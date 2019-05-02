@@ -3,9 +3,26 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.28307.572
 MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{A46731E3-44E7-4936-A827-68C295E24CAF}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EPES", "src\EPES\EPES.csproj", "{A5379223-5F49-4AF5-B413-52C94C3436D2}"
+EndProject
 Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{A5379223-5F49-4AF5-B413-52C94C3436D2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A5379223-5F49-4AF5-B413-52C94C3436D2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A5379223-5F49-4AF5-B413-52C94C3436D2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A5379223-5F49-4AF5-B413-52C94C3436D2}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{A5379223-5F49-4AF5-B413-52C94C3436D2} = {A46731E3-44E7-4936-A827-68C295E24CAF}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {03CB7606-1980-4F43-89A8-ADE6C00C7E7D}
