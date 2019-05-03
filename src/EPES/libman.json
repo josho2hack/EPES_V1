@@ -4,11 +4,6 @@
   "libraries": [
     {
       "library": "jquery@3.4.1",
-      "files": [
-        "jquery.min.js",
-        "jquery.js",
-        "jquery.min.map"
-      ],
       "destination": "wwwroot/lib/jquery/"
     },
     {
@@ -23,6 +18,25 @@
     {
       "library": "jquery-validation-unobtrusive@3.2.11",
       "destination": "wwwroot/lib/jquery-validation-unobtrusive/"
+    },
+    {
+      "library": "popper.js@1.15.0",
+      "destination": "wwwroot/lib/popper"
+    },
+    {
+      "provider": "cdnjs",
+      "library": "Chart.js@2.8.0",
+      "destination": "wwwroot/lib/Chart.js/"
+    },
+    {
+      "provider": "cdnjs",
+      "library": "datatables@1.10.19",
+      "destination": "wwwroot/lib/datatables/"
+    },
+    {
+      "provider": "cdnjs",
+      "library": "jquery-easing@1.4.1",
+      "destination": "wwwroot/lib/jquery-easing/"
     }
   ]
 }
