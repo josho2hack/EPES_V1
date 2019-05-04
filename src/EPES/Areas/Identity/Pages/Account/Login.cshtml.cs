@@ -44,7 +44,7 @@ namespace EPES.Areas.Identity.Pages.Account
             [DataType(DataType.Password)]
             public string Password { get; set; }
 
-            [Display(Name = "Remember me?")]
+            [Display(Name = "บันทึกการเข้าสู่ระบบไว้จนกว่าจะคลิกออกจากระบบ ?")]
             public bool RememberMe { get; set; }
         }
 
