@@ -4,14 +4,16 @@ using EPES.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace EPES.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("25620506023013_PointOfEvaluations")]
+    partial class PointOfEvaluations
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -107,12 +109,12 @@ namespace EPES.Data.Migrations
 
                     b.Property<DateTime>("Month");
 
-                    b.Property<int>("OfficeId");
+                    b.Property<int?>("OfficeId");
 
                     b.Property<decimal>("OldResult")
                         .HasColumnType("decimal(38, 10)");
 
-                    b.Property<int>("PointOfEvaluationId");
+                    b.Property<int?>("PointOfEvaluationId");
 
                     b.Property<decimal>("Result")
                         .HasColumnType("decimal(38, 10)");
@@ -136,8 +138,6 @@ namespace EPES.Data.Migrations
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<string>("ApplicationUserId");
-
                     b.Property<string>("Code")
                         .HasMaxLength(8);
 
@@ -146,8 +146,6 @@ namespace EPES.Data.Migrations
                     b.Property<string>("Remark");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("ApplicationUserId");
 
                     b.ToTable("Offices");
                 });
@@ -163,8 +161,6 @@ namespace EPES.Data.Migrations
                     b.Property<string>("Name");
 
                     b.Property<int?>("OwnerOfficeId");
-
-                    b.Property<int?>("Plan");
 
                     b.Property<int>("Point");
 
@@ -184,6 +180,8 @@ namespace EPES.Data.Migrations
                         .HasColumnType("decimal(18, 4)");
 
                     b.Property<int>("SubPoint");
+
+                    b.Property<int?>("Type");
 
                     b.Property<string>("Unit");
 
@@ -213,17 +211,17 @@ namespace EPES.Data.Migrations
 
                     b.Property<DateTime>("LastMonth");
 
-                    b.Property<int>("OfficeID");
+                    b.Property<int?>("OfficeId");
 
-                    b.Property<int>("PointOfEvaluationID");
+                    b.Property<int?>("PointOfEvaluationId");
 
                     b.Property<int>("Value");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("OfficeID");
+                    b.HasIndex("OfficeId");
 
-                    b.HasIndex("PointOfEvaluationID");
+                    b.HasIndex("PointOfEvaluationId");
 
                     b.ToTable("Scores");
                 });
@@ -342,24 +340,15 @@ namespace EPES.Data.Migrations
                 {
                     b.HasOne("EPES.Models.Office", "Office")
                         .WithMany("DataForEvaluations")
-                        .HasForeignKey("OfficeId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .HasForeignKey("OfficeId");
 
                     b.HasOne("EPES.Models.PointOfEvaluation", "PointOfEvaluation")
                         .WithMany("DataForEvaluations")
-                        .HasForeignKey("PointOfEvaluationId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .HasForeignKey("PointOfEvaluationId");
 
                     b.HasOne("EPES.Models.ApplicationUser", "UpdateUser")
-                        .WithMany("DataForEvaluations")
-                        .HasForeignKey("UpdateUserId");
-                });
-
-            modelBuilder.Entity("EPES.Models.Office", b =>
-                {
-                    b.HasOne("EPES.Models.ApplicationUser", "ApplicationUser")
                         .WithMany()
-                        .HasForeignKey("ApplicationUserId");
+                        .HasForeignKey("UpdateUserId");
                 });
 
             modelBuilder.Entity("EPES.Models.PointOfEvaluation", b =>
@@ -373,7 +362,7 @@ namespace EPES.Data.Migrations
                         .HasForeignKey("OwnerOfficeId");
 
                     b.HasOne("EPES.Models.ApplicationUser", "UpdateUser")
-                        .WithMany("PointOfEvaluations")
+                        .WithMany()
                         .HasForeignKey("UpdateUserId");
                 });
 
@@ -381,13 +370,11 @@ namespace EPES.Data.Migrations
                 {
                     b.HasOne("EPES.Models.Office", "Office")
                         .WithMany("Scores")
-                        .HasForeignKey("OfficeID")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .HasForeignKey("OfficeId");
 
                     b.HasOne("EPES.Models.PointOfEvaluation", "PointOfEvaluation")
                         .WithMany()
-                        .HasForeignKey("PointOfEvaluationID")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .HasForeignKey("PointOfEvaluationId");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
