@@ -112,8 +112,8 @@ namespace EPES
                     template: "{controller=Home}/{action=Index}/{id?}");
             });
 
-            UserRoleSeed.Seed(roleManager).Wait();
-            UserSeed.Seed(userManager).Wait();
+            //UserRoleSeed.Seed(roleManager).Wait();
+            //UserSeed.Seed(userManager).Wait();
         }
     }
 }
