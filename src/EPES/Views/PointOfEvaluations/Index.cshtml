@@ -11,15 +11,17 @@
     <h1 class="h3 mb-2 text-gray-800">แผนปฏิบัติราชการ</h1>
     <p class="mb-4">ตัวชี้วัดผลการปฏิบัติราชการ</p>
     <form asp-action="Index">
-        <div class="form-group">
-            <input type="hidden" name="officeCode" value="@user.OfficeId" />
-            <label class="control-label">ปี: </label>
-            <select name="yearPoint" id="yearPoint" class="form-control" onchange="this.form.submit()">
-                <option value="-1">@DateTime.Now.AddYears(-1).ToString("yyyy")</option>
-                <option value="0">@DateTime.Now.ToString("yyyy")</option>
-                <option value="1">@DateTime.Now.AddYears(1).ToString("yyyy")</option>
-            </select>
+        <div class="form-group row">
+            <label class="col-form-label col-md-8 text-md-right">ปี: </label>
+            <div class="col-md-4">
+                <select asp-for="yearPoint" class="form-control" onchange="this.form.submit()">
+                    <option value="-1">@DateTime.Now.AddYears(-1).ToString("yyyy")</option>
+                    <option value="0">@DateTime.Now.ToString("yyyy")</option>
+                    <option value="1">@DateTime.Now.AddYears(1).ToString("yyyy")</option>
+                </select>
+            </div>
         </div>
+        <input type="hidden" name="officeCode" value="@user.OfficeId" />
     </form>
     @if (Model.pointA != null)
     {

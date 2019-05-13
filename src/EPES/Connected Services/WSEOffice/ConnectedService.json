@@ -5,7 +5,7 @@
     "Uri": "https://go.microsoft.com/fwlink/?linkid=858517"
   },
   "ExtendedData": {
-    "Uri": "http://wservice.rd.go.th/ServiceEoffice/AuthenUserEoffice1.asmx?WSDL",
+    "Uri": "http://wservice.rd.go.th/ServiceEoffice/AuthenUserEoffice.asmx?WSDL",
     "Namespace": "WSEOffice",
     "SelectedAccessLevelForGeneratedClass": "Public",
     "GenerateMessageContract": false,
