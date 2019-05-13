@@ -1,4 +1,12 @@
-﻿<ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
+﻿@using Microsoft.AspNetCore.Identity
+
+@inject UserManager<ApplicationUser> UserManager
+
+@{
+    var user = await UserManager.GetUserAsync(User);
+}
+
+<ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
     <!-- Sidebar - Brand -->
     <a class="sidebar-brand d-flex align-items-center justify-content-center" href="~/Home">
         <div class="sidebar-brand-icon rotate-n-15">
@@ -59,7 +67,7 @@
         <div id="collapseBasic" class="collapse" aria-labelledby="headingBasic" data-parent="#accordionSidebar">
             <div class="bg-white py-2 collapse-inner rounded">
                 <h6 class="collapse-header">จัดการข้อมูลพื้นฐาน:</h6>
-                <a class="collapse-item" asp-area="" asp-controller="PointOfEvaluations" asp-action="Index">แผนปฏิบัติราชการ</a>
+                <a class="collapse-item" asp-area="" asp-controller="PointOfEvaluations" asp-action="Index" asp-route-officeCode="@user.OfficeId">แผนปฏิบัติราชการ</a>
                 <a class="collapse-item" href="#">เป้าหมาย/ประมาณการ</a>
             </div>
         </div>

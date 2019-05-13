@@ -1,61 +1,130 @@
-﻿@model IEnumerable<EPES.Models.PointOfEvaluation>
+﻿@using Microsoft.AspNetCore.Identity
+@model EPES.ViewModels.PointOfEvaluationViewModel
+@inject UserManager<ApplicationUser> UserManager
+
+@{
+    var user = await UserManager.GetUserAsync(User);
+}
+
 
 <div class="container-fluid">
     <h1 class="h3 mb-2 text-gray-800">แผนปฏิบัติราชการ</h1>
     <p class="mb-4">ตัวชี้วัดผลการปฏิบัติราชการ</p>
-    <p>
-        <a asp-action="Create">เพิ่มแผน</a>
-    </p>
+    <form asp-action="Index">
+        <div class="form-group">
+            <input type="hidden" name="officeCode" value="@user.OfficeId" />
+            <label class="control-label">ปี: </label>
+            <select name="yearPoint" id="yearPoint" class="form-control" onchange="this.form.submit()">
+                <option value="-1">@DateTime.Now.AddYears(-1).ToString("yyyy")</option>
+                <option value="0">@DateTime.Now.ToString("yyyy")</option>
+                <option value="1">@DateTime.Now.AddYears(1).ToString("yyyy")</option>
+            </select>
+        </div>
+    </form>
+    @if (Model.pointA != null)
+    {
+        <!-- Plan A -->
+        <div class="card shadow mb-4">
+            <div class="card-header py-3">
+                <h6 class="m-0 font-weight-bold text-primary">แผน A</h6>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-bordered" id="EPEStable" style="width:100%;" cellspacing="0">
+                        <thead>
+                            <tr>
+                                <th>
+                                    ปี
+                                </th>
+                                <th>
+                                    ตัวชี้วัด
+                                </th>
+                                <th>
+                                    ตัวชี้วัดย่อย
+                                </th>
+                                <th>
+                                    รายละเอียด
+                                </th>
+                                <th>
+                                    หน่วยนับ
+                                </th>
+                                <th>
+                                    น้ำหนัก
+                                </th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in Model.pointA)
+                            {
+                                <tr>
+                                    <td>
+                                        @item.Year.ToString("yyyy")
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.Point)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.SubPoint)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.Name)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.Unit)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.Weight)
+                                    </td>
+                                    <td>
+                                        <a asp-action="Edit" asp-route-id="@item.Id"><i class="fas fa-edit"></i></a>|
+                                        <a asp-action="Details" asp-route-id="@item.Id"><i class="fas fa-search-plus"></i></a>
+                                        <a asp-action="Delete" asp-route-id="@item.Id"><i class="fas fa-trash"></i></a>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                    <p class="text-right">
+                        <a asp-action="Create" asp-route-plan="0">เพิ่มแผน</a>
+                    </p>
+                </div>
+            </div>
+        </div>
+    }
+    <!-- Plan B -->
     <div class="card shadow mb-4">
         <div class="card-header py-3">
-            <h6 class="m-0 font-weight-bold text-primary">แผน A</h6>
+            <h6 class="m-0 font-weight-bold text-primary">แผน B</h6>
         </div>
         <div class="card-body">
             <div class="table-responsive">
-                <table class="table table-bordered" id="EPEStable" style="width:100%;" cellspacing="0">
+                <table class="table table-bordered" id="EPEStableB" style="width:100%;" cellspacing="0">
                     <thead>
                         <tr>
                             <th>
-                                @Html.DisplayNameFor(model => model.Year)
+                                ปี
                             </th>
                             <th>
-                                @Html.DisplayNameFor(model => model.Point)
+                                ตัวชี้วัด
                             </th>
                             <th>
-                                @Html.DisplayNameFor(model => model.SubPoint)
+                                ตัวชี้วัดย่อย
                             </th>
                             <th>
-                                @Html.DisplayNameFor(model => model.Plan)
+                                รายละเอียด
                             </th>
                             <th>
-                                @Html.DisplayNameFor(model => model.Name)
+                                หน่วยนับ
                             </th>
                             <th>
-                                @Html.DisplayNameFor(model => model.Unit)
-                            </th>
-                            <th>
-                                @Html.DisplayNameFor(model => model.Weight)
-                            </th>
-                            <th>
-                                @Html.DisplayNameFor(model => model.Rate1)
-                            </th>
-                            <th>
-                                @Html.DisplayNameFor(model => model.Rate2)
-                            </th>
-                            <th>
-                                @Html.DisplayNameFor(model => model.Rate3)
-                            </th>
-                            <th>
-                                @Html.DisplayNameFor(model => model.Rate4)
-                            </th>
-                            <th>
-                                @Html.DisplayNameFor(model => model.Rate5)
+                                น้ำหนัก
                             </th>
                             <th></th>
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach (var item in Model)
+                        @foreach (var item in Model.pointB)
                         {
                             <tr>
                                 <td>
@@ -68,7 +137,73 @@
                                     @Html.DisplayFor(modelItem => item.SubPoint)
                                 </td>
                                 <td>
-                                    @Html.DisplayFor(modelItem => item.Plan)
+                                    @Html.DisplayFor(modelItem => item.Name)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Unit)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Weight)
+                                </td>
+                                <td>
+                                    <a asp-action="Edit" asp-route-id="@item.Id"><i class="fas fa-edit"></i></a>|
+                                    <a asp-action="Details" asp-route-id="@item.Id"><i class="fas fa-search-plus"></i></a>
+                                    <a asp-action="Delete" asp-route-id="@item.Id"><i class="fas fa-trash"></i></a>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+                <p class="text-right">
+                    <a asp-action="Create" asp-route-plan="1">เพิ่มแผน</a>
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Plan C -->
+    <div class="card shadow mb-4">
+        <div class="card-header py-3">
+            <h6 class="m-0 font-weight-bold text-primary">แผน C</h6>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-bordered" id="EPEStableC" style="width:100%;" cellspacing="0">
+                    <thead>
+                        <tr>
+                            <th>
+                                ปี
+                            </th>
+                            <th>
+                                ตัวชี้วัด
+                            </th>
+                            <th>
+                                ตัวชี้วัดย่อย
+                            </th>
+                            <th>
+                                รายละเอียด
+                            </th>
+                            <th>
+                                หน่วยนับ
+                            </th>
+                            <th>
+                                น้ำหนัก
+                            </th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model.pointC)
+                        {
+                            <tr>
+                                <td>
+                                    @item.Year.ToString("yyyy")
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Point)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.SubPoint)
                                 </td>
                                 <td>
                                     @Html.DisplayFor(modelItem => item.Name)
@@ -80,19 +215,73 @@
                                     @Html.DisplayFor(modelItem => item.Weight)
                                 </td>
                                 <td>
-                                    @Html.DisplayFor(modelItem => item.Rate1)
+                                    <a asp-action="Edit" asp-route-id="@item.Id"><i class="fas fa-edit"></i></a>|
+                                    <a asp-action="Details" asp-route-id="@item.Id"><i class="fas fa-search-plus"></i></a>
+                                    <a asp-action="Delete" asp-route-id="@item.Id"><i class="fas fa-trash"></i></a>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+                <p class="text-right">
+                    <a asp-action="Create" asp-route-plan="2">เพิ่มแผน</a>
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Plan D -->
+    <div class="card shadow mb-4">
+        <div class="card-header py-3">
+            <h6 class="m-0 font-weight-bold text-primary">แผน D</h6>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-bordered" id="EPEStableD" style="width:100%;" cellspacing="0">
+                    <thead>
+                        <tr>
+                            <th>
+                                ปี
+                            </th>
+                            <th>
+                                ตัวชี้วัด
+                            </th>
+                            <th>
+                                ตัวชี้วัดย่อย
+                            </th>
+                            <th>
+                                รายละเอียด
+                            </th>
+                            <th>
+                                หน่วยนับ
+                            </th>
+                            <th>
+                                น้ำหนัก
+                            </th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model.pointD)
+                        {
+                            <tr>
+                                <td>
+                                    @item.Year.ToString("yyyy")
                                 </td>
                                 <td>
-                                    @Html.DisplayFor(modelItem => item.Rate2)
+                                    @Html.DisplayFor(modelItem => item.Point)
                                 </td>
                                 <td>
-                                    @Html.DisplayFor(modelItem => item.Rate3)
+                                    @Html.DisplayFor(modelItem => item.SubPoint)
                                 </td>
                                 <td>
-                                    @Html.DisplayFor(modelItem => item.Rate4)
+                                    @Html.DisplayFor(modelItem => item.Name)
                                 </td>
                                 <td>
-                                    @Html.DisplayFor(modelItem => item.Rate5)
+                                    @Html.DisplayFor(modelItem => item.Unit)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Weight)
                                 </td>
                                 <td>
                                     <a asp-action="Edit" asp-route-id="@item.Id"><i class="fas fa-edit"></i></a>|
@@ -103,9 +292,13 @@
                         }
                     </tbody>
                 </table>
+                <p class="text-right">
+                    <a asp-action="Create" asp-route-plan="3">เพิ่มแผน</a>
+                </p>
             </div>
         </div>
     </div>
+
 </div>
 
 @section Scripts {

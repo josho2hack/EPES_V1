@@ -1,11 +1,9 @@
 ﻿using EPES.Data;
 using EPES.Models;
+using EPES.ViewModels;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -21,9 +19,109 @@ namespace EPES.Controllers
         }
 
         // GET: PointOfEvaluations
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string officeCode, string returnUrl = null, int yearPoint = 0)
         {
-            return View(await _context.PointOfEvaluations.ToListAsync());
+            DateTime yearForQuery;
+            if (yearPoint == 0)
+            {
+                yearForQuery = new DateTime(DateTime.Now.Year, 1, 1);
+            }
+            else
+            {
+                yearForQuery = new DateTime(DateTime.Now.AddYears(yearPoint).Year, 1, 1);
+            }
+
+            returnUrl = returnUrl ?? Url.Content("~/");
+            if (officeCode == null)
+            {
+                return LocalRedirect(returnUrl);
+            }
+
+            var viewModel = new PointOfEvaluationViewModel();
+            if (officeCode == "00000726")
+            {
+                viewModel.pointA = await _context.PointOfEvaluations.Where(p => (p.Plan == TypeOfPlan.A) && (p.Year == yearForQuery)).ToListAsync();
+                viewModel.pointB = await _context.PointOfEvaluations.Where(p => (p.Plan == TypeOfPlan.B) && (p.Year == yearForQuery)).ToListAsync();
+                viewModel.pointC = await _context.PointOfEvaluations.Where(p => (p.Plan == TypeOfPlan.C) && (p.Year == yearForQuery)).ToListAsync();
+            }
+            else
+            {
+
+                if (officeCode.Substring(0, 4) == "0000")
+                {
+                    viewModel.pointA = await _context.PointOfEvaluations.Where(p => p.Plan == TypeOfPlan.A && p.OwnerOffice.Code == officeCode && p.Year == yearForQuery).ToListAsync();
+                    viewModel.pointB = await _context.PointOfEvaluations.Where(p => p.Plan == TypeOfPlan.B && p.OwnerOffice.Code == officeCode && p.Year == yearForQuery).ToListAsync();
+                    viewModel.pointC = await _context.PointOfEvaluations.Where(p => p.Plan == TypeOfPlan.C && p.OwnerOffice.Code == officeCode && p.Year == yearForQuery).ToListAsync();
+                }
+                else
+                {
+                    // List Plan B All Office
+                    viewModel.pointB = await _context.PointOfEvaluations.Where(p => p.Plan == TypeOfPlan.B && p.Year == yearForQuery).ToListAsync();
+
+                    if (officeCode.Substring(2, 6) == "000000")
+                    {
+                        viewModel.pointC = await _context.PointOfEvaluations.Where(p => (p.Plan == TypeOfPlan.C && p.OwnerOffice == null && p.Year == yearForQuery) || (p.Plan == TypeOfPlan.C && p.OwnerOffice.Code.StartsWith(officeCode.Substring(0, 2)) && p.Year == yearForQuery)).ToListAsync();
+                    }
+                    else
+                    {
+                        viewModel.pointC = await _context.PointOfEvaluations.Where(p => (p.Plan == TypeOfPlan.C && p.OwnerOffice == null && p.Year == yearForQuery) || (p.Plan == TypeOfPlan.C && p.OwnerOffice.Code == officeCode && p.Year == yearForQuery)).ToListAsync();
+                    }
+                }
+            }
+            viewModel.pointD = await _context.PointOfEvaluations.Where(p => p.Plan == TypeOfPlan.D).ToListAsync();
+            return View(viewModel);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Index(string officeCode, int yearPoint = 0)
+        {
+            DateTime yearForQuery;
+            if (yearPoint == 0)
+            {
+                yearForQuery = new DateTime(DateTime.Now.Year, 1, 1);
+            }
+            else
+            {
+                yearForQuery = new DateTime(DateTime.Now.AddYears(yearPoint).Year, 1, 1);
+            }
+
+            var viewModel = new PointOfEvaluationViewModel();
+            if (officeCode == "00000726")
+            {
+                viewModel.pointA = await _context.PointOfEvaluations.Where(p => (p.Plan == TypeOfPlan.A) && (p.Year == yearForQuery)).ToListAsync();
+                viewModel.pointB = await _context.PointOfEvaluations.Where(p => (p.Plan == TypeOfPlan.B) && (p.Year == yearForQuery)).ToListAsync();
+                viewModel.pointC = await _context.PointOfEvaluations.Where(p => (p.Plan == TypeOfPlan.C) && (p.Year == yearForQuery)).ToListAsync();
+            }
+            else
+            {
+
+                if (officeCode.Substring(0, 4) == "0000")
+                {
+                    viewModel.pointA = await _context.PointOfEvaluations.Where(p => p.Plan == TypeOfPlan.A && p.OwnerOffice.Code == officeCode && p.Year == yearForQuery).ToListAsync();
+                    viewModel.pointB = await _context.PointOfEvaluations.Where(p => p.Plan == TypeOfPlan.B && p.OwnerOffice.Code == officeCode && p.Year == yearForQuery).ToListAsync();
+                    viewModel.pointC = await _context.PointOfEvaluations.Where(p => p.Plan == TypeOfPlan.C && p.OwnerOffice.Code == officeCode && p.Year == yearForQuery).ToListAsync();
+                }
+                else
+                {
+                    // List Plan B All Office
+                    viewModel.pointB = await _context.PointOfEvaluations.Where(p => p.Plan == TypeOfPlan.B && p.Year == yearForQuery).ToListAsync();
+
+                    if (officeCode.Substring(2, 6) == "000000")
+                    {
+                        viewModel.pointC = await _context.PointOfEvaluations.Where(p => (p.Plan == TypeOfPlan.C && p.OwnerOffice == null && p.Year == yearForQuery) || (p.Plan == TypeOfPlan.C && p.OwnerOffice.Code.StartsWith(officeCode.Substring(0, 2)) && p.Year == yearForQuery)).ToListAsync();
+                    }
+                    else
+                    {
+                        viewModel.pointC = await _context.PointOfEvaluations.Where(p => (p.Plan == TypeOfPlan.C && p.OwnerOffice == null && p.Year == yearForQuery) || (p.Plan == TypeOfPlan.C && p.OwnerOffice.Code == officeCode && p.Year == yearForQuery)).ToListAsync();
+                    }
+                }
+            }
+
+            viewModel.pointD = await _context.PointOfEvaluations.Where(p => p.Plan == TypeOfPlan.D).ToListAsync();
+            viewModel.yearPoint = yearPoint;
+
+            return View(viewModel);
         }
 
         // GET: PointOfEvaluations/Details/5
@@ -47,8 +145,27 @@ namespace EPES.Controllers
         }
 
         // GET: PointOfEvaluations/Create
-        public IActionResult Create()
+        public IActionResult Create(int? plan)
         {
+            switch (plan)
+            {
+                case 0:
+                    ViewBag.Plan = "A";
+                    ViewBag.PlanValue = "0";
+                    break;
+                case 1:
+                    ViewBag.Plan = "B";
+                    ViewBag.PlanValue = "1";
+                    break;
+                case 2:
+                    ViewBag.Plan = "C";
+                    ViewBag.PlanValue = "2";
+                    break;
+                case 3:
+                    ViewBag.Plan = "D";
+                    ViewBag.PlanValue = "3";
+                    break;
+            }
             return View();
         }
 
