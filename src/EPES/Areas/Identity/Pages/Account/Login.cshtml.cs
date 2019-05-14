@@ -83,7 +83,7 @@ namespace EPES.Areas.Identity.Pages.Account
                 {
                     if ((await _userManager.FindByNameAsync("admin")) == null)
                     {
-                        var admin = new ApplicationUser { UserName = "admin", Email = "admin@epes.rd.go.th",FName = "Admin",LName = "EPES"};
+                        var admin = new ApplicationUser { UserName = "admin", Email = "admin@epes.rd.go.th",FName = "Admin",LName = "EPES",OfficeId="00013000"};
                         await _userManager.CreateAsync(admin, "P@ssw0rd");
 
                         if ((await _roleManager.FindByNameAsync("Admin")) == null)

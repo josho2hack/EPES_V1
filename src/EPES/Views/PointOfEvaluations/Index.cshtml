@@ -53,37 +53,43 @@
                                 <th>
                                     น้ำหนัก
                                 </th>
+                                <th>
+                                    ตัวชี้วัดสำหรับ
+                                </th>
                                 <th></th>
                             </tr>
                         </thead>
                         <tbody>
                             @foreach (var item in Model.pointA)
                             {
-                                <tr>
-                                    <td>
-                                        @item.Year.ToString("yyyy")
-                                    </td>
-                                    <td>
-                                        @Html.DisplayFor(modelItem => item.Point)
-                                    </td>
-                                    <td>
-                                        @Html.DisplayFor(modelItem => item.SubPoint)
-                                    </td>
-                                    <td>
-                                        @Html.DisplayFor(modelItem => item.Name)
-                                    </td>
-                                    <td>
-                                        @Html.DisplayFor(modelItem => item.Unit)
-                                    </td>
-                                    <td>
-                                        @Html.DisplayFor(modelItem => item.Weight)
-                                    </td>
-                                    <td>
-                                        <a asp-action="Edit" asp-route-id="@item.Id"><i class="fas fa-edit"></i></a>|
-                                        <a asp-action="Details" asp-route-id="@item.Id"><i class="fas fa-search-plus"></i></a>
-                                        <a asp-action="Delete" asp-route-id="@item.Id"><i class="fas fa-trash"></i></a>
-                                    </td>
-                                </tr>
+                            <tr>
+                                <td>
+                                    @item.Year.ToString("yyyy")
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Point)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.SubPoint)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Name)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Unit)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Weight)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.OwnerOffice.Name)
+                                </td>
+                                <td>
+                                    <a asp-action="Edit" asp-route-id="@item.Id"><i class="fas fa-edit"></i></a>|
+                                    <a asp-action="Details" asp-route-id="@item.Id"><i class="fas fa-search-plus"></i></a>
+                                    <a asp-action="Delete" asp-route-id="@item.Id"><i class="fas fa-trash"></i></a>
+                                </td>
+                            </tr>
                             }
                         </tbody>
                     </table>
@@ -122,37 +128,43 @@
                             <th>
                                 น้ำหนัก
                             </th>
+                            <th>
+                                ตัวชี้วัดสำหรับ
+                            </th>
                             <th></th>
                         </tr>
                     </thead>
                     <tbody>
                         @foreach (var item in Model.pointB)
                         {
-                            <tr>
-                                <td>
-                                    @item.Year.ToString("yyyy")
-                                </td>
-                                <td>
-                                    @Html.DisplayFor(modelItem => item.Point)
-                                </td>
-                                <td>
-                                    @Html.DisplayFor(modelItem => item.SubPoint)
-                                </td>
-                                <td>
-                                    @Html.DisplayFor(modelItem => item.Name)
-                                </td>
-                                <td>
-                                    @Html.DisplayFor(modelItem => item.Unit)
-                                </td>
-                                <td>
-                                    @Html.DisplayFor(modelItem => item.Weight)
-                                </td>
-                                <td>
-                                    <a asp-action="Edit" asp-route-id="@item.Id"><i class="fas fa-edit"></i></a>|
-                                    <a asp-action="Details" asp-route-id="@item.Id"><i class="fas fa-search-plus"></i></a>
-                                    <a asp-action="Delete" asp-route-id="@item.Id"><i class="fas fa-trash"></i></a>
-                                </td>
-                            </tr>
+                        <tr>
+                            <td>
+                                @item.Year.ToString("yyyy")
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Point)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.SubPoint)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Name)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Unit)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Weight)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.OwnerOffice.Name)
+                            </td>
+                            <td>
+                                <a asp-action="Edit" asp-route-id="@item.Id"><i class="fas fa-edit"></i></a>|
+                                <a asp-action="Details" asp-route-id="@item.Id"><i class="fas fa-search-plus"></i></a>
+                                <a asp-action="Delete" asp-route-id="@item.Id"><i class="fas fa-trash"></i></a>
+                            </td>
+                        </tr>
                         }
                     </tbody>
                 </table>
@@ -191,37 +203,43 @@
                             <th>
                                 น้ำหนัก
                             </th>
+                            <th>
+                                ตัวชี้วัดสำหรับ
+                            </th>
                             <th></th>
                         </tr>
                     </thead>
                     <tbody>
                         @foreach (var item in Model.pointC)
                         {
-                            <tr>
-                                <td>
-                                    @item.Year.ToString("yyyy")
-                                </td>
-                                <td>
-                                    @Html.DisplayFor(modelItem => item.Point)
-                                </td>
-                                <td>
-                                    @Html.DisplayFor(modelItem => item.SubPoint)
-                                </td>
-                                <td>
-                                    @Html.DisplayFor(modelItem => item.Name)
-                                </td>
-                                <td>
-                                    @Html.DisplayFor(modelItem => item.Unit)
-                                </td>
-                                <td>
-                                    @Html.DisplayFor(modelItem => item.Weight)
-                                </td>
-                                <td>
-                                    <a asp-action="Edit" asp-route-id="@item.Id"><i class="fas fa-edit"></i></a>|
-                                    <a asp-action="Details" asp-route-id="@item.Id"><i class="fas fa-search-plus"></i></a>
-                                    <a asp-action="Delete" asp-route-id="@item.Id"><i class="fas fa-trash"></i></a>
-                                </td>
-                            </tr>
+                        <tr>
+                            <td>
+                                @item.Year.ToString("yyyy")
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Point)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.SubPoint)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Name)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Unit)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Weight)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.OwnerOffice.Name)
+                            </td>
+                            <td>
+                                <a asp-action="Edit" asp-route-id="@item.Id"><i class="fas fa-edit"></i></a>|
+                                <a asp-action="Details" asp-route-id="@item.Id"><i class="fas fa-search-plus"></i></a>
+                                <a asp-action="Delete" asp-route-id="@item.Id"><i class="fas fa-trash"></i></a>
+                            </td>
+                        </tr>
                         }
                     </tbody>
                 </table>
@@ -260,37 +278,43 @@
                             <th>
                                 น้ำหนัก
                             </th>
+                            <th>
+                                ตัวชี้วัดสำหรับ
+                            </th>
                             <th></th>
                         </tr>
                     </thead>
                     <tbody>
                         @foreach (var item in Model.pointD)
                         {
-                            <tr>
-                                <td>
-                                    @item.Year.ToString("yyyy")
-                                </td>
-                                <td>
-                                    @Html.DisplayFor(modelItem => item.Point)
-                                </td>
-                                <td>
-                                    @Html.DisplayFor(modelItem => item.SubPoint)
-                                </td>
-                                <td>
-                                    @Html.DisplayFor(modelItem => item.Name)
-                                </td>
-                                <td>
-                                    @Html.DisplayFor(modelItem => item.Unit)
-                                </td>
-                                <td>
-                                    @Html.DisplayFor(modelItem => item.Weight)
-                                </td>
-                                <td>
-                                    <a asp-action="Edit" asp-route-id="@item.Id"><i class="fas fa-edit"></i></a>|
-                                    <a asp-action="Details" asp-route-id="@item.Id"><i class="fas fa-search-plus"></i></a>
-                                    <a asp-action="Delete" asp-route-id="@item.Id"><i class="fas fa-trash"></i></a>
-                                </td>
-                            </tr>
+                        <tr>
+                            <td>
+                                @item.Year.ToString("yyyy")
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Point)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.SubPoint)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Name)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Unit)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Weight)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.OwnerOffice.Name)
+                            </td>
+                            <td>
+                                <a asp-action="Edit" asp-route-id="@item.Id"><i class="fas fa-edit"></i></a>|
+                                <a asp-action="Details" asp-route-id="@item.Id"><i class="fas fa-search-plus"></i></a>
+                                <a asp-action="Delete" asp-route-id="@item.Id"><i class="fas fa-trash"></i></a>
+                            </td>
+                        </tr>
                         }
                     </tbody>
                 </table>
