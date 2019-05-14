@@ -1,7 +1,11 @@
-﻿@model EPES.Models.PointOfEvaluation
+﻿@using Microsoft.AspNetCore.Identity
+@model EPES.Models.PointOfEvaluation
+
+@inject UserManager<ApplicationUser> UserManager
 
 @{
     ViewData["Title"] = "Create";
+    var user = await UserManager.GetUserAsync(User);
 }
 
 <div class="container-fluid">
@@ -75,10 +79,35 @@
                             <input asp-for="Rate5" class="form-control" />
                             <span asp-validation-for="Rate5" class="text-danger"></span>
                         </div>
+
+                        @if (user.OfficeId == "00013000")
+                        {
+                            <div class="form-group">
+                                <label asp-for="OwnerOfficeId" class="control-label"></label>
+                                <select asp-for="OwnerOfficeId" class="form-control" asp-items="ViewBag.OfficeID">
+                                    <option value="">ตัวชี้วัด สภ./สท.</option>
+                                </select>
+                                <span asp-validation-for="OwnerOfficeId" class="text-danger"></span>
+                            </div>
+                            <div class="form-group">
+                                <label asp-for="AuditOfficeId" class="control-label"></label>
+                                <select asp-for="AuditOfficeId" class="form-control" asp-items="ViewBag.OfficeID">
+                                    <option value="14">กองวิชาการแผนภาษี</option>
+                                </select>
+                                <span asp-validation-for="AuditOfficeId" class="text-danger"></span>
+                            </div>
+                        }
+                        else
+                        {
+                            <input id="ownerOfficeCode" name="ownerOfficeCode" class="form-control" placeholder="@user.OfficeId" hidden />
+                            <input id="auditOfficeCode" name="auditOfficeCode" class="form-control" placeholder="@user.OfficeId" hidden />
+                        }
                         <div class="form-group">
                             <input type="submit" value="Create" class="btn btn-primary" />
                         </div>
+
                         <input asp-for="Plan" class="form-control" placeholder="@ViewBag.PlanValue" hidden />
+                        <input asp-for="UpdateUserId" class="form-control" placeholder="@user.Id" hidden />
                     </form>
                 </div>
             </div>
@@ -86,9 +115,9 @@
             <div>
                 <a asp-action="Index">Back to List</a>
             </div>
-            </div>
         </div>
     </div>
-            @section Scripts {
-                @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
-            }
+</div>
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

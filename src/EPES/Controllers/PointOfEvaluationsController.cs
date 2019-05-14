@@ -3,6 +3,7 @@ using EPES.Models;
 using EPES.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Linq;
@@ -138,6 +139,7 @@ namespace EPES.Controllers
             var pointOfEvaluation = await _context.PointOfEvaluations
                 .Include(p => p.OwnerOffice)
                 .Include(p => p.AuditOffice)
+                .AsNoTracking()
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (pointOfEvaluation == null)
             {
@@ -169,6 +171,7 @@ namespace EPES.Controllers
                     ViewBag.PlanValue = "3";
                     break;
             }
+            PopulateOfficesDropDownList();
             return View();
         }
 
@@ -177,12 +180,26 @@ namespace EPES.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Year,Point,SubPoint,Plan,Name,Unit,Weight,Rate1,Rate2,Rate3,Rate4,Rate5")] PointOfEvaluation pointOfEvaluation)
+        public async Task<IActionResult> Create([Bind("Year,Point,SubPoint,Plan,Name,Unit,Weight,Rate1,Rate2,Rate3,Rate4,Rate5,OwnerOfficeId,AuditOfficeId,UpdateUserId")] PointOfEvaluation pointOfEvaluation,string ownerOfficeCode = null,string auditOfficeCode = null)
         {
+            if (ownerOfficeCode != null)
+            {
+                var office = await _context.Offices.FirstOrDefaultAsync(o => o.Code == ownerOfficeCode);
+                pointOfEvaluation.OwnerOfficeId = office.Id;
+            }
+            if (auditOfficeCode != null)
+            {
+                var office = await _context.Offices.FirstOrDefaultAsync(o => o.Code == auditOfficeCode);
+                pointOfEvaluation.AuditOfficeId = office.Id;
+            }
             try
             {
                 if (ModelState.IsValid)
                 {
+                    pointOfEvaluation.UpdateUser = _context.ApplicationUsers.Single(s => s.Id == pointOfEvaluation.UpdateUserId);
+                    pointOfEvaluation.OwnerOffice = _context.Offices.Single(s => s.Id == pointOfEvaluation.OwnerOfficeId);
+                    pointOfEvaluation.AuditOffice = _context.Offices.Single(s => s.Id == pointOfEvaluation.AuditOfficeId);
+
                     _context.Add(pointOfEvaluation);
                     await _context.SaveChangesAsync();
                     return RedirectToAction(nameof(Index));
@@ -302,6 +319,15 @@ namespace EPES.Controllers
         private bool PointOfEvaluationExists(int id)
         {
             return _context.PointOfEvaluations.Any(e => e.Id == id);
+        }
+
+        private void PopulateOfficesDropDownList(object selectedOffice = null)
+        {
+            var officesQuery = from d in _context.Offices
+                                   where(d.Code != "00000000" && d.Code.Substring(5,3) == "000")
+                                   orderby d.Id
+                                   select d;
+            ViewBag.OfficeID = new SelectList(officesQuery.AsNoTracking(), "Id", "Name", selectedOffice);
         }
     }
 }

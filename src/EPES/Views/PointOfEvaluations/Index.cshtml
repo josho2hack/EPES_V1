@@ -36,9 +36,6 @@
                         <thead>
                             <tr>
                                 <th>
-                                    ปี
-                                </th>
-                                <th>
                                     ตัวชี้วัด
                                 </th>
                                 <th>
@@ -56,6 +53,9 @@
                                 <th>
                                     ตัวชี้วัดสำหรับ
                                 </th>
+                                <th>
+                                    หน่วยงานตรวจสอบ
+                                </th>
                                 <th></th>
                             </tr>
                         </thead>
@@ -63,9 +63,6 @@
                             @foreach (var item in Model.pointA)
                             {
                             <tr>
-                                <td>
-                                    @item.Year.ToString("yyyy")
-                                </td>
                                 <td>
                                     @Html.DisplayFor(modelItem => item.Point)
                                 </td>
@@ -83,6 +80,9 @@
                                 </td>
                                 <td>
                                     @Html.DisplayFor(modelItem => item.OwnerOffice.Name)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.AuditOffice.Name)
                                 </td>
                                 <td>
                                     <a asp-action="Edit" asp-route-id="@item.Id"><i class="fas fa-edit"></i></a>|
@@ -111,9 +111,6 @@
                     <thead>
                         <tr>
                             <th>
-                                ปี
-                            </th>
-                            <th>
                                 ตัวชี้วัด
                             </th>
                             <th>
@@ -131,6 +128,9 @@
                             <th>
                                 ตัวชี้วัดสำหรับ
                             </th>
+                            <th>
+                                หน่วยงานตรวจสอบ
+                            </th>
                             <th></th>
                         </tr>
                     </thead>
@@ -138,9 +138,6 @@
                         @foreach (var item in Model.pointB)
                         {
                         <tr>
-                            <td>
-                                @item.Year.ToString("yyyy")
-                            </td>
                             <td>
                                 @Html.DisplayFor(modelItem => item.Point)
                             </td>
@@ -158,6 +155,9 @@
                             </td>
                             <td>
                                 @Html.DisplayFor(modelItem => item.OwnerOffice.Name)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.AuditOffice.Name)
                             </td>
                             <td>
                                 <a asp-action="Edit" asp-route-id="@item.Id"><i class="fas fa-edit"></i></a>|
@@ -186,9 +186,6 @@
                     <thead>
                         <tr>
                             <th>
-                                ปี
-                            </th>
-                            <th>
                                 ตัวชี้วัด
                             </th>
                             <th>
@@ -206,6 +203,9 @@
                             <th>
                                 ตัวชี้วัดสำหรับ
                             </th>
+                            <th>
+                                หน่วยงานตรวจสอบ
+                            </th>
                             <th></th>
                         </tr>
                     </thead>
@@ -213,9 +213,6 @@
                         @foreach (var item in Model.pointC)
                         {
                         <tr>
-                            <td>
-                                @item.Year.ToString("yyyy")
-                            </td>
                             <td>
                                 @Html.DisplayFor(modelItem => item.Point)
                             </td>
@@ -233,6 +230,9 @@
                             </td>
                             <td>
                                 @Html.DisplayFor(modelItem => item.OwnerOffice.Name)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.AuditOffice.Name)
                             </td>
                             <td>
                                 <a asp-action="Edit" asp-route-id="@item.Id"><i class="fas fa-edit"></i></a>|
@@ -261,9 +261,6 @@
                     <thead>
                         <tr>
                             <th>
-                                ปี
-                            </th>
-                            <th>
                                 ตัวชี้วัด
                             </th>
                             <th>
@@ -281,6 +278,9 @@
                             <th>
                                 ตัวชี้วัดสำหรับ
                             </th>
+                            <th>
+                                หน่วยงานตรวจสอบ
+                            </th>
                             <th></th>
                         </tr>
                     </thead>
@@ -288,9 +288,6 @@
                         @foreach (var item in Model.pointD)
                         {
                         <tr>
-                            <td>
-                                @item.Year.ToString("yyyy")
-                            </td>
                             <td>
                                 @Html.DisplayFor(modelItem => item.Point)
                             </td>
@@ -308,6 +305,9 @@
                             </td>
                             <td>
                                 @Html.DisplayFor(modelItem => item.OwnerOffice.Name)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.AuditOffice.Name)
                             </td>
                             <td>
                                 <a asp-action="Edit" asp-route-id="@item.Id"><i class="fas fa-edit"></i></a>|
