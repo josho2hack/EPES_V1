@@ -86,7 +86,7 @@
                                 </td>
                                 <td>
                                     <a asp-action="Edit" asp-route-id="@item.Id"><i class="fas fa-edit"></i></a>|
-                                    <a asp-action="Details" asp-route-id="@item.Id"><i class="fas fa-search-plus"></i></a>
+                                    <a asp-action="Details" asp-route-id="@item.Id"><i class="fas fa-search-plus"></i></a>|
                                     <a asp-action="Delete" asp-route-id="@item.Id"><i class="fas fa-trash"></i></a>
                                 </td>
                             </tr>
@@ -94,7 +94,7 @@
                         </tbody>
                     </table>
                     <p class="text-right">
-                        <a asp-action="Create" asp-route-plan="0">เพิ่มแผน</a>
+                        <a asp-action="Create" asp-route-plan="0" asp-route-yearPoint="@Model.yearPoint">เพิ่มแผน</a>
                     </p>
                 </div>
             </div>
@@ -161,7 +161,7 @@
                             </td>
                             <td>
                                 <a asp-action="Edit" asp-route-id="@item.Id"><i class="fas fa-edit"></i></a>|
-                                <a asp-action="Details" asp-route-id="@item.Id"><i class="fas fa-search-plus"></i></a>
+                                <a asp-action="Details" asp-route-id="@item.Id"><i class="fas fa-search-plus"></i></a>|
                                 <a asp-action="Delete" asp-route-id="@item.Id"><i class="fas fa-trash"></i></a>
                             </td>
                         </tr>
@@ -169,7 +169,7 @@
                     </tbody>
                 </table>
                 <p class="text-right">
-                    <a asp-action="Create" asp-route-plan="1">เพิ่มแผน</a>
+                    <a asp-action="Create" asp-route-plan="1" asp-route-yearPoint="@Model.yearPoint">เพิ่มแผน</a>
                 </p>
             </div>
         </div>
@@ -236,7 +236,7 @@
                             </td>
                             <td>
                                 <a asp-action="Edit" asp-route-id="@item.Id"><i class="fas fa-edit"></i></a>|
-                                <a asp-action="Details" asp-route-id="@item.Id"><i class="fas fa-search-plus"></i></a>
+                                <a asp-action="Details" asp-route-id="@item.Id"><i class="fas fa-search-plus"></i></a>|
                                 <a asp-action="Delete" asp-route-id="@item.Id"><i class="fas fa-trash"></i></a>
                             </td>
                         </tr>
@@ -244,7 +244,7 @@
                     </tbody>
                 </table>
                 <p class="text-right">
-                    <a asp-action="Create" asp-route-plan="2">เพิ่มแผน</a>
+                    <a asp-action="Create" asp-route-plan="2" asp-route-yearPoint="@Model.yearPoint">เพิ่มแผน</a>
                 </p>
             </div>
         </div>
@@ -311,7 +311,7 @@
                             </td>
                             <td>
                                 <a asp-action="Edit" asp-route-id="@item.Id"><i class="fas fa-edit"></i></a>|
-                                <a asp-action="Details" asp-route-id="@item.Id"><i class="fas fa-search-plus"></i></a>
+                                <a asp-action="Details" asp-route-id="@item.Id"><i class="fas fa-search-plus"></i></a>|
                                 <a asp-action="Delete" asp-route-id="@item.Id"><i class="fas fa-trash"></i></a>
                             </td>
                         </tr>
@@ -319,7 +319,7 @@
                     </tbody>
                 </table>
                 <p class="text-right">
-                    <a asp-action="Create" asp-route-plan="3">เพิ่มแผน</a>
+                    <a asp-action="Create" asp-route-plan="3" asp-route-yearPoint="@Model.yearPoint">เพิ่มแผน</a>
                 </p>
             </div>
         </div>
