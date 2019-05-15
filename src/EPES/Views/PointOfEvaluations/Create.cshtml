@@ -21,15 +21,6 @@
                     <form asp-action="Create">
                         <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                         <div class="form-group">
-                            <label asp-for="Year" class="control-label"></label>
-                            <select asp-for="Year" class="form-control">
-                                <option value="@(new DateTime(DateTime.Now.AddYears(-1).Year,1,1))">@DateTime.Now.AddYears(-1).ToString("yyyy")</option>
-                                <option value="@(new DateTime(DateTime.Now.Year,1,1))" selected="selected">@DateTime.Now.ToString("yyyy")</option>
-                                <option value="@(new DateTime(DateTime.Now.AddYears(1).Year,1,1))">@DateTime.Now.AddYears(1).ToString("yyyy")</option>
-                            </select>
-                            <span asp-validation-for="Year" class="text-danger"></span>
-                        </div>
-                        <div class="form-group">
                             <label asp-for="Point" class="control-label"></label>
                             <input asp-for="Point" class="form-control" />
                             <span asp-validation-for="Point" class="text-danger"></span>
@@ -99,15 +90,14 @@
                         }
                         else
                         {
-                            <input id="ownerOfficeCode" name="ownerOfficeCode" class="form-control" placeholder="@user.OfficeId" hidden />
-                            <input id="auditOfficeCode" name="auditOfficeCode" class="form-control" placeholder="@user.OfficeId" hidden />
+                            <input id="ownerOfficeCode" name="ownerOfficeCode" placeholder="@user.OfficeId" hidden />
+                            <input id="auditOfficeCode" name="auditOfficeCode" placeholder="@user.OfficeId" hidden />
                         }
                         <div class="form-group">
-                            <input type="submit" value="Create" class="btn btn-primary" />
+                            <input type="submit" value="เพิ่ม" class="btn btn-primary" />
                         </div>
-
-                        <input asp-for="Plan" class="form-control" placeholder="@ViewBag.PlanValue" hidden />
-                        <input asp-for="UpdateUserId" class="form-control" placeholder="@user.Id" hidden />
+                        <input id="yearPoint" name="yearPoint" placeholder="@ViewBag.yearPoint" hidden />
+                        <input asp-for="Plan" placeholder="@ViewBag.PlanValue" hidden />
                     </form>
                 </div>
             </div>
