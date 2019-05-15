@@ -2,6 +2,7 @@
 using EPES.Models;
 using EPES.ViewModels;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -16,15 +17,19 @@ namespace EPES.Controllers
     public class PointOfEvaluationsController : Controller
     {
         private readonly ApplicationDbContext _context;
+        private readonly UserManager<ApplicationUser> _userManager;
 
-        public PointOfEvaluationsController(ApplicationDbContext context)
+        public PointOfEvaluationsController(ApplicationDbContext context, UserManager<ApplicationUser> userManager)
         {
             _context = context;
+            _userManager = userManager;
         }
 
         // GET: PointOfEvaluations
         public async Task<IActionResult> Index(string officeCode, string returnUrl = null, int yearPoint = 0)
-        {
+        {  
+            var office = await _context.Offices.SingleAsync(o => o.Code == officeCode);
+
             returnUrl = returnUrl ?? Url.Content("~/");
             if (officeCode == null)
             {
@@ -51,11 +56,11 @@ namespace EPES.Controllers
             else
             {
 
-                if (officeCode.Substring(0, 4) == "00")
+                if (officeCode.Substring(0, 2) == "00")
                 {
-                    viewModel.pointA = await _context.PointOfEvaluations.Where(p => p.Plan == TypeOfPlan.A && p.OwnerOffice.Code == officeCode && p.Year == yearForQuery).Include(p => p.OwnerOffice).Include(p => p.AuditOffice).ToListAsync();
-                    viewModel.pointB = await _context.PointOfEvaluations.Where(p => p.Plan == TypeOfPlan.B && p.OwnerOffice.Code == officeCode && p.Year == yearForQuery).Include(p => p.OwnerOffice).Include(p => p.AuditOffice).ToListAsync();
-                    viewModel.pointC = await _context.PointOfEvaluations.Where(p => p.Plan == TypeOfPlan.C && p.OwnerOffice.Code == officeCode && p.Year == yearForQuery).Include(p => p.OwnerOffice).Include(p => p.AuditOffice).ToListAsync();
+                    viewModel.pointA = await _context.PointOfEvaluations.Where(p => p.Plan == TypeOfPlan.A && p.OwnerOfficeId == office.Id && p.Year == yearForQuery).Include(p => p.OwnerOffice).Include(p => p.AuditOffice).ToListAsync();
+                    viewModel.pointB = await _context.PointOfEvaluations.Where(p => p.Plan == TypeOfPlan.B && p.AuditOfficeId == office.Id && p.Year == yearForQuery).Include(p => p.OwnerOffice).Include(p => p.AuditOffice).ToListAsync();
+                    viewModel.pointC = await _context.PointOfEvaluations.Where(p => p.Plan == TypeOfPlan.C && p.OwnerOfficeId == office.Id && p.Year == yearForQuery).Include(p => p.OwnerOffice).Include(p => p.AuditOffice).ToListAsync();
                 }
                 else
                 {
@@ -64,11 +69,11 @@ namespace EPES.Controllers
 
                     if (officeCode.Substring(2, 6) == "000000")
                     {
-                        viewModel.pointC = await _context.PointOfEvaluations.Where(p => (p.Plan == TypeOfPlan.C && p.OwnerOffice == null && p.Year == yearForQuery) || (p.Plan == TypeOfPlan.C && p.OwnerOffice.Code.StartsWith(officeCode.Substring(0, 2)) && p.Year == yearForQuery)).Include(p => p.OwnerOffice).Include(p => p.AuditOffice).ToListAsync();
+                        viewModel.pointC = await _context.PointOfEvaluations.Include(p => p.OwnerOffice).Include(p => p.AuditOffice).Where(p => (p.Plan == TypeOfPlan.C && p.OwnerOffice == null && p.Year == yearForQuery) || (p.Plan == TypeOfPlan.C && p.OwnerOffice.Code.StartsWith(officeCode.Substring(0, 2)) && p.Year == yearForQuery)).ToListAsync();
                     }
                     else
                     {
-                        viewModel.pointC = await _context.PointOfEvaluations.Where(p => (p.Plan == TypeOfPlan.C && p.OwnerOffice == null && p.Year == yearForQuery) || (p.Plan == TypeOfPlan.C && p.OwnerOffice.Code == officeCode && p.Year == yearForQuery)).Include(p => p.OwnerOffice).Include(p => p.AuditOffice).ToListAsync();
+                        viewModel.pointC = await _context.PointOfEvaluations.Where(p => (p.Plan == TypeOfPlan.C && p.OwnerOffice == null && p.Year == yearForQuery) || (p.Plan == TypeOfPlan.C && p.OwnerOfficeId == office.Id && p.Year == yearForQuery)).Include(p => p.OwnerOffice).Include(p => p.AuditOffice).ToListAsync();
                     }
                 }
             }
@@ -182,7 +187,7 @@ namespace EPES.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Point,SubPoint,Plan,Name,Unit,Weight,Rate1,Rate2,Rate3,Rate4,Rate5 ")] PointOfEvaluation pointOfEvaluation, int yearPoint,string ownerOfficeCode = null,string auditOfficeCode = null)
+        public async Task<IActionResult> Create([Bind("Point,SubPoint,Plan,Name,Unit,Weight,Rate1,Rate2,Rate3,Rate4,Rate5,OwnerOfficeId,AuditOfficeId")] PointOfEvaluation pointOfEvaluation,int y,string ownerOfficeCode = null,string auditOfficeCode = null)
         {
             if (ownerOfficeCode != null)
             {
@@ -195,7 +200,7 @@ namespace EPES.Controllers
                 //pointOfEvaluation.AuditOfficeId = office.Id;
             }
 
-            pointOfEvaluation.Year = new DateTime(DateTime.Now.AddYears(yearPoint).Year, 1, 1);
+            pointOfEvaluation.Year = new DateTime(DateTime.Now.AddYears(y).Year, 1, 1);
             pointOfEvaluation.UpdateUserId = User.FindFirst(ClaimTypes.NameIdentifier).Value;
 
             try
@@ -204,7 +209,8 @@ namespace EPES.Controllers
                 {
                     _context.Add(pointOfEvaluation);
                     await _context.SaveChangesAsync();
-                    return RedirectToAction(nameof(Index));
+                    var user = await _userManager.GetUserAsync(User);
+                    return RedirectToAction(nameof(Index), new { officeCode = user.OfficeId , yearPoint = y });
                 }
             }
             catch (DbUpdateException)
@@ -244,6 +250,7 @@ namespace EPES.Controllers
             {
                 return NotFound();
             }
+            var user = await _userManager.GetUserAsync(User);
 
             var pointOfEvaluationToUpdate = await _context.PointOfEvaluations.FirstOrDefaultAsync(p => p.Id == id);
 
@@ -255,7 +262,7 @@ namespace EPES.Controllers
                 try
                 {
                     await _context.SaveChangesAsync();
-                    return RedirectToAction(nameof(Index));
+                    return RedirectToAction(nameof(Index), new { officeCode = user.OfficeId});
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -263,7 +270,7 @@ namespace EPES.Controllers
                         "ลองพยายามบันทึกอีกครั้ง " +
                         "โปรดแจ้งผู้ดูแลระบบ");
                 }
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction(nameof(Index), new { officeCode = user.OfficeId });
             }
             return View(pointOfEvaluationToUpdate);
         }
@@ -300,16 +307,18 @@ namespace EPES.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
+            var user = await _userManager.GetUserAsync(User);
+
             var pointOfEvaluation = await _context.PointOfEvaluations.FindAsync(id);
             if (pointOfEvaluation == null)
             {
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction(nameof(Index), new { officeCode = user.OfficeId });
             }
             try
             {
                 _context.PointOfEvaluations.Remove(pointOfEvaluation);
                 await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction(nameof(Index), new { officeCode = user.OfficeId });
             }
             catch (DbUpdateException /* ex */)
             {

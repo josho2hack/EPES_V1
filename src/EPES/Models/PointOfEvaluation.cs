@@ -53,10 +53,9 @@ namespace EPES.Models
         [Column(TypeName = "decimal(18, 4)")]
         public decimal Rate5 { get; set; }
 
-        [DisplayFormat(NullDisplayText = "ตัวชี้วัด สภ./สท.")]
         public int? OwnerOfficeId { get; set; }
         [Display(Name = "หน่วยงานเจ้าของ")]
-        [DisplayFormat(NullDisplayText = "ตัวชี้วัด สภ./สท.")]
+        [DisplayFormat(NullDisplayText = "สภ./สท.")]
         public Office OwnerOffice { get; set; }
 
         public int? AuditOfficeId { get; set; }

@@ -14,6 +14,7 @@ namespace EPES.Models
         public string Code { get; set; }
 
         [Display(Name = "หน่วยงาน")]
+        [DisplayFormat(NullDisplayText = "สภ./สท.")]
         public string Name { get; set; }
 
         [Display(Name = "หมายเหตุ")]

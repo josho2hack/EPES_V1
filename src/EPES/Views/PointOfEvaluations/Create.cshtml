@@ -90,20 +90,20 @@
                         }
                         else
                         {
-                            <input id="ownerOfficeCode" name="ownerOfficeCode" placeholder="@user.OfficeId" hidden />
-                            <input id="auditOfficeCode" name="auditOfficeCode" placeholder="@user.OfficeId" hidden />
+                            <input name="ownerOfficeCode" value="@user.OfficeId" hidden />
+                            <input name="auditOfficeCode" value="@user.OfficeId" hidden />
                         }
                         <div class="form-group">
                             <input type="submit" value="เพิ่ม" class="btn btn-primary" />
                         </div>
-                        <input id="yearPoint" name="yearPoint" placeholder="@ViewBag.yearPoint" hidden />
+                        <input type="hidden" name="y" value="@ViewBag.yearPoint" />
                         <input asp-for="Plan" placeholder="@ViewBag.PlanValue" hidden />
                     </form>
                 </div>
             </div>
 
             <div>
-                <a asp-controller="PointOfEvaluation" asp-action="Index">ยกเลิก</a>
+                <a asp-area="" asp-controller="PointOfEvaluations" asp-action="Index">ยกเลิก</a>
             </div>
         </div>
     </div>
