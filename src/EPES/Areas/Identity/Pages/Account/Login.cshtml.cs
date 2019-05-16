@@ -102,6 +102,18 @@ namespace EPES.Areas.Identity.Pages.Account
                         }
                         await _userManager.AddToRoleAsync(admin, "Admin");
                     }
+                    if ((await _userManager.FindByNameAsync("pak")) == null)
+                    {
+                        var pak = new ApplicationUser { UserName = "pak", Email = "pak@epes.rd.go.th", FName = "Pak", LName = "EPES", OfficeId = "01000000" };
+                        await _userManager.CreateAsync(pak, "P@ssw0rd");
+                        await _userManager.AddToRoleAsync(pak, "Manager");
+                    }
+                    if ((await _userManager.FindByNameAsync("sortor")) == null)
+                    {
+                        var sortor = new ApplicationUser { UserName = "sortor", Email = "sortor@epes.rd.go.th", FName = "Sortor", LName = "EPES", OfficeId = "01003000" };
+                        await _userManager.CreateAsync(sortor, "P@ssw0rd");
+                        await _userManager.AddToRoleAsync(sortor, "User");
+                    }
                     var result = await _signInManager.PasswordSignInAsync(Input.Username, Input.Password, Input.RememberMe, lockoutOnFailure: false);
                     if (result.Succeeded)
                     {

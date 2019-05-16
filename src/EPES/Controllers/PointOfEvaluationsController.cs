@@ -135,7 +135,7 @@ namespace EPES.Controllers
         }
 
         // GET: PointOfEvaluations/Details/5
-        public async Task<IActionResult> Details(int? id)
+        public async Task<IActionResult> Details(int? id,int yearPoint = 0)
         {
             if (id == null)
             {
@@ -152,11 +152,12 @@ namespace EPES.Controllers
                 return NotFound();
             }
 
+            ViewBag.yearPoint = yearPoint;
             return View(pointOfEvaluation);
         }
 
         // GET: PointOfEvaluations/Create
-        public IActionResult Create(int? plan,int? yearPoint)
+        public async Task<IActionResult> Create(int? plan,int? yearPoint)
         {
             switch (plan)
             {
@@ -178,7 +179,10 @@ namespace EPES.Controllers
                     break;
             }
             ViewBag.yearPoint = yearPoint;
+            var user = await _userManager.GetUserAsync(User);
+            var office = await _context.Offices.SingleAsync(o => o.Code == user.OfficeId);
             PopulateOfficesDropDownList();
+            PopulateAuditOfficesDropDownList(office.Id);
             return View();
         }
 
@@ -187,8 +191,10 @@ namespace EPES.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Point,SubPoint,Plan,Name,Unit,Weight,Rate1,Rate2,Rate3,Rate4,Rate5,OwnerOfficeId,AuditOfficeId")] PointOfEvaluation pointOfEvaluation,int y,string ownerOfficeCode = null,string auditOfficeCode = null)
+        public async Task<IActionResult> Create([Bind("Point,Plan,Name,Unit,Weight,Rate1,Rate2,Rate3,Rate4,Rate5,OwnerOfficeId,AuditOfficeId")] PointOfEvaluation pointOfEvaluation,int y,string ownerOfficeCode = null,string auditOfficeCode = null)
         {
+            var user = await _userManager.GetUserAsync(User);
+
             if (ownerOfficeCode != null)
             {
                 pointOfEvaluation.OwnerOffice = await _context.Offices.FirstOrDefaultAsync(o => o.Code == ownerOfficeCode);
@@ -202,6 +208,7 @@ namespace EPES.Controllers
 
             pointOfEvaluation.Year = new DateTime(DateTime.Now.AddYears(y).Year, 1, 1);
             pointOfEvaluation.UpdateUserId = User.FindFirst(ClaimTypes.NameIdentifier).Value;
+            pointOfEvaluation.SubPoint = 0;
 
             try
             {
@@ -209,7 +216,6 @@ namespace EPES.Controllers
                 {
                     _context.Add(pointOfEvaluation);
                     await _context.SaveChangesAsync();
-                    var user = await _userManager.GetUserAsync(User);
                     return RedirectToAction(nameof(Index), new { officeCode = user.OfficeId , yearPoint = y });
                 }
             }
@@ -220,22 +226,28 @@ namespace EPES.Controllers
                     "ลองพยายามบันทึกอีกครั้ง " +
                     "โปรดแจ้งผู้ดูแลระบบ");
             }
+            PopulateOfficesDropDownList(pointOfEvaluation.OwnerOfficeId);
+            PopulateAuditOfficesDropDownList(pointOfEvaluation.AuditOfficeId);
             return View(pointOfEvaluation);
         }
 
         // GET: PointOfEvaluations/Edit/5
-        public async Task<IActionResult> Edit(int? id)
+        public async Task<IActionResult> Edit(int? id, int yearPoint = 0)
         {
             if (id == null)
             {
                 return NotFound();
             }
 
-            var pointOfEvaluation = await _context.PointOfEvaluations.FindAsync(id);
+            var pointOfEvaluation = await _context.PointOfEvaluations.Include(p => p.OwnerOffice).Include(p => p.AuditOffice).Where(p => p.Id == id).FirstOrDefaultAsync();
             if (pointOfEvaluation == null)
             {
                 return NotFound();
             }
+
+            ViewBag.yearPoint = yearPoint;
+            PopulateOfficesDropDownList();
+            PopulateAuditOfficesDropDownList();
             return View(pointOfEvaluation);
         }
 
@@ -244,7 +256,7 @@ namespace EPES.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost, ActionName("Edit")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> EditPost(int? id)//, [Bind("Id,Year,Point,SubPoint,Plan,Name,Unit,Weight,Rate1,Rate2,Rate3,Rate4,Rate5")] PointOfEvaluation pointOfEvaluation)
+        public async Task<IActionResult> EditPost(int? id,int yearpoint = 0)//, [Bind("Id,Year,Point,SubPoint,Plan,Name,Unit,Weight,Rate1,Rate2,Rate3,Rate4,Rate5")] PointOfEvaluation pointOfEvaluation)
         {
             if (id == null)
             {
@@ -256,13 +268,13 @@ namespace EPES.Controllers
 
             if (await TryUpdateModelAsync<PointOfEvaluation>(
                 pointOfEvaluationToUpdate, "",
-                p => p.Year, p => p.Point, p => p.SubPoint, p => p.Plan, p => p.Name, p => p.Unit, p => p.Weight,
-                p => p.Rate1, p => p.Rate2, p => p.Rate3, p => p.Rate4, p => p.Rate5))
+                p => p.Year, p => p.Point, p => p.Plan, p => p.Name, p => p.Unit, p => p.Weight,
+                p => p.Rate1, p => p.Rate2, p => p.Rate3, p => p.Rate4, p => p.Rate5 , p => p.OwnerOfficeId, p => p.AuditOfficeId))
             {
                 try
                 {
                     await _context.SaveChangesAsync();
-                    return RedirectToAction(nameof(Index), new { officeCode = user.OfficeId});
+                    return RedirectToAction(nameof(Index), new { officeCode = user.OfficeId, yearPoint = yearpoint});
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -270,8 +282,10 @@ namespace EPES.Controllers
                         "ลองพยายามบันทึกอีกครั้ง " +
                         "โปรดแจ้งผู้ดูแลระบบ");
                 }
-                return RedirectToAction(nameof(Index), new { officeCode = user.OfficeId });
+                return RedirectToAction(nameof(Index), new { officeCode = user.OfficeId, yearPoint = yearpoint });
             }
+            PopulateOfficesDropDownList(pointOfEvaluationToUpdate.OwnerOfficeId);
+            PopulateAuditOfficesDropDownList(pointOfEvaluationToUpdate.AuditOfficeId);
             return View(pointOfEvaluationToUpdate);
         }
 
@@ -305,11 +319,11 @@ namespace EPES.Controllers
         // POST: PointOfEvaluations/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
+        public async Task<IActionResult> DeleteConfirmed(int pointId)
         {
             var user = await _userManager.GetUserAsync(User);
 
-            var pointOfEvaluation = await _context.PointOfEvaluations.FindAsync(id);
+            var pointOfEvaluation = await _context.PointOfEvaluations.FindAsync(pointId);
             if (pointOfEvaluation == null)
             {
                 return RedirectToAction(nameof(Index), new { officeCode = user.OfficeId });
@@ -323,7 +337,7 @@ namespace EPES.Controllers
             catch (DbUpdateException /* ex */)
             {
                 //Log the error (uncomment ex variable name and write a log.)
-                return RedirectToAction(nameof(Delete), new { id = id, saveChangesError = true });
+                return RedirectToAction(nameof(Delete), new { id = pointId, saveChangesError = true });
             }
         }
 
@@ -339,6 +353,15 @@ namespace EPES.Controllers
                                    orderby d.Id
                                    select d;
             ViewBag.OfficeID = new SelectList(officesQuery.AsNoTracking(), "Id", "Name", selectedOffice);
+        }
+
+        private void PopulateAuditOfficesDropDownList(object selectedOffice = null)
+        {
+            var officesQuery = from d in _context.Offices
+                               where (d.Code != "00000000" && d.Code.Substring(5, 3) == "000")
+                               orderby d.Id
+                               select d;
+            ViewBag.AuditOfficeID = new SelectList(officesQuery.AsNoTracking(), "Id", "Name", selectedOffice);
         }
     }
 }

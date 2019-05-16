@@ -3,6 +3,7 @@
 @inject UserManager<ApplicationUser> UserManager
 
 @{
+    ViewData["Title"] = "Point Of Evaluation";
     var user = await UserManager.GetUserAsync(User);
 }
 
@@ -12,8 +13,8 @@
     <p class="mb-4">ตัวชี้วัดผลการปฏิบัติราชการ</p>
     <form asp-action="Index">
         <div class="form-group row">
-            <label class="col-form-label col-md-8 text-md-right">ปี: </label>
-            <div class="col-md-4">
+            <label class="col-form-label col-md-10 text-md-right">ปีงบประมาณ: </label>
+            <div class="col-md-2">
                 <select asp-for="yearPoint" class="form-control" onchange="this.form.submit()">
                     <option value="-1">@DateTime.Now.AddYears(-1).ToString("yyyy")</option>
                     <option value="0">@DateTime.Now.ToString("yyyy")</option>
@@ -28,7 +29,7 @@
         <!-- Plan A -->
         <div class="card shadow mb-4">
             <div class="card-header py-3">
-                <h6 class="m-0 font-weight-bold text-primary">แผน A</h6>
+                <h6 class="m-0 font-weight-bold text-primary">แผนงานตามนโยบายจากผู้บริหาร (Top - Down : A)</h6>
             </div>
             <div class="card-body">
                 <div class="table-responsive">
@@ -36,13 +37,10 @@
                         <thead>
                             <tr>
                                 <th>
-                                    ตัวชี้วัด
+                                    ลำดับที่
                                 </th>
                                 <th>
-                                    ตัวชี้วัดย่อย
-                                </th>
-                                <th>
-                                    รายละเอียด
+                                    แผนงาน/ตัวชี้วัด
                                 </th>
                                 <th>
                                     หน่วยนับ
@@ -54,7 +52,7 @@
                                     ตัวชี้วัดสำหรับ
                                 </th>
                                 <th>
-                                    หน่วยงานตรวจสอบ
+                                    หน่วยกำกับ
                                 </th>
                                 <th></th>
                             </tr>
@@ -65,9 +63,6 @@
                                 <tr>
                                     <td>
                                         @Html.DisplayFor(modelItem => item.Point)
-                                    </td>
-                                    <td>
-                                        @Html.DisplayFor(modelItem => item.SubPoint)
                                     </td>
                                     <td>
                                         @Html.DisplayFor(modelItem => item.Name)
@@ -92,7 +87,7 @@
                                         <a asp-action="Details" asp-route-id="@item.Id"><i class="fas fa-search-plus"></i></a>
                                         @if (User.IsInRole("Admin") || user.OfficeId == item.OwnerOffice.Code)
                                         {
-                                            <a asp-action="Delete" asp-route-id="@item.Id"><i class="fas fa-trash"></i></a>
+                                            <a asp-action="Delete" asp-route-id="@item.Id" asp-route-yearPoint="@Model.yearPoint"><i class="fas fa-trash"></i></a>
                                         }
                                     </td>
                                 </tr>
@@ -109,7 +104,7 @@
     <!-- Plan B -->
     <div class="card shadow mb-4">
         <div class="card-header py-3">
-            <h6 class="m-0 font-weight-bold text-primary">แผน B</h6>
+            <h6 class="m-0 font-weight-bold text-primary">แผนงานตามนโยบายที่ถ่ายทอดไปยังหน่วยปฏิบัติ (Top - Down : B)</h6>
         </div>
         <div class="card-body">
             <div class="table-responsive">
@@ -117,13 +112,10 @@
                     <thead>
                         <tr>
                             <th>
-                                ตัวชี้วัด
+                                ลำดับที่
                             </th>
                             <th>
-                                ตัวชี้วัดย่อย
-                            </th>
-                            <th>
-                                รายละเอียด
+                                แผนงาน/ตัวชี้วัด
                             </th>
                             <th>
                                 หน่วยนับ
@@ -135,7 +127,7 @@
                                 ตัวชี้วัดสำหรับ
                             </th>
                             <th>
-                                หน่วยงานตรวจสอบ
+                                หน่วยกำกับ
                             </th>
                             <th></th>
                         </tr>
@@ -146,9 +138,6 @@
                             <tr>
                                 <td>
                                     @Html.DisplayFor(modelItem => item.Point)
-                                </td>
-                                <td>
-                                    @Html.DisplayFor(modelItem => item.SubPoint)
                                 </td>
                                 <td>
                                     @Html.DisplayFor(modelItem => item.Name)
@@ -168,12 +157,12 @@
                                 <td>
                                     @if (User.IsInRole("Admin") || user.OfficeId == item.AuditOffice.Code)
                                     {
-                                        <a asp-action="Edit" asp-route-id="@item.Id"><i class="fas fa-edit"></i></a>
+                                        <a asp-action="Edit" asp-route-id="@item.Id" asp-route-yearPoint="@Model.yearPoint"><i class="fas fa-edit"></i></a>
                                     }
-                                    <a asp-action="Details" asp-route-id="@item.Id"><i class="fas fa-search-plus"></i></a>
+                                    <a asp-action="Details" asp-route-id="@item.Id" asp-route-yearPoint="@Model.yearPoint"><i class="fas fa-search-plus"></i></a>
                                     @if (User.IsInRole("Admin") || user.OfficeId == item.AuditOffice.Code)
                                     {
-                                        <a asp-action="Delete" asp-route-id="@item.Id"><i class="fas fa-trash"></i></a>
+                                        <a asp-action="Delete" asp-route-id="@item.Id" asp-route-yearPoint="@Model.yearPoint"><i class="fas fa-trash"></i></a>
                                     }
                                 </td>
                             </tr>
@@ -193,7 +182,7 @@
     <!-- Plan C -->
     <div class="card shadow mb-4">
         <div class="card-header py-3">
-            <h6 class="m-0 font-weight-bold text-primary">แผน C</h6>
+            <h6 class="m-0 font-weight-bold text-primary">แผนงานตามความต้องการของหน่วยงาน (Bottom - Up : C)</h6>
         </div>
         <div class="card-body">
             <div class="table-responsive">
@@ -201,13 +190,10 @@
                     <thead>
                         <tr>
                             <th>
-                                ตัวชี้วัด
+                                ลำดับที่
                             </th>
                             <th>
-                                ตัวชี้วัดย่อย
-                            </th>
-                            <th>
-                                รายละเอียด
+                                แผนงาน/ตัวชี้วัด
                             </th>
                             <th>
                                 หน่วยนับ
@@ -219,7 +205,7 @@
                                 ตัวชี้วัดสำหรับ
                             </th>
                             <th>
-                                หน่วยงานตรวจสอบ
+                                หน่วยกำกับ
                             </th>
                             <th></th>
                         </tr>
@@ -230,9 +216,6 @@
                             <tr>
                                 <td>
                                     @Html.DisplayFor(modelItem => item.Point)
-                                </td>
-                                <td>
-                                    @Html.DisplayFor(modelItem => item.SubPoint)
                                 </td>
                                 <td>
                                     @Html.DisplayFor(modelItem => item.Name)
@@ -252,12 +235,12 @@
                                 <td>
                                     @if (User.IsInRole("Admin") || user.OfficeId == item.OwnerOffice.Code)
                                     {
-                                        <a asp-action="Edit" asp-route-id="@item.Id"><i class="fas fa-edit"></i></a>
+                                        <a asp-action="Edit" asp-route-id="@item.Id" asp-route-yearPoint="@Model.yearPoint"><i class="fas fa-edit"></i></a>
                                     }
-                                    <a asp-action="Details" asp-route-id="@item.Id"><i class="fas fa-search-plus"></i></a>
+                                    <a asp-action="Details" asp-route-id="@item.Id" asp-route-yearPoint="@Model.yearPoint"><i class="fas fa-search-plus"></i></a>
                                     @if (User.IsInRole("Admin") || user.OfficeId == item.OwnerOffice.Code)
                                     {
-                                        <a asp-action="Delete" asp-route-id="@item.Id"><i class="fas fa-trash"></i></a>
+                                        <a asp-action="Delete" asp-route-id="@item.Id" asp-route-yearPoint="@Model.yearPoint"><i class="fas fa-trash"></i></a>
                                     }
                                 </td>
                             </tr>
@@ -274,7 +257,7 @@
     <!-- Plan D -->
     <div class="card shadow mb-4">
         <div class="card-header py-3">
-            <h6 class="m-0 font-weight-bold text-primary">แผน D</h6>
+            <h6 class="m-0 font-weight-bold text-primary">แผนงานร่วม (Joint KPI: D)</h6>
         </div>
         <div class="card-body">
             <div class="table-responsive">
@@ -282,13 +265,10 @@
                     <thead>
                         <tr>
                             <th>
-                                ตัวชี้วัด
+                                ลำดับที่
                             </th>
                             <th>
-                                ตัวชี้วัดย่อย
-                            </th>
-                            <th>
-                                รายละเอียด
+                                แผนงาน/ตัวชี้วัด
                             </th>
                             <th>
                                 หน่วยนับ
@@ -300,7 +280,7 @@
                                 ตัวชี้วัดสำหรับ
                             </th>
                             <th>
-                                หน่วยงานตรวจสอบ
+                                หน่วยกำกับ
                             </th>
                             <th></th>
                         </tr>
@@ -311,9 +291,6 @@
                             <tr>
                                 <td>
                                     @Html.DisplayFor(modelItem => item.Point)
-                                </td>
-                                <td>
-                                    @Html.DisplayFor(modelItem => item.SubPoint)
                                 </td>
                                 <td>
                                     @Html.DisplayFor(modelItem => item.Name)
@@ -333,12 +310,12 @@
                                 <td>
                                     @if (User.IsInRole("Admin") || user.OfficeId == item.OwnerOffice.Code)
                                     {
-                                        <a asp-action="Edit" asp-route-id="@item.Id"><i class="fas fa-edit"></i></a>
+                                        <a asp-action="Edit" asp-route-id="@item.Id" asp-route-yearPoint="@Model.yearPoint"><i class="fas fa-edit"></i></a>
                                     }
-                                    <a asp-action="Details" asp-route-id="@item.Id"><i class="fas fa-search-plus"></i></a>
+                                    <a asp-action="Details" asp-route-id="@item.Id" asp-route-yearPoint="@Model.yearPoint"><i class="fas fa-search-plus"></i></a>
                                     @if (User.IsInRole("Admin") || user.OfficeId == item.OwnerOffice.Code)
                                     {
-                                        <a asp-action="Delete" asp-route-id="@item.Id"><i class="fas fa-trash"></i></a>
+                                        <a asp-action="Delete" asp-route-id="@item.Id" asp-route-yearPoint="@Model.yearPoint"><i class="fas fa-trash"></i></a>
                                     }
                                 </td>
                             </tr>
