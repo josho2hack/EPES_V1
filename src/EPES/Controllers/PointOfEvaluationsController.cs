@@ -26,25 +26,12 @@ namespace EPES.Controllers
         }
 
         // GET: PointOfEvaluations
-        public async Task<IActionResult> Index(string officeCode, string returnUrl = null, int yearPoint = 0)
-        {  
+        public async Task<IActionResult> Index()
+        {
+            var user = await _userManager.GetUserAsync(User);
+            var officeCode = user.OfficeId;
             var office = await _context.Offices.SingleAsync(o => o.Code == officeCode);
-
-            returnUrl = returnUrl ?? Url.Content("~/");
-            if (officeCode == null)
-            {
-                return LocalRedirect(returnUrl);
-            }
-
-            DateTime yearForQuery;
-            if (yearPoint == 0)
-            {
-                yearForQuery = new DateTime(DateTime.Now.Year, 1, 1);
-            }
-            else
-            {
-                yearForQuery = new DateTime(DateTime.Now.AddYears(yearPoint).Year, 1, 1);
-            }
+            var yearForQuery = new DateTime(DateTime.Now.Year, 1, 1);
 
             var viewModel = new PointOfEvaluationViewModel();
             if (officeCode == "00013000")
@@ -78,14 +65,18 @@ namespace EPES.Controllers
                 }
             }
             viewModel.pointD = await _context.PointOfEvaluations.Where(p => p.Plan == TypeOfPlan.D).Include(p => p.OwnerOffice).Include(p => p.AuditOffice).ToListAsync();
-            viewModel.yearPoint = yearPoint;
+
             return View(viewModel);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Index(string officeCode, int yearPoint = 0)
+        public async Task<IActionResult> Index(int yearPoint = 0)
         {
+            var user = await _userManager.GetUserAsync(User);
+            var officeCode = user.OfficeId;
+            var office = await _context.Offices.SingleAsync(o => o.Code == officeCode);
+
             DateTime yearForQuery;
             if (yearPoint == 0)
             {
