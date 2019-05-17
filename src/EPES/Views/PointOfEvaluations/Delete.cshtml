@@ -95,8 +95,9 @@
 
             <form asp-action="Delete">
                 <input type="hidden" asp-for="Id" />
+                <input type="hidden" name="yearP" value="@ViewBag.yearPoint" />
                 <input type="submit" value="ลบ" class="btn btn-danger" />
-                <a asp-action="Index" class="btn btn-success">ยกเลิก</a>
+                <a asp-action="Index" asp-route-yearPoint="@ViewBag.yearPoint" class="btn btn-success">ยกเลิก</a>
             </form>
         </div>
     </div>

@@ -87,7 +87,7 @@
                             <input name="auditOfficeCode" value="@user.OfficeId" hidden />
                         }
                                 <button type="submit" class="btn btn-primary">เพิ่ม</button>
-                                <a asp-area="" asp-controller="PointOfEvaluations" asp-action="Index" class="btn btn-secondary">ยกเลิก</a>
+                                <a asp-area="" asp-controller="PointOfEvaluations" asp-action="Index" asp-route-yearPoint="@ViewBag.yearPoint" class="btn btn-secondary">ยกเลิก</a>
                         <input type="hidden" name="y" value="@ViewBag.yearPoint" />
                         <input asp-for="Plan" placeholder="@ViewBag.PlanValue" hidden />
                     </form>

@@ -13,88 +13,87 @@
         </div>
         <div class="card-body">
             <dl class="row">
-                <dt class="col-sm-6">
+                <dt class="col-sm-4">
                     @Html.DisplayNameFor(model => model.Year)
                 </dt>
-                <dd class="col-sm-6">
+                <dd class="col-sm-8">
                     @Model.Year.ToString("yyyy")
                 </dd>
-                <dt class="col-sm-6">
+                <dt class="col-sm-4">
                     @Html.DisplayNameFor(model => model.Plan)
                 </dt>
-                <dd class="col-sm-6">
+                <dd class="col-sm-8">
                     @Html.DisplayFor(model => model.Plan)
                 </dd>
-                <dt class="col-sm-6">
+                <dt class="col-sm-4">
                     @Html.DisplayNameFor(model => model.Point)
                 </dt>
-                <dd class="col-sm-6">
+                <dd class="col-sm-8">
                     @Html.DisplayFor(model => model.Point)
                 </dd>
-                <dt class="col-sm-6">
+                <dt class="col-sm-4">
                     @Html.DisplayNameFor(model => model.Name)
                 </dt>
-                <dd class="col-sm-6">
+                <dd class="col-sm-8">
                     @Html.DisplayFor(model => model.Name)
                 </dd>
-                <dt class="col-sm-6">
+                <dt class="col-sm-4">
                     @Html.DisplayNameFor(model => model.Unit)
                 </dt>
-                <dd class="col-sm-6">
+                <dd class="col-sm-8">
                     @Html.DisplayFor(model => model.Unit)
                 </dd>
-                <dt class="col-sm-6">
+                <dt class="col-sm-4">
                     @Html.DisplayNameFor(model => model.Weight)
                 </dt>
-                <dd class="col-sm-6">
+                <dd class="col-sm-8">
                     @Html.DisplayFor(model => model.Weight)
                 </dd>
-                <dt class="col-sm-6">
+                <dt class="col-sm-4">
                     @Html.DisplayNameFor(model => model.Rate1)
                 </dt>
-                <dd class="col-sm-6">
+                <dd class="col-sm-8">
                     @Html.DisplayFor(model => model.Rate1)
                 </dd>
-                <dt class="col-sm-6">
+                <dt class="col-sm-4">
                     @Html.DisplayNameFor(model => model.Rate2)
                 </dt>
-                <dd class="col-sm-6">
+                <dd class="col-sm-8">
                     @Html.DisplayFor(model => model.Rate2)
                 </dd>
-                <dt class="col-sm-6">
+                <dt class="col-sm-4">
                     @Html.DisplayNameFor(model => model.Rate3)
                 </dt>
-                <dd class="col-sm-6">
+                <dd class="col-sm-8">
                     @Html.DisplayFor(model => model.Rate3)
                 </dd>
-                <dt class="col-sm-6">
+                <dt class="col-sm-4">
                     @Html.DisplayNameFor(model => model.Rate4)
                 </dt>
-                <dd class="col-sm-6">
+                <dd class="col-sm-8">
                     @Html.DisplayFor(model => model.Rate4)
                 </dd>
-                <dt class="col-sm-6">
+                <dt class="col-sm-4">
                     @Html.DisplayNameFor(model => model.Rate5)
                 </dt>
-                <dd class="col-sm-6">
+                <dd class="col-sm-8">
                     @Html.DisplayFor(model => model.Rate5)
                 </dd>
-                <dt class="col-sm-6">
+                <dt class="col-sm-4">
                     @Html.DisplayNameFor(model => model.OwnerOffice)
                 </dt>
-                <dd class="col-sm-6">
+                <dd class="col-sm-8">
                     @Html.DisplayFor(model => model.OwnerOffice.Name)
                 </dd>
-                <dt class="col-sm-6">
+                <dt class="col-sm-4">
                     @Html.DisplayNameFor(model => model.AuditOffice)
                 </dt>
-                <dd class="col-sm-6">
+                <dd class="col-sm-8">
                     @Html.DisplayFor(model => model.AuditOffice.Name)
                 </dd>
             </dl>
             <div>
-                <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-warning">แก้ไขแผน</a>
-                <a asp-action="Index" class="btn btn-info">กลับหน้าแผน</a>
+                <a asp-action="Index" asp-route-yearPoint="@ViewBag.yearPoint" class="btn btn-info">กลับหน้าแผน</a>
             </div>
         </div>
     </div>

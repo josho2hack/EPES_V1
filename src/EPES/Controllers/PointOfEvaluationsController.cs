@@ -26,12 +26,21 @@ namespace EPES.Controllers
         }
 
         // GET: PointOfEvaluations
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(int yearPoint = 0)
         {
             var user = await _userManager.GetUserAsync(User);
             var officeCode = user.OfficeId;
             //var office = await _context.Offices.SingleAsync(o => o.Code == officeCode);
-            var yearForQuery = new DateTime(DateTime.Now.Year, 1, 1);
+
+            DateTime yearForQuery;
+            if (yearPoint == 0)
+            {
+                yearForQuery = new DateTime(DateTime.Now.Year, 1, 1);
+            }
+            else
+            {
+                yearForQuery = new DateTime(DateTime.Now.AddYears(yearPoint).Year, 1, 1);
+            }
 
             var viewModel = new PointOfEvaluationViewModel();
             if (officeCode == "00013000")
@@ -64,14 +73,14 @@ namespace EPES.Controllers
                     }
                 }
             }
-            viewModel.pointD = await _context.PointOfEvaluations.Where(p => p.Plan == TypeOfPlan.D).Include(p => p.OwnerOffice).Include(p => p.AuditOffice).ToListAsync();
+            viewModel.pointD = await _context.PointOfEvaluations.Where(p => p.Plan == TypeOfPlan.D && p.Year == yearForQuery).Include(p => p.OwnerOffice).Include(p => p.AuditOffice).ToListAsync();
 
             return View(viewModel);
         }
 
-        [HttpPost]
+        [HttpPost,ActionName("Index")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Index(int yearPoint = 0)
+        public async Task<IActionResult> IndexPost(int yearPoint = 0)
         {
             var user = await _userManager.GetUserAsync(User);
             var officeCode = user.OfficeId;
@@ -119,9 +128,9 @@ namespace EPES.Controllers
                 }
             }
 
-            viewModel.pointD = await _context.PointOfEvaluations.Where(p => p.Plan == TypeOfPlan.D).Include(p => p.OwnerOffice).Include(p => p.AuditOffice).ToListAsync();
-            viewModel.yearPoint = yearPoint;
+            viewModel.pointD = await _context.PointOfEvaluations.Where(p => p.Plan == TypeOfPlan.D && p.Year == yearForQuery).Include(p => p.OwnerOffice).Include(p => p.AuditOffice).ToListAsync();
 
+            viewModel.yearPoint = yearPoint;
             return View(viewModel);
         }
 
@@ -169,9 +178,7 @@ namespace EPES.Controllers
                     ViewBag.PlanValue = "3";
                     break;
             }
-            ViewBag.yearPoint = yearPoint;
-            var user = await _userManager.GetUserAsync(User);
-            var office = await _context.Offices.SingleAsync(o => o.Code == user.OfficeId);
+            
             if (plan == 3)
             {
                 PopulateOfficesDropDownList(1);
@@ -180,7 +187,12 @@ namespace EPES.Controllers
             {
                 PopulateOfficesDropDownList();
             }
+
+            var user = await _userManager.GetUserAsync(User);
+            var office = await _context.Offices.SingleAsync(o => o.Code == user.OfficeId);
             PopulateAuditOfficesDropDownList(office.Id);
+
+            ViewBag.yearPoint = yearPoint;
             return View();
         }
 
@@ -224,11 +236,14 @@ namespace EPES.Controllers
                     "ลองพยายามบันทึกอีกครั้ง " +
                     "โปรดแจ้งผู้ดูแลระบบ");
             }
+
             if (User.IsInRole("Admin"))
             {
                 PopulateOfficesDropDownList(pointOfEvaluation.OwnerOfficeId);
                 PopulateAuditOfficesDropDownList(pointOfEvaluation.AuditOfficeId);
             }
+
+            ViewBag.yearPoint = y;
             return View(pointOfEvaluation);
         }
 
@@ -246,12 +261,13 @@ namespace EPES.Controllers
                 return NotFound();
             }
 
-            ViewBag.yearPoint = yearPoint;
             if (User.IsInRole("Admin"))
             {
                 PopulateOfficesDropDownList();
                 PopulateAuditOfficesDropDownList();
             }
+
+            ViewBag.yearPoint = yearPoint;
             return View(pointOfEvaluation);
         }
 
@@ -297,7 +313,7 @@ namespace EPES.Controllers
         }
 
         // GET: PointOfEvaluations/Delete/5
-        public async Task<IActionResult> Delete(int? id, bool? saveChangesError = false)
+        public async Task<IActionResult> Delete(int? id, int yearPoint,bool? saveChangesError = false)
         {
             if (id == null)
             {
@@ -322,17 +338,18 @@ namespace EPES.Controllers
                     "โปรดแจ้งผู้ดูแลระบบ";
             }
 
+            ViewBag.yearPoint = yearPoint;
             return View(pointOfEvaluation);
         }
 
         // POST: PointOfEvaluations/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int pointId)
+        public async Task<IActionResult> DeleteConfirmed(int Id,int yearP)
         {
             var user = await _userManager.GetUserAsync(User);
 
-            var pointOfEvaluation = await _context.PointOfEvaluations.FindAsync(pointId);
+            var pointOfEvaluation = await _context.PointOfEvaluations.FindAsync(Id);
             if (pointOfEvaluation == null)
             {
                 return RedirectToAction(nameof(Index));
@@ -341,12 +358,12 @@ namespace EPES.Controllers
             {
                 _context.PointOfEvaluations.Remove(pointOfEvaluation);
                 await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction(nameof(Index), new { yearPoint = yearP });
             }
             catch (DbUpdateException /* ex */)
             {
                 //Log the error (uncomment ex variable name and write a log.)
-                return RedirectToAction(nameof(Delete), new { id = pointId, saveChangesError = true });
+                return RedirectToAction(nameof(Delete), new { id = Id, yearPoint = yearP, saveChangesError = true });
             }
         }
 
