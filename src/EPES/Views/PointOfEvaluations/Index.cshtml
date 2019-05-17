@@ -29,7 +29,7 @@
         <!-- Plan A -->
         <div class="card shadow mb-4">
             <div class="card-header py-3">
-                <h6 class="m-0 font-weight-bold text-primary">แผนงานตามนโยบายจากผู้บริหาร (Top - Down : A)</h6>
+                <h6 class="m-0 font-weight-bold text-primary">แผนงานตามนโยบายจากผู้บริหาร (Top - Down: A)</h6>
             </div>
             <div class="card-body">
                 <div class="table-responsive">
@@ -80,12 +80,12 @@
                                         @Html.DisplayFor(modelItem => item.AuditOffice.Name)
                                     </td>
                                     <td>
-                                        @if (User.IsInRole("Admin") || user.OfficeId == item.OwnerOffice.Code)
+                                        @if (User.IsInRole("Admin") || user.OfficeId == item.OwnerOffice?.Code)
                                         {
                                             <a asp-action="Edit" asp-route-id="@item.Id"><i class="fas fa-edit"></i></a>
                                         }
                                         <a asp-action="Details" asp-route-id="@item.Id"><i class="fas fa-search-plus"></i></a>
-                                        @if (User.IsInRole("Admin") || user.OfficeId == item.OwnerOffice.Code)
+                                        @if (User.IsInRole("Admin") || user.OfficeId == item.OwnerOffice?.Code)
                                         {
                                             <a asp-action="Delete" asp-route-id="@item.Id" asp-route-yearPoint="@Model.yearPoint"><i class="fas fa-trash"></i></a>
                                         }
@@ -104,7 +104,7 @@
     <!-- Plan B -->
     <div class="card shadow mb-4">
         <div class="card-header py-3">
-            <h6 class="m-0 font-weight-bold text-primary">แผนงานตามนโยบายที่ถ่ายทอดไปยังหน่วยปฏิบัติ (Top - Down : B)</h6>
+            <h6 class="m-0 font-weight-bold text-primary">แผนงานตามนโยบายที่ถ่ายทอดไปยังหน่วยปฏิบัติ (Top - Down: B)</h6>
         </div>
         <div class="card-body">
             <div class="table-responsive">
@@ -155,12 +155,12 @@
                                     @Html.DisplayFor(modelItem => item.AuditOffice.Name)
                                 </td>
                                 <td>
-                                    @if (User.IsInRole("Admin") || user.OfficeId == item.AuditOffice.Code)
+                                    @if (User.IsInRole("Admin") || user.OfficeId == item.AuditOffice?.Code)
                                     {
                                         <a asp-action="Edit" asp-route-id="@item.Id" asp-route-yearPoint="@Model.yearPoint"><i class="fas fa-edit"></i></a>
                                     }
                                     <a asp-action="Details" asp-route-id="@item.Id" asp-route-yearPoint="@Model.yearPoint"><i class="fas fa-search-plus"></i></a>
-                                    @if (User.IsInRole("Admin") || user.OfficeId == item.AuditOffice.Code)
+                                    @if (User.IsInRole("Admin") || user.OfficeId == item.AuditOffice?.Code)
                                     {
                                         <a asp-action="Delete" asp-route-id="@item.Id" asp-route-yearPoint="@Model.yearPoint"><i class="fas fa-trash"></i></a>
                                     }
@@ -170,7 +170,7 @@
                     </tbody>
                 </table>
                 <p class="text-right">
-                    @if (User.IsInRole("Admin") || User.IsInRole("Manager"))
+                    @if ((User.IsInRole("Admin") || User.IsInRole("Manager")) && user.OfficeId.StartsWith("00"))
                     {
                         <a asp-action="Create" asp-route-plan="1" asp-route-yearPoint="@Model.yearPoint">เพิ่มแผน</a>
                     }
@@ -182,7 +182,7 @@
     <!-- Plan C -->
     <div class="card shadow mb-4">
         <div class="card-header py-3">
-            <h6 class="m-0 font-weight-bold text-primary">แผนงานตามความต้องการของหน่วยงาน (Bottom - Up : C)</h6>
+            <h6 class="m-0 font-weight-bold text-primary">แผนงานตามความต้องการของหน่วยงาน (Bottom - Up: C)</h6>
         </div>
         <div class="card-body">
             <div class="table-responsive">
@@ -233,12 +233,12 @@
                                     @Html.DisplayFor(modelItem => item.AuditOffice.Name)
                                 </td>
                                 <td>
-                                    @if (User.IsInRole("Admin") || user.OfficeId == item.OwnerOffice.Code)
+                                    @if (User.IsInRole("Admin") || user.OfficeId == item.OwnerOffice?.Code)
                                     {
                                         <a asp-action="Edit" asp-route-id="@item.Id" asp-route-yearPoint="@Model.yearPoint"><i class="fas fa-edit"></i></a>
                                     }
                                     <a asp-action="Details" asp-route-id="@item.Id" asp-route-yearPoint="@Model.yearPoint"><i class="fas fa-search-plus"></i></a>
-                                    @if (User.IsInRole("Admin") || user.OfficeId == item.OwnerOffice.Code)
+                                    @if (User.IsInRole("Admin") || user.OfficeId == item.OwnerOffice?.Code)
                                     {
                                         <a asp-action="Delete" asp-route-id="@item.Id" asp-route-yearPoint="@Model.yearPoint"><i class="fas fa-trash"></i></a>
                                     }
@@ -308,12 +308,12 @@
                                     @Html.DisplayFor(modelItem => item.AuditOffice.Name)
                                 </td>
                                 <td>
-                                    @if (User.IsInRole("Admin") || user.OfficeId == item.OwnerOffice.Code)
+                                    @if (User.IsInRole("Admin") || user.OfficeId == item.OwnerOffice?.Code)
                                     {
                                         <a asp-action="Edit" asp-route-id="@item.Id" asp-route-yearPoint="@Model.yearPoint"><i class="fas fa-edit"></i></a>
                                     }
                                     <a asp-action="Details" asp-route-id="@item.Id" asp-route-yearPoint="@Model.yearPoint"><i class="fas fa-search-plus"></i></a>
-                                    @if (User.IsInRole("Admin") || user.OfficeId == item.OwnerOffice.Code)
+                                    @if (User.IsInRole("Admin") || user.OfficeId == item.OwnerOffice?.Code)
                                     {
                                         <a asp-action="Delete" asp-route-id="@item.Id" asp-route-yearPoint="@Model.yearPoint"><i class="fas fa-trash"></i></a>
                                     }

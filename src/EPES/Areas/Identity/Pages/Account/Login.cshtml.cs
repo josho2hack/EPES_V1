@@ -1,16 +1,16 @@
-﻿using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Authorization;
+﻿using EPES.Models;
 using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.Logging;
-using EPES.Models;
-using Microsoft.AspNetCore.Identity.UI.Services;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.Linq;
 using System.Text.Encodings.Web;
+using System.Threading.Tasks;
 
 namespace EPES.Areas.Identity.Pages.Account
 {
@@ -23,7 +23,7 @@ namespace EPES.Areas.Identity.Pages.Account
         private readonly IEmailSender _emailSender;
         private readonly RoleManager<IdentityRole> _roleManager;
 
-        public LoginModel(UserManager<ApplicationUser> userManager,SignInManager<ApplicationUser> signInManager, ILogger<LoginModel> logger, IEmailSender emailSender, RoleManager<IdentityRole> roleManager)
+        public LoginModel(UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager, ILogger<LoginModel> logger, IEmailSender emailSender, RoleManager<IdentityRole> roleManager)
         {
             _userManager = userManager;
             _signInManager = signInManager;
@@ -79,51 +79,84 @@ namespace EPES.Areas.Identity.Pages.Account
 
             if (ModelState.IsValid)
             {
-                if ((Input.Username == "admin") && (Input.Password == "P@ssw0rd"))
+                if (((Input.Username == "admin") || (Input.Username == "pak") || (Input.Username == "sortor")) && (Input.Password == "P@ssw0rd"))
                 {
-                    if ((await _userManager.FindByNameAsync("admin")) == null)
+                    if (Input.Username == "admin")
                     {
-                        var admin = new ApplicationUser { UserName = "admin", Email = "admin@epes.rd.go.th",FName = "Admin",LName = "EPES",OfficeId="00013000"};
-                        await _userManager.CreateAsync(admin, "P@ssw0rd");
-
-                        if ((await _roleManager.FindByNameAsync("Admin")) == null)
+                        if ((await _userManager.FindByNameAsync("admin")) == null)
                         {
-                            await _roleManager.CreateAsync(new IdentityRole { Name = "Admin" });
-                        }
+                            var admin = new ApplicationUser { UserName = "admin", Email = "admin@epes.rd.go.th", FName = "Admin", LName = "EPES", OfficeId = "00013000" };
+                            await _userManager.CreateAsync(admin, "P@ssw0rd");
 
-                        if ((await _roleManager.FindByNameAsync("Manager")) == null)
-                        {
-                            await _roleManager.CreateAsync(new IdentityRole { Name = "Manager" });
-                        }
+                            if ((await _roleManager.FindByNameAsync("Admin")) == null)
+                            {
+                                await _roleManager.CreateAsync(new IdentityRole { Name = "Admin" });
+                            }
 
-                        if ((await _roleManager.FindByNameAsync("User")) == null)
-                        {
-                            await _roleManager.CreateAsync(new IdentityRole { Name = "User" });
+                            if ((await _roleManager.FindByNameAsync("Manager")) == null)
+                            {
+                                await _roleManager.CreateAsync(new IdentityRole { Name = "Manager" });
+                            }
+
+                            if ((await _roleManager.FindByNameAsync("User")) == null)
+                            {
+                                await _roleManager.CreateAsync(new IdentityRole { Name = "User" });
+                            }
+                            await _userManager.AddToRoleAsync(admin, "Admin");
                         }
-                        await _userManager.AddToRoleAsync(admin, "Admin");
+                        
+                        
+                        var result = await _signInManager.PasswordSignInAsync(Input.Username, Input.Password, Input.RememberMe, lockoutOnFailure: false);
+                        if (result.Succeeded)
+                        {
+                            _logger.LogInformation("User logged in.");
+                            return LocalRedirect(returnUrl);
+                        }
+                        else
+                        {
+                            ModelState.AddModelError(string.Empty, "Invalid login attempt.");
+                            return Page();
+                        }
                     }
-                    if ((await _userManager.FindByNameAsync("pak")) == null)
+                    if (Input.Username == "pak")
                     {
-                        var pak = new ApplicationUser { UserName = "pak", Email = "pak@epes.rd.go.th", FName = "Pak", LName = "EPES", OfficeId = "01000000" };
-                        await _userManager.CreateAsync(pak, "P@ssw0rd");
-                        await _userManager.AddToRoleAsync(pak, "Manager");
+                        if ((await _userManager.FindByNameAsync("pak")) == null)
+                        {
+                            var pak = new ApplicationUser { UserName = "pak", Email = "pak@epes.rd.go.th", FName = "Pak", LName = "EPES", OfficeId = "01000000" };
+                            await _userManager.CreateAsync(pak, "P@ssw0rd");
+                            await _userManager.AddToRoleAsync(pak, "Manager");
+                        }
+                        var result = await _signInManager.PasswordSignInAsync(Input.Username, Input.Password, Input.RememberMe, lockoutOnFailure: false);
+                        if (result.Succeeded)
+                        {
+                            _logger.LogInformation("User logged in.");
+                            return LocalRedirect(returnUrl);
+                        }
+                        else
+                        {
+                            ModelState.AddModelError(string.Empty, "Invalid login attempt.");
+                            return Page();
+                        }
                     }
-                    if ((await _userManager.FindByNameAsync("sortor")) == null)
+                    if (Input.Username == "sortor")
                     {
-                        var sortor = new ApplicationUser { UserName = "sortor", Email = "sortor@epes.rd.go.th", FName = "Sortor", LName = "EPES", OfficeId = "01003000" };
-                        await _userManager.CreateAsync(sortor, "P@ssw0rd");
-                        await _userManager.AddToRoleAsync(sortor, "User");
-                    }
-                    var result = await _signInManager.PasswordSignInAsync(Input.Username, Input.Password, Input.RememberMe, lockoutOnFailure: false);
-                    if (result.Succeeded)
-                    {
-                        _logger.LogInformation("User logged in.");
-                        return LocalRedirect(returnUrl);
-                    }
-                    else
-                    {
-                        ModelState.AddModelError(string.Empty, "Invalid login attempt.");
-                        return Page();
+                        if ((await _userManager.FindByNameAsync("sortor")) == null)
+                        {
+                            var sortor = new ApplicationUser { UserName = "sortor", Email = "sortor@epes.rd.go.th", FName = "Sortor", LName = "EPES", OfficeId = "01003000" };
+                            await _userManager.CreateAsync(sortor, "P@ssw0rd");
+                            await _userManager.AddToRoleAsync(sortor, "User");
+                        }
+                        var result = await _signInManager.PasswordSignInAsync(Input.Username, Input.Password, Input.RememberMe, lockoutOnFailure: false);
+                        if (result.Succeeded)
+                        {
+                            _logger.LogInformation("User logged in.");
+                            return LocalRedirect(returnUrl);
+                        }
+                        else
+                        {
+                            ModelState.AddModelError(string.Empty, "Invalid login attempt.");
+                            return Page();
+                        }
                     }
                 }
                 else

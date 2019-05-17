@@ -41,7 +41,7 @@ namespace EPES.Models
         [Column(TypeName = "decimal(18, 4)")]
         public decimal Rate2 { get; set; }
 
-        [Display(Name = "เกณฑ์การให้คะแนน3 คะแนน")]
+        [Display(Name = "เกณฑ์การให้คะแนน 3 คะแนน")]
         [Column(TypeName = "decimal(18, 4)")]
         public decimal Rate3 { get; set; }
 
@@ -53,11 +53,13 @@ namespace EPES.Models
         [Column(TypeName = "decimal(18, 4)")]
         public decimal Rate5 { get; set; }
 
+        [Display(Name = "ตัวชี้วัดสำหรับ")]
         public int? OwnerOfficeId { get; set; }
         [Display(Name = "ตัวชี้วัดสำหรับ")]
         [DisplayFormat(NullDisplayText = "สภ./สท.")]
         public Office OwnerOffice { get; set; }
 
+        [Display(Name = "หน่วยงานกำกับ")]
         public int? AuditOfficeId { get; set; }
         [Display(Name = "หน่วยงานกำกับ")]
         public Office AuditOffice { get; set; }

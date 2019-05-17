@@ -9,7 +9,7 @@
     <p class="mb-4">ตัวชี้วัดผลการปฏิบัติราชการ</p>
     <div class="card shadow mb-4">
         <div class="card-header py-3">
-            <h6 class="m-0 font-weight-bold text-primary">เพิ่มแผน @ViewBag.Plan</h6>
+            <h6 class="m-0 font-weight-bold text-primary">แก้ไขแผน @ViewBag.Plan</h6>
         </div>
         <div class="card-body">
             <div class="row">
@@ -98,16 +98,14 @@
                         }
                         <div class="form-group">
                             <input type="hidden" name="yearPoint" value="@ViewBag.yearPoint" />
-                            <input type="submit" value="Save" class="btn btn-primary" />
+                            <input type="submit" value="บันทึก" class="btn btn-primary" />
+                            <a asp-area="" asp-controller="PointOfEvaluations" asp-action="Index" asp-route-yearPoint="@ViewBag.yearPoint" class="btn btn-secondary">ยกเลิก</a>
                         </div>
                     </form>
                 </div>
             </div>
         </div>
     </div>
-</div>
-<div>
-    <a asp-area="" asp-controller="PointOfEvaluations" asp-action="Index" asp-route-yearPoint="@ViewBag.yearPoint">กลับ</a>
 </div>
 
 @section Scripts {
