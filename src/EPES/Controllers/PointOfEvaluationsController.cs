@@ -217,7 +217,8 @@ namespace EPES.Controllers
             }
 
             pointOfEvaluation.Year = new DateTime(DateTime.Now.AddYears(y).Year, 1, 1);
-            pointOfEvaluation.UpdateUserId = User.FindFirst(ClaimTypes.NameIdentifier).Value;
+            //pointOfEvaluation.UpdateUserId = User.FindFirst(ClaimTypes.NameIdentifier).Value;
+            pointOfEvaluation.UpdateUserId = user.Id;
             pointOfEvaluation.SubPoint = 0;
 
             try
@@ -285,11 +286,12 @@ namespace EPES.Controllers
             var user = await _userManager.GetUserAsync(User);
 
             var pointOfEvaluationToUpdate = await _context.PointOfEvaluations.FirstOrDefaultAsync(p => p.Id == id);
+            pointOfEvaluationToUpdate.UpdateUserId = user.Id;
 
             if (await TryUpdateModelAsync<PointOfEvaluation>(
                 pointOfEvaluationToUpdate, "",
                 p => p.Year, p => p.Point, p => p.Plan, p => p.Name, p => p.Unit, p => p.Weight,
-                p => p.Rate1, p => p.Rate2, p => p.Rate3, p => p.Rate4, p => p.Rate5, p => p.OwnerOfficeId, p => p.AuditOfficeId))
+                p => p.Rate1, p => p.Rate2, p => p.Rate3, p => p.Rate4, p => p.Rate5, p => p.OwnerOfficeId, p => p.AuditOfficeId, p => p.UpdateUserId))
             {
                 try
                 {

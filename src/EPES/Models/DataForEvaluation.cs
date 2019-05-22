@@ -19,22 +19,22 @@ namespace EPES.Models
         [Display(Name = "ผลการดำเนินการ")]
         [DataType(DataType.Currency)]
         [Column(TypeName = "decimal(38, 10)")]
-        public decimal Result { get; set; }
+        public decimal? Result { get; set; }
 
         [Display(Name = "ผลการดำเนินการก่อนผู้ตรวจสอบแก้ไข")]
         [Column(TypeName = "decimal(38, 10)")]
-        public decimal OldResult { get; set; }
+        public decimal? OldResult { get; set; }
 
         [Display(Name = "เดือน")]
-        [DataType(DataType.Date)]
-        [DisplayFormat(DataFormatString = "{0:MMMM}", ApplyFormatInEditMode = true)]
-        public DateTime Month { get; set; }
+        //[DataType(DataType.Date)]
+        //[DisplayFormat(DataFormatString = "{0:MMMM}", ApplyFormatInEditMode = true)]
+        public int Month { get; set; }
 
         [Display(Name = "หมายเหตุการแก้ไข")]
         public String AuditComment { get; set; }
 
         [Display(Name = "การอนุมัติ")]
-        public Approve? Approve { get; set; }
+        public Approve Approve { get; set; } = Approve.รอพิจารณา;
 
         [Display(Name = "หมายเหตุการอนุมัติ")]
         public string CommentApprove { get; set; }
@@ -47,8 +47,14 @@ namespace EPES.Models
         [Display(Name = "หน่วยงาน")]
         public Office Office { get; set; }
 
+        public string UpdateUserId { get; set; }
         [Display(Name = "ผู้แก้ไขล่าสุด")]
         public ApplicationUser UpdateUser { get; set; }
+
+        //public DataForEvaluation()
+        //{
+        //    Approve = Approve.รอพิจารณา;
+        //}
     }
 
     public enum Approve

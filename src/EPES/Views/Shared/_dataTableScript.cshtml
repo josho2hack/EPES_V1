@@ -36,3 +36,15 @@
         });
     });
 </script>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('#DataForEvalutionTable').dataTable({
+            "language": {
+                "url": "@Url.Content("~/js/Thai.json")"
+            },
+            "lengthMenu": [[20, 40, 80, -1], [20, 40, 80, "All"]],
+            "ordering": false
+        });
+    });
+</script>

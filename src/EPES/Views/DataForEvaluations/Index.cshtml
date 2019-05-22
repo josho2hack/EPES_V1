@@ -1,16 +1,16 @@
 ﻿@using Microsoft.AspNetCore.Identity
-@model EPES.ViewModels.PointOfEvaluationViewModel
+@model EPES.ViewModels.DataForEvaluationViewModel
 @inject UserManager<ApplicationUser> UserManager
 
 @{
-    ViewData["Title"] = "Point Of Evaluation";
+    ViewData["Title"] = "Data for Evaluation";
     var user = await UserManager.GetUserAsync(User);
 }
 
 
 <div class="container-fluid">
     <h1 class="h3 mb-2 text-gray-800">แผนปฏิบัติราชการ</h1>
-    <p class="mb-4">ตัวชี้วัดผลการปฏิบัติราชการ</p>
+    <p class="mb-4">เป้าหมาย/ประมาณการ</p>
     <form asp-action="Index">
         <div class="form-group row">
             <label class="col-form-label col-md-10 text-md-right">ปีงบประมาณ: </label>
@@ -42,12 +42,6 @@
                                     แผนงาน/ตัวชี้วัด
                                 </th>
                                 <th>
-                                    หน่วยนับ
-                                </th>
-                                <th>
-                                    น้ำหนัก
-                                </th>
-                                <th>
                                     ตัวชี้วัดสำหรับ
                                 </th>
                                 <th>
@@ -67,12 +61,6 @@
                                         @Html.DisplayFor(modelItem => item.Name)
                                     </td>
                                     <td>
-                                        @Html.DisplayFor(modelItem => item.Unit)
-                                    </td>
-                                    <td>
-                                        @Html.DisplayFor(modelItem => item.Weight)
-                                    </td>
-                                    <td>
                                         @Html.DisplayFor(modelItem => item.OwnerOffice.Name)
                                     </td>
                                     <td>
@@ -81,21 +69,15 @@
                                     <td>
                                         @if (User.IsInRole("Admin") || user.OfficeId == item.OwnerOffice?.Code)
                                         {
-                                            <a asp-action="Edit" asp-route-id="@item.Id"><i class="fas fa-edit"></i></a>
+                                            <a asp-action="Create" asp-route-poeid="@item.Id"><i class="fas fa-bullseye"></i></a>
+                                            <a asp-action="Edit" asp-route-poeid="@item.Id"><i class="fas fa-edit"></i></a>
                                         }
-                                        <a asp-action="Details" asp-route-id="@item.Id"><i class="fas fa-search-plus"></i></a>
-                                        @if (User.IsInRole("Admin") || user.OfficeId == item.OwnerOffice?.Code)
-                                        {
-                                            <a asp-action="Delete" asp-route-id="@item.Id" asp-route-yearPoint="@Model.yearPoint"><i class="fas fa-trash"></i></a>
-                                        }
+                                        <a asp-action="Details" asp-route-poeid="@item.Id"><i class="fas fa-search-plus"></i></a>
                                     </td>
                                 </tr>
                             }
                         </tbody>
                     </table>
-                    <p class="text-right">
-                        <a asp-action="Create" asp-route-plan="0" asp-route-yearPoint="@Model.yearPoint">เพิ่มแผน</a>
-                    </p>
                 </div>
             </div>
         </div>
@@ -307,12 +289,12 @@
                                     @Html.DisplayFor(modelItem => item.AuditOffice.Name)
                                 </td>
                                 <td>
-                                    @if (User.IsInRole("Admin") || user.OfficeId == item.AuditOffice?.Code)
+                                    @if (User.IsInRole("Admin") || user.OfficeId == item.OwnerOffice?.Code)
                                     {
                                         <a asp-action="Edit" asp-route-id="@item.Id" asp-route-yearPoint="@Model.yearPoint"><i class="fas fa-edit"></i></a>
                                     }
                                     <a asp-action="Details" asp-route-id="@item.Id" asp-route-yearPoint="@Model.yearPoint"><i class="fas fa-search-plus"></i></a>
-                                    @if (User.IsInRole("Admin") || user.OfficeId == item.AuditOffice?.Code)
+                                    @if (User.IsInRole("Admin") || user.OfficeId == item.OwnerOffice?.Code)
                                     {
                                         <a asp-action="Delete" asp-route-id="@item.Id" asp-route-yearPoint="@Model.yearPoint"><i class="fas fa-trash"></i></a>
                                     }
@@ -322,7 +304,7 @@
                     </tbody>
                 </table>
                 <p class="text-right">
-                    @if ((User.IsInRole("Admin") || User.IsInRole("Manager")) && user.OfficeId.StartsWith("00"))
+                    @if (User.IsInRole("Admin"))
                     {
                         <a asp-action="Create" asp-route-plan="3" asp-route-yearPoint="@Model.yearPoint">เพิ่มแผน</a>
                     }
