@@ -36,6 +36,9 @@
                         <thead>
                             <tr>
                                 <th>
+                                    แผนงาน/โครงการ
+                                </th>
+                                <th>
                                     ลำดับที่
                                 </th>
                                 <th>
@@ -59,37 +62,40 @@
                         <tbody>
                             @foreach (var item in Model.pointA)
                             {
-                                <tr>
-                                    <td>
-                                        @Html.DisplayFor(modelItem => item.Point)
-                                    </td>
-                                    <td>
-                                        @Html.DisplayFor(modelItem => item.Name)
-                                    </td>
-                                    <td>
-                                        @Html.DisplayFor(modelItem => item.Unit)
-                                    </td>
-                                    <td>
-                                        @Html.DisplayFor(modelItem => item.Weight)
-                                    </td>
-                                    <td>
-                                        @Html.DisplayFor(modelItem => item.OwnerOffice.Name)
-                                    </td>
-                                    <td>
-                                        @Html.DisplayFor(modelItem => item.AuditOffice.Name)
-                                    </td>
-                                    <td>
-                                        @if (User.IsInRole("Admin") || user.OfficeId == item.OwnerOffice?.Code)
-                                        {
-                                            <a asp-action="Edit" asp-route-id="@item.Id"><i class="fas fa-edit"></i></a>
-                                        }
-                                        <a asp-action="Details" asp-route-id="@item.Id"><i class="fas fa-search-plus"></i></a>
-                                        @if (User.IsInRole("Admin") || user.OfficeId == item.OwnerOffice?.Code)
-                                        {
-                                            <a asp-action="Delete" asp-route-id="@item.Id" asp-route-yearPoint="@Model.yearPoint"><i class="fas fa-trash"></i></a>
-                                        }
-                                    </td>
-                                </tr>
+                            <tr>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.DetailPlan)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Point)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Name)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Unit)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Weight)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.OwnerOffice.Name)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.AuditOffice.Name)
+                                </td>
+                                <td>
+                                    @if (User.IsInRole("Admin") || user.OfficeId == item.OwnerOffice?.Code)
+                                    {
+                                        <a asp-action="Edit" asp-route-id="@item.Id"><i class="fas fa-edit"></i></a>
+                                    }
+                                    <a asp-action="Details" asp-route-id="@item.Id"><i class="fas fa-search-plus"></i></a>
+                                    @if (User.IsInRole("Admin") || user.OfficeId == item.OwnerOffice?.Code)
+                                    {
+                                        <a asp-action="Delete" asp-route-id="@item.Id" asp-route-yearPoint="@Model.yearPoint"><i class="fas fa-trash"></i></a>
+                                    }
+                                </td>
+                            </tr>
                             }
                         </tbody>
                     </table>
@@ -110,6 +116,9 @@
                 <table class="table table-bordered" id="EPEStableB" style="width:100%;" cellspacing="0">
                     <thead>
                         <tr>
+                            <th>
+                                แผนงาน/โครงการ
+                            </th>
                             <th>
                                 ลำดับที่
                             </th>
@@ -134,37 +143,40 @@
                     <tbody>
                         @foreach (var item in Model.pointB)
                         {
-                            <tr>
-                                <td>
-                                    @Html.DisplayFor(modelItem => item.Point)
-                                </td>
-                                <td>
-                                    @Html.DisplayFor(modelItem => item.Name)
-                                </td>
-                                <td>
-                                    @Html.DisplayFor(modelItem => item.Unit)
-                                </td>
-                                <td>
-                                    @Html.DisplayFor(modelItem => item.Weight)
-                                </td>
-                                <td>
-                                    @Html.DisplayFor(modelItem => item.OwnerOffice.Name)
-                                </td>
-                                <td>
-                                    @Html.DisplayFor(modelItem => item.AuditOffice.Name)
-                                </td>
-                                <td>
-                                    @if (User.IsInRole("Admin") || user.OfficeId == item.AuditOffice?.Code)
-                                    {
-                                        <a asp-action="Edit" asp-route-id="@item.Id" asp-route-yearPoint="@Model.yearPoint"><i class="fas fa-edit"></i></a>
-                                    }
-                                    <a asp-action="Details" asp-route-id="@item.Id" asp-route-yearPoint="@Model.yearPoint"><i class="fas fa-search-plus"></i></a>
-                                    @if (User.IsInRole("Admin") || user.OfficeId == item.AuditOffice?.Code)
-                                    {
-                                        <a asp-action="Delete" asp-route-id="@item.Id" asp-route-yearPoint="@Model.yearPoint"><i class="fas fa-trash"></i></a>
-                                    }
-                                </td>
-                            </tr>
+                        <tr>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.DetailPlan)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Point)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Name)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Unit)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Weight)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.OwnerOffice.Name)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.AuditOffice.Name)
+                            </td>
+                            <td>
+                                @if (User.IsInRole("Admin") || user.OfficeId == item.AuditOffice?.Code)
+                                {
+                                    <a asp-action="Edit" asp-route-id="@item.Id" asp-route-yearPoint="@Model.yearPoint"><i class="fas fa-edit"></i></a>
+                                }
+                                <a asp-action="Details" asp-route-id="@item.Id" asp-route-yearPoint="@Model.yearPoint"><i class="fas fa-search-plus"></i></a>
+                                @if (User.IsInRole("Admin") || user.OfficeId == item.AuditOffice?.Code)
+                                {
+                                    <a asp-action="Delete" asp-route-id="@item.Id" asp-route-yearPoint="@Model.yearPoint"><i class="fas fa-trash"></i></a>
+                                }
+                            </td>
+                        </tr>
                         }
                     </tbody>
                 </table>
@@ -189,6 +201,9 @@
                     <thead>
                         <tr>
                             <th>
+                                แผนงาน/โครงการ
+                            </th>
+                            <th>
                                 ลำดับที่
                             </th>
                             <th>
@@ -212,37 +227,40 @@
                     <tbody>
                         @foreach (var item in Model.pointC)
                         {
-                            <tr>
-                                <td>
-                                    @Html.DisplayFor(modelItem => item.Point)
-                                </td>
-                                <td>
-                                    @Html.DisplayFor(modelItem => item.Name)
-                                </td>
-                                <td>
-                                    @Html.DisplayFor(modelItem => item.Unit)
-                                </td>
-                                <td>
-                                    @Html.DisplayFor(modelItem => item.Weight)
-                                </td>
-                                <td>
-                                    @Html.DisplayFor(modelItem => item.OwnerOffice.Name)
-                                </td>
-                                <td>
-                                    @Html.DisplayFor(modelItem => item.AuditOffice.Name)
-                                </td>
-                                <td>
-                                    @if (User.IsInRole("Admin") || user.OfficeId == item.OwnerOffice?.Code)
-                                    {
-                                        <a asp-action="Edit" asp-route-id="@item.Id" asp-route-yearPoint="@Model.yearPoint"><i class="fas fa-edit"></i></a>
-                                    }
-                                    <a asp-action="Details" asp-route-id="@item.Id" asp-route-yearPoint="@Model.yearPoint"><i class="fas fa-search-plus"></i></a>
-                                    @if (User.IsInRole("Admin") || user.OfficeId == item.OwnerOffice?.Code)
-                                    {
-                                        <a asp-action="Delete" asp-route-id="@item.Id" asp-route-yearPoint="@Model.yearPoint"><i class="fas fa-trash"></i></a>
-                                    }
-                                </td>
-                            </tr>
+                        <tr>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.DetailPlan)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Point)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Name)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Unit)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Weight)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.OwnerOffice.Name)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.AuditOffice.Name)
+                            </td>
+                            <td>
+                                @if (User.IsInRole("Admin") || user.OfficeId == item.OwnerOffice?.Code)
+                                {
+                                    <a asp-action="Edit" asp-route-id="@item.Id" asp-route-yearPoint="@Model.yearPoint"><i class="fas fa-edit"></i></a>
+                                }
+                                <a asp-action="Details" asp-route-id="@item.Id" asp-route-yearPoint="@Model.yearPoint"><i class="fas fa-search-plus"></i></a>
+                                @if (User.IsInRole("Admin") || user.OfficeId == item.OwnerOffice?.Code)
+                                {
+                                    <a asp-action="Delete" asp-route-id="@item.Id" asp-route-yearPoint="@Model.yearPoint"><i class="fas fa-trash"></i></a>
+                                }
+                            </td>
+                        </tr>
                         }
                     </tbody>
                 </table>
@@ -263,6 +281,9 @@
                 <table class="table table-bordered" id="EPEStableD" style="width:100%;" cellspacing="0">
                     <thead>
                         <tr>
+                            <th>
+                                แผนงาน/โครงการ
+                            </th>
                             <th>
                                 ลำดับที่
                             </th>
@@ -287,37 +308,40 @@
                     <tbody>
                         @foreach (var item in Model.pointD)
                         {
-                            <tr>
-                                <td>
-                                    @Html.DisplayFor(modelItem => item.Point)
-                                </td>
-                                <td>
-                                    @Html.DisplayFor(modelItem => item.Name)
-                                </td>
-                                <td>
-                                    @Html.DisplayFor(modelItem => item.Unit)
-                                </td>
-                                <td>
-                                    @Html.DisplayFor(modelItem => item.Weight)
-                                </td>
-                                <td>
-                                    @Html.DisplayFor(modelItem => item.OwnerOffice.Name)
-                                </td>
-                                <td>
-                                    @Html.DisplayFor(modelItem => item.AuditOffice.Name)
-                                </td>
-                                <td>
-                                    @if (User.IsInRole("Admin") || user.OfficeId == item.AuditOffice?.Code)
-                                    {
-                                        <a asp-action="Edit" asp-route-id="@item.Id" asp-route-yearPoint="@Model.yearPoint"><i class="fas fa-edit"></i></a>
-                                    }
-                                    <a asp-action="Details" asp-route-id="@item.Id" asp-route-yearPoint="@Model.yearPoint"><i class="fas fa-search-plus"></i></a>
-                                    @if (User.IsInRole("Admin") || user.OfficeId == item.AuditOffice?.Code)
-                                    {
-                                        <a asp-action="Delete" asp-route-id="@item.Id" asp-route-yearPoint="@Model.yearPoint"><i class="fas fa-trash"></i></a>
-                                    }
-                                </td>
-                            </tr>
+                        <tr>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.DetailPlan)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Point)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Name)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Unit)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Weight)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.OwnerOffice.Name)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.AuditOffice.Name)
+                            </td>
+                            <td>
+                                @if (User.IsInRole("Admin") || user.OfficeId == item.AuditOffice?.Code)
+                                {
+                                    <a asp-action="Edit" asp-route-id="@item.Id" asp-route-yearPoint="@Model.yearPoint"><i class="fas fa-edit"></i></a>
+                                }
+                                <a asp-action="Details" asp-route-id="@item.Id" asp-route-yearPoint="@Model.yearPoint"><i class="fas fa-search-plus"></i></a>
+                                @if (User.IsInRole("Admin") || user.OfficeId == item.AuditOffice?.Code)
+                                {
+                                    <a asp-action="Delete" asp-route-id="@item.Id" asp-route-yearPoint="@Model.yearPoint"><i class="fas fa-trash"></i></a>
+                                }
+                            </td>
+                        </tr>
                         }
                     </tbody>
                 </table>

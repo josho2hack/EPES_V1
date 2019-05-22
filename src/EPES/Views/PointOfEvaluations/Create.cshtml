@@ -21,6 +21,11 @@
                     <form asp-action="Create">
                         <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                         <div class="form-group">
+                            <label asp-for="DetailPlan" class="control-label"></label>
+                            <input asp-for="DetailPlan" class="form-control" />
+                            <span asp-validation-for="DetailPlan" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
                             <label asp-for="Point" class="control-label"></label>
                             <input asp-for="Point" class="form-control" />
                             <span asp-validation-for="Point" class="text-danger"></span>
@@ -32,7 +37,8 @@
                         </div>
                         <div class="form-group">
                             <label asp-for="Unit" class="control-label"></label>
-                            <input asp-for="Unit" class="form-control" />
+                            <select asp-for="Unit" class="form-control" asp-items="Html.GetEnumSelectList<UnitOfPoint>()">
+                            </select>
                             <span asp-validation-for="Unit" class="text-danger"></span>
                         </div>
                         <div class="form-group">
@@ -71,7 +77,10 @@
                             <div class="form-group">
                                 <label asp-for="OwnerOfficeId" class="control-label"></label>
                                 <select asp-for="OwnerOfficeId" class="form-control" asp-items="ViewBag.OfficeID">
-                                    <option value="">ตัวชี้วัด สภ./สท.</option>
+                                    @if (ViewBag.PlanValue == TypeOfPlan.B || ViewBag.PlanValue == TypeOfPlan.C)
+                                    {
+                                    <option value="">สภ./สท.</option>
+                                    }
                                 </select>
                                 <span asp-validation-for="OwnerOfficeId" class="text-danger"></span>
                             </div>
@@ -86,8 +95,8 @@
                             <input name="ownerOfficeCode" value="@user.OfficeId" hidden />
                             <input name="auditOfficeCode" value="@user.OfficeId" hidden />
                         }
-                                <button type="submit" class="btn btn-primary">เพิ่ม</button>
-                                <a asp-area="" asp-controller="PointOfEvaluations" asp-action="Index" asp-route-yearPoint="@ViewBag.yearPoint" class="btn btn-secondary">ยกเลิก</a>
+                        <button type="submit" class="btn btn-primary">เพิ่ม</button>
+                        <a asp-area="" asp-controller="PointOfEvaluations" asp-action="Index" asp-route-yearPoint="@ViewBag.yearPoint" class="btn btn-secondary">ยกเลิก</a>
                         <input type="hidden" name="y" value="@ViewBag.yearPoint" />
                         <input asp-for="Plan" placeholder="@ViewBag.PlanValue" hidden />
                     </form>
@@ -98,4 +107,11 @@
 </div>
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $("#Unit").change(function () {
+                
+            });
+        });
+    </script>
 }

@@ -201,7 +201,7 @@ namespace EPES.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Point,Plan,Name,Unit,Weight,Rate1,Rate2,Rate3,Rate4,Rate5,OwnerOfficeId,AuditOfficeId")] PointOfEvaluation pointOfEvaluation, int y, string ownerOfficeCode = null, string auditOfficeCode = null)
+        public async Task<IActionResult> Create([Bind("DetailPlan,Point,Plan,Name,Unit,Weight,Rate1,Rate2,Rate3,Rate4,Rate5,OwnerOfficeId,AuditOfficeId")] PointOfEvaluation pointOfEvaluation, int y, string ownerOfficeCode = null, string auditOfficeCode = null)
         {
             var user = await _userManager.GetUserAsync(User);
 
@@ -290,7 +290,7 @@ namespace EPES.Controllers
 
             if (await TryUpdateModelAsync<PointOfEvaluation>(
                 pointOfEvaluationToUpdate, "",
-                p => p.Year, p => p.Point, p => p.Plan, p => p.Name, p => p.Unit, p => p.Weight,
+                p => p.Year, p => p.DetailPlan, p => p.Point, p => p.Plan, p => p.Name, p => p.Unit, p => p.Weight,
                 p => p.Rate1, p => p.Rate2, p => p.Rate3, p => p.Rate4, p => p.Rate5, p => p.OwnerOfficeId, p => p.AuditOfficeId, p => p.UpdateUserId))
             {
                 try

@@ -118,13 +118,13 @@ namespace EPES.Controllers
             if (ModelState.IsValid)
             {
                 var user = await _userManager.GetUserAsync(User);
-                dataForEvaluation.UpdateUserId = user.Id;
-                dataForEvaluation.PointOfEvaluationId = poeid;
+                //dataForEvaluation.UpdateUserId = user.Id;
+                //dataForEvaluation.PointOfEvaluationId = poeid;
 
 
 
-                _context.Add(dataForEvaluation);
-                await _context.SaveChangesAsync();
+                //_context.Add(dataForEvaluation);
+                //await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
             return View(dataForEvaluation);

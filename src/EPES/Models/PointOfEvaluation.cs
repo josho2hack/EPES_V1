@@ -21,13 +21,16 @@ namespace EPES.Models
         public int SubPoint { get; set; }
 
         [Display(Name = "แผน")]
-        public TypeOfPlan? Plan { get; set; } 
+        public TypeOfPlan? Plan { get; set; }
 
-        [Display(Name = "แผนงาน/ตัวชี้วัด")]
+        [Display(Name = "แผนงาน/โครงการ")]
+        public string DetailPlan { get; set; }
+
+        [Display(Name = "ตัวชี้วัดผลการปฏิบัติราชการ")]
         public string Name { get; set; }
 
         [Display(Name = "หน่วยนับ")]
-        public string Unit { get; set; }
+        public UnitOfPoint? Unit { get; set; }
 
         [Display(Name = "น้ำหนักร้อยละ")]
         [Column(TypeName = "decimal(7, 4)")]
@@ -37,21 +40,36 @@ namespace EPES.Models
         [Column(TypeName = "decimal(18, 4)")]
         public decimal Rate1 { get; set; }
 
+        [Display(Name = "รายละเอียดเกณฑ์การให้คะแนน 1 คะแนน")]
+        public string DetailRate1 { get; set; }
+
         [Display(Name = "เกณฑ์การให้คะแนน 2 คะแนน")]
         [Column(TypeName = "decimal(18, 4)")]
         public decimal Rate2 { get; set; }
+
+        [Display(Name = "รายละเอียดเกณฑ์การให้คะแนน 2 คะแนน")]
+        public string DetailRate2 { get; set; }
 
         [Display(Name = "เกณฑ์การให้คะแนน 3 คะแนน")]
         [Column(TypeName = "decimal(18, 4)")]
         public decimal Rate3 { get; set; }
 
+        [Display(Name = "รายละเอียดเกณฑ์การให้คะแนน 3 คะแนน")]
+        public string DetailRate3 { get; set; }
+
         [Display(Name = "เกณฑ์การให้คะแนน 4 คะแนน")]
         [Column(TypeName = "decimal(18, 4)")]
         public decimal Rate4 { get; set; }
 
+        [Display(Name = "รายละเอียดเกณฑ์การให้คะแนน 4 คะแนน")]
+        public string DetailRate4 { get; set; }
+
         [Display(Name = "เกณฑ์การให้คะแนน 5 คะแนน")]
         [Column(TypeName = "decimal(18, 4)")]
         public decimal Rate5 { get; set; }
+
+        [Display(Name = "รายละเอียดเกณฑ์การให้คะแนน 5 คะแนน")]
+        public string DetailRate5 { get; set; }
 
         [Display(Name = "ตัวชี้วัดสำหรับ")]
         public int? OwnerOfficeId { get; set; }
@@ -78,5 +96,11 @@ namespace EPES.Models
         B,
         C,
         D
+    }
+
+    public enum UnitOfPoint
+    {
+        ร้อยละ,
+        ระดับ
     }
 }

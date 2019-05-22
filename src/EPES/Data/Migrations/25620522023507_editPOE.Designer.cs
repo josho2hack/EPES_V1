@@ -4,14 +4,16 @@ using EPES.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace EPES.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("25620522023507_editPOE")]
+    partial class editPOE
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -187,7 +189,7 @@ namespace EPES.Data.Migrations
 
                     b.Property<int>("SubPoint");
 
-                    b.Property<int?>("Unit");
+                    b.Property<string>("Unit");
 
                     b.Property<string>("UpdateUserId");
 
