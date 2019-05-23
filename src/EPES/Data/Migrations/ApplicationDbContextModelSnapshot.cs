@@ -102,7 +102,7 @@ namespace EPES.Data.Migrations
 
                     b.Property<string>("CommentApprove");
 
-                    b.Property<decimal>("Expect")
+                    b.Property<decimal?>("Expect")
                         .HasColumnType("decimal(38, 10)");
 
                     b.Property<int>("Month");

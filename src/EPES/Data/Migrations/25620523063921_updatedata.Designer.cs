@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace EPES.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("25620522151335_updateDtoPoe")]
-    partial class updateDtoPoe
+    [Migration("25620523063921_updatedata")]
+    partial class updatedata
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -104,7 +104,7 @@ namespace EPES.Data.Migrations
 
                     b.Property<string>("CommentApprove");
 
-                    b.Property<decimal>("Expect")
+                    b.Property<decimal?>("Expect")
                         .HasColumnType("decimal(38, 10)");
 
                     b.Property<int>("Month");

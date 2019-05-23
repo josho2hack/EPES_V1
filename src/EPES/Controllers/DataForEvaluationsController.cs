@@ -1,15 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using EPES.Data;
+using EPES.Models;
+using EPES.ViewModels;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Identity;
-using EPES.Data;
-using EPES.Models;
-using EPES.ViewModels;
+using System;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace EPES.Controllers
 {
@@ -102,8 +101,7 @@ namespace EPES.Controllers
         {
             DataForEvaluationViewModel viewModel = new DataForEvaluationViewModel();
             viewModel.Point = await _context.PointOfEvaluations.FindAsync(poeid);
-            //viewModel.Offices = await _context.Offices.Where(o => o.Code != "00000000" && o.Code.Substring(5, 3) == "000").ToListAsync();
-            //ViewBag.poeid = poeid;
+
             return View(viewModel);
         }
 
@@ -112,22 +110,27 @@ namespace EPES.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(int poeid,int ownerofficeid, int? expext1, int? expext2, int? expext3, int? expext4,int? expext5, int? expext6, int? expext7, int? expext8, int? expext9, int? expext10, int? expext11, int? expext12)
+        public async Task<IActionResult> Create([Bind("poeid,ownerofficeid,expect1,expect2,expect3,expect4,expect5,expect6,expect7, expect8, expect9,expect10, expect11, expect12")] DataForEvaluationViewModel dataView)
         {
-            var dataForEvaluation = new List<DataForEvaluation>();
             if (ModelState.IsValid)
             {
                 var user = await _userManager.GetUserAsync(User);
-                //dataForEvaluation.UpdateUserId = user.Id;
-                //dataForEvaluation.PointOfEvaluationId = poeid;
+                SaveExpect(dataView.poeid, dataView.ownerofficeid, dataView.expect1, user.Id);
+                SaveExpect(dataView.poeid, dataView.ownerofficeid, dataView.expect2, user.Id);
+                SaveExpect(dataView.poeid, dataView.ownerofficeid, dataView.expect3, user.Id);
+                SaveExpect(dataView.poeid, dataView.ownerofficeid, dataView.expect4, user.Id);
+                SaveExpect(dataView.poeid, dataView.ownerofficeid, dataView.expect5, user.Id);
+                SaveExpect(dataView.poeid, dataView.ownerofficeid, dataView.expect6, user.Id);
+                SaveExpect(dataView.poeid, dataView.ownerofficeid, dataView.expect7, user.Id);
+                SaveExpect(dataView.poeid, dataView.ownerofficeid, dataView.expect8, user.Id);
+                SaveExpect(dataView.poeid, dataView.ownerofficeid, dataView.expect9, user.Id);
+                SaveExpect(dataView.poeid, dataView.ownerofficeid, dataView.expect10, user.Id);
+                SaveExpect(dataView.poeid, dataView.ownerofficeid, dataView.expect11, user.Id);
+                SaveExpect(dataView.poeid, dataView.ownerofficeid, dataView.expect12, user.Id);
 
-
-
-                //_context.Add(dataForEvaluation);
-                //await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            return View(dataForEvaluation);
+            return View(dataView);
         }
 
         // GET: DataForEvaluations/Edit/5
@@ -237,6 +240,53 @@ namespace EPES.Controllers
                                orderby d.Id
                                select d;
             ViewBag.AuditOfficeID = new SelectList(officesQuery.AsNoTracking(), "Id", "Name", selectedOffice);
+        }
+
+        public async void SaveExpect(int poeid, int ownerofficeid, decimal? expect, string userid)
+        {
+            if (expect != null)
+            {
+                DataForEvaluation dataForEvaluation = new DataForEvaluation();
+                dataForEvaluation = await _context.DataForEvaluations.Where(d => d.PointOfEvaluationId == poeid && d.OfficeId == ownerofficeid && d.Month == 1).SingleAsync();
+                if (dataForEvaluation != null)
+                {
+                    dataForEvaluation.UpdateUserId = userid;
+                    dataForEvaluation.PointOfEvaluationId = poeid;
+                    dataForEvaluation.OfficeId = ownerofficeid;
+                    dataForEvaluation.Expect = expect;
+                    try
+                    {
+                        _context.Update(dataForEvaluation);
+                        await _context.SaveChangesAsync();
+                    }
+                    catch (DbUpdateException)
+                    {
+                        //Log the error (uncomment ex variable name and write a log.
+                        ModelState.AddModelError("", "ไม่สามารถบันทึกข้อมูล. " +
+                            "ลองพยายามบันทึกอีกครั้ง " +
+                            "โปรดแจ้งผู้ดูแลระบบ");
+                    }
+                }
+                else
+                {
+                    dataForEvaluation.UpdateUserId = userid;
+                    dataForEvaluation.PointOfEvaluationId = poeid;
+                    dataForEvaluation.OfficeId = ownerofficeid;
+                    dataForEvaluation.Expect = expect;
+                    try
+                    {
+                        _context.Add(dataForEvaluation);
+                        await _context.SaveChangesAsync();
+                    }
+                    catch (DbUpdateException)
+                    {
+                        //Log the error (uncomment ex variable name and write a log.
+                        ModelState.AddModelError("", "ไม่สามารถบันทึกข้อมูล. " +
+                            "ลองพยายามบันทึกอีกครั้ง " +
+                            "โปรดแจ้งผู้ดูแลระบบ");
+                    }
+                }
+            }// Expect 1
         }
     }
 }

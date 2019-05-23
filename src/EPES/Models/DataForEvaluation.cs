@@ -14,7 +14,7 @@ namespace EPES.Models
         [Display(Name = "เป้าหมาย/ประมาณการ")]
         [DataType(DataType.Currency)]
         [Column(TypeName = "decimal(38, 10)")]
-        public decimal Expect { get; set; }
+        public decimal? Expect { get; set; }
 
         [Display(Name = "ผลการดำเนินการ")]
         [DataType(DataType.Currency)]

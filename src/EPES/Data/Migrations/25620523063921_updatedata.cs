@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace EPES.Data.Migrations
 {
-    public partial class updateDtoPoe : Migration
+    public partial class updatedata : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -13,11 +13,6 @@ namespace EPES.Data.Migrations
                 nullable: true,
                 oldClrType: typeof(string),
                 oldNullable: true);
-
-            migrationBuilder.AddColumn<string>(
-                name: "DetailPlan",
-                table: "PointOfEvaluations",
-                nullable: true);
 
             migrationBuilder.AddColumn<string>(
                 name: "DetailRate1",
@@ -65,6 +60,14 @@ namespace EPES.Data.Migrations
                 table: "DataForEvaluations",
                 nullable: false,
                 oldClrType: typeof(DateTime));
+
+            migrationBuilder.AlterColumn<decimal>(
+                name: "Expect",
+                table: "DataForEvaluations",
+                type: "decimal(38, 10)",
+                nullable: true,
+                oldClrType: typeof(decimal),
+                oldType: "decimal(38, 10)");
 
             migrationBuilder.AlterColumn<int>(
                 name: "Approve",
@@ -130,6 +133,15 @@ namespace EPES.Data.Migrations
                 table: "DataForEvaluations",
                 nullable: false,
                 oldClrType: typeof(int));
+
+            migrationBuilder.AlterColumn<decimal>(
+                name: "Expect",
+                table: "DataForEvaluations",
+                type: "decimal(38, 10)",
+                nullable: false,
+                oldClrType: typeof(decimal),
+                oldType: "decimal(38, 10)",
+                oldNullable: true);
 
             migrationBuilder.AlterColumn<int>(
                 name: "Approve",
