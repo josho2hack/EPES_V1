@@ -7,6 +7,15 @@
     <ApplicationIcon>wwwroot\favicon.ico</ApplicationIcon>
   </PropertyGroup>
 
+  <ItemGroup>
+    <Compile Remove="Data\Migrations\25620522023507_editPOE.cs" />
+    <Compile Remove="Data\Migrations\25620522023507_editPOE.Designer.cs" />
+    <Compile Remove="Data\Migrations\25620522065450_editDpoe.cs" />
+    <Compile Remove="Data\Migrations\25620522065450_editDpoe.Designer.cs" />
+    <Compile Remove="Data\Migrations\25620522150226_updateDtoPoe.cs" />
+    <Compile Remove="Data\Migrations\25620522150226_updateDtoPoe.Designer.cs" />
+  </ItemGroup>
+
 
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.App" />

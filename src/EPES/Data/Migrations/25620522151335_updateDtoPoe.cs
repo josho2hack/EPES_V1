@@ -3,12 +3,44 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace EPES.Data.Migrations
 {
-    public partial class editPOE : Migration
+    public partial class updateDtoPoe : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.AlterColumn<int>(
+                name: "Unit",
+                table: "PointOfEvaluations",
+                nullable: true,
+                oldClrType: typeof(string),
+                oldNullable: true);
+
             migrationBuilder.AddColumn<string>(
                 name: "DetailPlan",
+                table: "PointOfEvaluations",
+                nullable: true);
+
+            migrationBuilder.AddColumn<string>(
+                name: "DetailRate1",
+                table: "PointOfEvaluations",
+                nullable: true);
+
+            migrationBuilder.AddColumn<string>(
+                name: "DetailRate2",
+                table: "PointOfEvaluations",
+                nullable: true);
+
+            migrationBuilder.AddColumn<string>(
+                name: "DetailRate3",
+                table: "PointOfEvaluations",
+                nullable: true);
+
+            migrationBuilder.AddColumn<string>(
+                name: "DetailRate4",
+                table: "PointOfEvaluations",
+                nullable: true);
+
+            migrationBuilder.AddColumn<string>(
+                name: "DetailRate5",
                 table: "PointOfEvaluations",
                 nullable: true);
 
@@ -47,6 +79,33 @@ namespace EPES.Data.Migrations
             migrationBuilder.DropColumn(
                 name: "DetailPlan",
                 table: "PointOfEvaluations");
+
+            migrationBuilder.DropColumn(
+                name: "DetailRate1",
+                table: "PointOfEvaluations");
+
+            migrationBuilder.DropColumn(
+                name: "DetailRate2",
+                table: "PointOfEvaluations");
+
+            migrationBuilder.DropColumn(
+                name: "DetailRate3",
+                table: "PointOfEvaluations");
+
+            migrationBuilder.DropColumn(
+                name: "DetailRate4",
+                table: "PointOfEvaluations");
+
+            migrationBuilder.DropColumn(
+                name: "DetailRate5",
+                table: "PointOfEvaluations");
+
+            migrationBuilder.AlterColumn<string>(
+                name: "Unit",
+                table: "PointOfEvaluations",
+                nullable: true,
+                oldClrType: typeof(int),
+                oldNullable: true);
 
             migrationBuilder.AlterColumn<decimal>(
                 name: "Result",

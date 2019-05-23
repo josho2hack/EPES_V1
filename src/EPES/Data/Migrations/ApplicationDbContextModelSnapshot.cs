@@ -162,6 +162,16 @@ namespace EPES.Data.Migrations
 
                     b.Property<string>("DetailPlan");
 
+                    b.Property<string>("DetailRate1");
+
+                    b.Property<string>("DetailRate2");
+
+                    b.Property<string>("DetailRate3");
+
+                    b.Property<string>("DetailRate4");
+
+                    b.Property<string>("DetailRate5");
+
                     b.Property<string>("Name");
 
                     b.Property<int?>("OwnerOfficeId");

@@ -163,19 +163,19 @@ namespace EPES.Controllers
             {
                 case 0:
                     ViewBag.Plan = "A";
-                    ViewBag.PlanValue = "0";
+                    ViewBag.PlanValue = 0;
                     break;
                 case 1:
                     ViewBag.Plan = "B";
-                    ViewBag.PlanValue = "1";
+                    ViewBag.PlanValue = 1;
                     break;
                 case 2:
                     ViewBag.Plan = "C";
-                    ViewBag.PlanValue = "2";
+                    ViewBag.PlanValue = 2;
                     break;
                 case 3:
                     ViewBag.Plan = "D";
-                    ViewBag.PlanValue = "3";
+                    ViewBag.PlanValue = 3;
                     break;
             }
             
@@ -201,7 +201,7 @@ namespace EPES.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("DetailPlan,Point,Plan,Name,Unit,Weight,Rate1,Rate2,Rate3,Rate4,Rate5,OwnerOfficeId,AuditOfficeId")] PointOfEvaluation pointOfEvaluation, int y, string ownerOfficeCode = null, string auditOfficeCode = null)
+        public async Task<IActionResult> Create([Bind("DetailPlan,Point,Plan,Name,Unit,Weight,Rate1,DetailRate1,Rate2,DetailRate2,Rate3,DetailRate3,Rate4,DetailRate4,Rate5,DetailRate5,OwnerOfficeId,AuditOfficeId")] PointOfEvaluation pointOfEvaluation, int y, string ownerOfficeCode = null, string auditOfficeCode = null)
         {
             var user = await _userManager.GetUserAsync(User);
 
@@ -291,7 +291,7 @@ namespace EPES.Controllers
             if (await TryUpdateModelAsync<PointOfEvaluation>(
                 pointOfEvaluationToUpdate, "",
                 p => p.Year, p => p.DetailPlan, p => p.Point, p => p.Plan, p => p.Name, p => p.Unit, p => p.Weight,
-                p => p.Rate1, p => p.Rate2, p => p.Rate3, p => p.Rate4, p => p.Rate5, p => p.OwnerOfficeId, p => p.AuditOfficeId, p => p.UpdateUserId))
+                p => p.Rate1, p => p.DetailRate1, p => p.Rate2, p => p.DetailRate2, p => p.Rate3, p => p.DetailRate3, p => p.Rate4, p => p.DetailRate4, p => p.Rate5, p => p.DetailRate5, p => p.OwnerOfficeId, p => p.AuditOfficeId, p => p.UpdateUserId))
             {
                 try
                 {

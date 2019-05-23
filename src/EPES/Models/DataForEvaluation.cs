@@ -26,8 +26,7 @@ namespace EPES.Models
         public decimal? OldResult { get; set; }
 
         [Display(Name = "เดือน")]
-        //[DataType(DataType.Date)]
-        //[DisplayFormat(DataFormatString = "{0:MMMM}", ApplyFormatInEditMode = true)]
+        [Range(1,12)]
         public int Month { get; set; }
 
         [Display(Name = "หมายเหตุการแก้ไข")]

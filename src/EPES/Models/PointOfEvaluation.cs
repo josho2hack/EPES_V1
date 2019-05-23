@@ -37,6 +37,7 @@ namespace EPES.Models
         public decimal Weight { get; set; }
 
         [Display(Name = "เกณฑ์การให้คะแนน 1 คะแนน")]
+        [DataType(DataType.Currency)]
         [Column(TypeName = "decimal(18, 4)")]
         public decimal Rate1 { get; set; }
 
@@ -44,6 +45,7 @@ namespace EPES.Models
         public string DetailRate1 { get; set; }
 
         [Display(Name = "เกณฑ์การให้คะแนน 2 คะแนน")]
+        [DataType(DataType.Currency)]
         [Column(TypeName = "decimal(18, 4)")]
         public decimal Rate2 { get; set; }
 
@@ -51,6 +53,7 @@ namespace EPES.Models
         public string DetailRate2 { get; set; }
 
         [Display(Name = "เกณฑ์การให้คะแนน 3 คะแนน")]
+        [DataType(DataType.Currency)]
         [Column(TypeName = "decimal(18, 4)")]
         public decimal Rate3 { get; set; }
 
@@ -58,6 +61,7 @@ namespace EPES.Models
         public string DetailRate3 { get; set; }
 
         [Display(Name = "เกณฑ์การให้คะแนน 4 คะแนน")]
+        [DataType(DataType.Currency)]
         [Column(TypeName = "decimal(18, 4)")]
         public decimal Rate4 { get; set; }
 
@@ -65,6 +69,7 @@ namespace EPES.Models
         public string DetailRate4 { get; set; }
 
         [Display(Name = "เกณฑ์การให้คะแนน 5 คะแนน")]
+        [DataType(DataType.Currency)]
         [Column(TypeName = "decimal(18, 4)")]
         public decimal Rate5 { get; set; }
 

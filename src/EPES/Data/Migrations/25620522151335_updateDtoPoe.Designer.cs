@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace EPES.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("25620522023507_editPOE")]
-    partial class editPOE
+    [Migration("25620522151335_updateDtoPoe")]
+    partial class updateDtoPoe
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -164,6 +164,16 @@ namespace EPES.Data.Migrations
 
                     b.Property<string>("DetailPlan");
 
+                    b.Property<string>("DetailRate1");
+
+                    b.Property<string>("DetailRate2");
+
+                    b.Property<string>("DetailRate3");
+
+                    b.Property<string>("DetailRate4");
+
+                    b.Property<string>("DetailRate5");
+
                     b.Property<string>("Name");
 
                     b.Property<int?>("OwnerOfficeId");
@@ -189,7 +199,7 @@ namespace EPES.Data.Migrations
 
                     b.Property<int>("SubPoint");
 
-                    b.Property<string>("Unit");
+                    b.Property<int?>("Unit");
 
                     b.Property<string>("UpdateUserId");
 

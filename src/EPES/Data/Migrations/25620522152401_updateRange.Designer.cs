@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace EPES.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("25620522065450_editDpoe")]
-    partial class editDpoe
+    [Migration("25620522152401_updateRange")]
+    partial class updateRange
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -163,6 +163,16 @@ namespace EPES.Data.Migrations
                     b.Property<int?>("AuditOfficeId");
 
                     b.Property<string>("DetailPlan");
+
+                    b.Property<string>("DetailRate1");
+
+                    b.Property<string>("DetailRate2");
+
+                    b.Property<string>("DetailRate3");
+
+                    b.Property<string>("DetailRate4");
+
+                    b.Property<string>("DetailRate5");
 
                     b.Property<string>("Name");
 
