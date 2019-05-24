@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace EPES.Data.Migrations
 {
-    public partial class updatedata : Migration
+    public partial class UpdateMonthAndUnit : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -13,6 +13,11 @@ namespace EPES.Data.Migrations
                 nullable: true,
                 oldClrType: typeof(string),
                 oldNullable: true);
+
+            migrationBuilder.AddColumn<string>(
+                name: "DetailPlan",
+                table: "PointOfEvaluations",
+                nullable: true);
 
             migrationBuilder.AddColumn<string>(
                 name: "DetailRate1",

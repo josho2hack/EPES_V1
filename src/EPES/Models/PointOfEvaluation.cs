@@ -41,40 +41,51 @@ namespace EPES.Models
         [Column(TypeName = "decimal(18, 4)")]
         public decimal Rate1 { get; set; }
 
-        [Display(Name = "รายละเอียดเกณฑ์การให้คะแนน 1 คะแนน")]
+        [Display(Name = "รายละเอียดเกณฑ์การให้คะแนน 1 คะแนน รอบที่ 1")]
         public string DetailRate1 { get; set; }
+
+        [Display(Name = "รายละเอียดเกณฑ์การให้คะแนน 1 คะแนน รอบที่ 2")]
+        public string Detail2Rate1 { get; set; }
 
         [Display(Name = "เกณฑ์การให้คะแนน 2 คะแนน")]
         [DataType(DataType.Currency)]
         [Column(TypeName = "decimal(18, 4)")]
         public decimal Rate2 { get; set; }
 
-        [Display(Name = "รายละเอียดเกณฑ์การให้คะแนน 2 คะแนน")]
+        [Display(Name = "รายละเอียดเกณฑ์การให้คะแนน 2 คะแนน รอบที่ 1")]
         public string DetailRate2 { get; set; }
+        [Display(Name = "รายละเอียดเกณฑ์การให้คะแนน 2 คะแนน รอบที่ 2")]
+        public string Detail2Rate2 { get; set; }
 
         [Display(Name = "เกณฑ์การให้คะแนน 3 คะแนน")]
         [DataType(DataType.Currency)]
         [Column(TypeName = "decimal(18, 4)")]
         public decimal Rate3 { get; set; }
 
-        [Display(Name = "รายละเอียดเกณฑ์การให้คะแนน 3 คะแนน")]
+        [Display(Name = "รายละเอียดเกณฑ์การให้คะแนน 3 คะแนน รอบที่ 1")]
         public string DetailRate3 { get; set; }
+        [Display(Name = "รายละเอียดเกณฑ์การให้คะแนน 3 คะแนน รอบที่ 2")]
+        public string Detail2Rate3 { get; set; }
 
         [Display(Name = "เกณฑ์การให้คะแนน 4 คะแนน")]
         [DataType(DataType.Currency)]
         [Column(TypeName = "decimal(18, 4)")]
         public decimal Rate4 { get; set; }
 
-        [Display(Name = "รายละเอียดเกณฑ์การให้คะแนน 4 คะแนน")]
+        [Display(Name = "รายละเอียดเกณฑ์การให้คะแนน 4 คะแนน รอบที่ 1")]
         public string DetailRate4 { get; set; }
+        [Display(Name = "รายละเอียดเกณฑ์การให้คะแนน 4 คะแนน รอบที่ 2")]
+        public string Detail2Rate4 { get; set; }
 
         [Display(Name = "เกณฑ์การให้คะแนน 5 คะแนน")]
         [DataType(DataType.Currency)]
         [Column(TypeName = "decimal(18, 4)")]
         public decimal Rate5 { get; set; }
 
-        [Display(Name = "รายละเอียดเกณฑ์การให้คะแนน 5 คะแนน")]
+        [Display(Name = "รายละเอียดเกณฑ์การให้คะแนน 5 คะแนน รอบที่ 1")]
         public string DetailRate5 { get; set; }
+        [Display(Name = "รายละเอียดเกณฑ์การให้คะแนน 5 คะแนน รอบที่ 2")]
+        public string Detail2Rate5 { get; set; }
 
         [Display(Name = "ตัวชี้วัดสำหรับ")]
         public int? OwnerOfficeId { get; set; }

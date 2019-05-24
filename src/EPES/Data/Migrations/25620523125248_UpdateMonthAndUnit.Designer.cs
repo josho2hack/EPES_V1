@@ -4,14 +4,16 @@ using EPES.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace EPES.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("25620523125248_UpdateMonthAndUnit")]
+    partial class UpdateMonthAndUnit
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -159,16 +161,6 @@ namespace EPES.Data.Migrations
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<int?>("AuditOfficeId");
-
-                    b.Property<string>("Detail2Rate1");
-
-                    b.Property<string>("Detail2Rate2");
-
-                    b.Property<string>("Detail2Rate3");
-
-                    b.Property<string>("Detail2Rate4");
-
-                    b.Property<string>("Detail2Rate5");
 
                     b.Property<string>("DetailPlan");
 

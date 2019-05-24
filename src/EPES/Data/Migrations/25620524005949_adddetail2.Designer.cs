@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace EPES.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("25620523063921_updatedata")]
-    partial class updatedata
+    [Migration("25620524005949_adddetail2")]
+    partial class adddetail2
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -161,6 +161,16 @@ namespace EPES.Data.Migrations
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<int?>("AuditOfficeId");
+
+                    b.Property<string>("Detail2Rate1");
+
+                    b.Property<string>("Detail2Rate2");
+
+                    b.Property<string>("Detail2Rate3");
+
+                    b.Property<string>("Detail2Rate4");
+
+                    b.Property<string>("Detail2Rate5");
 
                     b.Property<string>("DetailPlan");
 

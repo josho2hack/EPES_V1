@@ -45,61 +45,58 @@
                             <select asp-for="Unit" class="form-control" asp-items="Html.GetEnumSelectList<UnitOfPoint>()"></select>
                             <span asp-validation-for="Unit" class="text-danger"></span>
                         </div>
-                        <div class="row">
-                            <div class="form-group col-md-5">
+                        <div class="form-group" name="round" hidden>
+                            รอบการประเมิน
+                            <select id="round" hidden>
+                                <option value="1">1</option>
+                                <option value="2">2</option>
+                            </select>รอบ
+                        </div>
+                        <div class="row" name="mainrate1">
+                            <div class="form-group col-md-5 percent">
                                 <label asp-for="Rate1" class="control-label"></label>
                                 <input asp-for="Rate1" class="form-control" />
                                 <span asp-validation-for="Rate1" class="text-danger"></span>
                             </div>
-                            <div class="form-group col-md-7">
-                                <label asp-for="DetailRate1" class="control-label labelDetailRate"></label>
-                                <input asp-for="DetailRate1" class="form-control" />
-                                <span asp-validation-for="DetailRate1" class="text-danger"></span>
-                            </div>
                         </div>
-                        <div class="row">
-                            <div class="form-group col-md-5">
+                        <div class="row" name="mainrate2">
+                            <div class="form-group col-md-5 percent">
                                 <label asp-for="Rate2" class="control-label"></label>
                                 <input asp-for="Rate2" class="form-control" />
                                 <span asp-validation-for="Rate2" class="text-danger"></span>
                             </div>
-                            <div class="form-group col-md-7">
-                                <label asp-for="DetailRate2" class="control-label labelDetailRate"></label>
-                                <input asp-for="DetailRate2" class="form-control" />
-                                <span asp-validation-for="DetailRate2" class="text-danger"></span>
-                            </div>
                         </div>
-                        <div class="row">
-                            <div class="form-group col-md-5">
+                        <div class="row" name="mainrate3">
+                            <div class="form-group col-md-5 percent percent">
                                 <label asp-for="Rate3" class="control-label"></label>
                                 <input asp-for="Rate3" class="form-control" />
                                 <span asp-validation-for="Rate3" class="text-danger"></span>
                             </div>
-                            <div class="form-group col-md-7">
+                            <div class="form-group col-md-6">
                                 <label asp-for="DetailRate3" class="control-label labelDetailRate"></label>
                                 <input asp-for="DetailRate3" class="form-control" />
                                 <span asp-validation-for="DetailRate3" class="text-danger"></span>
                             </div>
                         </div>
-                        <div class="row">
-                            <div class="form-group col-md-5">
+                        <div class="row" name="mainrate4">
+                            <div class="form-group col-md-5 percent">
                                 <label asp-for="Rate4" class="control-label"></label>
                                 <input asp-for="Rate4" class="form-control" />
                                 <span asp-validation-for="Rate4" class="text-danger"></span>
                             </div>
-                            <div class="form-group col-md-7">
+                            <div class="form-group col-md-6">
                                 <label asp-for="DetailRate4" class="control-label labelDetailRate"></label>
                                 <input asp-for="DetailRate4" class="form-control" />
                                 <span asp-validation-for="DetailRate4" class="text-danger"></span>
                             </div>
                         </div>
-                        <div class="row">
-                            <div class="form-group col-md-5">
+                        <div class="row" name="mainrate5">
+                            <div class="form-group col-md-5 percent">
                                 <label asp-for="Rate5" class="control-label"></label>
                                 <input asp-for="Rate5" class="form-control" />
                                 <span asp-validation-for="Rate5" class="text-danger"></span>
                             </div>
-                            <div class="form-group col-md-7">
+                            <div class="form-group col-md-6">
                                 <label asp-for="DetailRate5" class="control-label labelDetailRate"></label>
                                 <input asp-for="DetailRate5" class="form-control" />
                                 <span asp-validation-for="DetailRate5" class="text-danger"></span>
@@ -142,15 +139,30 @@
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
     <script type="text/javascript">
         $(document).ready(function () {
-            $(".labelDetailRate, #DetailRate1, #DetailRate2, #DetailRate3, #DetailRate4, #DetailRate5").hide();
 
             $("#Unit").change(function () {
                 if ($(this).children("option:selected").val() == 1) {
-                    
-                    //$(".labelDetailRate,#DetailRate1, #DetailRate2, #DetailRate3, #DetailRate4, #DetailRate5").show();
+                    $("div[name='round']").show();
+                    $("div[name^='mainrate']").empty();
+
+                    //var dr1 = "<div class='form-group col - md - 6'>
+                    //        <label class='control-label'>รายละเอียด</label >
+                    //        <input id='DetailRate1' name='DetailRate1' class='form-control' />
+                    //    </div >";
+                    $("div[name='mainrate1']").append(
+                        dr1
+                    );
+                    $("div[name='mainrate2']").append(
+                        //<div class="form-group col-md-6">
+                        //    <label asp-for="DetailRate2" class="control-label labelDetailRate"></label>
+                        //    <input asp-for="DetailRate2" class="form-control" />
+                        //    <span asp-validation-for="DetailRate2" class="text-danger"></span>
+                        //</div>
+                    );
                 }
                 else {
-                    $(".labelDetailRate,#DetailRate1, #DetailRate2, #DetailRate3, #DetailRate4, #DetailRate5").hide();
+                    $("div[name='round']").hide();
+                    $("div[name^='mainrate']").empty();
                 }
             });
         });
