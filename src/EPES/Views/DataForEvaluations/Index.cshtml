@@ -67,9 +67,8 @@
                                         @Html.DisplayFor(modelItem => item.AuditOffice.Name)
                                     </td>
                                     <td>
-                                        @if (User.IsInRole("Admin") || user.OfficeId == item.OwnerOffice?.Code)
+                                        @if (User.IsInRole("Admin") || (User.IsInRole("Manager") && user.OfficeId.StartsWith("000")))
                                         {
-                                            <a asp-action="Create" asp-route-poeid="@item.Id"><i class="fas fa-bullseye"></i></a>
                                             <a asp-action="Edit" asp-route-poeid="@item.Id"><i class="fas fa-edit"></i></a>
                                         }
                                         <a asp-action="Details" asp-route-poeid="@item.Id"><i class="fas fa-search-plus"></i></a>
@@ -110,31 +109,27 @@
                     <tbody>
                         @foreach (var item in Model.pointB)
                         {
-                        <tr>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.Point)
-                            </td>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.Name)
-                            </td>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.OwnerOffice.Name)
-                            </td>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.AuditOffice.Name)
-                            </td>
-                            <td>
-                                @if (User.IsInRole("Admin") || user.OfficeId == item.AuditOffice?.Code)
-                                {
-                                <a asp-action="Create" asp-route-poeid="@item.Id"><i class="fas fa-bullseye"></i></a>
-                                }
-                                <a asp-action="Edit" asp-route-poeid="@item.Id"><i class="fas fa-edit"></i></a>
-                                @if (User.IsInRole("Admin") || user.OfficeId == item.AuditOffice?.Code)
-                                {
-                                <a asp-action="Details" asp-route-poeid="@item.Id"><i class="fas fa-search-plus"></i></a>
-                                }
-                            </td>
-                        </tr>
+                            <tr>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Point)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Name)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.OwnerOffice.Name)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.AuditOffice.Name)
+                                </td>
+                                <td>
+                                    @if (User.IsInRole("Admin") || (User.IsInRole("Manager") && user.OfficeId.StartsWith("000")))
+                                    {
+                                        <a asp-action="Edit" asp-route-poeid="@item.Id"><i class="fas fa-edit"></i></a>
+                                    }
+                                    <a asp-action="Details" asp-route-poeid="@item.Id"><i class="fas fa-search-plus"></i></a>
+                                </td>
+                            </tr>
                         }
                     </tbody>
                 </table>
@@ -170,31 +165,27 @@
                     <tbody>
                         @foreach (var item in Model.pointC)
                         {
-                        <tr>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.Point)
-                            </td>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.Name)
-                            </td>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.OwnerOffice.Name)
-                            </td>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.AuditOffice.Name)
-                            </td>
-                            <td>
-                                @if (User.IsInRole("Admin") || user.OfficeId == item.OwnerOffice?.Code)
-                                {
-                                <a asp-action="Create" asp-route-poeid="@item.Id"><i class="fas fa-bullseye"></i></a>
-                                }
-                                <a asp-action="Edit" asp-route-poeid="@item.Id"><i class="fas fa-edit"></i></a>
-                                @if (User.IsInRole("Admin") || user.OfficeId == item.OwnerOffice?.Code)
-                                {
-                                <a asp-action="Details" asp-route-poeid="@item.Id"><i class="fas fa-search-plus"></i></a>
-                                }
-                            </td>
-                        </tr>
+                            <tr>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Point)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Name)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.OwnerOffice.Name)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.AuditOffice.Name)
+                                </td>
+                                <td>
+                                    @if (User.IsInRole("Admin") || User.IsInRole("Manager") || (User.IsInRole("User") && item.OwnerOffice != null))
+                                    {
+                                        <a asp-action="Edit" asp-route-poeid="@item.Id"><i class="fas fa-edit"></i></a>
+                                    }
+                                    <a asp-action="Details" asp-route-poeid="@item.Id"><i class="fas fa-search-plus"></i></a>
+                                </td>
+                            </tr>
                         }
                     </tbody>
                 </table>
@@ -230,31 +221,27 @@
                     <tbody>
                         @foreach (var item in Model.pointD)
                         {
-                        <tr>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.Point)
-                            </td>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.Name)
-                            </td>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.OwnerOffice.Name)
-                            </td>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.AuditOffice.Name)
-                            </td>
-                            <td>
-                                @if (User.IsInRole("Admin") || user.OfficeId == item.OwnerOffice?.Code)
-                                {
-                                <a asp-action="Create" asp-route-poeid="@item.Id"><i class="fas fa-bullseye"></i></a>
-                                }
-                                <a asp-action="Edit" asp-route-poeid="@item.Id"><i class="fas fa-edit"></i></a>
-                                @if (User.IsInRole("Admin") || user.OfficeId == item.OwnerOffice?.Code)
-                                {
-                                <a asp-action="Details" asp-route-poeid="@item.Id"><i class="fas fa-search-plus"></i></a>
-                                }
-                            </td>
-                        </tr>
+                            <tr>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Point)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Name)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.OwnerOffice.Name)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.AuditOffice.Name)
+                                </td>
+                                <td>
+                                    @if (User.IsInRole("Admin") || (User.IsInRole("Manager") && user.OfficeId.StartsWith("000") && user.OfficeId == item.AuditOffice?.Code))
+                                    {
+                                        <a asp-action="Edit" asp-route-poeid="@item.Id"><i class="fas fa-edit"></i></a>
+                                    }
+                                    <a asp-action="Details" asp-route-poeid="@item.Id"><i class="fas fa-search-plus"></i></a>
+                                </td>
+                            </tr>
                         }
                     </tbody>
                 </table>

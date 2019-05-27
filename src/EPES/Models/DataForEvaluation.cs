@@ -12,12 +12,10 @@ namespace EPES.Models
         public int Id { get; set; }
 
         [Display(Name = "เป้าหมาย/ประมาณการ")]
-        [DataType(DataType.Currency)]
         [Column(TypeName = "decimal(38, 10)")]
         public decimal? Expect { get; set; }
 
         [Display(Name = "ผลการดำเนินการ")]
-        [DataType(DataType.Currency)]
         [Column(TypeName = "decimal(38, 10)")]
         public decimal? Result { get; set; }
 

@@ -22,26 +22,25 @@
                         <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                         @if (User.IsInRole("Admin"))
                         {
-                            <div class="form-group">
-                                <label asp-for="OwnerOfficeId" class="control-label"></label>
-                                <select asp-for="OwnerOfficeId" class="form-control" asp-items="ViewBag.OfficeID">
-                                    @if ((ViewBag.PlanValue == 1) || (ViewBag.PlanValue == 2))
-                                    {
-                                        <option value="">สภ./สท.</option>
-                                    }
-                                </select>
-                                <span asp-validation-for="OwnerOfficeId" class="text-danger"></span>
-                            </div>
+                            if ((ViewBag.Plan == "A") || (ViewBag.Plan == "C"))
+                            {
+                                <div class="form-group">
+                                    <label asp-for="OwnerOfficeId" class="control-label"></label>
+                                    <select asp-for="OwnerOfficeId" class="form-control" asp-items="ViewBag.OfficeId">
+                                        @if (ViewBag.Plan == "C")
+                                        {
+                                            <option value="">สภ./สท.</option>
+                                        }
+                                    </select>
+                                    <span asp-validation-for="OwnerOfficeId" class="text-danger"></span>
+                                </div>
+                            }
+
                             <div class="form-group">
                                 <label asp-for="AuditOfficeId" class="control-label"></label>
-                                <select asp-for="AuditOfficeId" class="form-control" asp-items="ViewBag.AuditOfficeID"></select>
+                                <select asp-for="AuditOfficeId" class="form-control" asp-items="ViewBag.AuditOfficeId"></select>
                                 <span asp-validation-for="AuditOfficeId" class="text-danger"></span>
                             </div>
-                        }
-                        else
-                        {
-                            <input name="ownerOfficeCode" value="@user.OfficeId" hidden />
-                            <input name="auditOfficeCode" value="@user.OfficeId" hidden />
                         }
                         <div class="form-group">
                             <label asp-for="Point" class="control-label"></label>
@@ -115,10 +114,124 @@
                                 </div>
                             </div>
                         </fieldset>
+                        @if ((ViewBag.Plan == "A") || (ViewBag.Plan == "C"))
+                        {
+                            <table class="table table-bordered" id="DataForEvalutionTable" style="width:100%;" cellspacing="0">
+                                <thead>
+                                    <tr>
+                                        <th>
+                                            เดือน
+                                        </th>
+                                        <th>
+                                            เป้าหมาย/ประมาณการ
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>
+                                            @(new DateTime(1, 10, 1).ToString("MMMM"))
+                                        </td>
+                                        <td>
+                                            <input type="number" name="expect10" class="form-control" />
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            @(new DateTime(1, 11, 1).ToString("MMMM"))
+                                        </td>
+                                        <td>
+                                            <input type="number" name="expect11" class="form-control" />
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            @(new DateTime(1, 12, 1).ToString("MMMM"))
+                                        </td>
+                                        <td>
+                                            <input type="number" name="expect12" class="form-control" />
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            @(new DateTime(1, 1, 1).ToString("MMMM"))
+                                        </td>
+                                        <td>
+                                            <input type="number" name="expect1" class="form-control" />
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            @(new DateTime(1, 2, 1).ToString("MMMM"))
+                                        </td>
+                                        <td>
+                                            <input type="number" name="expect2" class="form-control" />
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            @(new DateTime(1, 3, 1).ToString("MMMM"))
+                                        </td>
+                                        <td>
+                                            <input type="number" name="expect3" class="form-control" />
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            @(new DateTime(1, 4, 1).ToString("MMMM"))
+                                        </td>
+                                        <td>
+                                            <input type="number" name="expect4" class="form-control" />
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            @(new DateTime(1, 5, 1).ToString("MMMM"))
+                                        </td>
+                                        <td>
+                                            <input type="number" name="expect5" class="form-control" />
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            @(new DateTime(1, 6, 1).ToString("MMMM"))
+                                        </td>
+                                        <td>
+                                            <input type="number" name="expect6" class="form-control" />
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            @(new DateTime(1, 7, 1).ToString("MMMM"))
+                                        </td>
+                                        <td>
+                                            <input type="number" name="expect7" class="form-control" />
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            @(new DateTime(1, 8, 1).ToString("MMMM"))
+                                        </td>
+                                        <td>
+                                            <input type="number" name="expect8" class="form-control" />
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            @(new DateTime(1, 9, 1).ToString("MMMM"))
+                                        </td>
+                                        <td>
+                                            <input type="number" name="expect9" class="form-control" />
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        }
+                        <input name="yearPoint" value="@ViewBag.yearPoint" hidden/>
+                        <input asp-for="Plan" placeholder="@ViewBag.PlanValue" hidden />
+
                         <button type="submit" class="btn btn-primary">บันทึก</button>
                         <a asp-area="" asp-controller="PointOfEvaluations" asp-action="Index" asp-route-yearPoint="@ViewBag.yearPoint" class="btn btn-secondary">ยกเลิก</a>
-                        <input type="hidden" name="y" value="@ViewBag.yearPoint" />
-                        <input asp-for="Plan" placeholder="@ViewBag.PlanValue" hidden />
                     </form>
                 </div>
             </div>
@@ -130,9 +243,13 @@
     <script type="text/javascript">
         $(document).ready(function () {
             $("div[name='round']").hide();
+
             $("#Unit").change(function () {
                 if ($(this).children("option:selected").val() == 1) {
+                    $("#DataForEvalutionTable").hide();
                     $("div[name='round']").show();
+
+                    $("#round-select").val('1');
                     $("div[name^='mainrate']").empty();
 
                     $("div[name='mainrate1']").append(
@@ -151,8 +268,8 @@
                         "<div class='form-group col-md-6'><label class='control-label'>รายละเอียดเกณฑ์การให้คะแนน 5 คะแนน รอบที่ 1</label><div class='row'><div class='col-md-2 text-md-right'>5.</div><div class='col-md-10'><input id='DetailRate5' name='DetailRate5' class='form-control' /></div></div></div>"
                     );
                 }
-                else
-                {
+                else {
+                    $("#DataForEvalutionTable").show();
                     $("div[name='round']").hide();
                     $("div[name^='mainrate']").empty();
 
@@ -210,6 +327,18 @@
                     $("div[name='mainrate5']").append(
                         "<div class='form-group col-md-6'><label class='control-label'>รายละเอียดเกณฑ์การให้คะแนน 5 คะแนน รอบที่ 1</label><div class='row'><div class='col-md-2 text-md-right'>5.</div><div class='col-md-10'><input id='DetailRate5' name='DetailRate5' class='form-control' /></div></div></div>"
                     );
+                }
+            });
+
+            if ($("#OwnerOfficeId").val() == "") {
+                $("#DataForEvalutionTable").hide();
+            }
+
+            $("#OwnerOfficeId").change(function () {
+                if ($(this).children() == "") {
+                    $("#DataForEvalutionTable").hide();
+                } else {
+                    $("#DataForEvalutionTable").show();
                 }
             });
         });

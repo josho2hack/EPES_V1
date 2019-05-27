@@ -79,7 +79,7 @@ namespace EPES.Areas.Identity.Pages.Account
 
             if (ModelState.IsValid)
             {
-                if (((Input.Username == "admin") || (Input.Username == "pak") || (Input.Username == "sortor")) && (Input.Password == "P@ssw0rd"))
+                if (((Input.Username == "admin") || (Input.Username == "pak") || (Input.Username == "sortor") || (Input.Username == "bortor")) && (Input.Password == "P@ssw0rd"))
                 {
                     if (Input.Username == "admin")
                     {
@@ -145,6 +145,26 @@ namespace EPES.Areas.Identity.Pages.Account
                             var sortor = new ApplicationUser { UserName = "sortor", Email = "sortor@epes.rd.go.th", FName = "Sortor", LName = "EPES", OfficeId = "01003000" };
                             await _userManager.CreateAsync(sortor, "P@ssw0rd");
                             await _userManager.AddToRoleAsync(sortor, "User");
+                        }
+                        var result = await _signInManager.PasswordSignInAsync(Input.Username, Input.Password, Input.RememberMe, lockoutOnFailure: false);
+                        if (result.Succeeded)
+                        {
+                            _logger.LogInformation("User logged in.");
+                            return LocalRedirect(returnUrl);
+                        }
+                        else
+                        {
+                            ModelState.AddModelError(string.Empty, "Invalid login attempt.");
+                            return Page();
+                        }
+                    }
+                    if (Input.Username == "bortor")
+                    {
+                        if ((await _userManager.FindByNameAsync("bortor")) == null)
+                        {
+                            var bortor = new ApplicationUser { UserName = "bortor", Email = "bortor@epes.rd.go.th", FName = "Bortor", LName = "EPES", OfficeId = "00007000" };
+                            await _userManager.CreateAsync(bortor, "P@ssw0rd");
+                            await _userManager.AddToRoleAsync(bortor, "Manager");
                         }
                         var result = await _signInManager.PasswordSignInAsync(Input.Username, Input.Password, Input.RememberMe, lockoutOnFailure: false);
                         if (result.Succeeded)

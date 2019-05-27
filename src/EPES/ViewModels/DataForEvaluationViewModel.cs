@@ -14,11 +14,11 @@ namespace EPES.ViewModels
         public IEnumerable<PointOfEvaluation> pointD { get; set; }
         //public IEnumerable<DataForEvaluation> dataP { get; set; }
         public IEnumerable<Office> Offices { get; set; }
-        public PointOfEvaluation Point { get; set; }
-        public int yearPoint { get; set; }
 
+        public PointOfEvaluation Point { get; set; }
+
+        public int yearPoint { get; set; }
         public int poeid { get; set; }
-        public int ownerofficeid { get; set; }
         public decimal? expect1 { get; set; }
         public decimal? expect2 { get; set; }
         public decimal? expect3 { get; set; }

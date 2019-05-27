@@ -10,6 +10,7 @@
     <div class="card shadow mb-4">
         <div class="card-header py-3">
             <h6 class="m-0 font-weight-bold text-primary">ต้องการลบตัวชี้วัดนี้ใช่หรือไม่?</h6>
+            <span style="color:red">@ViewData["ErrorMessage"]</span>
         </div>
         <div class="card-body">
             <dl class="row">
@@ -17,7 +18,13 @@
                     @Html.DisplayNameFor(model => model.Year)
                 </dt>
                 <dd class="col-sm-8">
-                    @Html.DisplayFor(model => model.Year)
+                    @Model.Year.ToString("yyyy")
+                </dd>
+                <dt class="col-sm-4">
+                    @Html.DisplayNameFor(model => model.Point)
+                </dt>
+                <dd class="col-sm-8">
+                    @Html.DisplayFor(model => model.Point)
                 </dd>
                 <dt class="col-sm-4">
                     @Html.DisplayNameFor(model => model.Plan)
@@ -26,10 +33,10 @@
                     @Html.DisplayFor(model => model.Plan)
                 </dd>
                 <dt class="col-sm-4">
-                    @Html.DisplayNameFor(model => model.Point)
+                    @Html.DisplayNameFor(model => model.DetailPlan)
                 </dt>
                 <dd class="col-sm-8">
-                    @Html.DisplayFor(model => model.Point)
+                    @Html.DisplayFor(model => model.DetailPlan)
                 </dd>
                 <dt class="col-sm-4">
                     @Html.DisplayNameFor(model => model.Name)
@@ -62,6 +69,12 @@
                     @Html.DisplayFor(model => model.DetailRate1)
                 </dd>
                 <dt class="col-sm-4">
+                    @Html.DisplayNameFor(model => model.Detail2Rate1)
+                </dt>
+                <dd class="col-sm-8">
+                    @Html.DisplayFor(model => model.Detail2Rate1)
+                </dd>
+                <dt class="col-sm-4">
                     @Html.DisplayNameFor(model => model.Rate2)
                 </dt>
                 <dd class="col-sm-8">
@@ -72,6 +85,12 @@
                 </dt>
                 <dd class="col-sm-8">
                     @Html.DisplayFor(model => model.DetailRate2)
+                </dd>
+                <dt class="col-sm-4">
+                    @Html.DisplayNameFor(model => model.Detail2Rate2)
+                </dt>
+                <dd class="col-sm-8">
+                    @Html.DisplayFor(model => model.Detail2Rate2)
                 </dd>
                 <dt class="col-sm-4">
                     @Html.DisplayNameFor(model => model.Rate3)
@@ -86,6 +105,12 @@
                     @Html.DisplayFor(model => model.DetailRate3)
                 </dd>
                 <dt class="col-sm-4">
+                    @Html.DisplayNameFor(model => model.Detail2Rate3)
+                </dt>
+                <dd class="col-sm-8">
+                    @Html.DisplayFor(model => model.Detail2Rate3)
+                </dd>
+                <dt class="col-sm-4">
                     @Html.DisplayNameFor(model => model.Rate4)
                 </dt>
                 <dd class="col-sm-8">
@@ -96,6 +121,12 @@
                 </dt>
                 <dd class="col-sm-8">
                     @Html.DisplayFor(model => model.DetailRate4)
+                </dd>
+                <dt class="col-sm-4">
+                    @Html.DisplayNameFor(model => model.Detail2Rate4)
+                </dt>
+                <dd class="col-sm-8">
+                    @Html.DisplayFor(model => model.Detail2Rate4)
                 </dd>
                 <dt class="col-sm-4">
                     @Html.DisplayNameFor(model => model.Rate5)
@@ -110,6 +141,12 @@
                     @Html.DisplayFor(model => model.DetailRate5)
                 </dd>
                 <dt class="col-sm-4">
+                    @Html.DisplayNameFor(model => model.Detail2Rate5)
+                </dt>
+                <dd class="col-sm-8">
+                    @Html.DisplayFor(model => model.Detail2Rate5)
+                </dd>
+                <dt class="col-sm-4">
                     @Html.DisplayNameFor(model => model.OwnerOffice)
                 </dt>
                 <dd class="col-sm-8">
@@ -122,7 +159,6 @@
                     @Html.DisplayFor(model => model.AuditOffice.Name)
                 </dd>
             </dl>
-
             <form asp-action="Delete">
                 <input type="hidden" asp-for="Id" />
                 <input type="hidden" name="yearP" value="@ViewBag.yearPoint" />
