@@ -163,8 +163,10 @@ namespace EPES.Controllers
             viewModel.Point = await _context.PointOfEvaluations.Include(p => p.OwnerOffice).Where(p => p.Id == poeid).FirstOrDefaultAsync();
             if (viewModel.Point.OwnerOfficeId == null || viewModel.Point.OwnerOfficeId == 1)
             {
-                return RedirectToAction(nameof(AllEdit), new { poeid = poeid, yearPoint = yearPoint, owneroffice = viewModel.Point.OwnerOfficeId });
+                return RedirectToAction(nameof(AllEdit), new { poeid = poeid, yearPoint = yearPoint, ownerofficeid = viewModel.Point.OwnerOfficeId });
+                //return View("AllEdit");
             }
+
             viewModel.expect1 = await _context.DataForEvaluations.Where(d => d.PointOfEvaluationId == poeid && d.OfficeId == viewModel.Point.OwnerOfficeId && d.Month == 1).Select(d => d.Expect).FirstOrDefaultAsync();
             viewModel.expect2 = await _context.DataForEvaluations.Where(d => d.PointOfEvaluationId == poeid && d.OfficeId == viewModel.Point.OwnerOfficeId && d.Month == 2).Select(d => d.Expect).FirstOrDefaultAsync();
             viewModel.expect3 = await _context.DataForEvaluations.Where(d => d.PointOfEvaluationId == poeid && d.OfficeId == viewModel.Point.OwnerOfficeId && d.Month == 3).Select(d => d.Expect).FirstOrDefaultAsync();
@@ -196,6 +198,41 @@ namespace EPES.Controllers
                 ViewBag.OfficeId = new SelectList(_context.Offices.Where(d => d.Code != "00000000" && d.Code.Substring(5, 3) == "000"), "Id", "Name");
             }
 
+            viewModel.yearPoint = yearPoint;
+            return View(viewModel);
+        }
+
+        [HttpPost, ActionName("AllEdit")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> AllEditPost(int poeid, int yearPoint, int? ownerofficeid)
+        {
+            DataForEvaluationViewModel viewModel = new DataForEvaluationViewModel();
+            viewModel.Point = await _context.PointOfEvaluations.Where(p => p.Id == poeid).FirstOrDefaultAsync();
+
+            if (ownerofficeid == null)
+            {
+                ViewBag.OfficeId = new SelectList(_context.Offices.Where(d => d.Code != "00000000" && d.Code.Substring(0, 3) != "000" && d.Code.Substring(5, 3) == "000"), "Id", "Name");
+            }
+            else
+            {
+                ViewBag.OfficeId = new SelectList(_context.Offices.Where(d => d.Code != "00000000" && d.Code.Substring(5, 3) == "000"), "Id", "Name",ownerofficeid);
+            }
+
+            viewModel.expect1 = await _context.DataForEvaluations.Where(d => d.PointOfEvaluationId == poeid && d.OfficeId == ownerofficeid && d.Month == 1).Select(d => d.Expect).FirstOrDefaultAsync();
+            viewModel.expect2 = await _context.DataForEvaluations.Where(d => d.PointOfEvaluationId == poeid && d.OfficeId == ownerofficeid && d.Month == 2).Select(d => d.Expect).FirstOrDefaultAsync();
+            viewModel.expect3 = await _context.DataForEvaluations.Where(d => d.PointOfEvaluationId == poeid && d.OfficeId == ownerofficeid && d.Month == 3).Select(d => d.Expect).FirstOrDefaultAsync();
+            viewModel.expect4 = await _context.DataForEvaluations.Where(d => d.PointOfEvaluationId == poeid && d.OfficeId == ownerofficeid && d.Month == 4).Select(d => d.Expect).FirstOrDefaultAsync();
+            viewModel.expect5 = await _context.DataForEvaluations.Where(d => d.PointOfEvaluationId == poeid && d.OfficeId == ownerofficeid && d.Month == 5).Select(d => d.Expect).FirstOrDefaultAsync();
+            viewModel.expect6 = await _context.DataForEvaluations.Where(d => d.PointOfEvaluationId == poeid && d.OfficeId == ownerofficeid && d.Month == 6).Select(d => d.Expect).FirstOrDefaultAsync();
+            viewModel.expect7 = await _context.DataForEvaluations.Where(d => d.PointOfEvaluationId == poeid && d.OfficeId == ownerofficeid && d.Month == 7).Select(d => d.Expect).FirstOrDefaultAsync();
+            viewModel.expect8 = await _context.DataForEvaluations.Where(d => d.PointOfEvaluationId == poeid && d.OfficeId == ownerofficeid && d.Month == 8).Select(d => d.Expect).FirstOrDefaultAsync();
+            viewModel.expect9 = await _context.DataForEvaluations.Where(d => d.PointOfEvaluationId == poeid && d.OfficeId == ownerofficeid && d.Month == 9).Select(d => d.Expect).FirstOrDefaultAsync();
+            viewModel.expect10 = await _context.DataForEvaluations.Where(d => d.PointOfEvaluationId == poeid && d.OfficeId == ownerofficeid && d.Month == 10).Select(d => d.Expect).FirstOrDefaultAsync();
+            viewModel.expect11 = await _context.DataForEvaluations.Where(d => d.PointOfEvaluationId == poeid && d.OfficeId == ownerofficeid && d.Month == 11).Select(d => d.Expect).FirstOrDefaultAsync();
+            viewModel.expect12 = await _context.DataForEvaluations.Where(d => d.PointOfEvaluationId == poeid && d.OfficeId == ownerofficeid && d.Month == 12).Select(d => d.Expect).FirstOrDefaultAsync();
+
+            viewModel.Office = await _context.Offices.Where(o => o.Id == ownerofficeid).FirstOrDefaultAsync();
+            viewModel.yearPoint = yearPoint;
             return View(viewModel);
         }
 
@@ -204,10 +241,19 @@ namespace EPES.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost, ActionName("Edit")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> EditPost([Bind("yearPoint,poeid,expect1,expect2,expect3,expect4,expect5,expect6,expect7,expect8,expect9,expect10,expect11,expect12")] DataForEvaluationViewModel dataView)
+        public async Task<IActionResult> EditPost([Bind("yearPoint,poeid,expect1,expect2,expect3,expect4,expect5,expect6,expect7,expect8,expect9,expect10,expect11,expect12")] DataForEvaluationViewModel dataView,int? ownerofficeid)
         {
             dataView.Point = await _context.PointOfEvaluations.Where(p => p.Id == dataView.poeid).FirstOrDefaultAsync();
-            var office = await _context.Offices.Where(o => o.Id == dataView.Point.OwnerOfficeId).FirstOrDefaultAsync();
+            Office office;
+            if (ownerofficeid != null)
+            {
+                office = await _context.Offices.Where(o => o.Id == ownerofficeid).FirstOrDefaultAsync();
+            }
+            else
+            {
+                office = await _context.Offices.Where(o => o.Id == dataView.Point.OwnerOfficeId).FirstOrDefaultAsync();
+            }
+            
             if (ModelState.IsValid)
             {
                 var user = await _userManager.GetUserAsync(User);
@@ -225,7 +271,11 @@ namespace EPES.Controllers
                 await SaveExpect(dataView.Point.Id, office.Id, 8, dataView.expect8, user.Id);
                 await SaveExpect(dataView.Point.Id, office.Id, 9, dataView.expect9, user.Id);
 
-                return RedirectToAction(nameof(AllEdit), new { yearPoint = dataView.yearPoint });
+                if (dataView.Point.OwnerOfficeId != null)
+                {
+                    return RedirectToAction(nameof(Index));
+                }
+                return RedirectToAction(nameof(Edit), new { poeid = dataView.poeid, yearPoint = dataView.yearPoint });
             }
             return View(dataView);
         }
