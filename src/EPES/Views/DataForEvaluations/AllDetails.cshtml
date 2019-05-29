@@ -6,7 +6,19 @@
 
 <div class="container-fluid">
     <h1 class="h3 mb-2 text-gray-800">แผนปฏิบัติราชการ</h1>
-    <p class="mb-4">เป้าหมาย/ประมาณการ @Model.Point.OwnerOffice.Name</p>
+    <p class="mb-4">เป้าหมาย/ประมาณการ</p>
+    <form asp-action="AllDetails">
+        <div class="form-group row">
+            <label class="col-form-label col-md-8 text-md-right">หน่วยงาน: </label>
+            <div class="col-md-4">
+                <select name="ownerofficeid" asp-items="ViewBag.OfficeId" class="form-control" onchange="this.form.submit()">
+                    <option value="">เลือกหน่วยงาน</option>
+                </select>
+            </div>
+        </div>
+        <input asp-for="yearPoint" class="form-control" hidden />
+        <input asp-for="poeid" value="@Model.Point.Id" class="form-control" hidden />
+    </form>
     <div class="card shadow mb-4">
         <div class="card-header py-3">
             <h6 class="m-0 font-weight-bold text-primary">@Model.Point.Name</h6>
@@ -128,3 +140,13 @@
         </div>
     </div>
 </div>
+
+@section Scripts {
+    <script>
+        $(function () {
+            if ($("select[name = 'ownerofficeid']").val() == "") {
+                $("div.card-body").hide();
+            }
+        });
+    </script>
+}

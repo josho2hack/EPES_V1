@@ -28,7 +28,7 @@
                         </div>
                         @if (User.IsInRole("Admin"))
                         {
-                            if ((ViewBag.Plan == "A") || (ViewBag.Plan == "C"))
+                            if ((ViewBag.Plan == "A") || (ViewBag.Plan == "C")) //plan B and D fix OwnerOfficeID "" and "00000000"
                             {
                                 <div class="form-group">
                                     <label asp-for="OwnerOfficeId" class="control-label"></label>
@@ -85,48 +85,126 @@
                                     <select asp-for="Unit" class="form-control" asp-items="Html.GetEnumSelectList<UnitOfPoint>()"></select>
                                     <span asp-validation-for="Unit" class="text-danger"></span>
                                 </div>
-                                <div class="form-group col-md-6" name="round">
-                                    <label class="control-label">รอบการประเมิน</label>
-                                    <select id="round-select" class="form-control">
-                                        <option value="1">1</option>
-                                        <option value="2">2</option>
-                                    </select>
-                                </div>
+                                @if (Model.Unit == UnitOfPoint.ระดับ)
+                                {
+                                    <div class="form-group col-md-6" name="round">
+                                        <label class="control-label">รอบการประเมิน</label>
+                                        <select id="round-select" class="form-control">
+                                            <option value="1">1</option>
+                                            <option value="2">2</option>
+                                        </select>
+                                    </div>
+                                }
                             </div>
                             <div class="row" name="mainrate1">
-                                <div class="form-group col-md-6 percent">
-                                    <label asp-for="Rate1" class="control-label"></label>
+                                <div class="form-group col-md-2 percent">
+                                    <label class='control-label'>เกณฑ์ 1 คะแนน</label>
                                     <input asp-for="Rate1" class="form-control" />
                                     <span asp-validation-for="Rate1" class="text-danger"></span>
                                 </div>
+                                @if (Model.Unit == UnitOfPoint.ระดับ)
+                                {
+                                    <div class='form-group col-md-5'>
+                                        <label class='control-label'>รายละเอียดเกณฑ์การให้คะแนน 1 คะแนน รอบที่ 1</label>
+                                        <div class='col-md-10'>
+                                            <input asp-for='DetailRate1' class='form-control' />
+                                        </div>
+                                    </div>
+                                    <div class='form-group col-md-5'>
+                                        <label class='control-label'>รายละเอียดเกณฑ์การให้คะแนน 1 คะแนน รอบที่ 2</label>
+                                        <div class='col-md-10'>
+                                            <input asp-for='Detail2Rate1' class='form-control' />
+                                        </div>
+                                    </div>
+                                }
                             </div>
                             <div class="row" name="mainrate2">
-                                <div class="form-group col-md-6 percent">
-                                    <label asp-for="Rate2" class="control-label"></label>
+                                <div class="form-group col-md-2 percent">
+                                    <label class='control-label'>เกณฑ์ 2 คะแนน</label>
                                     <input asp-for="Rate2" class="form-control" />
                                     <span asp-validation-for="Rate2" class="text-danger"></span>
                                 </div>
+                                @if (Model.Unit == UnitOfPoint.ระดับ)
+                                {
+                                    <div class='form-group col-md-5'>
+                                        <label class='control-label'>รายละเอียดเกณฑ์การให้คะแนน 2 คะแนน รอบที่ 1</label>
+                                        <div class='col-md-10'>
+                                            <input asp-for='DetailRate2' class='form-control' />
+                                        </div>
+                                    </div>
+                                    <div class='form-group col-md-5'>
+                                        <label class='control-label'>รายละเอียดเกณฑ์การให้คะแนน 2 คะแนน รอบที่ 2</label>
+                                        <div class='col-md-10'>
+                                            <input asp-for='Detail2Rate2' class='form-control' />
+                                        </div>
+                                    </div>
+                                }
                             </div>
                             <div class="row" name="mainrate3">
-                                <div class="form-group col-md-6 percent percent">
-                                    <label asp-for="Rate3" class="control-label"></label>
+                                <div class="form-group col-md-2 percent percent">
+                                    <label class='control-label'>เกณฑ์ 3 คะแนน</label>
                                     <input asp-for="Rate3" class="form-control" />
                                     <span asp-validation-for="Rate3" class="text-danger"></span>
                                 </div>
+                                @if (Model.Unit == UnitOfPoint.ระดับ)
+                                {
+                                    <div class='form-group col-md-5'>
+                                        <label class='control-label'>รายละเอียดเกณฑ์การให้คะแนน 3 คะแนน รอบที่ 1</label>
+                                        <div class='col-md-10'>
+                                            <input asp-for='DetailRate3' class='form-control' />
+                                        </div>
+                                    </div>
+                                    <div class='form-group col-md-5'>
+                                        <label class='control-label'>รายละเอียดเกณฑ์การให้คะแนน 3 คะแนน รอบที่ 2</label>
+                                        <div class='col-md-10'>
+                                            <input asp-for='Detail2Rate3' class='form-control' />
+                                        </div>
+                                    </div>
+                                }
                             </div>
                             <div class="row" name="mainrate4">
-                                <div class="form-group col-md-6 percent">
-                                    <label asp-for="Rate4" class="control-label"></label>
+                                <div class="form-group col-md-2 percent">
+                                    <label class='control-label'>เกณฑ์ 4 คะแนน</label>
                                     <input asp-for="Rate4" class="form-control" />
                                     <span asp-validation-for="Rate4" class="text-danger"></span>
                                 </div>
+                                @if (Model.Unit == UnitOfPoint.ระดับ)
+                                {
+                                    <div class='form-group col-md-5'>
+                                        <label class='control-label'>รายละเอียดเกณฑ์การให้คะแนน 4 คะแนน รอบที่ 1</label>
+                                        <div class='col-md-10'>
+                                            <input asp-for='DetailRate4' class='form-control' />
+                                        </div>
+                                    </div>
+                                    <div class='form-group col-md-5'>
+                                        <label class='control-label'>รายละเอียดเกณฑ์การให้คะแนน 4 คะแนน รอบที่ 2</label>
+                                        <div class='col-md-10'>
+                                            <input asp-for='Detail2Rate4' class='form-control' />
+                                        </div>
+                                    </div>
+                                }
                             </div>
                             <div class="row" name="mainrate5">
-                                <div class="form-group col-md-6 percent">
-                                    <label asp-for="Rate5" class="control-label"></label>
+                                <div class="form-group col-md-2 percent">
+                                    <label class='control-label'>เกณฑ์ 5 คะแนน</label>
                                     <input asp-for="Rate5" class="form-control" />
                                     <span asp-validation-for="Rate5" class="text-danger"></span>
                                 </div>
+                                @if (Model.Unit == UnitOfPoint.ระดับ)
+                                {
+                                    <div class='form-group col-md-5'>
+                                        <label class='control-label'>รายละเอียดเกณฑ์การให้คะแนน 5 คะแนน รอบที่ 1</label>
+                                        <div class='col-md-10'>
+                                            <input asp-for='DetailRate5' class='form-control' />
+                                        </div>
+                                    </div>
+                                    <div class='form-group col-md-5'>
+                                        <label class='control-label'>รายละเอียดเกณฑ์การให้คะแนน 5 คะแนน รอบที่ 2</label>
+                                        <div class='col-md-10'>
+                                            <input asp-for='Detail2Rate5' class='form-control' />
+                                        </div>
+                                    </div>
+                                }
                             </div>
                         </fieldset>
                         <div class="form-group">
@@ -235,7 +313,7 @@
                 }
             });
 
-            if ($("#OwnerOfficeId").val() == "") {
+            if ($("#OwnerOfficeId").val() == "") { //hide when plan C
                 $("#DataForEvalutionTable").hide();
             }
 
