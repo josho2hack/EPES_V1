@@ -11,18 +11,31 @@
 <div class="container-fluid">
     <h1 class="h3 mb-2 text-gray-800">แผนปฏิบัติราชการ</h1>
     <p class="mb-4">ตัวชี้วัดผลการปฏิบัติราชการ</p>
+
     <form asp-action="Index">
-        <div class="form-group row">
-            <label class="col-form-label col-md-10 text-md-right">ปีงบประมาณ: </label>
-            <div class="col-md-2">
-                <select asp-for="yearPoint" class="form-control" onchange="this.form.submit()">
-                    <option value="-1">@DateTime.Now.AddYears(-1).ToString("yyyy")</option>
-                    <option value="0">@DateTime.Now.ToString("yyyy")</option>
-                    <option value="1">@DateTime.Now.AddYears(1).ToString("yyyy")</option>
-                </select>
+        <div class="row justify-content-between">
+            <div class="col-md-4">
+                @if (User.IsInRole("Admin"))
+                {
+                    <div class="row">
+                        <label class="col-form-label col-md-4 text-md-left">หน่วยงาน: </label>
+                        <select name="selectoffice" class="form-control col-md-8" asp-items="ViewBag.OfficeId" onchange="this.form.submit()"></select>
+                    </div>
+                }
+                </div>
+            <div class="col-md-3">
+                <div class="row">
+                    <label class="col-form-label col-md-6 text-md-right">ปีงบประมาณ: </label>
+                    <select asp-for="yearPoint" class="form-control col-md-6" onchange="this.form.submit()">
+                        <option value="-1">@DateTime.Now.AddYears(-1).ToString("yyyy")</option>
+                        <option value="0">@DateTime.Now.ToString("yyyy")</option>
+                        <option value="1">@DateTime.Now.AddYears(1).ToString("yyyy")</option>
+                    </select>
+                </div>
             </div>
         </div>
     </form>
+
     @if (Model.pointA != null)
     {
         <!-- Plan A -->
@@ -37,9 +50,6 @@
                             <tr>
                                 <th>
                                     ลำดับที่
-                                </th>
-                                <th>
-                                    แผนงาน/โครงการ
                                 </th>
                                 <th>
                                     ตัวชี้วัด
@@ -67,9 +77,6 @@
                                         @Html.DisplayFor(modelItem => item.Point)
                                     </td>
                                     <td>
-                                        @Html.DisplayFor(modelItem => item.DetailPlan)
-                                    </td>
-                                    <td>
                                         @Html.DisplayFor(modelItem => item.Name)
                                     </td>
                                     <td>
@@ -87,12 +94,12 @@
                                     <td>
                                         @if (User.IsInRole("Admin") || (User.IsInRole("Manager") && user.OfficeId.StartsWith("000")))
                                         {
-                                            <a asp-action="Edit" asp-route-id="@item.Id"><i class="fas fa-edit"></i></a>
+                                            <a title="แก้ไข" asp-action="Edit" asp-route-id="@item.Id"><i class="fas fa-edit"></i></a>
                                         }
-                                        <a asp-action="Details" asp-route-id="@item.Id"><i class="fas fa-search-plus"></i></a>
+                                        <a title="รายละเอียด" asp-action="Details" asp-route-id="@item.Id"><i class="fas fa-search-plus"></i></a>
                                         @if (User.IsInRole("Admin") || (User.IsInRole("Manager") && user.OfficeId.StartsWith("000")))
                                         {
-                                            <a asp-action="Delete" asp-route-id="@item.Id" asp-route-yearPoint="@Model.yearPoint"><i class="fas fa-trash"></i></a>
+                                            <a title="ลบ" asp-action="Delete" asp-route-id="@item.Id" asp-route-yearPoint="@Model.yearPoint"><i class="fas fa-trash"></i></a>
                                         }
                                     </td>
                                 </tr>
@@ -123,9 +130,6 @@
                                 ลำดับที่
                             </th>
                             <th>
-                                แผนงาน/โครงการ
-                            </th>
-                            <th>
                                 ตัวชี้วัด
                             </th>
                             <th>
@@ -151,9 +155,6 @@
                                     @Html.DisplayFor(modelItem => item.Point)
                                 </td>
                                 <td>
-                                    @Html.DisplayFor(modelItem => item.DetailPlan)
-                                </td>
-                                <td>
                                     @Html.DisplayFor(modelItem => item.Name)
                                 </td>
                                 <td>
@@ -171,12 +172,12 @@
                                 <td>
                                     @if (User.IsInRole("Admin") || (User.IsInRole("Manager") && user.OfficeId.StartsWith("000")))
                                     {
-                                        <a asp-action="Edit" asp-route-id="@item.Id" asp-route-yearPoint="@Model.yearPoint"><i class="fas fa-edit"></i></a>
+                                        <a title="แก้ไข" asp-action="Edit" asp-route-id="@item.Id" asp-route-yearPoint="@Model.yearPoint"><i class="fas fa-edit"></i></a>
                                     }
-                                    <a asp-action="Details" asp-route-id="@item.Id" asp-route-yearPoint="@Model.yearPoint"><i class="fas fa-search-plus"></i></a>
+                                    <a title="รายละเอียด" asp-action="Details" asp-route-id="@item.Id" asp-route-yearPoint="@Model.yearPoint"><i class="fas fa-search-plus"></i></a>
                                     @if (User.IsInRole("Admin") || (User.IsInRole("Manager") && user.OfficeId.StartsWith("000")))
                                     {
-                                        <a asp-action="Delete" asp-route-id="@item.Id" asp-route-yearPoint="@Model.yearPoint"><i class="fas fa-trash"></i></a>
+                                        <a title="ลบ" asp-action="Delete" asp-route-id="@item.Id" asp-route-yearPoint="@Model.yearPoint"><i class="fas fa-trash"></i></a>
                                     }
                                 </td>
                             </tr>
@@ -207,9 +208,6 @@
                                 ลำดับที่
                             </th>
                             <th>
-                                แผนงาน/โครงการ
-                            </th>
-                            <th>
                                 ตัวชี้วัด
                             </th>
                             <th>
@@ -235,9 +233,6 @@
                                     @Html.DisplayFor(modelItem => item.Point)
                                 </td>
                                 <td>
-                                    @Html.DisplayFor(modelItem => item.DetailPlan)
-                                </td>
-                                <td>
                                     @Html.DisplayFor(modelItem => item.Name)
                                 </td>
                                 <td>
@@ -255,12 +250,12 @@
                                 <td>
                                     @if (User.IsInRole("Admin") || User.IsInRole("Manager") || (User.IsInRole("User") && item.OwnerOffice != null))
                                     {
-                                        <a asp-action="Edit" asp-route-id="@item.Id" asp-route-yearPoint="@Model.yearPoint"><i class="fas fa-edit"></i></a>
+                                        <a title="แก้ไข" asp-action="Edit" asp-route-id="@item.Id" asp-route-yearPoint="@Model.yearPoint"><i class="fas fa-edit"></i></a>
                                     }
-                                    <a asp-action="Details" asp-route-id="@item.Id" asp-route-yearPoint="@Model.yearPoint"><i class="fas fa-search-plus"></i></a>
+                                    <a title="รายละเอียด" asp-action="Details" asp-route-id="@item.Id" asp-route-yearPoint="@Model.yearPoint"><i class="fas fa-search-plus"></i></a>
                                     @if (User.IsInRole("Admin") || User.IsInRole("Manager") || (User.IsInRole("User") && item.OwnerOffice != null))
                                     {
-                                        <a asp-action="Delete" asp-route-id="@item.Id" asp-route-yearPoint="@Model.yearPoint"><i class="fas fa-trash"></i></a>
+                                        <a title="ลบ" asp-action="Delete" asp-route-id="@item.Id" asp-route-yearPoint="@Model.yearPoint"><i class="fas fa-trash"></i></a>
                                     }
                                 </td>
                             </tr>
@@ -291,9 +286,6 @@
                                 ลำดับที่
                             </th>
                             <th>
-                                แผนงาน/โครงการ
-                            </th>
-                            <th>
                                 ตัวชี้วัด
                             </th>
                             <th>
@@ -319,9 +311,6 @@
                                     @Html.DisplayFor(modelItem => item.Point)
                                 </td>
                                 <td>
-                                    @Html.DisplayFor(modelItem => item.DetailPlan)
-                                </td>
-                                <td>
                                     @Html.DisplayFor(modelItem => item.Name)
                                 </td>
                                 <td>
@@ -339,12 +328,12 @@
                                 <td>
                                     @if (User.IsInRole("Admin") || (User.IsInRole("Manager") && user.OfficeId.StartsWith("000") && user.OfficeId == item.AuditOffice?.Code))
                                     {
-                                        <a asp-action="Edit" asp-route-id="@item.Id" asp-route-yearPoint="@Model.yearPoint"><i class="fas fa-edit"></i></a>
+                                        <a title="แก้ไข" asp-action="Edit" asp-route-id="@item.Id" asp-route-yearPoint="@Model.yearPoint"><i class="fas fa-edit"></i></a>
                                     }
-                                    <a asp-action="Details" asp-route-id="@item.Id" asp-route-yearPoint="@Model.yearPoint"><i class="fas fa-search-plus"></i></a>
+                                    <a title="รายละเอียด" asp-action="Details" asp-route-id="@item.Id" asp-route-yearPoint="@Model.yearPoint"><i class="fas fa-search-plus"></i></a>
                                     @if (User.IsInRole("Admin") || (User.IsInRole("Manager") && user.OfficeId.StartsWith("000") && user.OfficeId == item.AuditOffice?.Code))
                                     {
-                                        <a asp-action="Delete" asp-route-id="@item.Id" asp-route-yearPoint="@Model.yearPoint"><i class="fas fa-trash"></i></a>
+                                        <a title="ลบ" asp-action="Delete" asp-route-id="@item.Id" asp-route-yearPoint="@Model.yearPoint"><i class="fas fa-trash"></i></a>
                                     }
                                 </td>
                             </tr>

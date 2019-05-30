@@ -22,12 +22,12 @@
                         <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                         @if (User.IsInRole("Admin"))
                         {
-                            if ((ViewBag.Plan == "A") || (ViewBag.Plan == "C"))
+                            if ((ViewBag.Plan == "A") || (ViewBag.Plan == "B") || (ViewBag.Plan == "C"))
                             {
                                 <div class="form-group">
                                     <label asp-for="OwnerOfficeId" class="control-label"></label>
                                     <select asp-for="OwnerOfficeId" class="form-control" asp-items="ViewBag.OfficeId">
-                                        @if (ViewBag.Plan == "C")
+                                        @if (ViewBag.Plan == "B" || ViewBag.Plan == "C")
                                         {
                                             <option value="">สภ./สท.</option>
                                         }

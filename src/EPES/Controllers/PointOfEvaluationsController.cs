@@ -54,17 +54,17 @@ namespace EPES.Controllers
                 if (officeCode.Substring(0, 3) == "000")
                 {
                     viewModel.pointA = await _context.PointOfEvaluations.Where(p => p.Plan == TypeOfPlan.A && p.OwnerOffice.Code == officeCode && p.Year == yearForQuery).Include(p => p.OwnerOffice).Include(p => p.AuditOffice).ToListAsync();
-                    viewModel.pointB = await _context.PointOfEvaluations.Where(p => p.Plan == TypeOfPlan.B && p.AuditOffice.Code == officeCode && p.Year == yearForQuery).Include(p => p.OwnerOffice).Include(p => p.AuditOffice).ToListAsync();
+                    viewModel.pointB = await _context.PointOfEvaluations.Where(p => p.Plan == TypeOfPlan.B && (p.AuditOffice.Code == officeCode || p.OwnerOffice.Code == officeCode) && p.Year == yearForQuery).Include(p => p.OwnerOffice).Include(p => p.AuditOffice).ToListAsync();
                     viewModel.pointC = await _context.PointOfEvaluations.Where(p => p.Plan == TypeOfPlan.C && p.OwnerOffice.Code == officeCode && p.Year == yearForQuery).Include(p => p.OwnerOffice).Include(p => p.AuditOffice).ToListAsync();
                 }
                 else
                 {
                     // List Plan B All Office
-                    viewModel.pointB = await _context.PointOfEvaluations.Where(p => p.Plan == TypeOfPlan.B && p.Year == yearForQuery).Include(p => p.OwnerOffice).Include(p => p.AuditOffice).ToListAsync();
+                    viewModel.pointB = await _context.PointOfEvaluations.Where(p => p.Plan == TypeOfPlan.B && p.OwnerOfficeId == null && p.Year == yearForQuery).Include(p => p.OwnerOffice).Include(p => p.AuditOffice).ToListAsync();
 
                     if (officeCode.Substring(2, 6) == "000000")
                     {
-                        viewModel.pointC = await _context.PointOfEvaluations.Include(p => p.OwnerOffice).Include(p => p.AuditOffice).Where(p => (p.Plan == TypeOfPlan.C && p.OwnerOffice == null && p.Year == yearForQuery) || (p.Plan == TypeOfPlan.C && p.OwnerOffice.Code.StartsWith(officeCode.Substring(0, 2)) && p.Year == yearForQuery)).ToListAsync();
+                        viewModel.pointC = await _context.PointOfEvaluations.Include(p => p.OwnerOffice).Include(p => p.AuditOffice).Where(p => p.Plan == TypeOfPlan.C && (p.OwnerOffice == null || p.OwnerOffice.Code.StartsWith(officeCode.Substring(0, 2))) && p.Year == yearForQuery).ToListAsync();
                     }
                     else
                     {
@@ -74,13 +74,14 @@ namespace EPES.Controllers
             }
             viewModel.pointD = await _context.PointOfEvaluations.Where(p => p.Plan == TypeOfPlan.D && p.Year == yearForQuery).Include(p => p.OwnerOffice).Include(p => p.AuditOffice).ToListAsync();
 
+            ViewBag.OfficeId = new SelectList(_context.Offices.Where(d => d.Code != "00000000" && d.Code.Substring(5, 3) == "000"), "Id", "Name");
             viewModel.yearPoint = yearPoint;
             return View(viewModel);
         }
 
         [HttpPost, ActionName("Index")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> IndexPost(int yearPoint = 0)
+        public async Task<IActionResult> IndexPost(int yearPoint = 0,int selectoffice = 1)
         {
             var user = await _userManager.GetUserAsync(User);
             var officeCode = user.OfficeId;
@@ -99,27 +100,37 @@ namespace EPES.Controllers
             var viewModel = new PointOfEvaluationViewModel();
             if (officeCode == "00013000")
             {
-                viewModel.pointA = await _context.PointOfEvaluations.Where(p => (p.Plan == TypeOfPlan.A) && (p.Year == yearForQuery)).Include(p => p.OwnerOffice).Include(p => p.AuditOffice).ToListAsync();
-                viewModel.pointB = await _context.PointOfEvaluations.Where(p => (p.Plan == TypeOfPlan.B) && (p.Year == yearForQuery)).Include(p => p.OwnerOffice).Include(p => p.AuditOffice).ToListAsync();
-                viewModel.pointC = await _context.PointOfEvaluations.Where(p => (p.Plan == TypeOfPlan.C) && (p.Year == yearForQuery)).Include(p => p.OwnerOffice).Include(p => p.AuditOffice).ToListAsync();
+                if (selectoffice == 1)
+                {
+                    viewModel.pointA = await _context.PointOfEvaluations.Where(p => (p.Plan == TypeOfPlan.A) && (p.Year == yearForQuery)).Include(p => p.OwnerOffice).Include(p => p.AuditOffice).ToListAsync();
+                    viewModel.pointB = await _context.PointOfEvaluations.Where(p => (p.Plan == TypeOfPlan.B) && (p.Year == yearForQuery)).Include(p => p.OwnerOffice).Include(p => p.AuditOffice).ToListAsync();
+                    viewModel.pointC = await _context.PointOfEvaluations.Where(p => (p.Plan == TypeOfPlan.C) && (p.Year == yearForQuery)).Include(p => p.OwnerOffice).Include(p => p.AuditOffice).ToListAsync();
+                }
+                else
+                {
+                    viewModel.pointA = await _context.PointOfEvaluations.Where(p => p.Plan == TypeOfPlan.A && (p.OwnerOfficeId == selectoffice) && p.Year == yearForQuery).Include(p => p.OwnerOffice).Include(p => p.AuditOffice).ToListAsync();
+                    viewModel.pointB = await _context.PointOfEvaluations.Where(p => (p.Plan == TypeOfPlan.B) && (p.OwnerOfficeId == selectoffice || p.AuditOfficeId == selectoffice || p.OwnerOfficeId == null) && (p.Year == yearForQuery)).Include(p => p.OwnerOffice).Include(p => p.AuditOffice).ToListAsync();
+                    viewModel.pointC = await _context.PointOfEvaluations.Where(p => (p.Plan == TypeOfPlan.C) && (p.OwnerOfficeId == selectoffice || p.AuditOfficeId == selectoffice) && (p.Year == yearForQuery)).Include(p => p.OwnerOffice).Include(p => p.AuditOffice).ToListAsync();
+                }
+                ViewBag.OfficeId = new SelectList(_context.Offices.Where(d => d.Code != "00000000" && d.Code.Substring(5, 3) == "000"), "Id", "Name",selectoffice);
             }
             else
             {
 
                 if (officeCode.Substring(0, 3) == "000")
                 {
-                    viewModel.pointA = await _context.PointOfEvaluations.Include(p => p.AuditOffice).Where(p => p.Plan == TypeOfPlan.A && p.OwnerOffice.Code == officeCode && p.Year == yearForQuery).Include(p => p.OwnerOffice).ToListAsync();
-                    viewModel.pointB = await _context.PointOfEvaluations.Include(p => p.OwnerOffice).Include(p => p.AuditOffice).Where(p => p.Plan == TypeOfPlan.B && p.OwnerOffice.Code == officeCode && p.Year == yearForQuery).ToListAsync();
-                    viewModel.pointC = await _context.PointOfEvaluations.Include(p => p.OwnerOffice).Include(p => p.AuditOffice).Where(p => p.Plan == TypeOfPlan.C && p.OwnerOffice.Code == officeCode && p.Year == yearForQuery).ToListAsync();
+                    viewModel.pointA = await _context.PointOfEvaluations.Where(p => p.Plan == TypeOfPlan.A && p.OwnerOffice.Code == officeCode && p.Year == yearForQuery).Include(p => p.OwnerOffice).Include(p => p.AuditOffice).ToListAsync();
+                    viewModel.pointB = await _context.PointOfEvaluations.Where(p => p.Plan == TypeOfPlan.B && (p.AuditOffice.Code == officeCode || p.OwnerOffice.Code == officeCode) && p.Year == yearForQuery).Include(p => p.OwnerOffice).Include(p => p.AuditOffice).ToListAsync();
+                    viewModel.pointC = await _context.PointOfEvaluations.Where(p => p.Plan == TypeOfPlan.C && p.OwnerOffice.Code == officeCode && p.Year == yearForQuery).Include(p => p.OwnerOffice).Include(p => p.AuditOffice).ToListAsync();
                 }
                 else
                 {
                     // List Plan B All Office
-                    viewModel.pointB = await _context.PointOfEvaluations.Where(p => p.Plan == TypeOfPlan.B && p.Year == yearForQuery).Include(p => p.OwnerOffice).Include(p => p.AuditOffice).ToListAsync();
+                    viewModel.pointB = await _context.PointOfEvaluations.Where(p => p.Plan == TypeOfPlan.B && p.OwnerOfficeId == null && p.Year == yearForQuery).Include(p => p.OwnerOffice).Include(p => p.AuditOffice).ToListAsync();
 
                     if (officeCode.Substring(2, 6) == "000000")
                     {
-                        viewModel.pointC = await _context.PointOfEvaluations.Include(p => p.OwnerOffice).Include(p => p.AuditOffice).Where(p => (p.Plan == TypeOfPlan.C && p.OwnerOffice == null && p.Year == yearForQuery) || (p.Plan == TypeOfPlan.C && p.OwnerOffice.Code.StartsWith(officeCode.Substring(0, 2)) && p.Year == yearForQuery)).ToListAsync();
+                        viewModel.pointC = await _context.PointOfEvaluations.Include(p => p.OwnerOffice).Include(p => p.AuditOffice).Where(p => p.Plan == TypeOfPlan.C && (p.OwnerOffice == null || p.OwnerOffice.Code.StartsWith(officeCode.Substring(0, 2))) && p.Year == yearForQuery).ToListAsync();
                     }
                     else
                     {
@@ -172,7 +183,7 @@ namespace EPES.Controllers
                 case 1:
                     ViewBag.Plan = "B";
                     ViewBag.PlanValue = 1;
-                    //ViewBag.OfficeId = "";
+                    ViewBag.OfficeId = new SelectList(_context.Offices.Where(d => d.Code != "00000000" && d.Code.Substring(5, 3) == "000"), "Id", "Name");
                     ViewBag.AuditOfficeId = new SelectList(_context.Offices.Where(d => d.Code != "00000000" && d.Code.Substring(0, 3) == "000"), "Id", "Name", office.Id);
                     break;
                 case 2:
@@ -262,7 +273,7 @@ namespace EPES.Controllers
                         await SaveExpect(dataView.Id, dataView.OwnerOffice.Id, 8, expect8, user.Id);
                         await SaveExpect(dataView.Id, dataView.OwnerOffice.Id, 9, expect9, user.Id);
                     }
-                    return RedirectToAction(nameof(Index), new { yearPoint = yearPoint });
+                    return RedirectToAction(nameof(Index), new { yearPoint = yearPoint, selectoffice = dataView.AuditOfficeId});
                 }
             }
             catch (DbUpdateException)
@@ -284,7 +295,7 @@ namespace EPES.Controllers
                 case TypeOfPlan.B:
                     ViewBag.Plan = "B";
                     ViewBag.PlanValue = 1;
-                    //ViewBag.OfficeId = "";
+                    ViewBag.OfficeId = new SelectList(_context.Offices.Where(d => d.Code != "00000000" && d.Code.Substring(5, 3) == "000"), "Id", "Name");
                     ViewBag.AuditOfficeId = new SelectList(_context.Offices.Where(d => d.Code != "00000000" && d.Code.Substring(0, 3) == "000"), "Id", "Name", office.Id);
                     break;
                 case TypeOfPlan.C:
@@ -327,12 +338,12 @@ namespace EPES.Controllers
                     ViewBag.Plan = "A";
                     //ViewBag.PlanValue = 0;
                     ViewBag.OfficeId = new SelectList(_context.Offices.Where(d => d.Code != "00000000" && d.Code.Substring(0, 3) == "000"), "Id", "Name", office.Id);
-                    ViewBag.AuditOfficeId = ViewBag.OfficeCode;
+                    ViewBag.AuditOfficeId = ViewBag.OfficeId;
                     break;
                 case TypeOfPlan.B:
                     ViewBag.Plan = "B";
                     //ViewBag.PlanValue = 1;
-                    //ViewBag.OfficeId = "";
+                    ViewBag.OfficeId = new SelectList(_context.Offices.Where(d => d.Code != "00000000" && d.Code.Substring(5, 3) == "000"), "Id", "Name");
                     ViewBag.AuditOfficeId = new SelectList(_context.Offices.Where(d => d.Code != "00000000" && d.Code.Substring(0, 3) == "000"), "Id", "Name", office.Id);
                     break;
                 case TypeOfPlan.C:
@@ -385,7 +396,7 @@ namespace EPES.Controllers
                         "ลองพยายามบันทึกอีกครั้ง " +
                         "โปรดแจ้งผู้ดูแลระบบ");
                 }
-                return RedirectToAction(nameof(Index), new { yearPoint = yearpoint });
+                return RedirectToAction(nameof(Index), new { yearPoint = yearpoint ,selectoffice = pointOfEvaluationToUpdate.AuditOfficeId});
             }
 
             var office = await _context.Offices.Where(o => o.Code == user.OfficeId).FirstOrDefaultAsync();
@@ -400,7 +411,7 @@ namespace EPES.Controllers
                 case TypeOfPlan.B:
                     ViewBag.Plan = "B";
                     ViewBag.PlanValue = 1;
-                    //ViewBag.OfficeId = "";
+                    ViewBag.OfficeId = new SelectList(_context.Offices.Where(d => d.Code != "00000000" && d.Code.Substring(5, 3) == "000"), "Id", "Name");
                     ViewBag.AuditOfficeId = new SelectList(_context.Offices.Where(d => d.Code != "00000000" && d.Code.Substring(0, 3) == "000"), "Id", "Name", office.Id);
                     break;
                 case TypeOfPlan.C:
@@ -465,7 +476,7 @@ namespace EPES.Controllers
             {
                 _context.PointOfEvaluations.Remove(pointOfEvaluation);
                 await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index), new { yearPoint = yearP });
+                return RedirectToAction(nameof(Index), new { yearPoint = yearP ,selectoffice = pointOfEvaluation.AuditOfficeId});
             }
             catch (DbUpdateException /*ex*/)
             {
