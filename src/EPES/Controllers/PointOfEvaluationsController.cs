@@ -132,7 +132,7 @@ namespace EPES.Controllers
                     if (officeselect.Code.Substring(0, 3) == "000")
                     {
                         viewModel.pointA = await _context.PointOfEvaluations.Where(p => p.Plan == TypeOfPlan.A && (p.OwnerOfficeId == selectoffice) && p.Year == yearForQuery).Include(p => p.OwnerOffice).Include(p => p.AuditOffice).ToListAsync();
-                        viewModel.pointB = await _context.PointOfEvaluations.Where(p => (p.Plan == TypeOfPlan.B) && (p.OwnerOfficeId == selectoffice || p.AuditOfficeId == selectoffice) && (p.Year == yearForQuery)).Include(p => p.OwnerOffice).Include(p => p.AuditOffice).ToListAsync();
+                        viewModel.pointB = await _context.PointOfEvaluations.Where(p => p.Plan == TypeOfPlan.B && (p.OwnerOfficeId == selectoffice || p.AuditOfficeId == selectoffice) && p.Year == yearForQuery).Include(p => p.OwnerOffice).Include(p => p.AuditOffice).ToListAsync();
                     }
                     else
                     {
