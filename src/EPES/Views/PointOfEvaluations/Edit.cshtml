@@ -210,9 +210,9 @@
                         <div class="form-group">
                             <input type="hidden" name="yearPoint" value="@ViewBag.yearPoint" />
                             <input asp-for="Plan" class="form-control" hidden />
-
+                            <input type="hidden" name="selectoffice" value="@ViewBag.selectoffice" />
                             <input type="submit" value="บันทึกการแก้ไข" class="btn btn-primary" />
-                            <a asp-area="" asp-controller="PointOfEvaluations" asp-action="Index" asp-route-yearPoint="@ViewBag.yearPoint" class="btn btn-secondary">ยกเลิก</a>
+                            <a asp-area="" asp-controller="PointOfEvaluations" asp-action="Index" asp-route-yearPoint="@ViewBag.yearPoint" asp-route-selectoffice="@ViewBag.selectoffice" class="btn btn-secondary">ยกเลิก</a>
                         </div>
                     </form>
                 </div>

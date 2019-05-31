@@ -80,9 +80,9 @@
                                     <td>
                                         @if (User.IsInRole("Admin") || (User.IsInRole("Manager") && user.OfficeId.StartsWith("000")))
                                         {
-                                            <a title="บันทึก/แก้ไข" asp-action="Edit" asp-route-poeid="@item.Id" asp-route-yearPoint="@Model.yearPoint"><i class="fas fa-edit"></i></a>
+                                            <a title="บันทึก/แก้ไข" asp-action="Edit" asp-route-poeid="@item.Id" asp-route-yearPoint="@Model.yearPoint" asp-route-selectoffice="@ViewBag.selectoffice"><i class="fas fa-edit"></i></a>
                                         }
-                                        <a title="รายละเอียด" asp-action="Details" asp-route-poeid="@item.Id" asp-route-yearPoint="@Model.yearPoint"><i class="fas fa-search-plus"></i></a>
+                                        <a title="รายละเอียด" asp-action="Details" asp-route-poeid="@item.Id" asp-route-yearPoint="@Model.yearPoint" asp-route-selectoffice="@ViewBag.selectoffice"><i class="fas fa-search-plus"></i></a>
                                     </td>
                                 </tr>
                             }
@@ -136,9 +136,9 @@
                                 <td>
                                     @if (User.IsInRole("Admin") || (User.IsInRole("Manager") && user.OfficeId.StartsWith("000")))
                                     {
-                                        <a title="บันทึก/แก้ไข" asp-action="Edit" asp-route-poeid="@item.Id" asp-route-yearPoint="@Model.yearPoint"><i class="fas fa-edit"></i></a>
+                                        <a title="บันทึก/แก้ไข" asp-action="Edit" asp-route-poeid="@item.Id" asp-route-yearPoint="@Model.yearPoint" asp-route-selectoffice="@ViewBag.selectoffice"><i class="fas fa-edit"></i></a>
                                     }
-                                    <a title="รายละเอียด" asp-action="Details" asp-route-poeid="@item.Id" asp-route-yearPoint="@Model.yearPoint"><i class="fas fa-search-plus"></i></a>
+                                    <a title="รายละเอียด" asp-action="Details" asp-route-poeid="@item.Id" asp-route-yearPoint="@Model.yearPoint" asp-route-selectoffice="@ViewBag.selectoffice"><i class="fas fa-search-plus"></i></a>
                                 </td>
                             </tr>
                         }
@@ -190,11 +190,11 @@
                                     @Html.DisplayFor(modelItem => item.AuditOffice.Name)
                                 </td>
                                 <td>
-                                    @if (User.IsInRole("Admin") || User.IsInRole("Manager") || (User.IsInRole("User") && item.OwnerOffice != null))
+                                    @if (User.IsInRole("Admin") || ((User.IsInRole("Manager") || User.IsInRole("User")) && item.OwnerOffice.Code == user.OfficeId))
                                     {
-                                        <a title="บันทึก/แก้ไข" asp-action="Edit" asp-route-poeid="@item.Id" asp-route-yearPoint="@Model.yearPoint"><i class="fas fa-edit"></i></a>
+                                        <a title="บันทึก/แก้ไข" asp-action="Edit" asp-route-poeid="@item.Id" asp-route-yearPoint="@Model.yearPoint" asp-route-selectoffice="@ViewBag.selectoffice"><i class="fas fa-edit"></i></a>
                                     }
-                                    <a title="รายละเอียด" asp-action="Details" asp-route-poeid="@item.Id" asp-route-yearPoint="@Model.yearPoint"><i class="fas fa-search-plus"></i></a>
+                                    <a title="รายละเอียด" asp-action="Details" asp-route-poeid="@item.Id" asp-route-yearPoint="@Model.yearPoint" asp-route-selectoffice="@ViewBag.selectoffice"><i class="fas fa-search-plus"></i></a>
                                 </td>
                             </tr>
                         }
@@ -248,9 +248,9 @@
                                 <td>
                                     @if (User.IsInRole("Admin") || (User.IsInRole("Manager") && user.OfficeId.StartsWith("000") && user.OfficeId == item.AuditOffice?.Code))
                                     {
-                                        <a title="บันทึก/แก้ไข" asp-action="Edit" asp-route-poeid="@item.Id" asp-route-yearPoint="@Model.yearPoint"><i class="fas fa-edit"></i></a>
+                                        <a title="บันทึก/แก้ไข" asp-action="Edit" asp-route-poeid="@item.Id" asp-route-yearPoint="@Model.yearPoint" asp-route-selectoffice="@ViewBag.selectoffice"><i class="fas fa-edit"></i></a>
                                     }
-                                    <a  title="รายละเอียด" asp-action="Details" asp-route-poeid="@item.Id" asp-route-yearPoint="@Model.yearPoint"><i class="fas fa-search-plus"></i></a>
+                                    <a  title="รายละเอียด" asp-action="Details" asp-route-poeid="@item.Id" asp-route-yearPoint="@Model.yearPoint" asp-route-selectoffice="@ViewBag.selectoffice"><i class="fas fa-search-plus"></i></a>
                                 </td>
                             </tr>
                         }

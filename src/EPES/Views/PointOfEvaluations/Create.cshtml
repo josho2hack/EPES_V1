@@ -20,9 +20,9 @@
                 <div class="col-md-8">
                     <form asp-action="Create">
                         <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-                        @if (User.IsInRole("Admin"))
+                        @if (User.IsInRole("Admin") || (User.IsInRole("Manager") && ViewBag.Plan == "B"))
                         {
-                            if ((ViewBag.Plan == "A") || (ViewBag.Plan == "B") || (ViewBag.Plan == "C"))
+                            if (ViewBag.Plan != "D")
                             {
                                 <div class="form-group">
                                     <label asp-for="OwnerOfficeId" class="control-label"></label>
@@ -114,7 +114,7 @@
                                 </div>
                             </div>
                         </fieldset>
-                        @if ((ViewBag.Plan == "A") || (ViewBag.Plan == "C"))
+                        @if (ViewBag.Plan != "D")
                         {
                             <table class="table table-bordered" id="DataForEvalutionTable" style="width:100%;" cellspacing="0">
                                 <thead>
@@ -229,9 +229,9 @@
                         }
                         <input name="yearPoint" value="@ViewBag.yearPoint" hidden/>
                         <input asp-for="Plan" placeholder="@ViewBag.PlanValue" hidden />
-
+                        <input type="hidden" name="selectoffice" value="@ViewBag.selectoffice" />
                         <button type="submit" class="btn btn-primary">บันทึก</button>
-                        <a asp-area="" asp-controller="PointOfEvaluations" asp-action="Index" asp-route-yearPoint="@ViewBag.yearPoint" class="btn btn-secondary">ยกเลิก</a>
+                        <a asp-area="" asp-controller="PointOfEvaluations" asp-action="Index" asp-route-yearPoint="@ViewBag.yearPoint" asp-route-selectoffice="@ViewBag.selectoffice" class="btn btn-secondary">ยกเลิก</a>
                     </form>
                 </div>
             </div>
@@ -246,8 +246,8 @@
 
             $("#Unit").change(function () {
                 if ($(this).children("option:selected").val() == 1) {
-                    $("#DataForEvalutionTable").hide();
                     $("div[name='round']").show();
+                    $("#DataForEvalutionTable").hide();
 
                     $("#round-select").val('1');
                     $("div[name^='mainrate']").empty();
@@ -269,9 +269,15 @@
                     );
                 }
                 else {
-                    $("#DataForEvalutionTable").show();
+
                     $("div[name='round']").hide();
                     $("div[name^='mainrate']").empty();
+
+                    if ($("#OwnerOfficeId").val() == "") {
+                        $("#DataForEvalutionTable").hide();
+                    } else {
+                        $("#DataForEvalutionTable").show();
+                    }
 
                     $("div[name='mainrate1']").append(
                         "<div class='form-group col-md-6'><label class='control-label'>เกณฑ์การให้คะแนน 1 คะแนน</label><input id='Rate1' name='Rate1' class='form-control' /></div>"
@@ -332,10 +338,12 @@
 
             if ($("#OwnerOfficeId").val() == "") {
                 $("#DataForEvalutionTable").hide();
+            } else {
+                $("#DataForEvalutionTable").show();
             }
 
             $("#OwnerOfficeId").change(function () {
-                if ($(this).children() == "") {
+                if ($(this).children("option:selected").val() == "") {
                     $("#DataForEvalutionTable").hide();
                 } else {
                     $("#DataForEvalutionTable").show();

@@ -94,12 +94,12 @@
                                     <td>
                                         @if (User.IsInRole("Admin") || (User.IsInRole("Manager") && user.OfficeId.StartsWith("000")))
                                         {
-                                            <a title="แก้ไข" asp-action="Edit" asp-route-id="@item.Id"><i class="fas fa-edit"></i></a>
+                                            <a title="แก้ไข" asp-action="Edit" asp-route-id="@item.Id"  asp-route-selectoffice="@ViewBag.selectoffice"><i class="fas fa-edit"></i></a>
                                         }
-                                        <a title="รายละเอียด" asp-action="Details" asp-route-id="@item.Id"><i class="fas fa-search-plus"></i></a>
+                                        <a title="รายละเอียด" asp-action="Details" asp-route-id="@item.Id" asp-route-selectoffice="@ViewBag.selectoffice"><i class="fas fa-search-plus"></i></a>
                                         @if (User.IsInRole("Admin") || (User.IsInRole("Manager") && user.OfficeId.StartsWith("000")))
                                         {
-                                            <a title="ลบ" asp-action="Delete" asp-route-id="@item.Id" asp-route-yearPoint="@Model.yearPoint"><i class="fas fa-trash"></i></a>
+                                            <a title="ลบ" asp-action="Delete" asp-route-id="@item.Id" asp-route-yearPoint="@Model.yearPoint"  asp-route-selectoffice="@ViewBag.selectoffice"><i class="fas fa-trash"></i></a>
                                         }
                                     </td>
                                 </tr>
@@ -109,7 +109,7 @@
                     <p class="text-right">
                         @if (User.IsInRole("Admin") || (User.IsInRole("Manager") && user.OfficeId.StartsWith("000")))
                         {
-                            <a asp-action="Create" asp-route-plan="0" asp-route-yearPoint="@Model.yearPoint">เพิ่มแผน</a>
+                            <a asp-action="Create" asp-route-plan="0" asp-route-yearPoint="@Model.yearPoint" asp-route-selectoffice="@ViewBag.selectoffice">เพิ่มแผน</a>
                         }
                     </p>
                 </div>
@@ -172,12 +172,12 @@
                                 <td>
                                     @if (User.IsInRole("Admin") || (User.IsInRole("Manager") && user.OfficeId.StartsWith("000")))
                                     {
-                                        <a title="แก้ไข" asp-action="Edit" asp-route-id="@item.Id" asp-route-yearPoint="@Model.yearPoint"><i class="fas fa-edit"></i></a>
+                                        <a title="แก้ไข" asp-action="Edit" asp-route-id="@item.Id" asp-route-yearPoint="@Model.yearPoint" asp-route-selectoffice="@ViewBag.selectoffice"><i class="fas fa-edit"></i></a>
                                     }
-                                    <a title="รายละเอียด" asp-action="Details" asp-route-id="@item.Id" asp-route-yearPoint="@Model.yearPoint"><i class="fas fa-search-plus"></i></a>
+                                    <a title="รายละเอียด" asp-action="Details" asp-route-id="@item.Id" asp-route-yearPoint="@Model.yearPoint" asp-route-selectoffice="@ViewBag.selectoffice"><i class="fas fa-search-plus"></i></a>
                                     @if (User.IsInRole("Admin") || (User.IsInRole("Manager") && user.OfficeId.StartsWith("000")))
                                     {
-                                        <a title="ลบ" asp-action="Delete" asp-route-id="@item.Id" asp-route-yearPoint="@Model.yearPoint"><i class="fas fa-trash"></i></a>
+                                        <a title="ลบ" asp-action="Delete" asp-route-id="@item.Id" asp-route-yearPoint="@Model.yearPoint" asp-route-selectoffice="@ViewBag.selectoffice"><i class="fas fa-trash"></i></a>
                                     }
                                 </td>
                             </tr>
@@ -187,7 +187,7 @@
                 <p class="text-right">
                     @if (User.IsInRole("Admin") || (User.IsInRole("Manager") && user.OfficeId.StartsWith("000")))
                     {
-                        <a asp-action="Create" asp-route-plan="1" asp-route-yearPoint="@Model.yearPoint">เพิ่มแผน</a>
+                        <a asp-action="Create" asp-route-plan="1" asp-route-yearPoint="@Model.yearPoint" asp-route-selectoffice="@ViewBag.selectoffice">เพิ่มแผน</a>
                     }
                 </p>
             </div>
@@ -250,12 +250,12 @@
                                 <td>
                                     @if (User.IsInRole("Admin") || User.IsInRole("Manager") || (User.IsInRole("User") && item.OwnerOffice != null))
                                     {
-                                        <a title="แก้ไข" asp-action="Edit" asp-route-id="@item.Id" asp-route-yearPoint="@Model.yearPoint"><i class="fas fa-edit"></i></a>
+                                        <a title="แก้ไข" asp-action="Edit" asp-route-id="@item.Id" asp-route-yearPoint="@Model.yearPoint" asp-route-selectoffice="@ViewBag.selectoffice"><i class="fas fa-edit"></i></a>
                                     }
-                                    <a title="รายละเอียด" asp-action="Details" asp-route-id="@item.Id" asp-route-yearPoint="@Model.yearPoint"><i class="fas fa-search-plus"></i></a>
+                                    <a title="รายละเอียด" asp-action="Details" asp-route-id="@item.Id" asp-route-yearPoint="@Model.yearPoint" asp-route-selectoffice="@ViewBag.selectoffice"><i class="fas fa-search-plus"></i></a>
                                     @if (User.IsInRole("Admin") || User.IsInRole("Manager") || (User.IsInRole("User") && item.OwnerOffice != null))
                                     {
-                                        <a title="ลบ" asp-action="Delete" asp-route-id="@item.Id" asp-route-yearPoint="@Model.yearPoint"><i class="fas fa-trash"></i></a>
+                                        <a title="ลบ" asp-action="Delete" asp-route-id="@item.Id" asp-route-yearPoint="@Model.yearPoint" asp-route-selectoffice="@ViewBag.selectoffice"><i class="fas fa-trash"></i></a>
                                     }
                                 </td>
                             </tr>
@@ -265,7 +265,7 @@
                 <p class="text-right">
                     @if (User.IsInRole("Admin") || User.IsInRole("Manager") || User.IsInRole("User"))
                     {
-                        <a asp-action="Create" asp-route-plan="2" asp-route-yearPoint="@Model.yearPoint">เพิ่มแผน</a>
+                        <a asp-action="Create" asp-route-plan="2" asp-route-yearPoint="@Model.yearPoint" asp-route-selectoffice="@ViewBag.selectoffice">เพิ่มแผน</a>
                     }
                 </p>
             </div>
@@ -328,12 +328,12 @@
                                 <td>
                                     @if (User.IsInRole("Admin") || (User.IsInRole("Manager") && user.OfficeId.StartsWith("000") && user.OfficeId == item.AuditOffice?.Code))
                                     {
-                                        <a title="แก้ไข" asp-action="Edit" asp-route-id="@item.Id" asp-route-yearPoint="@Model.yearPoint"><i class="fas fa-edit"></i></a>
+                                        <a title="แก้ไข" asp-action="Edit" asp-route-id="@item.Id" asp-route-yearPoint="@Model.yearPoint" asp-route-selectoffice="@ViewBag.selectoffice"><i class="fas fa-edit"></i></a>
                                     }
-                                    <a title="รายละเอียด" asp-action="Details" asp-route-id="@item.Id" asp-route-yearPoint="@Model.yearPoint"><i class="fas fa-search-plus"></i></a>
+                                    <a title="รายละเอียด" asp-action="Details" asp-route-id="@item.Id" asp-route-yearPoint="@Model.yearPoint" asp-route-selectoffice="@ViewBag.selectoffice"><i class="fas fa-search-plus"></i></a>
                                     @if (User.IsInRole("Admin") || (User.IsInRole("Manager") && user.OfficeId.StartsWith("000") && user.OfficeId == item.AuditOffice?.Code))
                                     {
-                                        <a title="ลบ" asp-action="Delete" asp-route-id="@item.Id" asp-route-yearPoint="@Model.yearPoint"><i class="fas fa-trash"></i></a>
+                                        <a title="ลบ" asp-action="Delete" asp-route-id="@item.Id" asp-route-yearPoint="@Model.yearPoint" asp-route-selectoffice="@ViewBag.selectoffice"><i class="fas fa-trash"></i></a>
                                     }
                                 </td>
                             </tr>
@@ -343,7 +343,7 @@
                 <p class="text-right">
                     @if (User.IsInRole("Admin") || User.IsInRole("PlanDAdmin"))
                     {
-                        <a asp-action="Create" asp-route-plan="3" asp-route-yearPoint="@Model.yearPoint">เพิ่มแผน</a>
+                        <a asp-action="Create" asp-route-plan="3" asp-route-yearPoint="@Model.yearPoint" asp-route-selectoffice="@ViewBag.selectoffice">เพิ่มแผน</a>
                     }
                 </p>
             </div>
