@@ -31,6 +31,12 @@
                                         {
                                             <option value="">สภ./สท.</option>
                                         }
+                                        @if (ViewBag.Plan == "D")
+                                        {
+                                            <option value="11111111">กอง/กลุ่ม/ศูนย์</option>
+                                            <option value="22222222">สภ.</option>
+                                            <option value="33333333">สท.</option>
+                                        }
                                     </select>
                                     <span asp-validation-for="OwnerOfficeId" class="text-danger"></span>
                                 </div>

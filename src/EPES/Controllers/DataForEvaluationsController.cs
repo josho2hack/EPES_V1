@@ -175,7 +175,7 @@ namespace EPES.Controllers
         }
 
         // GET: DataForEvaluations/Details/5
-        public async Task<IActionResult> Details(int? poeid,int yearPoint)
+        public async Task<IActionResult> Details(int? poeid,int yearPoint, int selectoffice = 1)
         {
             if (poeid == null)
             {
@@ -184,25 +184,26 @@ namespace EPES.Controllers
 
             DataForEvaluationViewModel viewModel = new DataForEvaluationViewModel();
             viewModel.Point = await _context.PointOfEvaluations.Include(p => p.OwnerOffice).Where(p => p.Id == poeid).FirstOrDefaultAsync();
-            if (viewModel.Point.OwnerOfficeId == null || viewModel.Point.OwnerOfficeId == 1)
+            if (selectoffice == 1 && (viewModel.Point.OwnerOfficeId == null || viewModel.Point.OwnerOfficeId == 1 || viewModel.Point.OwnerOffice.Code == "11111111" || viewModel.Point.OwnerOffice.Code == "22222222" || viewModel.Point.OwnerOffice.Code == "33333333"))
             {
                 return RedirectToAction(nameof(AllDetails), new { poeid = poeid, yearPoint = yearPoint, ownerofficeid = viewModel.Point.OwnerOfficeId });
             }
 
-            viewModel.expect1 = await _context.DataForEvaluations.Where(d => d.PointOfEvaluationId == poeid && d.OfficeId == viewModel.Point.OwnerOfficeId && d.Month == 1).Select(d => d.Expect).FirstOrDefaultAsync();
-            viewModel.expect2 = await _context.DataForEvaluations.Where(d => d.PointOfEvaluationId == poeid && d.OfficeId == viewModel.Point.OwnerOfficeId && d.Month == 2).Select(d => d.Expect).FirstOrDefaultAsync();
-            viewModel.expect3 = await _context.DataForEvaluations.Where(d => d.PointOfEvaluationId == poeid && d.OfficeId == viewModel.Point.OwnerOfficeId && d.Month == 3).Select(d => d.Expect).FirstOrDefaultAsync();
-            viewModel.expect4 = await _context.DataForEvaluations.Where(d => d.PointOfEvaluationId == poeid && d.OfficeId == viewModel.Point.OwnerOfficeId && d.Month == 4).Select(d => d.Expect).FirstOrDefaultAsync();
-            viewModel.expect5 = await _context.DataForEvaluations.Where(d => d.PointOfEvaluationId == poeid && d.OfficeId == viewModel.Point.OwnerOfficeId && d.Month == 5).Select(d => d.Expect).FirstOrDefaultAsync();
-            viewModel.expect6 = await _context.DataForEvaluations.Where(d => d.PointOfEvaluationId == poeid && d.OfficeId == viewModel.Point.OwnerOfficeId && d.Month == 6).Select(d => d.Expect).FirstOrDefaultAsync();
-            viewModel.expect7 = await _context.DataForEvaluations.Where(d => d.PointOfEvaluationId == poeid && d.OfficeId == viewModel.Point.OwnerOfficeId && d.Month == 7).Select(d => d.Expect).FirstOrDefaultAsync();
-            viewModel.expect8 = await _context.DataForEvaluations.Where(d => d.PointOfEvaluationId == poeid && d.OfficeId == viewModel.Point.OwnerOfficeId && d.Month == 8).Select(d => d.Expect).FirstOrDefaultAsync();
-            viewModel.expect9 = await _context.DataForEvaluations.Where(d => d.PointOfEvaluationId == poeid && d.OfficeId == viewModel.Point.OwnerOfficeId && d.Month == 9).Select(d => d.Expect).FirstOrDefaultAsync();
-            viewModel.expect10 = await _context.DataForEvaluations.Where(d => d.PointOfEvaluationId == poeid && d.OfficeId == viewModel.Point.OwnerOfficeId && d.Month == 10).Select(d => d.Expect).FirstOrDefaultAsync();
-            viewModel.expect11 = await _context.DataForEvaluations.Where(d => d.PointOfEvaluationId == poeid && d.OfficeId == viewModel.Point.OwnerOfficeId && d.Month == 11).Select(d => d.Expect).FirstOrDefaultAsync();
-            viewModel.expect12 = await _context.DataForEvaluations.Where(d => d.PointOfEvaluationId == poeid && d.OfficeId == viewModel.Point.OwnerOfficeId && d.Month == 12).Select(d => d.Expect).FirstOrDefaultAsync();
+            viewModel.expect1 = await _context.DataForEvaluations.Where(d => d.PointOfEvaluationId == poeid && d.OfficeId == selectoffice && d.Month == 1).Select(d => d.Expect).FirstOrDefaultAsync();
+            viewModel.expect2 = await _context.DataForEvaluations.Where(d => d.PointOfEvaluationId == poeid && d.OfficeId == selectoffice && d.Month == 2).Select(d => d.Expect).FirstOrDefaultAsync();
+            viewModel.expect3 = await _context.DataForEvaluations.Where(d => d.PointOfEvaluationId == poeid && d.OfficeId == selectoffice && d.Month == 3).Select(d => d.Expect).FirstOrDefaultAsync();
+            viewModel.expect4 = await _context.DataForEvaluations.Where(d => d.PointOfEvaluationId == poeid && d.OfficeId == selectoffice && d.Month == 4).Select(d => d.Expect).FirstOrDefaultAsync();
+            viewModel.expect5 = await _context.DataForEvaluations.Where(d => d.PointOfEvaluationId == poeid && d.OfficeId == selectoffice && d.Month == 5).Select(d => d.Expect).FirstOrDefaultAsync();
+            viewModel.expect6 = await _context.DataForEvaluations.Where(d => d.PointOfEvaluationId == poeid && d.OfficeId == selectoffice && d.Month == 6).Select(d => d.Expect).FirstOrDefaultAsync();
+            viewModel.expect7 = await _context.DataForEvaluations.Where(d => d.PointOfEvaluationId == poeid && d.OfficeId == selectoffice && d.Month == 7).Select(d => d.Expect).FirstOrDefaultAsync();
+            viewModel.expect8 = await _context.DataForEvaluations.Where(d => d.PointOfEvaluationId == poeid && d.OfficeId == selectoffice && d.Month == 8).Select(d => d.Expect).FirstOrDefaultAsync();
+            viewModel.expect9 = await _context.DataForEvaluations.Where(d => d.PointOfEvaluationId == poeid && d.OfficeId == selectoffice && d.Month == 9).Select(d => d.Expect).FirstOrDefaultAsync();
+            viewModel.expect10 = await _context.DataForEvaluations.Where(d => d.PointOfEvaluationId == poeid && d.OfficeId == selectoffice && d.Month == 10).Select(d => d.Expect).FirstOrDefaultAsync();
+            viewModel.expect11 = await _context.DataForEvaluations.Where(d => d.PointOfEvaluationId == poeid && d.OfficeId == selectoffice && d.Month == 11).Select(d => d.Expect).FirstOrDefaultAsync();
+            viewModel.expect12 = await _context.DataForEvaluations.Where(d => d.PointOfEvaluationId == poeid && d.OfficeId == selectoffice && d.Month == 12).Select(d => d.Expect).FirstOrDefaultAsync();
 
             viewModel.yearPoint = yearPoint;
+            viewModel.Office = await _context.Offices.FindAsync(selectoffice);
             return View(viewModel);
         }
 
