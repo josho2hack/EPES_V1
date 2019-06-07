@@ -44,10 +44,10 @@ namespace EPES.Controllers
             {
                 if (String.IsNullOrEmpty(selectoffice))
                 {
-                    viewModel.pointA = await _context.PointOfEvaluations.Where(p => (p.Plan == TypeOfPlan.A) && (p.Year == yearForQuery)).Include(p => p.OwnerOffice).Include(p => p.AuditOffice).ToListAsync();
-                    viewModel.pointB = await _context.PointOfEvaluations.Where(p => (p.Plan == TypeOfPlan.B) && (p.Year == yearForQuery)).Include(p => p.OwnerOffice).Include(p => p.AuditOffice).ToListAsync();
-                    viewModel.pointC = await _context.PointOfEvaluations.Where(p => (p.Plan == TypeOfPlan.C) && (p.Year == yearForQuery)).Include(p => p.OwnerOffice).Include(p => p.AuditOffice).ToListAsync();
-                    viewModel.pointD = await _context.PointOfEvaluations.Where(p => p.Plan == TypeOfPlan.D && p.Year == yearForQuery).Include(p => p.OwnerOffice).Include(p => p.AuditOffice).ToListAsync();
+                    viewModel.pointA = await _context.PointOfEvaluations.Where(p => p.Plan == TypeOfPlan.A && p.OwnerOffice.Code == "00013000" && p.Year == yearForQuery).Include(p => p.OwnerOffice).Include(p => p.AuditOffice).ToListAsync();
+                    viewModel.pointB = await _context.PointOfEvaluations.Where(p => p.Plan == TypeOfPlan.B && p.OwnerOffice.Code == "00013000" && p.Year == yearForQuery).Include(p => p.OwnerOffice).Include(p => p.AuditOffice).ToListAsync();
+                    viewModel.pointC = await _context.PointOfEvaluations.Where(p => p.Plan == TypeOfPlan.C && p.OwnerOffice.Code == "00013000" && p.Year == yearForQuery).Include(p => p.OwnerOffice).Include(p => p.AuditOffice).ToListAsync();
+                    viewModel.pointD = await _context.PointOfEvaluations.Where(p => p.Plan == TypeOfPlan.D && p.OwnerOffice.Code == "00013000" && p.Year == yearForQuery).Include(p => p.OwnerOffice).Include(p => p.AuditOffice).ToListAsync();
                 }
                 else
                 {
@@ -71,7 +71,7 @@ namespace EPES.Controllers
                     {
                         viewModel.pointA = await _context.PointOfEvaluations.Where(p => p.Plan == TypeOfPlan.A && p.OwnerOffice.Code == user.OfficeId && p.Year == yearForQuery).Include(p => p.OwnerOffice).Include(p => p.AuditOffice).ToListAsync();
 
-                        ViewBag.OfficeCode = new SelectList(viewModel.pointB.Where(b => b.AuditOffice.Code == user.OfficeId), "OwnerOffice.Code", "OwnerOffice.Name", selectoffice);
+                        ViewBag.OfficeCode = new SelectList(viewModel.pointB.Where(b => b.AuditOffice.Code == user.OfficeId).Select(b => new { Code = b.OwnerOffice.Code, Name = b.OwnerOffice.Name }).Distinct(), "Code", "Name", selectoffice);
                     }
                     else
                     {
@@ -88,7 +88,7 @@ namespace EPES.Controllers
                     {
                         viewModel.pointA = await _context.PointOfEvaluations.Where(p => p.Plan == TypeOfPlan.A && p.OwnerOffice.Code == selectoffice && p.Year == yearForQuery).Include(p => p.OwnerOffice).Include(p => p.AuditOffice).ToListAsync();
 
-                        ViewBag.OfficeCode = new SelectList(viewModel.pointB.Where(b => b.AuditOffice.Code == user.OfficeId), "OwnerOffice.Code", "OwnerOffice.Name", selectoffice);
+                        ViewBag.OfficeCode = new SelectList(viewModel.pointB.Where(b => b.AuditOffice.Code == user.OfficeId).Select(b => new { Code = b.OwnerOffice.Code, Name = b.OwnerOffice.Name }).Distinct(), "Code", "Name", selectoffice);
                     }
                     else
                     {
@@ -152,7 +152,7 @@ namespace EPES.Controllers
                     {
                         viewModel.pointA = await _context.PointOfEvaluations.Where(p => p.Plan == TypeOfPlan.A && p.OwnerOffice.Code == user.OfficeId && p.Year == yearForQuery).Include(p => p.OwnerOffice).Include(p => p.AuditOffice).ToListAsync();
 
-                        ViewBag.OfficeCode = new SelectList(viewModel.pointB.Where(b => b.AuditOffice.Code == user.OfficeId), "OwnerOffice.Code", "OwnerOffice.Name", selectoffice);
+                        ViewBag.OfficeCode = new SelectList(viewModel.pointB.Where(b => b.AuditOffice.Code == user.OfficeId).Select(b => new { Code = b.OwnerOffice.Code, Name = b.OwnerOffice.Name }).Distinct(), "Code", "Name", selectoffice);
                     }
                     else
                     {
@@ -169,7 +169,7 @@ namespace EPES.Controllers
                     {
                         viewModel.pointA = await _context.PointOfEvaluations.Where(p => p.Plan == TypeOfPlan.A && p.OwnerOffice.Code == selectoffice && p.Year == yearForQuery).Include(p => p.OwnerOffice).Include(p => p.AuditOffice).ToListAsync();
 
-                        ViewBag.OfficeCode = new SelectList(viewModel.pointB.Where(b => b.AuditOffice.Code == user.OfficeId), "OwnerOffice.Code", "OwnerOffice.Name", selectoffice);
+                        ViewBag.OfficeCode = new SelectList(viewModel.pointB.Where(b => b.AuditOffice.Code == user.OfficeId).Select(b => new { Code = b.OwnerOffice.Code, Name = b.OwnerOffice.Name }).Distinct(), "Code", "Name", selectoffice);
                     }
                     else
                     {
@@ -186,7 +186,7 @@ namespace EPES.Controllers
         }
 
         // GET: PointOfEvaluations/Details/5
-        public async Task<IActionResult> Details(int? id, int yearPoint = 0, int selectoffice = 1)
+        public async Task<IActionResult> Details(string selectoffice, int? id, int yearPoint = 0)
         {
             if (id == null)
             {
@@ -209,64 +209,74 @@ namespace EPES.Controllers
         }
 
         // GET: PointOfEvaluations/Create
-        public async Task<IActionResult> Create(int plan, int yearPoint, int selectoffice = 1)
+        public async Task<IActionResult> Create(string selectoffice, int plan, int yearPoint)
         {
             var user = await _userManager.GetUserAsync(User);
             var office = await _context.Offices.Where(o => o.Code == user.OfficeId).FirstOrDefaultAsync();
+            var officeselect = await _context.Offices.Where(o => o.Code == selectoffice).FirstOrDefaultAsync();
+
             switch (plan)
             {
                 case 0:
                     ViewBag.Plan = "A";
                     ViewBag.PlanValue = 0;
-                    if (selectoffice == 1)
+                    if (User.IsInRole("Admin"))
                     {
-                        ViewBag.OfficeId = new SelectList(_context.Offices.Where(d => d.Code != "00000000" && d.Code.Substring(0, 3) == "000"), "Id", "Name", office.Id);
+                        if (String.IsNullOrEmpty(selectoffice))
+                        {
+                            ViewBag.OfficeId = new SelectList(_context.Offices.Where(d => d.Code != "00000000" && d.Code.Substring(0, 3) == "000"), "Id", "Name", office.Id);
+                        }
+                        else
+                        {
+                            ViewBag.OfficeId = new SelectList(_context.Offices.Where(d => d.Code != "00000000" && d.Code.Substring(0, 3) == "000"), "Id", "Name", officeselect.Id);
+                        }
+                        ViewBag.AuditOfficeId = ViewBag.OfficeId;
                     }
-                    else
-                    {
-                        ViewBag.OfficeId = new SelectList(_context.Offices.Where(d => d.Code != "00000000" && d.Code.Substring(0, 3) == "000"), "Id", "Name", selectoffice);
-                    }
-                    ViewBag.AuditOfficeId = ViewBag.OfficeId;
                     break;
                 case 1:
                     ViewBag.Plan = "B";
                     ViewBag.PlanValue = 1;
-                    ViewBag.OfficeId = new SelectList(_context.Offices.Where(d => d.Code != "00000000" && d.Code.Substring(5, 3) == "000"), "Id", "Name");
-                    if (selectoffice == 1)
+                    if (String.IsNullOrEmpty(selectoffice))
                     {
-                        ViewBag.AuditOfficeId = new SelectList(_context.Offices.Where(d => d.Code != "00000000" && d.Code.Substring(0, 3) == "000"), "Id", "Name", office.Id);
+                        ViewBag.OfficeId = new SelectList(_context.Offices.Where(d => d.Code != "00000000" && d.Code.Substring(5, 3) == "000"), "Id", "Name", office.Id);
                     }
                     else
                     {
-                        ViewBag.AuditOfficeId = new SelectList(_context.Offices.Where(d => d.Code != "00000000" && d.Code.Substring(0, 3) == "000"), "Id", "Name", selectoffice);
+                        ViewBag.OfficeId = new SelectList(_context.Offices.Where(d => d.Code != "00000000" && d.Code.Substring(5, 3) == "000"), "Id", "Name", officeselect.Id);
+
                     }
+                    ViewBag.AuditOfficeId = new SelectList(_context.Offices.Where(d => d.Code != "00000000" && d.Code.Substring(0, 3) == "000"), "Id", "Name", office.Id);
                     break;
                 case 2:
                     ViewBag.Plan = "C";
                     ViewBag.PlanValue = 2;
-                    if (selectoffice == 1)
+                    if (User.IsInRole("Admin"))
                     {
-                        ViewBag.OfficeId = new SelectList(_context.Offices.Where(d => d.Code != "00000000" && d.Code.Substring(5, 3) == "000"), "Id", "Name", office.Id);
+                        if (String.IsNullOrEmpty(selectoffice))
+                        {
+                            ViewBag.OfficeId = new SelectList(_context.Offices.Where(d => d.Code != "00000000" && d.Code.Substring(5, 3) == "000"), "Id", "Name", office.Id);
+                        }
+                        else
+                        {
+                            ViewBag.OfficeId = new SelectList(_context.Offices.Where(d => d.Code != "00000000" && d.Code.Substring(5, 3) == "000"), "Id", "Name", officeselect.Id);
+
+                        }
                         ViewBag.AuditOfficeId = new SelectList(_context.Offices.Where(d => d.Code != "00000000" && d.Code.Substring(5, 3) == "000"), "Id", "Name", office.Id);
-                    }
-                    else
-                    {
-                        ViewBag.OfficeId = new SelectList(_context.Offices.Where(d => d.Code != "00000000" && d.Code.Substring(5, 3) == "000"), "Id", "Name", selectoffice);
-                        ViewBag.AuditOfficeId = new SelectList(_context.Offices.Where(d => d.Code != "00000000" && d.Code.Substring(5, 3) == "000"), "Id", "Name", selectoffice);
                     }
                     break;
                 case 3:
                     ViewBag.Plan = "D";
                     ViewBag.PlanValue = 3;
-                    //ViewBag.OfficeId = "00000000";
-                    if (selectoffice == 1)
+                    if (String.IsNullOrEmpty(selectoffice))
                     {
-                        ViewBag.AuditOfficeId = new SelectList(_context.Offices.Where(d => d.Code != "00000000" && d.Code.Substring(0, 3) == "000"), "Id", "Name", office.Id);
+                        ViewBag.OfficeId = new SelectList(_context.Offices.Where(d => d.Code != "00000000" && d.Code.Substring(5, 3) == "000"), "Id", "Name", office.Id);
                     }
                     else
                     {
-                        ViewBag.AuditOfficeId = new SelectList(_context.Offices.Where(d => d.Code != "00000000" && d.Code.Substring(0, 3) == "000"), "Id", "Name", selectoffice);
+                        ViewBag.OfficeId = new SelectList(_context.Offices.Where(d => d.Code != "00000000" && d.Code.Substring(5, 3) == "000"), "Id", "Name", officeselect.Id);
+
                     }
+                    ViewBag.AuditOfficeId = new SelectList(_context.Offices.Where(d => d.Code != "00000000" && d.Code.Substring(0, 3) == "000"), "Id", "Name", office.Id);
                     break;
             }
 
@@ -280,7 +290,7 @@ namespace EPES.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("DetailPlan,Point,Plan,Name,Unit,Weight,Rate1,DetailRate1,Rate2,DetailRate2,Rate3,DetailRate3,Rate4,DetailRate4,Rate5,DetailRate5,Detail2Rate1,Detail2Rate2,Detail2Rate3,Detail2Rate4,Detail2Rate5,OwnerOfficeId,AuditOfficeId")] PointOfEvaluation dataView, int yearPoint, decimal? expect1, decimal? expect2, decimal? expect3, decimal? expect4, decimal? expect5, decimal? expect6, decimal? expect7, decimal? expect8, decimal? expect9, decimal? expect10, decimal? expect11, decimal? expect12, int selectoffice = 1)
+        public async Task<IActionResult> Create([Bind("DetailPlan,Point,Plan,Name,Unit,Weight,Rate1,DetailRate1,Rate2,DetailRate2,Rate3,DetailRate3,Rate4,DetailRate4,Rate5,DetailRate5,Detail2Rate1,Detail2Rate2,Detail2Rate3,Detail2Rate4,Detail2Rate5,OwnerOfficeId,AuditOfficeId")] PointOfEvaluation dataView, string selectoffice, int yearPoint, decimal? expect1, decimal? expect2, decimal? expect3, decimal? expect4, decimal? expect5, decimal? expect6, decimal? expect7, decimal? expect8, decimal? expect9, decimal? expect10, decimal? expect11, decimal? expect12)
         {
             var user = await _userManager.GetUserAsync(User);
             var office = await _context.Offices.Where(o => o.Code == user.OfficeId).FirstOrDefaultAsync();
@@ -360,7 +370,7 @@ namespace EPES.Controllers
                 case TypeOfPlan.A:
                     ViewBag.Plan = "A";
                     ViewBag.PlanValue = 0;
-                    if (selectoffice == 1)
+                    if (String.IsNullOrEmpty(selectoffice))
                     {
                         ViewBag.OfficeId = new SelectList(_context.Offices.Where(d => d.Code != "00000000" && d.Code.Substring(0, 3) == "000"), "Id", "Name", office.Id);
                     }
@@ -373,7 +383,7 @@ namespace EPES.Controllers
                 case TypeOfPlan.B:
                     ViewBag.Plan = "B";
                     ViewBag.PlanValue = 1;
-                    if (selectoffice == 1)
+                    if (String.IsNullOrEmpty(selectoffice))
                     {
                         ViewBag.OfficeId = new SelectList(_context.Offices.Where(d => d.Code != "00000000" && d.Code.Substring(5, 3) == "000"), "Id", "Name");
                         ViewBag.AuditOfficeId = new SelectList(_context.Offices.Where(d => d.Code != "00000000" && d.Code.Substring(0, 3) == "000"), "Id", "Name", office.Id);
@@ -387,7 +397,7 @@ namespace EPES.Controllers
                 case TypeOfPlan.C:
                     ViewBag.Plan = "C";
                     ViewBag.PlanValue = 2;
-                    if (selectoffice == 1)
+                    if (String.IsNullOrEmpty(selectoffice))
                     {
                         ViewBag.OfficeId = new SelectList(_context.Offices.Where(d => d.Code != "00000000" && d.Code.Substring(5, 3) == "000"), "Id", "Name");
                         ViewBag.AuditOfficeId = new SelectList(_context.Offices.Where(d => d.Code != "00000000" && d.Code.Substring(5, 3) == "000"), "Id", "Name", office.Id);
@@ -402,7 +412,7 @@ namespace EPES.Controllers
                     ViewBag.Plan = "D";
                     ViewBag.PlanValue = 3;
                     //ViewBag.OfficeId = "00000000";
-                    if (selectoffice == 1)
+                    if (String.IsNullOrEmpty(selectoffice))
                     {
                         ViewBag.AuditOfficeId = new SelectList(_context.Offices.Where(d => d.Code != "00000000" && d.Code.Substring(0, 3) == "000"), "Id", "Name", office.Id);
                     }
@@ -420,7 +430,7 @@ namespace EPES.Controllers
         }
 
         // GET: PointOfEvaluations/Edit/5
-        public async Task<IActionResult> Edit(int? id, int yearPoint = 0, int selectoffice = 1)
+        public async Task<IActionResult> Edit(string selectoffice, int? id, int yearPoint = 0)
         {
             if (id == null)
             {
@@ -474,7 +484,7 @@ namespace EPES.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost, ActionName("Edit")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> EditPost(int? id, int yearpoint = 0, int selectoffice = 1)//, [Bind("Id,Year,Point,SubPoint,Plan,Name,Unit,Weight,Rate1,Rate2,Rate3,Rate4,Rate5")] PointOfEvaluation pointOfEvaluation)
+        public async Task<IActionResult> EditPost(string selectoffice, int? id, int yearpoint = 0)
         {
             if (id == null)
             {
@@ -538,7 +548,7 @@ namespace EPES.Controllers
         }
 
         // GET: PointOfEvaluations/Delete/5
-        public async Task<IActionResult> Delete(int? id, int yearPoint, bool? saveChangesError = false, int selectoffice = 1)
+        public async Task<IActionResult> Delete(string selectoffice, int? id, int yearPoint, bool? saveChangesError = false)
         {
             if (id == null)
             {
@@ -571,7 +581,7 @@ namespace EPES.Controllers
         // POST: PointOfEvaluations/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int Id, int yearP, int selectoffice = 1)
+        public async Task<IActionResult> DeleteConfirmed(string selectoffice, int Id, int yearP)
         {
             var user = await _userManager.GetUserAsync(User);
 

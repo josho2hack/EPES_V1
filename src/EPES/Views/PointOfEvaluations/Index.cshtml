@@ -100,12 +100,12 @@
                                     @Html.DisplayFor(modelItem => item.AuditOffice.Name)
                                 </td>
                                 <td>
-                                    @if (User.IsInRole("Admin") || User.IsInRole("Manager"))
+                                    @if (User.IsInRole("Admin") || (User.IsInRole("Manager") && (item.AuditOffice.Code == user.OfficeId || item.OwnerOffice.Code == user.OfficeId)))
                                     {
                                         <a title="แก้ไข" asp-action="Edit" asp-route-id="@item.Id" asp-route-yearPoint="@Model.yearPoint" asp-route-selectoffice="@ViewBag.selectoffice"><i class="fas fa-edit"></i></a>
                                     }
                                     <a title="รายละเอียด" asp-action="Details" asp-route-id="@item.Id" asp-route-yearPoint="@Model.yearPoint" asp-route-selectoffice="@ViewBag.selectoffice"><i class="fas fa-search-plus"></i></a>
-                                    @if (User.IsInRole("Admin") || User.IsInRole("Manager"))
+                                    @if (User.IsInRole("Admin") || (User.IsInRole("Manager") && (item.AuditOffice.Code == user.OfficeId || item.OwnerOffice.Code == user.OfficeId)))
                                     {
                                         <a title="ลบ" asp-action="Delete" asp-route-id="@item.Id" asp-route-yearPoint="@Model.yearPoint" asp-route-selectoffice="@ViewBag.selectoffice"><i class="fas fa-trash"></i></a>
                                     }
@@ -184,12 +184,12 @@
                                 @Html.DisplayFor(modelItem => item.AuditOffice.Name)
                             </td>
                             <td>
-                                @if (User.IsInRole("Admin") || User.IsInRole("Manager") || User.IsInRole("User"))
+                                @if (User.IsInRole("Admin") || (User.IsInRole("Manager") && (item.AuditOffice.Code == user.OfficeId || item.OwnerOffice.Code == user.OfficeId)) || (User.IsInRole("User") && item.OwnerOffice.Code == user.OfficeId))
                                 {
                                     <a title="แก้ไข" asp-action="Edit" asp-route-id="@item.Id" asp-route-yearPoint="@Model.yearPoint" asp-route-selectoffice="@ViewBag.selectoffice"><i class="fas fa-edit"></i></a>
                                 }
                                 <a title="รายละเอียด" asp-action="Details" asp-route-id="@item.Id" asp-route-yearPoint="@Model.yearPoint" asp-route-selectoffice="@ViewBag.selectoffice"><i class="fas fa-search-plus"></i></a>
-                                @if (User.IsInRole("Admin") || User.IsInRole("Manager") || User.IsInRole("User"))
+                                @if (User.IsInRole("Admin") || (User.IsInRole("Manager") && (item.AuditOffice.Code == user.OfficeId || item.OwnerOffice.Code == user.OfficeId)) || (User.IsInRole("User") && item.OwnerOffice.Code == user.OfficeId))
                                 {
                                     <a title="ลบ" asp-action="Delete" asp-route-id="@item.Id" asp-route-yearPoint="@Model.yearPoint" asp-route-selectoffice="@ViewBag.selectoffice"><i class="fas fa-trash"></i></a>
                                 }
@@ -268,12 +268,12 @@
                                 @Html.DisplayFor(modelItem => item.AuditOffice.Name)
                             </td>
                             <td>
-                                @if (User.IsInRole("Admin") || User.IsInRole("Manager") || User.IsInRole("User"))
+                                @if (User.IsInRole("Admin") || (User.IsInRole("Manager") && (item.AuditOffice.Code == user.OfficeId || item.OwnerOffice.Code == user.OfficeId)) || (User.IsInRole("User") && item.OwnerOffice.Code == user.OfficeId))
                                 {
                                     <a title="แก้ไข" asp-action="Edit" asp-route-id="@item.Id" asp-route-yearPoint="@Model.yearPoint" asp-route-selectoffice="@ViewBag.selectoffice"><i class="fas fa-edit"></i></a>
                                 }
                                 <a title="รายละเอียด" asp-action="Details" asp-route-id="@item.Id" asp-route-yearPoint="@Model.yearPoint" asp-route-selectoffice="@ViewBag.selectoffice"><i class="fas fa-search-plus"></i></a>
-                                @if (User.IsInRole("Admin") || User.IsInRole("Manager") || User.IsInRole("User"))
+                                @if (User.IsInRole("Admin") || (User.IsInRole("Manager") && (item.AuditOffice.Code == user.OfficeId || item.OwnerOffice.Code == user.OfficeId)) || (User.IsInRole("User") && item.OwnerOffice.Code == user.OfficeId))
                                 {
                                     <a title="ลบ" asp-action="Delete" asp-route-id="@item.Id" asp-route-yearPoint="@Model.yearPoint" asp-route-selectoffice="@ViewBag.selectoffice"><i class="fas fa-trash"></i></a>
                                 }
@@ -352,12 +352,12 @@
                                 @Html.DisplayFor(modelItem => item.AuditOffice.Name)
                             </td>
                             <td>
-                                @if (User.IsInRole("Admin") || User.IsInRole("Manager") || User.IsInRole("User"))
+                                @if (User.IsInRole("Admin") || (User.IsInRole("Manager") && (item.AuditOffice.Code == user.OfficeId || item.OwnerOffice.Code == user.OfficeId)) || (User.IsInRole("User") && item.OwnerOffice.Code == user.OfficeId))
                                 {
                                     <a title="แก้ไข" asp-action="Edit" asp-route-id="@item.Id" asp-route-yearPoint="@Model.yearPoint" asp-route-selectoffice="@ViewBag.selectoffice"><i class="fas fa-edit"></i></a>
                                 }
                                 <a title="รายละเอียด" asp-action="Details" asp-route-id="@item.Id" asp-route-yearPoint="@Model.yearPoint" asp-route-selectoffice="@ViewBag.selectoffice"><i class="fas fa-search-plus"></i></a>
-                                @if (User.IsInRole("Admin") || User.IsInRole("Manager") || User.IsInRole("User"))
+                                @if (User.IsInRole("Admin") || (User.IsInRole("Manager") && (item.AuditOffice.Code == user.OfficeId || item.OwnerOffice.Code == user.OfficeId)) || (User.IsInRole("User") && item.OwnerOffice.Code == user.OfficeId))
                                 {
                                     <a title="ลบ" asp-action="Delete" asp-route-id="@item.Id" asp-route-yearPoint="@Model.yearPoint" asp-route-selectoffice="@ViewBag.selectoffice"><i class="fas fa-trash"></i></a>
                                 }
