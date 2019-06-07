@@ -4,7 +4,8 @@
         $('#EPEStable').dataTable({
             "language": {
                 "url": "@Url.Content("~/js/Thai.json")"
-            }
+            },
+            paging: false
         });
     });
 </script>
@@ -14,7 +15,8 @@
             "language": {
                 "url": "@Url.Content("~/js/Thai.json")"
             },
-            "lengthMenu": [[20, 40, 80, -1], [20, 40, 80, "All"]]
+            paging: false
+            //"lengthMenu": [[20, 40, 80, -1], [20, 40, 80, "All"]]
         });
     });
 </script>
@@ -23,7 +25,8 @@
         $('#EPEStableC').dataTable({
             "language": {
                 "url": "@Url.Content("~/js/Thai.json")"
-            }
+            },
+            paging: false
         });
     });
 </script>
@@ -32,7 +35,8 @@
         $('#EPEStableD').dataTable({
             "language": {
                 "url": "@Url.Content("~/js/Thai.json")"
-            }
+            },
+            paging: false
         });
     });
 </script>
@@ -43,8 +47,9 @@
             "language": {
                 "url": "@Url.Content("~/js/Thai.json")"
             },
-            "lengthMenu": [[20, 40, 80, -1], [20, 40, 80, "All"]],
-            "ordering": false
+            paging: false
+            //"lengthMenu": [[20, 40, 80, -1], [20, 40, 80, "All"]],
+            //"ordering": false
         });
     });
 </script>
