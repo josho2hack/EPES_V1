@@ -6,7 +6,7 @@
 
 <div class="container-fluid">
     <h1 class="h3 mb-2 text-gray-800">แผนปฏิบัติราชการ</h1>
-    <p class="mb-4">เป้าหมาย/ประมาณการ @Model.Office.Name</p>
+    <p class="mb-4">เป้าหมาย/ประมาณการ @Model.Point.OwnerOffice.Name</p>
     <div class="card shadow mb-4">
         <div class="card-header py-3">
             <h6 class="m-0 font-weight-bold text-primary">@Model.Point.Name</h6>
@@ -123,7 +123,7 @@
                 </tbody>
             </table>
             <div>
-                <a asp-action="Index" class="btn btn-info" asp-route-yearPoint="@Model.yearPoint">กลับหน้า เป้าหมาย/ประมาณการ</a>
+                <a asp-action="Index" class="btn btn-info" asp-route-yearPoint="@Model.yearPoint" asp-route-selectoffice="@ViewBag.selectoffice">กลับหน้า เป้าหมาย/ประมาณการ</a>
             </div>
         </div>
     </div>

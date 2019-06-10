@@ -21,6 +21,7 @@ namespace EPES.ViewModels
 
         public int yearPoint { get; set; }
         public int poeid { get; set; }
+
         public decimal? expect1 { get; set; }
         public decimal? expect2 { get; set; }
         public decimal? expect3 { get; set; }
