@@ -13,16 +13,18 @@
     <p class="mb-4">เป้าหมาย/ประมาณการ</p>
     <form asp-action="Index">
         <div class="row justify-content-between">
-            <div class="col-md-4">
-                @if (User.IsInRole("Admin"))
+            <div class="col-md-6">
+                @if (User.IsInRole("Admin") || User.IsInRole("Manager"))
                 {
                     <div class="row">
-                        <label class="col-form-label col-md-4 text-md-left">หน่วยงาน: </label>
-                        <select name="selectoffice" class="form-control col-md-8" asp-items="ViewBag.OfficeId" onchange="this.form.submit()"></select>
+                        <label class="col-form-label col-md-3 text-md-right">หน่วยงาน: </label>
+                        <select name="selectoffice" class="form-control col-md-7" asp-items="ViewBag.OfficeCode" onchange="this.form.submit()">
+                            <option value="">เลือกหน่วยงาน</option>
+                        </select>
                     </div>
                 }
             </div>
-            <div class="col-md-3">
+            <div class="col-md-6">
                 <div class="row">
                     <label class="col-form-label col-md-6 text-md-right">ปีงบประมาณ: </label>
                     <select asp-for="yearPoint" class="form-control col-md-6" onchange="this.form.submit()">
@@ -50,7 +52,7 @@
                                     ลำดับที่
                                 </th>
                                 <th>
-                                    แผนงาน/ตัวชี้วัด
+                                    ตัวชี้วัด
                                 </th>
                                 <th>
                                     ตัวชี้วัดสำหรับ
@@ -78,7 +80,7 @@
                                         @Html.DisplayFor(modelItem => item.AuditOffice.Name)
                                     </td>
                                     <td>
-                                        @if (User.IsInRole("Admin") || (User.IsInRole("Manager") && user.OfficeId.StartsWith("000")))
+                                        @if (User.IsInRole("Admin") || (User.IsInRole("Manager") && (item.AuditOffice.Code == user.OfficeId || item.OwnerOffice.Code == user.OfficeId)))
                                         {
                                             <a title="บันทึก/แก้ไข" asp-action="Edit" asp-route-poeid="@item.Id" asp-route-yearPoint="@Model.yearPoint" asp-route-selectoffice="@ViewBag.selectoffice"><i class="fas fa-edit"></i></a>
                                         }
@@ -106,7 +108,7 @@
                                 ลำดับที่
                             </th>
                             <th>
-                                แผนงาน/ตัวชี้วัด
+                                ตัวชี้วัด
                             </th>
                             <th>
                                 ตัวชี้วัดสำหรับ
@@ -134,7 +136,7 @@
                                     @Html.DisplayFor(modelItem => item.AuditOffice.Name)
                                 </td>
                                 <td>
-                                    @if (User.IsInRole("Admin") || (User.IsInRole("Manager") && user.OfficeId.StartsWith("000")))
+                                    @if (User.IsInRole("Admin") || (User.IsInRole("Manager") && (item.AuditOffice.Code == user.OfficeId || item.OwnerOffice.Code == user.OfficeId)) || (User.IsInRole("Manager") && user.OfficeId.Substring(2, 6) == "000000" && item.OwnerOffice.Code.StartsWith(user.OfficeId.Substring(0, 2))) || (User.IsInRole("User") && item.OwnerOffice.Code == user.OfficeId))
                                     {
                                         <a title="บันทึก/แก้ไข" asp-action="Edit" asp-route-poeid="@item.Id" asp-route-yearPoint="@Model.yearPoint" asp-route-selectoffice="@ViewBag.selectoffice"><i class="fas fa-edit"></i></a>
                                     }
@@ -162,7 +164,7 @@
                                 ลำดับที่
                             </th>
                             <th>
-                                แผนงาน/ตัวชี้วัด
+                                ตัวชี้วัด
                             </th>
                             <th>
                                 ตัวชี้วัดสำหรับ
@@ -190,7 +192,7 @@
                                     @Html.DisplayFor(modelItem => item.AuditOffice.Name)
                                 </td>
                                 <td>
-                                    @if (User.IsInRole("Admin") || ((User.IsInRole("Manager") || User.IsInRole("User")) && item.OwnerOffice != null))
+                                    @if (User.IsInRole("Admin") || (User.IsInRole("Manager") && (item.AuditOffice.Code == user.OfficeId || item.OwnerOffice.Code == user.OfficeId)) || (User.IsInRole("Manager") && user.OfficeId.Substring(2, 6) == "000000" && item.OwnerOffice.Code.StartsWith(user.OfficeId.Substring(0, 2))) || (User.IsInRole("User") && item.OwnerOffice.Code == user.OfficeId))
                                     {
                                         <a title="บันทึก/แก้ไข" asp-action="Edit" asp-route-poeid="@item.Id" asp-route-yearPoint="@Model.yearPoint" asp-route-selectoffice="@ViewBag.selectoffice"><i class="fas fa-edit"></i></a>
                                     }
@@ -218,7 +220,7 @@
                                 ลำดับที่
                             </th>
                             <th>
-                                แผนงาน/ตัวชี้วัด
+                                ตัวชี้วัด
                             </th>
                             <th>
                                 ตัวชี้วัดสำหรับ
@@ -246,7 +248,7 @@
                                     @Html.DisplayFor(modelItem => item.AuditOffice.Name)
                                 </td>
                                 <td>
-                                    @if (User.IsInRole("Admin") || (User.IsInRole("Manager") && user.OfficeId.StartsWith("000") && user.OfficeId == item.AuditOffice?.Code))
+                                    @if (User.IsInRole("Admin") || (User.IsInRole("Manager") && (item.AuditOffice.Code == user.OfficeId || item.OwnerOffice.Code == user.OfficeId)) || (User.IsInRole("Manager") && user.OfficeId.Substring(2, 6) == "000000" && item.OwnerOffice.Code.StartsWith(user.OfficeId.Substring(0, 2))) || (User.IsInRole("User") && item.OwnerOffice.Code == user.OfficeId))
                                     {
                                         <a title="บันทึก/แก้ไข" asp-action="Edit" asp-route-poeid="@item.Id" asp-route-yearPoint="@Model.yearPoint" asp-route-selectoffice="@ViewBag.selectoffice"><i class="fas fa-edit"></i></a>
                                     }

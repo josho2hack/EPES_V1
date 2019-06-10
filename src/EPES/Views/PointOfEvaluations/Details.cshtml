@@ -20,6 +20,18 @@
                     @Model.Year.ToString("yyyy")
                 </dd>
                 <dt class="col-sm-4">
+                    @Html.DisplayNameFor(model => model.OwnerOffice)
+                </dt>
+                <dd class="col-sm-8">
+                    @Html.DisplayFor(model => model.OwnerOffice.Name)
+                </dd>
+                <dt class="col-sm-4">
+                    @Html.DisplayNameFor(model => model.AuditOffice)
+                </dt>
+                <dd class="col-sm-8">
+                    @Html.DisplayFor(model => model.AuditOffice.Name)
+                </dd>
+                <dt class="col-sm-4">
                     @Html.DisplayNameFor(model => model.Point)
                 </dt>
                 <dd class="col-sm-8">
@@ -55,108 +67,129 @@
                 <dd class="col-sm-8">
                     @Html.DisplayFor(model => model.Weight)
                 </dd>
+
                 <dt class="col-sm-4">
                     @Html.DisplayNameFor(model => model.Rate1)
                 </dt>
                 <dd class="col-sm-8">
                     @Html.DisplayFor(model => model.Rate1)
                 </dd>
-                <dt class="col-sm-4">
-                    @Html.DisplayNameFor(model => model.DetailRate1)
-                </dt>
-                <dd class="col-sm-8">
-                    @Html.DisplayFor(model => model.DetailRate1)
-                </dd>
-                <dt class="col-sm-4">
-                    @Html.DisplayNameFor(model => model.Detail2Rate1)
-                </dt>
-                <dd class="col-sm-8">
-                    @Html.DisplayFor(model => model.Detail2Rate1)
-                </dd>
+                @if (Model.Unit == UnitOfPoint.ระดับ)
+                {
+                    <dt class="col-sm-4">
+                        @Html.DisplayNameFor(model => model.DetailRate1)
+                    </dt>
+                    <dd class="col-sm-8">
+                        @Html.DisplayFor(model => model.DetailRate1)
+                    </dd>
+                    @if (!String.IsNullOrEmpty(Model.Detail2Rate1))
+                    {
+                        <dt class="col-sm-4">
+                            @Html.DisplayNameFor(model => model.Detail2Rate1)
+                        </dt>
+                        <dd class="col-sm-8">
+                            @Html.DisplayFor(model => model.Detail2Rate1)
+                        </dd>
+                    }
+
+                }
+
                 <dt class="col-sm-4">
                     @Html.DisplayNameFor(model => model.Rate2)
                 </dt>
                 <dd class="col-sm-8">
                     @Html.DisplayFor(model => model.Rate2)
                 </dd>
-                <dt class="col-sm-4">
-                    @Html.DisplayNameFor(model => model.DetailRate2)
-                </dt>
-                <dd class="col-sm-8">
-                    @Html.DisplayFor(model => model.DetailRate2)
-                </dd>
-                <dt class="col-sm-4">
-                    @Html.DisplayNameFor(model => model.Detail2Rate2)
-                </dt>
-                <dd class="col-sm-8">
-                    @Html.DisplayFor(model => model.Detail2Rate2)
-                </dd>
+                @if (Model.Unit == UnitOfPoint.ระดับ)
+                {
+                    <dt class="col-sm-4">
+                        @Html.DisplayNameFor(model => model.DetailRate2)
+                    </dt>
+                    <dd class="col-sm-8">
+                        @Html.DisplayFor(model => model.DetailRate2)
+                    </dd>
+                    @if (!String.IsNullOrEmpty(Model.Detail2Rate2))
+                    {
+                        <dt class="col-sm-4">
+                            @Html.DisplayNameFor(model => model.Detail2Rate2)
+                        </dt>
+                        <dd class="col-sm-8">
+                            @Html.DisplayFor(model => model.Detail2Rate2)
+                        </dd>
+                    }
+                }
                 <dt class="col-sm-4">
                     @Html.DisplayNameFor(model => model.Rate3)
                 </dt>
                 <dd class="col-sm-8">
                     @Html.DisplayFor(model => model.Rate3)
                 </dd>
-                <dt class="col-sm-4">
-                    @Html.DisplayNameFor(model => model.DetailRate3)
-                </dt>
-                <dd class="col-sm-8">
-                    @Html.DisplayFor(model => model.DetailRate3)
-                </dd>
-                <dt class="col-sm-4">
-                    @Html.DisplayNameFor(model => model.Detail2Rate3)
-                </dt>
-                <dd class="col-sm-8">
-                    @Html.DisplayFor(model => model.Detail2Rate3)
-                </dd>
+                @if (Model.Unit == UnitOfPoint.ระดับ)
+                {
+                    <dt class="col-sm-4">
+                        @Html.DisplayNameFor(model => model.DetailRate3)
+                    </dt>
+                    <dd class="col-sm-8">
+                        @Html.DisplayFor(model => model.DetailRate3)
+                    </dd>
+                    @if (!String.IsNullOrEmpty(Model.Detail2Rate3))
+                    {
+                        <dt class="col-sm-4">
+                            @Html.DisplayNameFor(model => model.Detail2Rate3)
+                        </dt>
+                        <dd class="col-sm-8">
+                            @Html.DisplayFor(model => model.Detail2Rate3)
+                        </dd>
+                    }
+                }
                 <dt class="col-sm-4">
                     @Html.DisplayNameFor(model => model.Rate4)
                 </dt>
                 <dd class="col-sm-8">
                     @Html.DisplayFor(model => model.Rate4)
                 </dd>
-                <dt class="col-sm-4">
-                    @Html.DisplayNameFor(model => model.DetailRate4)
-                </dt>
-                <dd class="col-sm-8">
-                    @Html.DisplayFor(model => model.DetailRate4)
-                </dd>
-                <dt class="col-sm-4">
-                    @Html.DisplayNameFor(model => model.Detail2Rate4)
-                </dt>
-                <dd class="col-sm-8">
-                    @Html.DisplayFor(model => model.Detail2Rate4)
-                </dd>
+                @if (Model.Unit == UnitOfPoint.ระดับ)
+                {
+                    <dt class="col-sm-4">
+                        @Html.DisplayNameFor(model => model.DetailRate4)
+                    </dt>
+                    <dd class="col-sm-8">
+                        @Html.DisplayFor(model => model.DetailRate4)
+                    </dd>
+                    @if (!String.IsNullOrEmpty(Model.Detail2Rate4))
+                    {
+                        <dt class="col-sm-4">
+                            @Html.DisplayNameFor(model => model.Detail2Rate4)
+                        </dt>
+                        <dd class="col-sm-8">
+                            @Html.DisplayFor(model => model.Detail2Rate4)
+                        </dd>
+                    }
+                }
                 <dt class="col-sm-4">
                     @Html.DisplayNameFor(model => model.Rate5)
                 </dt>
                 <dd class="col-sm-8">
                     @Html.DisplayFor(model => model.Rate5)
                 </dd>
-                <dt class="col-sm-4">
-                    @Html.DisplayNameFor(model => model.DetailRate5)
-                </dt>
-                <dd class="col-sm-8">
-                    @Html.DisplayFor(model => model.DetailRate5)
-                </dd>
-                <dt class="col-sm-4">
-                    @Html.DisplayNameFor(model => model.Detail2Rate5)
-                </dt>
-                <dd class="col-sm-8">
-                    @Html.DisplayFor(model => model.Detail2Rate5)
-                </dd>
-                <dt class="col-sm-4">
-                    @Html.DisplayNameFor(model => model.OwnerOffice)
-                </dt>
-                <dd class="col-sm-8">
-                    @Html.DisplayFor(model => model.OwnerOffice.Name)
-                </dd>
-                <dt class="col-sm-4">
-                    @Html.DisplayNameFor(model => model.AuditOffice)
-                </dt>
-                <dd class="col-sm-8">
-                    @Html.DisplayFor(model => model.AuditOffice.Name)
-                </dd>
+                @if (Model.Unit == UnitOfPoint.ระดับ)
+                {
+                    <dt class="col-sm-4">
+                        @Html.DisplayNameFor(model => model.DetailRate5)
+                    </dt>
+                    <dd class="col-sm-8">
+                        @Html.DisplayFor(model => model.DetailRate5)
+                    </dd>
+                    @if (!String.IsNullOrEmpty(Model.Detail2Rate5))
+                    {
+                        <dt class="col-sm-4">
+                            @Html.DisplayNameFor(model => model.Detail2Rate5)
+                        </dt>
+                        <dd class="col-sm-8">
+                            @Html.DisplayFor(model => model.Detail2Rate5)
+                        </dd>
+                    }
+                }
             </dl>
             <div>
                 <a asp-action="Index" asp-route-yearPoint="@ViewBag.yearPoint" asp-route-selectoffice="@ViewBag.selectoffice" class="btn btn-info">กลับหน้าแผน</a>

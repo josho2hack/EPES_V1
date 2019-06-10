@@ -16,7 +16,6 @@
                 <div class="col-md-8">
                     <form asp-action="Edit">
                         <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-
                         <div class="form-group">
                             <label asp-for="Year" class="control-label"></label>
                             <select asp-for="Year" class="form-control">
@@ -26,42 +25,20 @@
                             </select>
                             <span asp-validation-for="Year" class="text-danger"></span>
                         </div>
-                        @if (User.IsInRole("Admin") || (User.IsInRole("Manager") && ViewBag.Plan == "B"))
-                        {
-                            if (ViewBag.Plan != "D")
-                            {
-                                <div class="form-group">
-                                    <label asp-for="OwnerOfficeId" class="control-label"></label>
-                                    <select asp-for="OwnerOfficeId" class="form-control" asp-items="ViewBag.OfficeId">
-                                        @if (ViewBag.Plan == "B" || ViewBag.Plan == "C")
-                                        {
-                                            <option value="">สภ./สท.</option>
-                                        }
-                                        @if (ViewBag.Plan == "D")
-                                        {
-                                            <option value="11111111">กอง/กลุ่ม/ศูนย์</option>
-                                            <option value="22222222">สภ.</option>
-                                            <option value="33333333">สท.</option>
-                                        }
-                                    </select>
-                                    <span asp-validation-for="OwnerOfficeId" class="text-danger"></span>
-                                </div>
-                            }
-                            <div class="form-group">
-                                <label asp-for="AuditOfficeId" class="control-label"></label>
-                                <select asp-for="AuditOfficeId" class="form-control" asp-items="ViewBag.AuditOfficeId"></select>
-                                <span asp-validation-for="AuditOfficeId" class="text-danger"></span>
-                            </div>
-                        }
+                        <div class="form-group">
+                            <label asp-for="OwnerOfficeId" class="control-label"></label>
+                            <select asp-for="OwnerOfficeId" class="form-control" asp-items="ViewBag.OfficeId"></select>
+                            <span asp-validation-for="OwnerOfficeId" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="AuditOfficeId" class="control-label"></label>
+                            <select asp-for="AuditOfficeId" class="form-control" asp-items="ViewBag.AuditOfficeId"></select>
+                            <span asp-validation-for="AuditOfficeId" class="text-danger"></span>
+                        </div>
                         <div class="form-group">
                             <label asp-for="Point" class="control-label"></label>
                             <input asp-for="Point" class="form-control" />
                             <span asp-validation-for="Point" class="text-danger"></span>
-                        </div>
-                        <div class="form-group">
-                            <label asp-for="DetailPlan" class="control-label"></label>
-                            <input asp-for="DetailPlan" class="form-control" />
-                            <span asp-validation-for="DetailPlan" class="text-danger"></span>
                         </div>
                         <div class="form-group">
                             <label asp-for="Plan" class="control-label"></label>
@@ -72,6 +49,11 @@
                                 <option value="3">D</option>
                             </select>
                             <span asp-validation-for="Plan" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="DetailPlan" class="control-label"></label>
+                            <input asp-for="DetailPlan" class="form-control" />
+                            <span asp-validation-for="DetailPlan" class="text-danger"></span>
                         </div>
                         <div class="form-group">
                             <label asp-for="Name" class="control-label"></label>
@@ -91,16 +73,13 @@
                                     <select asp-for="Unit" class="form-control" asp-items="Html.GetEnumSelectList<UnitOfPoint>()"></select>
                                     <span asp-validation-for="Unit" class="text-danger"></span>
                                 </div>
-                                @if (Model.Unit == UnitOfPoint.ระดับ)
-                                {
-                                    <div class="form-group col-md-6" name="round">
-                                        <label class="control-label">รอบการประเมิน</label>
-                                        <select id="round-select" class="form-control">
-                                            <option value="1">1</option>
-                                            <option value="2">2</option>
-                                        </select>
-                                    </div>
-                                }
+                                <div class="form-group col-md-6" name="round">
+                                    <label class="control-label">รอบการประเมิน</label>
+                                    <select id="round-select" class="form-control">
+                                        <option value="1">1</option>
+                                        <option value="2">2</option>
+                                    </select>
+                                </div>
                             </div>
                             <div class="row" name="mainrate1">
                                 <div class="form-group col-md-2 percent">
@@ -215,7 +194,6 @@
                         </fieldset>
                         <div class="form-group">
                             <input type="hidden" name="yearPoint" value="@ViewBag.yearPoint" />
-                            <input asp-for="Plan" class="form-control" hidden />
                             <input type="hidden" name="selectoffice" value="@ViewBag.selectoffice" />
                             <input type="submit" value="บันทึกการแก้ไข" class="btn btn-primary" />
                             <a asp-area="" asp-controller="PointOfEvaluations" asp-action="Index" asp-route-yearPoint="@ViewBag.yearPoint" asp-route-selectoffice="@ViewBag.selectoffice" class="btn btn-secondary">ยกเลิก</a>

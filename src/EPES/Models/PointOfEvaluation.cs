@@ -14,7 +14,7 @@ namespace EPES.Models
         [DisplayFormat(DataFormatString = "{0:yyyy}", ApplyFormatInEditMode = true)]
         public DateTime Year { get; set; }
 
-        [Display(Name = "ลำดับที่")]
+        [Display(Name = "ตัวชี้วัดที่")]
         public int Point { get; set; }
 
         [Display(Name = "ลำดับที่ย่อย")]
