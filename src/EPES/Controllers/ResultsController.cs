@@ -1,14 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using EPES.Data;
+using EPES.Models;
+using EPES.ViewModels;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
-using EPES.Data;
-using EPES.Models;
-using Microsoft.AspNetCore.Identity;
-using EPES.ViewModels;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace EPES.Controllers
 {
@@ -24,64 +24,84 @@ namespace EPES.Controllers
         }
 
         // GET: Results
-        public async Task<IActionResult> Index(int yearPoint = 0)
+        public async Task<IActionResult> Index(string selectoffice, int yearPoint = 0)
         {
             var user = await _userManager.GetUserAsync(User);
-            var officeCode = user.OfficeId;
             var viewModel = new DataForEvaluationViewModel();
 
-            DateTime yearForQuery;
-            if (yearPoint == 0)
-            {
-                yearForQuery = new DateTime(DateTime.Now.Year, 1, 1);
-            }
-            else
-            {
-                yearForQuery = new DateTime(DateTime.Now.AddYears(yearPoint).Year, 1, 1);
-            }
+            DateTime yearForQuery = new DateTime(DateTime.Now.AddYears(yearPoint).Year, 1, 1);
 
-            if (officeCode == "00013000")
+            if (User.IsInRole("Admin"))
             {
-                viewModel.pointA = await _context.PointOfEvaluations.Where(p => (p.Plan == TypeOfPlan.A) && (p.Year == yearForQuery)).Include(p => p.OwnerOffice).Include(p => p.AuditOffice).ToListAsync();
-                viewModel.pointB = await _context.PointOfEvaluations.Where(p => (p.Plan == TypeOfPlan.B) && (p.Year == yearForQuery)).Include(p => p.OwnerOffice).Include(p => p.AuditOffice).ToListAsync();
-                viewModel.pointC = await _context.PointOfEvaluations.Where(p => (p.Plan == TypeOfPlan.C) && (p.Year == yearForQuery)).Include(p => p.OwnerOffice).Include(p => p.AuditOffice).ToListAsync();
-            }
-            else
-            {
-
-                if (officeCode.Substring(0, 2) == "00")
+                if (String.IsNullOrEmpty(selectoffice))
                 {
-                    viewModel.pointA = await _context.PointOfEvaluations.Where(p => p.Plan == TypeOfPlan.A && p.OwnerOffice.Code == officeCode && p.Year == yearForQuery).Include(p => p.OwnerOffice).Include(p => p.AuditOffice).ToListAsync();
-                    viewModel.pointB = await _context.PointOfEvaluations.Where(p => p.Plan == TypeOfPlan.B && p.AuditOffice.Code == officeCode && p.Year == yearForQuery).Include(p => p.OwnerOffice).Include(p => p.AuditOffice).ToListAsync();
-                    viewModel.pointC = await _context.PointOfEvaluations.Where(p => p.Plan == TypeOfPlan.C && p.OwnerOffice.Code == officeCode && p.Year == yearForQuery).Include(p => p.OwnerOffice).Include(p => p.AuditOffice).ToListAsync();
+                    viewModel.pointA = await _context.PointOfEvaluations.Where(p => p.Plan == TypeOfPlan.A && p.OwnerOffice.Code == user.OfficeId && p.Year == yearForQuery).Include(p => p.OwnerOffice).Include(p => p.AuditOffice).ToListAsync();
+                    viewModel.pointB = await _context.PointOfEvaluations.Where(p => p.Plan == TypeOfPlan.B && p.OwnerOffice.Code == user.OfficeId && p.Year == yearForQuery).Include(p => p.OwnerOffice).Include(p => p.AuditOffice).ToListAsync();
+                    viewModel.pointC = await _context.PointOfEvaluations.Where(p => p.Plan == TypeOfPlan.C && p.OwnerOffice.Code == user.OfficeId && p.Year == yearForQuery).Include(p => p.OwnerOffice).Include(p => p.AuditOffice).ToListAsync();
+                    viewModel.pointD = await _context.PointOfEvaluations.Where(p => p.Plan == TypeOfPlan.D && p.OwnerOffice.Code == user.OfficeId && p.Year == yearForQuery).Include(p => p.OwnerOffice).Include(p => p.AuditOffice).ToListAsync();
+                    ViewBag.OfficeCode = new SelectList(_context.Offices.Where(d => d.Code != "00000000" && d.Code.Substring(5, 3) == "000"), "Code", "Name", user.OfficeId);
                 }
                 else
                 {
-                    // List Plan B All Office
-                    viewModel.pointB = await _context.PointOfEvaluations.Where(p => p.Plan == TypeOfPlan.B && p.Year == yearForQuery).Include(p => p.OwnerOffice).Include(p => p.AuditOffice).ToListAsync();
-
-                    if (officeCode.Substring(2, 6) == "000000")
+                    if (selectoffice.Substring(0, 3) == "000")
                     {
-                        viewModel.pointC = await _context.PointOfEvaluations.Include(p => p.OwnerOffice).Include(p => p.AuditOffice).Where(p => (p.Plan == TypeOfPlan.C && p.OwnerOffice == null && p.Year == yearForQuery) || (p.Plan == TypeOfPlan.C && p.OwnerOffice.Code.StartsWith(officeCode.Substring(0, 2)) && p.Year == yearForQuery)).ToListAsync();
+                        viewModel.pointA = await _context.PointOfEvaluations.Where(p => p.Plan == TypeOfPlan.A && p.OwnerOffice.Code == selectoffice && p.Year == yearForQuery).Include(p => p.OwnerOffice).Include(p => p.AuditOffice).ToListAsync();
+                    }
+                    viewModel.pointB = await _context.PointOfEvaluations.Where(p => p.Plan == TypeOfPlan.B && p.OwnerOffice.Code == selectoffice && p.Year == yearForQuery).Include(p => p.OwnerOffice).Include(p => p.AuditOffice).ToListAsync();
+                    viewModel.pointC = await _context.PointOfEvaluations.Where(p => p.Plan == TypeOfPlan.C && p.OwnerOffice.Code == selectoffice && p.Year == yearForQuery).Include(p => p.OwnerOffice).Include(p => p.AuditOffice).ToListAsync();
+                    viewModel.pointD = await _context.PointOfEvaluations.Where(p => p.Plan == TypeOfPlan.D && p.OwnerOffice.Code == selectoffice && p.Year == yearForQuery).Include(p => p.OwnerOffice).Include(p => p.AuditOffice).ToListAsync();
+                    ViewBag.OfficeCode = new SelectList(_context.Offices.Where(d => d.Code != "00000000" && d.Code.Substring(5, 3) == "000"), "Code", "Name", selectoffice);
+                }
+            }
+            else
+            {
+                if (String.IsNullOrEmpty(selectoffice))
+                {
+                    if (user.OfficeId.Substring(0, 3) == "000")
+                    {
+                        viewModel.pointA = await _context.PointOfEvaluations.Where(p => p.Plan == TypeOfPlan.A && p.OwnerOffice.Code == user.OfficeId && p.Year == yearForQuery).Include(p => p.OwnerOffice).Include(p => p.AuditOffice).ToListAsync();
+
+                        ViewBag.OfficeCode = new SelectList(await _context.PointOfEvaluations.Where(p => p.Plan == TypeOfPlan.B && (p.OwnerOffice.Code == user.OfficeId || p.AuditOffice.Code == user.OfficeId) && p.Year == yearForQuery).Include(p => p.OwnerOffice).Include(p => p.AuditOffice).Select(b => new { Code = b.OwnerOffice.Code, Name = b.OwnerOffice.Name }).Distinct().ToListAsync(), "Code", "Name", user.OfficeId);
                     }
                     else
                     {
-                        viewModel.pointC = await _context.PointOfEvaluations.Include(p => p.OwnerOffice).Include(p => p.AuditOffice).Where(p => (p.Plan == TypeOfPlan.C && p.OwnerOffice == null && p.Year == yearForQuery) || (p.Plan == TypeOfPlan.C && p.OwnerOffice.Code == officeCode && p.Year == yearForQuery)).ToListAsync();
+                        ViewBag.OfficeCode = new SelectList(_context.Offices.Where(d => d.Code != "00000000" && d.Code.StartsWith(user.OfficeId.Substring(0, 2)) && d.Code.Substring(5, 3) == "000"), "Code", "Name", user.OfficeId);
                     }
+
+                    viewModel.pointB = await _context.PointOfEvaluations.Where(p => p.Plan == TypeOfPlan.B && p.OwnerOffice.Code == user.OfficeId && p.Year == yearForQuery).Include(p => p.OwnerOffice).Include(p => p.AuditOffice).ToListAsync();
+                    viewModel.pointC = await _context.PointOfEvaluations.Where(p => p.Plan == TypeOfPlan.C && p.OwnerOffice.Code == user.OfficeId && p.Year == yearForQuery).Include(p => p.OwnerOffice).Include(p => p.AuditOffice).ToListAsync();
+                    viewModel.pointD = await _context.PointOfEvaluations.Where(p => p.Plan == TypeOfPlan.D && p.OwnerOffice.Code == user.OfficeId && p.Year == yearForQuery).Include(p => p.OwnerOffice).Include(p => p.AuditOffice).ToListAsync();
+                }
+                else
+                {
+                    if (user.OfficeId.Substring(0, 3) == "000")
+                    {
+                        viewModel.pointA = await _context.PointOfEvaluations.Where(p => p.Plan == TypeOfPlan.A && p.OwnerOffice.Code == selectoffice && p.Year == yearForQuery).Include(p => p.OwnerOffice).Include(p => p.AuditOffice).ToListAsync();
+
+                        ViewBag.OfficeCode = new SelectList(await _context.PointOfEvaluations.Where(p => p.Plan == TypeOfPlan.B && (p.OwnerOffice.Code == user.OfficeId || p.AuditOffice.Code == user.OfficeId) && p.Year == yearForQuery).Include(p => p.OwnerOffice).Include(p => p.AuditOffice).Select(b => new { Code = b.OwnerOffice.Code, Name = b.OwnerOffice.Name }).Distinct().ToListAsync(), "Code", "Name", selectoffice);
+                    }
+                    else
+                    {
+                        ViewBag.OfficeCode = new SelectList(_context.Offices.Where(d => d.Code != "00000000" && d.Code.StartsWith(user.OfficeId.Substring(0, 2)) && d.Code.Substring(5, 3) == "000"), "Code", "Name", selectoffice);
+                    }
+
+                    viewModel.pointB = await _context.PointOfEvaluations.Where(p => p.Plan == TypeOfPlan.B && p.OwnerOffice.Code == selectoffice && p.Year == yearForQuery).Include(p => p.OwnerOffice).Include(p => p.AuditOffice).ToListAsync();
+                    viewModel.pointC = await _context.PointOfEvaluations.Where(p => p.Plan == TypeOfPlan.C && p.OwnerOffice.Code == selectoffice && p.Year == yearForQuery).Include(p => p.OwnerOffice).Include(p => p.AuditOffice).ToListAsync();
+                    viewModel.pointD = await _context.PointOfEvaluations.Where(p => p.Plan == TypeOfPlan.D && p.OwnerOffice.Code == selectoffice && p.Year == yearForQuery).Include(p => p.OwnerOffice).Include(p => p.AuditOffice).ToListAsync();
                 }
             }
-            viewModel.pointD = await _context.PointOfEvaluations.Where(p => p.Plan == TypeOfPlan.D && p.Year == yearForQuery).Include(p => p.OwnerOffice).Include(p => p.AuditOffice).ToListAsync();
 
+            ViewBag.selectoffice = selectoffice;
             viewModel.yearPoint = yearPoint;
             return View(viewModel);
         }
 
         [HttpPost, ActionName("Index")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> IndexPost(int yearPoint)
+        public async Task<IActionResult> IndexPost(string selectoffice, int yearPoint)
         {
             var user = await _userManager.GetUserAsync(User);
-            var officeCode = user.OfficeId;
+
             var viewModel = new DataForEvaluationViewModel();
 
             DateTime yearForQuery;
@@ -94,250 +114,201 @@ namespace EPES.Controllers
                 yearForQuery = new DateTime(DateTime.Now.AddYears(yearPoint).Year, 1, 1);
             }
 
-            if (officeCode == "00013000")
+            if (User.IsInRole("Admin"))
             {
-                viewModel.pointA = await _context.PointOfEvaluations.Where(p => (p.Plan == TypeOfPlan.A) && (p.Year == yearForQuery)).Include(p => p.OwnerOffice).Include(p => p.AuditOffice).ToListAsync();
-                viewModel.pointB = await _context.PointOfEvaluations.Where(p => (p.Plan == TypeOfPlan.B) && (p.Year == yearForQuery)).Include(p => p.OwnerOffice).Include(p => p.AuditOffice).ToListAsync();
-                viewModel.pointC = await _context.PointOfEvaluations.Where(p => (p.Plan == TypeOfPlan.C) && (p.Year == yearForQuery)).Include(p => p.OwnerOffice).Include(p => p.AuditOffice).ToListAsync();
-            }
-            else
-            {
-
-                if (officeCode.Substring(0, 2) == "00")
+                if (String.IsNullOrEmpty(selectoffice))
                 {
-                    viewModel.pointA = await _context.PointOfEvaluations.Where(p => p.Plan == TypeOfPlan.A && p.OwnerOffice.Code == officeCode && p.Year == yearForQuery).Include(p => p.OwnerOffice).Include(p => p.AuditOffice).ToListAsync();
-                    viewModel.pointB = await _context.PointOfEvaluations.Where(p => p.Plan == TypeOfPlan.B && p.AuditOffice.Code == officeCode && p.Year == yearForQuery).Include(p => p.OwnerOffice).Include(p => p.AuditOffice).ToListAsync();
-                    viewModel.pointC = await _context.PointOfEvaluations.Where(p => p.Plan == TypeOfPlan.C && p.OwnerOffice.Code == officeCode && p.Year == yearForQuery).Include(p => p.OwnerOffice).Include(p => p.AuditOffice).ToListAsync();
+                    viewModel.pointA = await _context.PointOfEvaluations.Where(p => (p.Plan == TypeOfPlan.A) && (p.Year == yearForQuery)).Include(p => p.OwnerOffice).Include(p => p.AuditOffice).ToListAsync();
+                    viewModel.pointB = await _context.PointOfEvaluations.Where(p => (p.Plan == TypeOfPlan.B) && (p.Year == yearForQuery)).Include(p => p.OwnerOffice).Include(p => p.AuditOffice).ToListAsync();
+                    viewModel.pointC = await _context.PointOfEvaluations.Where(p => (p.Plan == TypeOfPlan.C) && (p.Year == yearForQuery)).Include(p => p.OwnerOffice).Include(p => p.AuditOffice).ToListAsync();
+                    viewModel.pointD = await _context.PointOfEvaluations.Where(p => p.Plan == TypeOfPlan.D && p.Year == yearForQuery).Include(p => p.OwnerOffice).Include(p => p.AuditOffice).ToListAsync();
+                    ViewBag.OfficeCode = new SelectList(_context.Offices.Where(d => d.Code != "00000000" && d.Code.Substring(5, 3) == "000"), "Code", "Name", user.OfficeId);
                 }
                 else
                 {
-                    // List Plan B All Office
-                    viewModel.pointB = await _context.PointOfEvaluations.Where(p => p.Plan == TypeOfPlan.B && p.Year == yearForQuery).Include(p => p.OwnerOffice).Include(p => p.AuditOffice).ToListAsync();
-
-                    if (officeCode.Substring(2, 6) == "000000")
+                    if (selectoffice.Substring(0, 3) == "000")
                     {
-                        viewModel.pointC = await _context.PointOfEvaluations.Include(p => p.OwnerOffice).Include(p => p.AuditOffice).Where(p => (p.Plan == TypeOfPlan.C && p.OwnerOffice == null && p.Year == yearForQuery) || (p.Plan == TypeOfPlan.C && p.OwnerOffice.Code.StartsWith(officeCode.Substring(0, 2)) && p.Year == yearForQuery)).ToListAsync();
+                        viewModel.pointA = await _context.PointOfEvaluations.Where(p => p.Plan == TypeOfPlan.A && p.OwnerOffice.Code == selectoffice && p.Year == yearForQuery).Include(p => p.OwnerOffice).Include(p => p.AuditOffice).ToListAsync();
+                    }
+                    viewModel.pointB = await _context.PointOfEvaluations.Where(p => p.Plan == TypeOfPlan.B && p.OwnerOffice.Code == selectoffice && p.Year == yearForQuery).Include(p => p.OwnerOffice).Include(p => p.AuditOffice).ToListAsync();
+                    viewModel.pointC = await _context.PointOfEvaluations.Where(p => p.Plan == TypeOfPlan.C && p.OwnerOffice.Code == selectoffice && p.Year == yearForQuery).Include(p => p.OwnerOffice).Include(p => p.AuditOffice).ToListAsync();
+                    viewModel.pointD = await _context.PointOfEvaluations.Where(p => p.Plan == TypeOfPlan.D && p.OwnerOffice.Code == selectoffice && p.Year == yearForQuery).Include(p => p.OwnerOffice).Include(p => p.AuditOffice).ToListAsync();
+                    ViewBag.OfficeCode = new SelectList(_context.Offices.Where(d => d.Code != "00000000" && d.Code.Substring(5, 3) == "000"), "Code", "Name", selectoffice);
+                }
+            }
+            else
+            {
+                if (String.IsNullOrEmpty(selectoffice))
+                {
+                    if (user.OfficeId.Substring(0, 3) == "000")
+                    {
+                        viewModel.pointA = await _context.PointOfEvaluations.Where(p => p.Plan == TypeOfPlan.A && p.OwnerOffice.Code == user.OfficeId && p.Year == yearForQuery).Include(p => p.OwnerOffice).Include(p => p.AuditOffice).ToListAsync();
+
+                        ViewBag.OfficeCode = new SelectList(await _context.PointOfEvaluations.Where(p => p.Plan == TypeOfPlan.B && (p.OwnerOffice.Code == user.OfficeId || p.AuditOffice.Code == user.OfficeId) && p.Year == yearForQuery).Include(p => p.OwnerOffice).Include(p => p.AuditOffice).Select(b => new { Code = b.OwnerOffice.Code, Name = b.OwnerOffice.Name }).Distinct().ToListAsync(), "Code", "Name", user.OfficeId);
                     }
                     else
                     {
-                        viewModel.pointC = await _context.PointOfEvaluations.Include(p => p.OwnerOffice).Include(p => p.AuditOffice).Where(p => (p.Plan == TypeOfPlan.C && p.OwnerOffice == null && p.Year == yearForQuery) || (p.Plan == TypeOfPlan.C && p.OwnerOffice.Code == officeCode && p.Year == yearForQuery)).ToListAsync();
+                        ViewBag.OfficeCode = new SelectList(_context.Offices.Where(d => d.Code != "00000000" && d.Code.StartsWith(user.OfficeId.Substring(0, 2)) && d.Code.Substring(5, 3) == "000"), "Code", "Name", user.OfficeId);
                     }
+
+                    viewModel.pointB = await _context.PointOfEvaluations.Where(p => p.Plan == TypeOfPlan.B && p.OwnerOffice.Code == user.OfficeId && p.Year == yearForQuery).Include(p => p.OwnerOffice).Include(p => p.AuditOffice).ToListAsync();
+                    viewModel.pointC = await _context.PointOfEvaluations.Where(p => p.Plan == TypeOfPlan.C && p.OwnerOffice.Code == user.OfficeId && p.Year == yearForQuery).Include(p => p.OwnerOffice).Include(p => p.AuditOffice).ToListAsync();
+                    viewModel.pointD = await _context.PointOfEvaluations.Where(p => p.Plan == TypeOfPlan.D && p.OwnerOffice.Code == user.OfficeId && p.Year == yearForQuery).Include(p => p.OwnerOffice).Include(p => p.AuditOffice).ToListAsync();
+                }
+                else
+                {
+                    if (user.OfficeId.Substring(0, 3) == "000")
+                    {
+                        viewModel.pointA = await _context.PointOfEvaluations.Where(p => p.Plan == TypeOfPlan.A && p.OwnerOffice.Code == selectoffice && p.Year == yearForQuery).Include(p => p.OwnerOffice).Include(p => p.AuditOffice).ToListAsync();
+
+                        ViewBag.OfficeCode = new SelectList(await _context.PointOfEvaluations.Where(p => p.Plan == TypeOfPlan.B && (p.OwnerOffice.Code == user.OfficeId || p.AuditOffice.Code == user.OfficeId) && p.Year == yearForQuery).Include(p => p.OwnerOffice).Include(p => p.AuditOffice).Select(b => new { Code = b.OwnerOffice.Code, Name = b.OwnerOffice.Name }).Distinct().ToListAsync(), "Code", "Name", selectoffice);
+                    }
+                    else
+                    {
+                        ViewBag.OfficeCode = new SelectList(_context.Offices.Where(d => d.Code != "00000000" && d.Code.StartsWith(user.OfficeId.Substring(0, 2)) && d.Code.Substring(5, 3) == "000"), "Code", "Name", selectoffice);
+                    }
+
+                    viewModel.pointB = await _context.PointOfEvaluations.Where(p => p.Plan == TypeOfPlan.B && p.OwnerOffice.Code == selectoffice && p.Year == yearForQuery).Include(p => p.OwnerOffice).Include(p => p.AuditOffice).ToListAsync();
+                    viewModel.pointC = await _context.PointOfEvaluations.Where(p => p.Plan == TypeOfPlan.C && p.OwnerOffice.Code == selectoffice && p.Year == yearForQuery).Include(p => p.OwnerOffice).Include(p => p.AuditOffice).ToListAsync();
+                    viewModel.pointD = await _context.PointOfEvaluations.Where(p => p.Plan == TypeOfPlan.D && p.OwnerOffice.Code == selectoffice && p.Year == yearForQuery).Include(p => p.OwnerOffice).Include(p => p.AuditOffice).ToListAsync();
                 }
             }
-            viewModel.pointD = await _context.PointOfEvaluations.Where(p => p.Plan == TypeOfPlan.D && p.Year == yearForQuery).Include(p => p.OwnerOffice).Include(p => p.AuditOffice).ToListAsync();
 
+            ViewBag.selectoffice = selectoffice;
             viewModel.yearPoint = yearPoint;
             return View(viewModel);
         }
 
         // GET: Results/Details/5
-        public async Task<IActionResult> Details(int? poeid, int yearPoint)
+        public async Task<IActionResult> Details(string selectoffice, int poeid, int yearPoint)
         {
-            if (poeid == null)
+            DataForEvaluationViewModel viewModel = new DataForEvaluationViewModel();
+            viewModel.Point = await _context.PointOfEvaluations.Include(p => p.OwnerOffice).Where(p => p.Id == poeid).FirstOrDefaultAsync();
+            if (viewModel.Point == null)
             {
                 return NotFound();
             }
 
-            DataForEvaluationViewModel viewModel = new DataForEvaluationViewModel();
-            viewModel.Point = await _context.PointOfEvaluations.Include(p => p.OwnerOffice).Where(p => p.Id == poeid).FirstOrDefaultAsync();
-            if (viewModel.Point.OwnerOfficeId == null || viewModel.Point.OwnerOfficeId == 1)
-            {
-                return RedirectToAction(nameof(AllDetails), new { poeid = poeid, yearPoint = yearPoint, ownerofficeid = viewModel.Point.OwnerOfficeId });
-            }
+            viewModel.result1 = await _context.DataForEvaluations.Where(d => d.PointOfEvaluationId == poeid && d.Month == 1).Select(d => d.Result).FirstOrDefaultAsync();
+            viewModel.result2 = await _context.DataForEvaluations.Where(d => d.PointOfEvaluationId == poeid && d.Month == 2).Select(d => d.Result).FirstOrDefaultAsync();
+            viewModel.result3 = await _context.DataForEvaluations.Where(d => d.PointOfEvaluationId == poeid && d.Month == 3).Select(d => d.Result).FirstOrDefaultAsync();
+            viewModel.result4 = await _context.DataForEvaluations.Where(d => d.PointOfEvaluationId == poeid && d.Month == 4).Select(d => d.Result).FirstOrDefaultAsync();
+            viewModel.result5 = await _context.DataForEvaluations.Where(d => d.PointOfEvaluationId == poeid && d.Month == 5).Select(d => d.Result).FirstOrDefaultAsync();
+            viewModel.result6 = await _context.DataForEvaluations.Where(d => d.PointOfEvaluationId == poeid && d.Month == 6).Select(d => d.Result).FirstOrDefaultAsync();
+            viewModel.result7 = await _context.DataForEvaluations.Where(d => d.PointOfEvaluationId == poeid && d.Month == 7).Select(d => d.Result).FirstOrDefaultAsync();
+            viewModel.result8 = await _context.DataForEvaluations.Where(d => d.PointOfEvaluationId == poeid && d.Month == 8).Select(d => d.Result).FirstOrDefaultAsync();
+            viewModel.result9 = await _context.DataForEvaluations.Where(d => d.PointOfEvaluationId == poeid && d.Month == 9).Select(d => d.Result).FirstOrDefaultAsync();
+            viewModel.result10 = await _context.DataForEvaluations.Where(d => d.PointOfEvaluationId == poeid && d.Month == 10).Select(d => d.Result).FirstOrDefaultAsync();
+            viewModel.result11 = await _context.DataForEvaluations.Where(d => d.PointOfEvaluationId == poeid  && d.Month == 11).Select(d => d.Result).FirstOrDefaultAsync();
+            viewModel.result12 = await _context.DataForEvaluations.Where(d => d.PointOfEvaluationId == poeid  && d.Month == 12).Select(d => d.Result).FirstOrDefaultAsync();
 
-            viewModel.result1 = await _context.DataForEvaluations.Where(d => d.PointOfEvaluationId == poeid && d.OfficeId == viewModel.Point.OwnerOfficeId && d.Month == 1).Select(d => d.Result).FirstOrDefaultAsync();
-            viewModel.result2 = await _context.DataForEvaluations.Where(d => d.PointOfEvaluationId == poeid && d.OfficeId == viewModel.Point.OwnerOfficeId && d.Month == 2).Select(d => d.Result).FirstOrDefaultAsync();
-            viewModel.result3 = await _context.DataForEvaluations.Where(d => d.PointOfEvaluationId == poeid && d.OfficeId == viewModel.Point.OwnerOfficeId && d.Month == 3).Select(d => d.Result).FirstOrDefaultAsync();
-            viewModel.result4 = await _context.DataForEvaluations.Where(d => d.PointOfEvaluationId == poeid && d.OfficeId == viewModel.Point.OwnerOfficeId && d.Month == 4).Select(d => d.Result).FirstOrDefaultAsync();
-            viewModel.result5 = await _context.DataForEvaluations.Where(d => d.PointOfEvaluationId == poeid && d.OfficeId == viewModel.Point.OwnerOfficeId && d.Month == 5).Select(d => d.Result).FirstOrDefaultAsync();
-            viewModel.result6 = await _context.DataForEvaluations.Where(d => d.PointOfEvaluationId == poeid && d.OfficeId == viewModel.Point.OwnerOfficeId && d.Month == 6).Select(d => d.Result).FirstOrDefaultAsync();
-            viewModel.result7 = await _context.DataForEvaluations.Where(d => d.PointOfEvaluationId == poeid && d.OfficeId == viewModel.Point.OwnerOfficeId && d.Month == 7).Select(d => d.Result).FirstOrDefaultAsync();
-            viewModel.result8 = await _context.DataForEvaluations.Where(d => d.PointOfEvaluationId == poeid && d.OfficeId == viewModel.Point.OwnerOfficeId && d.Month == 8).Select(d => d.Result).FirstOrDefaultAsync();
-            viewModel.result9 = await _context.DataForEvaluations.Where(d => d.PointOfEvaluationId == poeid && d.OfficeId == viewModel.Point.OwnerOfficeId && d.Month == 9).Select(d => d.Result).FirstOrDefaultAsync();
-            viewModel.result10 = await _context.DataForEvaluations.Where(d => d.PointOfEvaluationId == poeid && d.OfficeId == viewModel.Point.OwnerOfficeId && d.Month == 10).Select(d => d.Result).FirstOrDefaultAsync();
-            viewModel.result11 = await _context.DataForEvaluations.Where(d => d.PointOfEvaluationId == poeid && d.OfficeId == viewModel.Point.OwnerOfficeId && d.Month == 11).Select(d => d.Result).FirstOrDefaultAsync();
-            viewModel.result12 = await _context.DataForEvaluations.Where(d => d.PointOfEvaluationId == poeid && d.OfficeId == viewModel.Point.OwnerOfficeId && d.Month == 12).Select(d => d.Result).FirstOrDefaultAsync();
-
-            viewModel.yearPoint = yearPoint;
-            return View(viewModel);
-        }
-
-        public async Task<IActionResult> AllDetails(int poeid, int yearPoint, int? ownerofficeid)
-        {
-            DataForEvaluationViewModel viewModel = new DataForEvaluationViewModel();
-            viewModel.Point = await _context.PointOfEvaluations.Include(p => p.OwnerOffice).Where(p => p.Id == poeid).FirstOrDefaultAsync();
-
-            if (ownerofficeid == null)
-            {
-                ViewBag.OfficeId = new SelectList(_context.Offices.Where(d => d.Code != "00000000" && d.Code.Substring(0, 3) != "000" && d.Code.Substring(5, 3) == "000"), "Id", "Name");
-            }
-            else
-            {
-                ViewBag.OfficeId = new SelectList(_context.Offices.Where(d => d.Code != "00000000" && d.Code.Substring(5, 3) == "000"), "Id", "Name");
-            }
-
-            viewModel.yearPoint = yearPoint;
-            return View(viewModel);
-        }
-
-        [HttpPost, ActionName("AllDetails")]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> AllDetailsPost(int poeid, int yearPoint, int? ownerofficeid)
-        {
-            DataForEvaluationViewModel viewModel = new DataForEvaluationViewModel();
-            viewModel.Point = await _context.PointOfEvaluations.Where(p => p.Id == poeid).FirstOrDefaultAsync();
-
-            if (ownerofficeid == null)
-            {
-                ViewBag.OfficeId = new SelectList(_context.Offices.Where(d => d.Code != "00000000" && d.Code.Substring(0, 3) != "000" && d.Code.Substring(5, 3) == "000"), "Id", "Name");
-            }
-            else
-            {
-                ViewBag.OfficeId = new SelectList(_context.Offices.Where(d => d.Code != "00000000" && d.Code.Substring(5, 3) == "000"), "Id", "Name", ownerofficeid);
-            }
-
-            viewModel.result1 = await _context.DataForEvaluations.Where(d => d.PointOfEvaluationId == poeid && d.OfficeId == ownerofficeid && d.Month == 1).Select(d => d.Result).FirstOrDefaultAsync();
-            viewModel.result2 = await _context.DataForEvaluations.Where(d => d.PointOfEvaluationId == poeid && d.OfficeId == ownerofficeid && d.Month == 2).Select(d => d.Result).FirstOrDefaultAsync();
-            viewModel.result3 = await _context.DataForEvaluations.Where(d => d.PointOfEvaluationId == poeid && d.OfficeId == ownerofficeid && d.Month == 3).Select(d => d.Result).FirstOrDefaultAsync();
-            viewModel.result4 = await _context.DataForEvaluations.Where(d => d.PointOfEvaluationId == poeid && d.OfficeId == ownerofficeid && d.Month == 4).Select(d => d.Result).FirstOrDefaultAsync();
-            viewModel.result5 = await _context.DataForEvaluations.Where(d => d.PointOfEvaluationId == poeid && d.OfficeId == ownerofficeid && d.Month == 5).Select(d => d.Result).FirstOrDefaultAsync();
-            viewModel.result6 = await _context.DataForEvaluations.Where(d => d.PointOfEvaluationId == poeid && d.OfficeId == ownerofficeid && d.Month == 6).Select(d => d.Result).FirstOrDefaultAsync();
-            viewModel.result7 = await _context.DataForEvaluations.Where(d => d.PointOfEvaluationId == poeid && d.OfficeId == ownerofficeid && d.Month == 7).Select(d => d.Result).FirstOrDefaultAsync();
-            viewModel.result8 = await _context.DataForEvaluations.Where(d => d.PointOfEvaluationId == poeid && d.OfficeId == ownerofficeid && d.Month == 8).Select(d => d.Result).FirstOrDefaultAsync();
-            viewModel.result9 = await _context.DataForEvaluations.Where(d => d.PointOfEvaluationId == poeid && d.OfficeId == ownerofficeid && d.Month == 9).Select(d => d.Result).FirstOrDefaultAsync();
-            viewModel.result10 = await _context.DataForEvaluations.Where(d => d.PointOfEvaluationId == poeid && d.OfficeId == ownerofficeid && d.Month == 10).Select(d => d.Result).FirstOrDefaultAsync();
-            viewModel.result11 = await _context.DataForEvaluations.Where(d => d.PointOfEvaluationId == poeid && d.OfficeId == ownerofficeid && d.Month == 11).Select(d => d.Result).FirstOrDefaultAsync();
-            viewModel.result12 = await _context.DataForEvaluations.Where(d => d.PointOfEvaluationId == poeid && d.OfficeId == ownerofficeid && d.Month == 12).Select(d => d.Result).FirstOrDefaultAsync();
-
-            //viewModel.Office = await _context.Offices.Where(o => o.Id == ownerofficeid).FirstOrDefaultAsync();
+            ViewBag.selectoffice = selectoffice;
             viewModel.yearPoint = yearPoint;
             return View(viewModel);
         }
 
         // GET: DataForEvaluations/Edit/5
-        public async Task<IActionResult> Edit(int? poeid, int yearPoint)
+        public async Task<IActionResult> Edit(string selectoffice, int poeid, int yearPoint)
         {
-            if (poeid == null)
+            DataForEvaluationViewModel viewModel = new DataForEvaluationViewModel();
+            viewModel.Point = await _context.PointOfEvaluations.Include(p => p.OwnerOffice).Where(p => p.Id == poeid).FirstOrDefaultAsync();
+
+            if (viewModel.Point == null)
             {
                 return NotFound();
             }
 
-            DataForEvaluationViewModel viewModel = new DataForEvaluationViewModel();
-            viewModel.Point = await _context.PointOfEvaluations.Include(p => p.OwnerOffice).Where(p => p.Id == poeid).FirstOrDefaultAsync();
-            if (viewModel.Point.OwnerOfficeId == null || viewModel.Point.OwnerOfficeId == 1)
-            {
-                return RedirectToAction(nameof(AllEdit), new { poeid = poeid, yearPoint = yearPoint, ownerofficeid = viewModel.Point.OwnerOfficeId });
-                //return View("AllEdit");
-            }
+            viewModel.result1 = await _context.DataForEvaluations.Where(d => d.PointOfEvaluationId == poeid && d.Month == 1).Select(d => d.Result).FirstOrDefaultAsync();
+            viewModel.result2 = await _context.DataForEvaluations.Where(d => d.PointOfEvaluationId == poeid && d.Month == 2).Select(d => d.Result).FirstOrDefaultAsync();
+            viewModel.result3 = await _context.DataForEvaluations.Where(d => d.PointOfEvaluationId == poeid && d.Month == 3).Select(d => d.Result).FirstOrDefaultAsync();
+            viewModel.result4 = await _context.DataForEvaluations.Where(d => d.PointOfEvaluationId == poeid && d.Month == 4).Select(d => d.Result).FirstOrDefaultAsync();
+            viewModel.result5 = await _context.DataForEvaluations.Where(d => d.PointOfEvaluationId == poeid && d.Month == 5).Select(d => d.Result).FirstOrDefaultAsync();
+            viewModel.result6 = await _context.DataForEvaluations.Where(d => d.PointOfEvaluationId == poeid && d.Month == 6).Select(d => d.Result).FirstOrDefaultAsync();
+            viewModel.result7 = await _context.DataForEvaluations.Where(d => d.PointOfEvaluationId == poeid && d.Month == 7).Select(d => d.Result).FirstOrDefaultAsync();
+            viewModel.result8 = await _context.DataForEvaluations.Where(d => d.PointOfEvaluationId == poeid && d.Month == 8).Select(d => d.Result).FirstOrDefaultAsync();
+            viewModel.result9 = await _context.DataForEvaluations.Where(d => d.PointOfEvaluationId == poeid && d.Month == 9).Select(d => d.Result).FirstOrDefaultAsync();
+            viewModel.result10 = await _context.DataForEvaluations.Where(d => d.PointOfEvaluationId == poeid && d.Month == 10).Select(d => d.Result).FirstOrDefaultAsync();
+            viewModel.result11 = await _context.DataForEvaluations.Where(d => d.PointOfEvaluationId == poeid && d.Month == 11).Select(d => d.Result).FirstOrDefaultAsync();
+            viewModel.result12 = await _context.DataForEvaluations.Where(d => d.PointOfEvaluationId == poeid && d.Month == 12).Select(d => d.Result).FirstOrDefaultAsync();
 
-            viewModel.result1 = await _context.DataForEvaluations.Where(d => d.PointOfEvaluationId == poeid && d.OfficeId == viewModel.Point.OwnerOfficeId && d.Month == 1).Select(d => d.Result).FirstOrDefaultAsync();
-            viewModel.result2 = await _context.DataForEvaluations.Where(d => d.PointOfEvaluationId == poeid && d.OfficeId == viewModel.Point.OwnerOfficeId && d.Month == 2).Select(d => d.Result).FirstOrDefaultAsync();
-            viewModel.result3 = await _context.DataForEvaluations.Where(d => d.PointOfEvaluationId == poeid && d.OfficeId == viewModel.Point.OwnerOfficeId && d.Month == 3).Select(d => d.Result).FirstOrDefaultAsync();
-            viewModel.result4 = await _context.DataForEvaluations.Where(d => d.PointOfEvaluationId == poeid && d.OfficeId == viewModel.Point.OwnerOfficeId && d.Month == 4).Select(d => d.Result).FirstOrDefaultAsync();
-            viewModel.result5 = await _context.DataForEvaluations.Where(d => d.PointOfEvaluationId == poeid && d.OfficeId == viewModel.Point.OwnerOfficeId && d.Month == 5).Select(d => d.Result).FirstOrDefaultAsync();
-            viewModel.result6 = await _context.DataForEvaluations.Where(d => d.PointOfEvaluationId == poeid && d.OfficeId == viewModel.Point.OwnerOfficeId && d.Month == 6).Select(d => d.Result).FirstOrDefaultAsync();
-            viewModel.result7 = await _context.DataForEvaluations.Where(d => d.PointOfEvaluationId == poeid && d.OfficeId == viewModel.Point.OwnerOfficeId && d.Month == 7).Select(d => d.Result).FirstOrDefaultAsync();
-            viewModel.result8 = await _context.DataForEvaluations.Where(d => d.PointOfEvaluationId == poeid && d.OfficeId == viewModel.Point.OwnerOfficeId && d.Month == 8).Select(d => d.Result).FirstOrDefaultAsync();
-            viewModel.result9 = await _context.DataForEvaluations.Where(d => d.PointOfEvaluationId == poeid && d.OfficeId == viewModel.Point.OwnerOfficeId && d.Month == 9).Select(d => d.Result).FirstOrDefaultAsync();
-            viewModel.result10 = await _context.DataForEvaluations.Where(d => d.PointOfEvaluationId == poeid && d.OfficeId == viewModel.Point.OwnerOfficeId && d.Month == 10).Select(d => d.Result).FirstOrDefaultAsync();
-            viewModel.result11 = await _context.DataForEvaluations.Where(d => d.PointOfEvaluationId == poeid && d.OfficeId == viewModel.Point.OwnerOfficeId && d.Month == 11).Select(d => d.Result).FirstOrDefaultAsync();
-            viewModel.result12 = await _context.DataForEvaluations.Where(d => d.PointOfEvaluationId == poeid && d.OfficeId == viewModel.Point.OwnerOfficeId && d.Month == 12).Select(d => d.Result).FirstOrDefaultAsync();
+            List<Object> list = new List<object>();
+            list.Add(new { Value = viewModel.Point.Rate1, Detail = "1." + viewModel.Point.DetailRate1 });
+            list.Add(new { Value = viewModel.Point.Rate2, Detail = "2." + viewModel.Point.DetailRate2 });
+            list.Add(new { Value = viewModel.Point.Rate3, Detail = "3." + viewModel.Point.DetailRate3 });
+            list.Add(new { Value = viewModel.Point.Rate4, Detail = "4." + viewModel.Point.DetailRate4 });
+            list.Add(new { Value = viewModel.Point.Rate5, Detail = "5." + viewModel.Point.DetailRate5 });
+            ViewBag.SelectLevel = new SelectList(list, "Value", "Detail");
 
-            viewModel.yearPoint = yearPoint;
-            return View(viewModel);
-        }
+            List<Object> list2 = new List<object>();
+            list2.Add(new { Value = viewModel.Point.Rate1, Detail = "1." + viewModel.Point.Detail2Rate1 });
+            list2.Add(new { Value = viewModel.Point.Rate2, Detail = "2." + viewModel.Point.Detail2Rate2 });
+            list2.Add(new { Value = viewModel.Point.Rate3, Detail = "3." + viewModel.Point.Detail2Rate3 });
+            list2.Add(new { Value = viewModel.Point.Rate4, Detail = "4." + viewModel.Point.Detail2Rate4 });
+            list2.Add(new { Value = viewModel.Point.Rate5, Detail = "5." + viewModel.Point.Detail2Rate5 });
+            ViewBag.SelectLevel2 = new SelectList(list2, "Value", "Detail");
 
-        public async Task<IActionResult> AllEdit(int poeid, int yearPoint, int? ownerofficeid)
-        {
-            DataForEvaluationViewModel viewModel = new DataForEvaluationViewModel();
-            viewModel.Point = await _context.PointOfEvaluations.Include(p => p.OwnerOffice).Where(p => p.Id == poeid).FirstOrDefaultAsync();
-
-            if (ownerofficeid == null)
-            {
-                ViewBag.OfficeId = new SelectList(_context.Offices.Where(d => d.Code != "00000000" && d.Code.Substring(0, 3) != "000" && d.Code.Substring(5, 3) == "000"), "Id", "Name");
-            }
-            else
-            {
-                ViewBag.OfficeId = new SelectList(_context.Offices.Where(d => d.Code != "00000000" && d.Code.Substring(5, 3) == "000"), "Id", "Name");
-            }
-
-            viewModel.yearPoint = yearPoint;
-            return View(viewModel);
-        }
-
-        [HttpPost, ActionName("AllEdit")]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> AllEditPost(int poeid, int yearPoint, int? ownerofficeid)
-        {
-            DataForEvaluationViewModel viewModel = new DataForEvaluationViewModel();
-            viewModel.Point = await _context.PointOfEvaluations.Where(p => p.Id == poeid).FirstOrDefaultAsync();
-
-            if (ownerofficeid == null)
-            {
-                ViewBag.OfficeId = new SelectList(_context.Offices.Where(d => d.Code != "00000000" && d.Code.Substring(0, 3) != "000" && d.Code.Substring(5, 3) == "000"), "Id", "Name");
-            }
-            else
-            {
-                ViewBag.OfficeId = new SelectList(_context.Offices.Where(d => d.Code != "00000000" && d.Code.Substring(5, 3) == "000"), "Id", "Name", ownerofficeid);
-            }
-
-            viewModel.result1 = await _context.DataForEvaluations.Where(d => d.PointOfEvaluationId == poeid && d.OfficeId == ownerofficeid && d.Month == 1).Select(d => d.Result).FirstOrDefaultAsync();
-            viewModel.result2 = await _context.DataForEvaluations.Where(d => d.PointOfEvaluationId == poeid && d.OfficeId == ownerofficeid && d.Month == 2).Select(d => d.Result).FirstOrDefaultAsync();
-            viewModel.result3 = await _context.DataForEvaluations.Where(d => d.PointOfEvaluationId == poeid && d.OfficeId == ownerofficeid && d.Month == 3).Select(d => d.Result).FirstOrDefaultAsync();
-            viewModel.result4 = await _context.DataForEvaluations.Where(d => d.PointOfEvaluationId == poeid && d.OfficeId == ownerofficeid && d.Month == 4).Select(d => d.Result).FirstOrDefaultAsync();
-            viewModel.result5 = await _context.DataForEvaluations.Where(d => d.PointOfEvaluationId == poeid && d.OfficeId == ownerofficeid && d.Month == 5).Select(d => d.Result).FirstOrDefaultAsync();
-            viewModel.result6 = await _context.DataForEvaluations.Where(d => d.PointOfEvaluationId == poeid && d.OfficeId == ownerofficeid && d.Month == 6).Select(d => d.Result).FirstOrDefaultAsync();
-            viewModel.result7 = await _context.DataForEvaluations.Where(d => d.PointOfEvaluationId == poeid && d.OfficeId == ownerofficeid && d.Month == 7).Select(d => d.Result).FirstOrDefaultAsync();
-            viewModel.result8 = await _context.DataForEvaluations.Where(d => d.PointOfEvaluationId == poeid && d.OfficeId == ownerofficeid && d.Month == 8).Select(d => d.Result).FirstOrDefaultAsync();
-            viewModel.result9 = await _context.DataForEvaluations.Where(d => d.PointOfEvaluationId == poeid && d.OfficeId == ownerofficeid && d.Month == 9).Select(d => d.Result).FirstOrDefaultAsync();
-            viewModel.result10 = await _context.DataForEvaluations.Where(d => d.PointOfEvaluationId == poeid && d.OfficeId == ownerofficeid && d.Month == 10).Select(d => d.Result).FirstOrDefaultAsync();
-            viewModel.result11 = await _context.DataForEvaluations.Where(d => d.PointOfEvaluationId == poeid && d.OfficeId == ownerofficeid && d.Month == 11).Select(d => d.Result).FirstOrDefaultAsync();
-            viewModel.result12 = await _context.DataForEvaluations.Where(d => d.PointOfEvaluationId == poeid && d.OfficeId == ownerofficeid && d.Month == 12).Select(d => d.Result).FirstOrDefaultAsync();
-
-            viewModel.Office = await _context.Offices.Where(o => o.Id == ownerofficeid).FirstOrDefaultAsync();
+            ViewBag.selectoffice = selectoffice;
+            viewModel.poeid = poeid;
             viewModel.yearPoint = yearPoint;
             return View(viewModel);
         }
 
         [HttpPost, ActionName("Edit")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> EditPost([Bind("yearPoint,poeid,result1,result2,result3,result4,result5,result6,result7,result8,result9,result10,result11,result12")] DataForEvaluationViewModel dataView, int? ownerofficeid)
+        public async Task<IActionResult> EditPost([Bind("yearPoint,poeid,result1,result2,result3,result4,result5,result6,result7,result8,result9,result10,result11,result12")] DataForEvaluationViewModel viewModel, string selectoffice)
         {
-            dataView.Point = await _context.PointOfEvaluations.Where(p => p.Id == dataView.poeid).FirstOrDefaultAsync();
-            Office office;
-            if (ownerofficeid != null)
-            {
-                office = await _context.Offices.Where(o => o.Id == ownerofficeid).FirstOrDefaultAsync();
-            }
-            else
-            {
-                office = await _context.Offices.Where(o => o.Id == dataView.Point.OwnerOfficeId).FirstOrDefaultAsync();
-            }
+            viewModel.Point = await _context.PointOfEvaluations.Include(p => p.OwnerOffice).Where(p => p.Id == viewModel.poeid).FirstOrDefaultAsync();
 
             if (ModelState.IsValid)
             {
                 var user = await _userManager.GetUserAsync(User);
 
-                await SaveResult(dataView.Point.Id, office.Id, 10, dataView.result10, user.Id);
-                await SaveResult(dataView.Point.Id, office.Id, 11, dataView.result11, user.Id);
-                await SaveResult(dataView.Point.Id, office.Id, 12, dataView.result12, user.Id);
-                await SaveResult(dataView.Point.Id, office.Id, 1, dataView.result1, user.Id);
-                await SaveResult(dataView.Point.Id, office.Id, 2, dataView.result2, user.Id);
-                await SaveResult(dataView.Point.Id, office.Id, 3, dataView.result3, user.Id);
-                await SaveResult(dataView.Point.Id, office.Id, 4, dataView.result4, user.Id);
-                await SaveResult(dataView.Point.Id, office.Id, 5, dataView.result5, user.Id);
-                await SaveResult(dataView.Point.Id, office.Id, 6, dataView.result6, user.Id);
-                await SaveResult(dataView.Point.Id, office.Id, 7, dataView.result7, user.Id);
-                await SaveResult(dataView.Point.Id, office.Id, 8, dataView.result8, user.Id);
-                await SaveResult(dataView.Point.Id, office.Id, 9, dataView.result9, user.Id);
+                await SaveResult(viewModel.Point.Id, viewModel.Point.OwnerOffice.Id, 10, viewModel.result10, user.Id);
+                await SaveResult(viewModel.Point.Id, viewModel.Point.OwnerOffice.Id, 11, viewModel.result11, user.Id);
+                await SaveResult(viewModel.Point.Id, viewModel.Point.OwnerOffice.Id, 12, viewModel.result12, user.Id);
+                await SaveResult(viewModel.Point.Id, viewModel.Point.OwnerOffice.Id, 1, viewModel.result1, user.Id);
+                await SaveResult(viewModel.Point.Id, viewModel.Point.OwnerOffice.Id, 2, viewModel.result2, user.Id);
+                await SaveResult(viewModel.Point.Id, viewModel.Point.OwnerOffice.Id, 3, viewModel.result3, user.Id);
+                await SaveResult(viewModel.Point.Id, viewModel.Point.OwnerOffice.Id, 4, viewModel.result4, user.Id);
+                await SaveResult(viewModel.Point.Id, viewModel.Point.OwnerOffice.Id, 5, viewModel.result5, user.Id);
+                await SaveResult(viewModel.Point.Id, viewModel.Point.OwnerOffice.Id, 6, viewModel.result6, user.Id);
+                await SaveResult(viewModel.Point.Id, viewModel.Point.OwnerOffice.Id, 7, viewModel.result7, user.Id);
+                await SaveResult(viewModel.Point.Id, viewModel.Point.OwnerOffice.Id, 8, viewModel.result8, user.Id);
+                await SaveResult(viewModel.Point.Id, viewModel.Point.OwnerOffice.Id, 9, viewModel.result9, user.Id);
 
-                if (dataView.Point.OwnerOfficeId != null)
-                {
-                    return RedirectToAction(nameof(Index), new { yearPoint = dataView.yearPoint });
-                }
-                return RedirectToAction(nameof(Edit), new { poeid = dataView.poeid, yearPoint = dataView.yearPoint });
+                return RedirectToAction(nameof(Index), new { yearPoint = viewModel.yearPoint, selectoffice = selectoffice });
             }
-            return View(dataView);
+
+            viewModel.result1 = await _context.DataForEvaluations.Where(d => d.PointOfEvaluationId == viewModel.poeid && d.Month == 1).Select(d => d.Result).FirstOrDefaultAsync();
+            viewModel.result2 = await _context.DataForEvaluations.Where(d => d.PointOfEvaluationId == viewModel.poeid && d.Month == 2).Select(d => d.Result).FirstOrDefaultAsync();
+            viewModel.result3 = await _context.DataForEvaluations.Where(d => d.PointOfEvaluationId == viewModel.poeid && d.Month == 3).Select(d => d.Result).FirstOrDefaultAsync();
+            viewModel.result4 = await _context.DataForEvaluations.Where(d => d.PointOfEvaluationId == viewModel.poeid && d.Month == 4).Select(d => d.Result).FirstOrDefaultAsync();
+            viewModel.result5 = await _context.DataForEvaluations.Where(d => d.PointOfEvaluationId == viewModel.poeid && d.Month == 5).Select(d => d.Result).FirstOrDefaultAsync();
+            viewModel.result6 = await _context.DataForEvaluations.Where(d => d.PointOfEvaluationId == viewModel.poeid && d.Month == 6).Select(d => d.Result).FirstOrDefaultAsync();
+            viewModel.result7 = await _context.DataForEvaluations.Where(d => d.PointOfEvaluationId == viewModel.poeid && d.Month == 7).Select(d => d.Result).FirstOrDefaultAsync();
+            viewModel.result8 = await _context.DataForEvaluations.Where(d => d.PointOfEvaluationId == viewModel.poeid && d.Month == 8).Select(d => d.Result).FirstOrDefaultAsync();
+            viewModel.result9 = await _context.DataForEvaluations.Where(d => d.PointOfEvaluationId == viewModel.poeid && d.Month == 9).Select(d => d.Result).FirstOrDefaultAsync();
+            viewModel.result10 = await _context.DataForEvaluations.Where(d => d.PointOfEvaluationId == viewModel.poeid && d.Month == 10).Select(d => d.Result).FirstOrDefaultAsync();
+            viewModel.result11 = await _context.DataForEvaluations.Where(d => d.PointOfEvaluationId == viewModel.poeid && d.Month == 11).Select(d => d.Result).FirstOrDefaultAsync();
+            viewModel.result12 = await _context.DataForEvaluations.Where(d => d.PointOfEvaluationId == viewModel.poeid && d.Month == 12).Select(d => d.Result).FirstOrDefaultAsync();
+
+            List<Object> list = new List<object>();
+            list.Add(new { Value = viewModel.Point.Rate1, Detail = "1." + viewModel.Point.DetailRate1 });
+            list.Add(new { Value = viewModel.Point.Rate2, Detail = "2." + viewModel.Point.DetailRate2 });
+            list.Add(new { Value = viewModel.Point.Rate3, Detail = "3." + viewModel.Point.DetailRate3 });
+            list.Add(new { Value = viewModel.Point.Rate4, Detail = "4." + viewModel.Point.DetailRate4 });
+            list.Add(new { Value = viewModel.Point.Rate5, Detail = "5." + viewModel.Point.DetailRate5 });
+            ViewBag.SelectLevel = new SelectList(list, "Value", "Detail");
+
+            List<Object> list2 = new List<object>();
+            list2.Add(new { Value = viewModel.Point.Rate1, Detail = "1." + viewModel.Point.Detail2Rate1 });
+            list2.Add(new { Value = viewModel.Point.Rate2, Detail = "2." + viewModel.Point.Detail2Rate2 });
+            list2.Add(new { Value = viewModel.Point.Rate3, Detail = "3." + viewModel.Point.Detail2Rate3 });
+            list2.Add(new { Value = viewModel.Point.Rate4, Detail = "4." + viewModel.Point.Detail2Rate4 });
+            list2.Add(new { Value = viewModel.Point.Rate5, Detail = "5." + viewModel.Point.Detail2Rate5 });
+            ViewBag.SelectLevel2 = new SelectList(list2, "Value", "Detail");
+            ViewBag.selectoffice = selectoffice;
+            return View(viewModel);
         }
 
         public async Task SaveResult(int poeid, int ownerofficeid, int month, decimal? result, string userid)

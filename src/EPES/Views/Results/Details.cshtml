@@ -21,6 +21,9 @@
                         <th>
                             ผลการปฏิบัติราชการ
                         </th>
+                        <th>
+                            รายละเอียด
+                        </th>
                     </tr>
                 </thead>
                 <tbody>
@@ -31,6 +34,29 @@
                         <td>
                             @Html.DisplayFor(model => model.result10)
                         </td>
+                        <td>
+                            @if (Model.Point.Unit == UnitOfPoint.ระดับ)
+                            {
+                                switch (Model.result10)
+                                {
+                                    case 1:
+                                        Html.DisplayFor(m => m.Point.DetailRate1);
+                                        break;
+                                    case 2:
+                                        Html.DisplayFor(m => m.Point.DetailRate2);
+                                        break;
+                                    case 3:
+                                        Html.DisplayFor(m => m.Point.DetailRate3);
+                                        break;
+                                    case 4:
+                                        Html.DisplayFor(m => m.Point.DetailRate4);
+                                        break;
+                                    case 5:
+                                        Html.DisplayFor(m => m.Point.DetailRate5);
+                                        break;
+                                }
+                            }
+                        </td>
                     </tr>
                     <tr>
                         <td>
@@ -38,6 +64,29 @@
                         </td>
                         <td>
                             @Html.DisplayFor(model => model.result11)
+                        </td>
+                        <td>
+                            @if (Model.Point.Unit == UnitOfPoint.ระดับ)
+                            {
+                                switch (Model.result11)
+                                {
+                                    case 1:
+                                        Html.DisplayFor(m => m.Point.DetailRate1);
+                                        break;
+                                    case 2:
+                                        Html.DisplayFor(m => m.Point.DetailRate2);
+                                        break;
+                                    case 3:
+                                        Html.DisplayFor(m => m.Point.DetailRate3);
+                                        break;
+                                    case 4:
+                                        Html.DisplayFor(m => m.Point.DetailRate4);
+                                        break;
+                                    case 5:
+                                        Html.DisplayFor(m => m.Point.DetailRate5);
+                                        break;
+                                }
+                            }
                         </td>
                     </tr>
                     <tr>
@@ -47,6 +96,29 @@
                         <td>
                             @Html.DisplayFor(model => model.result12)
                         </td>
+                        <td>
+                            @if (Model.Point.Unit == UnitOfPoint.ระดับ)
+                            {
+                                switch (Model.result12)
+                                {
+                                    case 1:
+                                        Html.DisplayFor(m => m.Point.DetailRate1);
+                                        break;
+                                    case 2:
+                                        Html.DisplayFor(m => m.Point.DetailRate2);
+                                        break;
+                                    case 3:
+                                        Html.DisplayFor(m => m.Point.DetailRate3);
+                                        break;
+                                    case 4:
+                                        Html.DisplayFor(m => m.Point.DetailRate4);
+                                        break;
+                                    case 5:
+                                        Html.DisplayFor(m => m.Point.DetailRate5);
+                                        break;
+                                }
+                            }
+                        </td>
                     </tr>
                     <tr>
                         <td>
@@ -54,6 +126,29 @@
                         </td>
                         <td>
                             @Html.DisplayFor(model => model.result1)
+                        </td>
+                        <td>
+                            @if (Model.Point.Unit == UnitOfPoint.ระดับ)
+                            {
+                                switch (Model.result1)
+                                {
+                                    case 1:
+                                        Html.DisplayFor(m => m.Point.DetailRate1);
+                                        break;
+                                    case 2:
+                                        Html.DisplayFor(m => m.Point.DetailRate2);
+                                        break;
+                                    case 3:
+                                        Html.DisplayFor(m => m.Point.DetailRate3);
+                                        break;
+                                    case 4:
+                                        Html.DisplayFor(m => m.Point.DetailRate4);
+                                        break;
+                                    case 5:
+                                        Html.DisplayFor(m => m.Point.DetailRate5);
+                                        break;
+                                }
+                            }
                         </td>
                     </tr>
                     <tr>
@@ -63,6 +158,29 @@
                         <td>
                             @Html.DisplayFor(model => model.result2)
                         </td>
+                        <td>
+                            @if (Model.Point.Unit == UnitOfPoint.ระดับ)
+                            {
+                                switch (Model.result2)
+                                {
+                                    case 1:
+                                        Html.DisplayFor(m => m.Point.DetailRate1);
+                                        break;
+                                    case 2:
+                                        Html.DisplayFor(m => m.Point.DetailRate2);
+                                        break;
+                                    case 3:
+                                        Html.DisplayFor(m => m.Point.DetailRate3);
+                                        break;
+                                    case 4:
+                                        Html.DisplayFor(m => m.Point.DetailRate4);
+                                        break;
+                                    case 5:
+                                        Html.DisplayFor(m => m.Point.DetailRate5);
+                                        break;
+                                }
+                            }
+                        </td>
                     </tr>
                     <tr>
                         <td>
@@ -70,6 +188,29 @@
                         </td>
                         <td>
                             @Html.DisplayFor(model => model.result3)
+                        </td>
+                        <td>
+                            @if (Model.Point.Unit == UnitOfPoint.ระดับ)
+                            {
+                                switch (Model.result3)
+                                {
+                                    case 1:
+                                        Html.DisplayFor(m => m.Point.DetailRate1);
+                                        break;
+                                    case 2:
+                                        Html.DisplayFor(m => m.Point.DetailRate2);
+                                        break;
+                                    case 3:
+                                        Html.DisplayFor(m => m.Point.DetailRate3);
+                                        break;
+                                    case 4:
+                                        Html.DisplayFor(m => m.Point.DetailRate4);
+                                        break;
+                                    case 5:
+                                        Html.DisplayFor(m => m.Point.DetailRate5);
+                                        break;
+                                }
+                            }
                         </td>
                     </tr>
                     <tr>
@@ -79,6 +220,64 @@
                         <td>
                             @Html.DisplayFor(model => model.result4)
                         </td>
+                        <td>
+                            @if (Model.Point.Unit == UnitOfPoint.ระดับ)
+                            {
+                                switch (Model.result4)
+                                {
+                                    case 1:
+                                        if (Model.Point.Detail2Rate1 == null)
+                                        {
+                                            Html.DisplayFor(m => m.Point.DetailRate1);
+                                        }
+                                        else
+                                        {
+                                            Html.DisplayFor(m => m.Point.Detail2Rate1);
+                                        }
+                                        break;
+                                    case 2:
+                                        if (Model.Point.Detail2Rate1 == null)
+                                        {
+                                            Html.DisplayFor(m => m.Point.DetailRate2);
+                                        }
+                                        else
+                                        {
+                                            Html.DisplayFor(m => m.Point.Detail2Rate2);
+                                        }
+                                        break;
+                                    case 3:
+                                        if (Model.Point.Detail2Rate1 == null)
+                                        {
+                                            Html.DisplayFor(m => m.Point.DetailRate3);
+                                        }
+                                        else
+                                        {
+                                            Html.DisplayFor(m => m.Point.Detail2Rate3);
+                                        }
+                                        break;
+                                    case 4:
+                                        if (Model.Point.Detail2Rate1 == null)
+                                        {
+                                            Html.DisplayFor(m => m.Point.DetailRate4);
+                                        }
+                                        else
+                                        {
+                                            Html.DisplayFor(m => m.Point.Detail2Rate4);
+                                        }
+                                        break;
+                                    case 5:
+                                        if (Model.Point.Detail2Rate1 == null)
+                                        {
+                                            Html.DisplayFor(m => m.Point.DetailRate5);
+                                        }
+                                        else
+                                        {
+                                            Html.DisplayFor(m => m.Point.Detail2Rate5);
+                                        }
+                                        break;
+                                }
+                            }
+                        </td>
                     </tr>
                     <tr>
                         <td>
@@ -86,6 +285,64 @@
                         </td>
                         <td>
                             @Html.DisplayFor(model => model.result5)
+                        </td>
+                        <td>
+                            @if (Model.Point.Unit == UnitOfPoint.ระดับ)
+                            {
+                                switch (Model.result5)
+                                {
+                                    case 1:
+                                        if (Model.Point.Detail2Rate1 == null)
+                                        {
+                                            Html.DisplayFor(m => m.Point.DetailRate1);
+                                        }
+                                        else
+                                        {
+                                            Html.DisplayFor(m => m.Point.Detail2Rate1);
+                                        }
+                                        break;
+                                    case 2:
+                                        if (Model.Point.Detail2Rate1 == null)
+                                        {
+                                            Html.DisplayFor(m => m.Point.DetailRate2);
+                                        }
+                                        else
+                                        {
+                                            Html.DisplayFor(m => m.Point.Detail2Rate2);
+                                        }
+                                        break;
+                                    case 3:
+                                        if (Model.Point.Detail2Rate1 == null)
+                                        {
+                                            Html.DisplayFor(m => m.Point.DetailRate3);
+                                        }
+                                        else
+                                        {
+                                            Html.DisplayFor(m => m.Point.Detail2Rate3);
+                                        }
+                                        break;
+                                    case 4:
+                                        if (Model.Point.Detail2Rate1 == null)
+                                        {
+                                            Html.DisplayFor(m => m.Point.DetailRate4);
+                                        }
+                                        else
+                                        {
+                                            Html.DisplayFor(m => m.Point.Detail2Rate4);
+                                        }
+                                        break;
+                                    case 5:
+                                        if (Model.Point.Detail2Rate1 == null)
+                                        {
+                                            Html.DisplayFor(m => m.Point.DetailRate5);
+                                        }
+                                        else
+                                        {
+                                            Html.DisplayFor(m => m.Point.Detail2Rate5);
+                                        }
+                                        break;
+                                }
+                            }
                         </td>
                     </tr>
                     <tr>
@@ -95,6 +352,64 @@
                         <td>
                             @Html.DisplayFor(model => model.result6)
                         </td>
+                        <td>
+                            @if (Model.Point.Unit == UnitOfPoint.ระดับ)
+                            {
+                                switch (Model.result6)
+                                {
+                                    case 1:
+                                        if (Model.Point.Detail2Rate1 == null)
+                                        {
+                                            Html.DisplayFor(m => m.Point.DetailRate1);
+                                        }
+                                        else
+                                        {
+                                            Html.DisplayFor(m => m.Point.Detail2Rate1);
+                                        }
+                                        break;
+                                    case 2:
+                                        if (Model.Point.Detail2Rate1 == null)
+                                        {
+                                            Html.DisplayFor(m => m.Point.DetailRate2);
+                                        }
+                                        else
+                                        {
+                                            Html.DisplayFor(m => m.Point.Detail2Rate2);
+                                        }
+                                        break;
+                                    case 3:
+                                        if (Model.Point.Detail2Rate1 == null)
+                                        {
+                                            Html.DisplayFor(m => m.Point.DetailRate3);
+                                        }
+                                        else
+                                        {
+                                            Html.DisplayFor(m => m.Point.Detail2Rate3);
+                                        }
+                                        break;
+                                    case 4:
+                                        if (Model.Point.Detail2Rate1 == null)
+                                        {
+                                            Html.DisplayFor(m => m.Point.DetailRate4);
+                                        }
+                                        else
+                                        {
+                                            Html.DisplayFor(m => m.Point.Detail2Rate4);
+                                        }
+                                        break;
+                                    case 5:
+                                        if (Model.Point.Detail2Rate1 == null)
+                                        {
+                                            Html.DisplayFor(m => m.Point.DetailRate5);
+                                        }
+                                        else
+                                        {
+                                            Html.DisplayFor(m => m.Point.Detail2Rate5);
+                                        }
+                                        break;
+                                }
+                            }
+                        </td>
                     </tr>
                     <tr>
                         <td>
@@ -102,6 +417,64 @@
                         </td>
                         <td>
                             @Html.DisplayFor(model => model.result7)
+                        </td>
+                        <td>
+                            @if (Model.Point.Unit == UnitOfPoint.ระดับ)
+                            {
+                                switch (Model.result7)
+                                {
+                                    case 1:
+                                        if (Model.Point.Detail2Rate1 == null)
+                                        {
+                                            Html.DisplayFor(m => m.Point.DetailRate1);
+                                        }
+                                        else
+                                        {
+                                            Html.DisplayFor(m => m.Point.Detail2Rate1);
+                                        }
+                                        break;
+                                    case 2:
+                                        if (Model.Point.Detail2Rate1 == null)
+                                        {
+                                            Html.DisplayFor(m => m.Point.DetailRate2);
+                                        }
+                                        else
+                                        {
+                                            Html.DisplayFor(m => m.Point.Detail2Rate2);
+                                        }
+                                        break;
+                                    case 3:
+                                        if (Model.Point.Detail2Rate1 == null)
+                                        {
+                                            Html.DisplayFor(m => m.Point.DetailRate3);
+                                        }
+                                        else
+                                        {
+                                            Html.DisplayFor(m => m.Point.Detail2Rate3);
+                                        }
+                                        break;
+                                    case 4:
+                                        if (Model.Point.Detail2Rate1 == null)
+                                        {
+                                            Html.DisplayFor(m => m.Point.DetailRate4);
+                                        }
+                                        else
+                                        {
+                                            Html.DisplayFor(m => m.Point.Detail2Rate4);
+                                        }
+                                        break;
+                                    case 5:
+                                        if (Model.Point.Detail2Rate1 == null)
+                                        {
+                                            Html.DisplayFor(m => m.Point.DetailRate5);
+                                        }
+                                        else
+                                        {
+                                            Html.DisplayFor(m => m.Point.Detail2Rate5);
+                                        }
+                                        break;
+                                }
+                            }
                         </td>
                     </tr>
                     <tr>
@@ -111,6 +484,64 @@
                         <td>
                             @Html.DisplayFor(model => model.result8)
                         </td>
+                        <td>
+                            @if (Model.Point.Unit == UnitOfPoint.ระดับ)
+                            {
+                                switch (Model.result8)
+                                {
+                                    case 1:
+                                        if (Model.Point.Detail2Rate1 == null)
+                                        {
+                                            Html.DisplayFor(m => m.Point.DetailRate1);
+                                        }
+                                        else
+                                        {
+                                            Html.DisplayFor(m => m.Point.Detail2Rate1);
+                                        }
+                                        break;
+                                    case 2:
+                                        if (Model.Point.Detail2Rate1 == null)
+                                        {
+                                            Html.DisplayFor(m => m.Point.DetailRate2);
+                                        }
+                                        else
+                                        {
+                                            Html.DisplayFor(m => m.Point.Detail2Rate2);
+                                        }
+                                        break;
+                                    case 3:
+                                        if (Model.Point.Detail2Rate1 == null)
+                                        {
+                                            Html.DisplayFor(m => m.Point.DetailRate3);
+                                        }
+                                        else
+                                        {
+                                            Html.DisplayFor(m => m.Point.Detail2Rate3);
+                                        }
+                                        break;
+                                    case 4:
+                                        if (Model.Point.Detail2Rate1 == null)
+                                        {
+                                            Html.DisplayFor(m => m.Point.DetailRate4);
+                                        }
+                                        else
+                                        {
+                                            Html.DisplayFor(m => m.Point.Detail2Rate4);
+                                        }
+                                        break;
+                                    case 5:
+                                        if (Model.Point.Detail2Rate1 == null)
+                                        {
+                                            Html.DisplayFor(m => m.Point.DetailRate5);
+                                        }
+                                        else
+                                        {
+                                            Html.DisplayFor(m => m.Point.Detail2Rate5);
+                                        }
+                                        break;
+                                }
+                            }
+                        </td>
                     </tr>
                     <tr>
                         <td>
@@ -119,11 +550,69 @@
                         <td>
                             @Html.DisplayFor(model => model.result9)
                         </td>
+                        <td>
+                            @if (Model.Point.Unit == UnitOfPoint.ระดับ)
+                            {
+                                switch (Model.result9)
+                                {
+                                    case 1:
+                                        if (Model.Point.Detail2Rate1 == null)
+                                        {
+                                            Html.DisplayFor(m => m.Point.DetailRate1);
+                                        }
+                                        else
+                                        {
+                                            Html.DisplayFor(m => m.Point.Detail2Rate1);
+                                        }
+                                        break;
+                                    case 2:
+                                        if (Model.Point.Detail2Rate1 == null)
+                                        {
+                                            Html.DisplayFor(m => m.Point.DetailRate2);
+                                        }
+                                        else
+                                        {
+                                            Html.DisplayFor(m => m.Point.Detail2Rate2);
+                                        }
+                                        break;
+                                    case 3:
+                                        if (Model.Point.Detail2Rate1 == null)
+                                        {
+                                            Html.DisplayFor(m => m.Point.DetailRate3);
+                                        }
+                                        else
+                                        {
+                                            Html.DisplayFor(m => m.Point.Detail2Rate3);
+                                        }
+                                        break;
+                                    case 4:
+                                        if (Model.Point.Detail2Rate1 == null)
+                                        {
+                                            Html.DisplayFor(m => m.Point.DetailRate4);
+                                        }
+                                        else
+                                        {
+                                            Html.DisplayFor(m => m.Point.Detail2Rate4);
+                                        }
+                                        break;
+                                    case 5:
+                                        if (Model.Point.Detail2Rate1 == null)
+                                        {
+                                            Html.DisplayFor(m => m.Point.DetailRate5);
+                                        }
+                                        else
+                                        {
+                                            Html.DisplayFor(m => m.Point.Detail2Rate5);
+                                        }
+                                        break;
+                                }
+                            }
+                        </td>
                     </tr>
                 </tbody>
             </table>
             <div>
-                <a asp-action="Index" class="btn btn-info" asp-route-yearPoint="@Model.yearPoint">กลับหน้า บันทึกผลการปฏิบัติราชการ</a>
+                <a asp-action="Index" class="btn btn-info" asp-route-yearPoint="@Model.yearPoint" asp-route-selectoffice="@ViewBag.selectoffice">กลับหน้า บันทึกผลการปฏิบัติราชการ</a>
             </div>
         </div>
     </div>

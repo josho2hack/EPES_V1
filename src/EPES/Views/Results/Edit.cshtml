@@ -32,105 +32,267 @@
                                     <td>
                                         @(new DateTime(1, 10, 1).ToString("MMMM"))
                                     </td>
-                                    <td>
-                                        <input asp-for="result10" class="form-control" />
-                                    </td>
+                                    @if (Model.Point.Unit == UnitOfPoint.ระดับ)
+                                    {
+                                        <td>
+                                            <select asp-for="result10" class="form-control col-md-7" asp-items="ViewBag.SelectLevel"></select>
+                                        </td>
+                                    }
+                                    else
+                                    {
+                                        <td>
+                                            <input asp-for="result10" class="form-control" />
+                                        </td>
+                                    }
                                 </tr>
                                 <tr>
                                     <td>
                                         @(new DateTime(1, 11, 1).ToString("MMMM"))
                                     </td>
-                                    <td>
-                                        <input asp-for="result11" class="form-control" />
-                                    </td>
+                                    @if (Model.Point.Unit == UnitOfPoint.ระดับ)
+                                    {
+                                        <td>
+                                            <select asp-for="result11" class="form-control col-md-7" asp-items="ViewBag.SelectLevel"></select>
+                                        </td>
+                                    }
+                                    else
+                                    {
+                                        <td>
+                                            <input asp-for="result11" class="form-control" />
+                                        </td>
+                                    }
                                 </tr>
                                 <tr>
                                     <td>
                                         @(new DateTime(1, 12, 1).ToString("MMMM"))
                                     </td>
-                                    <td>
-                                        <input asp-for="result12" class="form-control" />
-                                    </td>
+                                    @if (Model.Point.Unit == UnitOfPoint.ระดับ)
+                                    {
+                                        <td>
+                                            <select asp-for="result12" class="form-control col-md-7" asp-items="ViewBag.SelectLevel"></select>
+                                        </td>
+                                    }
+                                    else
+                                    {
+                                        <td>
+                                            <input asp-for="result12" class="form-control" />
+                                        </td>
+                                    }
                                 </tr>
                                 <tr>
                                     <td>
                                         @(new DateTime(1, 1, 1).ToString("MMMM"))
                                     </td>
-                                    <td>
-                                        <input asp-for="result1" class="form-control" />
-                                    </td>
+                                    @if (Model.Point.Unit == UnitOfPoint.ระดับ)
+                                    {
+                                        <td>
+                                            <select asp-for="result1" class="form-control col-md-7" asp-items="ViewBag.SelectLevel"></select>
+                                        </td>
+                                    }
+                                    else
+                                    {
+                                        <td>
+                                            <input asp-for="result1" class="form-control" />
+                                        </td>
+                                    }
                                 </tr>
                                 <tr>
                                     <td>
                                         @(new DateTime(1, 2, 1).ToString("MMMM"))
                                     </td>
-                                    <td>
-                                        <input asp-for="result2" class="form-control" />
-                                    </td>
+                                    @if (Model.Point.Unit == UnitOfPoint.ระดับ)
+                                    {
+                                        <td>
+                                            <select asp-for="result2" class="form-control col-md-7" asp-items="ViewBag.SelectLevel"></select>
+                                        </td>
+                                    }
+                                    else
+                                    {
+                                        <td>
+                                            <input asp-for="result2" class="form-control" />
+                                        </td>
+                                    }
                                 </tr>
                                 <tr>
                                     <td>
                                         @(new DateTime(1, 3, 1).ToString("MMMM"))
                                     </td>
-                                    <td>
-                                        <input asp-for="result3" class="form-control" />
-                                    </td>
+                                    @if (Model.Point.Unit == UnitOfPoint.ระดับ)
+                                    {
+                                        <td>
+                                            <select asp-for="result3" class="form-control col-md-7" asp-items="ViewBag.SelectLevel"></select>
+                                        </td>
+                                    }
+                                    else
+                                    {
+                                        <td>
+                                            <input asp-for="result3" class="form-control" />
+                                        </td>
+                                    }
                                 </tr>
                                 <tr>
                                     <td>
                                         @(new DateTime(1, 4, 1).ToString("MMMM"))
                                     </td>
-                                    <td>
-                                        <input asp-for="result4" class="form-control" />
-                                    </td>
+                                    @if (Model.Point.Unit == UnitOfPoint.ระดับ)
+                                    {
+                                        if (Model.Point.Detail2Rate1 != null)
+                                        {
+                                            <td>
+                                                <select asp-for="result4" class="form-control col-md-7" asp-items="ViewBag.SelectLevel2"></select>
+                                            </td>
+                                        }
+                                        else
+                                        {
+                                            <td>
+                                                <select asp-for="result4" class="form-control col-md-7" asp-items="ViewBag.SelectLevel"></select>
+                                            </td>
+                                        }
+                                    }
+                                    else
+                                    {
+                                        <td>
+                                            <input asp-for="result4" class="form-control" />
+                                        </td>
+                                    }
                                 </tr>
                                 <tr>
                                     <td>
                                         @(new DateTime(1, 5, 1).ToString("MMMM"))
                                     </td>
-                                    <td>
-                                        <input asp-for="result5" class="form-control" />
-                                    </td>
+                                    @if (Model.Point.Unit == UnitOfPoint.ระดับ)
+                                    {
+                                        if (Model.Point.Detail2Rate1 != null)
+                                        {
+                                            <td>
+                                                <select asp-for="result5" class="form-control col-md-7" asp-items="ViewBag.SelectLevel2"></select>
+                                            </td>
+                                        }
+                                        else
+                                        {
+                                            <td>
+                                                <select asp-for="result5" class="form-control col-md-7" asp-items="ViewBag.SelectLevel"></select>
+                                            </td>
+                                        }
+                                    }
+                                    else
+                                    {
+                                        <td>
+                                            <input asp-for="result5" class="form-control" />
+                                        </td>
+                                    }
                                 </tr>
                                 <tr>
                                     <td>
                                         @(new DateTime(1, 6, 1).ToString("MMMM"))
                                     </td>
-                                    <td>
-                                        <input asp-for="result6" class="form-control" />
-                                    </td>
+                                    @if (Model.Point.Unit == UnitOfPoint.ระดับ)
+                                    {
+                                        if (Model.Point.Detail2Rate1 != null)
+                                        {
+                                            <td>
+                                                <select asp-for="result6" class="form-control col-md-7" asp-items="ViewBag.SelectLevel2"></select>
+                                            </td>
+                                        }
+                                        else
+                                        {
+                                            <td>
+                                                <select asp-for="result6" class="form-control col-md-7" asp-items="ViewBag.SelectLevel"></select>
+                                            </td>
+                                        }
+                                    }
+                                    else
+                                    {
+                                        <td>
+                                            <input asp-for="result6" class="form-control" />
+                                        </td>
+                                    }
                                 </tr>
                                 <tr>
                                     <td>
                                         @(new DateTime(1, 7, 1).ToString("MMMM"))
                                     </td>
-                                    <td>
-                                        <input asp-for="result7" class="form-control" />
-                                    </td>
+                                    @if (Model.Point.Unit == UnitOfPoint.ระดับ)
+                                    {
+                                        if (Model.Point.Detail2Rate1 != null)
+                                        {
+                                            <td>
+                                                <select asp-for="result7" class="form-control col-md-7" asp-items="ViewBag.SelectLevel2"></select>
+                                            </td>
+                                        }
+                                        else
+                                        {
+                                            <td>
+                                                <select asp-for="result7" class="form-control col-md-7" asp-items="ViewBag.SelectLevel"></select>
+                                            </td>
+                                        }
+                                    }
+                                    else
+                                    {
+                                        <td>
+                                            <input asp-for="result7" class="form-control" />
+                                        </td>
+                                    }
                                 </tr>
                                 <tr>
                                     <td>
                                         @(new DateTime(1, 8, 1).ToString("MMMM"))
                                     </td>
-                                    <td>
-                                        <input asp-for="result8" class="form-control" />
-                                    </td>
+                                    @if (Model.Point.Unit == UnitOfPoint.ระดับ)
+                                    {
+                                        if (Model.Point.Detail2Rate1 != null)
+                                        {
+                                            <td>
+                                                <select asp-for="result8" class="form-control col-md-7" asp-items="ViewBag.SelectLevel2"></select>
+                                            </td>
+                                        }
+                                        else
+                                        {
+                                            <td>
+                                                <select asp-for="result8" class="form-control col-md-7" asp-items="ViewBag.SelectLevel"></select>
+                                            </td>
+                                        }
+                                    }
+                                    else
+                                    {
+                                        <td>
+                                            <input asp-for="result8" class="form-control" />
+                                        </td>
+                                    }
                                 </tr>
                                 <tr>
                                     <td>
                                         @(new DateTime(1, 9, 1).ToString("MMMM"))
                                     </td>
-                                    <td>
-                                        <input asp-for="result9" class="form-control" />
-                                    </td>
+                                    @if (Model.Point.Unit == UnitOfPoint.ระดับ)
+                                    {
+                                        if (Model.Point.Detail2Rate1 != null)
+                                        {
+                                            <td>
+                                                <select asp-for="result9" class="form-control col-md-7" asp-items="ViewBag.SelectLevel2"></select>
+                                            </td>
+                                        }
+                                        else
+                                        {
+                                            <td>
+                                                <select asp-for="result9" class="form-control col-md-7" asp-items="ViewBag.SelectLevel"></select>
+                                            </td>
+                                        }
+                                    }
+                                    else
+                                    {
+                                        <td>
+                                            <input asp-for="result9" class="form-control" />
+                                        </td>
+                                    }
                                 </tr>
                             </tbody>
                         </table>
                         <div class="form-group">
                             <input asp-for="yearPoint" class="form-control" hidden />
-                            <input asp-for="poeid" value="@Model.Point.Id" class="form-control" hidden />
+                            <input asp-for="poeid" class="form-control" hidden />
                             <input type="submit" value="บันทึก" class="btn btn-primary" />
-                            <a asp-area="" asp-controller="Results" asp-action="Index" asp-route-yearPoint="@Model.yearPoint" class="btn btn-secondary">ยกเลิก</a>
+                            <a asp-area="" asp-controller="Results" asp-action="Index" asp-route-yearPoint="@Model.yearPoint" asp-route-selectoffice="@ViewBag.selectoffice"class="btn btn-secondary">ยกเลิก</a>
                         </div>
                     </form>
                 </div>
