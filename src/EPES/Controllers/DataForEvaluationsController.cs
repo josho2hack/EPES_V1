@@ -242,20 +242,33 @@ namespace EPES.Controllers
             viewModel.expect12 = await _context.DataForEvaluations.Where(d => d.PointOfEvaluationId == poeid && d.Month == 12).Select(d => d.Expect).FirstOrDefaultAsync();
 
             List<Object> list = new List<object>();
-            list.Add(new { Value = viewModel.Point.Rate1, Detail = "1." + viewModel.Point.DetailRate1 });
-            list.Add(new { Value = viewModel.Point.Rate2, Detail = "2." + viewModel.Point.DetailRate2 });
-            list.Add(new { Value = viewModel.Point.Rate3, Detail = "3." + viewModel.Point.DetailRate3 });
-            list.Add(new { Value = viewModel.Point.Rate4, Detail = "4." + viewModel.Point.DetailRate4 });
-            list.Add(new { Value = viewModel.Point.Rate5, Detail = "5." + viewModel.Point.DetailRate5 });
-            ViewBag.SelectLevel = new SelectList(list, "Value", "Detail");
+            list.Add(new { Value = "", Detail = "เลือกระดับผลปฏิบัติราชการ" });
+            list.Add(new { Value = "1", Detail = "1." + viewModel.Point.DetailRate1 });
+            list.Add(new { Value = "2", Detail = "2." + viewModel.Point.DetailRate2 });
+            list.Add(new { Value = "3", Detail = "3." + viewModel.Point.DetailRate3 });
+            list.Add(new { Value = "4", Detail = "4." + viewModel.Point.DetailRate4 });
+            list.Add(new { Value = "5", Detail = "5." + viewModel.Point.DetailRate5 });
+            ViewBag.SelectLevel10 = new SelectList(list, "Value", "Detail", viewModel.expect10?.ToString("N0"));
+            ViewBag.SelectLevel11 = new SelectList(list, "Value", "Detail", viewModel.expect11?.ToString("N0"));
+            ViewBag.SelectLevel12 = new SelectList(list, "Value", "Detail", viewModel.expect12?.ToString("N0"));
+            ViewBag.SelectLevel1 = new SelectList(list, "Value", "Detail", viewModel.expect1?.ToString("N0"));
+            ViewBag.SelectLevel2 = new SelectList(list, "Value", "Detail", viewModel.expect2?.ToString("N0"));
+            ViewBag.SelectLevel3 = new SelectList(list, "Value", "Detail", viewModel.expect3?.ToString("N0"));
+
 
             List<Object> list2 = new List<object>();
-            list2.Add(new { Value = viewModel.Point.Rate1, Detail = "1." + viewModel.Point.Detail2Rate1 });
-            list2.Add(new { Value = viewModel.Point.Rate2, Detail = "2." + viewModel.Point.Detail2Rate2 });
-            list2.Add(new { Value = viewModel.Point.Rate3, Detail = "3." + viewModel.Point.Detail2Rate3 });
-            list2.Add(new { Value = viewModel.Point.Rate4, Detail = "4." + viewModel.Point.Detail2Rate4 });
-            list2.Add(new { Value = viewModel.Point.Rate5, Detail = "5." + viewModel.Point.Detail2Rate5 });
-            ViewBag.SelectLevel2 = new SelectList(list2, "Value", "Detail");
+            list2.Add(new { Value = "", Detail = "เลือกระดับผลปฏิบัติราชการ" });
+            list2.Add(new { Value = "1", Detail = "1." + viewModel.Point.Detail2Rate1 });
+            list2.Add(new { Value = "2", Detail = "2." + viewModel.Point.Detail2Rate2 });
+            list2.Add(new { Value = "3", Detail = "3." + viewModel.Point.Detail2Rate3 });
+            list2.Add(new { Value = "4", Detail = "4." + viewModel.Point.Detail2Rate4 });
+            list2.Add(new { Value = "5", Detail = "5." + viewModel.Point.Detail2Rate5 });
+            ViewBag.SelectLevel4 = new SelectList(list2, "Value", "Detail", viewModel.expect4?.ToString("N0"));
+            ViewBag.SelectLevel5 = new SelectList(list2, "Value", "Detail", viewModel.expect5?.ToString("N0"));
+            ViewBag.SelectLevel6 = new SelectList(list2, "Value", "Detail", viewModel.expect6?.ToString("N0"));
+            ViewBag.SelectLevel7 = new SelectList(list2, "Value", "Detail", viewModel.expect7?.ToString("N0"));
+            ViewBag.SelectLevel8 = new SelectList(list2, "Value", "Detail", viewModel.expect8?.ToString("N0"));
+            ViewBag.SelectLevel9 = new SelectList(list2, "Value", "Detail", viewModel.expect9?.ToString("N0"));
 
             ViewBag.selectoffice = selectoffice;
             viewModel.poeid = poeid;
@@ -303,6 +316,7 @@ namespace EPES.Controllers
             viewModel.expect12 = await _context.DataForEvaluations.Where(d => d.PointOfEvaluationId == viewModel.poeid && d.Month == 12).Select(d => d.Expect).FirstOrDefaultAsync();
 
             List<Object> list = new List<object>();
+            list.Add(new { Value = "", Detail = "เลือกระดับผลปฏิบัติราชการ" });
             list.Add(new { Value = viewModel.Point.Rate1, Detail = "1." + viewModel.Point.DetailRate1 });
             list.Add(new { Value = viewModel.Point.Rate2, Detail = "2." + viewModel.Point.DetailRate2 });
             list.Add(new { Value = viewModel.Point.Rate3, Detail = "3." + viewModel.Point.DetailRate3 });
@@ -311,12 +325,14 @@ namespace EPES.Controllers
             ViewBag.SelectLevel = new SelectList(list, "Value", "Detail");
 
             List<Object> list2 = new List<object>();
+            list2.Add(new { Value = "", Detail = "เลือกระดับผลปฏิบัติราชการ" });
             list2.Add(new { Value = viewModel.Point.Rate1, Detail = "1." + viewModel.Point.Detail2Rate1 });
             list2.Add(new { Value = viewModel.Point.Rate2, Detail = "2." + viewModel.Point.Detail2Rate2 });
             list2.Add(new { Value = viewModel.Point.Rate3, Detail = "3." + viewModel.Point.Detail2Rate3 });
             list2.Add(new { Value = viewModel.Point.Rate4, Detail = "4." + viewModel.Point.Detail2Rate4 });
             list2.Add(new { Value = viewModel.Point.Rate5, Detail = "5." + viewModel.Point.Detail2Rate5 });
             ViewBag.SelectLevel2 = new SelectList(list2, "Value", "Detail");
+
             ViewBag.selectoffice = selectoffice;
             return View(viewModel);
         }

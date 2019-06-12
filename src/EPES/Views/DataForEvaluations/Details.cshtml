@@ -37,7 +37,7 @@
                         <td>
                             @if (Model.Point.Unit == UnitOfPoint.ระดับ)
                             {
-                                switch (Model.expect10)
+                                switch (Convert.ToInt32(Model.expect10))
                                 {
                                     case 1:
                                         Html.DisplayFor(m => m.Point.DetailRate1);

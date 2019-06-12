@@ -291,8 +291,9 @@
                         <div class="form-group">
                             <input asp-for="yearPoint" class="form-control" hidden />
                             <input asp-for="poeid" class="form-control" hidden />
+                            <input type="hidden" name="selectoffice" value="@ViewBag.selectoffice" />
                             <input type="submit" value="บันทึก" class="btn btn-primary" />
-                            <a asp-area="" asp-controller="Results" asp-action="Index" asp-route-yearPoint="@Model.yearPoint" asp-route-selectoffice="@ViewBag.selectoffice"class="btn btn-secondary">ยกเลิก</a>
+                            <a asp-area="" asp-controller="Results" asp-action="Index" asp-route-yearPoint="@Model.yearPoint" asp-route-selectoffice="@ViewBag.selectoffice" class="btn btn-secondary">ยกเลิก</a>
                         </div>
                     </form>
                 </div>
