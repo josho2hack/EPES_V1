@@ -1303,5 +1303,71 @@ namespace EPES.Controllers
                 }
             }// Expect 1
         }
+        public async Task<IActionResult> Copy()
+        {
+            var target = await _context.Offices.Where(d => d.Code != "00000000" && d.Code != "01000000" && d.Code.Substring(0, 2) != "00" && d.Code.Substring(5, 3) == "000").ToListAsync();
+
+            var user = await _userManager.GetUserAsync(User);
+            try
+            {
+                PointOfEvaluation dataToCopy;
+                for (int i = 1; i <= 22; i++)
+                {
+                    if (i == 19 || i == 20)
+                    {
+                        continue;
+                    }
+                    var data = await _context.PointOfEvaluations.Include(p => p.OwnerOffice).Where(p => p.Point == i && p.OwnerOffice.Code == "01000000").FirstOrDefaultAsync();
+
+                    foreach (var item in target)
+                    {
+                        dataToCopy = await _context.PointOfEvaluations.Include(p => p.OwnerOffice).Where(p => p.OwnerOffice.Code == item.Code && p.Name == data.Name && p.Plan == data.Plan).FirstOrDefaultAsync();
+                        if (dataToCopy == null)
+                        {
+                            dataToCopy = new PointOfEvaluation();
+                            dataToCopy.Year = data.Year;
+                            dataToCopy.AuditOfficeId = data.AuditOfficeId;
+                            dataToCopy.OwnerOfficeId = item.Id;
+                            dataToCopy.Point = data.Point;
+                            dataToCopy.SubPoint = data.SubPoint;
+                            dataToCopy.DetailPlan = data.DetailPlan;
+                            dataToCopy.Name = data.Name;
+                            dataToCopy.Plan = data.Plan;
+                            dataToCopy.Weight = data.Weight;
+                            dataToCopy.Unit = data.Unit;
+
+                            dataToCopy.Rate1 = data.Rate1;
+                            dataToCopy.Rate2 = data.Rate2;
+                            dataToCopy.Rate3 = data.Rate3;
+                            dataToCopy.Rate4 = data.Rate4;
+                            dataToCopy.Rate5 = data.Rate5;
+                            dataToCopy.DetailRate1 = data.DetailRate1;
+                            dataToCopy.DetailRate2 = data.DetailRate2;
+                            dataToCopy.DetailRate3 = data.DetailRate3;
+                            dataToCopy.DetailRate4 = data.DetailRate4;
+                            dataToCopy.DetailRate5 = data.DetailRate5;
+                            dataToCopy.Detail2Rate1 = data.Detail2Rate1;
+                            dataToCopy.Detail2Rate2 = data.Detail2Rate2;
+                            dataToCopy.Detail2Rate3 = data.Detail2Rate3;
+                            dataToCopy.Detail2Rate4 = data.Detail2Rate4;
+                            dataToCopy.Detail2Rate5 = data.Detail2Rate5;
+                            dataToCopy.UpdateUserId = user.Id;
+
+                            _context.Add(dataToCopy);
+                            await _context.SaveChangesAsync();
+                        }
+                    }
+                }
+                return Ok();
+            }
+            catch (DbUpdateException)
+            {
+                //Log the error (uncomment ex variable name and write a log.
+                ModelState.AddModelError("", "ไม่สามารถบันทึกข้อมูล. " +
+                    "ลองพยายามบันทึกอีกครั้ง " +
+                    "โปรดแจ้งผู้ดูแลระบบ");
+                return NotFound();
+            }
+        }
     }
 }
