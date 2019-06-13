@@ -1,0 +1,269 @@
+﻿@using Microsoft.AspNetCore.Identity
+@model EPES.ViewModels.DataForEvaluationViewModel
+@inject UserManager<ApplicationUser> UserManager
+
+@{
+    ViewData["Title"] = "Data for Evaluation";
+    var user = await UserManager.GetUserAsync(User);
+}
+
+
+<div class="container-fluid">
+    <h1 class="h3 mb-2 text-gray-800">ผลการปฏิบัติราชการ</h1>
+    <p class="mb-4">บันทึกผล</p>
+    <form asp-action="Index">
+        <div class="row justify-content-between">
+            <div class="col-md-6">
+                @if (User.IsInRole("Admin") || User.IsInRole("Manager"))
+                {
+                    <div class="row">
+                        <label class="col-form-label col-md-3 text-md-right">หน่วยงาน: </label>
+                        <select name="selectoffice" class="form-control col-md-7" asp-items="ViewBag.OfficeCode" onchange="this.form.submit()">
+                            <option value="">เลือกหน่วยงาน</option>
+                        </select>
+                    </div>
+                }
+            </div>
+            <div class="col-md-6">
+                <div class="row">
+                    <label class="col-form-label col-md-6 text-md-right">ปีงบประมาณ: </label>
+                    <select asp-for="yearPoint" class="form-control col-md-6" onchange="this.form.submit()">
+                        <option value="-1">@DateTime.Now.AddYears(-1).ToString("yyyy")</option>
+                        <option value="0">@DateTime.Now.ToString("yyyy")</option>
+                        <option value="1">@DateTime.Now.AddYears(1).ToString("yyyy")</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+    </form>
+    @if (Model.pointA != null)
+    {
+        <!-- Plan A -->
+        <div class="card shadow mb-4">
+            <div class="card-header py-3">
+                <h6 class="m-0 font-weight-bold text-primary">แผนงานตามนโยบายจากผู้บริหาร (Top - Down: A)</h6>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-bordered" id="EPEStable" style="width:100%;" cellspacing="0">
+                        <thead>
+                            <tr>
+                                <th>
+                                    ลำดับที่
+                                </th>
+                                <th>
+                                    ตัวชี้วัด
+                                </th>
+                                <th>
+                                    สำหรับ
+                                </th>
+                                <th>
+                                    หน่วยกำกับ
+                                </th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in Model.pointA)
+                            {
+                                <tr>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.Point)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.Name)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.OwnerOffice.Name)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.AuditOffice.Name)
+                                    </td>
+                                    <td>
+                                        @if (User.IsInRole("Admin") || (User.IsInRole("Manager") && (item.AuditOffice.Code == user.OfficeId || item.OwnerOffice.Code == user.OfficeId)))
+                                        {
+                                            <a asp-action="Edit" asp-route-poeid="@item.Id" asp-route-yearPoint="@Model.yearPoint" asp-route-selectoffice="@ViewBag.selectoffice"><i class="fas fa-edit"></i></a>
+                                        }
+                                        <a asp-action="Details" asp-route-poeid="@item.Id" asp-route-yearPoint="@Model.yearPoint" asp-route-selectoffice="@ViewBag.selectoffice"><i class="fas fa-search-plus"></i></a>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    }
+    <!-- Plan B -->
+    <div class="card shadow mb-4">
+        <div class="card-header py-3">
+            <h6 class="m-0 font-weight-bold text-primary">แผนงานตามนโยบายที่ถ่ายทอดไปยังหน่วยปฏิบัติ (Top - Down: B)</h6>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-bordered" id="EPEStableB" style="width:100%;" cellspacing="0">
+                    <thead>
+                        <tr>
+                            <th>
+                                ลำดับที่
+                            </th>
+                            <th>
+                                ตัวชี้วัด
+                            </th>
+                            <th>
+                                สำหรับ
+                            </th>
+                            <th>
+                                หน่วยกำกับ
+                            </th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model.pointB)
+                        {
+                            <tr>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Point)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Name)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.OwnerOffice.Name)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.AuditOffice.Name)
+                                </td>
+                                <td>
+                                    @if (User.IsInRole("Admin") || (User.IsInRole("Manager") && (item.AuditOffice.Code == user.OfficeId || item.OwnerOffice.Code == user.OfficeId)) || (User.IsInRole("Manager") && user.OfficeId.Substring(2, 6) == "000000" && item.OwnerOffice.Code.StartsWith(user.OfficeId.Substring(0, 2))) || (User.IsInRole("User") && item.OwnerOffice.Code == user.OfficeId))
+                                    {
+                                        <a asp-action="Edit" asp-route-poeid="@item.Id" asp-route-yearPoint="@Model.yearPoint" asp-route-selectoffice="@ViewBag.selectoffice"><i class="fas fa-edit"></i></a>
+                                    }
+                                    <a asp-action="Details" asp-route-poeid="@item.Id" asp-route-yearPoint="@Model.yearPoint" asp-route-selectoffice="@ViewBag.selectoffice"><i class="fas fa-search-plus"></i></a>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- Plan C -->
+    <div class="card shadow mb-4">
+        <div class="card-header py-3">
+            <h6 class="m-0 font-weight-bold text-primary">แผนงานตามความต้องการของหน่วยงาน (Bottom - Up: C)</h6>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-bordered" id="EPEStableC" style="width:100%;" cellspacing="0">
+                    <thead>
+                        <tr>
+                            <th>
+                                ลำดับที่
+                            </th>
+                            <th>
+                                ตัวชี้วัด
+                            </th>
+                            <th>
+                                สำหรับ
+                            </th>
+                            <th>
+                                หน่วยกำกับ
+                            </th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model.pointC)
+                        {
+                            <tr>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Point)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Name)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.OwnerOffice.Name)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.AuditOffice.Name)
+                                </td>
+                                <td>
+                                    @if (User.IsInRole("Admin") || (User.IsInRole("Manager") && (item.AuditOffice.Code == user.OfficeId || item.OwnerOffice.Code == user.OfficeId)) || (User.IsInRole("Manager") && user.OfficeId.Substring(2, 6) == "000000" && item.OwnerOffice.Code.StartsWith(user.OfficeId.Substring(0, 2))) || (User.IsInRole("User") && item.OwnerOffice.Code == user.OfficeId))
+                                    {
+                                        <a asp-action="Edit" asp-route-poeid="@item.Id" asp-route-yearPoint="@Model.yearPoint" asp-route-selectoffice="@ViewBag.selectoffice"><i class="fas fa-edit"></i></a>
+                                    }
+                                    <a asp-action="Details" asp-route-poeid="@item.Id" asp-route-yearPoint="@Model.yearPoint" asp-route-selectoffice="@ViewBag.selectoffice"><i class="fas fa-search-plus"></i></a>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- Plan D -->
+    <div class="card shadow mb-4">
+        <div class="card-header py-3">
+            <h6 class="m-0 font-weight-bold text-primary">แผนงานร่วม (Joint KPI: D)</h6>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-bordered" id="EPEStableD" style="width:100%;" cellspacing="0">
+                    <thead>
+                        <tr>
+                            <th>
+                                ลำดับที่
+                            </th>
+                            <th>
+                                ตัวชี้วัด
+                            </th>
+                            <th>
+                                สำหรับ
+                            </th>
+                            <th>
+                                หน่วยกำกับ
+                            </th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model.pointD)
+                        {
+                            <tr>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Point)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Name)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.OwnerOffice.Name)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.AuditOffice.Name)
+                                </td>
+                                <td>
+                                    @if (User.IsInRole("Admin") || (User.IsInRole("Manager") && (item.AuditOffice.Code == user.OfficeId || item.OwnerOffice.Code == user.OfficeId)) || (User.IsInRole("Manager") && user.OfficeId.Substring(2, 6) == "000000" && item.OwnerOffice.Code.StartsWith(user.OfficeId.Substring(0, 2))) || (User.IsInRole("User") && item.OwnerOffice.Code == user.OfficeId))
+                                    {
+                                        <a asp-action="Edit" asp-route-poeid="@item.Id" asp-route-yearPoint="@Model.yearPoint" asp-route-selectoffice="@ViewBag.selectoffice"><i class="fas fa-edit"></i></a>
+                                    }
+                                    <a asp-action="Details" asp-route-poeid="@item.Id" asp-route-yearPoint="@Model.yearPoint" asp-route-selectoffice="@ViewBag.selectoffice"><i class="fas fa-search-plus"></i></a>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+@section Scripts {
+    <partial name="_dataTableScript" />
+}

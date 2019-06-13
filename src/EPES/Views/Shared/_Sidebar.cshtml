@@ -23,26 +23,37 @@
             <span>ภาพรวม</span>
         </a>
     </li>
+
     <!-- Divider -->
     <hr class="sidebar-divider">
-    <!-- Heading -->
-    <div class="sidebar-heading">
-        บันทึกผลการปฏิบัติราชการ
-    </div>
-    <!-- Nav Item - Collapse Menu -->
-    <li class="nav-item">
-        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseEdit" aria-expanded="true" aria-controls="collapseEdit">
-            <i class="fas fa-fw fa-edit"></i>
-            <span>บันทึก</span>
-        </a>
-        <div id="collapseEdit" class="collapse" aria-labelledby="headingEdit" data-parent="#accordionSidebar">
-            <div class="bg-white py-2 collapse-inner rounded">
-                <h6 class="collapse-header">รายการบันทึก:</h6>
-                <a class="collapse-item" asp-area="" asp-controller="Results" asp-action="Index">บันทึกผล</a>
-                <a class="collapse-item" asp-area="" asp-controller="Audits" asp-action="Index">ตรวจสอบ/ยืนยัน</a>
-            </div>
+    @if (User.IsInRole("Admin") || User.IsInRole("Manager") || User.IsInRole("User"))
+    {
+        <!-- Heading -->
+        <div class="sidebar-heading">
+            บันทึกผลการปฏิบัติราชการ
         </div>
-    </li>
+        <!-- Nav Item - Collapse Menu -->
+        <li class="nav-item">
+            <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseEdit" aria-expanded="true" aria-controls="collapseEdit">
+                <i class="fas fa-fw fa-edit"></i>
+                <span>บันทึก</span>
+            </a>
+            <div id="collapseEdit" class="collapse" aria-labelledby="headingEdit" data-parent="#accordionSidebar">
+                <div class="bg-white py-2 collapse-inner rounded">
+                    <h6 class="collapse-header">รายเดือน:</h6>
+                    <a class="collapse-item" asp-area="" asp-controller="Results" asp-action="IndexMonth">บันทึกผล</a>
+                    <a class="collapse-item" asp-area="" asp-controller="Audits" asp-action="IndexMonth">ตรวจสอบ/ยืนยัน</a>
+                    @if (User.IsInRole("Admin"))
+                    {
+                        <div class="collapse-divider"></div>
+                        <h6 class="collapse-header">รายปี: </h6>
+                        <a class="collapse-item" asp-area="" asp-controller="Results" asp-action="Index">บันทึกผล รายปี</a>
+                        <a class="collapse-item" asp-area="" asp-controller="Audits" asp-action="Index">ตรวจสอบ/ยืนยัน รายปี</a>
+                    }
+                </div>
+            </div>
+        </li>
+    }
     <!-- Nav Item - Collapse Menu -->
     <li class="nav-item">
         <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseReport" aria-expanded="true" aria-controls="collapseReport">
@@ -58,43 +69,58 @@
             </div>
         </div>
     </li>
-    <!-- Nav Item - Collapse Menu -->
-    <li class="nav-item">
-        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseBasic" aria-expanded="true" aria-controls="collapseBasic">
-            <i class="fas fa-fw fa-cog"></i>
-            <span>ข้อมูลพื้นฐาน</span>
-        </a>
-        <div id="collapseBasic" class="collapse" aria-labelledby="headingBasic" data-parent="#accordionSidebar">
-            <div class="bg-white py-2 collapse-inner rounded">
-                <h6 class="collapse-header">จัดการข้อมูลพื้นฐาน:</h6>
-                <a class="collapse-item" asp-area="" asp-controller="PointOfEvaluations" asp-action="Index">แผนปฏิบัติราชการ</a>
-                <a class="collapse-item" asp-area="" asp-controller="DataForEvaluations" asp-action="Index">เป้าหมาย/ประมาณการ</a>
-                <a class="collapse-item" asp-area="" asp-controller="PointOfEvaluations" asp-action="Copy">คัดลอกแผน สภ.1 -> สภ./สท.</a>
+    @if (User.IsInRole("Admin") || User.IsInRole("Manager") || User.IsInRole("User"))
+    {
+        <!-- Nav Item - Collapse Menu -->
+        <li class="nav-item">
+            <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseBasic" aria-expanded="true" aria-controls="collapseBasic">
+                <i class="fas fa-fw fa-cog"></i>
+                <span>ข้อมูลพื้นฐาน</span>
+            </a>
+            <div id="collapseBasic" class="collapse" aria-labelledby="headingBasic" data-parent="#accordionSidebar">
+                <div class="bg-white py-2 collapse-inner rounded">
+                    <h6 class="collapse-header">จัดการข้อมูลพื้นฐาน:</h6>
+                    <a class="collapse-item" asp-area="" asp-controller="PointOfEvaluations" asp-action="Index">แผนปฏิบัติราชการ</a>
+                    <a class="collapse-item" asp-area="" asp-controller="DataForEvaluations" asp-action="Index">เป้าหมาย/ประมาณการ</a>
+                    @if (User.IsInRole("Admin"))
+                    {
+                        <div class="collapse-divider"></div>
+                        <h6 class="collapse-header">พิเศษ: </h6>
+                        <a class="collapse-item" asp-area="" asp-controller="PointOfEvaluations" asp-action="Copy">คัดลอก สภ.1 -> สภ./สท.</a>
+                        <a class="collapse-item" asp-area="" asp-controller="PointOfEvaluations" asp-action="">คัดลอก ผษ. -> กอง/สำนัก/ศูนย์</a>
+                        <div class="collapse-divider"></div>
+                        <h6 class="collapse-header">เชื่อมโยงข้อมูลอัตโนมัติ: </h6>
+                        <a class="collapse-item" asp-area="" asp-controller="PointOfEvaluations" asp-action="#">ตัวชี้วัดที่ 1 (สภ./สท.)</a>
+                    }
+                </div>
             </div>
+        </li>
+    }
+    @if (User.IsInRole("Admin"))
+    {
+        <!-- Divider -->
+        <hr class="sidebar-divider">
+        <!-- Heading -->
+        <div class="sidebar-heading">
+            จัดการผู้ใช้งาน
         </div>
-    </li>
-    <!-- Divider -->
-    <hr class="sidebar-divider">
-    <!-- Heading -->
-    <div class="sidebar-heading">
-        จัดการผู้ใช้งาน
-    </div>
-    <!-- Nav Item - Collapse Menu -->
-    <li class="nav-item">
-        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseUSer" aria-expanded="true" aria-controls="collapseUSer">
-            <i class="fas fa-fw fa-user"></i>
-            <span>ผู้ใช้และสิทธิ์</span>
-        </a>
-        <div id="collapseUSer" class="collapse" aria-labelledby="headingUSer" data-parent="#accordionSidebar">
-            <div class="bg-white py-2 collapse-inner rounded">
-                <h6 class="collapse-header">ผู้ใช้:</h6>
-                <a class="collapse-item" href="#">จัดการผู้ใช้</a>
-                <div class="collapse-divider"></div>
-                <h6 class="collapse-header">สิทธิ์:</h6>
-                <a class="collapse-item" href="#">จัดการสิทธิ์</a>
+        <!-- Nav Item - Collapse Menu -->
+        <li class="nav-item">
+            <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseUSer" aria-expanded="true" aria-controls="collapseUSer">
+                <i class="fas fa-fw fa-user"></i>
+                <span>ผู้ใช้และสิทธิ์</span>
+            </a>
+            <div id="collapseUSer" class="collapse" aria-labelledby="headingUSer" data-parent="#accordionSidebar">
+                <div class="bg-white py-2 collapse-inner rounded">
+                    <h6 class="collapse-header">ผู้ใช้:</h6>
+                    <a class="collapse-item" href="#">จัดการผู้ใช้</a>
+                    <div class="collapse-divider"></div>
+                    <h6 class="collapse-header">สิทธิ์:</h6>
+                    <a class="collapse-item" href="#">จัดการสิทธิ์</a>
+                </div>
             </div>
-        </div>
-    </li>
+        </li>
+    }
     <!-- Divider -->
     <hr class="sidebar-divider d-none d-md-block">
     <!-- Sidebar Toggler (Sidebar) -->
