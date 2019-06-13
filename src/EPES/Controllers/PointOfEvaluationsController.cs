@@ -1313,10 +1313,15 @@ namespace EPES.Controllers
                 PointOfEvaluation dataToCopy;
                 for (int i = 1; i <= 22; i++)
                 {
-                    if (i == 19 || i == 20)
+                    if (i == 19 || i == 20 || i == 21)
                     {
                         continue;
                     }
+                    if (i == 22)
+                    {
+                        target = await _context.Offices.Where(d => d.Code != "00000000" && d.Code != "01000000" && d.Code.Substring(5, 3) == "000").ToListAsync();
+                    }
+
                     var data = await _context.PointOfEvaluations.Include(p => p.OwnerOffice).Where(p => p.Point == i && p.OwnerOffice.Code == "01000000").FirstOrDefaultAsync();
 
                     foreach (var item in target)
