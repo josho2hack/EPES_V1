@@ -48,10 +48,11 @@ namespace EPES.Models
         [Display(Name = "ผู้แก้ไขล่าสุด")]
         public ApplicationUser UpdateUser { get; set; }
 
-        //public DataForEvaluation()
-        //{
-        //    Approve = Approve.รอพิจารณา;
-        //}
+        [Display(Name = "เป็นไปตามแผน")]
+        public bool Completed { get; set; }
+
+        [Display(Name = "ไฟล์แนบ")]
+        public string AttachFile { get; set; }
     }
 
     public enum Approve

@@ -43,8 +43,17 @@ namespace EPES.Models
         [Display(Name = "รายละเอียดเกณฑ์การให้คะแนน 1 คะแนน รอบที่ 1")]
         public string DetailRate1 { get; set; }
 
+        [Display(Name = "เดือนเริ่ม 1 คะแนน รอบที่ 1")]
+        public DateTime? Rate1MonthStart { get; set; }
+        [Display(Name = "เดือนสิ้นสุด 1 คะแนน รอบที่ 1")]
+        public DateTime? Rate1MonthStop { get; set; }
+
         [Display(Name = "รายละเอียดเกณฑ์การให้คะแนน 1 คะแนน รอบที่ 2")]
         public string Detail2Rate1 { get; set; }
+        [Display(Name = "เดือนเริ่ม 1 คะแนน รอบที่ 2")]
+        public DateTime? Rate1MonthStart2 { get; set; }
+        [Display(Name = "เดือนสิ้นสุด 1 คะแนน รอบที่ 2")]
+        public DateTime? Rate1MonthStop2 { get; set; }
 
         [Display(Name = "เกณฑ์การให้คะแนน 2 คะแนน")]
         [Column(TypeName = "decimal(18, 4)")]
@@ -52,8 +61,17 @@ namespace EPES.Models
 
         [Display(Name = "รายละเอียดเกณฑ์การให้คะแนน 2 คะแนน รอบที่ 1")]
         public string DetailRate2 { get; set; }
+        [Display(Name = "เดือนเริ่ม 2 คะแนน รอบที่ 1")]
+        public DateTime? Rate2MonthStart { get; set; }
+        [Display(Name = "เดือนสิ้นสุด 2 คะแนน รอบที่ 1")]
+        public DateTime? Rate2MonthStop { get; set; }
+
         [Display(Name = "รายละเอียดเกณฑ์การให้คะแนน 2 คะแนน รอบที่ 2")]
         public string Detail2Rate2 { get; set; }
+        [Display(Name = "เดือนเริ่ม 2 คะแนน รอบที่ 2")]
+        public DateTime? Rate2MonthStart2 { get; set; }
+        [Display(Name = "เดือนสิ้นสุด 2 คะแนน รอบที่ 2")]
+        public DateTime? Rate2MonthStop2 { get; set; }
 
         [Display(Name = "เกณฑ์การให้คะแนน 3 คะแนน")]
         [Column(TypeName = "decimal(18, 4)")]
@@ -61,8 +79,16 @@ namespace EPES.Models
 
         [Display(Name = "รายละเอียดเกณฑ์การให้คะแนน 3 คะแนน รอบที่ 1")]
         public string DetailRate3 { get; set; }
+        [Display(Name = "เดือนเริ่ม 3 คะแนน รอบที่ 1")]
+        public DateTime? Rate3MonthStart { get; set; }
+        [Display(Name = "เดือนสิ้นสุด 3 คะแนน รอบที่ 1")]
+        public DateTime? Rate3MonthStop { get; set; }
         [Display(Name = "รายละเอียดเกณฑ์การให้คะแนน 3 คะแนน รอบที่ 2")]
         public string Detail2Rate3 { get; set; }
+        [Display(Name = "เดือนเริ่ม 3 คะแนน รอบที่ 2")]
+        public DateTime? Rate3MonthStart2 { get; set; }
+        [Display(Name = "เดือนสิ้นสุด 3 คะแนน รอบที่ 2")]
+        public DateTime? Rate3MonthStop2 { get; set; }
 
         [Display(Name = "เกณฑ์การให้คะแนน 4 คะแนน")]
         [Column(TypeName = "decimal(18, 4)")]
@@ -70,8 +96,16 @@ namespace EPES.Models
 
         [Display(Name = "รายละเอียดเกณฑ์การให้คะแนน 4 คะแนน รอบที่ 1")]
         public string DetailRate4 { get; set; }
+        [Display(Name = "เดือนเริ่ม 4 คะแนน รอบที่ 1")]
+        public DateTime? Rate4MonthStart { get; set; }
+        [Display(Name = "เดือนสิ้นสุด 4 คะแนน รอบที่ 1")]
+        public DateTime? Rate4MonthStop { get; set; }
         [Display(Name = "รายละเอียดเกณฑ์การให้คะแนน 4 คะแนน รอบที่ 2")]
         public string Detail2Rate4 { get; set; }
+        [Display(Name = "เดือนเริ่ม 4 คะแนน รอบที่ 2")]
+        public DateTime? Rate4MonthStart2 { get; set; }
+        [Display(Name = "เดือนสิ้นสุด 4 คะแนน รอบที่ 2")]
+        public DateTime? Rate4MonthStop2 { get; set; }
 
         [Display(Name = "เกณฑ์การให้คะแนน 5 คะแนน")]
         [Column(TypeName = "decimal(18, 4)")]
@@ -79,8 +113,16 @@ namespace EPES.Models
 
         [Display(Name = "รายละเอียดเกณฑ์การให้คะแนน 5 คะแนน รอบที่ 1")]
         public string DetailRate5 { get; set; }
+        [Display(Name = "เดือนเริ่ม 5 คะแนน รอบที่ 1")]
+        public DateTime? Rate5MonthStart { get; set; }
+        [Display(Name = "เดือนสิ้นสุด 5 คะแนน รอบที่ 1")]
+        public DateTime? Rate5MonthStop { get; set; }
         [Display(Name = "รายละเอียดเกณฑ์การให้คะแนน 5 คะแนน รอบที่ 2")]
         public string Detail2Rate5 { get; set; }
+        [Display(Name = "เดือนเริ่ม 5 คะแนน รอบที่ 2")]
+        public DateTime? Rate5MonthStart2 { get; set; }
+        [Display(Name = "เดือนสิ้นสุด 5 คะแนน รอบที่ 2")]
+        public DateTime? Rate5MonthStop2 { get; set; }
 
         [Display(Name = "ตัวชี้วัดสำหรับ")]
         public int? OwnerOfficeId { get; set; }

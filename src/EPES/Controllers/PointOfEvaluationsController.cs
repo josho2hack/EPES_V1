@@ -437,7 +437,7 @@ namespace EPES.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("DetailPlan,Point,Plan,Name,Unit,Weight,Rate1,DetailRate1,Rate2,DetailRate2,Rate3,DetailRate3,Rate4,DetailRate4,Rate5,DetailRate5,Detail2Rate1,Detail2Rate2,Detail2Rate3,Detail2Rate4,Detail2Rate5,OwnerOfficeId,AuditOfficeId")] PointOfEvaluation dataView, string selectoffice, int yearPoint, decimal? expect1, decimal? expect2, decimal? expect3, decimal? expect4, decimal? expect5, decimal? expect6, decimal? expect7, decimal? expect8, decimal? expect9, decimal? expect10, decimal? expect11, decimal? expect12)
+        public async Task<IActionResult> Create([Bind("DetailPlan,Point,Plan,Name,Unit,Weight,Rate1,DetailRate1,Rate2,DetailRate2,Rate3,DetailRate3,Rate4,DetailRate4,Rate5,DetailRate5,Detail2Rate1,Detail2Rate2,Detail2Rate3,Detail2Rate4,Detail2Rate5,OwnerOfficeId,AuditOfficeId,Rate1MonthStart,Rate1MonthStop,Rate1MonthStart2,Rate1MonthStop2,Rate2MonthStart,Rate2MonthStop,Rate2MonthStart2,Rate2MonthStop2,Rate3MonthStart,Rate3MonthStop,Rate3MonthStart2,Rate3MonthStop2,Rate4MonthStart,Rate4MonthStop,Rate4MonthStart2,Rate4MonthStop2,Rate5MonthStart,Rate5MonthStop,Rate5MonthStart2,Rate5MonthStop2")] PointOfEvaluation dataView, string selectoffice, int yearPoint, decimal? expect1, decimal? expect2, decimal? expect3, decimal? expect4, decimal? expect5, decimal? expect6, decimal? expect7, decimal? expect8, decimal? expect9, decimal? expect10, decimal? expect11, decimal? expect12)
         {
             var user = await _userManager.GetUserAsync(User);
 
@@ -945,7 +945,7 @@ namespace EPES.Controllers
             if (await TryUpdateModelAsync<PointOfEvaluation>(
                 pointOfEvaluationToUpdate, "",
                 p => p.Year, p => p.DetailPlan, p => p.Point, p => p.Plan, p => p.Name, p => p.Unit, p => p.Weight,
-                p => p.Rate1, p => p.DetailRate1, p => p.Rate2, p => p.DetailRate2, p => p.Rate3, p => p.DetailRate3, p => p.Rate4, p => p.DetailRate4, p => p.Rate5, p => p.DetailRate5, p => p.OwnerOfficeId, p => p.AuditOfficeId, p => p.UpdateUserId, p => p.Detail2Rate1, p => p.Detail2Rate2, p => p.Detail2Rate3, p => p.Detail2Rate4, p => p.Detail2Rate5))
+                p => p.Rate1, p => p.DetailRate1, p => p.Rate2, p => p.DetailRate2, p => p.Rate3, p => p.DetailRate3, p => p.Rate4, p => p.DetailRate4, p => p.Rate5, p => p.DetailRate5, p => p.OwnerOfficeId, p => p.AuditOfficeId, p => p.UpdateUserId, p => p.Detail2Rate1, p => p.Detail2Rate2, p => p.Detail2Rate3, p => p.Detail2Rate4, p => p.Detail2Rate5,p => p.Rate1MonthStart,p => p.Rate1MonthStop,p => p.Rate1MonthStart2,p => p.Rate1MonthStop2, p => p.Rate2MonthStart, p => p.Rate2MonthStop, p => p.Rate2MonthStart2, p => p.Rate2MonthStop2, p => p.Rate3MonthStart, p => p.Rate3MonthStop, p => p.Rate3MonthStart2, p => p.Rate3MonthStop2, p => p.Rate4MonthStart, p => p.Rate4MonthStop, p => p.Rate4MonthStart2, p => p.Rate4MonthStop2, p => p.Rate5MonthStart, p => p.Rate5MonthStop, p => p.Rate5MonthStart2, p => p.Rate5MonthStop2))
             {
                 try
                 {
@@ -1356,6 +1356,26 @@ namespace EPES.Controllers
                             dataToCopy.Detail2Rate3 = data.Detail2Rate3;
                             dataToCopy.Detail2Rate4 = data.Detail2Rate4;
                             dataToCopy.Detail2Rate5 = data.Detail2Rate5;
+                            dataToCopy.Rate1MonthStart = data.Rate1MonthStart;
+                            dataToCopy.Rate1MonthStop = data.Rate1MonthStop;
+                            dataToCopy.Rate1MonthStart2 = data.Rate1MonthStart2;
+                            dataToCopy.Rate1MonthStop2 = data.Rate1MonthStop2;
+                            dataToCopy.Rate2MonthStart = data.Rate2MonthStart;
+                            dataToCopy.Rate2MonthStop = data.Rate2MonthStop;
+                            dataToCopy.Rate2MonthStart2 = data.Rate2MonthStart2;
+                            dataToCopy.Rate2MonthStop2 = data.Rate2MonthStop2;
+                            dataToCopy.Rate3MonthStart = data.Rate3MonthStart;
+                            dataToCopy.Rate3MonthStop = data.Rate3MonthStop;
+                            dataToCopy.Rate3MonthStart2 = data.Rate3MonthStart2;
+                            dataToCopy.Rate3MonthStop2 = data.Rate3MonthStop2;
+                            dataToCopy.Rate4MonthStart = data.Rate4MonthStart;
+                            dataToCopy.Rate4MonthStop = data.Rate4MonthStop;
+                            dataToCopy.Rate4MonthStart2 = data.Rate4MonthStart2;
+                            dataToCopy.Rate4MonthStop2 = data.Rate4MonthStop2;
+                            dataToCopy.Rate5MonthStart = data.Rate5MonthStart;
+                            dataToCopy.Rate5MonthStop = data.Rate5MonthStop;
+                            dataToCopy.Rate5MonthStart2 = data.Rate5MonthStart2;
+                            dataToCopy.Rate5MonthStop2 = data.Rate5MonthStop2;
                             dataToCopy.UpdateUserId = user.Id;
 
                             _context.Add(dataToCopy);
