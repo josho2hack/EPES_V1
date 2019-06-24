@@ -199,8 +199,8 @@ namespace EPES.Controllers
             viewModel.result8 = await _context.DataForEvaluations.Where(d => d.PointOfEvaluationId == poeid && d.Month == 8).Select(d => d.Result).FirstOrDefaultAsync();
             viewModel.result9 = await _context.DataForEvaluations.Where(d => d.PointOfEvaluationId == poeid && d.Month == 9).Select(d => d.Result).FirstOrDefaultAsync();
             viewModel.result10 = await _context.DataForEvaluations.Where(d => d.PointOfEvaluationId == poeid && d.Month == 10).Select(d => d.Result).FirstOrDefaultAsync();
-            viewModel.result11 = await _context.DataForEvaluations.Where(d => d.PointOfEvaluationId == poeid  && d.Month == 11).Select(d => d.Result).FirstOrDefaultAsync();
-            viewModel.result12 = await _context.DataForEvaluations.Where(d => d.PointOfEvaluationId == poeid  && d.Month == 12).Select(d => d.Result).FirstOrDefaultAsync();
+            viewModel.result11 = await _context.DataForEvaluations.Where(d => d.PointOfEvaluationId == poeid && d.Month == 11).Select(d => d.Result).FirstOrDefaultAsync();
+            viewModel.result12 = await _context.DataForEvaluations.Where(d => d.PointOfEvaluationId == poeid && d.Month == 12).Select(d => d.Result).FirstOrDefaultAsync();
 
             ViewBag.selectoffice = selectoffice;
             viewModel.yearPoint = yearPoint;
@@ -436,7 +436,7 @@ namespace EPES.Controllers
                 list.Add(new { Value = i, Month = new DateTime(DateTime.Now.Year, i, 1).ToString("MMMM") });
             }
 
-            ViewBag.Month = new SelectList(list, "Value", "Month");
+            ViewBag.Month = new SelectList(list, "Value", "Month",DateTime.Now.Month);
             ViewBag.selectoffice = selectoffice;
             viewModel.yearPoint = yearPoint;
             return View(viewModel);
@@ -517,7 +517,7 @@ namespace EPES.Controllers
                 list.Add(new { Value = i, Month = new DateTime(DateTime.Now.Year, i, 1).ToString("MMMM") });
             }
 
-            ViewBag.Month = new SelectList(list, "Value", "Month");
+            ViewBag.Month = new SelectList(list, "Value", "Month", DateTime.Now.Month);
             ViewBag.selectoffice = selectoffice;
             viewModel.yearPoint = yearPoint;
             return View(viewModel);
