@@ -75,7 +75,7 @@
                                         ผลการปฏิบัติราชการ
                                     </th>
                                     <th>
-                                        ความสำเร็จ
+                                        วันที่แล้วเสร็จ
                                     </th>
                                     <th>
                                         แนบไฟล์
@@ -85,43 +85,47 @@
                             <tbody>
                                 @foreach (var item in Model.pointA)
                                 {
-                                    <tr>
-                                        <td>
-                                            @Html.DisplayFor(modelItem => item.Point)
-                                        </td>
-                                        <td>
-                                            @Html.DisplayFor(modelItem => item.Name)
-                                        </td>
-                                        <td>
-                                            @Html.DisplayFor(modelItem => item.Weight)
-                                        </td>
-                                        <td>
-                                            @Html.DisplayFor(modelItem => item.Weight)
-                                        </td>
-                                        @if (Model.Point?.Unit == UnitOfPoint.ร้อยละ)
+                                <tr>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.Point)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.Name)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.Weight)
+                                    </td>
+                                    <td>
+                                        @foreach (var dataItem in item.DataForEvaluations)
                                         {
-                                            <td>
-                                                <select name="@{@item.Plan@item.Id}Result" class="form-control col-md-7" asp-items="ViewBag.SelectLevel"></select>
-                                            </td>
-
+                                            @Html.DisplayFor(modelItem => dataItem.Expect)
                                         }
-                                        else
-                                        {
-                                            <td>
-                                                <input name="@{@item.Plan@item.Id}Result" class="form-control" />
-                                            </td>
+                                    </td>
 
-                                            <td>
-                                                <select name="@{@item.Plan@item.Id}Completed">
-                                                    <option value="1">เป็นไปตามแผน</option>
-                                                    <option value="0">ไม่เป็นไปตามแผน</option>
-                                                </select>
-                                            </td>
-                                            <td>
-                                                <input type="file" name="@{@item.Plan@item.Id}AttachFile" accept="application/pdf" />
-                                            </td>
-                                        }
-                                    </tr>
+                                    @if (Model.Point?.Unit == UnitOfPoint.ร้อยละ)
+                                    {
+                                        <td>
+                                            <select name="@{@item.Plan@item.Id}Result" class="form-control col-md-7" asp-items="ViewBag.SelectLevel"></select>
+                                        </td>
+
+                                    }
+                                    else
+                                    {
+                                        <td>
+                                            <input name="@{@item.Plan@item.Id}Result" class="form-control" />
+                                        </td>
+
+                                        <td>
+                                            <select name="@{@item.Plan@item.Id}Completed">
+                                                <option value="1">เป็นไปตามแผน</option>
+                                                <option value="0">ไม่เป็นไปตามแผน</option>
+                                            </select>
+                                        </td>
+                                        <td>
+                                            <input type="file" name="@{@item.Plan@item.Id}AttachFile" accept="application/pdf" />
+                                        </td>
+                                    }
+                                </tr>
                                 }
                             </tbody>
                         </table>

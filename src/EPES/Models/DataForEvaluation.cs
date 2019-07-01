@@ -48,8 +48,8 @@ namespace EPES.Models
         [Display(Name = "ผู้แก้ไขล่าสุด")]
         public ApplicationUser UpdateUser { get; set; }
 
-        [Display(Name = "เป็นไปตามแผน")]
-        public bool Completed { get; set; }
+        [Display(Name = "วันที่แล้วเสร็จ")]
+        public bool CompletedDate { get; set; }
 
         [Display(Name = "ไฟล์แนบ")]
         public string AttachFile { get; set; }
