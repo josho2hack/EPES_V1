@@ -1,5 +1,5 @@
 ﻿@using Microsoft.AspNetCore.Identity
-@model EPES.ViewModels.DataForEvaluationViewModel
+@model EPES.ViewModels.ResultViewModel
 @inject UserManager<ApplicationUser> UserManager
 
 @{
@@ -83,49 +83,48 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                @foreach (var item in Model.pointA)
+                                @for (int i = 0; i < Model.pointA.Count(); i++)
                                 {
-                                <tr>
-                                    <td>
-                                        @Html.DisplayFor(modelItem => item.Point)
-                                    </td>
-                                    <td>
-                                        @Html.DisplayFor(modelItem => item.Name)
-                                    </td>
-                                    <td>
-                                        @Html.DisplayFor(modelItem => item.Weight)
-                                    </td>
-                                    <td>
-                                        @foreach (var dataItem in item.DataForEvaluations)
+                                    <tr>
+                                        <td>
+                                            @Html.TextBox("pointA[" + @i + "].Point", Model.pointA[i].Point)
+                                        </td>
+
+                                        <td>
+                                            @Model.pointA[i].Name
+                                        </td>
+                                        <td>
+                                            @Model.pointA[i].Weight
+                                        </td>
+                                        <td>
+                                            @Model.pointA[i].DataForEvaluations?.Where(d => d.Month == Model.month).SingleOrDefault()?.Expect
+                                        </td>
+
+                                        @if (Model.Point?.Unit == UnitOfPoint.ร้อยละ)
                                         {
-                                            @Html.DisplayFor(modelItem => dataItem.Expect)
+                                            <td>
+                                                @Html.TextBox("pointA[" + @i + "].DataForEvaluations[0].Result", Model.pointA[i].DataForEvaluations?.Where(d => d.Month == Model.month).SingleOrDefault()?.Result)
+                                            </td>
+                                            <td></td>
+                                            <td></td>
                                         }
-                                    </td>
+                                        else
+                                        {
+                                            <td>
+                                                @Html.TextBox("pointA[" + @i + "].DataForEvaluations[0].Result", Model.pointA[i].DataForEvaluations?.Where(d => d.Month == Model.month).SingleOrDefault()?.Result)
+                                            </td>
 
-                                    @if (Model.Point?.Unit == UnitOfPoint.ร้อยละ)
-                                    {
-                                        <td>
-                                            <select name="@{@item.Plan@item.Id}Result" class="form-control col-md-7" asp-items="ViewBag.SelectLevel"></select>
-                                        </td>
-
-                                    }
-                                    else
-                                    {
-                                        <td>
-                                            <input name="@{@item.Plan@item.Id}Result" class="form-control" />
-                                        </td>
-
-                                        <td>
-                                            <select name="@{@item.Plan@item.Id}Completed">
-                                                <option value="1">เป็นไปตามแผน</option>
-                                                <option value="0">ไม่เป็นไปตามแผน</option>
-                                            </select>
-                                        </td>
-                                        <td>
-                                            <input type="file" name="@{@item.Plan@item.Id}AttachFile" accept="application/pdf" />
-                                        </td>
-                                    }
-                                </tr>
+                                            <td>
+                                                <select name="Completed">
+                                                    <option value="1">เป็นไปตามแผน</option>
+                                                    <option value="0">ไม่เป็นไปตามแผน</option>
+                                                </select>
+                                            </td>
+                                            <td>
+                                                <input type="file" name="AttachFile" accept="application/pdf" />
+                                            </td>
+                                        }
+                                    </tr>
                                 }
                             </tbody>
                         </table>

@@ -136,7 +136,7 @@ namespace EPES.Models
         public Office AuditOffice { get; set; }
 
         [Display(Name = "ข้อมูลในการประเมิน")]
-        public ICollection<DataForEvaluation> DataForEvaluations { get; set; }
+        public IList<DataForEvaluation> DataForEvaluations { get; set; }
 
         public string UpdateUserId { get; set; }
         [Display(Name = "ผู้แก้ไขล่าสุด")]

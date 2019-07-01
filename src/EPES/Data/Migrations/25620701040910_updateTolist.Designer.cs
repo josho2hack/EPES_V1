@@ -4,14 +4,16 @@ using EPES.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace EPES.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("25620701040910_updateTolist")]
+    partial class updateTolist
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -104,7 +106,7 @@ namespace EPES.Data.Migrations
 
                     b.Property<string>("CommentApprove");
 
-                    b.Property<DateTime?>("CompletedDate");
+                    b.Property<bool>("CompletedDate");
 
                     b.Property<decimal?>("Expect")
                         .HasColumnType("decimal(38, 10)");

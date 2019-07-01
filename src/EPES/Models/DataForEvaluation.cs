@@ -49,7 +49,8 @@ namespace EPES.Models
         public ApplicationUser UpdateUser { get; set; }
 
         [Display(Name = "วันที่แล้วเสร็จ")]
-        public bool CompletedDate { get; set; }
+        [DataType(DataType.Date)]
+        public DateTime? CompletedDate { get; set; }
 
         [Display(Name = "ไฟล์แนบ")]
         public string AttachFile { get; set; }

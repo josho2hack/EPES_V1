@@ -22,17 +22,17 @@ namespace EPES.Models
 
         [Display(Name = "ตัวชี้วัดของหน่วยงาน")]
         [InverseProperty("OwnerOffice")]
-        public ICollection<PointOfEvaluation> OwnerPointOfEvaluations { get; set; }
+        public IList<PointOfEvaluation> OwnerPointOfEvaluations { get; set; }
 
         [Display(Name = "ตัวชี้วัดที่ตรวจสอบ")]
         [InverseProperty("AuditOffice")]
-        public ICollection<PointOfEvaluation> AuditPointOfEvaluations { get; set; }
+        public IList<PointOfEvaluation> AuditPointOfEvaluations { get; set; }
 
         [Display(Name = "ข้อมูลที่ใช้ในการประเมิน")]
-        public ICollection<DataForEvaluation> DataForEvaluations { get; set; }
+        public IList<DataForEvaluation> DataForEvaluations { get; set; }
 
         [Display(Name = "คะแนนของหน่วยงาน")]
-        public ICollection<Score> Scores { get; set; }
+        public IList<Score> Scores { get; set; }
 
         [Display(Name = "เจ้าหน้าที่")]
         public ApplicationUser ApplicationUser { get; set; }

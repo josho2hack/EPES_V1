@@ -8,16 +8,17 @@ namespace EPES.ViewModels
 {
     public class ResultViewModel
     {
-        public IEnumerable<PointOfEvaluation> pointA { get; set; }
-        public IEnumerable<PointOfEvaluation> pointB { get; set; }
-        public IEnumerable<PointOfEvaluation> pointC { get; set; }
-        public IEnumerable<PointOfEvaluation> pointD { get; set; }
+        public IList<PointOfEvaluation> pointA { get; set; }
+        public IList<PointOfEvaluation> pointB { get; set; }
+        public IList<PointOfEvaluation> pointC { get; set; }
+        public IList<PointOfEvaluation> pointD { get; set; }
 
-        public IEnumerable<Office> Offices { get; set; }
+        public IList<Office> Offices { get; set; }
 
         public Office Office { get; set; }
         public PointOfEvaluation Point { get; set; }
 
+        public int month { get; set; }
         public int yearPoint { get; set; }
         public int poeid { get; set; }
     }
