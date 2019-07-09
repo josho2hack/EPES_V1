@@ -471,6 +471,7 @@ namespace EPES.Controllers
 
             ViewBag.Month = new SelectList(list, "Value", "Month",DateTime.Now.Month);
             ViewBag.selectoffice = selectoffice;
+            viewModel.month = m;
             viewModel.yearPoint = yearPoint;
             return View(viewModel);
         }

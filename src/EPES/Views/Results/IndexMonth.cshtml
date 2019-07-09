@@ -87,7 +87,7 @@
                                 {
                                     <tr>
                                         <td>
-                                            @Html.TextBox("pointA[" + @i + "].Point", Model.pointA[i].Point)
+                                            @Model.pointA[i].Point
                                         </td>
 
                                         <td>
@@ -103,7 +103,7 @@
                                         @if (Model.Point?.Unit == UnitOfPoint.ร้อยละ)
                                         {
                                             <td>
-                                                @Html.TextBox("pointA[" + @i + "].DataForEvaluations[0].Result", Model.pointA[i].DataForEvaluations?.Where(d => d.Month == Model.month).SingleOrDefault()?.Result)
+                                                @*@Html.TextBox("pointA[" + @i + "].DataForEvaluations[0].Result", Model.pointA[i].DataForEvaluations?.Where(d => d.Month == Model.month).SingleOrDefault()?.Result)*@
                                             </td>
                                             <td></td>
                                             <td></td>
@@ -111,14 +111,12 @@
                                         else
                                         {
                                             <td>
-                                                @Html.TextBox("pointA[" + @i + "].DataForEvaluations[0].Result", Model.pointA[i].DataForEvaluations?.Where(d => d.Month == Model.month).SingleOrDefault()?.Result)
-                                            </td>
-
-                                            <td>
-                                                <select name="Completed">
-                                                    <option value="1">เป็นไปตามแผน</option>
-                                                    <option value="0">ไม่เป็นไปตามแผน</option>
+                                                <select>
+                                                    <option value="value">text</option>
                                                 </select>
+                                            </td>
+                                            <td>
+                                                <input type="date" name="name" value="" />
                                             </td>
                                             <td>
                                                 <input type="file" name="AttachFile" accept="application/pdf" />
@@ -139,7 +137,8 @@
             </div>
             <div class="card-body">
                 <div class="table-responsive">
-                    <table class="table table-bordered" id="EPEStableB" style="width:100%;" cellspacing="0">
+
+                    <table class="table table-bordered" id="EPEStable" style="width:100%;" cellspacing="0">
                         <thead>
                             <tr>
                                 <th>
@@ -149,37 +148,68 @@
                                     ตัวชี้วัด
                                 </th>
                                 <th>
-                                    สำหรับ
+                                    น้ำหนักร้อยละ
                                 </th>
                                 <th>
-                                    หน่วยกำกับ
+                                    เป้าหมาย/ประมาณการ
                                 </th>
-                                <th></th>
+                                <th>
+                                    ผลการปฏิบัติราชการ
+                                </th>
+                                <th>
+                                    วันที่แล้วเสร็จ
+                                </th>
+                                <th>
+                                    แนบไฟล์
+                                </th>
                             </tr>
                         </thead>
                         <tbody>
-                            @foreach (var item in Model.pointB)
+                            @for (int i = 0; i < Model.pointB.Count(); i++)
                             {
                                 <tr>
                                     <td>
-                                        @Html.DisplayFor(modelItem => item.Point)
+                                        @Model.pointB[i].Point
+                                    </td>
+
+                                    <td>
+                                        @Model.pointB[i].Name
                                     </td>
                                     <td>
-                                        @Html.DisplayFor(modelItem => item.Name)
+                                        @Model.pointB[i].Weight
                                     </td>
-                                    <td>
-                                        @Html.DisplayFor(modelItem => item.OwnerOffice.Name)
-                                    </td>
-                                    <td>
-                                        @Html.DisplayFor(modelItem => item.AuditOffice.Name)
-                                    </td>
-                                    <td>
-                                        @if (User.IsInRole("Admin") || (User.IsInRole("Manager") && (item.AuditOffice.Code == user.OfficeId || item.OwnerOffice.Code == user.OfficeId)) || (User.IsInRole("Manager") && user.OfficeId.Substring(2, 6) == "000000" && item.OwnerOffice.Code.StartsWith(user.OfficeId.Substring(0, 2))) || (User.IsInRole("User") && item.OwnerOffice.Code == user.OfficeId))
+                                    @{decimal? x = 0m;}
+                                    @foreach (var item in @Model.pointB[i].DataForEvaluations)
+                                    {
+                                        if (item.Month == Model.month)
                                         {
-                                            <a asp-action="Edit" asp-route-poeid="@item.Id" asp-route-yearPoint="@Model.yearPoint" asp-route-selectoffice="@ViewBag.selectoffice"><i class="fas fa-edit"></i></a>
+                                            x = item.Expect;
                                         }
-                                        <a asp-action="Details" asp-route-poeid="@item.Id" asp-route-yearPoint="@Model.yearPoint" asp-route-selectoffice="@ViewBag.selectoffice"><i class="fas fa-search-plus"></i></a>
-                                    </td>
+                                    }
+                                    <td>@x</td>
+
+                                    @if (Model.Point?.Unit == UnitOfPoint.ร้อยละ)
+                                    {
+                                        <td>
+                                            @*@Html.TextBox("pointA[" + @i + "].DataForEvaluations[0].Result", Model.pointA[i].DataForEvaluations?.Where(d => d.Month == Model.month).SingleOrDefault()?.Result)*@
+                                        </td>
+                                        <td></td>
+                                        <td></td>
+                                    }
+                                    else
+                                    {
+                                        <td>
+                                            <select>
+                                                <option value="value">text</option>
+                                            </select>
+                                        </td>
+                                        <td>
+                                            <input type="date" name="name" value="" />
+                                        </td>
+                                        <td>
+                                            <input type="file" name="AttachFile" accept="application/pdf" />
+                                        </td>
+                                    }
                                 </tr>
                             }
                         </tbody>
