@@ -111,7 +111,7 @@
                                         else
                                         {
                                             <td>
-                                                <select>
+                                                <select class="form-control col-md-7" asp-items="ViewBag.OfficeCode">
                                                     <option value="value">text</option>
                                                 </select>
                                             </td>
@@ -181,14 +181,14 @@
                                     @{decimal? x = 0m;}
                                     @foreach (var item in @Model.pointB[i].DataForEvaluations)
                                     {
-                                        if (item.Month == Model.month)
+                                        if (item.Month == Model.month && item.OfficeId == Model.pointB[i].OwnerOfficeId)
                                         {
                                             x = item.Expect;
                                         }
                                     }
                                     <td>@x</td>
 
-                                    @if (Model.Point?.Unit == UnitOfPoint.ร้อยละ)
+                                    @if (Model.pointB[i].Unit == UnitOfPoint.ร้อยละ)
                                     {
                                         <td>
                                             @*@Html.TextBox("pointA[" + @i + "].DataForEvaluations[0].Result", Model.pointA[i].DataForEvaluations?.Where(d => d.Month == Model.month).SingleOrDefault()?.Result)*@
