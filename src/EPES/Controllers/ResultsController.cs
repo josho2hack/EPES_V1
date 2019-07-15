@@ -363,7 +363,7 @@ namespace EPES.Controllers
             return _context.DataForEvaluations.Any(e => e.Id == id);
         }
 
-        public async Task<IActionResult> IndexMonth(string selectoffice, int month = 0,int yearPoint = 0)
+        public async Task<IActionResult> IndexMonth(string selectoffice, int month = 0, int yearPoint = 0)
         {
             int m;
             if (month == 0)
@@ -400,7 +400,7 @@ namespace EPES.Controllers
                 }
                 else
                 {
-                    if (selectoffice.Substring(0, 3) == "000") 
+                    if (selectoffice.Substring(0, 3) == "000")
                     {
                         viewModel.pointA = await _context.PointOfEvaluations.Where(p => p.Plan == TypeOfPlan.A && p.OwnerOffice.Code == selectoffice && p.Year == yearForQuery).Include(p => p.OwnerOffice).Include(p => p.AuditOffice).Include(p => p.DataForEvaluations).ToListAsync();
                     }
@@ -469,7 +469,7 @@ namespace EPES.Controllers
                 }
             }
 
-            ViewBag.Month = new SelectList(list, "Value", "Month",DateTime.Now.Month);
+            ViewBag.Month = new SelectList(list, "Value", "Month", m);
             ViewBag.selectoffice = selectoffice;
             viewModel.month = m;
             viewModel.yearPoint = yearPoint;
