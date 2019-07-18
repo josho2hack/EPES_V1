@@ -45,6 +45,7 @@
 
   <ItemGroup>
     <Folder Include="Reports\" />
+    <Folder Include="wwwroot\attach_files\" />
   </ItemGroup>
 
 </Project>

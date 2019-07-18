@@ -28,7 +28,7 @@
             <div class="col-md-4">
                 <div class="row">
                     <label class="col-form-label col-md-3 text-md-right">เดือน: </label>
-                    <select name="selectmonth" class="form-control col-md-7" asp-items="ViewBag.Month" onchange="this.form.submit()"></select>
+                    <select name="month" class="form-control col-md-7" asp-items="ViewBag.Month" onchange="this.form.submit()"></select>
                 </div>
             </div>
             <div class="col-md-4">
@@ -43,7 +43,8 @@
             </div>
         </div>
     </form>
-    <form asp-action="EditMonth" enctype="multipart/form-data">
+    @using (Html.BeginForm("IndexMonth", "Results", FormMethod.Post, new { enctype = "multipart/form-data" }))
+    {
         @if (Model.pointA != null)
         {
             <!-- Plan A -->
@@ -58,25 +59,25 @@
                             <thead>
                                 <tr>
                                     <th>
-                                        ลำดับที่
+                                        ที่
                                     </th>
                                     <th>
                                         ตัวชี้วัด
                                     </th>
                                     <th>
-                                        น้ำหนักร้อยละ
+                                        <i class="fas fa-percent" title="น้ำหนักร้อยละ"></i>
                                     </th>
                                     <th>
-                                        เป้าหมาย/ประมาณการ
+                                        <i class="fas fa-bullseye" title="เป้าหมาย/ประมาณการ"></i> เป้า
                                     </th>
                                     <th>
-                                        ผลการปฏิบัติราชการ
+                                        ผลการปฏิบัติ
                                     </th>
                                     <th>
-                                        วันที่แล้วเสร็จ
+                                        <i class="far fa-calendar-check" title="วันที่แล้วเสร็จ"></i> วันที่แล้วเสร็จ
                                     </th>
                                     <th>
-                                        แนบไฟล์
+                                        <i class="fas fa-paperclip" title="ไฟล์แนบ"></i> แนบ
                                     </th>
                                 </tr>
                             </thead>
@@ -92,16 +93,25 @@
                                             @Model.pointA[i].Name
                                         </td>
                                         <td>
-                                            @Model.pointA[i].Weight
+                                            @Model.pointA[i].Weight.ToString("N2")
                                         </td>
-                                        <td>
-                                            @Model.pointA[i].DataForEvaluations?.Where(d => d.Month == Model.month).SingleOrDefault()?.Expect
-                                        </td>
+                                        @{
+                                            DataForEvaluation de = null;
+                                        }
+                                        @foreach (var item in @Model.pointA[i].DataForEvaluations)
+                                        {
+                                            if (item.Month == Model.month && item.OfficeId == Model.pointA[i].OwnerOfficeId)
+                                            {
+                                                de = item;
+                                            }
+                                        }
+                                        <td>@string.Format("{0:N4}", de?.Expect)</td>
 
-                                        @if (Model.Point?.Unit == UnitOfPoint.ร้อยละ)
+                                        @if (Model.pointA[i].Unit == UnitOfPoint.ร้อยละ)
                                         {
                                             <td>
-                                                @*@Html.TextBox("pointA[" + @i + "].DataForEvaluations[0].Result", Model.pointA[i].DataForEvaluations?.Where(d => d.Month == Model.month).SingleOrDefault()?.Result)*@
+                                                <input type="hidden" name="pointB[@i].DataForEvaluations[0].Id" value=@de?.Id />
+                                                @Html.TextBox("pointA[" + @i + "].DataForEvaluations[0].Result", de?.Result, new { @class = "form-control" })
                                             </td>
                                             <td></td>
                                             <td></td>
@@ -109,15 +119,34 @@
                                         else
                                         {
                                             <td>
-                                                <select class="form-control col-md-7" asp-items="ViewBag.OfficeCode">
-                                                    <option value="value">text</option>
-                                                </select>
+                                                <input type="hidden" name="pointA[@i].DataForEvaluations[0].Id" value=@de?.Id />
+                                                @{
+                                                    List<Object> list = new List<object>();
+                                                    list.Add(new { Value = 1, Detail = "1." + Model.pointA[i].DetailRate1 });
+                                                    list.Add(new { Value = 2, Detail = "2." + Model.pointA[i].DetailRate2 });
+                                                    list.Add(new { Value = 3, Detail = "3." + Model.pointA[i].DetailRate3 });
+                                                    list.Add(new { Value = 4, Detail = "4." + Model.pointA[i].DetailRate4 });
+                                                    list.Add(new { Value = 5, Detail = "5." + Model.pointA[i].DetailRate5 });
+
+                                                    if ((3 < Model.month) && (Model.month < 10) && !String.IsNullOrEmpty(Model.pointA[i].Detail2Rate1))
+                                                    {
+                                                        list.Clear();
+                                                        list.Add(new { Value = 1, Detail = "1." + Model.pointA[i].Detail2Rate1 });
+                                                        list.Add(new { Value = 2, Detail = "2." + Model.pointA[i].Detail2Rate2 });
+                                                        list.Add(new { Value = 3, Detail = "3." + Model.pointA[i].Detail2Rate3 });
+                                                        list.Add(new { Value = 4, Detail = "4." + Model.pointA[i].Detail2Rate4 });
+                                                        list.Add(new { Value = 5, Detail = "5." + Model.pointA[i].Detail2Rate5 });
+                                                    }
+
+                                                    ViewBag.SelectLevel = new SelectList(list, "Value", "Detail", de?.Result);
+                                                }
+                                                <select name="pointA[@i].DataForEvaluations[0].Result" class="form-control" asp-items="ViewBag.SelectLevel"></select>
                                             </td>
                                             <td>
-                                                <input type="date" name="name" value="" />
+                                                <input type="date" name="pointA[@i].DataForEvaluations[0].CompletedDate" class="form-control" value="" />
                                             </td>
                                             <td>
-                                                <input type="file" name="AttachFile" accept="application/pdf" />
+                                                @*<input type="file" name="pointA[@i].DataForEvaluations[0].FileUpload" class="form-control" accept="application/pdf" />*@
                                             </td>
                                         }
                                     </tr>
@@ -128,232 +157,342 @@
                 </div>
             </div>
         }
-        <!-- Plan B -->
-        <div class="card shadow mb-4">
-            <div class="card-header py-3">
-                <h6 class="m-0 font-weight-bold text-primary">แผนงานตามนโยบายที่ถ่ายทอดไปยังหน่วยปฏิบัติ (Top - Down: B)</h6>
-            </div>
-            <div class="card-body">
-                <div class="table-responsive">
-
-                    <table class="table table-bordered" id="EPEStable" style="width:100%;" cellspacing="0">
-                        <thead>
-                            <tr>
-                                <th>
-                                    ที่
-                                </th>
-                                <th>
-                                    ตัวชี้วัด
-                                </th>
-                                <th>
-                                    <i class="fas fa-percent" title="น้ำหนักร้อยละ"></i>
-                                </th>
-                                <th>
-                                    <i class="fas fa-bullseye" title="เป้าหมาย/ประมาณการ"></i> เป้า
-                                </th>
-                                <th>
-                                    ผลการปฏิบัติ
-                                </th>
-                                <th>
-                                    <i class="far fa-calendar-check" title="วันที่แล้วเสร็จ"></i> วันที่แล้วเสร็จ
-                                </th>
-                                <th>
-                                    <i class="fas fa-paperclip" title="ไฟล์แนบ"></i> แนบ
-                                </th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @for (int i = 0; i < Model.pointB.Count(); i++)
-                            {
-                                <tr>
-                                    <td>
-                                        @Model.pointB[i].Point
-                                    </td>
-
-                                    <td>
-                                        @Model.pointB[i].Name
-                                    </td>
-                                    <td>
-                                        @Model.pointB[i].Weight.ToString("N2")
-                                    </td>
-                                    @{
-                                        DataForEvaluation de = null;
-                                    }
-                                    @foreach (var item in @Model.pointB[i].DataForEvaluations)
-                                    {
-                                        if (item.Month == Model.month && item.OfficeId == Model.pointB[i].OwnerOfficeId)
-                                        {
-                                            de = item;
-                                        }
-                                    }
-                                    <td>@string.Format("{0:N4}", de?.Expect)</td>
-
-                                    @if (Model.pointB[i].Unit == UnitOfPoint.ร้อยละ)
-                                    {
-                                        <td>
-                                            <input type="hidden" name="pointB[@i].DataForEvaluations.Id" value=@de?.Id />
-                                            @Html.TextBox("pointB[" + @i + "].DataForEvaluations.Result", de?.Result, new { @class = "form-control" })
-                                        </td>
-                                        <td></td>
-                                        <td></td>
-                                    }
-                                    else
-                                    {
-                                        <td>
-                                            <input type="hidden" name="pointB[@i].DataForEvaluations.ID" value=@de?.Id />
-                                            @{
-                                                List<Object> list = new List<object>();
-                                                list.Add(new { Value = 1, Detail = "1." + Model.pointB[i].DetailRate1 });
-                                                list.Add(new { Value = 2, Detail = "2." + Model.pointB[i].DetailRate2 });
-                                                list.Add(new { Value = 3, Detail = "3." + Model.pointB[i].DetailRate3 });
-                                                list.Add(new { Value = 4, Detail = "4." + Model.pointB[i].DetailRate4 });
-                                                list.Add(new { Value = 5, Detail = "5." + Model.pointB[i].DetailRate5 });
-
-                                                if ((3 < Model.month) && (Model.month < 10) && !String.IsNullOrEmpty(Model.pointB[i].Detail2Rate1))
-                                                {
-                                                    list.Clear();
-                                                    list.Add(new { Value = 1, Detail = "1." + Model.pointB[i].Detail2Rate1 });
-                                                    list.Add(new { Value = 2, Detail = "2." + Model.pointB[i].Detail2Rate2 });
-                                                    list.Add(new { Value = 3, Detail = "3." + Model.pointB[i].Detail2Rate3 });
-                                                    list.Add(new { Value = 4, Detail = "4." + Model.pointB[i].Detail2Rate4 });
-                                                    list.Add(new { Value = 5, Detail = "5." + Model.pointB[i].Detail2Rate5 });
-                                                }
-
-                                                ViewBag.SelectLevel = new SelectList(list, "Value", "Detail", de?.Result);
-                                            }
-                                            <select name="pointB[@i].DataForEvaluations.Result" class="form-control" asp-items="ViewBag.SelectLevel"></select>
-                                        </td>
-                                        <td>
-                                            <input type="date" name="pointB[@i].DataForEvaluations.CompletedDate" class="form-control" value="" />
-                                        </td>
-                                        <td>
-                                            <input type="file" name="pointB[@i].DataForEvaluations.FileUpload" class="form-control" accept="application/pdf" />
-                                        </td>
-                                    }
-                                </tr>
-                            }
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-        </div>
-
-        <!-- Plan C -->
-        <div class="card shadow mb-4">
-            <div class="card-header py-3">
-                <h6 class="m-0 font-weight-bold text-primary">แผนงานตามความต้องการของหน่วยงาน (Bottom - Up: C)</h6>
-            </div>
-            <div class="card-body">
-                <div class="table-responsive">
-                    <table class="table table-bordered" id="EPEStableC" style="width:100%;" cellspacing="0">
-                        <thead>
-                            <tr>
-                                <th>
-                                    ลำดับที่
-                                </th>
-                                <th>
-                                    ตัวชี้วัด
-                                </th>
-                                <th>
-                                    สำหรับ
-                                </th>
-                                <th>
-                                    หน่วยกำกับ
-                                </th>
-                                <th></th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @foreach (var item in Model.pointC)
-                            {
-                                <tr>
-                                    <td>
-                                        @Html.DisplayFor(modelItem => item.Point)
-                                    </td>
-                                    <td>
-                                        @Html.DisplayFor(modelItem => item.Name)
-                                    </td>
-                                    <td>
-                                        @Html.DisplayFor(modelItem => item.OwnerOffice.Name)
-                                    </td>
-                                    <td>
-                                        @Html.DisplayFor(modelItem => item.AuditOffice.Name)
-                                    </td>
-                                    <td>
-                                        @if (User.IsInRole("Admin") || (User.IsInRole("Manager") && (item.AuditOffice.Code == user.OfficeId || item.OwnerOffice.Code == user.OfficeId)) || (User.IsInRole("Manager") && user.OfficeId.Substring(2, 6) == "000000" && item.OwnerOffice.Code.StartsWith(user.OfficeId.Substring(0, 2))) || (User.IsInRole("User") && item.OwnerOffice.Code == user.OfficeId))
-                                        {
-                                            <a asp-action="Edit" asp-route-poeid="@item.Id" asp-route-yearPoint="@Model.yearPoint" asp-route-selectoffice="@ViewBag.selectoffice"><i class="fas fa-edit"></i></a>
-                                        }
-                                        <a asp-action="Details" asp-route-poeid="@item.Id" asp-route-yearPoint="@Model.yearPoint" asp-route-selectoffice="@ViewBag.selectoffice"><i class="fas fa-search-plus"></i></a>
-                                    </td>
-                                </tr>
-                            }
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-        </div>
-
-        <!-- Plan D -->
-        <div class="card shadow mb-4">
-            <div class="card-header py-3">
-                <h6 class="m-0 font-weight-bold text-primary">แผนงานร่วม (Joint KPI: D)</h6>
-            </div>
-            <div class="card-body">
-                <div class="table-responsive">
-                    <table class="table table-bordered" id="EPEStableD" style="width:100%;" cellspacing="0">
-                        <thead>
-                            <tr>
-                                <th>
-                                    ลำดับที่
-                                </th>
-                                <th>
-                                    ตัวชี้วัด
-                                </th>
-                                <th>
-                                    สำหรับ
-                                </th>
-                                <th>
-                                    หน่วยกำกับ
-                                </th>
-                                <th></th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @foreach (var item in Model.pointD)
-                            {
-                                <tr>
-                                    <td>
-                                        @Html.DisplayFor(modelItem => item.Point)
-                                    </td>
-                                    <td>
-                                        @Html.DisplayFor(modelItem => item.Name)
-                                    </td>
-                                    <td>
-                                        @Html.DisplayFor(modelItem => item.OwnerOffice.Name)
-                                    </td>
-                                    <td>
-                                        @Html.DisplayFor(modelItem => item.AuditOffice.Name)
-                                    </td>
-                                    <td>
-                                        @if (User.IsInRole("Admin") || (User.IsInRole("Manager") && (item.AuditOffice.Code == user.OfficeId || item.OwnerOffice.Code == user.OfficeId)) || (User.IsInRole("Manager") && user.OfficeId.Substring(2, 6) == "000000" && item.OwnerOffice.Code.StartsWith(user.OfficeId.Substring(0, 2))) || (User.IsInRole("User") && item.OwnerOffice.Code == user.OfficeId))
-                                        {
-                                            <a asp-action="Edit" asp-route-poeid="@item.Id" asp-route-yearPoint="@Model.yearPoint" asp-route-selectoffice="@ViewBag.selectoffice"><i class="fas fa-edit"></i></a>
-                                        }
-                                        <a asp-action="Details" asp-route-poeid="@item.Id" asp-route-yearPoint="@Model.yearPoint" asp-route-selectoffice="@ViewBag.selectoffice"><i class="fas fa-search-plus"></i></a>
-                                    </td>
-                                </tr>
-                            }
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-        </div>
-        <input type="submit" value="บันทึก" class="btn btn-primary" />
+        <input asp-for="yearPoint" class="form-control" hidden />
+        <input asp-for="month" class="form-control" hidden />
+        <input type="hidden" name="selectoffice" value="@ViewBag.selectoffice" />
+        <input type="submit" name="Update" value="บันทึก" class="btn btn-primary" />
         <a asp-area="" asp-controller="Results" asp-action="IndexMonth" asp-route-yearPoint="@Model.yearPoint" asp-route-selectoffice="@ViewBag.selectoffice" asp-route-month="@Model.month" class="btn btn-secondary">ยกเลิก</a>
-    </form>
+    }
+    <!-- Plan B -->
+    <div class="card shadow mb-4">
+        <div class="card-header py-3">
+            <h6 class="m-0 font-weight-bold text-primary">แผนงานตามนโยบายที่ถ่ายทอดไปยังหน่วยปฏิบัติ (Top - Down: B)</h6>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+
+                <table class="table table-bordered" id="EPEStable" style="width:100%;" cellspacing="0">
+                    <thead>
+                        <tr>
+                            <th>
+                                ที่
+                            </th>
+                            <th>
+                                ตัวชี้วัด
+                            </th>
+                            <th>
+                                <i class="fas fa-percent" title="น้ำหนักร้อยละ"></i>
+                            </th>
+                            <th>
+                                <i class="fas fa-bullseye" title="เป้าหมาย/ประมาณการ"></i> เป้า
+                            </th>
+                            <th>
+                                ผลการปฏิบัติ
+                            </th>
+                            <th>
+                                <i class="far fa-calendar-check" title="วันที่แล้วเสร็จ"></i> วันที่แล้วเสร็จ
+                            </th>
+                            <th>
+                                <i class="fas fa-paperclip" title="ไฟล์แนบ"></i> แนบ
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @for (int i = 0; i < Model.pointB.Count(); i++)
+                        {
+                            <tr>
+                                <td>
+                                    @Model.pointB[i].Point
+                                </td>
+
+                                <td>
+                                    @Model.pointB[i].Name
+                                </td>
+                                <td>
+                                    @Model.pointB[i].Weight.ToString("N2")
+                                </td>
+                                @{
+                                    DataForEvaluation de = null;
+                                }
+                                @foreach (var item in @Model.pointB[i].DataForEvaluations)
+                                {
+                                    if (item.Month == Model.month && item.OfficeId == Model.pointB[i].OwnerOfficeId)
+                                    {
+                                        de = item;
+                                    }
+                                }
+                                <td>@string.Format("{0:N4}", de?.Expect)</td>
+
+                                @if (Model.pointB[i].Unit == UnitOfPoint.ร้อยละ)
+                                {
+                                    <td>
+                                        <input type="hidden" name="pointB[@i].DataForEvaluations[0].Id" value=@de?.Id />
+                                        @Html.TextBox("pointB[" + @i + "].DataForEvaluations[0].Result", de?.Result, new { @class = "form-control" })
+                                    </td>
+                                    <td></td>
+                                    <td></td>
+                                }
+                                else
+                                {
+                                    <td>
+                                        <input type="hidden" name="pointB[@i].DataForEvaluations[0].Id" value=@de?.Id />
+                                        @{
+                                            List<Object> list = new List<object>();
+                                            list.Add(new { Value = 1, Detail = "1." + Model.pointB[i].DetailRate1 });
+                                            list.Add(new { Value = 2, Detail = "2." + Model.pointB[i].DetailRate2 });
+                                            list.Add(new { Value = 3, Detail = "3." + Model.pointB[i].DetailRate3 });
+                                            list.Add(new { Value = 4, Detail = "4." + Model.pointB[i].DetailRate4 });
+                                            list.Add(new { Value = 5, Detail = "5." + Model.pointB[i].DetailRate5 });
+
+                                            if ((3 < Model.month) && (Model.month < 10) && !String.IsNullOrEmpty(Model.pointB[i].Detail2Rate1))
+                                            {
+                                                list.Clear();
+                                                list.Add(new { Value = 1, Detail = "1." + Model.pointB[i].Detail2Rate1 });
+                                                list.Add(new { Value = 2, Detail = "2." + Model.pointB[i].Detail2Rate2 });
+                                                list.Add(new { Value = 3, Detail = "3." + Model.pointB[i].Detail2Rate3 });
+                                                list.Add(new { Value = 4, Detail = "4." + Model.pointB[i].Detail2Rate4 });
+                                                list.Add(new { Value = 5, Detail = "5." + Model.pointB[i].Detail2Rate5 });
+                                            }
+
+                                            ViewBag.SelectLevel = new SelectList(list, "Value", "Detail", de?.Result);
+                                        }
+                                        <select name="pointB[@i].DataForEvaluations[0].Result" class="form-control" asp-items="ViewBag.SelectLevel"></select>
+                                    </td>
+                                    <td>
+                                        <input type="date" name="pointB[@i].DataForEvaluations[0].CompletedDate" class="form-control" value="" />
+                                    </td>
+                                    <td>
+                                        @*<input type="file" name="pointB[@i].DataForEvaluations[0].FileUpload" class="form-control" accept="application/pdf" />*@
+                                    </td>
+                                }
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- Plan C -->
+    <div class="card shadow mb-4">
+        <div class="card-header py-3">
+            <h6 class="m-0 font-weight-bold text-primary">แผนงานตามความต้องการของหน่วยงาน (Bottom - Up: C)</h6>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-bordered" id="EPEStable" style="width:100%;" cellspacing="0">
+                    <thead>
+                        <tr>
+                            <th>
+                                ที่
+                            </th>
+                            <th>
+                                ตัวชี้วัด
+                            </th>
+                            <th>
+                                <i class="fas fa-percent" title="น้ำหนักร้อยละ"></i>
+                            </th>
+                            <th>
+                                <i class="fas fa-bullseye" title="เป้าหมาย/ประมาณการ"></i> เป้า
+                            </th>
+                            <th>
+                                ผลการปฏิบัติ
+                            </th>
+                            <th>
+                                <i class="far fa-calendar-check" title="วันที่แล้วเสร็จ"></i> วันที่แล้วเสร็จ
+                            </th>
+                            <th>
+                                <i class="fas fa-paperclip" title="ไฟล์แนบ"></i> แนบ
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @for (int i = 0; i < Model.pointC.Count(); i++)
+                        {
+                            <tr>
+                                <td>
+                                    @Model.pointC[i].Point
+                                </td>
+
+                                <td>
+                                    @Model.pointC[i].Name
+                                </td>
+                                <td>
+                                    @Model.pointC[i].Weight.ToString("N2")
+                                </td>
+                                @{
+                                    DataForEvaluation de = null;
+                                }
+                                @foreach (var item in @Model.pointC[i].DataForEvaluations)
+                                {
+                                    if (item.Month == Model.month && item.OfficeId == Model.pointC[i].OwnerOfficeId)
+                                    {
+                                        de = item;
+                                    }
+                                }
+                                <td>@string.Format("{0:N4}", de?.Expect)</td>
+
+                                @if (Model.pointC[i].Unit == UnitOfPoint.ร้อยละ)
+                                {
+                                    <td>
+                                        <input type="hidden" name="pointC[@i].DataForEvaluations[0].Id" value=@de?.Id />
+                                        @Html.TextBox("pointC[" + @i + "].DataForEvaluations[0].Result", de?.Result, new { @class = "form-control" })
+                                    </td>
+                                    <td></td>
+                                    <td></td>
+                                }
+                                else
+                                {
+                                    <td>
+                                        <input type="hidden" name="pointC[@i].DataForEvaluations[0].Id" value=@de?.Id />
+                                        @{
+                                            List<Object> list = new List<object>();
+                                            list.Add(new { Value = 1, Detail = "1." + Model.pointC[i].DetailRate1 });
+                                            list.Add(new { Value = 2, Detail = "2." + Model.pointC[i].DetailRate2 });
+                                            list.Add(new { Value = 3, Detail = "3." + Model.pointC[i].DetailRate3 });
+                                            list.Add(new { Value = 4, Detail = "4." + Model.pointC[i].DetailRate4 });
+                                            list.Add(new { Value = 5, Detail = "5." + Model.pointC[i].DetailRate5 });
+
+                                            if ((3 < Model.month) && (Model.month < 10) && !String.IsNullOrEmpty(Model.pointC[i].Detail2Rate1))
+                                            {
+                                                list.Clear();
+                                                list.Add(new { Value = 1, Detail = "1." + Model.pointC[i].Detail2Rate1 });
+                                                list.Add(new { Value = 2, Detail = "2." + Model.pointC[i].Detail2Rate2 });
+                                                list.Add(new { Value = 3, Detail = "3." + Model.pointC[i].Detail2Rate3 });
+                                                list.Add(new { Value = 4, Detail = "4." + Model.pointC[i].Detail2Rate4 });
+                                                list.Add(new { Value = 5, Detail = "5." + Model.pointC[i].Detail2Rate5 });
+                                            }
+
+                                            ViewBag.SelectLevel = new SelectList(list, "Value", "Detail", de?.Result);
+                                        }
+                                        <select name="pointC[@i].DataForEvaluations[0].Result" class="form-control" asp-items="ViewBag.SelectLevel"></select>
+                                    </td>
+                                    <td>
+                                        <input type="date" name="pointC[@i].DataForEvaluations[0].CompletedDate" class="form-control" value="" />
+                                    </td>
+                                    <td>
+                                        @*<input type="file" name="pointC[@i].DataForEvaluations[0].FileUpload" class="form-control" accept="application/pdf" />*@
+                                    </td>
+                                }
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- Plan D -->
+    <div class="card shadow mb-4">
+        <div class="card-header py-3">
+            <h6 class="m-0 font-weight-bold text-primary">แผนงานร่วม (Joint KPI: D)</h6>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-bordered" id="EPEStable" style="width:100%;" cellspacing="0">
+                    <thead>
+                        <tr>
+                            <th>
+                                ที่
+                            </th>
+                            <th>
+                                ตัวชี้วัด
+                            </th>
+                            <th>
+                                <i class="fas fa-percent" title="น้ำหนักร้อยละ"></i>
+                            </th>
+                            <th>
+                                <i class="fas fa-bullseye" title="เป้าหมาย/ประมาณการ"></i> เป้า
+                            </th>
+                            <th>
+                                ผลการปฏิบัติ
+                            </th>
+                            <th>
+                                <i class="far fa-calendar-check" title="วันที่แล้วเสร็จ"></i> วันที่แล้วเสร็จ
+                            </th>
+                            <th>
+                                <i class="fas fa-paperclip" title="ไฟล์แนบ"></i> แนบ
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @for (int i = 0; i < Model.pointD.Count(); i++)
+                        {
+                            <tr>
+                                <td>
+                                    @Model.pointD[i].Point
+                                </td>
+
+                                <td>
+                                    @Model.pointD[i].Name
+                                </td>
+                                <td>
+                                    @Model.pointD[i].Weight.ToString("N2")
+                                </td>
+                                @{
+                                    DataForEvaluation de = null;
+                                }
+                                @foreach (var item in @Model.pointD[i].DataForEvaluations)
+                                {
+                                    if (item.Month == Model.month && item.OfficeId == Model.pointD[i].OwnerOfficeId)
+                                    {
+                                        de = item;
+                                    }
+                                }
+                                <td>@string.Format("{0:N4}", de?.Expect)</td>
+
+                                @if (Model.pointD[i].Unit == UnitOfPoint.ร้อยละ)
+                                {
+                                    <td>
+                                        <input type="hidden" name="pointD[@i].DataForEvaluations[0].Id" value=@de?.Id />
+                                        @Html.TextBox("pointD[" + @i + "].DataForEvaluations[0].Result", de?.Result, new { @class = "form-control" })
+                                    </td>
+                                    <td></td>
+                                    <td></td>
+                                }
+                                else
+                                {
+                                    <td>
+                                        <input type="hidden" name="pointD[@i].DataForEvaluations[0].Id" value=@de?.Id />
+                                        @{
+                                            List<Object> list = new List<object>();
+                                            list.Add(new { Value = 1, Detail = "1." + Model.pointD[i].DetailRate1 });
+                                            list.Add(new { Value = 2, Detail = "2." + Model.pointD[i].DetailRate2 });
+                                            list.Add(new { Value = 3, Detail = "3." + Model.pointD[i].DetailRate3 });
+                                            list.Add(new { Value = 4, Detail = "4." + Model.pointD[i].DetailRate4 });
+                                            list.Add(new { Value = 5, Detail = "5." + Model.pointD[i].DetailRate5 });
+
+                                            if ((3 < Model.month) && (Model.month < 10) && !String.IsNullOrEmpty(Model.pointD[i].Detail2Rate1))
+                                            {
+                                                list.Clear();
+                                                list.Add(new { Value = 1, Detail = "1." + Model.pointD[i].Detail2Rate1 });
+                                                list.Add(new { Value = 2, Detail = "2." + Model.pointD[i].Detail2Rate2 });
+                                                list.Add(new { Value = 3, Detail = "3." + Model.pointD[i].Detail2Rate3 });
+                                                list.Add(new { Value = 4, Detail = "4." + Model.pointD[i].Detail2Rate4 });
+                                                list.Add(new { Value = 5, Detail = "5." + Model.pointD[i].Detail2Rate5 });
+                                            }
+
+                                            ViewBag.SelectLevel = new SelectList(list, "Value", "Detail", de?.Result);
+                                        }
+                                        <select name="pointD[@i].DataForEvaluations[0].Result" class="form-control" asp-items="ViewBag.SelectLevel"></select>
+                                    </td>
+                                    <td>
+                                        <input type="date" name="pointD[@i].DataForEvaluations[0].CompletedDate" class="form-control" value="" />
+                                    </td>
+                                    <td>
+                                        @*<input type="file" name="pointD[@i].DataForEvaluations[0].FileUpload" class="form-control" accept="application/pdf" />*@
+                                    </td>
+                                }
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
 </div>
 
 @section Scripts {
     <partial name="_dataTableScript" />
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
 }

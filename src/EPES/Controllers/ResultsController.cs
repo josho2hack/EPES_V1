@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -481,147 +482,304 @@ namespace EPES.Controllers
 
         [HttpPost, ActionName("IndexMonth")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> IndexMonthPost(string selectoffice, int month, int yearPoint)
-        {
-            int m;
-            if (month == 0)
-            {
-                if (DateTime.Now.Month == 1)
-                {
-                    m = 12;
-                }
-                else
-                {
-                    m = DateTime.Now.Month - 1;
-                }
-            }
-            else
-            {
-                m = month;
-            }
-
-            var user = await _userManager.GetUserAsync(User);
-            var viewModel = new ResultViewModel();
-
-            DateTime yearForQuery = new DateTime(DateTime.Now.AddYears(yearPoint).Year, 1, 1);
-
-            if (User.IsInRole("Admin"))
-            {
-                if (String.IsNullOrEmpty(selectoffice))
-                {
-                    viewModel.pointA = await _context.PointOfEvaluations.Where(p => p.Plan == TypeOfPlan.A && p.OwnerOffice.Code == user.OfficeId && p.Year == yearForQuery).Include(p => p.OwnerOffice).Include(p => p.AuditOffice).Include(p => p.DataForEvaluations).ToListAsync();
-                    viewModel.pointB = await _context.PointOfEvaluations.Where(p => p.Plan == TypeOfPlan.B && p.OwnerOffice.Code == user.OfficeId && p.Year == yearForQuery).Include(p => p.OwnerOffice).Include(p => p.AuditOffice).Include(p => p.DataForEvaluations).ToListAsync();
-                    viewModel.pointC = await _context.PointOfEvaluations.Where(p => p.Plan == TypeOfPlan.C && p.OwnerOffice.Code == user.OfficeId && p.Year == yearForQuery).Include(p => p.OwnerOffice).Include(p => p.AuditOffice).Include(p => p.DataForEvaluations).ToListAsync();
-                    viewModel.pointD = await _context.PointOfEvaluations.Where(p => p.Plan == TypeOfPlan.D && p.OwnerOffice.Code == user.OfficeId && p.Year == yearForQuery).Include(p => p.OwnerOffice).Include(p => p.AuditOffice).Include(p => p.DataForEvaluations).ToListAsync();
-
-                    ViewBag.OfficeCode = new SelectList(_context.Offices.Where(d => d.Code != "00000000" && d.Code.Substring(5, 3) == "000"), "Code", "Name", user.OfficeId);
-                }
-                else
-                {
-                    if (selectoffice.Substring(0, 3) == "000")
-                    {
-                        viewModel.pointA = await _context.PointOfEvaluations.Where(p => p.Plan == TypeOfPlan.A && p.OwnerOffice.Code == selectoffice && p.Year == yearForQuery).Include(p => p.OwnerOffice).Include(p => p.AuditOffice).Include(p => p.DataForEvaluations).ToListAsync();
-                    }
-                    viewModel.pointB = await _context.PointOfEvaluations.Where(p => p.Plan == TypeOfPlan.B && p.OwnerOffice.Code == selectoffice && p.Year == yearForQuery).Include(p => p.OwnerOffice).Include(p => p.AuditOffice).Include(p => p.DataForEvaluations).ToListAsync();
-                    viewModel.pointC = await _context.PointOfEvaluations.Where(p => p.Plan == TypeOfPlan.C && p.OwnerOffice.Code == selectoffice && p.Year == yearForQuery).Include(p => p.OwnerOffice).Include(p => p.AuditOffice).Include(p => p.DataForEvaluations).ToListAsync();
-                    viewModel.pointD = await _context.PointOfEvaluations.Where(p => p.Plan == TypeOfPlan.D && p.OwnerOffice.Code == selectoffice && p.Year == yearForQuery).Include(p => p.OwnerOffice).Include(p => p.AuditOffice).Include(p => p.DataForEvaluations).ToListAsync();
-
-                    ViewBag.OfficeCode = new SelectList(_context.Offices.Where(d => d.Code != "00000000" && d.Code.Substring(5, 3) == "000"), "Code", "Name", selectoffice);
-                }
-            }
-            else // No Admin
-            {
-                if (String.IsNullOrEmpty(selectoffice))
-                {
-                    if (user.OfficeId.Substring(0, 3) == "000") // HQ Office
-                    {
-                        viewModel.pointA = await _context.PointOfEvaluations.Where(p => p.Plan == TypeOfPlan.A && p.OwnerOffice.Code == user.OfficeId && p.Year == yearForQuery).Include(p => p.OwnerOffice).Include(p => p.AuditOffice).Include(p => p.DataForEvaluations).ToListAsync();
-
-                        ViewBag.OfficeCode = new SelectList(await _context.PointOfEvaluations.Where(p => p.Plan == TypeOfPlan.B && (p.OwnerOffice.Code == user.OfficeId || p.AuditOffice.Code == user.OfficeId) && p.Year == yearForQuery).Include(p => p.OwnerOffice).Include(p => p.AuditOffice).Select(b => new { Code = b.OwnerOffice.Code, Name = b.OwnerOffice.Name }).Distinct().ToListAsync(), "Code", "Name", user.OfficeId);
-                    }
-                    else // Pak or ST
-                    {
-                        ViewBag.OfficeCode = new SelectList(_context.Offices.Where(d => d.Code != "00000000" && d.Code.StartsWith(user.OfficeId.Substring(0, 2)) && d.Code.Substring(5, 3) == "000"), "Code", "Name", user.OfficeId);
-                    }
-
-                    viewModel.pointB = await _context.PointOfEvaluations.Where(p => p.Plan == TypeOfPlan.B && p.OwnerOffice.Code == user.OfficeId && p.Year == yearForQuery).Include(p => p.OwnerOffice).Include(p => p.AuditOffice).Include(p => p.DataForEvaluations).ToListAsync();
-                    viewModel.pointC = await _context.PointOfEvaluations.Where(p => p.Plan == TypeOfPlan.C && p.OwnerOffice.Code == user.OfficeId && p.Year == yearForQuery).Include(p => p.OwnerOffice).Include(p => p.AuditOffice).Include(p => p.DataForEvaluations).ToListAsync();
-                    viewModel.pointD = await _context.PointOfEvaluations.Where(p => p.Plan == TypeOfPlan.D && p.OwnerOffice.Code == user.OfficeId && p.Year == yearForQuery).Include(p => p.OwnerOffice).Include(p => p.AuditOffice).Include(p => p.DataForEvaluations).ToListAsync();
-                }
-                else
-                {
-                    if (user.OfficeId.Substring(0, 3) == "000") // HQ Office
-                    {
-                        viewModel.pointA = await _context.PointOfEvaluations.Where(p => p.Plan == TypeOfPlan.A && p.OwnerOffice.Code == selectoffice && p.Year == yearForQuery).Include(p => p.OwnerOffice).Include(p => p.AuditOffice).Include(p => p.DataForEvaluations).ToListAsync();
-
-                        ViewBag.OfficeCode = new SelectList(await _context.PointOfEvaluations.Where(p => p.Plan == TypeOfPlan.B && (p.OwnerOffice.Code == user.OfficeId || p.AuditOffice.Code == user.OfficeId) && p.Year == yearForQuery).Include(p => p.OwnerOffice).Include(p => p.AuditOffice).Select(b => new { Code = b.OwnerOffice.Code, Name = b.OwnerOffice.Name }).Distinct().ToListAsync(), "Code", "Name", selectoffice);
-                    }
-                    else // Pak or ST
-                    {
-                        ViewBag.OfficeCode = new SelectList(_context.Offices.Where(d => d.Code != "00000000" && d.Code.StartsWith(user.OfficeId.Substring(0, 2)) && d.Code.Substring(5, 3) == "000"), "Code", "Name", selectoffice);
-                    }
-
-                    viewModel.pointB = await _context.PointOfEvaluations.Where(p => p.Plan == TypeOfPlan.B && p.OwnerOffice.Code == selectoffice && p.Year == yearForQuery).Include(p => p.OwnerOffice).Include(p => p.AuditOffice).Include(p => p.DataForEvaluations).ToListAsync();
-                    viewModel.pointC = await _context.PointOfEvaluations.Where(p => p.Plan == TypeOfPlan.C && p.OwnerOffice.Code == selectoffice && p.Year == yearForQuery).Include(p => p.OwnerOffice).Include(p => p.AuditOffice).Include(p => p.DataForEvaluations).ToListAsync();
-                    viewModel.pointD = await _context.PointOfEvaluations.Where(p => p.Plan == TypeOfPlan.D && p.OwnerOffice.Code == selectoffice && p.Year == yearForQuery).Include(p => p.OwnerOffice).Include(p => p.AuditOffice).Include(p => p.DataForEvaluations).ToListAsync();
-                }
-            }
-
-            List<Object> list = new List<object>();
-            if (m < 10)
-            {
-                for (int i = 10; i <= 12; i++)
-                {
-                    list.Add(new { Value = i, Month = new DateTime(DateTime.Now.Year, i, 1).ToString("MMMM") });
-                }
-                for (int i = 1; i <= m; i++)
-                {
-                    list.Add(new { Value = i, Month = new DateTime(DateTime.Now.Year, i, 1).ToString("MMMM") });
-                }
-            }
-            else
-            {
-                for (int i = 10; i <= m; i++)
-                {
-                    list.Add(new { Value = i, Month = new DateTime(DateTime.Now.Year, i, 1).ToString("MMMM") });
-                }
-            }
-
-            ViewBag.Month = new SelectList(list, "Value", "Month", m);
-            ViewBag.selectoffice = selectoffice;
-            viewModel.month = m;
-            viewModel.yearPoint = yearPoint;
-            return View(viewModel);
-        }
-
-        [HttpPost, ActionName("EditMonth")]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> EditMonthPost(string selectoffice, ResultViewModel model)
+        public async Task<IActionResult> IndexMonthPost(string selectoffice, ResultViewModel model, string Update)
         {
             var user = await _userManager.GetUserAsync(User);
-            if (model.pointA != null)
+            if (Update == "บันทึก")
             {
-                foreach (var item in model.pointA)
+                if (model.pointA != null) // Plan A
                 {
-                    foreach (var de in item.DataForEvaluations)
+                    foreach (var item in model.pointA)
                     {
-                        var dataForEvaluation = await _context.DataForEvaluations.FindAsync(d => d.Id);
+                        //string uniqueFile = null;
+                        if (item.DataForEvaluations[0] != null)
+                        {
+                            var de = await _context.DataForEvaluations.FirstAsync(d => d.Id == item.DataForEvaluations[0].Id);
+                            if (de != null)
+                            {
+                                de.Result = item.DataForEvaluations[0].Result;
+                                //if (item.DataForEvaluations[0].FileUpload != null)
+                                //{
+                                //    uniqueFile = Guid.NewGuid().ToString() + "_" + item.DataForEvaluations[0].FileUpload.FileName;
+                                //    string uploadFolder = Path.Combine(_hostingEnvironment.WebRootPath, "attach_files");
+                                //    string filePath = Path.Combine(uploadFolder, uniqueFile);
+                                //    await item.DataForEvaluations[0].FileUpload.CopyToAsync(new FileStream(filePath, FileMode.Create));
+                                //    de.AttachFile = uniqueFile;
+                                //}
+                                //de.UpdateUserId = user.Id;
+                                await _context.SaveChangesAsync();
+                            }
+                        }
+                        else
+                        {
+                            var de = new DataForEvaluation();
+                            de.Result = item.DataForEvaluations[0].Result;
+
+                            //if (item.DataForEvaluations[0].FileUpload != null)
+                            //{
+                            //    uniqueFile = Guid.NewGuid().ToString() + "_" + item.DataForEvaluations[0].FileUpload.FileName;
+                            //    string uploadFolder = Path.Combine(_hostingEnvironment.WebRootPath, "attach_files");
+                            //    string filePath = Path.Combine(uploadFolder, uniqueFile);
+                            //    await item.DataForEvaluations[0].FileUpload.CopyToAsync(new FileStream(filePath, FileMode.Create));
+                            //    de.AttachFile = uniqueFile;
+                            //}
+                            de.UpdateUserId = user.Id;
+                            de.PointOfEvaluationId = item.Id;
+                            de.OfficeId = item.OwnerOffice.Id;
+                            de.Month = model.month;
+                            await _context.SaveChangesAsync();
+                        }
                     }
                 }
-            }
-            try
-            {
-                await _context.SaveChangesAsync();
+
+                if (model.pointB != null) // Plan B
+                {
+                    foreach (var item in model.pointB)
+                    {
+                        string uniqueFile = null;
+                        if (item.DataForEvaluations[0] != null)
+                        {
+                            var de = await _context.DataForEvaluations.FirstAsync(d => d.Id == item.DataForEvaluations[0].Id);
+                            if (de != null)
+                            {
+                                de.Result = item.DataForEvaluations[0].Result;
+                                if (item.DataForEvaluations[0].FileUpload != null)
+                                {
+                                    uniqueFile = Guid.NewGuid().ToString() + "_" + item.DataForEvaluations[0].FileUpload.FileName;
+                                    string uploadFolder = Path.Combine(_hostingEnvironment.WebRootPath, "attach_files");
+                                    string filePath = Path.Combine(uploadFolder, uniqueFile);
+                                    await item.DataForEvaluations[0].FileUpload.CopyToAsync(new FileStream(filePath, FileMode.Create));
+                                    de.AttachFile = uniqueFile;
+                                }
+                                de.UpdateUserId = user.Id;
+                                await _context.SaveChangesAsync();
+                            }
+                        }
+                        else
+                        {
+                            var de = new DataForEvaluation();
+                            de.Result = item.DataForEvaluations[0].Result;
+
+                            if (item.DataForEvaluations[0].FileUpload != null)
+                            {
+                                uniqueFile = Guid.NewGuid().ToString() + "_" + item.DataForEvaluations[0].FileUpload.FileName;
+                                string uploadFolder = Path.Combine(_hostingEnvironment.WebRootPath, "attach_files");
+                                string filePath = Path.Combine(uploadFolder, uniqueFile);
+                                await item.DataForEvaluations[0].FileUpload.CopyToAsync(new FileStream(filePath, FileMode.Create));
+                                de.AttachFile = uniqueFile;
+                            }
+                            de.UpdateUserId = user.Id;
+                            de.PointOfEvaluationId = item.Id;
+                            de.OfficeId = item.OwnerOffice.Id;
+                            de.Month = model.month;
+                            await _context.SaveChangesAsync();
+                        }
+                    }
+                }
+
+                if (model.pointC != null) // Plan C
+                {
+                    foreach (var item in model.pointC)
+                    {
+                        string uniqueFile = null;
+                        if (item.DataForEvaluations[0] != null)
+                        {
+                            var de = await _context.DataForEvaluations.FirstAsync(d => d.Id == item.DataForEvaluations[0].Id);
+                            if (de != null)
+                            {
+                                de.Result = item.DataForEvaluations[0].Result;
+                                if (item.DataForEvaluations[0].FileUpload != null)
+                                {
+                                    uniqueFile = Guid.NewGuid().ToString() + "_" + item.DataForEvaluations[0].FileUpload.FileName;
+                                    string uploadFolder = Path.Combine(_hostingEnvironment.WebRootPath, "attach_files");
+                                    string filePath = Path.Combine(uploadFolder, uniqueFile);
+                                    await item.DataForEvaluations[0].FileUpload.CopyToAsync(new FileStream(filePath, FileMode.Create));
+                                    de.AttachFile = uniqueFile;
+                                }
+                                de.UpdateUserId = user.Id;
+                                await _context.SaveChangesAsync();
+                            }
+                        }
+                        else
+                        {
+                            var de = new DataForEvaluation();
+                            de.Result = item.DataForEvaluations[0].Result;
+
+                            if (item.DataForEvaluations[0].FileUpload != null)
+                            {
+                                uniqueFile = Guid.NewGuid().ToString() + "_" + item.DataForEvaluations[0].FileUpload.FileName;
+                                string uploadFolder = Path.Combine(_hostingEnvironment.WebRootPath, "attach_files");
+                                string filePath = Path.Combine(uploadFolder, uniqueFile);
+                                await item.DataForEvaluations[0].FileUpload.CopyToAsync(new FileStream(filePath, FileMode.Create));
+                                de.AttachFile = uniqueFile;
+                            }
+                            de.UpdateUserId = user.Id;
+                            de.PointOfEvaluationId = item.Id;
+                            de.OfficeId = item.OwnerOffice.Id;
+                            de.Month = model.month;
+                            await _context.SaveChangesAsync();
+                        }
+                    }
+                }
+
+                if (model.pointD != null) // Plan D
+                {
+                    foreach (var item in model.pointD)
+                    {
+                        string uniqueFile = null;
+                        if (item.DataForEvaluations[0] != null)
+                        {
+                            var de = await _context.DataForEvaluations.FirstAsync(d => d.Id == item.DataForEvaluations[0].Id);
+                            if (de != null)
+                            {
+                                de.Result = item.DataForEvaluations[0].Result;
+                                if (item.DataForEvaluations[0].FileUpload != null)
+                                {
+                                    uniqueFile = Guid.NewGuid().ToString() + "_" + item.DataForEvaluations[0].FileUpload.FileName;
+                                    string uploadFolder = Path.Combine(_hostingEnvironment.WebRootPath, "attach_files");
+                                    string filePath = Path.Combine(uploadFolder, uniqueFile);
+                                    await item.DataForEvaluations[0].FileUpload.CopyToAsync(new FileStream(filePath, FileMode.Create));
+                                    de.AttachFile = uniqueFile;
+                                }
+                                de.UpdateUserId = user.Id;
+                                await _context.SaveChangesAsync();
+                            }
+                        }
+                        else
+                        {
+                            var de = new DataForEvaluation();
+                            de.Result = item.DataForEvaluations[0].Result;
+
+                            if (item.DataForEvaluations[0].FileUpload != null)
+                            {
+                                uniqueFile = Guid.NewGuid().ToString() + "_" + item.DataForEvaluations[0].FileUpload.FileName;
+                                string uploadFolder = Path.Combine(_hostingEnvironment.WebRootPath, "attach_files");
+                                string filePath = Path.Combine(uploadFolder, uniqueFile);
+                                await item.DataForEvaluations[0].FileUpload.CopyToAsync(new FileStream(filePath, FileMode.Create));
+                                de.AttachFile = uniqueFile;
+                            }
+                            de.UpdateUserId = user.Id;
+                            de.PointOfEvaluationId = item.Id;
+                            de.OfficeId = item.OwnerOffice.Id;
+                            de.Month = model.month;
+                            await _context.SaveChangesAsync();
+                        }
+                    }
+                }
+
                 return RedirectToAction(nameof(IndexMonth), new { selectoffice = selectoffice, month = model.month, yearPoint = model.yearPoint });
             }
-            catch (DbUpdateConcurrencyException)
+            else
             {
-                ModelState.AddModelError("", "ไม่สามารถบันทึกข้อมูล. " +
-                    "ลองพยายามบันทึกอีกครั้ง " +
-                    "โปรดแจ้งผู้ดูแลระบบ");
-            }
+                int m;
+                if (model.month == 0)
+                {
+                    if (DateTime.Now.Month == 1)
+                    {
+                        m = 12;
+                    }
+                    else
+                    {
+                        m = DateTime.Now.Month - 1;
+                    }
+                }
+                else
+                {
+                    m = model.month;
+                }
 
-            return RedirectToAction(nameof(IndexMonth), new { selectoffice = selectoffice, month = model.month, yearPoint = model.yearPoint });
+                var viewModel = new ResultViewModel();
+
+                DateTime yearForQuery = new DateTime(DateTime.Now.AddYears(model.yearPoint).Year, 1, 1);
+
+                if (User.IsInRole("Admin"))
+                {
+                    if (String.IsNullOrEmpty(selectoffice))
+                    {
+                        viewModel.pointA = await _context.PointOfEvaluations.Where(p => p.Plan == TypeOfPlan.A && p.OwnerOffice.Code == user.OfficeId && p.Year == yearForQuery).Include(p => p.OwnerOffice).Include(p => p.AuditOffice).Include(p => p.DataForEvaluations).ToListAsync();
+                        viewModel.pointB = await _context.PointOfEvaluations.Where(p => p.Plan == TypeOfPlan.B && p.OwnerOffice.Code == user.OfficeId && p.Year == yearForQuery).Include(p => p.OwnerOffice).Include(p => p.AuditOffice).Include(p => p.DataForEvaluations).ToListAsync();
+                        viewModel.pointC = await _context.PointOfEvaluations.Where(p => p.Plan == TypeOfPlan.C && p.OwnerOffice.Code == user.OfficeId && p.Year == yearForQuery).Include(p => p.OwnerOffice).Include(p => p.AuditOffice).Include(p => p.DataForEvaluations).ToListAsync();
+                        viewModel.pointD = await _context.PointOfEvaluations.Where(p => p.Plan == TypeOfPlan.D && p.OwnerOffice.Code == user.OfficeId && p.Year == yearForQuery).Include(p => p.OwnerOffice).Include(p => p.AuditOffice).Include(p => p.DataForEvaluations).ToListAsync();
+
+                        ViewBag.OfficeCode = new SelectList(_context.Offices.Where(d => d.Code != "00000000" && d.Code.Substring(5, 3) == "000"), "Code", "Name", user.OfficeId);
+                    }
+                    else
+                    {
+                        if (selectoffice.Substring(0, 3) == "000")
+                        {
+                            viewModel.pointA = await _context.PointOfEvaluations.Where(p => p.Plan == TypeOfPlan.A && p.OwnerOffice.Code == selectoffice && p.Year == yearForQuery).Include(p => p.OwnerOffice).Include(p => p.AuditOffice).Include(p => p.DataForEvaluations).ToListAsync();
+                        }
+                        viewModel.pointB = await _context.PointOfEvaluations.Where(p => p.Plan == TypeOfPlan.B && p.OwnerOffice.Code == selectoffice && p.Year == yearForQuery).Include(p => p.OwnerOffice).Include(p => p.AuditOffice).Include(p => p.DataForEvaluations).ToListAsync();
+                        viewModel.pointC = await _context.PointOfEvaluations.Where(p => p.Plan == TypeOfPlan.C && p.OwnerOffice.Code == selectoffice && p.Year == yearForQuery).Include(p => p.OwnerOffice).Include(p => p.AuditOffice).Include(p => p.DataForEvaluations).ToListAsync();
+                        viewModel.pointD = await _context.PointOfEvaluations.Where(p => p.Plan == TypeOfPlan.D && p.OwnerOffice.Code == selectoffice && p.Year == yearForQuery).Include(p => p.OwnerOffice).Include(p => p.AuditOffice).Include(p => p.DataForEvaluations).ToListAsync();
+
+                        ViewBag.OfficeCode = new SelectList(_context.Offices.Where(d => d.Code != "00000000" && d.Code.Substring(5, 3) == "000"), "Code", "Name", selectoffice);
+                    }
+                }
+                else // No Admin
+                {
+                    if (String.IsNullOrEmpty(selectoffice))
+                    {
+                        if (user.OfficeId.Substring(0, 3) == "000") // HQ Office
+                        {
+                            viewModel.pointA = await _context.PointOfEvaluations.Where(p => p.Plan == TypeOfPlan.A && p.OwnerOffice.Code == user.OfficeId && p.Year == yearForQuery).Include(p => p.OwnerOffice).Include(p => p.AuditOffice).Include(p => p.DataForEvaluations).ToListAsync();
+
+                            ViewBag.OfficeCode = new SelectList(await _context.PointOfEvaluations.Where(p => p.Plan == TypeOfPlan.B && (p.OwnerOffice.Code == user.OfficeId || p.AuditOffice.Code == user.OfficeId) && p.Year == yearForQuery).Include(p => p.OwnerOffice).Include(p => p.AuditOffice).Select(b => new { Code = b.OwnerOffice.Code, Name = b.OwnerOffice.Name }).Distinct().ToListAsync(), "Code", "Name", user.OfficeId);
+                        }
+                        else // Pak or ST
+                        {
+                            ViewBag.OfficeCode = new SelectList(_context.Offices.Where(d => d.Code != "00000000" && d.Code.StartsWith(user.OfficeId.Substring(0, 2)) && d.Code.Substring(5, 3) == "000"), "Code", "Name", user.OfficeId);
+                        }
+
+                        viewModel.pointB = await _context.PointOfEvaluations.Where(p => p.Plan == TypeOfPlan.B && p.OwnerOffice.Code == user.OfficeId && p.Year == yearForQuery).Include(p => p.OwnerOffice).Include(p => p.AuditOffice).Include(p => p.DataForEvaluations).ToListAsync();
+                        viewModel.pointC = await _context.PointOfEvaluations.Where(p => p.Plan == TypeOfPlan.C && p.OwnerOffice.Code == user.OfficeId && p.Year == yearForQuery).Include(p => p.OwnerOffice).Include(p => p.AuditOffice).Include(p => p.DataForEvaluations).ToListAsync();
+                        viewModel.pointD = await _context.PointOfEvaluations.Where(p => p.Plan == TypeOfPlan.D && p.OwnerOffice.Code == user.OfficeId && p.Year == yearForQuery).Include(p => p.OwnerOffice).Include(p => p.AuditOffice).Include(p => p.DataForEvaluations).ToListAsync();
+                    }
+                    else
+                    {
+                        if (user.OfficeId.Substring(0, 3) == "000") // HQ Office
+                        {
+                            viewModel.pointA = await _context.PointOfEvaluations.Where(p => p.Plan == TypeOfPlan.A && p.OwnerOffice.Code == selectoffice && p.Year == yearForQuery).Include(p => p.OwnerOffice).Include(p => p.AuditOffice).Include(p => p.DataForEvaluations).ToListAsync();
+
+                            ViewBag.OfficeCode = new SelectList(await _context.PointOfEvaluations.Where(p => p.Plan == TypeOfPlan.B && (p.OwnerOffice.Code == user.OfficeId || p.AuditOffice.Code == user.OfficeId) && p.Year == yearForQuery).Include(p => p.OwnerOffice).Include(p => p.AuditOffice).Select(b => new { Code = b.OwnerOffice.Code, Name = b.OwnerOffice.Name }).Distinct().ToListAsync(), "Code", "Name", selectoffice);
+                        }
+                        else // Pak or ST
+                        {
+                            ViewBag.OfficeCode = new SelectList(_context.Offices.Where(d => d.Code != "00000000" && d.Code.StartsWith(user.OfficeId.Substring(0, 2)) && d.Code.Substring(5, 3) == "000"), "Code", "Name", selectoffice);
+                        }
+
+                        viewModel.pointB = await _context.PointOfEvaluations.Where(p => p.Plan == TypeOfPlan.B && p.OwnerOffice.Code == selectoffice && p.Year == yearForQuery).Include(p => p.OwnerOffice).Include(p => p.AuditOffice).Include(p => p.DataForEvaluations).ToListAsync();
+                        viewModel.pointC = await _context.PointOfEvaluations.Where(p => p.Plan == TypeOfPlan.C && p.OwnerOffice.Code == selectoffice && p.Year == yearForQuery).Include(p => p.OwnerOffice).Include(p => p.AuditOffice).Include(p => p.DataForEvaluations).ToListAsync();
+                        viewModel.pointD = await _context.PointOfEvaluations.Where(p => p.Plan == TypeOfPlan.D && p.OwnerOffice.Code == selectoffice && p.Year == yearForQuery).Include(p => p.OwnerOffice).Include(p => p.AuditOffice).Include(p => p.DataForEvaluations).ToListAsync();
+                    }
+                }
+
+                List<Object> list = new List<object>();
+                if (m < 10)
+                {
+                    for (int i = 10; i <= 12; i++)
+                    {
+                        list.Add(new { Value = i, Month = new DateTime(DateTime.Now.Year, i, 1).ToString("MMMM") });
+                    }
+                    for (int i = 1; i <= m; i++)
+                    {
+                        list.Add(new { Value = i, Month = new DateTime(DateTime.Now.Year, i, 1).ToString("MMMM") });
+                    }
+                }
+                else
+                {
+                    for (int i = 10; i <= m; i++)
+                    {
+                        list.Add(new { Value = i, Month = new DateTime(DateTime.Now.Year, i, 1).ToString("MMMM") });
+                    }
+                }
+
+                ViewBag.Month = new SelectList(list, "Value", "Month", m);
+                ViewBag.selectoffice = selectoffice;
+                viewModel.month = m;
+                viewModel.yearPoint = model.yearPoint;
+                return View(viewModel);
+            }
         }
     }
 }
