@@ -1,4 +1,5 @@
 ﻿using EPES.Models;
+using Microsoft.AspNetCore.Http;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -21,5 +22,7 @@ namespace EPES.ViewModels
         public int month { get; set; }
         public int yearPoint { get; set; }
         public int poeid { get; set; }
+
+        //public IFormFile MyProperty { get; set; }
     }
 }

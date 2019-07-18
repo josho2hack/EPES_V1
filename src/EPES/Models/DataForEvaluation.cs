@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Http;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -54,6 +55,10 @@ namespace EPES.Models
 
         [Display(Name = "ไฟล์แนบ")]
         public string AttachFile { get; set; }
+
+        [NotMapped]
+        [Display(Name = "ไฟล์ Upload")]
+        public IFormFile FileUpload { get; set; }
     }
 
     public enum Approve

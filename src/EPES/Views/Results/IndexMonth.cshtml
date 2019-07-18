@@ -28,8 +28,7 @@
             <div class="col-md-4">
                 <div class="row">
                     <label class="col-form-label col-md-3 text-md-right">เดือน: </label>
-                    <select name="selectmonth" class="form-control col-md-7" asp-items="ViewBag.Month" onchange="this.form.submit()">
-                    </select>
+                    <select name="selectmonth" class="form-control col-md-7" asp-items="ViewBag.Month" onchange="this.form.submit()"></select>
                 </div>
             </div>
             <div class="col-md-4">
@@ -150,16 +149,16 @@
                                     <i class="fas fa-percent" title="น้ำหนักร้อยละ"></i>
                                 </th>
                                 <th>
-                                    <i class="fas fa-bullseye" title="เป้าหมาย/ประมาณการ"></i> เป้าหมาย
+                                    <i class="fas fa-bullseye" title="เป้าหมาย/ประมาณการ"></i> เป้า
                                 </th>
                                 <th>
-                                    ผลปฏิบัติ
+                                    ผลการปฏิบัติ
                                 </th>
                                 <th>
                                     <i class="far fa-calendar-check" title="วันที่แล้วเสร็จ"></i> วันที่แล้วเสร็จ
                                 </th>
                                 <th>
-                                    <i class="fas fa-paperclip" title="ไฟล์แนบ"></i>
+                                    <i class="fas fa-paperclip" title="ไฟล์แนบ"></i> แนบ
                                 </th>
                             </tr>
                         </thead>
@@ -175,7 +174,7 @@
                                         @Model.pointB[i].Name
                                     </td>
                                     <td>
-                                        @Model.pointB[i].Weight
+                                        @Model.pointB[i].Weight.ToString("N2")
                                     </td>
                                     @{
                                         DataForEvaluation de = null;
@@ -187,12 +186,12 @@
                                             de = item;
                                         }
                                     }
-                                    <td>@de?.Expect</td>
+                                    <td>@string.Format("{0:N4}", de?.Expect)</td>
 
                                     @if (Model.pointB[i].Unit == UnitOfPoint.ร้อยละ)
                                     {
                                         <td>
-                                            <input type="hidden" name="pointB[@i].DataForEvaluations.ID" value=@de?.Id />
+                                            <input type="hidden" name="pointB[@i].DataForEvaluations.Id" value=@de?.Id />
                                             @Html.TextBox("pointB[" + @i + "].DataForEvaluations.Result", de?.Result, new { @class = "form-control" })
                                         </td>
                                         <td></td>
@@ -202,7 +201,7 @@
                                     {
                                         <td>
                                             <input type="hidden" name="pointB[@i].DataForEvaluations.ID" value=@de?.Id />
-                                            @{ 
+                                            @{
                                                 List<Object> list = new List<object>();
                                                 list.Add(new { Value = 1, Detail = "1." + Model.pointB[i].DetailRate1 });
                                                 list.Add(new { Value = 2, Detail = "2." + Model.pointB[i].DetailRate2 });
@@ -222,14 +221,13 @@
 
                                                 ViewBag.SelectLevel = new SelectList(list, "Value", "Detail", de?.Result);
                                             }
-                                            <select name="pointB[@i].DataForEvaluations.Result" class="form-control" asp-items="ViewBag.SelectLevel">
-                                            </select>
+                                            <select name="pointB[@i].DataForEvaluations.Result" class="form-control" asp-items="ViewBag.SelectLevel"></select>
                                         </td>
                                         <td>
                                             <input type="date" name="pointB[@i].DataForEvaluations.CompletedDate" class="form-control" value="" />
                                         </td>
                                         <td>
-                                            <input type="file" name="pointB[@i].DataForEvaluations.AttachFile" class="form-control" accept="application/pdf" />
+                                            <input type="file" name="pointB[@i].DataForEvaluations.FileUpload" class="form-control" accept="application/pdf" />
                                         </td>
                                     }
                                 </tr>
@@ -352,7 +350,7 @@
             </div>
         </div>
         <input type="submit" value="บันทึก" class="btn btn-primary" />
-        <a asp-area="" asp-controller="Results" asp-action="IndexMonth" asp-route-yearPoint="@Model.yearPoint" asp-route-selectoffice="@ViewBag.selectoffice" class="btn btn-secondary">ยกเลิก</a>
+        <a asp-area="" asp-controller="Results" asp-action="IndexMonth" asp-route-yearPoint="@Model.yearPoint" asp-route-selectoffice="@ViewBag.selectoffice" asp-route-month="@Model.month" class="btn btn-secondary">ยกเลิก</a>
     </form>
 </div>
 
