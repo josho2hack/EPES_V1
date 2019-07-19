@@ -43,6 +43,36 @@
             </div>
         </div>
     </form>
+    <div id="data-grid-demo">
+        @(Html.DevExtreme().DataGrid<PointOfEvaluation>()
+                    .ID("gridContainer")
+                    .Paging(paging => paging.Enabled(false))
+                    .ShowBorders(true)
+                    .Editing(editing =>
+                    {
+                        editing.Mode(GridEditMode.Batch);
+                        editing.AllowUpdating(true);
+                        editing.SelectTextOnEditStart(true);
+                        editing.StartEditAction(GridStartEditAction.Click);
+                    })
+                    .Columns(columns =>
+                    {
+                        columns.AddFor(m => m.Point).AllowEditing(false)
+                            .Width(70);
+
+                        columns.AddFor(m => m.Name);
+
+                        columns.AddFor(m => m.Weight);
+                    })
+                    .DataSource(d => d.Mvc()
+                        .Controller("DataGridEmployees")
+                        .LoadAction("Get")
+                        .UpdateAction("Put")
+                        .Key("Id")
+                    )
+        )
+    </div>
+
     @using (Html.BeginForm("IndexMonth", "Results", FormMethod.Post, new { enctype = "multipart/form-data" }))
     {
         @if (Model.pointA != null)
