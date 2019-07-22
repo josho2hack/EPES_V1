@@ -65,7 +65,7 @@
                         columns.AddFor(m => m.Weight);
                     })
                     .DataSource(d => d.Mvc()
-                        .Controller("DataGridEmployees")
+                        .Controller("DataGridPointOfEvaluations")
                         .LoadAction("Get")
                         .UpdateAction("Put")
                         .Key("Id")
