@@ -8,7 +8,6 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -369,6 +368,7 @@ namespace EPES.Controllers
 
         public async Task<IActionResult> IndexMonth(string selectoffice, int month = 0, int yearPoint = 0)
         {
+            ViewBag.msg1 = "hello1";
             int m;
             if (month == 0)
             {
@@ -487,6 +487,7 @@ namespace EPES.Controllers
             var user = await _userManager.GetUserAsync(User);
             if (Update == "บันทึก")
             {
+
                 if (model.pointA != null) // Plan A
                 {
                     foreach (var item in model.pointA)
@@ -532,140 +533,140 @@ namespace EPES.Controllers
                     }
                 }
 
-                if (model.pointB != null) // Plan B
-                {
-                    foreach (var item in model.pointB)
-                    {
-                        string uniqueFile = null;
-                        if (item.DataForEvaluations[0] != null)
-                        {
-                            var de = await _context.DataForEvaluations.FirstAsync(d => d.Id == item.DataForEvaluations[0].Id);
-                            if (de != null)
-                            {
-                                de.Result = item.DataForEvaluations[0].Result;
-                                if (item.DataForEvaluations[0].FileUpload != null)
-                                {
-                                    uniqueFile = Guid.NewGuid().ToString() + "_" + item.DataForEvaluations[0].FileUpload.FileName;
-                                    string uploadFolder = Path.Combine(_hostingEnvironment.WebRootPath, "attach_files");
-                                    string filePath = Path.Combine(uploadFolder, uniqueFile);
-                                    await item.DataForEvaluations[0].FileUpload.CopyToAsync(new FileStream(filePath, FileMode.Create));
-                                    de.AttachFile = uniqueFile;
-                                }
-                                de.UpdateUserId = user.Id;
-                                await _context.SaveChangesAsync();
-                            }
-                        }
-                        else
-                        {
-                            var de = new DataForEvaluation();
-                            de.Result = item.DataForEvaluations[0].Result;
+                //if (model.pointB != null) // Plan B
+                //{
+                //    foreach (var item in model.pointB)
+                //    {
+                //        string uniqueFile = null;
+                //        if (item.DataForEvaluations[0] != null)
+                //        {
+                //            var de = await _context.DataForEvaluations.FirstAsync(d => d.Id == item.DataForEvaluations[0].Id);
+                //            if (de != null)
+                //            {
+                //                de.Result = item.DataForEvaluations[0].Result;
+                //                if (item.DataForEvaluations[0].FileUpload != null)
+                //                {
+                //                    uniqueFile = Guid.NewGuid().ToString() + "_" + item.DataForEvaluations[0].FileUpload.FileName;
+                //                    string uploadFolder = Path.Combine(_hostingEnvironment.WebRootPath, "attach_files");
+                //                    string filePath = Path.Combine(uploadFolder, uniqueFile);
+                //                    await item.DataForEvaluations[0].FileUpload.CopyToAsync(new FileStream(filePath, FileMode.Create));
+                //                    de.AttachFile = uniqueFile;
+                //                }
+                //                de.UpdateUserId = user.Id;
+                //                await _context.SaveChangesAsync();
+                //            }
+                //        }
+                //        else
+                //        {
+                //            var de = new DataForEvaluation();
+                //            de.Result = item.DataForEvaluations[0].Result;
 
-                            if (item.DataForEvaluations[0].FileUpload != null)
-                            {
-                                uniqueFile = Guid.NewGuid().ToString() + "_" + item.DataForEvaluations[0].FileUpload.FileName;
-                                string uploadFolder = Path.Combine(_hostingEnvironment.WebRootPath, "attach_files");
-                                string filePath = Path.Combine(uploadFolder, uniqueFile);
-                                await item.DataForEvaluations[0].FileUpload.CopyToAsync(new FileStream(filePath, FileMode.Create));
-                                de.AttachFile = uniqueFile;
-                            }
-                            de.UpdateUserId = user.Id;
-                            de.PointOfEvaluationId = item.Id;
-                            de.OfficeId = item.OwnerOffice.Id;
-                            de.Month = model.month;
-                            await _context.SaveChangesAsync();
-                        }
-                    }
-                }
+                //            if (item.DataForEvaluations[0].FileUpload != null)
+                //            {
+                //                uniqueFile = Guid.NewGuid().ToString() + "_" + item.DataForEvaluations[0].FileUpload.FileName;
+                //                string uploadFolder = Path.Combine(_hostingEnvironment.WebRootPath, "attach_files");
+                //                string filePath = Path.Combine(uploadFolder, uniqueFile);
+                //                await item.DataForEvaluations[0].FileUpload.CopyToAsync(new FileStream(filePath, FileMode.Create));
+                //                de.AttachFile = uniqueFile;
+                //            }
+                //            de.UpdateUserId = user.Id;
+                //            de.PointOfEvaluationId = item.Id;
+                //            de.OfficeId = item.OwnerOffice.Id;
+                //            de.Month = model.month;
+                //            await _context.SaveChangesAsync();
+                //        }
+                //    }
+                //}
 
-                if (model.pointC != null) // Plan C
-                {
-                    foreach (var item in model.pointC)
-                    {
-                        string uniqueFile = null;
-                        if (item.DataForEvaluations[0] != null)
-                        {
-                            var de = await _context.DataForEvaluations.FirstAsync(d => d.Id == item.DataForEvaluations[0].Id);
-                            if (de != null)
-                            {
-                                de.Result = item.DataForEvaluations[0].Result;
-                                if (item.DataForEvaluations[0].FileUpload != null)
-                                {
-                                    uniqueFile = Guid.NewGuid().ToString() + "_" + item.DataForEvaluations[0].FileUpload.FileName;
-                                    string uploadFolder = Path.Combine(_hostingEnvironment.WebRootPath, "attach_files");
-                                    string filePath = Path.Combine(uploadFolder, uniqueFile);
-                                    await item.DataForEvaluations[0].FileUpload.CopyToAsync(new FileStream(filePath, FileMode.Create));
-                                    de.AttachFile = uniqueFile;
-                                }
-                                de.UpdateUserId = user.Id;
-                                await _context.SaveChangesAsync();
-                            }
-                        }
-                        else
-                        {
-                            var de = new DataForEvaluation();
-                            de.Result = item.DataForEvaluations[0].Result;
+                //if (model.pointC != null) // Plan C
+                //{
+                //    foreach (var item in model.pointC)
+                //    {
+                //        string uniqueFile = null;
+                //        if (item.DataForEvaluations[0] != null)
+                //        {
+                //            var de = await _context.DataForEvaluations.FirstAsync(d => d.Id == item.DataForEvaluations[0].Id);
+                //            if (de != null)
+                //            {
+                //                de.Result = item.DataForEvaluations[0].Result;
+                //                if (item.DataForEvaluations[0].FileUpload != null)
+                //                {
+                //                    uniqueFile = Guid.NewGuid().ToString() + "_" + item.DataForEvaluations[0].FileUpload.FileName;
+                //                    string uploadFolder = Path.Combine(_hostingEnvironment.WebRootPath, "attach_files");
+                //                    string filePath = Path.Combine(uploadFolder, uniqueFile);
+                //                    await item.DataForEvaluations[0].FileUpload.CopyToAsync(new FileStream(filePath, FileMode.Create));
+                //                    de.AttachFile = uniqueFile;
+                //                }
+                //                de.UpdateUserId = user.Id;
+                //                await _context.SaveChangesAsync();
+                //            }
+                //        }
+                //        else
+                //        {
+                //            var de = new DataForEvaluation();
+                //            de.Result = item.DataForEvaluations[0].Result;
 
-                            if (item.DataForEvaluations[0].FileUpload != null)
-                            {
-                                uniqueFile = Guid.NewGuid().ToString() + "_" + item.DataForEvaluations[0].FileUpload.FileName;
-                                string uploadFolder = Path.Combine(_hostingEnvironment.WebRootPath, "attach_files");
-                                string filePath = Path.Combine(uploadFolder, uniqueFile);
-                                await item.DataForEvaluations[0].FileUpload.CopyToAsync(new FileStream(filePath, FileMode.Create));
-                                de.AttachFile = uniqueFile;
-                            }
-                            de.UpdateUserId = user.Id;
-                            de.PointOfEvaluationId = item.Id;
-                            de.OfficeId = item.OwnerOffice.Id;
-                            de.Month = model.month;
-                            await _context.SaveChangesAsync();
-                        }
-                    }
-                }
+                //            if (item.DataForEvaluations[0].FileUpload != null)
+                //            {
+                //                uniqueFile = Guid.NewGuid().ToString() + "_" + item.DataForEvaluations[0].FileUpload.FileName;
+                //                string uploadFolder = Path.Combine(_hostingEnvironment.WebRootPath, "attach_files");
+                //                string filePath = Path.Combine(uploadFolder, uniqueFile);
+                //                await item.DataForEvaluations[0].FileUpload.CopyToAsync(new FileStream(filePath, FileMode.Create));
+                //                de.AttachFile = uniqueFile;
+                //            }
+                //            de.UpdateUserId = user.Id;
+                //            de.PointOfEvaluationId = item.Id;
+                //            de.OfficeId = item.OwnerOffice.Id;
+                //            de.Month = model.month;
+                //            await _context.SaveChangesAsync();
+                //        }
+                //    }
+                //}
 
-                if (model.pointD != null) // Plan D
-                {
-                    foreach (var item in model.pointD)
-                    {
-                        string uniqueFile = null;
-                        if (item.DataForEvaluations[0] != null)
-                        {
-                            var de = await _context.DataForEvaluations.FirstAsync(d => d.Id == item.DataForEvaluations[0].Id);
-                            if (de != null)
-                            {
-                                de.Result = item.DataForEvaluations[0].Result;
-                                if (item.DataForEvaluations[0].FileUpload != null)
-                                {
-                                    uniqueFile = Guid.NewGuid().ToString() + "_" + item.DataForEvaluations[0].FileUpload.FileName;
-                                    string uploadFolder = Path.Combine(_hostingEnvironment.WebRootPath, "attach_files");
-                                    string filePath = Path.Combine(uploadFolder, uniqueFile);
-                                    await item.DataForEvaluations[0].FileUpload.CopyToAsync(new FileStream(filePath, FileMode.Create));
-                                    de.AttachFile = uniqueFile;
-                                }
-                                de.UpdateUserId = user.Id;
-                                await _context.SaveChangesAsync();
-                            }
-                        }
-                        else
-                        {
-                            var de = new DataForEvaluation();
-                            de.Result = item.DataForEvaluations[0].Result;
+                //if (model.pointD != null) // Plan D
+                //{
+                //    foreach (var item in model.pointD)
+                //    {
+                //        string uniqueFile = null;
+                //        if (item.DataForEvaluations[0] != null)
+                //        {
+                //            var de = await _context.DataForEvaluations.FirstAsync(d => d.Id == item.DataForEvaluations[0].Id);
+                //            if (de != null)
+                //            {
+                //                de.Result = item.DataForEvaluations[0].Result;
+                //                if (item.DataForEvaluations[0].FileUpload != null)
+                //                {
+                //                    uniqueFile = Guid.NewGuid().ToString() + "_" + item.DataForEvaluations[0].FileUpload.FileName;
+                //                    string uploadFolder = Path.Combine(_hostingEnvironment.WebRootPath, "attach_files");
+                //                    string filePath = Path.Combine(uploadFolder, uniqueFile);
+                //                    await item.DataForEvaluations[0].FileUpload.CopyToAsync(new FileStream(filePath, FileMode.Create));
+                //                    de.AttachFile = uniqueFile;
+                //                }
+                //                de.UpdateUserId = user.Id;
+                //                await _context.SaveChangesAsync();
+                //            }
+                //        }
+                //        else
+                //        {
+                //            var de = new DataForEvaluation();
+                //            de.Result = item.DataForEvaluations[0].Result;
 
-                            if (item.DataForEvaluations[0].FileUpload != null)
-                            {
-                                uniqueFile = Guid.NewGuid().ToString() + "_" + item.DataForEvaluations[0].FileUpload.FileName;
-                                string uploadFolder = Path.Combine(_hostingEnvironment.WebRootPath, "attach_files");
-                                string filePath = Path.Combine(uploadFolder, uniqueFile);
-                                await item.DataForEvaluations[0].FileUpload.CopyToAsync(new FileStream(filePath, FileMode.Create));
-                                de.AttachFile = uniqueFile;
-                            }
-                            de.UpdateUserId = user.Id;
-                            de.PointOfEvaluationId = item.Id;
-                            de.OfficeId = item.OwnerOffice.Id;
-                            de.Month = model.month;
-                            await _context.SaveChangesAsync();
-                        }
-                    }
-                }
+                //            if (item.DataForEvaluations[0].FileUpload != null)
+                //            {
+                //                uniqueFile = Guid.NewGuid().ToString() + "_" + item.DataForEvaluations[0].FileUpload.FileName;
+                //                string uploadFolder = Path.Combine(_hostingEnvironment.WebRootPath, "attach_files");
+                //                string filePath = Path.Combine(uploadFolder, uniqueFile);
+                //                await item.DataForEvaluations[0].FileUpload.CopyToAsync(new FileStream(filePath, FileMode.Create));
+                //                de.AttachFile = uniqueFile;
+                //            }
+                //            de.UpdateUserId = user.Id;
+                //            de.PointOfEvaluationId = item.Id;
+                //            de.OfficeId = item.OwnerOffice.Id;
+                //            de.Month = model.month;
+                //            await _context.SaveChangesAsync();
+                //        }
+                //    }
+                //}
 
                 return RedirectToAction(nameof(IndexMonth), new { selectoffice = selectoffice, month = model.month, yearPoint = model.yearPoint });
             }
@@ -780,6 +781,65 @@ namespace EPES.Controllers
                 viewModel.yearPoint = model.yearPoint;
                 return View(viewModel);
             }
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> UpdateMonth(string selectoffice, List<UpdateDataViewModel> UpdateData,int month, string Update)
+        {
+            //ViewBag.msg1 = "hello1";
+            var user = await _userManager.GetUserAsync(User);
+            if (Update == "บันทึก")
+            {
+                if (UpdateData != null) // Plan A
+                {
+                    foreach (var item in UpdateData)
+                    {
+                        //string uniqueFile = null;
+                        if (item.Id != null)
+                        {
+                            var de = await _context.DataForEvaluations.FirstAsync(d => d.Id == item.Id);
+                            if (de != null)
+                            {
+                                de.Result = item.Result;
+                                //if (item.DataForEvaluations[0].FileUpload != null)
+                                //{
+                                //    uniqueFile = Guid.NewGuid().ToString() + "_" + item.DataForEvaluations[0].FileUpload.FileName;
+                                //    string uploadFolder = Path.Combine(_hostingEnvironment.WebRootPath, "attach_files");
+                                //    string filePath = Path.Combine(uploadFolder, uniqueFile);
+                                //    await item.DataForEvaluations[0].FileUpload.CopyToAsync(new FileStream(filePath, FileMode.Create));
+                                //    de.AttachFile = uniqueFile;
+                                //}
+                                de.UpdateUserId = user.Id;
+                                de.CompletedDate = item.CompletedDate;
+                                await _context.SaveChangesAsync();
+                            }
+                        }
+                        else
+                        {
+                            var de = new DataForEvaluation();
+                            de.Result = item.Result;
+
+                            //if (item.DataForEvaluations[0].FileUpload != null)
+                            //{
+                            //    uniqueFile = Guid.NewGuid().ToString() + "_" + item.DataForEvaluations[0].FileUpload.FileName;
+                            //    string uploadFolder = Path.Combine(_hostingEnvironment.WebRootPath, "attach_files");
+                            //    string filePath = Path.Combine(uploadFolder, uniqueFile);
+                            //    await item.DataForEvaluations[0].FileUpload.CopyToAsync(new FileStream(filePath, FileMode.Create));
+                            //    de.AttachFile = uniqueFile;
+                            //}
+                            de.UpdateUserId = user.Id;
+                            de.PointOfEvaluationId = item.poeid;
+                            de.OfficeId = item.officeid;
+                            de.Month = month;
+                            de.CompletedDate = Convert.ToDateTime(item.CompletedDate);
+                            _context.Add(de);
+                            await _context.SaveChangesAsync();
+                        }
+                    }
+                }
+            }
+            return RedirectToAction(nameof(IndexMonth), new { selectoffice = selectoffice ,month = month});
         }
     }
 }

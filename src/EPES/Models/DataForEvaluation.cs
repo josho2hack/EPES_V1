@@ -10,6 +10,7 @@ namespace EPES.Models
 {
     public class DataForEvaluation
     {
+        [Key]
         public int Id { get; set; }
 
         [Display(Name = "เป้าหมาย/ประมาณการ")]

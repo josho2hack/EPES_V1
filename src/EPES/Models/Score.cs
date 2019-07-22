@@ -8,6 +8,7 @@ namespace EPES.Models
 {
     public class Score
     {
+        [Key]
         public int Id { get; set; }
 
         [Display(Name = "คะแนน")]

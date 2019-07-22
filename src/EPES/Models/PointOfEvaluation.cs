@@ -7,6 +7,7 @@ namespace EPES.Models
 {
     public class PointOfEvaluation
     {
+        [Key]
         public int Id { get; set; }
 
         [Display(Name = "ปีงบประมาณ")]

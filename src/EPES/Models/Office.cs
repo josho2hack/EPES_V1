@@ -6,6 +6,7 @@ namespace EPES.Models
 {
     public class Office
     {
+        [Key]
         public int Id { get; set; }
 
         [Display(Name = "รหัสหน่วยงาน")]
