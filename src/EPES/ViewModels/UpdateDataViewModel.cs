@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Http;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
@@ -11,13 +12,11 @@ namespace EPES.ViewModels
         public int? Id { get; set; }
         public decimal? Result { get; set; }
 
-        [DataType(DataType.Date)]
-        [DisplayFormat(DataFormatString = "{0:dd-MM-yyyy}", ApplyFormatInEditMode = true)]
         public string CompletedDate { get; set; }
 
         public int poeid { get; set; }
         public int officeid { get; set; }
 
-        //public int month { get; set; }
+        public IFormFile FileUpload { get; set; }
     }
 }

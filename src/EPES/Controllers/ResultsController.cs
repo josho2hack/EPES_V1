@@ -9,6 +9,7 @@ using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -786,7 +787,7 @@ namespace EPES.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> UpdateMonth(string selectoffice, List<UpdateDataViewModel> UpdateData,int month, string Update)
+        public async Task<IActionResult> UpdateMonth(string selectoffice, List<UpdateDataViewModel> UpdateData, int yearPoint, int month, string Update)
         {
             //ViewBag.msg1 = "hello1";
             var user = await _userManager.GetUserAsync(User);
@@ -803,14 +804,17 @@ namespace EPES.Controllers
                             if (de != null)
                             {
                                 de.Result = item.Result;
-                                //if (item.DataForEvaluations[0].FileUpload != null)
+
+                                //string uniqueFile;
+                                //if (item.FileUpload != null)
                                 //{
-                                //    uniqueFile = Guid.NewGuid().ToString() + "_" + item.DataForEvaluations[0].FileUpload.FileName;
+                                //    uniqueFile = Guid.NewGuid().ToString() + "_" + item.FileUpload.FileName;
                                 //    string uploadFolder = Path.Combine(_hostingEnvironment.WebRootPath, "attach_files");
                                 //    string filePath = Path.Combine(uploadFolder, uniqueFile);
-                                //    await item.DataForEvaluations[0].FileUpload.CopyToAsync(new FileStream(filePath, FileMode.Create));
+                                //    await item.FileUpload.CopyToAsync(new FileStream(filePath, FileMode.Create));
                                 //    de.AttachFile = uniqueFile;
                                 //}
+
                                 de.UpdateUserId = user.Id;
                                 if (item.CompletedDate != null)
                                 {
@@ -824,14 +828,16 @@ namespace EPES.Controllers
                             var de = new DataForEvaluation();
                             de.Result = item.Result;
 
-                            //if (item.DataForEvaluations[0].FileUpload != null)
+                            //string uniqueFile;
+                            //if (item.FileUpload != null)
                             //{
-                            //    uniqueFile = Guid.NewGuid().ToString() + "_" + item.DataForEvaluations[0].FileUpload.FileName;
+                            //    uniqueFile = Guid.NewGuid().ToString() + "_" + item.FileUpload.FileName;
                             //    string uploadFolder = Path.Combine(_hostingEnvironment.WebRootPath, "attach_files");
                             //    string filePath = Path.Combine(uploadFolder, uniqueFile);
-                            //    await item.DataForEvaluations[0].FileUpload.CopyToAsync(new FileStream(filePath, FileMode.Create));
+                            //    await item.FileUpload.CopyToAsync(new FileStream(filePath, FileMode.Create));
                             //    de.AttachFile = uniqueFile;
                             //}
+
                             de.UpdateUserId = user.Id;
                             de.PointOfEvaluationId = item.poeid;
                             de.OfficeId = item.officeid;
@@ -843,7 +849,7 @@ namespace EPES.Controllers
                     }
                 }
             }
-            return RedirectToAction(nameof(IndexMonth), new { selectoffice = selectoffice ,month = month});
+            return RedirectToAction(nameof(IndexMonth), new { selectoffice = selectoffice, yearPoint = yearPoint, month = month });
         }
     }
 }
