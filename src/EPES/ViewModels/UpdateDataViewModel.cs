@@ -12,7 +12,8 @@ namespace EPES.ViewModels
         public decimal? Result { get; set; }
 
         [DataType(DataType.Date)]
-        public DateTime? CompletedDate { get; set; }
+        [DisplayFormat(DataFormatString = "{0:dd-MM-yyyy}", ApplyFormatInEditMode = true)]
+        public string CompletedDate { get; set; }
 
         public int poeid { get; set; }
         public int officeid { get; set; }

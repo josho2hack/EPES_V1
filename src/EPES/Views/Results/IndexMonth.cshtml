@@ -11,8 +11,7 @@
 <div class="container-fluid">
     <h1 class="h3 mb-2 text-gray-800">ผลการปฏิบัติราชการ</h1>
     <p class="mb-4">บันทึกผล</p>
-    <h1>@ViewBag.msg1</h1>
-    @*<form asp-action="IndexMonth">
+    <form asp-action="IndexMonth">
         <div class="row justify-content-between">
             <div class="col-md-4">
                 @if (User.IsInRole("Admin") || User.IsInRole("Manager"))
@@ -43,10 +42,11 @@
                 </div>
             </div>
         </div>
-    </form>*@
+    </form>
+
+    <!-- Plan A -->
     @if (Model.pointA != null)
     {
-        <!-- Plan A -->
         <div class="card shadow mb-4">
             <div class="card-header py-3">
                 <h6 class="m-0 font-weight-bold text-primary">แผนงานตามนโยบายจากผู้บริหาร (Top - Down: A)</h6>
@@ -85,75 +85,83 @@
                                 @for (int i = 0; i < Model.pointA.Count(); i++)
                                 {
 
-                                <tr>
-                                    <td>
-                                        @Model.pointA[i].Point
-                                    </td>
+                                    <tr>
+                                        <td>
+                                            @Model.pointA[i].Point
+                                        </td>
 
-                                    <td>
-                                        @Model.pointA[i].Name
-                                    </td>
-                                    <td>
-                                        @Model.pointA[i].Weight.ToString("N2")
-                                    </td>
-                                    @{
-                                        DataForEvaluation de = null;
-                                    }
-                                    @foreach (var item in @Model.pointA[i].DataForEvaluations)
-                                    {
-                                        if (item.Month == Model.month && item.OfficeId == Model.pointA[i].OwnerOfficeId)
-                                        {
-                                            de = item;
+                                        <td>
+                                            @Model.pointA[i].Name
+                                        </td>
+                                        <td>
+                                            @Model.pointA[i].Weight.ToString("N2")
+                                        </td>
+                                        @{
+                                            DataForEvaluation de = null;
                                         }
-                                    }
-                                    <td>@string.Format("{0:N4}", de?.Expect)</td>
-
-                                    @if (Model.pointA[i].Unit == UnitOfPoint.ร้อยละ)
-                                    {
-                                        <td>
-                                            @Html.TextBox("UpdateData[" + @i + "].Result", de?.Result, new { @class = "form-control" })
-                                        </td>
-                                        <td></td>
-                                        <td></td>
-                                    }
-                                    else
-                                    {
-                                        <td>
-                                            @{
-                                                List<Object> list = new List<object>();
-                                                list.Add(new { Value = 1, Detail = "1." + Model.pointA[i].DetailRate1 });
-                                                list.Add(new { Value = 2, Detail = "2." + Model.pointA[i].DetailRate2 });
-                                                list.Add(new { Value = 3, Detail = "3." + Model.pointA[i].DetailRate3 });
-                                                list.Add(new { Value = 4, Detail = "4." + Model.pointA[i].DetailRate4 });
-                                                list.Add(new { Value = 5, Detail = "5." + Model.pointA[i].DetailRate5 });
-
-                                                if ((3 < Model.month) && (Model.month < 10) && !String.IsNullOrEmpty(Model.pointA[i].Detail2Rate1))
-                                                {
-                                                    list.Clear();
-                                                    list.Add(new { Value = 1, Detail = "1." + Model.pointA[i].Detail2Rate1 });
-                                                    list.Add(new { Value = 2, Detail = "2." + Model.pointA[i].Detail2Rate2 });
-                                                    list.Add(new { Value = 3, Detail = "3." + Model.pointA[i].Detail2Rate3 });
-                                                    list.Add(new { Value = 4, Detail = "4." + Model.pointA[i].Detail2Rate4 });
-                                                    list.Add(new { Value = 5, Detail = "5." + Model.pointA[i].Detail2Rate5 });
-                                                }
-
-                                                ViewBag.SelectLevel = new SelectList(list, "Value", "Detail", (int)de?.Result);
+                                        @foreach (var item in @Model.pointA[i].DataForEvaluations)
+                                        {
+                                            if (item.Month == Model.month && item.OfficeId == Model.pointA[i].OwnerOfficeId)
+                                            {
+                                                de = item;
                                             }
-                                            <select name="UpdateData[@i].Result" class="form-control" asp-items="ViewBag.SelectLevel"></select>
-                                        </td>
-                                        <td>
-                                            <input type="date" name="UpdateData[@i].CompletedDate" value=@de?.CompletedDate />
-                                        </td>
-                                        <td>
-                                            @*<input type="file" name="pointA[@i].DataForEvaluations[0].FileUpload" class="form-control" accept="application/pdf" />*@
-                                        </td>
-                                    }
+                                        }
+                                        <td>@string.Format("{0:N4}", de?.Expect)</td>
+
+                                        @if (Model.pointA[i].Unit == UnitOfPoint.ร้อยละ)
+                                        {
+                                            <td>
+                                                @Html.TextBox("UpdateData[" + @i + "].Result", de?.Result, new { @class = "form-control" })
+                                            </td>
+                                            <td></td>
+                                            <td></td>
+                                        }
+                                        else
+                                        {
+                                            <td>
+                                                @{
+                                                    List<Object> list = new List<object>();
+                                                    list.Add(new { Value = 1, Detail = "1." + Model.pointA[i].DetailRate1 });
+                                                    list.Add(new { Value = 2, Detail = "2." + Model.pointA[i].DetailRate2 });
+                                                    list.Add(new { Value = 3, Detail = "3." + Model.pointA[i].DetailRate3 });
+                                                    list.Add(new { Value = 4, Detail = "4." + Model.pointA[i].DetailRate4 });
+                                                    list.Add(new { Value = 5, Detail = "5." + Model.pointA[i].DetailRate5 });
+
+                                                    if ((3 < Model.month) && (Model.month < 10) && !String.IsNullOrEmpty(Model.pointA[i].Detail2Rate1))
+                                                    {
+                                                        list.Clear();
+                                                        list.Add(new { Value = 1, Detail = "1." + Model.pointA[i].Detail2Rate1 });
+                                                        list.Add(new { Value = 2, Detail = "2." + Model.pointA[i].Detail2Rate2 });
+                                                        list.Add(new { Value = 3, Detail = "3." + Model.pointA[i].Detail2Rate3 });
+                                                        list.Add(new { Value = 4, Detail = "4." + Model.pointA[i].Detail2Rate4 });
+                                                        list.Add(new { Value = 5, Detail = "5." + Model.pointA[i].Detail2Rate5 });
+                                                    }
+
+                                                    ViewBag.SelectLevel = new SelectList(list, "Value", "Detail", de == null ? 1 : (int)de.Result);
+                                                }
+                                                <select name="UpdateData[@i].Result" class="form-control" asp-items="ViewBag.SelectLevel"></select>
+                                            </td>
+                                            <td>
+                                                @{
+                                                    string dateUpdate = "";
+                                                    if (de != null)
+                                                    {
+                                                        dateUpdate = Convert.ToString(de.CompletedDate);
+                                                    }
+
+                                                }
+                                                <input type="date" name="UpdateData[@i].CompletedDate" value=@{Convert.ToString(dateUpdate, "en-US");} />
+                                            </td>
+                                            <td>
+                                                @*<input type="file" name="pointA[@i].DataForEvaluations[0].FileUpload" class="form-control" accept="application/pdf" />*@
+                                            </td>
+                                        }
                                         <td>
                                             <input type="hidden" name="UpdateData[@i].Id" value=@de?.Id />
                                             <input type="hidden" name="UpdateData[@i].poeid" value=@Model.pointA[i].Id />
                                             <input type="hidden" name="UpdateData[@i].officeid" value=@Model.pointA[i].OwnerOfficeId />
                                         </td>
-                                </tr>
+                                    </tr>
                                 }
                             </tbody>
                         </table>
@@ -258,7 +266,7 @@
                                                 list.Add(new { Value = 5, Detail = "5." + Model.pointB[i].Detail2Rate5 });
                                             }
 
-                                            ViewBag.SelectLevel = new SelectList(list, "Value", "Detail", de?.Result);
+                                            ViewBag.SelectLevel = new SelectList(list, "Value", "Detail", de?.Result ?? 1);
                                         }
                                         <select name="pointB[@i].DataForEvaluations[0].Result" class="form-control" asp-items="ViewBag.SelectLevel"></select>
                                     </td>

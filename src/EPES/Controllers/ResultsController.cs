@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -811,7 +812,10 @@ namespace EPES.Controllers
                                 //    de.AttachFile = uniqueFile;
                                 //}
                                 de.UpdateUserId = user.Id;
-                                de.CompletedDate = item.CompletedDate;
+                                if (item.CompletedDate != null)
+                                {
+                                    de.CompletedDate = DateTime.Parse(item.CompletedDate, CultureInfo.CreateSpecificCulture("en-US"));
+                                }
                                 await _context.SaveChangesAsync();
                             }
                         }
