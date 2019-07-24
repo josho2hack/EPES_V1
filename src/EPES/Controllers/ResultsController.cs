@@ -2,6 +2,7 @@
 using EPES.Models;
 using EPES.ViewModels;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -530,6 +531,7 @@ namespace EPES.Controllers
                             de.PointOfEvaluationId = item.Id;
                             de.OfficeId = item.OwnerOffice.Id;
                             de.Month = model.month;
+                            _context.Add(de);
                             await _context.SaveChangesAsync();
                         }
                     }
@@ -804,17 +806,6 @@ namespace EPES.Controllers
                             if (de != null)
                             {
                                 de.Result = item.Result;
-
-                                //string uniqueFile;
-                                //if (item.FileUpload != null)
-                                //{
-                                //    uniqueFile = Guid.NewGuid().ToString() + "_" + item.FileUpload.FileName;
-                                //    string uploadFolder = Path.Combine(_hostingEnvironment.WebRootPath, "attach_files");
-                                //    string filePath = Path.Combine(uploadFolder, uniqueFile);
-                                //    await item.FileUpload.CopyToAsync(new FileStream(filePath, FileMode.Create));
-                                //    de.AttachFile = uniqueFile;
-                                //}
-
                                 de.UpdateUserId = user.Id;
                                 if (item.CompletedDate != null)
                                 {
@@ -827,17 +818,6 @@ namespace EPES.Controllers
                         {
                             var de = new DataForEvaluation();
                             de.Result = item.Result;
-
-                            //string uniqueFile;
-                            //if (item.FileUpload != null)
-                            //{
-                            //    uniqueFile = Guid.NewGuid().ToString() + "_" + item.FileUpload.FileName;
-                            //    string uploadFolder = Path.Combine(_hostingEnvironment.WebRootPath, "attach_files");
-                            //    string filePath = Path.Combine(uploadFolder, uniqueFile);
-                            //    await item.FileUpload.CopyToAsync(new FileStream(filePath, FileMode.Create));
-                            //    de.AttachFile = uniqueFile;
-                            //}
-
                             de.UpdateUserId = user.Id;
                             de.PointOfEvaluationId = item.poeid;
                             de.OfficeId = item.officeid;
@@ -850,6 +830,50 @@ namespace EPES.Controllers
                 }
             }
             return RedirectToAction(nameof(IndexMonth), new { selectoffice = selectoffice, yearPoint = yearPoint, month = month });
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> FileSelection(IFormFile attachFile, int deid, string selectoffice, int yearPoint, int month)
+        {
+            // Learn to use the entire functionality of the dxFileUploader widget.
+            // http://js.devexpress.com/Documentation/Guide/UI_Widgets/UI_Widgets_-_Deep_Dive/dxFileUploader/
+
+            if (attachFile != null)
+            {
+                await SaveFile(attachFile, deid);
+            }
+
+            return RedirectToAction(nameof(IndexMonth), new { selectoffice = selectoffice, yearPoint = yearPoint, month = month });
+        }
+
+        public async Task SaveFile(IFormFile file, int deid)
+        {
+
+            var uniqueFile = Guid.NewGuid().ToString() + "_" + file.FileName;
+            try
+            {
+                var path = Path.Combine(_hostingEnvironment.WebRootPath, "attach_files");
+                if (!Directory.Exists(path))
+                    Directory.CreateDirectory(path);
+
+                using (var fileStream = System.IO.File.Create(Path.Combine(path, uniqueFile)))
+                {
+                    file.CopyTo(fileStream);
+                }
+            }
+            catch
+            {
+                Response.StatusCode = 400;
+            }
+
+            var user = await _userManager.GetUserAsync(User);
+            var de = await _context.DataForEvaluations.FirstAsync(d => d.Id == deid);
+            if (de != null)
+            {
+                de.UpdateUserId = user.Id;
+                de.AttachFile = uniqueFile;
+                await _context.SaveChangesAsync();
+            }
         }
     }
 }

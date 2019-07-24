@@ -54,3 +54,53 @@ body {
   height: 25px;
   line-height: 25px; /* Vertically center the text there */
 }
+
+#popup {
+    padding: 10px;
+}
+
+    #popup ul {
+        list-style-type: none;
+        text-align: center;
+    }
+
+        #popup ul li {
+            display: inline-block;
+            width: 160px;
+            margin: 10px;
+        }
+
+            #popup ul li img {
+                width: 100px;
+            }
+
+.button-info {
+    margin: 10px;
+}
+
+.popup p {
+    margin-bottom: 10px;
+    margin-top: 0;
+}
+
+#form {
+    max-width: 600px;
+    margin: auto;
+}
+
+#button {
+    margin-top: 50px;
+    margin-right: 20px;
+    float: right;
+}
+
+#fileuploader-container {
+    border: 1px solid #d3d3d3;
+    margin: 20px 20px 0 20px;
+}
+
+#form h3 {
+    margin-left: 20px;
+    font-weight: normal;
+    font-size: 22px;
+}

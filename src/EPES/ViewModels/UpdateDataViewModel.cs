@@ -17,6 +17,6 @@ namespace EPES.ViewModels
         public int poeid { get; set; }
         public int officeid { get; set; }
 
-        public IFormFile FileUpload { get; set; }
+        //public IFormFile FileUpload { get; set; }
     }
 }

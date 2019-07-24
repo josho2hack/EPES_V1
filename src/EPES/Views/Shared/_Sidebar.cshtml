@@ -43,13 +43,13 @@
                     <h6 class="collapse-header">รายเดือน:</h6>
                     <a class="collapse-item" asp-area="" asp-controller="Results" asp-action="IndexMonth">บันทึกผล</a>
                     <a class="collapse-item" asp-area="" asp-controller="Audits" asp-action="IndexMonth">ตรวจสอบ/ยืนยัน</a>
-                    @if (User.IsInRole("Admin"))
+                    @*@if (User.IsInRole("Admin"))
                     {
                         <div class="collapse-divider"></div>
                         <h6 class="collapse-header">รายปี: </h6>
                         <a class="collapse-item" asp-area="" asp-controller="Results" asp-action="Index">บันทึกผล รายปี</a>
                         <a class="collapse-item" asp-area="" asp-controller="Audits" asp-action="Index">ตรวจสอบ/ยืนยัน รายปี</a>
-                    }
+                    }*@
                 </div>
             </div>
         </li>
@@ -109,10 +109,10 @@
                     <a class="collapse-item" href="#">จัดการสิทธิ์</a>
                     <div class="collapse-divider"></div>
                     <h6 class="collapse-header">พิเศษ: </h6>
-                    <h6 class="collapse-header">เชื่อมโยงข้อมูลอัตโนมัติ: </h6>
-                    <a class="collapse-item" asp-area="" asp-controller="PointOfEvaluations" asp-action="#">ตัวชี้วัดที่ 1 (สภ./สท.)</a>
+                    @*<h6 class="collapse-header">เชื่อมโยงข้อมูลอัตโนมัติ: </h6>
+                    <a class="collapse-item" asp-area="" asp-controller="PointOfEvaluations" asp-action="#">ตัวชี้วัดที่ 1 (สภ./สท.)</a>*@
                     <div class="collapse-divider"></div>
-                    <a class="collapse-item text-danger" asp-area="" asp-controller="PointOfEvaluations" asp-action="Copy">คัดลอก สภ.1 -> สภ./สท.</a>
+                    <a class="collapse-item text-danger" asp-area="" asp-controller="PointOfEvaluations" asp-action="Copy">คัดลอก สภ.1 (1-18,22)-> สภ./สท.</a>
                 </div>
             </div>
         </li>

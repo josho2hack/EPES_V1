@@ -109,9 +109,12 @@
 
                                         @if (Model.pointA[i].Unit == UnitOfPoint.ร้อยละ)
                                         {
-                                            <td>
-                                                @Html.TextBox("UpdateData[" + @i + "].Result", de?.Result, new { @class = "form-control" })
-                                            </td>
+                                        <td>
+                                            @Html.TextBox("UpdateData[" + @i + "].Result", de?.Result, new { @class = "form-control" })
+                                            <input type="hidden" name="UpdateData[@i].Id" value=@de?.Id />
+                                            <input type="hidden" name="UpdateData[@i].poeid" value=@Model.pointA[i].Id />
+                                            <input type="hidden" name="UpdateData[@i].officeid" value=@Model.pointA[i].OwnerOfficeId />
+                                        </td>
                                             <td></td>
                                             <td></td>
                                         }
@@ -166,7 +169,60 @@
                                                 <input type="hidden" name="UpdateData[@i].officeid" value=@Model.pointA[i].OwnerOfficeId />
                                             </td>
                                             <td>
-                                                @*<input type="file" name="UpdateData[@i].FileUpload" class="form-control" accept="application/pdf" />*@
+                                                @if (de != null)
+                                                {
+                                                    @(Html.DevExtreme().Popup()
+                                                                                .ID("attach-popup")
+                                                                                .ElementAttr("class", "popup")
+                                                                                .Width(400)
+                                                                                .Height(300)
+                                                                                .ShowTitle(true)
+                                                                                .Title("แนบไฟล์")
+                                                                                .Visible(false)
+                                                                                .DragEnabled(false)
+                                                                                .CloseOnOutsideClick(true)
+                                                    )
+                                                    @(Html.DevExtreme().Button()
+                                                                                .ElementAttr("class", "button-info")
+                                                                                .Text("แนบ")
+                                                                                .OnClick(@<text>
+                                                                                    function showInfo(data) {
+                                                                                    var popup = $("#attach-popup").dxPopup("instance");
+                                                                                    popup.option("contentTemplate", $("#popup-template-" + @de?.Id));
+                                                                                    popup.show();
+                                                                                    }
+                                                                                </text>)
+                                                    )
+                                                    @if (de?.AttachFile != null)
+                                                    {
+                                                        <a href="~/attach_files/@de?.AttachFile" target="_blank"><i class="fas fa-file-pdf fa-2x"></i></a>
+                                                    }
+                                                    @using (Html.DevExtreme().NamedTemplate("popup-template-" + @de?.Id))
+                                                    {
+                                                        <form id="form" method="post" enctype="multipart/form-data" action="FileSelection">
+                                                            <h3>แนบไฟล์ประกอบผลการปฏิบัติ</h3>
+                                                            <div id="fileuploader-container">
+                                                                @(Html.DevExtreme().FileUploader()
+                                                                                              .Name("AttachFile")
+                                                                                              .SelectButtonText("เลือกไฟล์แนบ")
+                                                                                              .LabelText("")
+                                                                                              .Accept("application/pdf")
+                                                                                              .UploadMode(FileUploadMode.UseForm)
+                                                                )
+                                                            </div>
+                                                            @(Html.DevExtreme().Button()
+                                                                                          .ID("button")
+                                                                                          .Text("ส่งไฟล์แนบ")
+                                                                                          .Type(ButtonType.Success)
+                                                                                          .UseSubmitBehavior(true)
+                                                            )
+                                                            <input type="hidden" name="deid" value=@de?.Id />
+                                                            <input asp-for="yearPoint" class="form-control" hidden />
+                                                            <input asp-for="month" class="form-control" hidden />
+                                                            <input type="hidden" name="selectoffice" value="@ViewBag.selectoffice" />
+                                                        </form>
+                                                    }
+                                                }
                                             </td>
                                         }
                                     </tr>
@@ -248,9 +304,12 @@
 
                                         @if (Model.pointB[i].Unit == UnitOfPoint.ร้อยละ)
                                         {
-                                            <td>
-                                                @Html.TextBox("UpdateData[" + @i + "].Result", de?.Result, new { @class = "form-control" })
-                                            </td>
+                                        <td>
+                                            @Html.TextBox("UpdateData[" + @i + "].Result", de?.Result, new { @class = "form-control" })
+                                            <input type="hidden" name="UpdateData[@i].Id" value=@de?.Id />
+                                            <input type="hidden" name="UpdateData[@i].poeid" value=@Model.pointB[i].Id />
+                                            <input type="hidden" name="UpdateData[@i].officeid" value=@Model.pointB[i].OwnerOfficeId />
+                                        </td>
                                             <td></td>
                                             <td></td>
                                         }
@@ -305,7 +364,60 @@
                                                 <input type="hidden" name="UpdateData[@i].officeid" value=@Model.pointB[i].OwnerOfficeId />
                                             </td>
                                             <td>
-                                                @*<input type="file" name="UpdateData[@i].FileUpload" class="form-control" accept="application/pdf" />*@
+                                                @if (de != null)
+                                                {
+                                                    @(Html.DevExtreme().Popup()
+                                                              .ID("attach-popup")
+                                                              .ElementAttr("class", "popup")
+                                                              .Width(400)
+                                                              .Height(300)
+                                                              .ShowTitle(true)
+                                                              .Title("แนบไฟล์")
+                                                              .Visible(false)
+                                                              .DragEnabled(false)
+                                                              .CloseOnOutsideClick(true)
+                                                    )
+                                                    @(Html.DevExtreme().Button()
+                                                              .ElementAttr("class", "button-info")
+                                                              .Text("แนบ")
+                                                              .OnClick(@<text>
+                                                              function showInfo(data) {
+                                                                   var popup = $("#attach-popup").dxPopup("instance");
+                                                                   popup.option("contentTemplate", $("#popup-template-" + @de?.Id));
+                                                                   popup.show();
+                                                              }
+                                                              </text>)
+                                                    )
+                                                    @if (de?.AttachFile != null)
+                                                    {
+                                                        <a href="~/attach_files/@de?.AttachFile" target="_blank"><i class="fas fa-file-pdf fa-2x"></i></a>
+                                                    }
+                                                    @using (Html.DevExtreme().NamedTemplate("popup-template-" + @de?.Id))
+                                                    {
+                                                        <form id="form" method="post" enctype="multipart/form-data" action="FileSelection">
+                                                            <h3>แนบไฟล์ประกอบผลการปฏิบัติ</h3>
+                                                            <div id="fileuploader-container">
+                                                                @(Html.DevExtreme().FileUploader()
+                                                                                      .Name("AttachFile")
+                                                                                      .SelectButtonText("เลือกไฟล์แนบ")
+                                                                                      .LabelText("")
+                                                                                      .Accept("application/pdf")
+                                                                                      .UploadMode(FileUploadMode.UseForm)
+                                                                )
+                                                            </div>
+                                                            @(Html.DevExtreme().Button()
+                                                                                      .ID("button")
+                                                                                      .Text("ส่งไฟล์แนบ")
+                                                                                      .Type(ButtonType.Success)
+                                                                                      .UseSubmitBehavior(true)
+                                                            )
+                                                            <input type="hidden" name="deid" value=@de?.Id />
+                                                            <input asp-for="yearPoint" class="form-control" hidden />
+                                                            <input asp-for="month" class="form-control" hidden />
+                                                            <input type="hidden" name="selectoffice" value="@ViewBag.selectoffice" />
+                                                        </form>
+                                                    }
+                                                }
                                             </td>
                                         }
                                     </tr>
@@ -387,9 +499,12 @@
 
                                         @if (Model.pointC[i].Unit == UnitOfPoint.ร้อยละ)
                                         {
-                                            <td>
-                                                @Html.TextBox("UpdateData[" + @i + "].Result", de?.Result, new { @class = "form-control" })
-                                            </td>
+                                        <td>
+                                            @Html.TextBox("UpdateData[" + @i + "].Result", de?.Result, new { @class = "form-control" })
+                                            <input type="hidden" name="UpdateData[@i].Id" value=@de?.Id />
+                                            <input type="hidden" name="UpdateData[@i].poeid" value=@Model.pointC[i].Id />
+                                            <input type="hidden" name="UpdateData[@i].officeid" value=@Model.pointC[i].OwnerOfficeId />
+                                        </td>
                                             <td></td>
                                             <td></td>
                                         }
@@ -444,7 +559,60 @@
                                                 <input type="hidden" name="UpdateData[@i].officeid" value=@Model.pointC[i].OwnerOfficeId />
                                             </td>
                                             <td>
-                                                @*<input type="file" name="UpdateData[@i].FileUpload" class="form-control" accept="application/pdf" />*@
+                                                @if (de != null)
+                                                {
+                                                    @(Html.DevExtreme().Popup()
+                                                                      .ID("attach-popup")
+                                                                      .ElementAttr("class", "popup")
+                                                                      .Width(400)
+                                                                      .Height(300)
+                                                                      .ShowTitle(true)
+                                                                      .Title("แนบไฟล์")
+                                                                      .Visible(false)
+                                                                      .DragEnabled(false)
+                                                                      .CloseOnOutsideClick(true)
+                                                    )
+                                                    @(Html.DevExtreme().Button()
+                                                                      .ElementAttr("class", "button-info")
+                                                                      .Text("แนบ")
+                                                                      .OnClick(@<text>
+                                                                        function showInfo(data) {
+                                                                        var popup = $("#attach-popup").dxPopup("instance");
+                                                                        popup.option("contentTemplate", $("#popup-template-" + @de?.Id));
+                                                                        popup.show();
+                                                                        }
+                                                                    </text>)
+                                                    )
+                                                    @if (de?.AttachFile != null)
+                                                    {
+                                                        <a href="~/attach_files/@de?.AttachFile" target="_blank"><i class="fas fa-file-pdf fa-2x"></i></a>
+                                                    }
+                                                    @using (Html.DevExtreme().NamedTemplate("popup-template-" + @de?.Id))
+                                                    {
+                                                        <form id="form" method="post" enctype="multipart/form-data" action="FileSelection">
+                                                            <h3>แนบไฟล์ประกอบผลการปฏิบัติ</h3>
+                                                            <div id="fileuploader-container">
+                                                                @(Html.DevExtreme().FileUploader()
+                                                                                              .Name("AttachFile")
+                                                                                              .SelectButtonText("เลือกไฟล์แนบ")
+                                                                                              .LabelText("")
+                                                                                              .Accept("application/pdf")
+                                                                                              .UploadMode(FileUploadMode.UseForm)
+                                                                )
+                                                            </div>
+                                                            @(Html.DevExtreme().Button()
+                                                                                              .ID("button")
+                                                                                              .Text("ส่งไฟล์แนบ")
+                                                                                              .Type(ButtonType.Success)
+                                                                                              .UseSubmitBehavior(true)
+                                                            )
+                                                            <input type="hidden" name="deid" value=@de?.Id />
+                                                            <input asp-for="yearPoint" class="form-control" hidden />
+                                                            <input asp-for="month" class="form-control" hidden />
+                                                            <input type="hidden" name="selectoffice" value="@ViewBag.selectoffice" />
+                                                        </form>
+                                                    }
+                                                }
                                             </td>
                                         }
                                     </tr>
@@ -526,9 +694,12 @@
 
                                         @if (Model.pointD[i].Unit == UnitOfPoint.ร้อยละ)
                                         {
-                                            <td>
-                                                @Html.TextBox("UpdateData[" + @i + "].Result", de?.Result, new { @class = "form-control" })
-                                            </td>
+                                        <td>
+                                            @Html.TextBox("UpdateData[" + @i + "].Result", de?.Result, new { @class = "form-control" })
+                                            <input type="hidden" name="UpdateData[@i].Id" value=@de?.Id />
+                                            <input type="hidden" name="UpdateData[@i].poeid" value=@Model.pointD[i].Id />
+                                            <input type="hidden" name="UpdateData[@i].officeid" value=@Model.pointD[i].OwnerOfficeId />
+                                        </td>
                                             <td></td>
                                             <td></td>
                                         }
@@ -583,7 +754,60 @@
                                                 <input type="hidden" name="UpdateData[@i].officeid" value=@Model.pointD[i].OwnerOfficeId />
                                             </td>
                                             <td>
-                                                @*<input type="file" name="UpdateData[@i].FileUpload" class="form-control" accept="application/pdf" />*@
+                                                @if (de != null)
+                                                {
+                                                    @(Html.DevExtreme().Popup()
+                                                                      .ID("attach-popup")
+                                                                      .ElementAttr("class", "popup")
+                                                                      .Width(400)
+                                                                      .Height(300)
+                                                                      .ShowTitle(true)
+                                                                      .Title("แนบไฟล์")
+                                                                      .Visible(false)
+                                                                      .DragEnabled(false)
+                                                                      .CloseOnOutsideClick(true)
+                                                    )
+                                                    @(Html.DevExtreme().Button()
+                                                                      .ElementAttr("class", "button-info")
+                                                                      .Text("แนบ")
+                                                                      .OnClick(@<text>
+                                                                        function showInfo(data) {
+                                                                        var popup = $("#attach-popup").dxPopup("instance");
+                                                                        popup.option("contentTemplate", $("#popup-template-" + @de?.Id));
+                                                                        popup.show();
+                                                                        }
+                                                                    </text>)
+                                                    )
+                                                    @if (de?.AttachFile != null)
+                                                    {
+                                                        <a href="~/attach_files/@de?.AttachFile" target="_blank"><i class="fas fa-file-pdf fa-2x"></i></a>
+                                                    }
+                                                    @using (Html.DevExtreme().NamedTemplate("popup-template-" + @de?.Id))
+                                                    {
+                                                        <form id="form" method="post" enctype="multipart/form-data" action="FileSelection">
+                                                            <h3>แนบไฟล์ประกอบผลการปฏิบัติ</h3>
+                                                            <div id="fileuploader-container">
+                                                                @(Html.DevExtreme().FileUploader()
+                                                                                              .Name("AttachFile")
+                                                                                              .SelectButtonText("เลือกไฟล์แนบ")
+                                                                                              .LabelText("")
+                                                                                              .Accept("application/pdf")
+                                                                                              .UploadMode(FileUploadMode.UseForm)
+                                                                )
+                                                            </div>
+                                                            @(Html.DevExtreme().Button()
+                                                                                              .ID("button")
+                                                                                              .Text("ส่งไฟล์แนบ")
+                                                                                              .Type(ButtonType.Success)
+                                                                                              .UseSubmitBehavior(true)
+                                                            )
+                                                            <input type="hidden" name="deid" value=@de?.Id />
+                                                            <input asp-for="yearPoint" class="form-control" hidden />
+                                                            <input asp-for="month" class="form-control" hidden />
+                                                            <input type="hidden" name="selectoffice" value="@ViewBag.selectoffice" />
+                                                        </form>
+                                                    }
+                                                }
                                             </td>
                                         }
                                     </tr>
