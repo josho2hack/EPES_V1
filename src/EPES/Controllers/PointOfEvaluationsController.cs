@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -945,7 +946,7 @@ namespace EPES.Controllers
             if (await TryUpdateModelAsync<PointOfEvaluation>(
                 pointOfEvaluationToUpdate, "",
                 p => p.Year, p => p.DetailPlan, p => p.Point, p => p.Plan, p => p.Name, p => p.Unit, p => p.Weight,
-                p => p.Rate1, p => p.DetailRate1, p => p.Rate2, p => p.DetailRate2, p => p.Rate3, p => p.DetailRate3, p => p.Rate4, p => p.DetailRate4, p => p.Rate5, p => p.DetailRate5, p => p.OwnerOfficeId, p => p.AuditOfficeId, p => p.UpdateUserId, p => p.Detail2Rate1, p => p.Detail2Rate2, p => p.Detail2Rate3, p => p.Detail2Rate4, p => p.Detail2Rate5,p => p.Rate1MonthStart,p => p.Rate1MonthStop,p => p.Rate1MonthStart2,p => p.Rate1MonthStop2, p => p.Rate2MonthStart, p => p.Rate2MonthStop, p => p.Rate2MonthStart2, p => p.Rate2MonthStop2, p => p.Rate3MonthStart, p => p.Rate3MonthStop, p => p.Rate3MonthStart2, p => p.Rate3MonthStop2, p => p.Rate4MonthStart, p => p.Rate4MonthStop, p => p.Rate4MonthStart2, p => p.Rate4MonthStop2, p => p.Rate5MonthStart, p => p.Rate5MonthStop, p => p.Rate5MonthStart2, p => p.Rate5MonthStop2))
+                p => p.Rate1, p => p.DetailRate1, p => p.Rate2, p => p.DetailRate2, p => p.Rate3, p => p.DetailRate3, p => p.Rate4, p => p.DetailRate4, p => p.Rate5, p => p.DetailRate5, p => p.OwnerOfficeId, p => p.AuditOfficeId, p => p.UpdateUserId, p => p.Detail2Rate1, p => p.Detail2Rate2, p => p.Detail2Rate3, p => p.Detail2Rate4, p => p.Detail2Rate5,p => p.R1MStart,p => p.R1MStop,p => p.Rate1MonthStart2,p => p.Rate1MonthStop2, p => p.Rate2MonthStart, p => p.Rate2MonthStop, p => p.Rate2MonthStart2, p => p.Rate2MonthStop2, p => p.Rate3MonthStart, p => p.Rate3MonthStop, p => p.Rate3MonthStart2, p => p.Rate3MonthStop2, p => p.Rate4MonthStart, p => p.Rate4MonthStop, p => p.Rate4MonthStart2, p => p.Rate4MonthStop2, p => p.Rate5MonthStart, p => p.Rate5MonthStop, p => p.Rate5MonthStart2, p => p.Rate5MonthStop2))
             {
                 try
                 {

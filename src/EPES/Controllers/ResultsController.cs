@@ -760,20 +760,20 @@ namespace EPES.Controllers
                 }
 
                 List<Object> list = new List<object>();
-                if (m < 10)
+                if (DateTime.Now.Month - 1 < 10)
                 {
                     for (int i = 10; i <= 12; i++)
                     {
                         list.Add(new { Value = i, Month = new DateTime(DateTime.Now.Year, i, 1).ToString("MMMM") });
                     }
-                    for (int i = 1; i <= m; i++)
+                    for (int i = 1; i <= DateTime.Now.Month - 1; i++)
                     {
                         list.Add(new { Value = i, Month = new DateTime(DateTime.Now.Year, i, 1).ToString("MMMM") });
                     }
                 }
                 else
                 {
-                    for (int i = 10; i <= m; i++)
+                    for (int i = 10; i <= DateTime.Now.Month - 1; i++)
                     {
                         list.Add(new { Value = i, Month = new DateTime(DateTime.Now.Year, i, 1).ToString("MMMM") });
                     }
@@ -810,6 +810,7 @@ namespace EPES.Controllers
                                 if (item.CompletedDate != null)
                                 {
                                     de.CompletedDate = DateTime.Parse(item.CompletedDate, CultureInfo.CreateSpecificCulture("en-US"));
+                                    //de.CompletedDate = DateTime.Parse(item.CompletedDate);
                                 }
                                 await _context.SaveChangesAsync();
                             }
