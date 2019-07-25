@@ -53,7 +53,7 @@ namespace EPES.Models
         [DataType(DataType.Date)]
         public string R1MStart {
             get { return this.Rate1MonthStart?.ToString("yyyy-MM-dd",enCulture); }
-            set { this.Rate1MonthStart = DateTime.Parse(value,enCulture); } }
+            set { if(value != null) this.Rate1MonthStart = DateTime.Parse(value,enCulture); } }
 
         [DataType(DataType.Date)]
         [Display(Name = "เดือนสิ้นสุด 1 คะแนน รอบที่ 1")]
@@ -63,7 +63,7 @@ namespace EPES.Models
         public string R1MStop
         {
             get { return this.Rate1MonthStop?.ToString("yyyy-MM-dd", enCulture); }
-            set { this.Rate1MonthStop = DateTime.Parse(value,enCulture); }
+            set { if (value != null) this.Rate1MonthStop = DateTime.Parse(value,enCulture); }
         }
 
         [Display(Name = "รายละเอียดเกณฑ์การให้คะแนน 1 คะแนน รอบที่ 2")]
@@ -76,7 +76,7 @@ namespace EPES.Models
         public string R1MStart2
         {
             get { return this.Rate1MonthStart2?.ToString("yyyy-MM-dd", enCulture); }
-            set { this.Rate1MonthStart2 = DateTime.Parse(value, enCulture); }
+            set { if (value != null) this.Rate1MonthStart2 = DateTime.Parse(value, enCulture); }
         }
 
         [DataType(DataType.Date)]
@@ -87,7 +87,7 @@ namespace EPES.Models
         public string R1MStop2
         {
             get { return this.Rate1MonthStop2?.ToString("yyyy-MM-dd", enCulture); }
-            set { this.Rate1MonthStop2 = DateTime.Parse(value, enCulture); }
+            set { if (value != null) this.Rate1MonthStop2 = DateTime.Parse(value, enCulture); }
         }
         [Display(Name = "เกณฑ์การให้คะแนน 2 คะแนน")]
         [Column(TypeName = "decimal(18, 4)")]
@@ -103,7 +103,7 @@ namespace EPES.Models
         public string R2MStart
         {
             get { return this.Rate2MonthStart?.ToString("yyyy-MM-dd", enCulture); }
-            set { this.Rate2MonthStart = DateTime.Parse(value, enCulture); }
+            set { if (value != null) this.Rate2MonthStart = DateTime.Parse(value, enCulture); }
         }
         [DataType(DataType.Date)]
         [Display(Name = "เดือนสิ้นสุด 2 คะแนน รอบที่ 1")]
@@ -113,7 +113,7 @@ namespace EPES.Models
         public string R2MStop
         {
             get { return this.Rate2MonthStop?.ToString("yyyy-MM-dd", enCulture); }
-            set { this.Rate2MonthStop = DateTime.Parse(value, enCulture); }
+            set { if (value != null) this.Rate2MonthStop = DateTime.Parse(value, enCulture); }
         }
         [Display(Name = "รายละเอียดเกณฑ์การให้คะแนน 2 คะแนน รอบที่ 2")]
         public string Detail2Rate2 { get; set; }
@@ -125,7 +125,7 @@ namespace EPES.Models
         public string R2MStart2
         {
             get { return this.Rate2MonthStart2?.ToString("yyyy-MM-dd", enCulture); }
-            set { this.Rate2MonthStart2 = DateTime.Parse(value, enCulture); }
+            set { if (value != null) this.Rate2MonthStart2 = DateTime.Parse(value, enCulture); }
         }
         [DataType(DataType.Date)]
         [Display(Name = "เดือนสิ้นสุด 2 คะแนน รอบที่ 2")]
@@ -135,7 +135,7 @@ namespace EPES.Models
         public string R2MStop2
         {
             get { return this.Rate2MonthStop2?.ToString("yyyy-MM-dd", enCulture); }
-            set { this.Rate2MonthStop2 = DateTime.Parse(value, enCulture); }
+            set { if (value != null) this.Rate2MonthStop2 = DateTime.Parse(value, enCulture); }
         }
         [Display(Name = "เกณฑ์การให้คะแนน 3 คะแนน")]
         [Column(TypeName = "decimal(18, 4)")]
@@ -151,7 +151,7 @@ namespace EPES.Models
         public string R3MStart
         {
             get { return this.Rate3MonthStart?.ToString("yyyy-MM-dd", enCulture); }
-            set { this.Rate3MonthStart = DateTime.Parse(value, enCulture); }
+            set { if (value != null) this.Rate3MonthStart = DateTime.Parse(value, enCulture); }
         }
         [DataType(DataType.Date)]
         [Display(Name = "เดือนสิ้นสุด 3 คะแนน รอบที่ 1")]
@@ -161,7 +161,7 @@ namespace EPES.Models
         public string R3MStop
         {
             get { return this.Rate3MonthStop?.ToString("yyyy-MM-dd", enCulture); }
-            set { this.Rate3MonthStop = DateTime.Parse(value, enCulture); }
+            set { if (value != null) this.Rate3MonthStop = DateTime.Parse(value, enCulture); }
         }
         [Display(Name = "รายละเอียดเกณฑ์การให้คะแนน 3 คะแนน รอบที่ 2")]
         public string Detail2Rate3 { get; set; }
@@ -173,7 +173,7 @@ namespace EPES.Models
         public string R3MStart2
         {
             get { return this.Rate3MonthStart2?.ToString("yyyy-MM-dd", enCulture); }
-            set { this.Rate3MonthStart2 = DateTime.Parse(value, enCulture); }
+            set { if (value != null) this.Rate3MonthStart2 = DateTime.Parse(value, enCulture); }
         }
         [DataType(DataType.Date)]
         [Display(Name = "เดือนสิ้นสุด 3 คะแนน รอบที่ 2")]
@@ -183,7 +183,7 @@ namespace EPES.Models
         public string R3MStop2
         {
             get { return this.Rate3MonthStop2?.ToString("yyyy-MM-dd", enCulture); }
-            set { this.Rate3MonthStop2 = DateTime.Parse(value, enCulture); }
+            set { if (value != null) this.Rate3MonthStop2 = DateTime.Parse(value, enCulture); }
         }
         [Display(Name = "เกณฑ์การให้คะแนน 4 คะแนน")]
         [Column(TypeName = "decimal(18, 4)")]
@@ -199,7 +199,7 @@ namespace EPES.Models
         public string R4MStart
         {
             get { return this.Rate4MonthStart?.ToString("yyyy-MM-dd", enCulture); }
-            set { this.Rate4MonthStart = DateTime.Parse(value, enCulture); }
+            set { if (value != null) this.Rate4MonthStart = DateTime.Parse(value, enCulture); }
         }
         [DataType(DataType.Date)]
         [Display(Name = "เดือนสิ้นสุด 4 คะแนน รอบที่ 1")]
@@ -209,7 +209,7 @@ namespace EPES.Models
         public string R4MStop
         {
             get { return this.Rate4MonthStop?.ToString("yyyy-MM-dd", enCulture); }
-            set { this.Rate4MonthStop = DateTime.Parse(value, enCulture); }
+            set { if (value != null) this.Rate4MonthStop = DateTime.Parse(value, enCulture); }
         }
         [Display(Name = "รายละเอียดเกณฑ์การให้คะแนน 4 คะแนน รอบที่ 2")]
         public string Detail2Rate4 { get; set; }
@@ -221,7 +221,7 @@ namespace EPES.Models
         public string R4MStart2
         {
             get { return this.Rate4MonthStart2?.ToString("yyyy-MM-dd", enCulture); }
-            set { this.Rate4MonthStart2 = DateTime.Parse(value, enCulture); }
+            set { if (value != null) this.Rate4MonthStart2 = DateTime.Parse(value, enCulture); }
         }
         [DataType(DataType.Date)]
         [Display(Name = "เดือนสิ้นสุด 4 คะแนน รอบที่ 2")]
@@ -231,7 +231,7 @@ namespace EPES.Models
         public string R4MStop2
         {
             get { return this.Rate4MonthStop2?.ToString("yyyy-MM-dd", enCulture); }
-            set { this.Rate4MonthStop2 = DateTime.Parse(value, enCulture); }
+            set { if (value != null) this.Rate4MonthStop2 = DateTime.Parse(value, enCulture); }
         }
         [Display(Name = "เกณฑ์การให้คะแนน 5 คะแนน")]
         [Column(TypeName = "decimal(18, 4)")]
@@ -247,7 +247,7 @@ namespace EPES.Models
         public string R5MStart
         {
             get { return this.Rate5MonthStart?.ToString("yyyy-MM-dd", enCulture); }
-            set { this.Rate5MonthStart = DateTime.Parse(value, enCulture); }
+            set { if (value != null) this.Rate5MonthStart = DateTime.Parse(value, enCulture); }
         }
         [DataType(DataType.Date)]
         [Display(Name = "เดือนสิ้นสุด 5 คะแนน รอบที่ 1")]
@@ -257,7 +257,7 @@ namespace EPES.Models
         public string R5MStop
         {
             get { return this.Rate5MonthStop?.ToString("yyyy-MM-dd", enCulture); }
-            set { this.Rate5MonthStop = DateTime.Parse(value, enCulture); }
+            set { if (value != null) this.Rate5MonthStop = DateTime.Parse(value, enCulture); }
         }
         [Display(Name = "รายละเอียดเกณฑ์การให้คะแนน 5 คะแนน รอบที่ 2")]
         public string Detail2Rate5 { get; set; }
@@ -270,7 +270,7 @@ namespace EPES.Models
         public string R5MStart2
         {
             get { return this.Rate5MonthStart2?.ToString("yyyy-MM-dd", enCulture); }
-            set { this.Rate5MonthStart2 = DateTime.Parse(value, enCulture); }
+            set { if (value != null) this.Rate5MonthStart2 = DateTime.Parse(value, enCulture); }
         }
         [DataType(DataType.Date)]
         [Display(Name = "เดือนสิ้นสุด 5 คะแนน รอบที่ 2")]
@@ -280,7 +280,7 @@ namespace EPES.Models
         public string R5MStop2
         {
             get { return this.Rate5MonthStop2?.ToString("yyyy-MM-dd", enCulture); }
-            set { this.Rate5MonthStop2 = DateTime.Parse(value, enCulture); }
+            set { if (value != null) this.Rate5MonthStop2 = DateTime.Parse(value, enCulture); }
         }
 
         [Display(Name = "ตัวชี้วัดสำหรับ")]

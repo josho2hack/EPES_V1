@@ -807,11 +807,12 @@ namespace EPES.Controllers
                             {
                                 de.Result = item.Result;
                                 de.UpdateUserId = user.Id;
-                                if (item.CompletedDate != null)
-                                {
-                                    de.CompletedDate = DateTime.Parse(item.CompletedDate, CultureInfo.CreateSpecificCulture("en-US"));
-                                    //de.CompletedDate = DateTime.Parse(item.CompletedDate);
-                                }
+                                de.Completed = item.Completed;
+                                //if (item.CompletedDate != null)
+                                //{
+                                //    //de.CompletedDate = DateTime.Parse(item.CompletedDate, CultureInfo.CreateSpecificCulture("en-US"));
+                                //    //de.CompletedDate = DateTime.Parse(item.Completed);
+                                //}
                                 await _context.SaveChangesAsync();
                             }
                         }
@@ -823,7 +824,8 @@ namespace EPES.Controllers
                             de.PointOfEvaluationId = item.poeid;
                             de.OfficeId = item.officeid;
                             de.Month = month;
-                            de.CompletedDate = Convert.ToDateTime(item.CompletedDate);
+                            de.Completed = item.Completed;
+                            //de.CompletedDate = Convert.ToDateTime(item.CompletedDate);
                             _context.Add(de);
                             await _context.SaveChangesAsync();
                         }

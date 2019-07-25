@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -10,6 +11,8 @@ namespace EPES.Models
 {
     public class DataForEvaluation
     {
+        private static IFormatProvider enCulture = CultureInfo.CreateSpecificCulture("en-US");
+
         [Key]
         public int Id { get; set; }
 
@@ -53,6 +56,13 @@ namespace EPES.Models
         [Display(Name = "วันที่แล้วเสร็จ")]
         [DataType(DataType.Date)]
         public DateTime? CompletedDate { get; set; }
+        [NotMapped]
+        [DataType(DataType.Date)]
+        public string Completed
+        {
+            get { return this.CompletedDate?.ToString("yyyy-MM-dd", enCulture); }
+            set { this.CompletedDate = DateTime.Parse(value, enCulture); }
+        }
 
         [Display(Name = "ไฟล์แนบ")]
         public string AttachFile { get; set; }

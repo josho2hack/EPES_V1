@@ -12,7 +12,7 @@ namespace EPES.ViewModels
         public int? Id { get; set; }
         public decimal? Result { get; set; }
 
-        public string CompletedDate { get; set; }
+        public string Completed { get; set; }
 
         public int poeid { get; set; }
         public int officeid { get; set; }
