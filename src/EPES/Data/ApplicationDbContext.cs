@@ -34,6 +34,7 @@ namespace EPES.Data
         public DbSet<PointOfEvaluation> PointOfEvaluations { get; set; }
         public DbSet<DataForEvaluation> DataForEvaluations { get; set; }
         public DbSet<Score> Scores { get; set; }
+        public DbSet<ScoreDraft> ScoreDrafts { get; set; }
         public DbSet<ApplicationUser> ApplicationUsers { get; set; }
     }
 }

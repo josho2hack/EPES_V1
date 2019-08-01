@@ -4,14 +4,16 @@ using EPES.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace EPES.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("25620731052020_ScoreDaft")]
+    partial class ScoreDaft
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -277,20 +279,19 @@ namespace EPES.Data.Migrations
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<int>("LastMonth");
+                    b.Property<DateTime>("LastMonth");
 
-                    b.Property<int>("OfficeId");
+                    b.Property<int>("OfficeID");
 
-                    b.Property<int>("PointOfEvaluationId");
+                    b.Property<int>("PointOfEvaluationID");
 
-                    b.Property<decimal>("ScoreValue")
-                        .HasColumnType("decimal(5, 4)");
+                    b.Property<int>("Value");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("OfficeId");
+                    b.HasIndex("OfficeID");
 
-                    b.HasIndex("PointOfEvaluationId");
+                    b.HasIndex("PointOfEvaluationID");
 
                     b.ToTable("Scores");
                 });
@@ -301,22 +302,21 @@ namespace EPES.Data.Migrations
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<int>("LastMonth");
+                    b.Property<DateTime>("LastMonth");
 
-                    b.Property<int>("OfficeId");
+                    b.Property<int>("OfficeID");
 
-                    b.Property<int>("PointOfEvaluationId");
+                    b.Property<int>("PointOfEvaluationID");
 
-                    b.Property<decimal>("ScoreValue")
-                        .HasColumnType("decimal(5, 4)");
+                    b.Property<int>("Value");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("OfficeId");
+                    b.HasIndex("OfficeID");
 
-                    b.HasIndex("PointOfEvaluationId");
+                    b.HasIndex("PointOfEvaluationID");
 
-                    b.ToTable("ScoreDrafts");
+                    b.ToTable("ScoresDrafts");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
@@ -472,12 +472,12 @@ namespace EPES.Data.Migrations
                 {
                     b.HasOne("EPES.Models.Office", "Office")
                         .WithMany("Scores")
-                        .HasForeignKey("OfficeId")
+                        .HasForeignKey("OfficeID")
                         .OnDelete(DeleteBehavior.Cascade);
 
                     b.HasOne("EPES.Models.PointOfEvaluation", "PointOfEvaluation")
                         .WithMany()
-                        .HasForeignKey("PointOfEvaluationId")
+                        .HasForeignKey("PointOfEvaluationID")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 
@@ -485,12 +485,12 @@ namespace EPES.Data.Migrations
                 {
                     b.HasOne("EPES.Models.Office", "Office")
                         .WithMany()
-                        .HasForeignKey("OfficeId")
+                        .HasForeignKey("OfficeID")
                         .OnDelete(DeleteBehavior.Cascade);
 
                     b.HasOne("EPES.Models.PointOfEvaluation", "PointOfEvaluation")
                         .WithMany()
-                        .HasForeignKey("PointOfEvaluationId")
+                        .HasForeignKey("PointOfEvaluationID")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 

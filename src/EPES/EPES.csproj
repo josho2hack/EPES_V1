@@ -24,6 +24,8 @@
     <Compile Remove="Data\Migrations\25620524024646_updatedata.Designer.cs" />
     <Compile Remove="Data\Migrations\25620701084736_updateCompleteDate.cs" />
     <Compile Remove="Data\Migrations\25620701084736_updateCompleteDate.Designer.cs" />
+    <Compile Remove="Data\Migrations\25620801120122_ScoreUpdateMonth.cs" />
+    <Compile Remove="Data\Migrations\25620801120122_ScoreUpdateMonth.Designer.cs" />
   </ItemGroup>
 
 

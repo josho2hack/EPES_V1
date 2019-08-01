@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace EPES.Models
 {
-    public class Score
+    public class ScoreDraft
     {
         [Key]
         public int Id { get; set; }
