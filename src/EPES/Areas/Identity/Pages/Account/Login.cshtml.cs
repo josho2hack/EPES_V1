@@ -79,7 +79,7 @@ namespace EPES.Areas.Identity.Pages.Account
 
             if (ModelState.IsValid)
             {
-                if (((Input.Username == "admin") || (Input.Username == "pak") || (Input.Username == "sortor") || (Input.Username == "bortor")) && (Input.Password == "P@ssw0rd"))
+                if (((Input.Username == "admin") || (Input.Username == "pak") || (Input.Username == "pak1") || (Input.Username == "pak2") || (Input.Username == "pak3") || (Input.Username == "pak4") || (Input.Username == "pak5") || (Input.Username == "pak6") || (Input.Username == "pak7") || (Input.Username == "pak8") || (Input.Username == "pak9") || (Input.Username == "pak10") || (Input.Username == "pak11") || (Input.Username == "pak12") || (Input.Username == "sortor") || (Input.Username == "bortor")) && (Input.Password == "P@ssw0rd" || Input.Password == "P@ssw0rd1" || Input.Password == "P@ssw0rd2" || Input.Password == "P@ssw0rd3" || Input.Password == "P@ssw0rd4" || Input.Password == "P@ssw0rd5" || Input.Password == "P@ssw0rd6" || Input.Password == "P@ssw0rd7" || Input.Password == "P@ssw0rd8" || Input.Password == "P@ssw0rd9" || Input.Password == "P@ssw0rd10" || Input.Password == "P@ssw0rd11" || Input.Password == "P@ssw0rd12"))
                 {
                     if (Input.Username == "admin")
                     {
@@ -122,8 +122,248 @@ namespace EPES.Areas.Identity.Pages.Account
                     {
                         if ((await _userManager.FindByNameAsync("pak")) == null)
                         {
-                            var pak = new ApplicationUser { UserName = "pak", Email = "pak@epes.rd.go.th", FName = "Pak", LName = "EPES", OfficeId = "01000000" };
+                            var pak = new ApplicationUser { UserName = "pak", Email = "pak@epes.rd.go.th", FName = "Pak1", LName = "EPES", OfficeId = "01000000" };
                             await _userManager.CreateAsync(pak, "P@ssw0rd");
+                            await _userManager.AddToRoleAsync(pak, "Manager");
+                        }
+                        var result = await _signInManager.PasswordSignInAsync(Input.Username, Input.Password, Input.RememberMe, lockoutOnFailure: false);
+                        if (result.Succeeded)
+                        {
+                            _logger.LogInformation("User logged in.");
+                            return LocalRedirect(returnUrl);
+                        }
+                        else
+                        {
+                            ModelState.AddModelError(string.Empty, "Invalid login attempt.");
+                            return Page();
+                        }
+                    }
+                    if (Input.Username == "pak1")
+                    {
+                        if ((await _userManager.FindByNameAsync("pak1")) == null)
+                        {
+                            var pak = new ApplicationUser { UserName = "pak1", Email = "pak1@epes.rd.go.th", FName = "Pak1", LName = "EPES", OfficeId = "01000000" };
+                            await _userManager.CreateAsync(pak, "P@ssw0rd1");
+                            await _userManager.AddToRoleAsync(pak, "Manager");
+                        }
+                        var result = await _signInManager.PasswordSignInAsync(Input.Username, Input.Password, Input.RememberMe, lockoutOnFailure: false);
+                        if (result.Succeeded)
+                        {
+                            _logger.LogInformation("User logged in.");
+                            return LocalRedirect(returnUrl);
+                        }
+                        else
+                        {
+                            ModelState.AddModelError(string.Empty, "Invalid login attempt.");
+                            return Page();
+                        }
+                    }
+                    if (Input.Username == "pak2")
+                    {
+                        if ((await _userManager.FindByNameAsync("pak2")) == null)
+                        {
+                            var pak = new ApplicationUser { UserName = "pak2", Email = "pak2@epes.rd.go.th", FName = "Pak2", LName = "EPES", OfficeId = "02000000" };
+                            await _userManager.CreateAsync(pak, "P@ssw0rd2");
+                            await _userManager.AddToRoleAsync(pak, "Manager");
+                        }
+                        var result = await _signInManager.PasswordSignInAsync(Input.Username, Input.Password, Input.RememberMe, lockoutOnFailure: false);
+                        if (result.Succeeded)
+                        {
+                            _logger.LogInformation("User logged in.");
+                            return LocalRedirect(returnUrl);
+                        }
+                        else
+                        {
+                            ModelState.AddModelError(string.Empty, "Invalid login attempt.");
+                            return Page();
+                        }
+                    }
+                    if (Input.Username == "pak3")
+                    {
+                        if ((await _userManager.FindByNameAsync("pak3")) == null)
+                        {
+                            var pak = new ApplicationUser { UserName = "pak3", Email = "pak3@epes.rd.go.th", FName = "Pak3", LName = "EPES", OfficeId = "03000000" };
+                            await _userManager.CreateAsync(pak, "P@ssw0rd3");
+                            await _userManager.AddToRoleAsync(pak, "Manager");
+                        }
+                        var result = await _signInManager.PasswordSignInAsync(Input.Username, Input.Password, Input.RememberMe, lockoutOnFailure: false);
+                        if (result.Succeeded)
+                        {
+                            _logger.LogInformation("User logged in.");
+                            return LocalRedirect(returnUrl);
+                        }
+                        else
+                        {
+                            ModelState.AddModelError(string.Empty, "Invalid login attempt.");
+                            return Page();
+                        }
+                    }
+                    if (Input.Username == "pak4")
+                    {
+                        if ((await _userManager.FindByNameAsync("pak4")) == null)
+                        {
+                            var pak = new ApplicationUser { UserName = "pak4", Email = "pak4@epes.rd.go.th", FName = "Pak4", LName = "EPES", OfficeId = "04000000" };
+                            await _userManager.CreateAsync(pak, "P@ssw0rd4");
+                            await _userManager.AddToRoleAsync(pak, "Manager");
+                        }
+                        var result = await _signInManager.PasswordSignInAsync(Input.Username, Input.Password, Input.RememberMe, lockoutOnFailure: false);
+                        if (result.Succeeded)
+                        {
+                            _logger.LogInformation("User logged in.");
+                            return LocalRedirect(returnUrl);
+                        }
+                        else
+                        {
+                            ModelState.AddModelError(string.Empty, "Invalid login attempt.");
+                            return Page();
+                        }
+                    }
+                    if (Input.Username == "pak5")
+                    {
+                        if ((await _userManager.FindByNameAsync("pak5")) == null)
+                        {
+                            var pak = new ApplicationUser { UserName = "pak5", Email = "pak5@epes.rd.go.th", FName = "Pak5", LName = "EPES", OfficeId = "05000000" };
+                            await _userManager.CreateAsync(pak, "P@ssw0rd5");
+                            await _userManager.AddToRoleAsync(pak, "Manager");
+                        }
+                        var result = await _signInManager.PasswordSignInAsync(Input.Username, Input.Password, Input.RememberMe, lockoutOnFailure: false);
+                        if (result.Succeeded)
+                        {
+                            _logger.LogInformation("User logged in.");
+                            return LocalRedirect(returnUrl);
+                        }
+                        else
+                        {
+                            ModelState.AddModelError(string.Empty, "Invalid login attempt.");
+                            return Page();
+                        }
+                    }
+                    if (Input.Username == "pak6")
+                    {
+                        if ((await _userManager.FindByNameAsync("pak6")) == null)
+                        {
+                            var pak = new ApplicationUser { UserName = "pak6", Email = "pak1@epes.rd.go.th", FName = "Pak6", LName = "EPES", OfficeId = "06000000" };
+                            await _userManager.CreateAsync(pak, "P@ssw0rd6");
+                            await _userManager.AddToRoleAsync(pak, "Manager");
+                        }
+                        var result = await _signInManager.PasswordSignInAsync(Input.Username, Input.Password, Input.RememberMe, lockoutOnFailure: false);
+                        if (result.Succeeded)
+                        {
+                            _logger.LogInformation("User logged in.");
+                            return LocalRedirect(returnUrl);
+                        }
+                        else
+                        {
+                            ModelState.AddModelError(string.Empty, "Invalid login attempt.");
+                            return Page();
+                        }
+                    }
+                    if (Input.Username == "pak7")
+                    {
+                        if ((await _userManager.FindByNameAsync("pak7")) == null)
+                        {
+                            var pak = new ApplicationUser { UserName = "pak7", Email = "pak7@epes.rd.go.th", FName = "Pak7", LName = "EPES", OfficeId = "07000000" };
+                            await _userManager.CreateAsync(pak, "P@ssw0rd7");
+                            await _userManager.AddToRoleAsync(pak, "Manager");
+                        }
+                        var result = await _signInManager.PasswordSignInAsync(Input.Username, Input.Password, Input.RememberMe, lockoutOnFailure: false);
+                        if (result.Succeeded)
+                        {
+                            _logger.LogInformation("User logged in.");
+                            return LocalRedirect(returnUrl);
+                        }
+                        else
+                        {
+                            ModelState.AddModelError(string.Empty, "Invalid login attempt.");
+                            return Page();
+                        }
+                    }
+                    if (Input.Username == "pak8")
+                    {
+                        if ((await _userManager.FindByNameAsync("pak8")) == null)
+                        {
+                            var pak = new ApplicationUser { UserName = "pak8", Email = "pak8@epes.rd.go.th", FName = "Pak8", LName = "EPES", OfficeId = "08000000" };
+                            await _userManager.CreateAsync(pak, "P@ssw0rd8");
+                            await _userManager.AddToRoleAsync(pak, "Manager");
+                        }
+                        var result = await _signInManager.PasswordSignInAsync(Input.Username, Input.Password, Input.RememberMe, lockoutOnFailure: false);
+                        if (result.Succeeded)
+                        {
+                            _logger.LogInformation("User logged in.");
+                            return LocalRedirect(returnUrl);
+                        }
+                        else
+                        {
+                            ModelState.AddModelError(string.Empty, "Invalid login attempt.");
+                            return Page();
+                        }
+                    }
+                    if (Input.Username == "pak9")
+                    {
+                        if ((await _userManager.FindByNameAsync("pak9")) == null)
+                        {
+                            var pak = new ApplicationUser { UserName = "pak9", Email = "pak9@epes.rd.go.th", FName = "Pak9", LName = "EPES", OfficeId = "09000000" };
+                            await _userManager.CreateAsync(pak, "P@ssw0rd9");
+                            await _userManager.AddToRoleAsync(pak, "Manager");
+                        }
+                        var result = await _signInManager.PasswordSignInAsync(Input.Username, Input.Password, Input.RememberMe, lockoutOnFailure: false);
+                        if (result.Succeeded)
+                        {
+                            _logger.LogInformation("User logged in.");
+                            return LocalRedirect(returnUrl);
+                        }
+                        else
+                        {
+                            ModelState.AddModelError(string.Empty, "Invalid login attempt.");
+                            return Page();
+                        }
+                    }
+                    if (Input.Username == "pak10")
+                    {
+                        if ((await _userManager.FindByNameAsync("pak10")) == null)
+                        {
+                            var pak = new ApplicationUser { UserName = "pak10", Email = "pak10@epes.rd.go.th", FName = "Pak10", LName = "EPES", OfficeId = "10000000" };
+                            await _userManager.CreateAsync(pak, "P@ssw0rd10");
+                            await _userManager.AddToRoleAsync(pak, "Manager");
+                        }
+                        var result = await _signInManager.PasswordSignInAsync(Input.Username, Input.Password, Input.RememberMe, lockoutOnFailure: false);
+                        if (result.Succeeded)
+                        {
+                            _logger.LogInformation("User logged in.");
+                            return LocalRedirect(returnUrl);
+                        }
+                        else
+                        {
+                            ModelState.AddModelError(string.Empty, "Invalid login attempt.");
+                            return Page();
+                        }
+                    }
+                    if (Input.Username == "pak11")
+                    {
+                        if ((await _userManager.FindByNameAsync("pak11")) == null)
+                        {
+                            var pak = new ApplicationUser { UserName = "pak11", Email = "pak11@epes.rd.go.th", FName = "Pak11", LName = "EPES", OfficeId = "11000000" };
+                            await _userManager.CreateAsync(pak, "P@ssw0rd11");
+                            await _userManager.AddToRoleAsync(pak, "Manager");
+                        }
+                        var result = await _signInManager.PasswordSignInAsync(Input.Username, Input.Password, Input.RememberMe, lockoutOnFailure: false);
+                        if (result.Succeeded)
+                        {
+                            _logger.LogInformation("User logged in.");
+                            return LocalRedirect(returnUrl);
+                        }
+                        else
+                        {
+                            ModelState.AddModelError(string.Empty, "Invalid login attempt.");
+                            return Page();
+                        }
+                    }
+                    if (Input.Username == "pak12")
+                    {
+                        if ((await _userManager.FindByNameAsync("pak12")) == null)
+                        {
+                            var pak = new ApplicationUser { UserName = "pak12", Email = "pak12@epes.rd.go.th", FName = "Pak12", LName = "EPES", OfficeId = "12000000" };
+                            await _userManager.CreateAsync(pak, "P@ssw0rd12");
                             await _userManager.AddToRoleAsync(pak, "Manager");
                         }
                         var result = await _signInManager.PasswordSignInAsync(Input.Username, Input.Password, Input.RememberMe, lockoutOnFailure: false);
