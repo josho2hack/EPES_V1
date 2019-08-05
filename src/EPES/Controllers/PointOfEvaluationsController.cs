@@ -438,7 +438,7 @@ namespace EPES.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("DetailPlan,Point,Plan,Name,Unit,Weight,Rate1,DetailRate1,Rate2,DetailRate2,Rate3,DetailRate3,Rate4,DetailRate4,Rate5,DetailRate5,Detail2Rate1,Detail2Rate2,Detail2Rate3,Detail2Rate4,Detail2Rate5,OwnerOfficeId,AuditOfficeId,Rate1MonthStart,Rate1MonthStop,Rate1MonthStart2,Rate1MonthStop2,Rate2MonthStart,Rate2MonthStop,Rate2MonthStart2,Rate2MonthStop2,Rate3MonthStart,Rate3MonthStop,Rate3MonthStart2,Rate3MonthStop2,Rate4MonthStart,Rate4MonthStop,Rate4MonthStart2,Rate4MonthStop2,Rate5MonthStart,Rate5MonthStop,Rate5MonthStart2,Rate5MonthStop2")] PointOfEvaluation dataView, string selectoffice, int yearPoint, decimal? expect1, decimal? expect2, decimal? expect3, decimal? expect4, decimal? expect5, decimal? expect6, decimal? expect7, decimal? expect8, decimal? expect9, decimal? expect10, decimal? expect11, decimal? expect12)
+        public async Task<IActionResult> Create([Bind("DetailPlan,Point,Plan,Name,Unit,Weight,Rate1,DetailRate1,Rate2,DetailRate2,Rate3,DetailRate3,Rate4,DetailRate4,Rate5,DetailRate5,Detail2Rate1,Detail2Rate2,Detail2Rate3,Detail2Rate4,Detail2Rate5,OwnerOfficeId,AuditOfficeId,Rate1MonthStart,Rate1MonthStop,Rate1MonthStart2,Rate1MonthStop2,Rate2MonthStart,Rate2MonthStop,Rate2MonthStart2,Rate2MonthStop2,Rate3MonthStart,Rate3MonthStop,Rate3MonthStart2,Rate3MonthStop2,Rate4MonthStart,Rate4MonthStop,Rate4MonthStart2,Rate4MonthStop2,Rate5MonthStart,Rate5MonthStop,Rate5MonthStart2,Rate5MonthStop2")] PointOfEvaluation dataView, string selectoffice, int yearPoint, decimal expect1, decimal expect2, decimal expect3, decimal expect4, decimal expect5, decimal expect6, decimal expect7, decimal expect8, decimal expect9, decimal expect10, decimal expect11, decimal expect12)
         {
             var user = await _userManager.GetUserAsync(User);
 
@@ -1258,7 +1258,7 @@ namespace EPES.Controllers
         //    ViewBag.AuditOfficeId = new SelectList(officesQuery.AsNoTracking(), "Id", "Name", selectedOffice);
         //}
 
-        public async Task SaveExpect(int poeid, int ownerofficeid, int month, decimal? expect, string userid)
+        public async Task SaveExpect(int poeid, int ownerofficeid, int month, decimal expect, string userid)
         {
             if (expect != null)
             {

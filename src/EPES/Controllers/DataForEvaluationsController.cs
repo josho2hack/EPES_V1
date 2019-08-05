@@ -248,12 +248,12 @@ namespace EPES.Controllers
             list.Add(new { Value = "3", Detail = "3." + viewModel.Point.DetailRate3 });
             list.Add(new { Value = "4", Detail = "4." + viewModel.Point.DetailRate4 });
             list.Add(new { Value = "5", Detail = "5." + viewModel.Point.DetailRate5 });
-            ViewBag.SelectLevel10 = new SelectList(list, "Value", "Detail", viewModel.expect10?.ToString("N0"));
-            ViewBag.SelectLevel11 = new SelectList(list, "Value", "Detail", viewModel.expect11?.ToString("N0"));
-            ViewBag.SelectLevel12 = new SelectList(list, "Value", "Detail", viewModel.expect12?.ToString("N0"));
-            ViewBag.SelectLevel1 = new SelectList(list, "Value", "Detail", viewModel.expect1?.ToString("N0"));
-            ViewBag.SelectLevel2 = new SelectList(list, "Value", "Detail", viewModel.expect2?.ToString("N0"));
-            ViewBag.SelectLevel3 = new SelectList(list, "Value", "Detail", viewModel.expect3?.ToString("N0"));
+            ViewBag.SelectLevel10 = new SelectList(list, "Value", "Detail", viewModel.expect10.ToString("N0"));
+            ViewBag.SelectLevel11 = new SelectList(list, "Value", "Detail", viewModel.expect11.ToString("N0"));
+            ViewBag.SelectLevel12 = new SelectList(list, "Value", "Detail", viewModel.expect12.ToString("N0"));
+            ViewBag.SelectLevel1 = new SelectList(list, "Value", "Detail", viewModel.expect1.ToString("N0"));
+            ViewBag.SelectLevel2 = new SelectList(list, "Value", "Detail", viewModel.expect2.ToString("N0"));
+            ViewBag.SelectLevel3 = new SelectList(list, "Value", "Detail", viewModel.expect3.ToString("N0"));
 
 
             List<Object> list2 = new List<object>();
@@ -263,18 +263,18 @@ namespace EPES.Controllers
             list2.Add(new { Value = "3", Detail = "3." + viewModel.Point.Detail2Rate3 });
             list2.Add(new { Value = "4", Detail = "4." + viewModel.Point.Detail2Rate4 });
             list2.Add(new { Value = "5", Detail = "5." + viewModel.Point.Detail2Rate5 });
-            ViewBag.SelectLevel4 = new SelectList(list2, "Value", "Detail", viewModel.expect4?.ToString("N0"));
-            ViewBag.SelectLevel5 = new SelectList(list2, "Value", "Detail", viewModel.expect5?.ToString("N0"));
-            ViewBag.SelectLevel6 = new SelectList(list2, "Value", "Detail", viewModel.expect6?.ToString("N0"));
-            ViewBag.SelectLevel7 = new SelectList(list2, "Value", "Detail", viewModel.expect7?.ToString("N0"));
-            ViewBag.SelectLevel8 = new SelectList(list2, "Value", "Detail", viewModel.expect8?.ToString("N0"));
-            ViewBag.SelectLevel9 = new SelectList(list2, "Value", "Detail", viewModel.expect9?.ToString("N0"));
-            ViewBag.SelectLevelx4 = new SelectList(list, "Value", "Detail", viewModel.expect4?.ToString("N0"));
-            ViewBag.SelectLevelx5 = new SelectList(list, "Value", "Detail", viewModel.expect5?.ToString("N0"));
-            ViewBag.SelectLevelx6 = new SelectList(list, "Value", "Detail", viewModel.expect6?.ToString("N0"));
-            ViewBag.SelectLevelx7 = new SelectList(list, "Value", "Detail", viewModel.expect7?.ToString("N0"));
-            ViewBag.SelectLevelx8 = new SelectList(list, "Value", "Detail", viewModel.expect8?.ToString("N0"));
-            ViewBag.SelectLevelx9 = new SelectList(list, "Value", "Detail", viewModel.expect9?.ToString("N0"));
+            ViewBag.SelectLevel4 = new SelectList(list2, "Value", "Detail", viewModel.expect4.ToString("N0"));
+            ViewBag.SelectLevel5 = new SelectList(list2, "Value", "Detail", viewModel.expect5.ToString("N0"));
+            ViewBag.SelectLevel6 = new SelectList(list2, "Value", "Detail", viewModel.expect6.ToString("N0"));
+            ViewBag.SelectLevel7 = new SelectList(list2, "Value", "Detail", viewModel.expect7.ToString("N0"));
+            ViewBag.SelectLevel8 = new SelectList(list2, "Value", "Detail", viewModel.expect8.ToString("N0"));
+            ViewBag.SelectLevel9 = new SelectList(list2, "Value", "Detail", viewModel.expect9.ToString("N0"));
+            ViewBag.SelectLevelx4 = new SelectList(list, "Value", "Detail", viewModel.expect4.ToString("N0"));
+            ViewBag.SelectLevelx5 = new SelectList(list, "Value", "Detail", viewModel.expect5.ToString("N0"));
+            ViewBag.SelectLevelx6 = new SelectList(list, "Value", "Detail", viewModel.expect6.ToString("N0"));
+            ViewBag.SelectLevelx7 = new SelectList(list, "Value", "Detail", viewModel.expect7.ToString("N0"));
+            ViewBag.SelectLevelx8 = new SelectList(list, "Value", "Detail", viewModel.expect8.ToString("N0"));
+            ViewBag.SelectLevelx9 = new SelectList(list, "Value", "Detail", viewModel.expect9.ToString("N0"));
 
             ViewBag.selectoffice = selectoffice;
             viewModel.poeid = poeid;
@@ -329,12 +329,12 @@ namespace EPES.Controllers
             list.Add(new { Value = "4", Detail = "4." + viewModel.Point.DetailRate4 });
             list.Add(new { Value = "5", Detail = "5." + viewModel.Point.DetailRate5 });
             ViewBag.SelectLevel = new SelectList(list, "Value", "Detail");
-            ViewBag.SelectLevel10 = new SelectList(list, "Value", "Detail", viewModel.expect10?.ToString("N0"));
-            ViewBag.SelectLevel11 = new SelectList(list, "Value", "Detail", viewModel.expect11?.ToString("N0"));
-            ViewBag.SelectLevel12 = new SelectList(list, "Value", "Detail", viewModel.expect12?.ToString("N0"));
-            ViewBag.SelectLevel1 = new SelectList(list, "Value", "Detail", viewModel.expect1?.ToString("N0"));
-            ViewBag.SelectLevel2 = new SelectList(list, "Value", "Detail", viewModel.expect2?.ToString("N0"));
-            ViewBag.SelectLevel3 = new SelectList(list, "Value", "Detail", viewModel.expect3?.ToString("N0"));
+            ViewBag.SelectLevel10 = new SelectList(list, "Value", "Detail", viewModel.expect10.ToString("N0"));
+            ViewBag.SelectLevel11 = new SelectList(list, "Value", "Detail", viewModel.expect11.ToString("N0"));
+            ViewBag.SelectLevel12 = new SelectList(list, "Value", "Detail", viewModel.expect12.ToString("N0"));
+            ViewBag.SelectLevel1 = new SelectList(list, "Value", "Detail", viewModel.expect1.ToString("N0"));
+            ViewBag.SelectLevel2 = new SelectList(list, "Value", "Detail", viewModel.expect2.ToString("N0"));
+            ViewBag.SelectLevel3 = new SelectList(list, "Value", "Detail", viewModel.expect3.ToString("N0"));
 
 
             List<Object> list2 = new List<object>();
@@ -344,12 +344,12 @@ namespace EPES.Controllers
             list2.Add(new { Value = "3", Detail = "3." + viewModel.Point.Detail2Rate3 });
             list2.Add(new { Value = "4", Detail = "4." + viewModel.Point.Detail2Rate4 });
             list2.Add(new { Value = "5", Detail = "5." + viewModel.Point.Detail2Rate5 });
-            ViewBag.SelectLevel4 = new SelectList(list2, "Value", "Detail", viewModel.expect4?.ToString("N0"));
-            ViewBag.SelectLevel5 = new SelectList(list2, "Value", "Detail", viewModel.expect5?.ToString("N0"));
-            ViewBag.SelectLevel6 = new SelectList(list2, "Value", "Detail", viewModel.expect6?.ToString("N0"));
-            ViewBag.SelectLevel7 = new SelectList(list2, "Value", "Detail", viewModel.expect7?.ToString("N0"));
-            ViewBag.SelectLevel8 = new SelectList(list2, "Value", "Detail", viewModel.expect8?.ToString("N0"));
-            ViewBag.SelectLevel9 = new SelectList(list2, "Value", "Detail", viewModel.expect9?.ToString("N0"));
+            ViewBag.SelectLevel4 = new SelectList(list2, "Value", "Detail", viewModel.expect4.ToString("N0"));
+            ViewBag.SelectLevel5 = new SelectList(list2, "Value", "Detail", viewModel.expect5.ToString("N0"));
+            ViewBag.SelectLevel6 = new SelectList(list2, "Value", "Detail", viewModel.expect6.ToString("N0"));
+            ViewBag.SelectLevel7 = new SelectList(list2, "Value", "Detail", viewModel.expect7.ToString("N0"));
+            ViewBag.SelectLevel8 = new SelectList(list2, "Value", "Detail", viewModel.expect8.ToString("N0"));
+            ViewBag.SelectLevel9 = new SelectList(list2, "Value", "Detail", viewModel.expect9.ToString("N0"));
 
             ViewBag.selectoffice = selectoffice;
             return View(viewModel);
@@ -360,7 +360,7 @@ namespace EPES.Controllers
             return _context.DataForEvaluations.Any(e => e.Id == id);
         }
 
-        public async Task SaveExpect(int poeid, int ownerofficeid, int month, decimal? expect, string userid)
+        public async Task SaveExpect(int poeid, int ownerofficeid, int month, decimal expect, string userid)
         {
             if (expect != null)
             {

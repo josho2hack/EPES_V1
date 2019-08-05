@@ -317,7 +317,7 @@ namespace EPES.Controllers
             return View(viewModel);
         }
 
-        public async Task SaveResult(int poeid, int ownerofficeid, int month, decimal? result, string userid)
+        public async Task SaveResult(int poeid, int ownerofficeid, int month, decimal result, string userid)
         {
             if (result != null)
             {

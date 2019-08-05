@@ -28,6 +28,14 @@ namespace EPES.Data
                 .HasOne(d => d.Office)
                 .WithMany(o => o.DataForEvaluations)
                 .OnDelete(DeleteBehavior.Restrict);
+
+            builder.Entity<DataForEvaluation>()
+            .Property(d => d.Result)
+            .HasDefaultValue(0);
+
+            builder.Entity<DataForEvaluation>()
+            .Property(d => d.Expect)
+            .HasDefaultValue(0);
         }
 
         public DbSet<Office> Offices { get; set; }

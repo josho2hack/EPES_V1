@@ -22,30 +22,30 @@ namespace EPES.ViewModels
         public int yearPoint { get; set; }
         public int poeid { get; set; }
 
-        public decimal? expect1 { get; set; }
-        public decimal? expect2 { get; set; }
-        public decimal? expect3 { get; set; }
-        public decimal? expect4 { get; set; }
-        public decimal? expect5 { get; set; }
-        public decimal? expect6 { get; set; }
-        public decimal? expect7 { get; set; }
-        public decimal? expect8 { get; set; }
-        public decimal? expect9 { get; set; }
-        public decimal? expect10 { get; set; }
-        public decimal? expect11 { get; set; }
-        public decimal? expect12 { get; set; }
+        public decimal expect1 { get; set; }
+        public decimal expect2 { get; set; }
+        public decimal expect3 { get; set; }
+        public decimal expect4 { get; set; }
+        public decimal expect5 { get; set; }
+        public decimal expect6 { get; set; }
+        public decimal expect7 { get; set; }
+        public decimal expect8 { get; set; }
+        public decimal expect9 { get; set; }
+        public decimal expect10 { get; set; }
+        public decimal expect11 { get; set; }
+        public decimal expect12 { get; set; }
 
-        public decimal? result1 { get; set; }
-        public decimal? result2 { get; set; }
-        public decimal? result3 { get; set; }
-        public decimal? result4 { get; set; }
-        public decimal? result5 { get; set; }
-        public decimal? result6 { get; set; }
-        public decimal? result7 { get; set; }
-        public decimal? result8 { get; set; }
-        public decimal? result9 { get; set; }
-        public decimal? result10 { get; set; }
-        public decimal? result11 { get; set; }
-        public decimal? result12 { get; set; }
+        public decimal result1 { get; set; }
+        public decimal result2 { get; set; }
+        public decimal result3 { get; set; }
+        public decimal result4 { get; set; }
+        public decimal result5 { get; set; }
+        public decimal result6 { get; set; }
+        public decimal result7 { get; set; }
+        public decimal result8 { get; set; }
+        public decimal result9 { get; set; }
+        public decimal result10 { get; set; }
+        public decimal result11 { get; set; }
+        public decimal result12 { get; set; }
     }
 }

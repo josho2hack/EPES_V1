@@ -18,11 +18,11 @@ namespace EPES.Models
 
         [Display(Name = "เป้าหมาย/ประมาณการ")]
         [Column(TypeName = "decimal(38, 10)")]
-        public decimal? Expect { get; set; }
+        public decimal Expect { get; set; }
 
         [Display(Name = "ผลการดำเนินการ")]
         [Column(TypeName = "decimal(38, 10)")]
-        public decimal? Result { get; set; }
+        public decimal Result { get; set; }
 
         [Display(Name = "ผลการดำเนินการก่อนผู้ตรวจสอบแก้ไข")]
         [Column(TypeName = "decimal(38, 10)")]
