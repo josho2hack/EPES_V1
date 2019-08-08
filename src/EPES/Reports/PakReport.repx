@@ -1,0 +1,106 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<XtraReportsLayoutSerializer SerializerVersion="19.1.3.0" Ref="1" ControlType="DevExpress.XtraReports.UI.XtraReport, DevExpress.XtraReports.v19.1, Version=19.1.3.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a" Name="PakReport" SnapGridSize="25" ReportUnit="TenthsOfAMillimeter" Margins="254, 254, 254, 254" PaperKind="A4" PageWidth="2100" PageHeight="2970" Version="19.1" DataMember="ScoreDrafts" DataSource="#Ref-0" Dpi="254" Font="Arial, 9.75pt">
+  <Bands>
+    <Item1 Ref="2" ControlType="TopMarginBand" Name="TopMargin" HeightF="254" Dpi="254" />
+    <Item2 Ref="3" ControlType="BottomMarginBand" Name="BottomMargin" HeightF="254" Dpi="254">
+      <Controls>
+        <Item1 Ref="4" ControlType="XRPageInfo" Name="pageInfo1" PageInfo="DateTime" SizeF="764,58" LocationFloat="16, 16" Dpi="254" StyleName="PageInfo" />
+        <Item2 Ref="5" ControlType="XRPageInfo" Name="pageInfo2" TextFormatString="Page {0} of {1}" TextAlignment="TopRight" SizeF="764,58" LocationFloat="812, 16" Dpi="254" StyleName="PageInfo" />
+      </Controls>
+    </Item2>
+    <Item3 Ref="6" ControlType="ReportHeaderBand" Name="ReportHeader" HeightF="152.4" Dpi="254">
+      <Controls>
+        <Item1 Ref="7" ControlType="XRLabel" Name="label1" Text="คะแนนผลการปฏิบัติราชการ" SizeF="1560,63.098217" LocationFloat="16, 16" Dpi="254" StyleName="Title" />
+      </Controls>
+    </Item3>
+    <Item4 Ref="8" ControlType="GroupHeaderBand" Name="GroupHeader1" GroupUnion="WithFirstDetail" HeightF="71.12" Dpi="254">
+      <Controls>
+        <Item1 Ref="9" ControlType="XRTable" Name="table1" SizeF="1592,71.12" LocationFloat="0, 0" Dpi="254">
+          <Rows>
+            <Item1 Ref="10" ControlType="XRTableRow" Name="tableRow1" Weight="1" Dpi="254">
+              <Cells>
+                <Item1 Ref="11" ControlType="XRTableCell" Name="tableCell1" Weight="0.22898456439300996" Text="Score Value" TextAlignment="MiddleRight" Dpi="254" StyleName="DetailCaption1" Borders="None">
+                  <StylePriority Ref="12" UseBorders="false" UseTextAlignment="false" />
+                </Item1>
+                <Item2 Ref="13" ControlType="XRTableCell" Name="tableCell2" Weight="0.38292586743532114" Text="Point Of Evaluation Id" TextAlignment="MiddleRight" Dpi="254" StyleName="DetailCaption1">
+                  <StylePriority Ref="14" UseTextAlignment="false" />
+                </Item2>
+                <Item3 Ref="15" ControlType="XRTableCell" Name="tableCell3" Weight="0.17206236106067446" Text="Office Id" TextAlignment="MiddleRight" Dpi="254" StyleName="DetailCaption1">
+                  <StylePriority Ref="16" UseTextAlignment="false" />
+                </Item3>
+                <Item4 Ref="17" ControlType="XRTableCell" Name="tableCell4" Weight="0.21602718794166143" Text="Last Month" TextAlignment="MiddleRight" Dpi="254" StyleName="DetailCaption1">
+                  <StylePriority Ref="18" UseTextAlignment="false" />
+                </Item4>
+              </Cells>
+            </Item1>
+          </Rows>
+        </Item1>
+      </Controls>
+    </Item4>
+    <Item5 Ref="19" ControlType="DetailBand" Name="Detail" HeightF="63.42" Dpi="254">
+      <Controls>
+        <Item1 Ref="20" ControlType="XRTable" Name="table2" SizeF="1592,63.42" LocationFloat="0, 0" Dpi="254" OddStyleName="DetailData3_Odd">
+          <Rows>
+            <Item1 Ref="21" ControlType="XRTableRow" Name="tableRow2" Weight="11.683999633789062" Dpi="254">
+              <Cells>
+                <Item1 Ref="22" ControlType="XRTableCell" Name="tableCell5" Weight="0.22898456439300996" TextFormatString="{0:C2}" TextAlignment="MiddleRight" Dpi="254" StyleName="DetailData1" Borders="None">
+                  <ExpressionBindings>
+                    <Item1 Ref="23" Expression="[ScoreValue]" PropertyName="Text" EventName="BeforePrint" />
+                  </ExpressionBindings>
+                  <StylePriority Ref="24" UseBorders="false" UseTextAlignment="false" />
+                </Item1>
+                <Item2 Ref="25" ControlType="XRTableCell" Name="tableCell6" Weight="0.38292586743532114" TextAlignment="MiddleRight" Dpi="254" StyleName="DetailData1">
+                  <ExpressionBindings>
+                    <Item1 Ref="26" Expression="[PointOfEvaluationId]" PropertyName="Text" EventName="BeforePrint" />
+                  </ExpressionBindings>
+                  <StylePriority Ref="27" UseTextAlignment="false" />
+                </Item2>
+                <Item3 Ref="28" ControlType="XRTableCell" Name="tableCell7" Weight="0.17206236106067446" TextAlignment="MiddleRight" Dpi="254" StyleName="DetailData1">
+                  <ExpressionBindings>
+                    <Item1 Ref="29" Expression="[OfficeId]" PropertyName="Text" EventName="BeforePrint" />
+                  </ExpressionBindings>
+                  <StylePriority Ref="30" UseTextAlignment="false" />
+                </Item3>
+                <Item4 Ref="31" ControlType="XRTableCell" Name="tableCell8" Weight="0.21602718794166143" TextAlignment="MiddleRight" Dpi="254" StyleName="DetailData1">
+                  <ExpressionBindings>
+                    <Item1 Ref="32" Expression="[LastMonth]" PropertyName="Text" EventName="BeforePrint" />
+                  </ExpressionBindings>
+                  <StylePriority Ref="33" UseTextAlignment="false" />
+                </Item4>
+              </Cells>
+            </Item1>
+          </Rows>
+        </Item1>
+      </Controls>
+    </Item5>
+    <Item6 Ref="34" ControlType="ReportFooterBand" Name="ReportFooter" HeightF="125.43647" Dpi="254">
+      <Controls>
+        <Item1 Ref="35" ControlType="XRPanel" Name="panel1" SizeF="1592,125.43647" LocationFloat="0, 0" Dpi="254" StyleName="GrandTotalBackground1">
+          <Controls>
+            <Item1 Ref="36" ControlType="XRLabel" Name="label2" Text="AVG" SizeF="83.06849,37.8064728" LocationFloat="0, 29.21" Dpi="254" StyleName="GrandTotalCaption1" />
+            <Item2 Ref="37" ControlType="XRLabel" Name="label3" TextFormatString="{0:C2}" CanGrow="false" TextAlignment="MiddleRight" WordWrap="false" SizeF="281.474945,37.8064728" LocationFloat="83.06849, 29.21" Dpi="254" StyleName="GrandTotalData1">
+              <Summary Ref="38" Running="Report" />
+              <ExpressionBindings>
+                <Item1 Ref="39" Expression="sumAvg([ScoreValue])" PropertyName="Text" EventName="BeforePrint" />
+              </ExpressionBindings>
+              <StylePriority Ref="40" UseTextAlignment="false" />
+            </Item2>
+          </Controls>
+        </Item1>
+      </Controls>
+    </Item6>
+  </Bands>
+  <StyleSheet>
+    <Item1 Ref="41" Name="Title" BorderStyle="Inset" Font="Arial, 14.25pt" ForeColor="255,64,70,80" BackColor="Transparent" BorderColor="Black" Sides="None" StringFormat="Near;Near;0;None;Character;Default" BorderWidthSerializable="1" />
+    <Item2 Ref="42" Name="DetailCaption1" BorderStyle="Inset" Padding="15,15,0,0,254" Font="Arial, 8.25pt, style=Bold" ForeColor="White" BackColor="255,23,104,196" BorderColor="White" Sides="Left" StringFormat="Near;Center;0;None;Character;Default" TextAlignment="MiddleLeft" BorderWidthSerializable="2" />
+    <Item3 Ref="43" Name="DetailData1" BorderStyle="Inset" Padding="15,15,0,0,254" Font="Arial, 8.25pt" ForeColor="Black" BorderColor="Transparent" Sides="Left" StringFormat="Near;Center;0;None;Character;Default" TextAlignment="MiddleLeft" BorderWidthSerializable="2" />
+    <Item4 Ref="44" Name="DetailData3_Odd" BorderStyle="Inset" Padding="15,15,0,0,254" Font="Arial, 8.25pt" ForeColor="Black" BackColor="255,243,245,248" BorderColor="Transparent" Sides="None" StringFormat="Near;Center;0;None;Character;Default" TextAlignment="MiddleLeft" BorderWidthSerializable="1" />
+    <Item5 Ref="45" Name="GrandTotalCaption1" BorderStyle="Inset" Padding="15,5,0,0,254" Font="Arial, 8.25pt, style=Bold" ForeColor="255,147,147,147" Sides="None" StringFormat="Near;Center;0;None;Character;Default" TextAlignment="MiddleLeft" />
+    <Item6 Ref="46" Name="GrandTotalData1" BorderStyle="Inset" Padding="5,15,0,0,254" Font="Arial, 8.25pt, style=Bold" ForeColor="255,75,75,75" Sides="None" StringFormat="Near;Center;0;None;Character;Default" TextAlignment="MiddleLeft" />
+    <Item7 Ref="47" Name="GrandTotalBackground1" BorderStyle="Inset" BackColor="White" BorderColor="255,75,75,75" Sides="Bottom" StringFormat="Near;Near;0;None;Character;Default" BorderWidthSerializable="2" />
+    <Item8 Ref="48" Name="PageInfo" BorderStyle="Inset" Padding="5,5,0,0,254" Font="Arial, 8.25pt, style=Bold" ForeColor="255,64,70,80" StringFormat="Near;Near;0;None;Character;Default" />
+  </StyleSheet>
+  <ComponentStorage>
+    <Item1 Ref="0" ObjectType="DevExpress.DataAccess.Sql.SqlDataSource,DevExpress.DataAccess.v19.1" Name="sqlDataSource1" Base64="PFNxbERhdGFTb3VyY2UgTmFtZT0ic3FsRGF0YVNvdXJjZTEiPjxDb25uZWN0aW9uIE5hbWU9IkRlZmF1bHRDb25uZWN0aW9uIiBGcm9tQXBwQ29uZmlnPSJ0cnVlIiAvPjxRdWVyeSBUeXBlPSJTZWxlY3RRdWVyeSIgTmFtZT0iU2NvcmVEcmFmdHMiPjxUYWJsZXM+PFRhYmxlIE5hbWU9IlNjb3JlRHJhZnRzIiAvPjwvVGFibGVzPjxDb2x1bW5zPjxDb2x1bW4gVGFibGU9IlNjb3JlRHJhZnRzIiBOYW1lPSJTY29yZVZhbHVlIiAvPjxDb2x1bW4gVGFibGU9IlNjb3JlRHJhZnRzIiBOYW1lPSJQb2ludE9mRXZhbHVhdGlvbklkIiAvPjxDb2x1bW4gVGFibGU9IlNjb3JlRHJhZnRzIiBOYW1lPSJPZmZpY2VJZCIgLz48Q29sdW1uIFRhYmxlPSJTY29yZURyYWZ0cyIgTmFtZT0iTGFzdE1vbnRoIiAvPjwvQ29sdW1ucz48L1F1ZXJ5PjxSZXN1bHRTY2hlbWE+PERhdGFTZXQgTmFtZT0ic3FsRGF0YVNvdXJjZTEiPjxWaWV3IE5hbWU9IlNjb3JlRHJhZnRzIj48RmllbGQgTmFtZT0iU2NvcmVWYWx1ZSIgVHlwZT0iRGVjaW1hbCIgLz48RmllbGQgTmFtZT0iUG9pbnRPZkV2YWx1YXRpb25JZCIgVHlwZT0iSW50MzIiIC8+PEZpZWxkIE5hbWU9Ik9mZmljZUlkIiBUeXBlPSJJbnQzMiIgLz48RmllbGQgTmFtZT0iTGFzdE1vbnRoIiBUeXBlPSJJbnQzMiIgLz48L1ZpZXc+PC9EYXRhU2V0PjwvUmVzdWx0U2NoZW1hPjxDb25uZWN0aW9uT3B0aW9ucyBDbG9zZUNvbm5lY3Rpb249InRydWUiIC8+PC9TcWxEYXRhU291cmNlPg==" />
+  </ComponentStorage>
+</XtraReportsLayoutSerializer>

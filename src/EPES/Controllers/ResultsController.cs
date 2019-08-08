@@ -9,7 +9,6 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
-using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
@@ -319,49 +318,46 @@ namespace EPES.Controllers
 
         public async Task SaveResult(int poeid, int ownerofficeid, int month, decimal result, string userid)
         {
-            if (result != null)
+            DataForEvaluation dataForEvaluation;
+            dataForEvaluation = await _context.DataForEvaluations.Where(d => d.PointOfEvaluationId == poeid && d.OfficeId == ownerofficeid && d.Month == month).FirstOrDefaultAsync();
+            if (dataForEvaluation != null)
             {
-                DataForEvaluation dataForEvaluation;
-                dataForEvaluation = await _context.DataForEvaluations.Where(d => d.PointOfEvaluationId == poeid && d.OfficeId == ownerofficeid && d.Month == month).FirstOrDefaultAsync();
-                if (dataForEvaluation != null)
+                dataForEvaluation.UpdateUserId = userid;
+                dataForEvaluation.Result = result;
+                try
                 {
-                    dataForEvaluation.UpdateUserId = userid;
-                    dataForEvaluation.Result = result;
-                    try
-                    {
-                        _context.Update(dataForEvaluation);
-                        await _context.SaveChangesAsync();
-                    }
-                    catch (DbUpdateException)
-                    {
-                        //Log the error (uncomment ex variable name and write a log.
-                        ModelState.AddModelError("", "ไม่สามารถบันทึกข้อมูล. " +
-                            "ลองพยายามบันทึกอีกครั้ง " +
-                            "โปรดแจ้งผู้ดูแลระบบ");
-                    }
+                    _context.Update(dataForEvaluation);
+                    await _context.SaveChangesAsync();
                 }
-                else
+                catch (DbUpdateException)
                 {
-                    dataForEvaluation = new DataForEvaluation();
-                    dataForEvaluation.UpdateUserId = userid;
-                    dataForEvaluation.PointOfEvaluationId = poeid;
-                    dataForEvaluation.OfficeId = ownerofficeid;
-                    dataForEvaluation.Month = month;
-                    dataForEvaluation.Result = result;
-                    try
-                    {
-                        _context.Add(dataForEvaluation);
-                        await _context.SaveChangesAsync();
-                    }
-                    catch (DbUpdateException)
-                    {
-                        //Log the error (uncomment ex variable name and write a log.
-                        ModelState.AddModelError("", "ไม่สามารถบันทึกข้อมูล. " +
-                            "ลองพยายามบันทึกอีกครั้ง " +
-                            "โปรดแจ้งผู้ดูแลระบบ");
-                    }
+                    //Log the error (uncomment ex variable name and write a log.
+                    ModelState.AddModelError("", "ไม่สามารถบันทึกข้อมูล. " +
+                        "ลองพยายามบันทึกอีกครั้ง " +
+                        "โปรดแจ้งผู้ดูแลระบบ");
                 }
-            }// Result 1
+            }
+            else
+            {
+                dataForEvaluation = new DataForEvaluation();
+                dataForEvaluation.UpdateUserId = userid;
+                dataForEvaluation.PointOfEvaluationId = poeid;
+                dataForEvaluation.OfficeId = ownerofficeid;
+                dataForEvaluation.Month = month;
+                dataForEvaluation.Result = result;
+                try
+                {
+                    _context.Add(dataForEvaluation);
+                    await _context.SaveChangesAsync();
+                }
+                catch (DbUpdateException)
+                {
+                    //Log the error (uncomment ex variable name and write a log.
+                    ModelState.AddModelError("", "ไม่สามารถบันทึกข้อมูล. " +
+                        "ลองพยายามบันทึกอีกครั้ง " +
+                        "โปรดแจ้งผู้ดูแลระบบ");
+                }
+            }
         }
 
         private bool DataForEvaluationExists(int id)

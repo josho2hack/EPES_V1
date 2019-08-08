@@ -362,49 +362,46 @@ namespace EPES.Controllers
 
         public async Task SaveExpect(int poeid, int ownerofficeid, int month, decimal expect, string userid)
         {
-            if (expect != null)
+            DataForEvaluation dataForEvaluation;
+            dataForEvaluation = await _context.DataForEvaluations.Where(d => d.PointOfEvaluationId == poeid && d.OfficeId == ownerofficeid && d.Month == month).FirstOrDefaultAsync();
+            if (dataForEvaluation != null)
             {
-                DataForEvaluation dataForEvaluation;
-                dataForEvaluation = await _context.DataForEvaluations.Where(d => d.PointOfEvaluationId == poeid && d.OfficeId == ownerofficeid && d.Month == month).FirstOrDefaultAsync();
-                if (dataForEvaluation != null)
+                dataForEvaluation.UpdateUserId = userid;
+                dataForEvaluation.Expect = expect;
+                try
                 {
-                    dataForEvaluation.UpdateUserId = userid;
-                    dataForEvaluation.Expect = expect;
-                    try
-                    {
-                        _context.Update(dataForEvaluation);
-                        await _context.SaveChangesAsync();
-                    }
-                    catch (DbUpdateException)
-                    {
-                        //Log the error (uncomment ex variable name and write a log.
-                        ModelState.AddModelError("", "ไม่สามารถบันทึกข้อมูล. " +
-                            "ลองพยายามบันทึกอีกครั้ง " +
-                            "โปรดแจ้งผู้ดูแลระบบ");
-                    }
+                    _context.Update(dataForEvaluation);
+                    await _context.SaveChangesAsync();
                 }
-                else
+                catch (DbUpdateException)
                 {
-                    dataForEvaluation = new DataForEvaluation();
-                    dataForEvaluation.UpdateUserId = userid;
-                    dataForEvaluation.PointOfEvaluationId = poeid;
-                    dataForEvaluation.OfficeId = ownerofficeid;
-                    dataForEvaluation.Month = month;
-                    dataForEvaluation.Expect = expect;
-                    try
-                    {
-                        _context.Add(dataForEvaluation);
-                        await _context.SaveChangesAsync();
-                    }
-                    catch (DbUpdateException)
-                    {
-                        //Log the error (uncomment ex variable name and write a log.
-                        ModelState.AddModelError("", "ไม่สามารถบันทึกข้อมูล. " +
-                            "ลองพยายามบันทึกอีกครั้ง " +
-                            "โปรดแจ้งผู้ดูแลระบบ");
-                    }
+                    //Log the error (uncomment ex variable name and write a log.
+                    ModelState.AddModelError("", "ไม่สามารถบันทึกข้อมูล. " +
+                        "ลองพยายามบันทึกอีกครั้ง " +
+                        "โปรดแจ้งผู้ดูแลระบบ");
                 }
-            }// Expect 1
+            }
+            else
+            {
+                dataForEvaluation = new DataForEvaluation();
+                dataForEvaluation.UpdateUserId = userid;
+                dataForEvaluation.PointOfEvaluationId = poeid;
+                dataForEvaluation.OfficeId = ownerofficeid;
+                dataForEvaluation.Month = month;
+                dataForEvaluation.Expect = expect;
+                try
+                {
+                    _context.Add(dataForEvaluation);
+                    await _context.SaveChangesAsync();
+                }
+                catch (DbUpdateException)
+                {
+                    //Log the error (uncomment ex variable name and write a log.
+                    ModelState.AddModelError("", "ไม่สามารถบันทึกข้อมูล. " +
+                        "ลองพยายามบันทึกอีกครั้ง " +
+                        "โปรดแจ้งผู้ดูแลระบบ");
+                }
+            }
         }
     }
 }

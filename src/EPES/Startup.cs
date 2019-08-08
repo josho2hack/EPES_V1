@@ -1,4 +1,6 @@
-﻿using EPES.Data;
+﻿using DevExpress.AspNetCore;
+using DevExpress.AspNetCore.Reporting;
+using EPES.Data;
 using EPES.Models;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -11,24 +13,28 @@ using Microsoft.AspNetCore.Mvc.Razor;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.FileProviders;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
+using System.IO;
 
 namespace EPES
 {
     public class Startup
     {
-        public Startup(IConfiguration configuration)
+        public Startup(IConfiguration configuration, IHostingEnvironment hostingEnvironment)
         {
             Configuration = configuration;
+            FileProvider = hostingEnvironment.ContentRootFileProvider;
         }
-
+        public IFileProvider FileProvider { get; }
         public IConfiguration Configuration { get; }
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddDevExpressControls();
             services.Configure<CookiePolicyOptions>(options =>
             {
                 // This lambda determines whether user consent for non-essential cookies is needed for a given request.
@@ -56,6 +62,15 @@ namespace EPES
                     options.Conventions.AuthorizeAreaFolder("Identity", "/Account/Manage");
                     options.Conventions.AuthorizeAreaPage("Identity", "/Account/Logout");
                 });
+
+            services.ConfigureReportingServices(configurator => {
+                configurator.ConfigureReportDesigner(designerConfigurator => {
+                    designerConfigurator.RegisterDataSourceWizardConfigFileConnectionStringsProvider();
+                });
+                configurator.ConfigureWebDocumentViewer(viewerConfigurator => {
+                    viewerConfigurator.UseCachedReportSourceBuilder();
+                });
+            });
 
             services.ConfigureApplicationCookie(options =>
             {
@@ -99,7 +114,24 @@ namespace EPES
             }
 
             app.UseHttpsRedirection();
+
+            var reportDirectory = Path.Combine(env.ContentRootPath, "Reports");
+            DevExpress.XtraReports.Web.Extensions.ReportStorageWebExtension.RegisterExtensionGlobal(new ReportStorageWebExtension1(reportDirectory));
+
+            DevExpress.XtraReports.Configuration.Settings.Default.UserDesignerOptions.DataBindingMode = DevExpress.XtraReports.UI.DataBindingMode.ExpressionsAdvanced;
+
+            app.UseDevExpressControls();
+            if (env.IsDevelopment())
+            {
+                app.UseDeveloperExceptionPage();
+            }
+
             app.UseStaticFiles();
+            app.UseStaticFiles(new StaticFileOptions
+            {
+                FileProvider = new PhysicalFileProvider(Path.Combine(env.ContentRootPath, "node_modules")),
+                RequestPath = "/node_modules"
+            });
             app.UseRequestLocalization();
             app.UseCookiePolicy();
 
@@ -111,6 +143,8 @@ namespace EPES
                     name: "default",
                     template: "{controller=Home}/{action=Index}/{id?}");
             });
+
+            app.UseDevExpressControls();
 
             //UserRoleSeed.Seed(roleManager).Wait();
             //UserSeed.Seed(userManager).Wait();
