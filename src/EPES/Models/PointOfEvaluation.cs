@@ -30,6 +30,12 @@ namespace EPES.Models
         [Display(Name = "แผนงาน/โครงการ")]
         public string DetailPlan { get; set; }
 
+        [Display(Name = "เป้าหมาย")]
+        public string ExpectPlan { get; set; }
+
+        [Display(Name = "DDRIVE")]
+        public string Ddrive { get; set; }
+
         [Display(Name = "ตัวชี้วัดผลการปฏิบัติราชการ")]
         public string Name { get; set; }
 
