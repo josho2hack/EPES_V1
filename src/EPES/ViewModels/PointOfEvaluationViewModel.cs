@@ -13,6 +13,8 @@ namespace EPES.ViewModels
         public IEnumerable<PointOfEvaluation> pointC { get; set; }
         public IEnumerable<PointOfEvaluation> pointD { get; set; }
 
+        public IEnumerable<PointOfEvaluation> PointList { get; set; }
+
         public int yearPoint { get; set; }
 
         public PointOfEvaluation point{ get; set; }

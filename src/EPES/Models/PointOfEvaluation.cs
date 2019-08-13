@@ -306,6 +306,12 @@ namespace EPES.Models
         public string UpdateUserId { get; set; }
         [Display(Name = "ผู้แก้ไขล่าสุด")]
         public ApplicationUser UpdateUser { get; set; }
+
+        [Display(Name = "คะแนน")]
+        public IList<Score> Scores { get; set; }
+
+        [Display(Name = "คะแนนเบื้องต้น")]
+        public IList<ScoreDraft> ScoreDrafts { get; set; }
     }
 
     public enum TypeOfPlan
