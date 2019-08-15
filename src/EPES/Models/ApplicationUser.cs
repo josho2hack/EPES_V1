@@ -50,7 +50,7 @@ namespace EPES.Models
         [Display(Name = "ข้อมูลที่ใช้ในการประเมิน")]
         public ICollection<DataForEvaluation> DataForEvaluations { get; set; }
 
-        [Display(Name = "ตัวชี้วัด")]
-        public ICollection<PointOfEvaluation> PointOfEvaluations { get; set; }
+        //[Display(Name = "ตัวชี้วัด")]
+        //public ICollection<PointOfEvaluation> PointOfEvaluations { get; set; }
     }
 }

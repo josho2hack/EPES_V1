@@ -21,13 +21,13 @@ namespace EPES.Models
         [Display(Name = "หมายเหตุ")]
         public string Remark { get; set; }
 
-        [Display(Name = "ตัวชี้วัดของหน่วยงาน")]
-        [InverseProperty("OwnerOffice")]
-        public IList<PointOfEvaluation> OwnerPointOfEvaluations { get; set; }
+        //[Display(Name = "ตัวชี้วัดของหน่วยงาน")]
+        //[InverseProperty("OwnerOffice")]
+        //public IList<PointOfEvaluation> OwnerPointOfEvaluations { get; set; }
 
-        [Display(Name = "ตัวชี้วัดที่ตรวจสอบ")]
-        [InverseProperty("AuditOffice")]
-        public IList<PointOfEvaluation> AuditPointOfEvaluations { get; set; }
+        //[Display(Name = "ตัวชี้วัดที่ตรวจสอบ")]
+        //[InverseProperty("AuditOffice")]
+        //public IList<PointOfEvaluation> AuditPointOfEvaluations { get; set; }
 
         [Display(Name = "ข้อมูลที่ใช้ในการประเมิน")]
         public IList<DataForEvaluation> DataForEvaluations { get; set; }

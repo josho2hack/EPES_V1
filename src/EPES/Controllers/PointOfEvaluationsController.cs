@@ -33,11 +33,25 @@ namespace EPES.Controllers
             DateTime yearForQuery;
             if (yearPoint == 0)
             {
-                yearForQuery = new DateTime(DateTime.Now.Year, 1, 1);
+                if (DateTime.Now.Month == 10 || DateTime.Now.Month == 11 || DateTime.Now.Month == 12)
+                {
+                    yearForQuery = new DateTime(DateTime.Now.AddYears(1).Year, 1, 1);
+                }
+                else
+                {
+                    yearForQuery = new DateTime(DateTime.Now.Year, 1, 1);
+                }
             }
             else
             {
-                yearForQuery = new DateTime(DateTime.Now.AddYears(yearPoint).Year, 1, 1);
+                if (DateTime.Now.Month == 10 || DateTime.Now.Month == 11 || DateTime.Now.Month == 12)
+                {
+                    yearForQuery = new DateTime(DateTime.Now.AddYears(1+yearPoint).Year, 1, 1);
+                }
+                else
+                {
+                    yearForQuery = new DateTime(DateTime.Now.AddYears(yearPoint).Year, 1, 1);
+                }
             }
 
             var viewModel = new PointOfEvaluationViewModel();
@@ -441,7 +455,15 @@ namespace EPES.Controllers
         {
             var user = await _userManager.GetUserAsync(User);
 
-            dataView.Year = new DateTime(DateTime.Now.AddYears(yearPoint).Year, 1, 1);
+            if (DateTime.Now.Month == 10 || DateTime.Now.Month == 11 || DateTime.Now.Month == 12)
+            {
+                dataView.Year = new DateTime(DateTime.Now.AddYears(yearPoint + 1).Year, 1, 1);
+            }
+            else
+            {
+                dataView.Year = new DateTime(DateTime.Now.AddYears(yearPoint).Year, 1, 1);
+            }
+
             dataView.UpdateUserId = user.Id;
             dataView.SubPoint = 0;
 

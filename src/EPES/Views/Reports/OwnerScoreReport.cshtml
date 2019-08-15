@@ -1,0 +1,92 @@
+﻿@model EPES.ViewModels.ReportViewModel
+@{
+    ViewData["Title"] = "OwnerScoreReport";
+}
+<link href="~/css/devextreme/dx.common.css" rel="stylesheet" />
+<link href="~/css/devextreme/dx.light.css" rel="stylesheet" />
+<script src="~/js/devextreme/jquery.js"></script>
+<script src="~/js/devextreme/cldr.js"></script>
+<script src="~/js/devextreme/cldr/event.js"></script>
+<script src="~/js/devextreme/cldr/supplemental.js"></script>
+<script src="~/js/devextreme/cldr/unresolved.js"></script>
+<script src="~/js/devextreme/globalize.js"></script>
+<script src="~/js/devextreme/globalize/message.js"></script>
+<script src="~/js/devextreme/globalize/number.js"></script>
+<script src="~/js/devextreme/globalize/currency.js"></script>
+<script src="~/js/devextreme/globalize/date.js"></script>
+<!-- Uncomment to enable the client-side export feature -->
+<!-- script src="~/js/devextreme/jszip.js"></script -->
+<!-- Uncomment to provide geo-data for the VectorMap control -->
+<!-- script src="~/js/devextreme/vectormap-data/world.js"></script -->
+<script src="~/js/devextreme/dx.all.js"></script>
+<script src="~/js/devextreme/aspnet/dx.aspnet.mvc.js"></script>
+<script src="~/js/devextreme/aspnet/dx.aspnet.data.js"></script>
+
+@*@(Html.DevExtreme().DataGrid()
+        .ID("gridContainer")
+        .ShowBorders(true)
+        .DataSource(Model.p)
+        .Columns(c =>
+        {
+            c.Add().DataField("Point");
+            c.Add().DataField("Name");
+            c.Add().DataField("Weight");
+            c.Add().DataField("ScoreDrafts.ScoreValue");
+            c.Add().DataField("Scores.ScoreValue");
+        })
+)*@
+<h2>
+
+</h2>
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th>ที่</th>
+            <th>ตัวชี้วัด</th>
+            <th>น้ำหนักร้อยละ (100%)</th>
+            <th>คะแนนเบื้องต้น</th>
+            <th>คะแนนที่รับรองแล้ว</th>
+            <th>คะแนนเบื้องต้นถ่วงน้ำหนัก</th>
+            <th>คะแนนที่รับรองแล้วถ่วงน้ำหนัก</th>
+        </tr>
+    </thead>
+    <tbody>
+        @for (int i = 0; i < Model.p.Count(); i++)
+        {
+        <tr>
+            <td>
+                @Model.p[i].Point
+            </td>
+
+            <td>
+                @Model.p[i].Name
+            </td>
+            <td>
+                @Model.p[i].Weight.ToString("N2")
+            </td>
+            @{
+                ScoreDraft sd = null;
+            }
+            @foreach (var item in @Model.p[i].ScoreDrafts)
+            {
+                if (item.LastMonth == Model.month && item.OfficeId == Model.p[i].OwnerOfficeId && item.PointOfEvaluationId == Model.p[i].Id)
+                {
+                    sd = item;
+                }
+            }
+            <td>@string.Format("{0:N4}", sd?.ScoreValue)</td>
+            @{
+                Score s = null;
+            }
+            @foreach (var item in @Model.p[i].Scores)
+            {
+                if (item.LastMonth == Model.month && item.OfficeId == Model.p[i].OwnerOfficeId && item.PointOfEvaluationId == Model.p[i].Id)
+                {
+                    s = item;
+                }
+            }
+            <td>@string.Format("{0:N4}", s?.ScoreValue)</td>
+        </tr>
+        }
+        </tbody>
+</table>
