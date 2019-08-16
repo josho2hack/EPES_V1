@@ -23,70 +23,214 @@
 <script src="~/js/devextreme/aspnet/dx.aspnet.data.js"></script>
 
 @*@(Html.DevExtreme().DataGrid()
-        .ID("gridContainer")
-        .ShowBorders(true)
-        .DataSource(Model.p)
-        .Columns(c =>
-        {
-            c.Add().DataField("Point");
-            c.Add().DataField("Name");
-            c.Add().DataField("Weight");
-            c.Add().DataField("ScoreDrafts.ScoreValue");
-            c.Add().DataField("Scores.ScoreValue");
-        })
+            .ID("gridContainer")
+            .ShowBorders(true)
+            .ColumnAutoWidth(true)
+            .DataSource(Model.p)
+            .Paging(p => p.Enabled(false))
+            .Columns(c =>
+            {
+                c.Add().DataField("Point")
+                    .Caption("ที่");
+                c.Add().DataField("Name")
+                    .Caption("ตัวชี้วัด");
+                c.Add().DataField("Unit")
+                    .Caption("หน่วยนับ");
+
+    //.DataType(Gr);
+    c.Add().DataField("Weight")
+                    .Caption("น้ำหนักร้อยละ")
+                    .DataType(GridColumnDataType.Number)
+                    .Format(f =>
+                    {
+                        f.Type(Format.FixedPoint)
+                         .Precision(2);
+                    });
+
+            })
+            .Summary(s => s.TotalItems(totalItems =>
+                {
+                    totalItems.Add()
+            .SummaryType(SummaryType.Count)
+            .Column("Point")
+            .Name("จำนวนตัวชี้วัด");
+
+                    totalItems.Add()
+            .SummaryType(SummaryType.Sum)
+            .DisplayFormat("{0}")
+             .ValueFormat(f => f
+                    .Type(Format.FixedPoint)
+                    .Precision(2)
+                )
+            .Column("Weight");
+                })
+            )
+            .MasterDetail(md =>
+            {
+                md.Enabled(true);
+                md.Template(@<text>
+                    @(Html.DevExtreme().DataGrid()
+                                .DataSource(Model.p)
+                                //.RepaintChangesOnly(true)
+                                .ColumnAutoWidth(true)
+                                .ShowBorders(true)
+                                .Paging(p => p.PageSize(12))
+                                .Columns(c =>
+                                {
+                                    c.Add()
+                                        .DataField("OrderID")
+                                        .DataType(GridColumnDataType.Number);
+                                    c.Add()
+                                        .DataField("ShipCity")
+                                        .DataType(GridColumnDataType.String);
+                                    c.Add()
+                                        .DataField("OrderDate")
+                                        .DataType(GridColumnDataType.DateTime);
+                                    c.Add()
+                                        .DataField("UnitPrice")
+                                        .DataType(GridColumnDataType.Number)
+                                        .Format(Format.Currency);
+                                    c.Add()
+                                        .DataField("Quantity")
+                                        .DataType(GridColumnDataType.Number);
+                                    c.Add()
+                                        .Caption("Amount")
+                                        .DataType(GridColumnDataType.Number)
+                                        .Format(Format.Currency)
+                                        .CalculateCellValue("getAmount")
+                                        .AllowSorting(true);
+                                })
+                                .Summary(s =>
+                                    s.TotalItems(totalItems =>
+                                    {
+                                        totalItems.Add()
+                                            .SummaryType(SummaryType.Count)
+                                            .Column("OrderID");
+                                        totalItems.Add()
+                                            .SummaryType(SummaryType.Sum)
+                                            .DisplayFormat("{0}")
+                                            .Column("Quantity");
+                                        totalItems.Add()
+                                            .SummaryType(SummaryType.Sum)
+                                            .DisplayFormat("{0}")
+                                            .ValueFormat(Format.Currency)
+                                            .Column("Amount");
+                                    })
+                                )
+                    )
+                </text>);
+                                })
+
 )*@
-<h2>
+<form asp-action="OwnerScoreReport">
+    <div class="row justify-content-between">
+        <div class="col-md-4">
+            @if (User.IsInRole("Admin") || User.IsInRole("Manager"))
+            {
+                <div class="row">
+                    <label class="col-form-label col-md-3 text-md-right">หน่วยงาน: </label>
+                    <select name="selectoffice" class="form-control col-md-7" asp-items="ViewBag.OfficeCode" onchange="this.form.submit()">
+                        <option value="">เลือกหน่วยงาน</option>
+                    </select>
+                </div>
 
-</h2>
+            }
+        </div>
+        <div class="col-md-4">
+            <div class="row">
+                <label class="col-form-label col-md-5 text-md-right">รายงานประจำเดือน: </label>
+                <select name="month" class="form-control col-md-7" asp-items="ViewBag.Month" onchange="this.form.submit()"></select>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="row">
+                <label class="col-form-label col-md-6 text-md-right">ปีงบประมาณ: </label>
+                <select asp-for="yearPoint" class="form-control col-md-6" onchange="this.form.submit()">
+                    <option value="-1">@DateTime.Now.AddYears(-1).ToString("yyyy")</option>
+                    <option value="0">@DateTime.Now.ToString("yyyy")</option>
+                    <option value="1">@DateTime.Now.AddYears(1).ToString("yyyy")</option>
+                </select>
+            </div>
+        </div>
+    </div>
+</form>
 <table class="table table-bordered">
-    <thead>
-        <tr>
-            <th>ที่</th>
-            <th>ตัวชี้วัด</th>
-            <th>น้ำหนักร้อยละ (100%)</th>
-            <th>คะแนนเบื้องต้น</th>
-            <th>คะแนนที่รับรองแล้ว</th>
-            <th>คะแนนเบื้องต้นถ่วงน้ำหนัก</th>
-            <th>คะแนนที่รับรองแล้วถ่วงน้ำหนัก</th>
-        </tr>
-    </thead>
-    <tbody>
-        @for (int i = 0; i < Model.p.Count(); i++)
-        {
-        <tr>
-            <td>
-                @Model.p[i].Point
-            </td>
+        <thead>
+            <tr>
+                <th>ที่</th>
+                <th>ตัวชี้วัด</th>
+                <th>น้ำหนักร้อยละ (100%)</th>
+                <th>คะแนนเบื้องต้น</th>
+                <th>คะแนนที่รับรองแล้ว</th>
+                <th>คะแนนเบื้องต้นถ่วงน้ำหนัก</th>
+                <th>คะแนนที่รับรองแล้วถ่วงน้ำหนัก</th>
+            </tr>
+        </thead>
+        <tbody>
+            @{ 
+                decimal sumWeight = 0m;
+                decimal sumScoreDraft = 0m;
+                decimal sumScore= 0m;
+            }
+            @for (int i = 0; i < Model.p.Count(); i++)
+            {
+                sumWeight += @Model.p[i].Weight;
+            <tr>
+                <td>
+                    @Model.p[i].Point
+                </td>
 
-            <td>
-                @Model.p[i].Name
-            </td>
-            <td>
-                @Model.p[i].Weight.ToString("N2")
-            </td>
-            @{
-                ScoreDraft sd = null;
-            }
-            @foreach (var item in @Model.p[i].ScoreDrafts)
-            {
-                if (item.LastMonth == Model.month && item.OfficeId == Model.p[i].OwnerOfficeId && item.PointOfEvaluationId == Model.p[i].Id)
-                {
-                    sd = item;
+                <td>
+                    @Model.p[i].Name
+                </td>
+                <td>
+                    @Model.p[i].Weight.ToString("N2")
+                </td>
+                @{
+                    ScoreDraft sd = null;
                 }
-            }
-            <td>@string.Format("{0:N4}", sd?.ScoreValue)</td>
-            @{
-                Score s = null;
-            }
-            @foreach (var item in @Model.p[i].Scores)
-            {
-                if (item.LastMonth == Model.month && item.OfficeId == Model.p[i].OwnerOfficeId && item.PointOfEvaluationId == Model.p[i].Id)
+                @foreach (var item in @Model.p[i].ScoreDrafts)
                 {
-                    s = item;
+                    if (item.LastMonth == Model.month && item.OfficeId == Model.p[i].OwnerOfficeId && item.PointOfEvaluationId == Model.p[i].Id)
+                    {
+                        sd = item;
+                    }
                 }
+                <td>@string.Format("{0:N4}", sd?.ScoreValue)</td>
+                @{
+                    if (sd != null)
+                    {
+                        sumScoreDraft += sd.ScoreValue;
+                    }
+
+                    Score s = null;
+                }
+                @foreach (var item in @Model.p[i].Scores)
+                {
+                    if (item.LastMonth == Model.month && item.OfficeId == Model.p[i].OwnerOfficeId && item.PointOfEvaluationId == Model.p[i].Id)
+                    {
+                        s = item;
+                    }
+                    if (s != null)
+                    {
+                        sumScore += s.ScoreValue;
+                    }
+                }
+                <td>@string.Format("{0:N4}", s?.ScoreValue)</td>
+                <td>@string.Format("{0:N4}", sd?.ScoreValue * @Model.p[i].Weight)</td>
+                <td>@string.Format("{0:N4}", s?.ScoreValue * @Model.p[i].Weight)</td>
+            </tr>
             }
-            <td>@string.Format("{0:N4}", s?.ScoreValue)</td>
-        </tr>
-        }
+            <tr>
+                <td>รวม</td>
+                <td></td>
+                <td>@string.Format("{0:N2}", sumWeight)</td>
+                <td>@string.Format("{0:N2}", sumScoreDraft/Model.p.Count())</td>
+                <td>@string.Format("{0:N2}", sumScore/Model.p.Count())</td>
+                <td>@string.Format("{0:N2}", sumScoreDraft/ Model.p.Count()* sumWeight)</td>
+                <td>@string.Format("{0:N2}", sumScore/ Model.p.Count()* sumWeight)</td>
+            </tr>
         </tbody>
-</table>
+    </table>
+
+<br />

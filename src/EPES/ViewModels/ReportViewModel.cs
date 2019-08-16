@@ -13,17 +13,8 @@ namespace EPES.ViewModels
         public IList<PointOfEvaluation> p { get; set; }
 
         public int month { get; set; }
+        public int yearPoint { get; set; }
+        public int poeid { get; set; }
 
-        //[Display(Name = "คะแนนเบื้องต้น")]
-        //[Column(TypeName = "decimal(5, 4)")]
-        //public decimal ScoreDraft { get; set; }
-
-        //[Display(Name = "คะแนน")]
-        //[Column(TypeName = "decimal(5, 4)")]
-        //public decimal Score { get; set; }
-
-        //[Display(Name = "เดือนล่าสุด")]
-        //[Range(1, 12)]
-        //public int LastMonth { get; set; }
     }
 }
