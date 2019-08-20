@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using EPES.Data;
+﻿using EPES.Data;
 using EPES.Models;
 using EPES.ViewModels;
 using Microsoft.AspNetCore.Authorization;
@@ -10,6 +6,10 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace EPES.Controllers
 {
@@ -73,20 +73,20 @@ namespace EPES.Controllers
             //                ).ToListAsync();
 
             List<Object> list = new List<object>();
-            if (m < 10)
+            if (DateTime.Now.Month - 1 < 10)
             {
                 for (int i = 10; i <= 12; i++)
                 {
                     list.Add(new { Value = i, Month = new DateTime(DateTime.Now.Year, i, 1).ToString("MMMM") });
                 }
-                for (int i = 1; i <= m; i++)
+                for (int i = 1; i <= DateTime.Now.Month - 1; i++)
                 {
                     list.Add(new { Value = i, Month = new DateTime(DateTime.Now.Year, i, 1).ToString("MMMM") });
                 }
             }
             else
             {
-                for (int i = 10; i <= m; i++)
+                for (int i = 10; i <= DateTime.Now.Month - 1; i++)
                 {
                     list.Add(new { Value = i, Month = new DateTime(DateTime.Now.Year, i, 1).ToString("MMMM") });
                 }
@@ -139,12 +139,10 @@ namespace EPES.Controllers
 
             if (String.IsNullOrEmpty(selectoffice))
             {
-                rmodel.p = await _context.PointOfEvaluations.Where(p => p.OwnerOffice.Code == user.OfficeId && p.Year == yearForQuery).Include(p => p.OwnerOffice).Include(p => p.ScoreDrafts).Include(p => p.Scores).OrderBy(p => p.Point).ToListAsync();
+                selectoffice = user.OfficeId;
             }
-            else
-            {
-                rmodel.p = await _context.PointOfEvaluations.Where(p => p.OwnerOffice.Code == selectoffice && p.Year == yearForQuery).Include(p => p.OwnerOffice).Include(p => p.ScoreDrafts).Include(p => p.Scores).OrderBy(p => p.Point).ToListAsync();
-            }
+
+            rmodel.p = await _context.PointOfEvaluations.Where(p => p.OwnerOffice.Code == selectoffice && p.Year == yearForQuery).Include(p => p.OwnerOffice).Include(p => p.ScoreDrafts).Include(p => p.Scores).OrderBy(p => p.Point).ToListAsync();
 
             //var rmodel = await (from mp in _context.PointOfEvaluations
             //                    join mo in _context.Offices on mp.OwnerOfficeId equals mo.Id
@@ -156,26 +154,26 @@ namespace EPES.Controllers
             //                ).ToListAsync();
 
             List<Object> list = new List<object>();
-            if (m < 10)
+            if (DateTime.Now.Month - 1 < 10)
             {
                 for (int i = 10; i <= 12; i++)
                 {
                     list.Add(new { Value = i, Month = new DateTime(DateTime.Now.Year, i, 1).ToString("MMMM") });
                 }
-                for (int i = 1; i <= m; i++)
+                for (int i = 1; i <= DateTime.Now.Month - 1; i++)
                 {
                     list.Add(new { Value = i, Month = new DateTime(DateTime.Now.Year, i, 1).ToString("MMMM") });
                 }
             }
             else
             {
-                for (int i = 10; i <= m; i++)
+                for (int i = 10; i <= DateTime.Now.Month - 1; i++)
                 {
                     list.Add(new { Value = i, Month = new DateTime(DateTime.Now.Year, i, 1).ToString("MMMM") });
                 }
             }
 
-            ViewBag.OfficeCode = new SelectList(_context.Offices.Where(d => d.Code != "00000000" && d.Code.Substring(5, 3) == "000"), "Code", "Name", user.OfficeId);
+            ViewBag.OfficeCode = new SelectList(_context.Offices.Where(d => d.Code != "00000000" && d.Code.Substring(5, 3) == "000"), "Code", "Name", selectoffice);
 
             ViewBag.Month = new SelectList(list, "Value", "Month", m);
             ViewBag.selectoffice = selectoffice;

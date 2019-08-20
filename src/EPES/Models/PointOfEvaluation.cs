@@ -30,7 +30,7 @@ namespace EPES.Models
         [Display(Name = "แผนงาน/โครงการ")]
         public string DetailPlan { get; set; }
 
-        [Display(Name = "เป้าหมาย")]
+        [Display(Name = "เป้าประสงค์")]
         public string ExpectPlan { get; set; }
 
         [Display(Name = "DDRIVE")]
