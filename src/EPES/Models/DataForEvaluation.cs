@@ -56,6 +56,7 @@ namespace EPES.Models
         [Display(Name = "วันที่แล้วเสร็จ")]
         [DataType(DataType.Date)]
         public DateTime? CompletedDate { get; set; }
+
         [NotMapped]
         [DataType(DataType.Date)]
         public string Completed

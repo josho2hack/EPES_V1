@@ -217,18 +217,18 @@
                     }
                 }
                 <td>@string.Format("{0:N4}", s?.ScoreValue)</td>
-                <td>@string.Format("{0:N4}", sd?.ScoreValue * @Model.p[i].Weight)</td>
-                <td>@string.Format("{0:N4}", s?.ScoreValue * @Model.p[i].Weight)</td>
+                <td>@string.Format("{0:N4}", sd?.ScoreValue * @Model.p[i].Weight / 100)</td>
+                <td>@string.Format("{0:N4}", s?.ScoreValue * @Model.p[i].Weight / 100)</td>
             </tr>
             }
             <tr>
                 <td>รวม</td>
                 <td></td>
                 <td>@string.Format("{0:N2}", sumWeight)</td>
-                <td>@string.Format("{0:N4}", Math.Round(sumScoreDraft/Model.p.Count(),1, MidpointRounding.AwayFromZero))</td>
-                <td>@string.Format("{0:N4}", Math.Round(sumScore /Model.p.Count(),1, MidpointRounding.AwayFromZero))</td>
-                <td>@string.Format("{0:N4}", Math.Round(sumScoreDraft/ Model.p.Count()* sumWeight,1, MidpointRounding.AwayFromZero))</td>
-                <td>@string.Format("{0:N4}", Math.Round(sumScore / Model.p.Count()* sumWeight,1, MidpointRounding.AwayFromZero))</td>
+                <td>@string.Format("{0:N4}", Math.Round(sumScoreDraft/Model.p.Count(),3, MidpointRounding.AwayFromZero))</td>
+                <td>@string.Format("{0:N4}", Math.Round(sumScore /Model.p.Count(),3, MidpointRounding.AwayFromZero))</td>
+                <td>@string.Format("{0:N4}", Math.Round(sumScoreDraft/ Model.p.Count()* sumWeight / 100,3, MidpointRounding.AwayFromZero))</td>
+                <td>@string.Format("{0:N4}", Math.Round(sumScore / Model.p.Count()* sumWeight / 100,3, MidpointRounding.AwayFromZero))</td>
             </tr>
         </tbody>
     </table>
