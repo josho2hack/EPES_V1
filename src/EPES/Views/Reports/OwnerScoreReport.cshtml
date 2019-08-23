@@ -225,10 +225,10 @@
                 <td>รวม</td>
                 <td></td>
                 <td>@string.Format("{0:N2}", sumWeight)</td>
-                <td>@string.Format("{0:N4}", sumScoreDraft/Model.p.Count())</td>
-                <td>@string.Format("{0:N4}", sumScore/Model.p.Count())</td>
-                <td>@string.Format("{0:N4}", sumScoreDraft/ Model.p.Count()* sumWeight)</td>
-                <td>@string.Format("{0:N4}", sumScore/ Model.p.Count()* sumWeight)</td>
+                <td>@string.Format("{0:N4}", Math.Round(sumScoreDraft/Model.p.Count(),1))</td>
+                <td>@string.Format("{0:N4}", Math.Round(sumScore /Model.p.Count(),1))</td>
+                <td>@string.Format("{0:N4}", Math.Round(sumScoreDraft/ Model.p.Count()* sumWeight,1))</td>
+                <td>@string.Format("{0:N4}", Math.Round(sumScore / Model.p.Count()* sumWeight,1))</td>
             </tr>
         </tbody>
     </table>
