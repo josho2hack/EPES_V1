@@ -747,12 +747,13 @@
 
                                         @if (Model.pointD[i].Unit == UnitOfPoint.ร้อยละ)
                                         {
-                                            <td>
-                                                @Html.TextBox("UpdateData[" + @i + "].Result", de?.Result, new { @class = "form-control" })
-                                                <input type="hidden" name="UpdateData[@i].Id" value=@de?.Id />
-                                                <input type="hidden" name="UpdateData[@i].poeid" value=@Model.pointD[i].Id />
-                                                <input type="hidden" name="UpdateData[@i].officeid" value=@Model.pointD[i].OwnerOfficeId />
-                                            </td>
+                                        <td>
+                                            @Html.TextBox("UpdateData[" + @i + "].Result", de?.Result, new { @class = "form-control" })
+                                            <input type="hidden" name="UpdateData[@i].Id" value=@de?.Id />
+                                            <input type="hidden" name="UpdateData[@i].poeid" value=@Model.pointD[i].Id />
+                                            <input type="hidden" name="UpdateData[@i].officeid" value=@Model.pointD[i].OwnerOfficeId />
+                                            <input type="hidden" name="UpdateData[@i].Completed" value=@(de?.Completed ??  DateTime.Now.ToString("yyyy-MM-dd", CultureInfo.CreateSpecificCulture("en-US"))) />
+                                        </td>
                                             <td></td>
                                             <td></td>
                                         }
