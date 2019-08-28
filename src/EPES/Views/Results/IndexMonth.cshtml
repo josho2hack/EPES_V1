@@ -130,7 +130,17 @@
                                         @if (Model.pointA[i].Unit == UnitOfPoint.ร้อยละ)
                                         {
                                         <td>
-                                            @Html.TextBox("UpdateData[" + @i + "].Result", de?.Result, new { @class = "form-control" })
+                                            @{
+                                                //@Html.TextBox("UpdateData[" + @i + "].Result", de?.Result, new { @class = "form-control" })
+                                                if (de != null)
+                                                {
+                                                    double v = (double)de.Result;
+                                                    Html.DevExtreme().NumberBox()
+                                                    .Format("#,##0.0000")
+                                                    .Value(v)
+                                                    .Disabled(true);
+                                                }
+                                            }
                                             <input type="hidden" name="UpdateData[@i].Id" value=@de?.Id />
                                             <input type="hidden" name="UpdateData[@i].poeid" value=@Model.pointA[i].Id />
                                             <input type="hidden" name="UpdateData[@i].officeid" value=@Model.pointA[i].OwnerOfficeId />
@@ -336,7 +346,17 @@
                                         @if (Model.pointB[i].Unit == UnitOfPoint.ร้อยละ)
                                         {
                                         <td>
-                                            @Html.TextBox("UpdateData[" + @i + "].Result", de?.Result, new { @class = "form-control" })
+                                            @{
+                                                @Html.TextBox("UpdateData[" + @i + "].Result", de?.Result, new { @class = "form-control" })
+                                                //if (de != null)
+                                                //{
+                                                //    double v = (double)de.Result;
+                                                //    Html.DevExtreme().NumberBox()
+                                                //    .Format("#,##0.0000")
+                                                //    .Value(v)
+                                                //    .Disabled(true);
+                                                //}
+                                            }
                                             <input type="hidden" name="UpdateData[@i].Id" value=@de?.Id />
                                             <input type="hidden" name="UpdateData[@i].poeid" value=@Model.pointB[i].Id />
                                             <input type="hidden" name="UpdateData[@i].officeid" value=@Model.pointB[i].OwnerOfficeId />
