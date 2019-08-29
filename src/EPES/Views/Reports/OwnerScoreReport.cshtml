@@ -192,7 +192,7 @@
                 }
                 @foreach (var item in @Model.p[i].ScoreDrafts)
                 {
-                    if (item.LastMonth == Model.month && item.OfficeId == Model.p[i].OwnerOfficeId && item.PointOfEvaluationId == Model.p[i].Id)
+                    if (item.LastMonth == Model.month && item.OfficeId == Model.p[i].OwnerOfficeId)
                     {
                         sd = item;
                     }
@@ -210,7 +210,7 @@
                 }
                 @foreach (var item in @Model.p[i].Scores)
                 {
-                    if (item.LastMonth == Model.month && item.OfficeId == Model.p[i].OwnerOfficeId && item.PointOfEvaluationId == Model.p[i].Id)
+                    if (item.LastMonth == Model.month && item.OfficeId == Model.p[i].OwnerOfficeId)
                     {
                         s = item;
                     }

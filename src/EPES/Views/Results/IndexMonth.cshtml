@@ -138,7 +138,8 @@
                                                     Html.DevExtreme().NumberBox()
                                                     .Format("#,##0.0000")
                                                     .Value(v)
-                                                    .Disabled(true);
+                                                    .Option("class", "form-control")
+                                                    .Render();
                                                 }
                                             }
                                             <input type="hidden" name="UpdateData[@i].Id" value=@de?.Id />
@@ -347,15 +348,17 @@
                                         {
                                         <td>
                                             @{
-                                                @Html.TextBox("UpdateData[" + @i + "].Result", de?.Result, new { @class = "form-control" })
-                                                //if (de != null)
-                                                //{
-                                                //    double v = (double)de.Result;
-                                                //    Html.DevExtreme().NumberBox()
-                                                //    .Format("#,##0.0000")
-                                                //    .Value(v)
-                                                //    .Disabled(true);
-                                                //}
+                                                //@Html.TextBox("UpdateData[" + @i + "].Result", de?.Result, new { @class = "form-control" })
+                                                if (de != null)
+                                                {
+                                                    double v = (double)de.Result;
+                                                    Html.DevExtreme().NumberBox()
+                                                    .Format("#,##0.0000")
+                                                    .Value(v)
+                                                    .Option("class", "form-control")
+                                                    .Width("100%")
+                                                    .Render();
+                                                }
                                             }
                                             <input type="hidden" name="UpdateData[@i].Id" value=@de?.Id />
                                             <input type="hidden" name="UpdateData[@i].poeid" value=@Model.pointB[i].Id />
@@ -562,7 +565,18 @@
                                         @if (Model.pointC[i].Unit == UnitOfPoint.ร้อยละ)
                                         {
                                         <td>
-                                            @Html.TextBox("UpdateData[" + @i + "].Result", de?.Result, new { @class = "form-control" })
+                                            @{
+                                                //@Html.TextBox("UpdateData[" + @i + "].Result", de?.Result, new { @class = "form-control" })
+                                                if (de != null)
+                                                {
+                                                    double v = (double)de.Result;
+                                                    Html.DevExtreme().NumberBox()
+                                                    .Format("#,##0.0000")
+                                                    .Value(v)
+                                                    .Option("class", "form-control")
+                                                    .Render();
+                                                }
+                                            }
                                             <input type="hidden" name="UpdateData[@i].Id" value=@de?.Id />
                                             <input type="hidden" name="UpdateData[@i].poeid" value=@Model.pointC[i].Id />
                                             <input type="hidden" name="UpdateData[@i].officeid" value=@Model.pointC[i].OwnerOfficeId />
@@ -768,7 +782,18 @@
                                         @if (Model.pointD[i].Unit == UnitOfPoint.ร้อยละ)
                                         {
                                         <td>
-                                            @Html.TextBox("UpdateData[" + @i + "].Result", de?.Result, new { @class = "form-control" })
+                                            @{
+                                                //@Html.TextBox("UpdateData[" + @i + "].Result", de?.Result, new { @class = "form-control" })
+                                                if (de != null)
+                                                {
+                                                    double v = (double)de.Result;
+                                                    Html.DevExtreme().NumberBox()
+                                                    .Format("#,##0.0000")
+                                                    .Value(v)
+                                                    .Option("class", "form-control")
+                                                    .Render();
+                                                }
+                                            }
                                             <input type="hidden" name="UpdateData[@i].Id" value=@de?.Id />
                                             <input type="hidden" name="UpdateData[@i].poeid" value=@Model.pointD[i].Id />
                                             <input type="hidden" name="UpdateData[@i].officeid" value=@Model.pointD[i].OwnerOfficeId />
