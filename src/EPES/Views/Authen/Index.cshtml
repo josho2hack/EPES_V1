@@ -1,0 +1,21 @@
+﻿
+@{
+    ViewData["Title"] = "Index";
+    Layout = null;
+}
+
+<h3>
+    @ViewBag.Username
+</h3>
+<ul>
+    <li>@ViewBag.TimeStamp</li>
+    <li>@ViewBag.Signature</li>
+    <li>------------------</li>
+    <li>@ViewBag.Data</li>
+    <li>------------------</li>
+    <li>Return as hexadecimal string: @ViewBag.Hexhased</li>
+    <li>SignatureEPES: @ViewBag.SignatureEPES</li>
+    <li>-------------------</li>
+    <li>@ViewBag.Result</li>
+</ul>
+

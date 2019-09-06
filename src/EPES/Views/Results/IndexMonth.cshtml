@@ -129,24 +129,25 @@
 
                                         @if (Model.pointA[i].Unit == UnitOfPoint.ร้อยละ)
                                         {
-                                        <td>
-                                            @{
-                                                //@Html.TextBox("UpdateData[" + @i + "].Result", de?.Result, new { @class = "form-control" })
-                                                if (de != null)
-                                                {
-                                                    double v = (double)de.Result;
-                                                    Html.DevExtreme().NumberBox()
-                                                    .Format("#,##0.0000")
-                                                    .Value(v)
-                                                    .Option("class", "form-control")
-                                                    .Render();
+                                            <td>
+                                                @{
+                                                    //@Html.TextBox("UpdateData[" + @i + "].Result", de?.Result, new { @class = "form-control" })
+                                                    if (de != null)
+                                                    {
+                                                        double v = (double)de.Result;
+                                                        Html.DevExtreme().NumberBox()
+                                                        .Format("#,##0.0000")
+
+                                                        .Value(v)
+                                                        .Option("class", "form-control")
+                                                        .Render();
+                                                    }
                                                 }
-                                            }
-                                            <input type="hidden" name="UpdateData[@i].Id" value=@de?.Id />
-                                            <input type="hidden" name="UpdateData[@i].poeid" value=@Model.pointA[i].Id />
-                                            <input type="hidden" name="UpdateData[@i].officeid" value=@Model.pointA[i].OwnerOfficeId />
-                                            <input type="hidden" name="UpdateData[@i].Completed" value=@(de?.Completed ??  DateTime.Now.ToString("yyyy-MM-dd", CultureInfo.CreateSpecificCulture("en-US"))) />
-                                        </td>
+                                                <input type="hidden" name="UpdateData[@i].Id" value=@de?.Id />
+                                                <input type="hidden" name="UpdateData[@i].poeid" value=@Model.pointA[i].Id />
+                                                <input type="hidden" name="UpdateData[@i].officeid" value=@Model.pointA[i].OwnerOfficeId />
+                                                <input type="hidden" name="UpdateData[@i].Completed" value=@(de?.Completed ??  DateTime.Now.ToString("yyyy-MM-dd", CultureInfo.CreateSpecificCulture("en-US"))) />
+                                            </td>
                                             <td></td>
                                             <td></td>
                                         }
@@ -185,41 +186,41 @@
                                                 @if (de != null)
                                                 {
                                                     @(Html.DevExtreme().Popup()
-                                                                                                                .ID("attach-popup")
-                                                                                                                .ElementAttr("class", "popup")
-                                                                                                                .Width(500)
-                                                                                                                .Height(400)
-                                                                                                                .ShowTitle(true)
-                                                                                                                .Title("แนบไฟล์")
-                                                                                                                .Visible(false)
-                                                                                                                .DragEnabled(false)
-                                                                                                                .CloseOnOutsideClick(true)
+                                                                                                                                        .ID("attach-popup")
+                                                                                                                                        .ElementAttr("class", "popup")
+                                                                                                                                        .Width(500)
+                                                                                                                                        .Height(400)
+                                                                                                                                        .ShowTitle(true)
+                                                                                                                                        .Title("แนบไฟล์")
+                                                                                                                                        .Visible(false)
+                                                                                                                                        .DragEnabled(false)
+                                                                                                                                        .CloseOnOutsideClick(true)
                                                     )
                                                     @(Html.DevExtreme().Button()
-                                                                                                                .ElementAttr("class", "button-info")
-                                                                                                                .Text("แนบ")
-                                                                                                                .OnClick(@<text>
-                                                                                                                    function showInfo(data) {
-                                                                                                                    var popup = $("#attach-popup").dxPopup("instance");
-                                                                                                                    popup.option("contentTemplate", $("#popup-template-" + @de?.Id));
-                                                                                                                    popup.show();
-                                                                                                                    }
-                                                                                                                </text>)
+                                                                                                                                        .ElementAttr("class", "button-info")
+                                                                                                                                        .Text("แนบ")
+                                                                                                                                        .OnClick(@<text>
+                                                                                                                                            function showInfo(data) {
+                                                                                                                                            var popup = $("#attach-popup").dxPopup("instance");
+                                                                                                                                            popup.option("contentTemplate", $("#popup-template-" + @de?.Id));
+                                                                                                                                            popup.show();
+                                                                                                                                            }
+                                                                                                                                        </text>)
                                                     )
                                                     @if (de?.AttachFile != null)
                                                     {
                                                         <a href="~/attach_files/@de?.AttachFile" target="_blank"><i class="fas fa-file-pdf fa-2x"></i></a><br />
                                                         @(Html.DevExtreme().Button()
-                                                                                                                .ElementAttr("class", "button-danger")
-                                                                                                                .Text("ลบ")
-                                                                                                                .Type(ButtonType.Danger)
-                                                                                                                .OnClick(@<text>
-                                                                                                                    function showInfo(data) {
-                                                                                                                    var popup = $("#attach-popup").dxPopup("instance");
-                                                                                                                    popup.option("contentTemplate", $("#popup-template-del-" + @de?.Id));
-                                                                                                                    popup.show();
-                                                                                                                    }
-                                                                                                                </text>)
+                                                                                                                                        .ElementAttr("class", "button-danger")
+                                                                                                                                        .Text("ลบ")
+                                                                                                                                        .Type(ButtonType.Danger)
+                                                                                                                                        .OnClick(@<text>
+                                                                                                                                            function showInfo(data) {
+                                                                                                                                            var popup = $("#attach-popup").dxPopup("instance");
+                                                                                                                                            popup.option("contentTemplate", $("#popup-template-del-" + @de?.Id));
+                                                                                                                                            popup.show();
+                                                                                                                                            }
+                                                                                                                                        </text>)
                                                         )
                                                     }
                                                     @using (Html.DevExtreme().NamedTemplate("popup-template-" + @de?.Id))
@@ -228,18 +229,18 @@
                                                             <h3>แนบไฟล์ประกอบผลการปฏิบัติ</h3>
                                                             <div id="fileuploader-container">
                                                                 @(Html.DevExtreme().FileUploader()
-                                                                                                                              .Name("AttachFile")
-                                                                                                                              .SelectButtonText("เลือกไฟล์แนบ")
-                                                                                                                              .LabelText("")
-                                                                                                                              .Accept("application/pdf")
-                                                                                                                              .UploadMode(FileUploadMode.UseForm)
+                                                                                                                                                      .Name("AttachFile")
+                                                                                                                                                      .SelectButtonText("เลือกไฟล์แนบ")
+                                                                                                                                                      .LabelText("")
+                                                                                                                                                      .Accept("application/pdf")
+                                                                                                                                                      .UploadMode(FileUploadMode.UseForm)
                                                                 )
                                                             </div>
                                                             @(Html.DevExtreme().Button()
-                                                                                                                          .ID("button")
-                                                                                                                          .Text("ส่งไฟล์แนบ")
-                                                                                                                          .Type(ButtonType.Success)
-                                                                                                                          .UseSubmitBehavior(true)
+                                                                                                                                                  .ID("button")
+                                                                                                                                                  .Text("ส่งไฟล์แนบ")
+                                                                                                                                                  .Type(ButtonType.Success)
+                                                                                                                                                  .UseSubmitBehavior(true)
                                                             )
                                                             <input type="hidden" name="deid" value=@de?.Id />
                                                             <input asp-for="yearPoint" class="form-control" hidden />
@@ -253,10 +254,10 @@
                                                             <h3>ลบไฟล์ประกอบผลการปฏิบัติ</h3>
                                                             <h5>@de.AttachFile</h5>
                                                             @(Html.DevExtreme().Button()
-                                                                                                                          .ID("button")
-                                                                                                                          .Text("ลบไฟล์แนบ")
-                                                                                                                          .Type(ButtonType.Danger)
-                                                                                                                          .UseSubmitBehavior(true)
+                                                                                                                                                  .ID("button")
+                                                                                                                                                  .Text("ลบไฟล์แนบ")
+                                                                                                                                                  .Type(ButtonType.Danger)
+                                                                                                                                                  .UseSubmitBehavior(true)
                                                             )
                                                             <input type="hidden" name="deid" value=@de?.Id />
                                                             <input asp-for="yearPoint" class="form-control" hidden />
@@ -353,18 +354,20 @@
                                                 {
                                                     double v = (double)de.Result;
                                                     Html.DevExtreme().NumberBox()
+                                                    .Mode(NumberBoxMode.Number)
                                                     .Format("#,##0.0000")
+                                                    .ID("UpdateData[" + @i + "].Result")
                                                     .Value(v)
                                                     .Option("class", "form-control")
                                                     .Width("100%")
                                                     .Render();
                                                 }
-                                            }
-                                            <input type="hidden" name="UpdateData[@i].Id" value=@de?.Id />
-                                            <input type="hidden" name="UpdateData[@i].poeid" value=@Model.pointB[i].Id />
-                                            <input type="hidden" name="UpdateData[@i].officeid" value=@Model.pointB[i].OwnerOfficeId />
-                                            <input type="hidden" name="UpdateData[@i].Completed" value=@(de?.Completed ??  DateTime.Now.ToString("yyyy-MM-dd", CultureInfo.CreateSpecificCulture("en-US"))) />
-                                        </td>
+                                                    }
+                                                    <input type="hidden" name="UpdateData[@i].Id" value=@de?.Id />
+                                                    <input type="hidden" name="UpdateData[@i].poeid" value=@Model.pointB[i].Id />
+                                                    <input type="hidden" name="UpdateData[@i].officeid" value=@Model.pointB[i].OwnerOfficeId />
+                                                    <input type="hidden" name="UpdateData[@i].Completed" value=@(de?.Completed ??  DateTime.Now.ToString("yyyy-MM-dd", CultureInfo.CreateSpecificCulture("en-US"))) />
+                                                </td>
                                             <td></td>
                                             <td></td>
                                         }
@@ -403,41 +406,41 @@
                                                 @if (de != null)
                                                 {
                                                     @(Html.DevExtreme().Popup()
-                                                                                              .ID("attach-popup")
-                                                                                              .ElementAttr("class", "popup")
-                                                                                              .Width(500)
-                                                                                              .Height(400)
-                                                                                              .ShowTitle(true)
-                                                                                              .Title("แนบไฟล์")
-                                                                                              .Visible(false)
-                                                                                              .DragEnabled(false)
-                                                                                              .CloseOnOutsideClick(true)
+                                                                                                                      .ID("attach-popup")
+                                                                                                                      .ElementAttr("class", "popup")
+                                                                                                                      .Width(500)
+                                                                                                                      .Height(400)
+                                                                                                                      .ShowTitle(true)
+                                                                                                                      .Title("แนบไฟล์")
+                                                                                                                      .Visible(false)
+                                                                                                                      .DragEnabled(false)
+                                                                                                                      .CloseOnOutsideClick(true)
                                                     )
                                                     @(Html.DevExtreme().Button()
-                                                                                              .ElementAttr("class", "button-info")
-                                                                                              .Text("แนบ")
-                                                                                              .OnClick(@<text>
-                                                                                                function showInfo(data) {
-                                                                                                var popup = $("#attach-popup").dxPopup("instance");
-                                                                                                popup.option("contentTemplate", $("#popup-template-" + @de?.Id));
-                                                                                                popup.show();
-                                                                                                }
-                                                                                            </text>)
+                                                                                                                      .ElementAttr("class", "button-info")
+                                                                                                                      .Text("แนบ")
+                                                                                                                      .OnClick(@<text>
+                                                                                                                        function showInfo(data) {
+                                                                                                                        var popup = $("#attach-popup").dxPopup("instance");
+                                                                                                                        popup.option("contentTemplate", $("#popup-template-" + @de?.Id));
+                                                                                                                        popup.show();
+                                                                                                                        }
+                                                                                                                    </text>)
                                                     )
                                                     @if (de?.AttachFile != null)
                                                     {
                                                         <a href="~/attach_files/@de?.AttachFile" target="_blank"><i class="fas fa-file-pdf fa-2x"></i></a><br />
                                                         @(Html.DevExtreme().Button()
-                                                                                                                                .ElementAttr("class", "button-danger")
-                                                                                                                                .Text("ลบ")
-                                                                                                                                .Type(ButtonType.Danger)
-                                                                                                                                .OnClick(@<text>
-                                                                                                                                    function showInfo(data) {
-                                                                                                                                    var popup = $("#attach-popup").dxPopup("instance");
-                                                                                                                                    popup.option("contentTemplate", $("#popup-template-del-" + @de?.Id));
-                                                                                                                                    popup.show();
-                                                                                                                                    }
-                                                                                                                                </text>)
+                                                                                                                                                        .ElementAttr("class", "button-danger")
+                                                                                                                                                        .Text("ลบ")
+                                                                                                                                                        .Type(ButtonType.Danger)
+                                                                                                                                                        .OnClick(@<text>
+                                                                                                                                                            function showInfo(data) {
+                                                                                                                                                            var popup = $("#attach-popup").dxPopup("instance");
+                                                                                                                                                            popup.option("contentTemplate", $("#popup-template-del-" + @de?.Id));
+                                                                                                                                                            popup.show();
+                                                                                                                                                            }
+                                                                                                                                                        </text>)
                                                         )
                                                     }
                                                     @using (Html.DevExtreme().NamedTemplate("popup-template-" + @de?.Id))
@@ -446,18 +449,18 @@
                                                             <h3>แนบไฟล์ประกอบผลการปฏิบัติ</h3>
                                                             <div id="fileuploader-container">
                                                                 @(Html.DevExtreme().FileUploader()
-                                                                                                                      .Name("AttachFile")
-                                                                                                                      .SelectButtonText("เลือกไฟล์แนบ")
-                                                                                                                      .LabelText("")
-                                                                                                                      .Accept("application/pdf")
-                                                                                                                      .UploadMode(FileUploadMode.UseForm)
+                                                                                                                                              .Name("AttachFile")
+                                                                                                                                              .SelectButtonText("เลือกไฟล์แนบ")
+                                                                                                                                              .LabelText("")
+                                                                                                                                              .Accept("application/pdf")
+                                                                                                                                              .UploadMode(FileUploadMode.UseForm)
                                                                 )
                                                             </div>
                                                             @(Html.DevExtreme().Button()
-                                                                                                                      .ID("button")
-                                                                                                                      .Text("ส่งไฟล์แนบ")
-                                                                                                                      .Type(ButtonType.Success)
-                                                                                                                      .UseSubmitBehavior(true)
+                                                                                                                                              .ID("button")
+                                                                                                                                              .Text("ส่งไฟล์แนบ")
+                                                                                                                                              .Type(ButtonType.Success)
+                                                                                                                                              .UseSubmitBehavior(true)
                                                             )
                                                             <input type="hidden" name="deid" value=@de?.Id />
                                                             <input asp-for="yearPoint" class="form-control" hidden />
@@ -471,10 +474,10 @@
                                                             <h3>ลบไฟล์ประกอบผลการปฏิบัติ</h3>
                                                             <h5>@de.AttachFile</h5>
                                                             @(Html.DevExtreme().Button()
-                                                                                                                                  .ID("button")
-                                                                                                                                  .Text("ลบไฟล์แนบ")
-                                                                                                                                  .Type(ButtonType.Danger)
-                                                                                                                                  .UseSubmitBehavior(true)
+                                                                                                                                                          .ID("button")
+                                                                                                                                                          .Text("ลบไฟล์แนบ")
+                                                                                                                                                          .Type(ButtonType.Danger)
+                                                                                                                                                          .UseSubmitBehavior(true)
                                                             )
                                                             <input type="hidden" name="deid" value=@de?.Id />
                                                             <input asp-for="yearPoint" class="form-control" hidden />
@@ -499,7 +502,7 @@
             </div>
         </div>
     }
-    <!-- Plan C -->
+    <!-- Plan C แผนงานตามความต้องการของหน่วยงาน (Bottom - Up: C)-->
     @if (Model.pointC != null)
     {
         <div class="card shadow mb-4">
@@ -564,24 +567,25 @@
 
                                         @if (Model.pointC[i].Unit == UnitOfPoint.ร้อยละ)
                                         {
-                                        <td>
-                                            @{
-                                                //@Html.TextBox("UpdateData[" + @i + "].Result", de?.Result, new { @class = "form-control" })
-                                                if (de != null)
-                                                {
-                                                    double v = (double)de.Result;
-                                                    Html.DevExtreme().NumberBox()
-                                                    .Format("#,##0.0000")
-                                                    .Value(v)
-                                                    .Option("class", "form-control")
-                                                    .Render();
+                                            <td>
+                                                @{
+                                                    //@Html.TextBox("UpdateData[" + @i + "].Result", de?.Result, new { @class = "form-control" })
+                                                    if (de != null)
+                                                    {
+                                                        double v = (double)de.Result;
+                                                        Html.DevExtreme().NumberBox()
+                                                        .Format("#,##0.0000")
+                                                        .Value(v)
+                                                        .Option("class", "form-control")
+                                                        .Width("100%")
+                                                        .Render();
+                                                    }
                                                 }
-                                            }
-                                            <input type="hidden" name="UpdateData[@i].Id" value=@de?.Id />
-                                            <input type="hidden" name="UpdateData[@i].poeid" value=@Model.pointC[i].Id />
-                                            <input type="hidden" name="UpdateData[@i].officeid" value=@Model.pointC[i].OwnerOfficeId />
-                                            <input type="hidden" name="UpdateData[@i].Completed" value=@(de?.Completed ??  DateTime.Now.ToString("yyyy-MM-dd", CultureInfo.CreateSpecificCulture("en-US"))) />
-                                        </td>
+                                                <input type="hidden" name="UpdateData[@i].Id" value=@de?.Id />
+                                                <input type="hidden" name="UpdateData[@i].poeid" value=@Model.pointC[i].Id />
+                                                <input type="hidden" name="UpdateData[@i].officeid" value=@Model.pointC[i].OwnerOfficeId />
+                                                <input type="hidden" name="UpdateData[@i].Completed" value=@(de?.Completed ??  DateTime.Now.ToString("yyyy-MM-dd", CultureInfo.CreateSpecificCulture("en-US"))) />
+                                            </td>
                                             <td></td>
                                             <td></td>
                                         }
@@ -645,16 +649,16 @@
                                                     {
                                                         <a href="~/attach_files/@de?.AttachFile" target="_blank"><i class="fas fa-file-pdf fa-2x"></i></a><br />
                                                         @(Html.DevExtreme().Button()
-                                                                                                                                .ElementAttr("class", "button-danger")
-                                                                                                                                .Text("ลบ")
-                                                                                                                                .Type(ButtonType.Danger)
-                                                                                                                                .OnClick(@<text>
-                                                                                                                                    function showInfo(data) {
-                                                                                                                                    var popup = $("#attach-popup").dxPopup("instance");
-                                                                                                                                    popup.option("contentTemplate", $("#popup-template-del-" + @de?.Id));
-                                                                                                                                    popup.show();
-                                                                                                                                    }
-                                                                                                                                </text>)
+                                                                                                                                        .ElementAttr("class", "button-danger")
+                                                                                                                                        .Text("ลบ")
+                                                                                                                                        .Type(ButtonType.Danger)
+                                                                                                                                        .OnClick(@<text>
+                                                                                                                                            function showInfo(data) {
+                                                                                                                                            var popup = $("#attach-popup").dxPopup("instance");
+                                                                                                                                            popup.option("contentTemplate", $("#popup-template-del-" + @de?.Id));
+                                                                                                                                            popup.show();
+                                                                                                                                            }
+                                                                                                                                        </text>)
                                                         )
                                                     }
                                                     @using (Html.DevExtreme().NamedTemplate("popup-template-" + @de?.Id))
@@ -688,10 +692,10 @@
                                                             <h3>ลบไฟล์ประกอบผลการปฏิบัติ</h3>
                                                             <h5>@de.AttachFile</h5>
                                                             @(Html.DevExtreme().Button()
-                                                                                                                                  .ID("button")
-                                                                                                                                  .Text("ลบไฟล์แนบ")
-                                                                                                                                  .Type(ButtonType.Danger)
-                                                                                                                                  .UseSubmitBehavior(true)
+                                                                                                                                          .ID("button")
+                                                                                                                                          .Text("ลบไฟล์แนบ")
+                                                                                                                                          .Type(ButtonType.Danger)
+                                                                                                                                          .UseSubmitBehavior(true)
                                                             )
                                                             <input type="hidden" name="deid" value=@de?.Id />
                                                             <input asp-for="yearPoint" class="form-control" hidden />
@@ -781,24 +785,24 @@
 
                                         @if (Model.pointD[i].Unit == UnitOfPoint.ร้อยละ)
                                         {
-                                        <td>
-                                            @{
-                                                //@Html.TextBox("UpdateData[" + @i + "].Result", de?.Result, new { @class = "form-control" })
-                                                if (de != null)
-                                                {
-                                                    double v = (double)de.Result;
-                                                    Html.DevExtreme().NumberBox()
-                                                    .Format("#,##0.0000")
-                                                    .Value(v)
-                                                    .Option("class", "form-control")
-                                                    .Render();
+                                            <td>
+                                                @{
+                                                    //@Html.TextBox("UpdateData[" + @i + "].Result", de?.Result, new { @class = "form-control" })
+                                                    if (de != null)
+                                                    {
+                                                        double v = (double)de.Result;
+                                                        Html.DevExtreme().NumberBox()
+                                                        .Format("#,##0.0000")
+                                                        .Value(v)
+                                                        .Option("class", "form-control")
+                                                        .Render();
+                                                    }
                                                 }
-                                            }
-                                            <input type="hidden" name="UpdateData[@i].Id" value=@de?.Id />
-                                            <input type="hidden" name="UpdateData[@i].poeid" value=@Model.pointD[i].Id />
-                                            <input type="hidden" name="UpdateData[@i].officeid" value=@Model.pointD[i].OwnerOfficeId />
-                                            <input type="hidden" name="UpdateData[@i].Completed" value=@(de?.Completed ??  DateTime.Now.ToString("yyyy-MM-dd", CultureInfo.CreateSpecificCulture("en-US"))) />
-                                        </td>
+                                                <input type="hidden" name="UpdateData[@i].Id" value=@de?.Id />
+                                                <input type="hidden" name="UpdateData[@i].poeid" value=@Model.pointD[i].Id />
+                                                <input type="hidden" name="UpdateData[@i].officeid" value=@Model.pointD[i].OwnerOfficeId />
+                                                <input type="hidden" name="UpdateData[@i].Completed" value=@(de?.Completed ??  DateTime.Now.ToString("yyyy-MM-dd", CultureInfo.CreateSpecificCulture("en-US"))) />
+                                            </td>
                                             <td></td>
                                             <td></td>
                                         }
@@ -837,41 +841,41 @@
                                                 @if (de != null)
                                                 {
                                                     @(Html.DevExtreme().Popup()
-                                                                                                      .ID("attach-popup")
-                                                                                                      .ElementAttr("class", "popup")
-                                                                                                      .Width(500)
-                                                                                                      .Height(400)
-                                                                                                      .ShowTitle(true)
-                                                                                                      .Title("แนบไฟล์")
-                                                                                                      .Visible(false)
-                                                                                                      .DragEnabled(false)
-                                                                                                      .CloseOnOutsideClick(true)
+                                                                                                                              .ID("attach-popup")
+                                                                                                                              .ElementAttr("class", "popup")
+                                                                                                                              .Width(500)
+                                                                                                                              .Height(400)
+                                                                                                                              .ShowTitle(true)
+                                                                                                                              .Title("แนบไฟล์")
+                                                                                                                              .Visible(false)
+                                                                                                                              .DragEnabled(false)
+                                                                                                                              .CloseOnOutsideClick(true)
                                                     )
                                                     @(Html.DevExtreme().Button()
-                                                                                                      .ElementAttr("class", "button-info")
-                                                                                                      .Text("แนบ")
-                                                                                                      .OnClick(@<text>
-                                                                                                        function showInfo(data) {
-                                                                                                        var popup = $("#attach-popup").dxPopup("instance");
-                                                                                                        popup.option("contentTemplate", $("#popup-template-" + @de?.Id));
-                                                                                                        popup.show();
-                                                                                                        }
-                                                                                                    </text>)
+                                                                                                                              .ElementAttr("class", "button-info")
+                                                                                                                              .Text("แนบ")
+                                                                                                                              .OnClick(@<text>
+                                                                                                                                function showInfo(data) {
+                                                                                                                                var popup = $("#attach-popup").dxPopup("instance");
+                                                                                                                                popup.option("contentTemplate", $("#popup-template-" + @de?.Id));
+                                                                                                                                popup.show();
+                                                                                                                                }
+                                                                                                                            </text>)
                                                     )
                                                     @if (de?.AttachFile != null)
                                                     {
                                                         <a href="~/attach_files/@de?.AttachFile" target="_blank"><i class="fas fa-file-pdf fa-2x"></i></a><br />
                                                         @(Html.DevExtreme().Button()
-                                                                                                                                .ElementAttr("class", "button-danger")
-                                                                                                                                .Text("ลบ")
-                                                                                                                                .Type(ButtonType.Danger)
-                                                                                                                                .OnClick(@<text>
-                                                                                                                                    function showInfo(data) {
-                                                                                                                                    var popup = $("#attach-popup").dxPopup("instance");
-                                                                                                                                    popup.option("contentTemplate", $("#popup-template-del-" + @de?.Id));
-                                                                                                                                    popup.show();
-                                                                                                                                    }
-                                                                                                                                </text>)
+                                                                                                                                                        .ElementAttr("class", "button-danger")
+                                                                                                                                                        .Text("ลบ")
+                                                                                                                                                        .Type(ButtonType.Danger)
+                                                                                                                                                        .OnClick(@<text>
+                                                                                                                                                            function showInfo(data) {
+                                                                                                                                                            var popup = $("#attach-popup").dxPopup("instance");
+                                                                                                                                                            popup.option("contentTemplate", $("#popup-template-del-" + @de?.Id));
+                                                                                                                                                            popup.show();
+                                                                                                                                                            }
+                                                                                                                                                        </text>)
                                                         )
                                                     }
                                                     @using (Html.DevExtreme().NamedTemplate("popup-template-" + @de?.Id))
@@ -880,18 +884,18 @@
                                                             <h3>แนบไฟล์ประกอบผลการปฏิบัติ</h3>
                                                             <div id="fileuploader-container">
                                                                 @(Html.DevExtreme().FileUploader()
-                                                                                                                              .Name("AttachFile")
-                                                                                                                              .SelectButtonText("เลือกไฟล์แนบ")
-                                                                                                                              .LabelText("")
-                                                                                                                              .Accept("application/pdf")
-                                                                                                                              .UploadMode(FileUploadMode.UseForm)
+                                                                                                                                                      .Name("AttachFile")
+                                                                                                                                                      .SelectButtonText("เลือกไฟล์แนบ")
+                                                                                                                                                      .LabelText("")
+                                                                                                                                                      .Accept("application/pdf")
+                                                                                                                                                      .UploadMode(FileUploadMode.UseForm)
                                                                 )
                                                             </div>
                                                             @(Html.DevExtreme().Button()
-                                                                                                                              .ID("button")
-                                                                                                                              .Text("ส่งไฟล์แนบ")
-                                                                                                                              .Type(ButtonType.Success)
-                                                                                                                              .UseSubmitBehavior(true)
+                                                                                                                                                      .ID("button")
+                                                                                                                                                      .Text("ส่งไฟล์แนบ")
+                                                                                                                                                      .Type(ButtonType.Success)
+                                                                                                                                                      .UseSubmitBehavior(true)
                                                             )
                                                             <input type="hidden" name="deid" value=@de?.Id />
                                                             <input asp-for="yearPoint" class="form-control" hidden />
@@ -905,10 +909,10 @@
                                                             <h3>ลบไฟล์ประกอบผลการปฏิบัติ</h3>
                                                             <h5>@de.AttachFile</h5>
                                                             @(Html.DevExtreme().Button()
-                                                                                                                                  .ID("button")
-                                                                                                                                  .Text("ลบไฟล์แนบ")
-                                                                                                                                  .Type(ButtonType.Danger)
-                                                                                                                                  .UseSubmitBehavior(true)
+                                                                                                                                                          .ID("button")
+                                                                                                                                                          .Text("ลบไฟล์แนบ")
+                                                                                                                                                          .Type(ButtonType.Danger)
+                                                                                                                                                          .UseSubmitBehavior(true)
                                                             )
                                                             <input type="hidden" name="deid" value=@de?.Id />
                                                             <input asp-for="yearPoint" class="form-control" hidden />

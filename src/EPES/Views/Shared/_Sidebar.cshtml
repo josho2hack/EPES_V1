@@ -44,12 +44,12 @@
                     <a class="collapse-item" asp-area="" asp-controller="Results" asp-action="IndexMonth">บันทึกผลปฏิบัติราชการ</a>
                     <a class="collapse-item" asp-area="" asp-controller="Audits" asp-action="IndexMonth">ตรวจสอบ/ยืนยัน</a>
                     @*@if (User.IsInRole("Admin"))
-                    {
-                        <div class="collapse-divider"></div>
-                        <h6 class="collapse-header">รายปี: </h6>
-                        <a class="collapse-item" asp-area="" asp-controller="Results" asp-action="Index">บันทึกผล รายปี</a>
-                        <a class="collapse-item" asp-area="" asp-controller="Audits" asp-action="Index">ตรวจสอบ/ยืนยัน รายปี</a>
-                    }*@
+                        {
+                            <div class="collapse-divider"></div>
+                            <h6 class="collapse-header">รายปี: </h6>
+                            <a class="collapse-item" asp-area="" asp-controller="Results" asp-action="Index">บันทึกผล รายปี</a>
+                            <a class="collapse-item" asp-area="" asp-controller="Audits" asp-action="Index">ตรวจสอบ/ยืนยัน รายปี</a>
+                        }*@
                 </div>
             </div>
         </li>
@@ -64,9 +64,23 @@
             <div class="bg-white py-2 collapse-inner rounded">
                 <h6 class="collapse-header">ผลการปฏิบัติงาน:</h6>
                 @*<a class="collapse-item" href="#">กรมสรรพากร</a>
-                <a class="collapse-item" href="#">กอง สำนัก ศูนย์</a>
-                <a class="collapse-item" href="#">สภ./สท.</a>*@
+                    <a class="collapse-item" href="#">กอง สำนัก ศูนย์</a>
+                    <a class="collapse-item" href="#">สภ./สท.</a>*@
                 <a class="collapse-item" asp-area="" asp-controller="Reports" asp-action="OwnerScoreReport">รายงาน</a>
+            </div>
+        </div>
+    </li>
+    <!-- Nav Item - Collapse Menu -->
+    <li class="nav-item">
+        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseDoc" aria-expanded="true" aria-controls="collapseDoc">
+            <i class="fas fa-fw fa-chart-area"></i>
+            <span>คู่มือ</span>
+        </a>
+        <div id="collapseDoc" class="collapse" aria-labelledby="headingReport" data-parent="#accordionSidebar">
+            <div class="bg-white py-2 collapse-inner rounded">
+                <h6 class="collapse-header">คู่มือการใช้งานระบบ:</h6>
+                <a class="collapse-item" href="#">คู่มือผู้ใช้งาน</a>
+                <a class="collapse-item" href="#">คู่มือผู้ดูแลระบบ</a>
             </div>
         </div>
     </li>
@@ -106,7 +120,7 @@
                     <div class="collapse-divider"></div>
                     <h6 class="collapse-header">พิเศษ: </h6>
                     @*<h6 class="collapse-header">เชื่อมโยงข้อมูลอัตโนมัติ: </h6>
-                    <a class="collapse-item" asp-area="" asp-controller="PointOfEvaluations" asp-action="#">ตัวชี้วัดที่ 1 (สภ./สท.)</a>*@
+                        <a class="collapse-item" asp-area="" asp-controller="PointOfEvaluations" asp-action="#">ตัวชี้วัดที่ 1 (สภ./สท.)</a>*@
                     <div class="collapse-divider"></div>
                     <a class="collapse-item text-danger" asp-area="" asp-controller="PointOfEvaluations" asp-action="Copy">คัดลอก สภ.1 (1-18,22)-> สภ./สท.</a>
                 </div>

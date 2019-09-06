@@ -16,7 +16,7 @@
             <div class="modal-footer">
                 <button class="btn btn-secondary" type="button" data-dismiss="modal">ยกเลิก</button>
                 <form class="form-inline" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">
-                    <button type="submit" class="btn btn-primary">ออกจากระบบ</button>
+                    <button type="submit" class="btn btn-primary" onclick="parent.close();">ออกจากระบบ</button>
                 </form>
             </div>
         </div>
