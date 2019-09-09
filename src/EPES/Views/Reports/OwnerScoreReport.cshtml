@@ -2,126 +2,7 @@
 @{
     ViewData["Title"] = "OwnerScoreReport";
 }
-<link href="~/css/devextreme/dx.common.css" rel="stylesheet" />
-<link href="~/css/devextreme/dx.light.css" rel="stylesheet" />
-<script src="~/js/devextreme/jquery.js"></script>
-<script src="~/js/devextreme/cldr.js"></script>
-<script src="~/js/devextreme/cldr/event.js"></script>
-<script src="~/js/devextreme/cldr/supplemental.js"></script>
-<script src="~/js/devextreme/cldr/unresolved.js"></script>
-<script src="~/js/devextreme/globalize.js"></script>
-<script src="~/js/devextreme/globalize/message.js"></script>
-<script src="~/js/devextreme/globalize/number.js"></script>
-<script src="~/js/devextreme/globalize/currency.js"></script>
-<script src="~/js/devextreme/globalize/date.js"></script>
-<!-- Uncomment to enable the client-side export feature -->
-<!-- script src="~/js/devextreme/jszip.js"></script -->
-<!-- Uncomment to provide geo-data for the VectorMap control -->
-<!-- script src="~/js/devextreme/vectormap-data/world.js"></script -->
-<script src="~/js/devextreme/dx.all.js"></script>
-<script src="~/js/devextreme/aspnet/dx.aspnet.mvc.js"></script>
-<script src="~/js/devextreme/aspnet/dx.aspnet.data.js"></script>
 
-@*@(Html.DevExtreme().DataGrid()
-                .ID("gridContainer")
-                .ShowBorders(true)
-                .ColumnAutoWidth(true)
-                .DataSource(Model.p)
-                .Paging(p => p.Enabled(false))
-                .Columns(c =>
-                {
-                    c.Add().DataField("Point")
-                        .Caption("ที่");
-                    c.Add().DataField("Name")
-                        .Caption("ตัวชี้วัด");
-                    c.Add().DataField("Unit")
-                        .Caption("หน่วยนับ");
-
-        //.DataType(Gr);
-        c.Add().DataField("Weight")
-                        .Caption("น้ำหนักร้อยละ")
-                        .DataType(GridColumnDataType.Number)
-                        .Format(f =>
-                        {
-                            f.Type(Format.FixedPoint)
-                             .Precision(2);
-                        });
-
-                })
-                .Summary(s => s.TotalItems(totalItems =>
-                    {
-                        totalItems.Add()
-                .SummaryType(SummaryType.Count)
-                .Column("Point")
-                .Name("จำนวนตัวชี้วัด");
-
-                        totalItems.Add()
-                .SummaryType(SummaryType.Sum)
-                .DisplayFormat("{0}")
-                 .ValueFormat(f => f
-                        .Type(Format.FixedPoint)
-                        .Precision(2)
-                    )
-                .Column("Weight");
-                    })
-                )
-                .MasterDetail(md =>
-                {
-                    md.Enabled(true);
-                    md.Template(@<text>
-                        @(Html.DevExtreme().DataGrid()
-                                    .DataSource(Model.p)
-                                    //.RepaintChangesOnly(true)
-                                    .ColumnAutoWidth(true)
-                                    .ShowBorders(true)
-                                    .Paging(p => p.PageSize(12))
-                                    .Columns(c =>
-                                    {
-                                        c.Add()
-                                            .DataField("OrderID")
-                                            .DataType(GridColumnDataType.Number);
-                                        c.Add()
-                                            .DataField("ShipCity")
-                                            .DataType(GridColumnDataType.String);
-                                        c.Add()
-                                            .DataField("OrderDate")
-                                            .DataType(GridColumnDataType.DateTime);
-                                        c.Add()
-                                            .DataField("UnitPrice")
-                                            .DataType(GridColumnDataType.Number)
-                                            .Format(Format.Currency);
-                                        c.Add()
-                                            .DataField("Quantity")
-                                            .DataType(GridColumnDataType.Number);
-                                        c.Add()
-                                            .Caption("Amount")
-                                            .DataType(GridColumnDataType.Number)
-                                            .Format(Format.Currency)
-                                            .CalculateCellValue("getAmount")
-                                            .AllowSorting(true);
-                                    })
-                                    .Summary(s =>
-                                        s.TotalItems(totalItems =>
-                                        {
-                                            totalItems.Add()
-                                                .SummaryType(SummaryType.Count)
-                                                .Column("OrderID");
-                                            totalItems.Add()
-                                                .SummaryType(SummaryType.Sum)
-                                                .DisplayFormat("{0}")
-                                                .Column("Quantity");
-                                            totalItems.Add()
-                                                .SummaryType(SummaryType.Sum)
-                                                .DisplayFormat("{0}")
-                                                .ValueFormat(Format.Currency)
-                                                .Column("Amount");
-                                        })
-                                    )
-                        )
-                    </text>);
-                                    })
-
-    )*@
 <form asp-action="OwnerScoreReport">
     <div class="row justify-content-between">
         <div class="col-md-4">
@@ -160,8 +41,17 @@
             <th>ที่</th>
             <th>ตัวชี้วัด</th>
             <th>น้ำหนักร้อยละ (100%)</th>
-            <th>คะแนนเบื้องต้น</th>
-            <th>คะแนนเบื้องต้นถ่วงน้ำหนัก</th>
+            <th>
+                <i class="fas fa-bullseye" title="เป้าหมาย/ประมาณการ"></i>
+            </th>
+            <th>
+                ผลการปฏิบัติ
+            </th>
+            @if (User.IsInRole("Admin") || User.IsInRole("Manager"))
+            {
+                <th>คะแนนเบื้องต้น</th>
+                <th>คะแนนเบื้องต้นถ่วงน้ำหนัก</th>
+            }
             <th>คะแนนที่รับรองแล้ว</th>
             <th>คะแนนที่รับรองแล้วถ่วงน้ำหนัก</th>
         </tr>
@@ -175,64 +65,156 @@
         @for (int i = 0; i < Model.p.Count(); i++)
         {
             sumWeight += @Model.p[i].Weight;
-            <tr>
-                <td>
-                    @Model.p[i].Point
-                </td>
+        <tr>
+            <td>
+                @Model.p[i].Point
+            </td>
 
-                <td>
-                    @Model.p[i].Name
-                </td>
-                <td>
-                    @Model.p[i].Weight.ToString("N2")
-                </td>
-
-                @{
-                    ScoreDraft sd = null;
+            <td>
+                @Model.p[i].Name
+            </td>
+            <td>
+                @Model.p[i].Weight.ToString("N2")
+            </td>
+            @{
+                DataForEvaluation de = null;
+            }
+            @foreach (var item in @Model.p[i].DataForEvaluations)
+            {
+                if (item.Month == Model.month && item.OfficeId == Model.p[i].OwnerOfficeId && item.PointOfEvaluationId == @Model.p[i].Id)
+                {
+                    de = item;
                 }
-                @foreach (var item in @Model.p[i].ScoreDrafts)
+            }
+            <td>@string.Format("{0:N4}", de?.Expect)</td>
+
+            <td>@string.Format("{0:N4}", de?.Result)</td>
+
+            @if (User.IsInRole("Admin") || User.IsInRole("Manager"))
+            {
+
+                ScoreDraft sd = null;
+
+                foreach (var item in @Model.p[i].ScoreDrafts)
                 {
                     if (item.LastMonth == Model.month && item.OfficeId == Model.p[i].OwnerOfficeId)
                     {
                         sd = item;
                     }
                 }
-                <td>@string.Format("{0:N4}", sd?.ScoreValue)</td>
-                @if (sd != null)
+
+                if (sd != null)
                 {
+                    string sColor;
+                    if (sd.ScoreValue <= 2)
+                    {
+                        sColor = "red";
+                    }
+                    else if (sd.ScoreValue > 2 && sd.ScoreValue <= 4)
+                    {
+                        sColor = "orange";
+                    }
+                    else
+                    {
+                        sColor = "green";
+                    }
+
+                    <td style="color:@sColor;font-weight: bold">@string.Format("{0:N4}", sd?.ScoreValue)</td>
+
                     var sdx = sd.ScoreValue * @Model.p[i].Weight / 100;
                     sumScoreDraftWithWeight += sdx;
-                    <td>@string.Format("{0:N4}", sdx)</td>
+                    <td style="color:@sColor;font-weight: bold">@string.Format("{0:N4}", sdx)</td>
+                }
+                else
+                {
+                    <td></td>
+                    <td></td>
+                }
+            }
+
+            @{
+                Score s = null;
+            }
+            @foreach (var item in @Model.p[i].Scores)
+            {
+                if (item.LastMonth == Model.month && item.OfficeId == Model.p[i].OwnerOfficeId)
+                {
+                    s = item;
+                }
+            }
+
+            @if (s != null)
+            {
+                string sColor;
+                if (s.ScoreValue <= 2)
+                {
+                    sColor = "red";
+                }
+                else if (s.ScoreValue > 2 && s.ScoreValue <= 4)
+                {
+                    sColor = "orange";
+                }
+                else
+                {
+                    sColor = "green";
                 }
 
-                @{
-                    Score s = null;
-                }
-                @foreach (var item in @Model.p[i].Scores)
-                {
-                    if (item.LastMonth == Model.month && item.OfficeId == Model.p[i].OwnerOfficeId)
-                    {
-                        s = item;
-                    }
-                }
-                <td>@string.Format("{0:N4}", s?.ScoreValue)</td>
+                <td style="color:@sColor;font-weight: bold">@string.Format("{0:N4}", s?.ScoreValue)</td>
 
-                @if (s != null)
-                {
-                    var sx = s.ScoreValue * @Model.p[i].Weight / 100;
-                    sumScoreWithWeight += sx;
-                    <td>@string.Format("{0:N4}", sx)</td>
+                var sx = s.ScoreValue * @Model.p[i].Weight / 100;
+                sumScoreWithWeight += sx;
+                <td style="color:@sColor;font-weight: bold">@string.Format("{0:N4}", sx)</td>
+            }
+            else
+            {
+                <td></td>
+                <td></td>
+            }
+        </tr>
                 }
-            </tr>
-        }
         <tr>
-            <td>รวม</td>
+            <td style="color:blue;font-weight: bold">รวม</td>
             <td></td>
-            <td>@string.Format("{0:N2}", sumWeight)</td>
+            <td style="color:blue;font-weight: bold">@string.Format("{0:N2}", sumWeight)</td>
             <td></td>
-            <td>@string.Format("{0:N4}", Math.Round(sumScoreDraftWithWeight, 3, MidpointRounding.AwayFromZero))</td>
             <td></td>
-            <td>@string.Format("{0:N4}", Math.Round(sumScoreWithWeight, 3, MidpointRounding.AwayFromZero))</td>
+            @if (User.IsInRole("Admin") || User.IsInRole("Manager"))
+            {
+                string sColor;
+                if (sumScoreDraftWithWeight <= 2)
+                {
+                    sColor = "red";
+                }
+                else if (sumScoreDraftWithWeight > 2 && sumScoreDraftWithWeight <= 4)
+                {
+                    sColor = "orange";
+                }
+                else
+                {
+                    sColor = "green";
+                }
+
+                <td></td>
+                <td style="color:@sColor;font-weight: bold">@string.Format("{0:N4}", Math.Round(sumScoreDraftWithWeight, 3, MidpointRounding.AwayFromZero))</td>
+            }
+            <td></td>
+            @{
+                string ssColor;
+                if (sumScoreWithWeight <= 2)
+                {
+                    ssColor = "red";
+                }
+                else if (sumScoreWithWeight > 2 && sumScoreWithWeight <= 4)
+                {
+                    ssColor = "orange";
+                }
+                else
+                {
+                    ssColor = "green";
+                }
+                <td style="color:@ssColor;font-weight: bold">@string.Format("{0:N4}", Math.Round(sumScoreWithWeight, 3, MidpointRounding.AwayFromZero))</td>
+            }
+
         </tr>
     </tbody>
 </table>

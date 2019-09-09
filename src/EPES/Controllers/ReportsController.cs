@@ -61,7 +61,7 @@ namespace EPES.Controllers
             var user = await _userManager.GetUserAsync(User);
             var rmodel = new ReportViewModel();
 
-            rmodel.p = await _context.PointOfEvaluations.Where(p => p.OwnerOffice.Code == user.OfficeId && p.Year == yearForQuery).Include(p => p.OwnerOffice).Include(p => p.ScoreDrafts).Include(p => p.Scores).OrderBy(p => p.Point).ToListAsync();
+            rmodel.p = await _context.PointOfEvaluations.Where(p => p.OwnerOffice.Code == user.OfficeId && p.Year == yearForQuery).Include(p => p.DataForEvaluations).Include(p => p.ScoreDrafts).Include(p => p.Scores).OrderBy(p => p.Point).ToListAsync();
 
             //var rmodel = await (from mp in _context.PointOfEvaluations
             //                    join mo in _context.Offices on mp.OwnerOfficeId equals mo.Id
@@ -142,7 +142,7 @@ namespace EPES.Controllers
                 selectoffice = user.OfficeId;
             }
 
-            rmodel.p = await _context.PointOfEvaluations.Where(p => p.OwnerOffice.Code == selectoffice && p.Year == yearForQuery).Include(p => p.OwnerOffice).Include(p => p.ScoreDrafts).Include(p => p.Scores).OrderBy(p => p.Point).ToListAsync();
+            rmodel.p = await _context.PointOfEvaluations.Where(p => p.OwnerOffice.Code == selectoffice && p.Year == yearForQuery).Include(p => p.DataForEvaluations).Include(p => p.ScoreDrafts).Include(p => p.Scores).OrderBy(p => p.Point).ToListAsync();
 
             //var rmodel = await (from mp in _context.PointOfEvaluations
             //                    join mo in _context.Offices on mp.OwnerOfficeId equals mo.Id

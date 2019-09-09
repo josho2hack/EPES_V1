@@ -11,6 +11,7 @@ namespace EPES.ViewModels
     public class ReportViewModel
     {
         public IList<PointOfEvaluation> p { get; set; }
+        //public DataForEvaluation de { get; set; }
 
         public int month { get; set; }
         public int yearPoint { get; set; }
