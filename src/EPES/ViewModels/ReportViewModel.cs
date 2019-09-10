@@ -17,5 +17,6 @@ namespace EPES.ViewModels
         public int yearPoint { get; set; }
         public int poeid { get; set; }
 
+        public int indexList { get; set; }
     }
 }
