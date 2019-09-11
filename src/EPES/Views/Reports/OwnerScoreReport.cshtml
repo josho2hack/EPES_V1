@@ -63,135 +63,120 @@
         @for (int i = 0; i < Model.p.Count(); i++)
         {
             sumWeight += @Model.p[i].Weight;
-        <tr>
-            <td>
-                @Model.p[i].Point
-            </td>
-
-            <td>
-                @Model.p[i].Name
-            </td>
-            <td>
-                @Model.p[i].Weight.ToString("N2")
-            </td>
-            @{
-                DataForEvaluation de = null;
-            }
-            @foreach (var item in @Model.p[i].DataForEvaluations)
-            {
-                if (item.Month == Model.month && item.OfficeId == Model.p[i].OwnerOfficeId && item.PointOfEvaluationId == @Model.p[i].Id)
-                {
-                    de = item;
-                }
-            }
-            @if (Model.p[i].Unit == UnitOfPoint.ร้อยละ)
-            {
-                <td>@string.Format("{0:N4}", de?.Expect)</td>
-
-                <td>@string.Format("{0:N4}", de?.Result)</td>
-            }
-            else
-            {
+            <tr>
                 <td>
-                    @*<select name="Expect[@i]" class="form-control" asp-items="ViewBag.SelectLevelE" disabled></select>*@
+                    @Model.p[i].Point
                 </td>
-                @*<select name="Result[@i]" class="form-control" asp-items="ViewBag.SelectLevelR" disabled></select>*@
-                List<string> list1 = new List<string>();
-                list1.Add("1." + Model.p[i].DetailRate1);
-                list1.Add("2." + Model.p[i].DetailRate2);
-                list1.Add("3." + Model.p[i].DetailRate3);
-                list1.Add("4." + Model.p[i].DetailRate4);
-                list1.Add("5." + Model.p[i].DetailRate5);
 
-                if ((3 < Model.month) && (Model.month < 10) && !String.IsNullOrEmpty(Model.p[i].Detail2Rate1))
+                <td>
+                    @Model.p[i].Name
+                </td>
+                <td>
+                    @Model.p[i].Weight.ToString("N2")
+                </td>
+                @{
+                    Dictionary<decimal, string> dict = new Dictionary<decimal, string>();
+                    dict.Add(1m, "1." + Model.p[i].DetailRate1);
+                    dict.Add(2m, "2." + Model.p[i].DetailRate2);
+                    dict.Add(3m, "3." + Model.p[i].DetailRate3);
+                    dict.Add(4m, "4." + Model.p[i].DetailRate4);
+                    dict.Add(5m, "5." + Model.p[i].DetailRate5);
+
+                    if ((3 < Model.month) && (Model.month < 10) && !String.IsNullOrEmpty(Model.p[i].Detail2Rate1))
+                    {
+                        dict.Clear();
+                        dict.Add(1m, "1." + Model.p[i].Detail2Rate1);
+                        dict.Add(2m, "2." + Model.p[i].Detail2Rate2);
+                        dict.Add(3m, "3." + Model.p[i].Detail2Rate3);
+                        dict.Add(4m, "4." + Model.p[i].Detail2Rate4);
+                        dict.Add(5m, "5." + Model.p[i].Detail2Rate5);
+                    }
+                    DataForEvaluation de = null;
+                }
+                @foreach (var item in @Model.p[i].DataForEvaluations)
                 {
-                    list1.Clear();
-                    list1.Add("1." + Model.p[i].Detail2Rate1);
-                    list1.Add("2." + Model.p[i].Detail2Rate2);
-                    list1.Add("3." + Model.p[i].Detail2Rate3);
-                    list1.Add("4." + Model.p[i].Detail2Rate4);
-                    list1.Add("5." + Model.p[i].Detail2Rate5);
+                    if (item.Month == Model.month && item.OfficeId == Model.p[i].OwnerOfficeId && item.PointOfEvaluationId == @Model.p[i].Id)
+                    {
+                        de = item;
+                    }
                 }
 
-                switch (de.Result)
+                @if (Model.p[i].Unit == UnitOfPoint.ร้อยละ)
                 {
-                    case 0m:
-                        if ((3 < Model.month) && (Model.month < 10) && !String.IsNullOrEmpty(Model.p[i].Detail2Rate1))
-                        {
-                            <td>@("1." + Model.p[i].Detail2Rate1)</td>}
-                        else
-                        {
-                            <td>@("1." + Model.p[i].DetailRate1)</td>
-                        }
-                        break;
-                    case 1m:
-                        if ((3 < Model.month) && (Model.month < 10) && !String.IsNullOrEmpty(Model.p[i].Detail2Rate1))
-                        {
-                            <td>@("1." + Model.p[i].Detail2Rate1)</td>}
-                        else
-                        {
-                            <td>@("1." + Model.p[i].DetailRate1)</td>
-                        }
-                        break;
-                    case 2m:
-                        if ((3 < Model.month) && (Model.month < 10) && !String.IsNullOrEmpty(Model.p[i].Detail2Rate1))
-                        {
-                            <td>@("2." + Model.p[i].Detail2Rate2)</td>}
-                        else
-                        {
-                            <td>@("2." + Model.p[i].DetailRate2)</td>
-                        }
-                        break;
-                    case 3m:
-                        if ((3 < Model.month) && (Model.month < 10) && !String.IsNullOrEmpty(Model.p[i].Detail2Rate1))
-                        {
-                            <td>@("3." + Model.p[i].Detail2Rate3)</td>}
-                        else
-                        {
-                            <td>@("3." + Model.p[i].DetailRate3)</td>
-                        }
-                        break;
-                    case 4m:
-                        if ((3 < Model.month) && (Model.month < 10) && !String.IsNullOrEmpty(Model.p[i].Detail2Rate1))
-                        {
-                            <td>@("4." + Model.p[i].Detail2Rate4)</td>}
-                        else
-                        {
-                            <td>@("4." + Model.p[i].DetailRate4)</td>
-                        }
-                        break;
-                    case 5m:
-                        if ((3 < Model.month) && (Model.month < 10) && !String.IsNullOrEmpty(Model.p[i].Detail2Rate1))
-                        {
-                            <td>@("5." + Model.p[i].Detail2Rate5)</td>}
-                        else
-                        {
-                            <td>@("5." + Model.p[i].DetailRate5)</td>
-                        }
-                        break;
+                    <td>@string.Format("{0:N4}", de?.Expect)</td>
+
+                    <td>@string.Format("{0:N4}", de?.Result)</td>
                 }
-            }
-            @if (User.IsInRole("Admin") || User.IsInRole("Manager"))
-            {
+                else
+                {
+                    <td>
+                        @*<select name="Expect[@i]" class="form-control" asp-items="ViewBag.SelectLevelE" disabled></select>*@
+                    </td>
+                    @*<select name="Result[@i]" class="form-control" asp-items="ViewBag.SelectLevelR" disabled></select>*@
+                   
+                    <td>@dict[de.Result]</td>
+                }
+                @if (User.IsInRole("Admin") || User.IsInRole("Manager"))
+                {
 
-                ScoreDraft sd = null;
+                    ScoreDraft sd = null;
 
-                foreach (var item in @Model.p[i].ScoreDrafts)
+                    foreach (var item in @Model.p[i].ScoreDrafts)
+                    {
+                        if (item.LastMonth == Model.month && item.OfficeId == Model.p[i].OwnerOfficeId)
+                        {
+                            sd = item;
+                        }
+                    }
+
+                    if (sd != null)
+                    {
+                        string sColor;
+                        if (sd.ScoreValue <= 2)
+                        {
+                            sColor = "red";
+                        }
+                        else if (sd.ScoreValue > 2 && sd.ScoreValue <= 4)
+                        {
+                            sColor = "orange";
+                        }
+                        else
+                        {
+                            sColor = "green";
+                        }
+
+                        <td style="color:@sColor;font-weight: bold">@string.Format("{0:N4}", sd?.ScoreValue)</td>
+
+                        var sdx = sd.ScoreValue * @Model.p[i].Weight / 100;
+                        sumScoreDraftWithWeight += sdx;
+                        <td style="color:@sColor;font-weight: bold">@string.Format("{0:N4}", sdx)</td>
+                    }
+                    else
+                    {
+                        <td></td>
+                        <td></td>
+                    }
+                }
+
+                @{
+                    Score s = null;
+                }
+                @foreach (var item in @Model.p[i].Scores)
                 {
                     if (item.LastMonth == Model.month && item.OfficeId == Model.p[i].OwnerOfficeId)
                     {
-                        sd = item;
+                        s = item;
                     }
                 }
 
-                if (sd != null)
+                @if (s != null)
                 {
                     string sColor;
-                    if (sd.ScoreValue <= 2)
+                    if (s.ScoreValue <= 2)
                     {
                         sColor = "red";
                     }
-                    else if (sd.ScoreValue > 2 && sd.ScoreValue <= 4)
+                    else if (s.ScoreValue > 2 && s.ScoreValue <= 4)
                     {
                         sColor = "orange";
                     }
@@ -200,64 +185,24 @@
                         sColor = "green";
                     }
 
-                    <td style="color:@sColor;font-weight: bold">@string.Format("{0:N4}", sd?.ScoreValue)</td>
+                    <td style="color:@sColor;font-weight: bold">@string.Format("{0:N4}", s?.ScoreValue)</td>
 
-                    var sdx = sd.ScoreValue * @Model.p[i].Weight / 100;
-                    sumScoreDraftWithWeight += sdx;
-                    <td style="color:@sColor;font-weight: bold">@string.Format("{0:N4}", sdx)</td>
+                    var sx = s.ScoreValue * @Model.p[i].Weight / 100;
+                    sumScoreWithWeight += sx;
+                    <td style="color:@sColor;font-weight: bold">@string.Format("{0:N4}", sx)</td>
                 }
                 else
                 {
                     <td></td>
                     <td></td>
                 }
-            }
-
-            @{
-                Score s = null;
-            }
-            @foreach (var item in @Model.p[i].Scores)
-            {
-                if (item.LastMonth == Model.month && item.OfficeId == Model.p[i].OwnerOfficeId)
-                {
-                    s = item;
-                }
-            }
-
-            @if (s != null)
-            {
-                string sColor;
-                if (s.ScoreValue <= 2)
-                {
-                    sColor = "red";
-                }
-                else if (s.ScoreValue > 2 && s.ScoreValue <= 4)
-                {
-                    sColor = "orange";
-                }
-                else
-                {
-                    sColor = "green";
-                }
-
-                <td style="color:@sColor;font-weight: bold">@string.Format("{0:N4}", s?.ScoreValue)</td>
-
-                var sx = s.ScoreValue * @Model.p[i].Weight / 100;
-                sumScoreWithWeight += sx;
-                <td style="color:@sColor;font-weight: bold">@string.Format("{0:N4}", sx)</td>
-            }
-            else
-            {
-                <td></td>
-                <td></td>
-            }
-            <td>
-                @if (de?.AttachFile != null)
-                {
-                    <a href="~/attach_files/@de?.AttachFile" target="_blank"><i class="fas fa-file-pdf fa-2x"></i></a>
-                }
-            </td>
-        </tr>
+                <td>
+                    @if (de?.AttachFile != null)
+                    {
+                        <a href="~/attach_files/@de?.AttachFile" target="_blank"><i class="fas fa-file-pdf fa-2x"></i></a>
+                    }
+                </td>
+            </tr>
         }
         <tr>
             <td style="color:blue;font-weight: bold">รวม</td>
