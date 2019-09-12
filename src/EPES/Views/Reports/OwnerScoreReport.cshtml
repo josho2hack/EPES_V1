@@ -113,8 +113,15 @@
                         @*<select name="Expect[@i]" class="form-control" asp-items="ViewBag.SelectLevelE" disabled></select>*@
                     </td>
                     @*<select name="Result[@i]" class="form-control" asp-items="ViewBag.SelectLevelR" disabled></select>*@
-                   
-                    <td>@dict[de.Result]</td>
+                    if (de != null)
+                    {
+                        <td>@dict[de.Result]</td>
+                    }
+                    else
+                    {
+                        <td></td>
+                    }
+
                 }
                 @if (User.IsInRole("Admin") || User.IsInRole("Manager"))
                 {
