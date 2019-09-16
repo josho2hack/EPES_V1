@@ -497,6 +497,7 @@ namespace EPES.Controllers
                             if (de != null)
                             {
                                 de.Result = item.DataForEvaluations[0].Result;
+                                de.TimeUpdate = DateTime.Now;
                                 await _context.SaveChangesAsync();
                             }
                         }
@@ -508,6 +509,7 @@ namespace EPES.Controllers
                             de.PointOfEvaluationId = item.Id;
                             de.OfficeId = item.OwnerOffice.Id;
                             de.Month = model.month;
+                            de.TimeUpdate = DateTime.Now;
                             _context.Add(de);
                             await _context.SaveChangesAsync();
                         }
@@ -649,6 +651,7 @@ namespace EPES.Controllers
                                 de.Result = item.Result;
                                 de.UpdateUserId = user.Id;
                                 de.Completed = item.Completed;
+                                de.TimeUpdate = DateTime.Now;
 
                                 await _context.SaveChangesAsync();
                             }
@@ -662,6 +665,8 @@ namespace EPES.Controllers
                             de.OfficeId = item.officeid;
                             de.Month = month;
                             de.Completed = item.Completed;
+                            de.TimeUpdate = DateTime.Now;
+
                             _context.Add(de);
                             await _context.SaveChangesAsync();
                         }

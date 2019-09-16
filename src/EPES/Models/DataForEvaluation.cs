@@ -71,6 +71,23 @@ namespace EPES.Models
         [NotMapped]
         [Display(Name = "ไฟล์ Upload")]
         public IFormFile FileUpload { get; set; }
+
+        [Timestamp]
+        public byte[] RowVersion { get; set; }
+
+        public DateTime TimeUpdate
+        {
+            get
+            {
+                return this.timeUpdate.HasValue
+                   ? this.timeUpdate.Value
+                   : DateTime.Now;
+            }
+
+            set { this.timeUpdate = value; }
+        }
+
+        private DateTime? timeUpdate = null;
     }
 
     public enum Approve
