@@ -365,7 +365,7 @@ namespace EPES.Controllers
             return _context.DataForEvaluations.Any(e => e.Id == id);
         }
 
-        public async Task<IActionResult> IndexMonth(string selectoffice, int month = 0, int yearPoint = 0)
+        public async Task<IActionResult> IndexMonth(string selectoffice, bool isUpdate = false, int month = 0, int yearPoint = 0)
         {
             ViewBag.msg1 = "hello1";
             int m;
@@ -453,25 +453,38 @@ namespace EPES.Controllers
             }
 
             List<Object> list = new List<object>();
-            if (m < 10)
+            if (isUpdate)
             {
                 for (int i = 10; i <= 12; i++)
                 {
                     list.Add(new { Value = i, Month = new DateTime(DateTime.Now.Year, i, 1).ToString("MMMM") });
                 }
-                for (int i = 1; i <= m; i++)
+                for (int i = 1; i < 10; i++)
                 {
                     list.Add(new { Value = i, Month = new DateTime(DateTime.Now.Year, i, 1).ToString("MMMM") });
                 }
             }
             else
             {
-                for (int i = 10; i <= m; i++)
+                if (m < 10)
                 {
-                    list.Add(new { Value = i, Month = new DateTime(DateTime.Now.Year, i, 1).ToString("MMMM") });
+                    for (int i = 10; i <= 12; i++)
+                    {
+                        list.Add(new { Value = i, Month = new DateTime(DateTime.Now.Year, i, 1).ToString("MMMM") });
+                    }
+                    for (int i = 1; i <= m; i++)
+                    {
+                        list.Add(new { Value = i, Month = new DateTime(DateTime.Now.Year, i, 1).ToString("MMMM") });
+                    }
+                }
+                else
+                {
+                    for (int i = 10; i <= m; i++)
+                    {
+                        list.Add(new { Value = i, Month = new DateTime(DateTime.Now.Year, i, 1).ToString("MMMM") });
+                    }
                 }
             }
-
             ViewBag.Month = new SelectList(list, "Value", "Month", m);
             ViewBag.selectoffice = selectoffice;
             viewModel.month = m;
@@ -673,7 +686,7 @@ namespace EPES.Controllers
                     }
                 }
             }
-            return RedirectToAction(nameof(IndexMonth), new { selectoffice = selectoffice, yearPoint = yearPoint, month = month });
+            return RedirectToAction(nameof(IndexMonth), new { selectoffice = selectoffice, isUpdate = true, yearPoint = yearPoint, month = month });
         }
 
         [HttpPost]

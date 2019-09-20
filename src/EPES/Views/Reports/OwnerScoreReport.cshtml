@@ -59,13 +59,11 @@
             decimal sumWeight = 0m;
             decimal sumScoreDraftWithWeight = 0m;
             decimal sumScoreWithWeight = 0m;
-            decimal sumExpect = 0m, sumResult = 0m;
         }
         @for (int i = 0; i < Model.p.Count(); i++)
         {
             sumWeight += @Model.p[i].Weight;
-            sumExpect = 0m;
-            sumResult = 0m;
+            decimal sumExpect = 0m, sumResult = 0m;
 
             <tr>
                 <td>
@@ -97,6 +95,7 @@
                     }
                     DataForEvaluation de = null;
                 }
+
                 @foreach (var item in @Model.p[i].DataForEvaluations)
                 {
                     if (item.Month == Model.month && item.OfficeId == Model.p[i].OwnerOfficeId && item.PointOfEvaluationId == @Model.p[i].Id)
@@ -104,26 +103,29 @@
                         de = item;
                     }
 
-                    if (Model.month < 10)
+                    if (item.OfficeId == Model.p[i].OwnerOfficeId && item.PointOfEvaluationId == @Model.p[i].Id)
                     {
-                        if (item.Month >= 10 && item.Month <= 12)
+                        if (Model.month < 10)
                         {
-                            sumExpect += item.Expect;
-                            sumResult += item.Result;
-                        }
+                            if (item.Month >= 10 && item.Month <= 12)
+                            {
+                                sumExpect += item.Expect;
+                                sumResult += item.Result;
+                            }
 
-                        if (item.Month <= Model.month)
-                        {
-                            sumExpect += item.Expect;
-                            sumResult += item.Result;
+                            if (item.Month <= Model.month)
+                            {
+                                sumExpect += item.Expect;
+                                sumResult += item.Result;
+                            }
                         }
-                    }
-                    else
-                    {
-                        if (item.Month >= 10 && item.Month <= Model.month)
+                        else
                         {
-                            sumExpect += item.Expect;
-                            sumResult += item.Result;
+                            if (item.Month >= 10 && item.Month <= Model.month)
+                            {
+                                sumExpect += item.Expect;
+                                sumResult += item.Result;
+                            }
                         }
                     }
                 }
