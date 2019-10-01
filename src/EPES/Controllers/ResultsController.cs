@@ -365,30 +365,32 @@ namespace EPES.Controllers
             return _context.DataForEvaluations.Any(e => e.Id == id);
         }
 
-        public async Task<IActionResult> IndexMonth(string selectoffice, bool isUpdate = false, int month = 0, int yearPoint = 0)
+        public async Task<IActionResult> IndexMonth(string selectoffice, bool isUpdate = false, int month = 0)
         {
-            ViewBag.msg1 = "hello1";
-            int m;
-            if (month == 0)
-            {
-                if (DateTime.Now.Month == 1)
-                {
-                    m = 12;
-                }
-                else
-                {
-                    m = DateTime.Now.Month - 1;
-                }
-            }
-            else
-            {
-                m = month;
-            }
-
             var user = await _userManager.GetUserAsync(User);
             var viewModel = new ResultViewModel();
 
-            DateTime yearForQuery = new DateTime(DateTime.Now.AddYears(yearPoint).Year, 1, 1);
+            int m;
+            if (DateTime.Now.Month == 1)
+            {
+                m = 12;
+            }
+            else
+            {
+                m = DateTime.Now.Month - 1;
+            }
+
+            DateTime yearForQuery;
+
+            if (DateTime.Now.Month == 11 || DateTime.Now.Month == 12)
+            {
+                yearForQuery = new DateTime(DateTime.Now.AddYears(1).Year, 1, 1);
+            }
+            else
+            {
+                yearForQuery = new DateTime(DateTime.Now.Year, 1, 1);
+            }
+
 
             if (User.IsInRole("Admin"))
             {
@@ -488,19 +490,26 @@ namespace EPES.Controllers
             ViewBag.Month = new SelectList(list, "Value", "Month", m);
             ViewBag.selectoffice = selectoffice;
             viewModel.month = m;
-            viewModel.yearPoint = yearPoint;
+            if (DateTime.Now.Month == 10)
+            {
+                viewModel.yearPoint = -1;
+            }
+            else
+            {
+                viewModel.yearPoint = 0;
+            }
             return View(viewModel);
         }
 
         [HttpPost, ActionName("IndexMonth")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> IndexMonthPost(string selectoffice, ResultViewModel model, string Update)
+        public async Task<IActionResult> IndexMonthPost(string selectoffice, ResultViewModel model, string Update, int yearPoint)
         {
             var user = await _userManager.GetUserAsync(User);
             if (Update == "บันทึก")
             {
 
-                if (model.pointA != null) // Plan A
+                if (model.pointA != null) // Plan A Save Plan A
                 {
                     foreach (var item in model.pointA)
                     {
@@ -528,31 +537,36 @@ namespace EPES.Controllers
                         }
                     }
                 }
-
-                return RedirectToAction(nameof(IndexMonth), new { selectoffice = selectoffice, month = model.month, yearPoint = model.yearPoint });
+                //When A is Null Redirect not Save
+                return RedirectToAction(nameof(IndexMonth), new { selectoffice = selectoffice});
             }
             else
             {
-                int m;
-                if (model.month == 0)
+                var viewModel = new ResultViewModel();
+
+                DateTime yearForQuery;
+                if (yearPoint == 0)
                 {
-                    if (DateTime.Now.Month == 1)
+                    if (DateTime.Now.Month == 10 || DateTime.Now.Month == 11 || DateTime.Now.Month == 12)
                     {
-                        m = 12;
+                        yearForQuery = new DateTime(DateTime.Now.AddYears(1).Year, 1, 1);
                     }
                     else
                     {
-                        m = DateTime.Now.Month - 1;
+                        yearForQuery = new DateTime(DateTime.Now.Year, 1, 1);
                     }
                 }
                 else
                 {
-                    m = model.month;
+                    if (DateTime.Now.Month == 10 || DateTime.Now.Month == 11 || DateTime.Now.Month == 12)
+                    {
+                            yearForQuery = new DateTime(DateTime.Now.AddYears(1+yearPoint).Year, 1, 1);
+                    }
+                    else
+                    {
+                        yearForQuery = new DateTime(DateTime.Now.AddYears(yearPoint).Year, 1, 1);
+                    }
                 }
-
-                var viewModel = new ResultViewModel();
-
-                DateTime yearForQuery = new DateTime(DateTime.Now.AddYears(model.yearPoint).Year, 1, 1);
 
                 if (User.IsInRole("Admin"))
                 {
@@ -636,10 +650,10 @@ namespace EPES.Controllers
                     }
                 }
 
-                ViewBag.Month = new SelectList(list, "Value", "Month", m);
+                ViewBag.Month = new SelectList(list, "Value", "Month", model.month);
                 ViewBag.selectoffice = selectoffice;
-                viewModel.month = m;
                 viewModel.yearPoint = model.yearPoint;
+
                 return View(viewModel);
             }
         }
