@@ -498,6 +498,7 @@ namespace EPES.Controllers
             {
                 viewModel.yearPoint = 0;
             }
+
             return View(viewModel);
         }
 
@@ -653,6 +654,7 @@ namespace EPES.Controllers
                 ViewBag.Month = new SelectList(list, "Value", "Month", model.month);
                 ViewBag.selectoffice = selectoffice;
                 viewModel.yearPoint = model.yearPoint;
+                viewModel.month = model.month;
 
                 return View(viewModel);
             }

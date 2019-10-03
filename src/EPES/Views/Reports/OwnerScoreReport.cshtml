@@ -26,9 +26,42 @@
             <div class="row">
                 <label class="col-form-label col-md-6 text-md-right">ปีงบประมาณ: </label>
                 <select asp-for="yearPoint" class="form-control col-md-6" onchange="this.form.submit()">
-                    <option value="-1">@DateTime.Now.AddYears(-1).ToString("yyyy")</option>
-                    <option value="0">@DateTime.Now.ToString("yyyy")</option>
-                    <option value="1">@DateTime.Now.AddYears(1).ToString("yyyy")</option>
+                    <option value="-1">
+                        @{
+                            if (DateTime.Now.Month == 10 || DateTime.Now.Month == 11 || DateTime.Now.Month == 12)
+                            {
+                                @DateTime.Now.ToString("yyyy");
+                            }
+                            else
+                            {
+                                @DateTime.Now.AddYears(-1).ToString("yyyy");
+                            }
+                        }
+                    </option>
+                    <option value="0">
+                        @{
+                            if (DateTime.Now.Month == 10 || DateTime.Now.Month == 11 || DateTime.Now.Month == 12)
+                            {
+                                @DateTime.Now.AddYears(1).ToString("yyyy");
+                            }
+                            else
+                            {
+                                @DateTime.Now.ToString("yyyy");
+                            }
+                        }
+                    </option>
+                    <option value="1">
+                        @{
+                            if (DateTime.Now.Month == 10 || DateTime.Now.Month == 11 || DateTime.Now.Month == 12)
+                            {
+                                @DateTime.Now.AddYears(2).ToString("yyyy");
+                            }
+                            else
+                            {
+                                @DateTime.Now.AddYears(1).ToString("yyyy");
+                            }
+                        }
+                    </option>
                 </select>
             </div>
         </div>

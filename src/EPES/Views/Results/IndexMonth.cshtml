@@ -153,7 +153,7 @@
                                         }
                                         @foreach (var item in @Model.pointA[i].DataForEvaluations)
                                         {
-                                            if (item.Month == 5 && item.OfficeId == Model.pointA[i].OwnerOfficeId)
+                                            if (item.Month == Model.month && item.OfficeId == Model.pointA[i].OwnerOfficeId)
                                             {
                                                 de = item;
                                             }
