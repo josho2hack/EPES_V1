@@ -668,13 +668,13 @@ namespace EPES.Controllers
             var user = await _userManager.GetUserAsync(User);
             if (Update == "บันทึก")
             {
-                if (UpdateData != null) // Plan A
+                if (UpdateData != null)
                 {
                     foreach (var item in UpdateData)
                     {
                         if (item.Id != null)
                         {
-                            var de = await _context.DataForEvaluations.FirstAsync(d => d.Id == item.Id);
+                            var de = await _context.DataForEvaluations.FirstOrDefaultAsync(d => d.Id == item.Id);
                             if (de != null)
                             {
                                 de.Result = item.Result;
