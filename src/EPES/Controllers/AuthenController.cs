@@ -133,7 +133,7 @@ namespace EPES.Controllers
 
                         if (result.Succeeded)
                         {
-                            return Redirect("~/Home");
+                            return Redirect("~/Home/IndexMember");
                         }
                         else
                         {
@@ -187,7 +187,7 @@ namespace EPES.Controllers
                         {
                             //ViewBag.tran = transCls.AppTransID;
                             //return View();
-                            return Redirect("~/Home");
+                            return Redirect("~/Home/IndexMember");
                         }
                         else
                         {

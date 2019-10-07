@@ -1,6 +1,7 @@
 ﻿using EPES.Data;
 using EPES.Models;
 using EPES.ViewModels;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
@@ -15,6 +16,7 @@ using System.Threading.Tasks;
 
 namespace EPES.Controllers
 {
+    [Authorize]
     public class ResultsController : Controller
     {
         private readonly ApplicationDbContext _context;
