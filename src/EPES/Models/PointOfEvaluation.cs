@@ -325,7 +325,9 @@ namespace EPES.Models
     public enum UnitOfPoint
     {
         ร้อยละ,
-        ระดับ
+        ระดับ,
+        [Display(Name = "ระดับ/ร้อยละ")]
+        ระดับ_ร้อยละ
     }
 
     public enum ExpectPlanRD
