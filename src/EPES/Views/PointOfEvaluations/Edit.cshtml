@@ -47,13 +47,11 @@
                         </div>
                         <div class="form-group">
                             <label asp-for="ExpectPlan" class="control-label"></label>
-                            <input asp-for="ExpectPlan" class="form-control" />
-                            <span asp-validation-for="ExpectPlan" class="text-danger"></span>
+                            <select asp-for="ExpectPlan" asp-items="Html.GetEnumSelectList<ExpectPlanRD>()"></select>
                         </div>
                         <div class="form-group">
                             <label asp-for="Ddrive" class="control-label"></label>
-                            <input asp-for="Ddrive" class="form-control" />
-                            <span asp-validation-for="Ddrive" class="text-danger"></span>
+                            <select asp-for="Ddrive" asp-items="Html.GetEnumSelectList<DdriveRD>()"></select>
                         </div>
                         <div class="form-group">
                             <label asp-for="Plan" class="control-label"></label>
@@ -112,14 +110,17 @@
                                         <label class='control-label'>วันสิ้นสุด</label>
                                         <input asp-for='R1MStop' class='form-control' />
                                     </div>
-                                    <div class='form-group col-md-5'>
-                                        <label class='control-label'>รายละเอียดเกณฑ์การให้คะแนน 1 คะแนน รอบที่ 2</label>
-                                        <input asp-for='Detail2Rate1' class='form-control' />
-                                        <label class='control-label'>วันเริ่ม</label>
-                                        <input asp-for='R1MStart2' class='form-control' />
-                                        <label class='control-label'>วันสิ้นสุด</label>
-                                        <input asp-for='R1MStop2' class='form-control' />
-                                    </div>
+                                    @if (!String.IsNullOrEmpty(Model.Detail2Rate1))
+                                    {
+                                        <div class='form-group col-md-5'>
+                                            <label class='control-label'>รายละเอียดเกณฑ์การให้คะแนน 1 คะแนน รอบที่ 2</label>
+                                            <input asp-for='Detail2Rate1' class='form-control' />
+                                            <label class='control-label'>วันเริ่ม</label>
+                                            <input asp-for='R1MStart2' class='form-control' />
+                                            <label class='control-label'>วันสิ้นสุด</label>
+                                            <input asp-for='R1MStop2' class='form-control' />
+                                        </div>
+                                    }
                                 }
                             </div>
                             <div class="row" name="mainrate2">
@@ -138,14 +139,17 @@
                                         <label class='control-label'>วันสิ้นสุด</label>
                                         <input asp-for='R2MStop' class='form-control' />
                                     </div>
-                                    <div class='form-group col-md-5'>
-                                        <label class='control-label'>รายละเอียดเกณฑ์การให้คะแนน 2 คะแนน รอบที่ 2</label>
-                                        <input asp-for='Detail2Rate2' class='form-control' />
-                                        <label class='control-label'>วันเริ่ม</label>
-                                        <input asp-for='R2MStart2' class='form-control' />
-                                        <label class='control-label'>วันสิ้นสุด</label>
-                                        <input asp-for='R2MStop2' class='form-control' />
-                                    </div>
+                                    @if (!String.IsNullOrEmpty(Model.Detail2Rate2))
+                                    {
+                                        <div class='form-group col-md-5'>
+                                            <label class='control-label'>รายละเอียดเกณฑ์การให้คะแนน 2 คะแนน รอบที่ 2</label>
+                                            <input asp-for='Detail2Rate2' class='form-control' />
+                                            <label class='control-label'>วันเริ่ม</label>
+                                            <input asp-for='R2MStart2' class='form-control' />
+                                            <label class='control-label'>วันสิ้นสุด</label>
+                                            <input asp-for='R2MStop2' class='form-control' />
+                                        </div>
+                                    }
                                 }
                             </div>
                             <div class="row" name="mainrate3">
@@ -164,14 +168,17 @@
                                         <label class='control-label'>วันสิ้นสุด</label>
                                         <input asp-for='R3MStop' class='form-control' />
                                     </div>
-                                    <div class='form-group col-md-5'>
-                                        <label class='control-label'>รายละเอียดเกณฑ์การให้คะแนน 3 คะแนน รอบที่ 2</label>
-                                        <input asp-for='Detail2Rate3' class='form-control' />
-                                        <label class='control-label'>วันเริ่ม</label>
-                                        <input asp-for='R3MStart2' class='form-control' />
-                                        <label class='control-label'>วันสิ้นสุด</label>
-                                        <input asp-for='R3MStop2' class='form-control' />
-                                    </div>
+                                    @if (!String.IsNullOrEmpty(Model.Detail2Rate3))
+                                    {
+                                        <div class='form-group col-md-5'>
+                                            <label class='control-label'>รายละเอียดเกณฑ์การให้คะแนน 3 คะแนน รอบที่ 2</label>
+                                            <input asp-for='Detail2Rate3' class='form-control' />
+                                            <label class='control-label'>วันเริ่ม</label>
+                                            <input asp-for='R3MStart2' class='form-control' />
+                                            <label class='control-label'>วันสิ้นสุด</label>
+                                            <input asp-for='R3MStop2' class='form-control' />
+                                        </div>
+                                    }
                                 }
                             </div>
                             <div class="row" name="mainrate4">
@@ -190,14 +197,17 @@
                                         <label class='control-label'>วันสิ้นสุด</label>
                                         <input asp-for='R4MStop' class='form-control' />
                                     </div>
-                                    <div class='form-group col-md-5'>
-                                        <label class='control-label'>รายละเอียดเกณฑ์การให้คะแนน 4 คะแนน รอบที่ 2</label>
-                                        <input asp-for='Detail2Rate4' class='form-control' />
-                                        <label class='control-label'>วันเริ่ม</label>
-                                        <input asp-for='R4MStart2' class='form-control' />
-                                        <label class='control-label'>วันสิ้นสุด</label>
-                                        <input asp-for='R4MStop2' class='form-control' />
-                                    </div>
+                                    @if (!String.IsNullOrEmpty(Model.Detail2Rate4))
+                                    {
+                                        <div class='form-group col-md-5'>
+                                            <label class='control-label'>รายละเอียดเกณฑ์การให้คะแนน 4 คะแนน รอบที่ 2</label>
+                                            <input asp-for='Detail2Rate4' class='form-control' />
+                                            <label class='control-label'>วันเริ่ม</label>
+                                            <input asp-for='R4MStart2' class='form-control' />
+                                            <label class='control-label'>วันสิ้นสุด</label>
+                                            <input asp-for='R4MStop2' class='form-control' />
+                                        </div>
+                                    }
                                 }
                             </div>
                             <div class="row" name="mainrate5">
@@ -216,14 +226,17 @@
                                         <label class='control-label'>วันสิ้นสุด</label>
                                         <input asp-for='R5MStop' class='form-control' />
                                     </div>
-                                    <div class='form-group col-md-5'>
-                                        <label class='control-label'>รายละเอียดเกณฑ์การให้คะแนน 5 คะแนน รอบที่ 2</label>
-                                        <input asp-for='Detail2Rate5' class='form-control' />
-                                        <label class='control-label'>วันเริ่ม</label>
-                                        <input asp-for='R5MStart2' class='form-control' />
-                                        <label class='control-label'>วันสิ้นสุด</label>
-                                        <input asp-for='R5MStop2' class='form-control' />
-                                    </div>
+                                    @if (!String.IsNullOrEmpty(Model.Detail2Rate5))
+                                    {
+                                        <div class='form-group col-md-5'>
+                                            <label class='control-label'>รายละเอียดเกณฑ์การให้คะแนน 5 คะแนน รอบที่ 2</label>
+                                            <input asp-for='Detail2Rate5' class='form-control' />
+                                            <label class='control-label'>วันเริ่ม</label>
+                                            <input asp-for='R5MStart2' class='form-control' />
+                                            <label class='control-label'>วันสิ้นสุด</label>
+                                            <input asp-for='R5MStop2' class='form-control' />
+                                        </div>
+                                    }
                                 }
                             </div>
                             <div class="row" name="mainrate6">
@@ -252,115 +265,115 @@
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
-<script type="text/javascript">
-    $(document).ready(function () {
-        $("div[name='round']").hide();
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $("div[name='round']").hide();
 
-        $("#Unit").change(function () {
-            if ($(this).children("option:selected").val() == 1) {
-                $("div[name='round']").show();
-                $("#DataForEvalutionTable").hide();
-
-                $("#round-select").val('1');
-                $("div[name^='mainrate']").empty();
-
-                $("div[name='mainrate1']").append(
-                 "<div class='form-group col-md-6'><label class='control-label'>รายละเอียดเกณฑ์การให้คะแนน 1 คะแนน รอบที่ 1</label><div class='row'><div class='col-md-2 text-md-right'>1.</div><div class='col-md-10'><input id='DetailRate1' name='DetailRate1' class='form-control' /></div></div></div><div class='form-group col-md-3'><label class='control-label'>วันที่เริ่ม</label><input type='date' name='R1MStart' class='form-control' /></div><div class='form-group col-md-3'><label class='control-label'>วันที่สิ้นสุด</label><input type='date' name='R1MStop' class='form-control' /></div>"
-                );
-                $("div[name='mainrate2']").append(
-                    "<div class='form-group col-md-6'><label class='control-label'>รายละเอียดเกณฑ์การให้คะแนน 2 คะแนน รอบที่ 1</label><div class='row'><div class='col-md-2 text-md-right'>2.</div><div class='col-md-10'><input id='DetailRate2' name='DetailRate2' class='form-control' /></div></div></div><div class='form-group col-md-3'><label class='control-label'>วันที่เริ่ม</label><input type='date' name='R2MStart' class='form-control' /></div><div class='form-group col-md-3'><label class='control-label'>วันที่สิ้นสุด</label><input type='date' name='R2MStop' class='form-control' /></div>"
-                );
-                $("div[name='mainrate3']").append(
-                    "<div class='form-group col-md-6'><label class='control-label'>รายละเอียดเกณฑ์การให้คะแนน 3 คะแนน รอบที่ 1</label><div class='row'><div class='col-md-2 text-md-right'>3.</div><div class='col-md-10'><input id='DetailRate3' name='DetailRate3' class='form-control' /></div></div></div><div class='form-group col-md-3'><label class='control-label'>วันที่เริ่ม</label><input type='date' name='R3MStart' class='form-control' /></div><div class='form-group col-md-3'><label class='control-label'>วันที่สิ้นสุด</label><input type='date' name='R3MStop' class='form-control' /></div>"
-                );
-                $("div[name='mainrate4']").append(
-                    "<div class='form-group col-md-6'><label class='control-label'>รายละเอียดเกณฑ์การให้คะแนน 4 คะแนน รอบที่ 1</label><div class='row'><div class='col-md-2 text-md-right'>4.</div><div class='col-md-10'><input id='DetailRate4' name='DetailRate4' class='form-control' /></div></div></div><div class='form-group col-md-3'><label class='control-label'>วันที่เริ่ม</label><input type='date' name='R4MStart' class='form-control' /></div><div class='form-group col-md-3'><label class='control-label'>วันที่สิ้นสุด</label><input type='date' name='R4MStop' class='form-control' /></div>"
-                );
-                $("div[name='mainrate5']").append(
-                    "<div class='form-group col-md-6'><label class='control-label'>รายละเอียดเกณฑ์การให้คะแนน 5 คะแนน รอบที่ 1</label><div class='row'><div class='col-md-2 text-md-right'>5.</div><div class='col-md-10'><input id='DetailRate5' name='DetailRate5' class='form-control' /></div></div></div><div class='form-group col-md-3'><label class='control-label'>วันที่เริ่ม</label><input type='date' name='R5MStart' class='form-control' /></div><div class='form-group col-md-3'><label class='control-label'>วันที่สิ้นสุด</label><input type='date' name='R5MStop' class='form-control' /></div>"
-                );
-            }
-            else {
-
-                $("div[name='round']").hide();
-                $("div[name^='mainrate']").empty();
-
-                if ($("#OwnerOfficeId").val() == "") {
+            $("#Unit").change(function () {
+                if ($(this).children("option:selected").val() == 1) {
+                    $("div[name='round']").show();
                     $("#DataForEvalutionTable").hide();
-                } else {
-                    $("#DataForEvalutionTable").show();
+
+                    $("#round-select").val('1');
+                    $("div[name^='mainrate']").empty();
+
+                    $("div[name='mainrate1']").append(
+                        "<div class='form-group col-md-6'><label class='control-label'>รายละเอียดเกณฑ์การให้คะแนน 1 คะแนน รอบที่ 1</label><div class='row'><div class='col-md-2 text-md-right'>1.</div><div class='col-md-10'><input id='DetailRate1' name='DetailRate1' class='form-control' /></div></div></div><div class='form-group col-md-3'><label class='control-label'>วันที่เริ่ม</label><input type='date' name='R1MStart' class='form-control' /></div><div class='form-group col-md-3'><label class='control-label'>วันที่สิ้นสุด</label><input type='date' name='R1MStop' class='form-control' /></div>"
+                    );
+                    $("div[name='mainrate2']").append(
+                        "<div class='form-group col-md-6'><label class='control-label'>รายละเอียดเกณฑ์การให้คะแนน 2 คะแนน รอบที่ 1</label><div class='row'><div class='col-md-2 text-md-right'>2.</div><div class='col-md-10'><input id='DetailRate2' name='DetailRate2' class='form-control' /></div></div></div><div class='form-group col-md-3'><label class='control-label'>วันที่เริ่ม</label><input type='date' name='R2MStart' class='form-control' /></div><div class='form-group col-md-3'><label class='control-label'>วันที่สิ้นสุด</label><input type='date' name='R2MStop' class='form-control' /></div>"
+                    );
+                    $("div[name='mainrate3']").append(
+                        "<div class='form-group col-md-6'><label class='control-label'>รายละเอียดเกณฑ์การให้คะแนน 3 คะแนน รอบที่ 1</label><div class='row'><div class='col-md-2 text-md-right'>3.</div><div class='col-md-10'><input id='DetailRate3' name='DetailRate3' class='form-control' /></div></div></div><div class='form-group col-md-3'><label class='control-label'>วันที่เริ่ม</label><input type='date' name='R3MStart' class='form-control' /></div><div class='form-group col-md-3'><label class='control-label'>วันที่สิ้นสุด</label><input type='date' name='R3MStop' class='form-control' /></div>"
+                    );
+                    $("div[name='mainrate4']").append(
+                        "<div class='form-group col-md-6'><label class='control-label'>รายละเอียดเกณฑ์การให้คะแนน 4 คะแนน รอบที่ 1</label><div class='row'><div class='col-md-2 text-md-right'>4.</div><div class='col-md-10'><input id='DetailRate4' name='DetailRate4' class='form-control' /></div></div></div><div class='form-group col-md-3'><label class='control-label'>วันที่เริ่ม</label><input type='date' name='R4MStart' class='form-control' /></div><div class='form-group col-md-3'><label class='control-label'>วันที่สิ้นสุด</label><input type='date' name='R4MStop' class='form-control' /></div>"
+                    );
+                    $("div[name='mainrate5']").append(
+                        "<div class='form-group col-md-6'><label class='control-label'>รายละเอียดเกณฑ์การให้คะแนน 5 คะแนน รอบที่ 1</label><div class='row'><div class='col-md-2 text-md-right'>5.</div><div class='col-md-10'><input id='DetailRate5' name='DetailRate5' class='form-control' /></div></div></div><div class='form-group col-md-3'><label class='control-label'>วันที่เริ่ม</label><input type='date' name='R5MStart' class='form-control' /></div><div class='form-group col-md-3'><label class='control-label'>วันที่สิ้นสุด</label><input type='date' name='R5MStop' class='form-control' /></div>"
+                    );
                 }
+                else {
 
-                $("div[name='mainrate1']").append(
-                    "<div class='form-group col-md-6'><label class='control-label'>เกณฑ์การให้คะแนน 1 คะแนน</label><input id='Rate1' name='Rate1' class='form-control' /></div>"
-                );
-                $("div[name='mainrate2']").append(
-                    "<div class='form-group col-md-6'><label class='control-label'>เกณฑ์การให้คะแนน 2 คะแนน</label><input id='Rate2' name='Rate2' class='form-control' /></div>"
-                );
-                $("div[name='mainrate3']").append(
-                    "<div class='form-group col-md-6'><label class='control-label'>เกณฑ์การให้คะแนน 3 คะแนน</label><input id='Rate3' name='Rate3' class='form-control' /></div>"
-                );
-                $("div[name='mainrate4']").append(
-                    "<div class='form-group col-md-6'><label class='control-label'>เกณฑ์การให้คะแนน 4 คะแนน</label><input id='Rate4' name='Rate4' class='form-control' /></div>"
-                );
-                $("div[name='mainrate5']").append(
-                    "<div class='form-group col-md-6'><label class='control-label'>เกณฑ์การให้คะแนน 5 คะแนน</label><input id='Rate5' name='Rate5' class='form-control' /></div>"
-                );
-            }
-        });
+                    $("div[name='round']").hide();
+                    $("div[name^='mainrate']").empty();
 
-        $("#round-select").change(function () {
-            if ($(this).children("option:selected").val() == 2) {
-                $("div[name='mainrate6']").append(
-                    "<div class='form-group col-md-6'><label class='control-label'>รายละเอียดเกณฑ์การให้คะแนน 1 คะแนน รอบที่ 2</label><div class='row'><div class='col-md-2 text-md-right'>1.</div><div class='col-md-10'><input id='Detail2Rate1' name='Detail2Rate1' class='form-control' /></div></div></div><div class='form-group col-md-3'><label class='control-label'>วันที่เริ่ม</label><input type='date' name='R1MStart2' class='form-control' /></div><div class='form-group col-md-3'><label class='control-label'>วันที่สิ้นสุด</label><input type='date' name='R1MStop2' class='form-control' /></div>"
-                );
-                $("div[name='mainrate7']").append(
-                    "<div class='form-group col-md-6'><label class='control-label'>รายละเอียดเกณฑ์การให้คะแนน 2 คะแนน รอบที่ 2</label><div class='row'><div class='col-md-2 text-md-right'>2.</div><div class='col-md-10'><input id='Detail2Rate2' name='Detail2Rate2' class='form-control' /></div></div></div><div class='form-group col-md-3'><label class='control-label'>วันที่เริ่ม</label><input type='date' name='R2MStart2' class='form-control' /></div><div class='form-group col-md-3'><label class='control-label'>วันที่สิ้นสุด</label><input type='date' name='R2MStop2' class='form-control' /></div>"
-                );
-                $("div[name='mainrate8']").append(
-                    "<div class='form-group col-md-6'><label class='control-label'>รายละเอียดเกณฑ์การให้คะแนน 3 คะแนน รอบที่ 2</label><div class='row'><div class='col-md-2 text-md-right'>3.</div><div class='col-md-10'><input id='Detail2Rate3' name='Detail2Rate3' class='form-control' /></div></div></div><div class='form-group col-md-3'><label class='control-label'>วันที่เริ่ม</label><input type='date' name='R3MStart2' class='form-control' /></div><div class='form-group col-md-3'><label class='control-label'>วันที่สิ้นสุด</label><input type='date' name='R3MStop2' class='form-control' /></div>"
-                );
-                $("div[name='mainrate9']").append(
-                    "<div class='form-group col-md-6'><label class='control-label'>รายละเอียดเกณฑ์การให้คะแนน 4 คะแนน รอบที่ 2</label><div class='row'><div class='col-md-2 text-md-right'>4.</div><div class='col-md-10'><input id='Detail2Rate4' name='Detail2Rate4' class='form-control' /></div></div></div><div class='form-group col-md-3'><label class='control-label'>วันที่เริ่ม</label><input type='date' name='R4MStart2' class='form-control' /></div><div class='form-group col-md-3'><label class='control-label'>วันที่สิ้นสุด</label><input type='date' name='R4MStop2' class='form-control' /></div>"
-                );
-                $("div[name='mainrate10']").append(
-                    "<div class='form-group col-md-6'><label class='control-label'>รายละเอียดเกณฑ์การให้คะแนน 5 คะแนน รอบที่ 2</label><div class='row'><div class='col-md-2 text-md-right'>5.</div><div class='col-md-10'><input id='Detail2Rate5' name='Detail2Rate5' class='form-control' /></div></div></div><div class='form-group col-md-3'><label class='control-label'>วันที่เริ่ม</label><input type='date' name='R5MStart2' class='form-control' /></div><div class='form-group col-md-3'><label class='control-label'>วันที่สิ้นสุด</label><input type='date' name='R5MStop2' class='form-control' /></div>"
-                );
-            }
-            else {
-                $("div[name^='mainrate']").empty();
+                    if ($("#OwnerOfficeId").val() == "") {
+                        $("#DataForEvalutionTable").hide();
+                    } else {
+                        $("#DataForEvalutionTable").show();
+                    }
 
-                $("div[name='mainrate1']").append(
-                 "<div class='form-group col-md-6'><label class='control-label'>รายละเอียดเกณฑ์การให้คะแนน 1 คะแนน รอบที่ 1</label><div class='row'><div class='col-md-2 text-md-right'>1.</div><div class='col-md-10'><input id='DetailRate1' name='DetailRate1' class='form-control' /></div></div></div><div class='form-group col-md-3'><label class='control-label'>วันที่เริ่ม</label><input type='date' name='R1MStart' class='form-control' /></div><div class='form-group col-md-3'><label class='control-label'>วันที่สิ้นสุด</label><input type='date' name='R1MStop' class='form-control' /></div>"
-                );
-                $("div[name='mainrate2']").append(
-                    "<div class='form-group col-md-6'><label class='control-label'>รายละเอียดเกณฑ์การให้คะแนน 2 คะแนน รอบที่ 1</label><div class='row'><div class='col-md-2 text-md-right'>2.</div><div class='col-md-10'><input id='DetailRate2' name='DetailRate2' class='form-control' /></div></div></div><div class='form-group col-md-3'><label class='control-label'>วันที่เริ่ม</label><input type='date' name='R2MStart' class='form-control' /></div><div class='form-group col-md-3'><label class='control-label'>วันที่สิ้นสุด</label><input type='date' name='R2MStop' class='form-control' /></div>"
-                );
-                $("div[name='mainrate3']").append(
-                    "<div class='form-group col-md-6'><label class='control-label'>รายละเอียดเกณฑ์การให้คะแนน 3 คะแนน รอบที่ 1</label><div class='row'><div class='col-md-2 text-md-right'>3.</div><div class='col-md-10'><input id='DetailRate3' name='DetailRate3' class='form-control' /></div></div></div><div class='form-group col-md-3'><label class='control-label'>วันที่เริ่ม</label><input type='date' name='R3MStart' class='form-control' /></div><div class='form-group col-md-3'><label class='control-label'>วันที่สิ้นสุด</label><input type='date' name='R3MStop' class='form-control' /></div>"
-                );
-                $("div[name='mainrate4']").append(
-                    "<div class='form-group col-md-6'><label class='control-label'>รายละเอียดเกณฑ์การให้คะแนน 4 คะแนน รอบที่ 1</label><div class='row'><div class='col-md-2 text-md-right'>4.</div><div class='col-md-10'><input id='DetailRate4' name='DetailRate4' class='form-control' /></div></div></div><div class='form-group col-md-3'><label class='control-label'>วันที่เริ่ม</label><input type='date' name='R4MStart' class='form-control' /></div><div class='form-group col-md-3'><label class='control-label'>วันที่สิ้นสุด</label><input type='date' name='R4MStop' class='form-control' /></div>"
-                );
-                $("div[name='mainrate5']").append(
-                    "<div class='form-group col-md-6'><label class='control-label'>รายละเอียดเกณฑ์การให้คะแนน 5 คะแนน รอบที่ 1</label><div class='row'><div class='col-md-2 text-md-right'>5.</div><div class='col-md-10'><input id='DetailRate5' name='DetailRate5' class='form-control' /></div></div></div><div class='form-group col-md-3'><label class='control-label'>วันที่เริ่ม</label><input type='date' name='R5MStart' class='form-control' /></div><div class='form-group col-md-3'><label class='control-label'>วันที่สิ้นสุด</label><input type='date' name='R5MStop' class='form-control' /></div>"
-                );
-            }
-        });
+                    $("div[name='mainrate1']").append(
+                        "<div class='form-group col-md-6'><label class='control-label'>เกณฑ์การให้คะแนน 1 คะแนน</label><input id='Rate1' name='Rate1' class='form-control' /></div>"
+                    );
+                    $("div[name='mainrate2']").append(
+                        "<div class='form-group col-md-6'><label class='control-label'>เกณฑ์การให้คะแนน 2 คะแนน</label><input id='Rate2' name='Rate2' class='form-control' /></div>"
+                    );
+                    $("div[name='mainrate3']").append(
+                        "<div class='form-group col-md-6'><label class='control-label'>เกณฑ์การให้คะแนน 3 คะแนน</label><input id='Rate3' name='Rate3' class='form-control' /></div>"
+                    );
+                    $("div[name='mainrate4']").append(
+                        "<div class='form-group col-md-6'><label class='control-label'>เกณฑ์การให้คะแนน 4 คะแนน</label><input id='Rate4' name='Rate4' class='form-control' /></div>"
+                    );
+                    $("div[name='mainrate5']").append(
+                        "<div class='form-group col-md-6'><label class='control-label'>เกณฑ์การให้คะแนน 5 คะแนน</label><input id='Rate5' name='Rate5' class='form-control' /></div>"
+                    );
+                }
+            });
 
-        if ($("#OwnerOfficeId").val() == "") {
-            $("#DataForEvalutionTable").hide();
-        } else {
-            $("#DataForEvalutionTable").show();
-        }
+            $("#round-select").change(function () {
+                if ($(this).children("option:selected").val() == 2) {
+                    $("div[name='mainrate6']").append(
+                        "<div class='form-group col-md-6'><label class='control-label'>รายละเอียดเกณฑ์การให้คะแนน 1 คะแนน รอบที่ 2</label><div class='row'><div class='col-md-2 text-md-right'>1.</div><div class='col-md-10'><input id='Detail2Rate1' name='Detail2Rate1' class='form-control' /></div></div></div><div class='form-group col-md-3'><label class='control-label'>วันที่เริ่ม</label><input type='date' name='R1MStart2' class='form-control' /></div><div class='form-group col-md-3'><label class='control-label'>วันที่สิ้นสุด</label><input type='date' name='R1MStop2' class='form-control' /></div>"
+                    );
+                    $("div[name='mainrate7']").append(
+                        "<div class='form-group col-md-6'><label class='control-label'>รายละเอียดเกณฑ์การให้คะแนน 2 คะแนน รอบที่ 2</label><div class='row'><div class='col-md-2 text-md-right'>2.</div><div class='col-md-10'><input id='Detail2Rate2' name='Detail2Rate2' class='form-control' /></div></div></div><div class='form-group col-md-3'><label class='control-label'>วันที่เริ่ม</label><input type='date' name='R2MStart2' class='form-control' /></div><div class='form-group col-md-3'><label class='control-label'>วันที่สิ้นสุด</label><input type='date' name='R2MStop2' class='form-control' /></div>"
+                    );
+                    $("div[name='mainrate8']").append(
+                        "<div class='form-group col-md-6'><label class='control-label'>รายละเอียดเกณฑ์การให้คะแนน 3 คะแนน รอบที่ 2</label><div class='row'><div class='col-md-2 text-md-right'>3.</div><div class='col-md-10'><input id='Detail2Rate3' name='Detail2Rate3' class='form-control' /></div></div></div><div class='form-group col-md-3'><label class='control-label'>วันที่เริ่ม</label><input type='date' name='R3MStart2' class='form-control' /></div><div class='form-group col-md-3'><label class='control-label'>วันที่สิ้นสุด</label><input type='date' name='R3MStop2' class='form-control' /></div>"
+                    );
+                    $("div[name='mainrate9']").append(
+                        "<div class='form-group col-md-6'><label class='control-label'>รายละเอียดเกณฑ์การให้คะแนน 4 คะแนน รอบที่ 2</label><div class='row'><div class='col-md-2 text-md-right'>4.</div><div class='col-md-10'><input id='Detail2Rate4' name='Detail2Rate4' class='form-control' /></div></div></div><div class='form-group col-md-3'><label class='control-label'>วันที่เริ่ม</label><input type='date' name='R4MStart2' class='form-control' /></div><div class='form-group col-md-3'><label class='control-label'>วันที่สิ้นสุด</label><input type='date' name='R4MStop2' class='form-control' /></div>"
+                    );
+                    $("div[name='mainrate10']").append(
+                        "<div class='form-group col-md-6'><label class='control-label'>รายละเอียดเกณฑ์การให้คะแนน 5 คะแนน รอบที่ 2</label><div class='row'><div class='col-md-2 text-md-right'>5.</div><div class='col-md-10'><input id='Detail2Rate5' name='Detail2Rate5' class='form-control' /></div></div></div><div class='form-group col-md-3'><label class='control-label'>วันที่เริ่ม</label><input type='date' name='R5MStart2' class='form-control' /></div><div class='form-group col-md-3'><label class='control-label'>วันที่สิ้นสุด</label><input type='date' name='R5MStop2' class='form-control' /></div>"
+                    );
+                }
+                else {
+                    $("div[name^='mainrate']").empty();
 
-        $("#OwnerOfficeId").change(function () {
-            if ($(this).children("option:selected").val() == "") {
+                    $("div[name='mainrate1']").append(
+                        "<div class='form-group col-md-6'><label class='control-label'>รายละเอียดเกณฑ์การให้คะแนน 1 คะแนน รอบที่ 1</label><div class='row'><div class='col-md-2 text-md-right'>1.</div><div class='col-md-10'><input id='DetailRate1' name='DetailRate1' class='form-control' /></div></div></div><div class='form-group col-md-3'><label class='control-label'>วันที่เริ่ม</label><input type='date' name='R1MStart' class='form-control' /></div><div class='form-group col-md-3'><label class='control-label'>วันที่สิ้นสุด</label><input type='date' name='R1MStop' class='form-control' /></div>"
+                    );
+                    $("div[name='mainrate2']").append(
+                        "<div class='form-group col-md-6'><label class='control-label'>รายละเอียดเกณฑ์การให้คะแนน 2 คะแนน รอบที่ 1</label><div class='row'><div class='col-md-2 text-md-right'>2.</div><div class='col-md-10'><input id='DetailRate2' name='DetailRate2' class='form-control' /></div></div></div><div class='form-group col-md-3'><label class='control-label'>วันที่เริ่ม</label><input type='date' name='R2MStart' class='form-control' /></div><div class='form-group col-md-3'><label class='control-label'>วันที่สิ้นสุด</label><input type='date' name='R2MStop' class='form-control' /></div>"
+                    );
+                    $("div[name='mainrate3']").append(
+                        "<div class='form-group col-md-6'><label class='control-label'>รายละเอียดเกณฑ์การให้คะแนน 3 คะแนน รอบที่ 1</label><div class='row'><div class='col-md-2 text-md-right'>3.</div><div class='col-md-10'><input id='DetailRate3' name='DetailRate3' class='form-control' /></div></div></div><div class='form-group col-md-3'><label class='control-label'>วันที่เริ่ม</label><input type='date' name='R3MStart' class='form-control' /></div><div class='form-group col-md-3'><label class='control-label'>วันที่สิ้นสุด</label><input type='date' name='R3MStop' class='form-control' /></div>"
+                    );
+                    $("div[name='mainrate4']").append(
+                        "<div class='form-group col-md-6'><label class='control-label'>รายละเอียดเกณฑ์การให้คะแนน 4 คะแนน รอบที่ 1</label><div class='row'><div class='col-md-2 text-md-right'>4.</div><div class='col-md-10'><input id='DetailRate4' name='DetailRate4' class='form-control' /></div></div></div><div class='form-group col-md-3'><label class='control-label'>วันที่เริ่ม</label><input type='date' name='R4MStart' class='form-control' /></div><div class='form-group col-md-3'><label class='control-label'>วันที่สิ้นสุด</label><input type='date' name='R4MStop' class='form-control' /></div>"
+                    );
+                    $("div[name='mainrate5']").append(
+                        "<div class='form-group col-md-6'><label class='control-label'>รายละเอียดเกณฑ์การให้คะแนน 5 คะแนน รอบที่ 1</label><div class='row'><div class='col-md-2 text-md-right'>5.</div><div class='col-md-10'><input id='DetailRate5' name='DetailRate5' class='form-control' /></div></div></div><div class='form-group col-md-3'><label class='control-label'>วันที่เริ่ม</label><input type='date' name='R5MStart' class='form-control' /></div><div class='form-group col-md-3'><label class='control-label'>วันที่สิ้นสุด</label><input type='date' name='R5MStop' class='form-control' /></div>"
+                    );
+                }
+            });
+
+            if ($("#OwnerOfficeId").val() == "") {
                 $("#DataForEvalutionTable").hide();
             } else {
                 $("#DataForEvalutionTable").show();
             }
+
+            $("#OwnerOfficeId").change(function () {
+                if ($(this).children("option:selected").val() == "") {
+                    $("#DataForEvalutionTable").hide();
+                } else {
+                    $("#DataForEvalutionTable").show();
+                }
+            });
         });
-    });
-</script>
+    </script>
 }

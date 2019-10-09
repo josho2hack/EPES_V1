@@ -70,19 +70,7 @@
             </div>
         </div>
     </li>
-    <!-- Nav Item - Collapse Menu -->
-    <li class="nav-item">
-        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseDoc" aria-expanded="true" aria-controls="collapseDoc">
-            <i class="fas fa-fw fa-book"></i>
-            <span>คู่มือ</span>
-        </a>
-        <div id="collapseDoc" class="collapse" aria-labelledby="headingReport" data-parent="#accordionSidebar">
-            <div class="bg-white py-2 collapse-inner rounded">
-                <h6 class="collapse-header">คู่มือการใช้งานระบบ:</h6>
-                <a class="collapse-item" href="#">คู่มือผู้ใช้งาน</a>
-            </div>
-        </div>
-    </li>
+
     @if (User.IsInRole("Admin") || User.IsInRole("Manager") || User.IsInRole("User"))
     {
         <!-- Nav Item - Collapse Menu -->
@@ -100,6 +88,19 @@
             </div>
         </li>
     }
+    <!-- Nav Item - Collapse Menu -->
+    <li class="nav-item">
+        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseDoc" aria-expanded="true" aria-controls="collapseDoc">
+            <i class="fas fa-fw fa-book"></i>
+            <span>คู่มือ</span>
+        </a>
+        <div id="collapseDoc" class="collapse" aria-labelledby="headingReport" data-parent="#accordionSidebar">
+            <div class="bg-white py-2 collapse-inner rounded">
+                <h6 class="collapse-header">คู่มือการใช้งานระบบ:</h6>
+                <a class="collapse-item" href="#">คู่มือผู้ใช้งาน</a>
+            </div>
+        </div>
+    </li>
     @if (User.IsInRole("Admin"))
     {
         <!-- Divider -->

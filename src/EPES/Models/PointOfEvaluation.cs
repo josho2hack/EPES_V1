@@ -31,10 +31,10 @@ namespace EPES.Models
         public string DetailPlan { get; set; }
 
         [Display(Name = "เป้าประสงค์")]
-        public string ExpectPlan { get; set; }
+        public ExpectPlanRD? ExpectPlan { get; set; }
 
         [Display(Name = "DDRIVE")]
-        public string Ddrive { get; set; }
+        public DdriveRD? Ddrive { get; set; }
 
         [Display(Name = "ตัวชี้วัดผลการปฏิบัติราชการ")]
         public string Name { get; set; }
@@ -326,5 +326,47 @@ namespace EPES.Models
     {
         ร้อยละ,
         ระดับ
+    }
+
+    public enum ExpectPlanRD
+    {
+        [Display(Name = "O1 กำหนดนโยบายภาษีให้มีความเหมาะสม เพื่อพัฒนาประเทศที่ยั่งยืน")]
+        O1,
+        [Display(Name = "O2 เพื่อประสิทธิภาพการจัดเก็บภาษี")]
+        O2,
+        [Display(Name = "O3 บูรณาการข้อมูลรายได้ รายจ่าย")]
+        O3,
+        [Display(Name = "O4 พัฒนาการแนะนำ กำกับดูแล ตรวจสอบภาษีอากรที่มีประสิทธิภาพ")]
+        O4,
+        [Display(Name = "O5 การเสริมสร้างการปฏิบัติหน้าที่ทางภาษีอากรให้ถูกต้อง")]
+        O5,
+        [Display(Name = "O6 ปรับปรุงระเบียบ/กฎหมาย/แนวปฏิบัติครบคลุมและเข้าใจง่าย")]
+        O6,
+        [Display(Name = "O7 พัฒนาบริการที่ดี มุ่งสู่ประชาชน")]
+        O7,
+        [Display(Name = "O8 พัฒนาบุคลากร: เก่ง ดี มีความสุข")]
+        O8,
+        [Display(Name = "O9 พัฒนาองค์กรให้เป็น Smart Office")]
+        O9,
+        [Display(Name = "O10 ส่งเสริม Innovation Culture")]
+        O10,
+        [Display(Name = "O11 สื่อสารองค์กรเชิงรุก")]
+        O11
+    }
+
+    public enum DdriveRD
+    {
+        [Display(Name = "D - Digital Transformation")]
+        D1,
+        [Display(Name = "D - Data Analytics")]
+        D2,
+        [Display(Name = "R - Revenue Collection")]
+        R,
+        [Display(Name = "I – Innovation")]
+        I,
+        [Display(Name = "V – Values")]
+        V,
+        [Display(Name = "E – Efficiency")]
+        E
     }
 }

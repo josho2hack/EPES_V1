@@ -42,13 +42,11 @@
                         </div>
                         <div class="form-group">
                             <label asp-for="ExpectPlan" class="control-label"></label>
-                            <input asp-for="ExpectPlan" class="form-control" />
-                            <span asp-validation-for="ExpectPlan" class="text-danger"></span>
+                            <select asp-for="ExpectPlan" asp-items="Html.GetEnumSelectList<ExpectPlanRD>()"></select>
                         </div>
                         <div class="form-group">
                             <label asp-for="Ddrive" class="control-label"></label>
-                            <input asp-for="Ddrive" class="form-control" />
-                            <span asp-validation-for="Ddrive" class="text-danger"></span>
+                            <select asp-for="Ddrive" asp-items="Html.GetEnumSelectList<DdriveRD>()"></select>
                         </div>
                         <div class="form-group">
                             <label asp-for="DetailPlan" class="control-label"></label>

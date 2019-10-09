@@ -33,6 +33,8 @@
     <Compile Remove="Data\Migrations\25620701084736_updateCompleteDate.Designer.cs" />
     <Compile Remove="Data\Migrations\25620801120122_ScoreUpdateMonth.cs" />
     <Compile Remove="Data\Migrations\25620801120122_ScoreUpdateMonth.Designer.cs" />
+    <Compile Remove="Data\Migrations\25621009042149_UpdatePoint.cs" />
+    <Compile Remove="Data\Migrations\25621009042149_UpdatePoint.Designer.cs" />
   </ItemGroup>
 
   <ItemGroup>

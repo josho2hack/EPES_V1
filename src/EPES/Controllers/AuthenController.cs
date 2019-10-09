@@ -44,8 +44,8 @@ namespace EPES.Controllers
 
             if (Signature == bCode)
             {
-                SSOServices.ServiceSoapClient serviceSoapClient = new SSOServices.ServiceSoapClient(SSOServices.ServiceSoapClient.EndpointConfiguration.ServiceSoap);
-                SSOServices.UserCls userCls = await serviceSoapClient.Get_SSO_UserAsync(Username, "EPES", "12345678");
+                SSOProductionService.ServiceSoapClient serviceSoapClient = new SSOProductionService.ServiceSoapClient(SSOProductionService.ServiceSoapClient.EndpointConfiguration.ServiceSoap);
+                SSOProductionService.UserCls userCls = await serviceSoapClient.Get_SSO_UserAsync(Username, "EPES", "123456789");
 
                 if (userCls != null)
                 {
@@ -70,10 +70,17 @@ namespace EPES.Controllers
                         await _roleManager.CreateAsync(new IdentityRole { Name = "Special" });
                     }
                     //End Create Group
+                    //if (userCls.UserID == null)
+                    //{
+                    //    return View();
+                    //}
+                    var userLocal = await _userManager.FindByNameAsync(Username);
 
-                    if ((await _userManager.FindByNameAsync(userCls.UserID)) == null)
+                    //var userLocal = await _userManager.FindByNameAsync(userCls.UserID);
+
+                    if (userLocal == null)
                     {
-                        SSOServices.LocCls locCls = await serviceSoapClient.Get_Location_NameAsync("EPES", "12345678", userCls.UserOfficeCode);
+                        SSOProductionService.LocCls locCls = await serviceSoapClient.Get_Location_NameAsync("EPES", "123456789", userCls.UserOfficeCode);
 
                         var user = new ApplicationUser
                         {
@@ -91,7 +98,7 @@ namespace EPES.Controllers
 
                         var resultCreate = await _userManager.CreateAsync(user, "P@ssw0rd");
 
-                        SSOServices.TransCls transCls = await serviceSoapClient.Get_SSO_TransactionAsync(userCls.UserID, "EPES", "12345678");
+                        SSOProductionService.TransCls transCls = await serviceSoapClient.Get_SSO_TransactionAsync(user.UserName, "EPES", "123456789");
                         if (transCls.AppTransID == "EPES-Admin")
                         {
                             if (!(await _userManager.IsInRoleAsync(user, "Admin")))
@@ -129,7 +136,7 @@ namespace EPES.Controllers
                             }
                         }
 
-                        var result = await _signInManager.PasswordSignInAsync(userCls.UserID, "P@ssw0rd", true, lockoutOnFailure: false);
+                        var result = await _signInManager.PasswordSignInAsync(user.UserName, "P@ssw0rd", true, lockoutOnFailure: false);
 
                         if (result.Succeeded)
                         {
@@ -142,47 +149,46 @@ namespace EPES.Controllers
                     }// End Create New User Local
                     else
                     {
-                        var user = await _userManager.FindByNameAsync(userCls.UserID);
-                        SSOServices.TransCls transCls = await serviceSoapClient.Get_SSO_TransactionAsync(userCls.UserID, "EPES", "12345678");
+                        SSOProductionService.TransCls transCls = await serviceSoapClient.Get_SSO_TransactionAsync(Username, "EPES", "123456789");
 
                         if (transCls.AppTransID == "EPES-Admin")
                         {
-                            if (!(await _userManager.IsInRoleAsync(user, "Admin")))
+                            if (!(await _userManager.IsInRoleAsync(userLocal, "Admin")))
                             {
-                                var roles = await _userManager.GetRolesAsync(user);
-                                await _userManager.RemoveFromRolesAsync(user, roles.ToArray());
-                                await _userManager.AddToRoleAsync(user, "Admin");
+                                var roles = await _userManager.GetRolesAsync(userLocal);
+                                await _userManager.RemoveFromRolesAsync(userLocal, roles.ToArray());
+                                await _userManager.AddToRoleAsync(userLocal, "Admin");
                             }
                         }
                         else if (transCls.AppTransID == "EPES-Manager")
                         {
-                            if (!(await _userManager.IsInRoleAsync(user, "Manager")))
+                            if (!(await _userManager.IsInRoleAsync(userLocal, "Manager")))
                             {
-                                var roles = await _userManager.GetRolesAsync(user);
-                                await _userManager.RemoveFromRolesAsync(user, roles.ToArray());
-                                await _userManager.AddToRoleAsync(user, "Manager");
+                                var roles = await _userManager.GetRolesAsync(userLocal);
+                                await _userManager.RemoveFromRolesAsync(userLocal, roles.ToArray());
+                                await _userManager.AddToRoleAsync(userLocal, "Manager");
                             }
                         }
                         else if (transCls.AppTransID == "EPES-Normal")
                         {
-                            if (!(await _userManager.IsInRoleAsync(user, "User")))
+                            if (!(await _userManager.IsInRoleAsync(userLocal, "User")))
                             {
-                                var roles = await _userManager.GetRolesAsync(user);
-                                await _userManager.RemoveFromRolesAsync(user, roles.ToArray());
-                                await _userManager.AddToRoleAsync(user, "User");
+                                var roles = await _userManager.GetRolesAsync(userLocal);
+                                await _userManager.RemoveFromRolesAsync(userLocal, roles.ToArray());
+                                await _userManager.AddToRoleAsync(userLocal, "User");
                             }
                         }
                         else if (transCls.AppTransID == "EPES-Special")
                         {
-                            if (!(await _userManager.IsInRoleAsync(user, "Special")))
+                            if (!(await _userManager.IsInRoleAsync(userLocal, "Special")))
                             {
-                                var roles = await _userManager.GetRolesAsync(user);
-                                await _userManager.RemoveFromRolesAsync(user, roles.ToArray());
-                                await _userManager.AddToRoleAsync(user, "Special");
+                                var roles = await _userManager.GetRolesAsync(userLocal);
+                                await _userManager.RemoveFromRolesAsync(userLocal, roles.ToArray());
+                                await _userManager.AddToRoleAsync(userLocal, "Special");
                             }
                         }
 
-                        var result = await _signInManager.PasswordSignInAsync(userCls.UserID, "P@ssw0rd", true, lockoutOnFailure: false);
+                        var result = await _signInManager.PasswordSignInAsync(userLocal.UserName, "P@ssw0rd", true, lockoutOnFailure: false);
                         if (result.Succeeded)
                         {
                             //ViewBag.tran = transCls.AppTransID;
