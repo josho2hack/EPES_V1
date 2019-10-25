@@ -36,6 +36,10 @@ namespace EPES.Data
             builder.Entity<DataForEvaluation>()
             .Property(d => d.Expect)
             .HasDefaultValue(0);
+
+            builder.Entity<PointOfEvaluation>()
+            .Property(p => p.SubPoint)
+            .HasDefaultValue(0);
         }
 
         public DbSet<Office> Offices { get; set; }
@@ -44,5 +48,6 @@ namespace EPES.Data
         public DbSet<Score> Scores { get; set; }
         public DbSet<ScoreDraft> ScoreDrafts { get; set; }
         public DbSet<ApplicationUser> ApplicationUsers { get; set; }
+        public DbSet<LevelRate> LevelRates { get; set; }
     }
 }

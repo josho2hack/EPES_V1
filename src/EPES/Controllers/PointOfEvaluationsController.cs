@@ -46,7 +46,7 @@ namespace EPES.Controllers
             {
                 if (DateTime.Now.Month == 10 || DateTime.Now.Month == 11 || DateTime.Now.Month == 12)
                 {
-                    yearForQuery = new DateTime(DateTime.Now.AddYears(1+yearPoint).Year, 1, 1);
+                    yearForQuery = new DateTime(DateTime.Now.AddYears(1 + yearPoint).Year, 1, 1);
                 }
                 else
                 {
@@ -227,6 +227,7 @@ namespace EPES.Controllers
             var pointOfEvaluation = await _context.PointOfEvaluations
                 .Include(p => p.OwnerOffice)
                 .Include(p => p.AuditOffice)
+                .Include(p => p.LevelRates)
                 .AsNoTracking()
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (pointOfEvaluation == null)
@@ -465,7 +466,7 @@ namespace EPES.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("DetailPlan,Point,SubPoint,Plan,ExpectPlan,Ddrive,Name,Unit,Weight,Rate1,DetailRate1,Rate2,DetailRate2,Rate3,DetailRate3,Rate4,DetailRate4,Rate5,DetailRate5,Detail2Rate1,Detail2Rate2,Detail2Rate3,Detail2Rate4,Detail2Rate5,OwnerOfficeId,AuditOfficeId,Rate1MonthStart,Rate1MonthStop,Rate1MonthStart2,Rate1MonthStop2,Rate2MonthStart,Rate2MonthStop,Rate2MonthStart2,Rate2MonthStop2,Rate3MonthStart,Rate3MonthStop,Rate3MonthStart2,Rate3MonthStop2,Rate4MonthStart,Rate4MonthStop,Rate4MonthStart2,Rate4MonthStop2,Rate5MonthStart,Rate5MonthStop,Rate5MonthStart2,Rate5MonthStop2")] PointOfEvaluation dataView, string selectoffice, int yearPoint, decimal expect1, decimal expect2, decimal expect3, decimal expect4, decimal expect5, decimal expect6, decimal expect7, decimal expect8, decimal expect9, decimal expect10, decimal expect11, decimal expect12)
+        public async Task<IActionResult> Create([Bind("DetailPlan,Point,SubPoint,Plan,ExpectPlan,Ddrive,Name,Unit,Weight,Rate1,DetailRate1,Rate2,DetailRate2,Rate3,DetailRate3,Rate4,DetailRate4,Rate5,DetailRate5,Detail2Rate1,Detail2Rate2,Detail2Rate3,Detail2Rate4,Detail2Rate5,OwnerOfficeId,AuditOfficeId,Rate1MonthStart,Rate1MonthStop,Rate1MonthStart2,Rate1MonthStop2,Rate2MonthStart,Rate2MonthStop,Rate2MonthStart2,Rate2MonthStop2,Rate3MonthStart,Rate3MonthStop,Rate3MonthStart2,Rate3MonthStop2,Rate4MonthStart,Rate4MonthStop,Rate4MonthStart2,Rate4MonthStop2,Rate5MonthStart,Rate5MonthStop,Rate5MonthStart2,Rate5MonthStop2")] PointOfEvaluation dataView,decimal LRate1,decimal LRate2,decimal LRate3,decimal LRate4 ,decimal LRate5, string selectoffice, int yearPoint, decimal expect1, decimal expect2, decimal expect3, decimal expect4, decimal expect5, decimal expect6, decimal expect7, decimal expect8, decimal expect9, decimal expect10, decimal expect11, decimal expect12)
         {
             var user = await _userManager.GetUserAsync(User);
 
@@ -479,7 +480,7 @@ namespace EPES.Controllers
             }
 
             dataView.UpdateUserId = user.Id;
-            dataView.SubPoint = 0;
+            //dataView.SubPoint = 0;
 
             try
             {
@@ -502,6 +503,21 @@ namespace EPES.Controllers
                         await SaveExpect(dataView.Id, dataView.OwnerOffice.Id, 8, expect8, user.Id);
                         await SaveExpect(dataView.Id, dataView.OwnerOffice.Id, 9, expect9, user.Id);
                     }
+
+                    if (dataView.Unit == UnitOfPoint.ระดับ_ร้อยละ)
+                    {
+                        var lr = new LevelRate();
+                        lr.Rate1 = LRate1;
+                        lr.Rate2 = LRate2;
+                        lr.Rate3 = LRate3;
+                        lr.Rate4 = LRate4;
+                        lr.Rate5 = LRate5;
+                        lr.PointOfEvaluation = dataView;
+
+                        _context.Add(lr);
+                        await _context.SaveChangesAsync();
+                    }
+
                     return RedirectToAction(nameof(Index), new { yearPoint = yearPoint, selectoffice = selectoffice });
                 }
             }
@@ -738,7 +754,7 @@ namespace EPES.Controllers
                 return NotFound();
             }
 
-            var pointOfEvaluation = await _context.PointOfEvaluations.Include(p => p.OwnerOffice).Include(p => p.AuditOffice).Where(p => p.Id == id).FirstOrDefaultAsync();
+            var pointOfEvaluation = await _context.PointOfEvaluations.Include(p => p.OwnerOffice).Include(p => p.AuditOffice).Include(p => p.LevelRates).Where(p => p.Id == id).FirstOrDefaultAsync();
             if (pointOfEvaluation == null)
             {
                 return NotFound();
@@ -985,7 +1001,6 @@ namespace EPES.Controllers
                 try
                 {
                     await _context.SaveChangesAsync();
-                    return RedirectToAction(nameof(Index), new { yearPoint = yearpoint, selectoffice = selectoffice });
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -995,6 +1010,21 @@ namespace EPES.Controllers
                 }
                 //return RedirectToAction(nameof(Index), new { yearPoint = yearpoint, selectoffice = pointOfEvaluationToUpdate.AuditOfficeId });
             }
+            if (pointOfEvaluationToUpdate.Unit == UnitOfPoint.ระดับ_ร้อยละ)
+            {
+                var lrToUpdate = await _context.LevelRates.FirstOrDefaultAsync(lr => lr.PointOfEvaluationId == id);
+                if (await TryUpdateModelAsync<LevelRate>(
+                    lrToUpdate, "", lr => lr.Rate1, lr => lr.Rate2, lr => lr.Rate3, lr => lr.Rate4, lr => lr.Rate5))
+                {
+                    await _context.SaveChangesAsync();
+                    return RedirectToAction(nameof(Index), new { yearPoint = yearpoint, selectoffice = selectoffice });
+                }
+            }
+            else
+            {
+                return RedirectToAction(nameof(Index), new { yearPoint = yearpoint, selectoffice = selectoffice });
+            }
+
 
             var office = await _context.Offices.Where(o => o.Code == user.OfficeId).FirstOrDefaultAsync();
             var officeselect = await _context.Offices.Where(o => o.Code == selectoffice).FirstOrDefaultAsync();

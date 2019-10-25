@@ -113,7 +113,7 @@
                                         @Html.DisplayFor(modelItem => item.AuditOffice.Name)
                                     </td>
                                     <td>
-                                        @if (User.IsInRole("Admin") || (User.IsInRole("Manager") && (item.AuditOffice.Code == user.OfficeId || item.OwnerOffice.Code == user.OfficeId)))
+                                        @if ((User.IsInRole("Admin") || (User.IsInRole("Manager") && (item.AuditOffice.Code == user.OfficeId || item.OwnerOffice.Code == user.OfficeId))) && item.Unit != UnitOfPoint.ระดับ)
                                         {
                                             <a title="บันทึก/แก้ไข" asp-action="Edit" asp-route-poeid="@item.Id" asp-route-yearPoint="@Model.yearPoint" asp-route-selectoffice="@ViewBag.selectoffice"><i class="fas fa-edit"></i></a>
                                         }
@@ -169,7 +169,7 @@
                                     @Html.DisplayFor(modelItem => item.AuditOffice.Name)
                                 </td>
                                 <td>
-                                    @if (User.IsInRole("Admin") || (User.IsInRole("Manager") && (item.AuditOffice.Code == user.OfficeId || item.OwnerOffice.Code == user.OfficeId)) || (User.IsInRole("Manager") && user.OfficeId.Substring(2, 6) == "000000" && item.OwnerOffice.Code.StartsWith(user.OfficeId.Substring(0, 2))) || (User.IsInRole("User") && item.OwnerOffice.Code == user.OfficeId))
+                                    @if ((User.IsInRole("Admin") || (User.IsInRole("Manager") && (item.AuditOffice.Code == user.OfficeId || item.OwnerOffice.Code == user.OfficeId)) || (User.IsInRole("Manager") && user.OfficeId.Substring(2, 6) == "000000" && item.OwnerOffice.Code.StartsWith(user.OfficeId.Substring(0, 2))) || (User.IsInRole("User") && item.OwnerOffice.Code == user.OfficeId)) && item.Unit != UnitOfPoint.ระดับ)
                                     {
                                         <a title="บันทึก/แก้ไข" asp-action="Edit" asp-route-poeid="@item.Id" asp-route-yearPoint="@Model.yearPoint" asp-route-selectoffice="@ViewBag.selectoffice"><i class="fas fa-edit"></i></a>
                                     }
@@ -225,7 +225,7 @@
                                     @Html.DisplayFor(modelItem => item.AuditOffice.Name)
                                 </td>
                                 <td>
-                                    @if (User.IsInRole("Admin") || (User.IsInRole("Manager") && (item.AuditOffice.Code == user.OfficeId || item.OwnerOffice.Code == user.OfficeId)) || (User.IsInRole("Manager") && user.OfficeId.Substring(2, 6) == "000000" && item.OwnerOffice.Code.StartsWith(user.OfficeId.Substring(0, 2))) || (User.IsInRole("User") && item.OwnerOffice.Code == user.OfficeId))
+                                    @if ((User.IsInRole("Admin") || (User.IsInRole("Manager") && (item.AuditOffice.Code == user.OfficeId || item.OwnerOffice.Code == user.OfficeId)) || (User.IsInRole("Manager") && user.OfficeId.Substring(2, 6) == "000000" && item.OwnerOffice.Code.StartsWith(user.OfficeId.Substring(0, 2))) || (User.IsInRole("User") && item.OwnerOffice.Code == user.OfficeId)) && item.Unit != UnitOfPoint.ระดับ)
                                     {
                                         <a title="บันทึก/แก้ไข" asp-action="Edit" asp-route-poeid="@item.Id" asp-route-yearPoint="@Model.yearPoint" asp-route-selectoffice="@ViewBag.selectoffice"><i class="fas fa-edit"></i></a>
                                     }
@@ -281,7 +281,7 @@
                                     @Html.DisplayFor(modelItem => item.AuditOffice.Name)
                                 </td>
                                 <td>
-                                    @if (User.IsInRole("Admin") || (User.IsInRole("Manager") && (item.AuditOffice.Code == user.OfficeId || item.OwnerOffice.Code == user.OfficeId)) || (User.IsInRole("Manager") && user.OfficeId.Substring(2, 6) == "000000" && item.OwnerOffice.Code.StartsWith(user.OfficeId.Substring(0, 2))) || (User.IsInRole("User") && item.OwnerOffice.Code == user.OfficeId))
+                                    @if ((User.IsInRole("Admin") || (User.IsInRole("Manager") && (item.AuditOffice.Code == user.OfficeId || item.OwnerOffice.Code == user.OfficeId)) || (User.IsInRole("Manager") && user.OfficeId.Substring(2, 6) == "000000" && item.OwnerOffice.Code.StartsWith(user.OfficeId.Substring(0, 2))) || (User.IsInRole("User") && item.OwnerOffice.Code == user.OfficeId)) && item.Unit != UnitOfPoint.ระดับ)
                                     {
                                         <a title="บันทึก/แก้ไข" asp-action="Edit" asp-route-poeid="@item.Id" asp-route-yearPoint="@Model.yearPoint" asp-route-selectoffice="@ViewBag.selectoffice"><i class="fas fa-edit"></i></a>
                                     }

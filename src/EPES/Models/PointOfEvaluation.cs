@@ -312,6 +312,9 @@ namespace EPES.Models
 
         [Display(Name = "คะแนนเบื้องต้น")]
         public IList<ScoreDraft> ScoreDrafts { get; set; }
+
+        [Display(Name = "ระดับ/ร้อยละ")]
+        public IList<LevelRate> LevelRates { get; set; }
     }
 
     public enum TypeOfPlan
