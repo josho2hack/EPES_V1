@@ -99,7 +99,7 @@
                                     <input asp-for="Rate1" class="form-control" />
                                     <span asp-validation-for="Rate1" class="text-danger"></span>
                                 </div>
-                                @if (Model.Unit == UnitOfPoint.ระดับ)
+                                @if (Model.Unit != UnitOfPoint.ร้อยละ)
                                 {
                                     <div class='form-group col-md-5'>
                                         <label class='control-label'>รายละเอียดเกณฑ์การให้คะแนน 1 คะแนน รอบที่ 1</label>
@@ -128,7 +128,7 @@
                                     <input asp-for="Rate2" class="form-control" />
                                     <span asp-validation-for="Rate2" class="text-danger"></span>
                                 </div>
-                                @if (Model.Unit == UnitOfPoint.ระดับ)
+                                @if (Model.Unit != UnitOfPoint.ร้อยละ)
                                 {
                                     <div class='form-group col-md-5'>
                                         <label class='control-label'>รายละเอียดเกณฑ์การให้คะแนน 2 คะแนน รอบที่ 1</label>
@@ -157,7 +157,7 @@
                                     <input asp-for="Rate3" class="form-control" />
                                     <span asp-validation-for="Rate3" class="text-danger"></span>
                                 </div>
-                                @if (Model.Unit == UnitOfPoint.ระดับ)
+                                @if (Model.Unit != UnitOfPoint.ร้อยละ)
                                 {
                                     <div class='form-group col-md-5'>
                                         <label class='control-label'>รายละเอียดเกณฑ์การให้คะแนน 3 คะแนน รอบที่ 1</label>
@@ -186,7 +186,7 @@
                                     <input asp-for="Rate4" class="form-control" />
                                     <span asp-validation-for="Rate4" class="text-danger"></span>
                                 </div>
-                                @if (Model.Unit == UnitOfPoint.ระดับ)
+                                @if (Model.Unit != UnitOfPoint.ร้อยละ)
                                 {
                                     <div class='form-group col-md-5'>
                                         <label class='control-label'>รายละเอียดเกณฑ์การให้คะแนน 4 คะแนน รอบที่ 1</label>
@@ -210,11 +210,15 @@
                                 }
                             </div>
                             <div class="row" name="mainrate5">
-                                <div class="form-group col-md-2 percent">
-                                    <label class='control-label'>เกณฑ์ 5 คะแนน</label>
-                                    <input asp-for="Rate5" class="form-control" />
-                                    <span asp-validation-for="Rate5" class="text-danger"></span>
-                                </div>
+                                @if (Model.Unit != UnitOfPoint.ระดับ_ร้อยละ)
+                                {
+                                    <div class="form-group col-md-2 percent">
+                                        <label class='control-label'>เกณฑ์ 5 คะแนน</label>
+                                        <input asp-for="Rate5" class="form-control" />
+                                        <span asp-validation-for="Rate5" class="text-danger"></span>
+                                    </div>
+                                }
+
                                 @if (Model.Unit == UnitOfPoint.ระดับ)
                                 {
                                     <div class='form-group col-md-5'>
@@ -236,6 +240,14 @@
                                             <input asp-for='R5MStop2' class='form-control' />
                                         </div>
                                     }
+                                }
+                                @if (Model.Unit == UnitOfPoint.ระดับ_ร้อยละ)
+                                {
+                                    <div class='form-group col-md-12'><label class='control-label'>เกณฑ์การให้คะแนน 4.2 คะแนน</label><input asp-for='LRate1' class='form-control' /></div>
+                                    <div class='form-group col-md-12'><label class='control-label'>เกณฑ์การให้คะแนน 4.4 คะแนน</label><input asp-for='LRate2' class='form-control' /></div>
+                                    <div class='form-group col-md-12'><label class='control-label'>เกณฑ์การให้คะแนน 4.6 คะแนน</label><input asp-for='LRate3' class='form-control' /></div>
+                                    <div class='form-group col-md-12'><label class='control-label'>เกณฑ์การให้คะแนน 4.8 คะแนน</label><input asp-for='LRate4' class='form-control' /></div>
+                                    <div class='form-group col-md-12'><label class='control-label'>เกณฑ์การให้คะแนน 5.0 คะแนน</label><input asp-for='LRate5' class='form-control' /></div>
                                 }
                             </div>
                             <div class="row" name="mainrate6">
@@ -290,6 +302,33 @@
                     );
                     $("div[name='mainrate5']").append(
                         "<div class='form-group col-md-6'><label class='control-label'>รายละเอียดเกณฑ์การให้คะแนน 5 คะแนน รอบที่ 1</label><div class='row'><div class='col-md-2 text-md-right'>5.</div><div class='col-md-10'><input id='DetailRate5' name='DetailRate5' class='form-control' /></div></div></div><div class='form-group col-md-3'><label class='control-label'>วันที่เริ่ม</label><input type='date' name='R5MStart' class='form-control' /></div><div class='form-group col-md-3'><label class='control-label'>วันที่สิ้นสุด</label><input type='date' name='R5MStop' class='form-control' /></div>"
+                    );
+                }
+                else if ($(this).children("option:selected").val() == 2) {
+                    $("div[name='round']").hide();
+                    $("#DataForEvalutionTable").show();
+
+                    $("#round-select").val('1');
+                    $("div[name^='mainrate']").empty();
+
+                    $("div[name='mainrate1']").append(
+                        "<div class='form-group col-md-6'><label class='control-label'>รายละเอียดเกณฑ์การให้คะแนน 1 คะแนน</label><div class='row'><div class='col-md-2 text-md-right'>1.</div><div class='col-md-10'><input id='DetailRate1' name='DetailRate1' class='form-control' /></div></div></div><div class='form-group col-md-3'><label class='control-label'>วันที่เริ่ม</label><input type='date' name='R1MStart' class='form-control' /></div><div class='form-group col-md-3'><label class='control-label'>วันที่สิ้นสุด</label><input type='date' name='R1MStop' class='form-control' /></div>"
+                    );
+                    $("div[name='mainrate2']").append(
+                        "<div class='form-group col-md-6'><label class='control-label'>รายละเอียดเกณฑ์การให้คะแนน 2 คะแนน</label><div class='row'><div class='col-md-2 text-md-right'>2.</div><div class='col-md-10'><input id='DetailRate2' name='DetailRate2' class='form-control' /></div></div></div><div class='form-group col-md-3'><label class='control-label'>วันที่เริ่ม</label><input type='date' name='R2MStart' class='form-control' /></div><div class='form-group col-md-3'><label class='control-label'>วันที่สิ้นสุด</label><input type='date' name='R2MStop' class='form-control' /></div>"
+                    );
+                    $("div[name='mainrate3']").append(
+                        "<div class='form-group col-md-6'><label class='control-label'>รายละเอียดเกณฑ์การให้คะแนน 3 คะแนน</label><div class='row'><div class='col-md-2 text-md-right'>3.</div><div class='col-md-10'><input id='DetailRate3' name='DetailRate3' class='form-control' /></div></div></div><div class='form-group col-md-3'><label class='control-label'>วันที่เริ่ม</label><input type='date' name='R3MStart' class='form-control' /></div><div class='form-group col-md-3'><label class='control-label'>วันที่สิ้นสุด</label><input type='date' name='R3MStop' class='form-control' /></div>"
+                    );
+                    $("div[name='mainrate4']").append(
+                        "<div class='form-group col-md-6'><label class='control-label'>รายละเอียดเกณฑ์การให้คะแนน 4 คะแนน</label><div class='row'><div class='col-md-2 text-md-right'>4.</div><div class='col-md-10'><input id='DetailRate4' name='DetailRate4' class='form-control' /></div></div></div><div class='form-group col-md-3'><label class='control-label'>วันที่เริ่ม</label><input type='date' name='R4MStart' class='form-control' /></div><div class='form-group col-md-3'><label class='control-label'>วันที่สิ้นสุด</label><input type='date' name='R4MStop' class='form-control' /></div>"
+                    );
+                    $("div[name='mainrate5']").append(
+                        "<div class='form-group col-md-12'><label class='control-label'>เกณฑ์การให้คะแนน 4.2 คะแนน</label><input id='LRate1' name='LRate1' class='form-control' /></div>" +
+                        "<div class='form-group col-md-12'><label class='control-label'>เกณฑ์การให้คะแนน 4.4 คะแนน</label><input id='LRate2' name='LRate2' class='form-control' /></div>" +
+                        "<div class='form-group col-md-12'><label class='control-label'>เกณฑ์การให้คะแนน 4.6 คะแนน</label><input id='LRate3' name='LRate3' class='form-control' /></div>" +
+                        "<div class='form-group col-md-12'><label class='control-label'>เกณฑ์การให้คะแนน 4.8 คะแนน</label><input id='LRate4' name='LRate4' class='form-control' /></div>" +
+                        "<div class='form-group col-md-12'><label class='control-label'>เกณฑ์การให้คะแนน 5.0 คะแนน</label><input id='LRate5' name='LRate5' class='form-control' /></div>"
                     );
                 }
                 else {

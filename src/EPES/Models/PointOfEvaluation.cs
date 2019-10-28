@@ -313,8 +313,25 @@ namespace EPES.Models
         [Display(Name = "คะแนนเบื้องต้น")]
         public IList<ScoreDraft> ScoreDrafts { get; set; }
 
-        [Display(Name = "ระดับ/ร้อยละ")]
-        public IList<LevelRate> LevelRates { get; set; }
+        [Display(Name = "เกณฑ์การให้คะแนน 4.2 คะแนน")]
+        [Column(TypeName = "decimal(18, 4)")]
+        public decimal LRate1 { get; set; } = 1;
+
+        [Display(Name = "เกณฑ์การให้คะแนน 4.4 คะแนน")]
+        [Column(TypeName = "decimal(18, 4)")]
+        public decimal LRate2 { get; set; } = 2;
+
+        [Display(Name = "เกณฑ์การให้คะแนน 4.6 คะแนน")]
+        [Column(TypeName = "decimal(18, 4)")]
+        public decimal LRate3 { get; set; } = 3;
+
+        [Display(Name = "เกณฑ์การให้คะแนน 4.8 คะแนน")]
+        [Column(TypeName = "decimal(18, 4)")]
+        public decimal LRate4 { get; set; } = 4;
+
+        [Display(Name = "เกณฑ์การให้คะแนน 5.0 คะแนน")]
+        [Column(TypeName = "decimal(18, 4)")]
+        public decimal LRate5 { get; set; } = 5;
     }
 
     public enum TypeOfPlan

@@ -48,6 +48,5 @@ namespace EPES.Data
         public DbSet<Score> Scores { get; set; }
         public DbSet<ScoreDraft> ScoreDrafts { get; set; }
         public DbSet<ApplicationUser> ApplicationUsers { get; set; }
-        public DbSet<LevelRate> LevelRates { get; set; }
     }
 }
