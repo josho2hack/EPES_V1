@@ -1,0 +1,91 @@
+﻿@model EPES.Models.DataForEvaluation
+
+@{
+    ViewData["Title"] = "Edit";
+}
+
+<h1>Edit</h1>
+
+<h4>DataForEvaluation</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Edit">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="Id" />
+            <div class="form-group">
+                <label asp-for="Expect" class="control-label"></label>
+                <input asp-for="Expect" class="form-control" />
+                <span asp-validation-for="Expect" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Result" class="control-label"></label>
+                <input asp-for="Result" class="form-control" />
+                <span asp-validation-for="Result" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="OldResult" class="control-label"></label>
+                <input asp-for="OldResult" class="form-control" />
+                <span asp-validation-for="OldResult" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Month" class="control-label"></label>
+                <input asp-for="Month" class="form-control" />
+                <span asp-validation-for="Month" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="AuditComment" class="control-label"></label>
+                <input asp-for="AuditComment" class="form-control" />
+                <span asp-validation-for="AuditComment" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Approve" class="control-label"></label>
+                <select asp-for="Approve" class="form-control"></select>
+                <span asp-validation-for="Approve" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="CommentApprove" class="control-label"></label>
+                <input asp-for="CommentApprove" class="form-control" />
+                <span asp-validation-for="CommentApprove" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="PointOfEvaluationId" class="control-label"></label>
+                <select asp-for="PointOfEvaluationId" class="form-control" asp-items="ViewBag.PointOfEvaluationId"></select>
+                <span asp-validation-for="PointOfEvaluationId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="OfficeId" class="control-label"></label>
+                <select asp-for="OfficeId" class="form-control" asp-items="ViewBag.OfficeId"></select>
+                <span asp-validation-for="OfficeId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="UpdateUserId" class="control-label"></label>
+                <select asp-for="UpdateUserId" class="form-control" asp-items="ViewBag.UpdateUserId"></select>
+                <span asp-validation-for="UpdateUserId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="CompletedDate" class="control-label"></label>
+                <input asp-for="CompletedDate" class="form-control" />
+                <span asp-validation-for="CompletedDate" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="AttachFile" class="control-label"></label>
+                <input asp-for="AttachFile" class="form-control" />
+                <span asp-validation-for="AttachFile" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="TimeUpdate" class="control-label"></label>
+                <input asp-for="TimeUpdate" class="form-control" />
+                <span asp-validation-for="TimeUpdate" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Save" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+

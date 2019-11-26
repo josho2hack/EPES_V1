@@ -456,36 +456,47 @@ namespace EPES.Controllers
                 }
             }
 
+            
             List<Object> list = new List<object>();
-            if (isUpdate)
+            if (User.IsInRole("Admin"))
             {
-                for (int i = 10; i <= 12; i++)
-                {
-                    list.Add(new { Value = i, Month = new DateTime(DateTime.Now.Year, i, 1).ToString("MMMM") });
-                }
-                for (int i = 1; i < 10; i++)
+                for (int i = 1; i <= 12; i++)
                 {
                     list.Add(new { Value = i, Month = new DateTime(DateTime.Now.Year, i, 1).ToString("MMMM") });
                 }
             }
             else
             {
-                if (m < 10)
+                if (isUpdate)
                 {
                     for (int i = 10; i <= 12; i++)
                     {
                         list.Add(new { Value = i, Month = new DateTime(DateTime.Now.Year, i, 1).ToString("MMMM") });
                     }
-                    for (int i = 1; i <= m; i++)
+                    for (int i = 1; i < 10; i++)
                     {
                         list.Add(new { Value = i, Month = new DateTime(DateTime.Now.Year, i, 1).ToString("MMMM") });
                     }
                 }
                 else
                 {
-                    for (int i = 10; i <= m; i++)
+                    if (m < 10)
                     {
-                        list.Add(new { Value = i, Month = new DateTime(DateTime.Now.Year, i, 1).ToString("MMMM") });
+                        for (int i = 10; i <= 12; i++)
+                        {
+                            list.Add(new { Value = i, Month = new DateTime(DateTime.Now.Year, i, 1).ToString("MMMM") });
+                        }
+                        for (int i = 1; i <= m; i++)
+                        {
+                            list.Add(new { Value = i, Month = new DateTime(DateTime.Now.Year, i, 1).ToString("MMMM") });
+                        }
+                    }
+                    else
+                    {
+                        for (int i = 10; i <= m; i++)
+                        {
+                            list.Add(new { Value = i, Month = new DateTime(DateTime.Now.Year, i, 1).ToString("MMMM") });
+                        }
                     }
                 }
             }
@@ -633,26 +644,36 @@ namespace EPES.Controllers
                     }
                 }
 
+
                 List<Object> list = new List<object>();
-                if (DateTime.Now.Month - 1 < 10)
+                if (User.IsInRole("Admin"))
                 {
-                    for (int i = 10; i <= 12; i++)
-                    {
-                        list.Add(new { Value = i, Month = new DateTime(DateTime.Now.Year, i, 1).ToString("MMMM") });
-                    }
-                    for (int i = 1; i <= DateTime.Now.Month - 1; i++)
+                    for (int i = 1; i <= 12; i++)
                     {
                         list.Add(new { Value = i, Month = new DateTime(DateTime.Now.Year, i, 1).ToString("MMMM") });
                     }
                 }
                 else
                 {
-                    for (int i = 10; i <= DateTime.Now.Month - 1; i++)
+                    if (DateTime.Now.Month - 1 < 10)
                     {
-                        list.Add(new { Value = i, Month = new DateTime(DateTime.Now.Year, i, 1).ToString("MMMM") });
+                        for (int i = 10; i <= 12; i++)
+                        {
+                            list.Add(new { Value = i, Month = new DateTime(DateTime.Now.Year, i, 1).ToString("MMMM") });
+                        }
+                        for (int i = 1; i <= DateTime.Now.Month - 1; i++)
+                        {
+                            list.Add(new { Value = i, Month = new DateTime(DateTime.Now.Year, i, 1).ToString("MMMM") });
+                        }
+                    }
+                    else
+                    {
+                        for (int i = 10; i <= DateTime.Now.Month - 1; i++)
+                        {
+                            list.Add(new { Value = i, Month = new DateTime(DateTime.Now.Year, i, 1).ToString("MMMM") });
+                        }
                     }
                 }
-
                 ViewBag.Month = new SelectList(list, "Value", "Month", model.month);
                 ViewBag.selectoffice = selectoffice;
                 viewModel.yearPoint = model.yearPoint;

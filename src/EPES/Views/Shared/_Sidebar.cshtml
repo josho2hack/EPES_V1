@@ -42,15 +42,11 @@
                 <div class="bg-white py-2 collapse-inner rounded">
                     <h6 class="collapse-header">รายเดือน:</h6>
                     <a class="collapse-item" asp-area="" asp-controller="Results" asp-action="IndexMonth">บันทึกผลปฏิบัติราชการ</a>
-                    <a class="collapse-item" asp-area="" asp-controller="Audits" asp-action="IndexMonth">ตรวจสอบ/ยืนยัน</a>
-                    @*@if (User.IsInRole("Admin"))
-                        {
-                            <div class="collapse-divider"></div>
-                            <h6 class="collapse-header">รายปี: </h6>
-                            <a class="collapse-item" asp-area="" asp-controller="Results" asp-action="Index">บันทึกผล รายปี</a>
-                            <a class="collapse-item" asp-area="" asp-controller="Audits" asp-action="Index">ตรวจสอบ/ยืนยัน รายปี</a>
-                        }*@
-                </div>
+                    @if (User.IsInRole("Admin") || User.IsInRole("Manager"))
+                    {
+                        <a class="collapse-item" asp-area="" asp-controller="Audit" asp-action="Index">ตรวจสอบ/ยืนยัน</a>
+                    }
+                    </div>
             </div>
         </li>
     }

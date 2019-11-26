@@ -69,25 +69,34 @@ namespace EPES.Controllers
             //                ).ToListAsync();
 
             List<Object> list = new List<object>();
-            if (DateTime.Now.Month - 1 < 10)
+            if (User.IsInRole("Admin"))
             {
-                for (int i = 10; i <= 12; i++)
-                {
-                    list.Add(new { Value = i, Month = new DateTime(DateTime.Now.Year, i, 1).ToString("MMMM") });
-                }
-                for (int i = 1; i <= DateTime.Now.Month - 1; i++)
+                for (int i = 1; i <= 12; i++)
                 {
                     list.Add(new { Value = i, Month = new DateTime(DateTime.Now.Year, i, 1).ToString("MMMM") });
                 }
             }
             else
             {
-                for (int i = 10; i <= DateTime.Now.Month - 1; i++)
+                if (DateTime.Now.Month - 1 < 10)
                 {
-                    list.Add(new { Value = i, Month = new DateTime(DateTime.Now.Year, i, 1).ToString("MMMM") });
+                    for (int i = 10; i <= 12; i++)
+                    {
+                        list.Add(new { Value = i, Month = new DateTime(DateTime.Now.Year, i, 1).ToString("MMMM") });
+                    }
+                    for (int i = 1; i <= DateTime.Now.Month - 1; i++)
+                    {
+                        list.Add(new { Value = i, Month = new DateTime(DateTime.Now.Year, i, 1).ToString("MMMM") });
+                    }
+                }
+                else
+                {
+                    for (int i = 10; i <= DateTime.Now.Month - 1; i++)
+                    {
+                        list.Add(new { Value = i, Month = new DateTime(DateTime.Now.Year, i, 1).ToString("MMMM") });
+                    }
                 }
             }
-
             if (User.IsInRole("Admin"))
             {
 
@@ -167,22 +176,32 @@ namespace EPES.Controllers
             //                ).ToListAsync();
 
             List<Object> list = new List<object>();
-            if (DateTime.Now.Month - 1 < 10)
+            if (User.IsInRole("Admin"))
             {
-                for (int i = 10; i <= 12; i++)
-                {
-                    list.Add(new { Value = i, Month = new DateTime(DateTime.Now.Year, i, 1).ToString("MMMM") });
-                }
-                for (int i = 1; i <= DateTime.Now.Month - 1; i++)
+                for (int i = 1; i <= 12; i++)
                 {
                     list.Add(new { Value = i, Month = new DateTime(DateTime.Now.Year, i, 1).ToString("MMMM") });
                 }
             }
             else
             {
-                for (int i = 10; i <= DateTime.Now.Month - 1; i++)
+                if (DateTime.Now.Month - 1 < 10)
                 {
-                    list.Add(new { Value = i, Month = new DateTime(DateTime.Now.Year, i, 1).ToString("MMMM") });
+                    for (int i = 10; i <= 12; i++)
+                    {
+                        list.Add(new { Value = i, Month = new DateTime(DateTime.Now.Year, i, 1).ToString("MMMM") });
+                    }
+                    for (int i = 1; i <= DateTime.Now.Month - 1; i++)
+                    {
+                        list.Add(new { Value = i, Month = new DateTime(DateTime.Now.Year, i, 1).ToString("MMMM") });
+                    }
+                }
+                else
+                {
+                    for (int i = 10; i <= DateTime.Now.Month - 1; i++)
+                    {
+                        list.Add(new { Value = i, Month = new DateTime(DateTime.Now.Year, i, 1).ToString("MMMM") });
+                    }
                 }
             }
 
