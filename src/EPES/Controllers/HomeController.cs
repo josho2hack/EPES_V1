@@ -67,18 +67,26 @@ namespace EPES.Controllers
             {
                 webRequest.ContentType = "application/json";
                 webRequest.UserAgent = "Nothing";
-                using (var s = webRequest.GetResponse().GetResponseStream())
+                webRequest.Timeout = 3000;
+                try
                 {
-                    using (var sr = new StreamReader(s))
+                    using (var s = webRequest.GetResponse().GetResponseStream())
                     {
-                        var taxCollectionsAsJson = sr.ReadToEnd();
-                        var taxCollections = JsonConvert.DeserializeObject<Rootobject>(taxCollectionsAsJson);
-                        foreach (var t in taxCollections.taxCollection)
+                        using (var sr = new StreamReader(s))
                         {
-                            CYcurrentYear += t.CYcurrentYear;
-                            CYforcast += t.CYforcast;
+                            var taxCollectionsAsJson = sr.ReadToEnd();
+                            var taxCollections = JsonConvert.DeserializeObject<Rootobject>(taxCollectionsAsJson);
+                            foreach (var t in taxCollections.taxCollection)
+                            {
+                                CYcurrentYear += t.CYcurrentYear;
+                                CYforcast += t.CYforcast;
+                            }
                         }
                     }
+                }
+                catch (WebException)
+                {
+                    Dispose();
                 }
             }
 
@@ -110,18 +118,27 @@ namespace EPES.Controllers
             {
                 webRequest.ContentType = "application/json";
                 webRequest.UserAgent = "Nothing";
-                using (var s = webRequest.GetResponse().GetResponseStream())
+                webRequest.Timeout = 3000;
+
+                try
                 {
-                    using (var sr = new StreamReader(s))
+                    using (var s = webRequest.GetResponse().GetResponseStream())
                     {
-                        var taxCollectionsAsJson = sr.ReadToEnd();
-                        var taxCollections = JsonConvert.DeserializeObject<Rootobject>(taxCollectionsAsJson);
-                        foreach (var t in taxCollections.taxCollection)
+                        using (var sr = new StreamReader(s))
                         {
-                            CYcurrentYear += t.CYcurrentYear;
-                            CYforcast += t.CYforcast;
+                            var taxCollectionsAsJson = sr.ReadToEnd();
+                            var taxCollections = JsonConvert.DeserializeObject<Rootobject>(taxCollectionsAsJson);
+                            foreach (var t in taxCollections.taxCollection)
+                            {
+                                CYcurrentYear += t.CYcurrentYear;
+                                CYforcast += t.CYforcast;
+                            }
                         }
                     }
+                }
+                catch (WebException)
+                {
+                    Dispose();
                 }
             }
 

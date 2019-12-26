@@ -35,6 +35,8 @@
     <Compile Remove="Data\Migrations\25620801120122_ScoreUpdateMonth.Designer.cs" />
     <Compile Remove="Data\Migrations\25621009042149_UpdatePoint.cs" />
     <Compile Remove="Data\Migrations\25621009042149_UpdatePoint.Designer.cs" />
+    <Compile Remove="Data\Migrations\25621028095352_RemoveLevelRate.cs" />
+    <Compile Remove="Data\Migrations\25621028095352_RemoveLevelRate.Designer.cs" />
   </ItemGroup>
 
   <ItemGroup>

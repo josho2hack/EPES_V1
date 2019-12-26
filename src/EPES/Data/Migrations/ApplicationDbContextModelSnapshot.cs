@@ -144,6 +144,36 @@ namespace EPES.Data.Migrations
                     b.ToTable("DataForEvaluations");
                 });
 
+            modelBuilder.Entity("EPES.Models.LevelRate", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("PointOfEvaluationId");
+
+                    b.Property<decimal>("Rate1")
+                        .HasColumnType("decimal(18, 4)");
+
+                    b.Property<decimal>("Rate2")
+                        .HasColumnType("decimal(18, 4)");
+
+                    b.Property<decimal>("Rate3")
+                        .HasColumnType("decimal(18, 4)");
+
+                    b.Property<decimal>("Rate4")
+                        .HasColumnType("decimal(18, 4)");
+
+                    b.Property<decimal>("Rate5")
+                        .HasColumnType("decimal(18, 4)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("PointOfEvaluationId");
+
+                    b.ToTable("LevelRates");
+                });
+
             modelBuilder.Entity("EPES.Models.Office", b =>
                 {
                     b.Property<int>("Id")
@@ -199,21 +229,6 @@ namespace EPES.Data.Migrations
                     b.Property<string>("DetailRate5");
 
                     b.Property<int?>("ExpectPlan");
-
-                    b.Property<decimal>("LRate1")
-                        .HasColumnType("decimal(18, 4)");
-
-                    b.Property<decimal>("LRate2")
-                        .HasColumnType("decimal(18, 4)");
-
-                    b.Property<decimal>("LRate3")
-                        .HasColumnType("decimal(18, 4)");
-
-                    b.Property<decimal>("LRate4")
-                        .HasColumnType("decimal(18, 4)");
-
-                    b.Property<decimal>("LRate5")
-                        .HasColumnType("decimal(18, 4)");
 
                     b.Property<string>("Name");
 
@@ -475,6 +490,14 @@ namespace EPES.Data.Migrations
                     b.HasOne("EPES.Models.ApplicationUser", "UpdateUser")
                         .WithMany("DataForEvaluations")
                         .HasForeignKey("UpdateUserId");
+                });
+
+            modelBuilder.Entity("EPES.Models.LevelRate", b =>
+                {
+                    b.HasOne("EPES.Models.PointOfEvaluation", "PointOfEvaluation")
+                        .WithMany("LevelRates")
+                        .HasForeignKey("PointOfEvaluationId")
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
 
             modelBuilder.Entity("EPES.Models.Office", b =>

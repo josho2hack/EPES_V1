@@ -32,14 +32,20 @@ namespace EPES.Models
         [Range(1,12)]
         public int Month { get; set; }
 
-        [Display(Name = "หมายเหตุการแก้ไข")]
-        public String AuditComment { get; set; }
-
         [Display(Name = "การอนุมัติ")]
         public Approve Approve { get; set; } = Approve.รอพิจารณา;
 
-        [Display(Name = "หมายเหตุการอนุมัติ")]
-        public string CommentApprove { get; set; }
+        [Display(Name = "หมายเหตุการอนุมัติ (หัวหน้าหน่วยงาน)")]
+        public string CommentApproveLevel1 { get; set; }
+
+        [Display(Name = "หมายเหตุการอนุมัติ (สภ./ผู้กำกับตัวชี้วัด)")]
+        public string CommentApproveLevel2 { get; set; }
+
+        [Display(Name = "หมายเหตุการอนุมัติ (กองผู้กำกับตัวชี้วัด)")]
+        public string CommentApproveLevel3 { get; set; }
+
+        [Display(Name = "หมายเหตุการอนุมัติ (ผษ.)")]
+        public string CommentApproveLevel4 { get; set; }
 
         public int PointOfEvaluationId { get; set; }
         [Display(Name = "ตัวชี้วัด")]
@@ -92,6 +98,6 @@ namespace EPES.Models
 
     public enum Approve
     {               
-        รอพิจารณา ,กำลังดำเนินการ, เห็นชอบ
+        รอพิจารณา , หัวหน้าหน่วยงานอนุมัติ, สภ_ผู้กำกับตัวชี้วัดอนุมัติ, กองผู้กำกับตัวชี้วัดอนุมัติ,ผษ_อนุมัติ
     }
 }
