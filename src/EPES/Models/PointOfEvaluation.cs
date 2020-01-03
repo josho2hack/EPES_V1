@@ -47,24 +47,24 @@ namespace EPES.Models
         public decimal Weight { get; set; }
 
         [Display(Name = "จำนวนรอบการประเมิน")]
-        public int CountRound { get; set; }
+        [NotMapped]
+        public int CountRound { get { return Rounds.Count; } }
 
         [Display(Name = "รอบการประเมิน")]
         public List<Round> Rounds { get; set; }
 
         [Display(Name = "ตัวชี้วัดสำหรับ")]
         public int? OwnerOfficeId { get; set; }
+
         [Display(Name = "ตัวชี้วัดสำหรับ")]
         [DisplayFormat(NullDisplayText = "สภ./สท.")]
         public Office OwnerOffice { get; set; }
 
-        [Display(Name = "หน่วยงานกำกับ")]
+        [Display(Name = "หมายเลขหน่วยงานกำกับ")]
         public int? AuditOfficeId { get; set; }
+
         [Display(Name = "หน่วยงานกำกับ")]
         public Office AuditOffice { get; set; }
-
-        [Display(Name = "ข้อมูลในการประเมิน")]
-        public IList<DataForEvaluation> DataForEvaluations { get; set; }
 
         public string UpdateUserId { get; set; }
         [Display(Name = "ผู้แก้ไขล่าสุด")]
