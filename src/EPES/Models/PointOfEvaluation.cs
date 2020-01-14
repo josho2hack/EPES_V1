@@ -21,7 +21,7 @@ namespace EPES.Models
         [Display(Name = "ตัวชี้วัดที่")]
         public int Point { get; set; }
 
-        [Display(Name = "ตัวชี้วัดย่อย")]
+        [Display(Name = "ตัวชี้วัดย่อย (ถ้ามี 0 = ตัวชี้วัดหลัก)")]
         public int SubPoint { get; set; }
 
         [Display(Name = "แผน")]
