@@ -1,0 +1,82 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<XtraReportsLayoutSerializer SerializerVersion="19.1.3.0" Ref="1" ControlType="DevExpress.XtraReports.UI.XtraReport, DevExpress.XtraReports.v19.1, Version=19.1.3.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a" Name="PakReport" SnapGridSize="25" ReportUnit="TenthsOfAMillimeter" Margins="50, 50, 50, 50" PaperKind="A4" PageWidth="2100" PageHeight="2970" Version="19.1" DataMember="Offices" DataSource="#Ref-0" Dpi="254" Font="TH SarabunIT๙, 15.749999pt, charSet=222">
+  <CalculatedFields>
+    <Item1 Ref="2" Name="NowYear" Expression="GetYear([Year])+543" DataMember="Offices" />
+    <Item2 Ref="3" Name="LastYear" Expression="GetYear(AddYears([Year],-1))+543" DataMember="Offices" />
+    <Item3 Ref="4" Name="LastMonthToReport" Expression="Iif([LastMonth] == 1, 'มกราคม' , [LastMonth] == 2,'กุมภาพันธ์', [LastMonth] == 3, 'มีนาคม', [LastMonth] == 4,'เมษายน', [LastMonth] == 5,'พฤษภาคม', [LastMonth] == 6,'มิถุนายน', [LastMonth] == 7,'กรกฎาคม', [LastMonth] == 8,'สิงหาคม', [LastMonth] == 9,'กันยายน', [LastMonth] == 10,'ตุลาคม', [LastMonth] == 11,'พฤศจิกายน', 'ธันวาคม')" DataMember="Offices" />
+  </CalculatedFields>
+  <Bands>
+    <Item1 Ref="5" ControlType="TopMarginBand" Name="TopMargin" HeightF="50" Dpi="254" />
+    <Item2 Ref="6" ControlType="BottomMarginBand" Name="BottomMargin" HeightF="50" Dpi="254" />
+    <Item3 Ref="7" ControlType="ReportHeaderBand" Name="ReportHeader" HeightF="222.389847" Dpi="254">
+      <Controls>
+        <Item1 Ref="8" ControlType="XRRichText" Name="richText1" SerializableRtfString="ewBcAHIAdABmADEAXABkAGUAZgBmADAAewBcAGYAbwBuAHQAdABiAGwAewBcAGYAMAAgAEMAYQBsAGkAYgByAGkAOwB9AHsAXABmADEAIABUAGkAbQBlAHMAIABOAGUAdwAgAFIAbwBtAGEAbgA7AH0AewBcAGYAMgBcAGYAYwBoAGEAcgBzAGUAdAAyADIAMgAgAFwAJwA1ADQAXAAnADQAOABcACcAMgAwAFwAJwA1ADMAXAAnADYAMQBcACcANwAyAFwAJwA2ADEAXAAnADYAMgBcACcANwA1AFwAJwA2AGUAXAAnADQAOQBcACcANQA0AFwAJwBmADkAOwB9AH0AewBcAGMAbwBsAG8AcgB0AGIAbAAgADsAXAByAGUAZAAwAFwAZwByAGUAZQBuADAAXABiAGwAdQBlADAAIAA7AFwAcgBlAGQAMABcAGcAcgBlAGUAbgAwAFwAYgBsAHUAZQAyADUANQAgADsAfQB7AFwAKgBcAGQAZQBmAGMAaABwACAAXABmADEAXABmAHMAMgA0AH0AewBcAHMAdAB5AGwAZQBzAGgAZQBlAHQAIAB7AFwAcQBsAFwAZgAxAFwAZgBzADIANAAgAE4AbwByAG0AYQBsADsAfQB7AFwAKgBcAGMAcwAxAFwAZgAxAFwAZgBzADIANABcAGMAZgAxACAARABlAGYAYQB1AGwAdAAgAFAAYQByAGEAZwByAGEAcABoACAARgBvAG4AdAA7AH0AewBcACoAXABjAHMAMgBcAHMAYgBhAHMAZQBkAG8AbgAxAFwAZgAxAFwAZgBzADIANABcAGMAZgAxACAATABpAG4AZQAgAE4AdQBtAGIAZQByADsAfQB7AFwAKgBcAGMAcwAzAFwAdQBsAFwAZgAxAFwAZgBzADIANABcAGMAZgAyACAASAB5AHAAZQByAGwAaQBuAGsAOwB9AHsAXAAqAFwAdABzADQAXAB0AHMAcgBvAHcAZABcAGYAMQBcAGYAcwAyADQAXABxAGwAXAB0AHMAYwBlAGwAbABwAGEAZABkAGYAbAAzAFwAdABzAGMAZQBsAGwAcABhAGQAZABsADEAMAA4AFwAdABzAGMAZQBsAGwAcABhAGQAZABmAGIAMwBcAHQAcwBjAGUAbABsAHAAYQBkAGQAZgByADMAXAB0AHMAYwBlAGwAbABwAGEAZABkAHIAMQAwADgAXAB0AHMAYwBlAGwAbABwAGEAZABkAGYAdAAzAFwAdABzAHYAZQByAHQAYQBsAHQAXABjAGwAdAB4AGwAcgB0AGIAIABOAG8AcgBtAGEAbAAgAFQAYQBiAGwAZQA7AH0AewBcACoAXAB0AHMANQBcAHQAcwByAG8AdwBkAFwAcwBiAGEAcwBlAGQAbwBuADQAXABmADEAXABmAHMAMgA0AFwAcQBsAFwAdAByAGIAcgBkAHIAdABcAGIAcgBkAHIAcwBcAGIAcgBkAHIAdwAxADAAXAB0AHIAYgByAGQAcgBsAFwAYgByAGQAcgBzAFwAYgByAGQAcgB3ADEAMABcAHQAcgBiAHIAZAByAGIAXABiAHIAZAByAHMAXABiAHIAZAByAHcAMQAwAFwAdAByAGIAcgBkAHIAcgBcAGIAcgBkAHIAcwBcAGIAcgBkAHIAdwAxADAAXAB0AHIAYgByAGQAcgBoAFwAYgByAGQAcgBzAFwAYgByAGQAcgB3ADEAMABcAHQAcgBiAHIAZAByAHYAXABiAHIAZAByAHMAXABiAHIAZAByAHcAMQAwAFwAdABzAGMAZQBsAGwAcABhAGQAZABmAGwAMwBcAHQAcwBjAGUAbABsAHAAYQBkAGQAbAAxADAAOABcAHQAcwBjAGUAbABsAHAAYQBkAGQAZgByADMAXAB0AHMAYwBlAGwAbABwAGEAZABkAHIAMQAwADgAXAB0AHMAdgBlAHIAdABhAGwAdABcAGMAbAB0AHgAbAByAHQAYgAgAFQAYQBiAGwAZQAgAFMAaQBtAHAAbABlACAAMQA7AH0AfQB7AFwAKgBcAGwAaQBzAHQAbwB2AGUAcgByAGkAZABlAHQAYQBiAGwAZQB9AFwAbgBvAHUAaQBjAG8AbQBwAGEAdABcAHMAcABsAHkAdAB3AG4AaQBuAGUAXABoAHQAbQBhAHUAdABzAHAAXABhAGwAbgB0AGIAbABpAG4AZABcAGUAeABwAHMAaAByAHQAbgBcAHMAcABsAHQAcABnAHAAYQByAFwAbgBvAGcAcgBvAHcAYQB1AHQAbwBmAGkAdABcAHAAYQByAGQAXABwAGwAYQBpAG4AXABxAGMAewBcAGIAXABmADIAXABmAHMAMwAxAFwAYwBmADEAIABcAHUAMwA2ADEAOQBcACcAYwAzAFwAdQAzADYAMwA0AFwAJwBkADIAXAB1ADMANgAxADgAXAAnAGMAMgBcAHUAMwA1ADkAMQBcACcAYQA3AFwAdQAzADYAMwA0AFwAJwBkADIAXAB1ADMANgAwADkAXAAnAGIAOQBcAHUAMwA2ADEAMgBcACcAYgBjAFwAdQAzADYAMgAxAFwAJwBjADUAXAB1ADMANgAwADUAXAAnAGIANQBcAHUAMwA2ADMAMwBcACcAZAAxAFwAdQAzADYAMgAzAFwAJwBjADcAXAB1ADMANQA5ADQAXAAnAGEAYQBcAHUAMwA2ADMANwBcACcAZAA1AFwAdQAzADYANQA3AFwAJwBlADkAXAB1ADMANgAyADMAXAAnAGMANwBcAHUAMwA2ADMAMwBcACcAZAAxAFwAdQAzADYAMAA0AFwAJwBiADQAXAB1ADMANgAwADUAXAAnAGIANQBcAHUAMwA2ADMANABcACcAZAAyAFwAdQAzADYAMQA3AFwAJwBjADEAXAB1ADMANgA0ADkAXAAnAGUAMQBcAHUAMwA2ADEAMgBcACcAYgBjAFwAdQAzADYAMAA5AFwAJwBiADkAXAB1ADMANgAxADEAXAAnAGIAYgBcAHUAMwA1ADkAOABcACcAYQBlAFwAdQAzADYAMwA2AFwAJwBkADQAXAB1ADMANgAxADAAXAAnAGIAYQBcAHUAMwA2ADMAMwBcACcAZAAxAFwAdQAzADYAMAA1AFwAJwBiADUAXAB1ADMANgAzADYAXAAnAGQANABcAHUAMwA2ADEAOQBcACcAYwAzAFwAdQAzADYAMwA0AFwAJwBkADIAXAB1ADMANQA5ADQAXAAnAGEAYQBcAHUAMwA1ADgANQBcACcAYQAxAFwAdQAzADYAMwA0AFwAJwBkADIAXAB1ADMANgAxADkAXAAnAGMAMwAgAFwAdQAzADYAMQAxAFwAJwBiAGIAXAB1ADMANgAxADkAXAAnAGMAMwBcAHUAMwA2ADMAMgBcACcAZAAwAFwAdQAzADUAOQAyAFwAJwBhADgAXAB1ADMANgAzADUAXAAnAGQAMwBcAHUAMwA2ADEAMQBcACcAYgBiAFwAdQAzADYAMwA3AFwAJwBkADUAXAB1ADMANQA5ADEAXAAnAGEANwBcAHUAMwA2ADEAMABcACcAYgBhAFwAdQAzADYAMQAxAFwAJwBiAGIAXAB1ADMANgAxADkAXAAnAGMAMwBcAHUAMwA2ADMAMgBcACcAZAAwAFwAdQAzADYAMQA3AFwAJwBjADEAXAB1ADMANgAzADQAXAAnAGQAMgBcAHUAMwA2ADAAMwBcACcAYgAzACAAXAB1ADMANgAxADQAXAAnAGIAZQAuAFwAdQAzADYAMgA0AFwAJwBjADgALgAgAFsATgBvAHcAWQBlAGEAcgBdAH0AXABiAFwAZgAyAFwAZgBzADMAMQBcAGMAZgAxAFwAcABhAHIAXABwAGEAcgBkAFwAcABsAGEAaQBuAFwAcQBjAHsAXABmADIAXABmAHMAMwAxAFwAYwBmADEAIABcAHUAMwA2ADAANQBcACcAYgA1AFwAdQAzADYAMwAzAFwAJwBkADEAXAB1ADMANgA1ADcAXAAnAGUAOQBcAHUAMwA1ADkAMQBcACcAYQA3AFwAdQAzADYANAA5AFwAJwBlADEAXAB1ADMANgAwADUAXAAnAGIANQBcAHUAMwA2ADUANgBcACcAZQA4AFwAdQAzADYANAA4AFwAJwBlADAAXAB1ADMANgAwADQAXAAnAGIANABcAHUAMwA2ADMAOQBcACcAZAA3AFwAdQAzADYAMgA5AFwAJwBjAGQAXAB1ADMANgAwADkAXAAnAGIAOQB9AHsAXABsAGEAbgBnADEAMAAzADMAXABsAGEAbgBnAGYAZQAxADAAMwAzAFwAZgAyAFwAZgBzADMAMQBcAGMAZgAxACAAIAB9AHsAXABmADIAXABmAHMAMwAxAFwAYwBmADEAIABcAHUAMwA2ADAANQBcACcAYgA1AFwAdQAzADYANAAwAFwAJwBkADgAXAB1ADMANgAyADEAXAAnAGMANQBcAHUAMwA2ADMANABcACcAZAAyAFwAdQAzADUAOAA4AFwAJwBhADQAXAB1ADMANgAxADcAXAAnAGMAMQAgAH0AewBcAGwAYQBuAGcAMQAwADMAMwBcAGwAYQBuAGcAZgBlADEAMAAzADMAXABmADIAXABmAHMAMwAxAFwAYwBmADEAIABbAEwAYQBzAHQAWQBlAGEAcgBdAH0AewBcAGYAMgBcAGYAcwAzADEAXABjAGYAMQAgACAALQAgAFwAdQAzADYANAA4AFwAJwBlADAAXAB1ADMANgAwADQAXAAnAGIANABcAHUAMwA2ADMAOQBcACcAZAA3AFwAdQAzADYAMgA5AFwAJwBjAGQAXAB1ADMANgAwADkAXAAnAGIAOQB9AHsAXABsAGEAbgBnADEAMAAzADMAXABsAGEAbgBnAGYAZQAxADAAMwAzAFwAZgAyAFwAZgBzADMAMQBcAGMAZgAxACAAIABbAEwAYQBzAHQATQBvAG4AdABoAFQAbwBSAGUAcABvAHIAdABdACAAWwBOAG8AdwBZAGUAYQByAF0AfQBcAGwAYQBuAGcAMQAwADMAMwBcAGwAYQBuAGcAZgBlADEAMAAzADMAXABmADIAXABmAHMAMwAxAFwAYwBmADEAXABwAGEAcgBcAHAAYQByAGQAXABwAGwAYQBpAG4AXABxAGMAewBcAGwAYQBuAGcAMQAwADMAMwBcAGwAYQBuAGcAZgBlADEAMAAzADMAXABmADIAXABmAHMAMwAxAFwAYwBmADEAIABbAE4AYQBtAGUAXQB9AFwAbABhAG4AZwAxADAAMwAzAFwAbABhAG4AZwBmAGUAMQAwADMAMwBcAGYAMgBcAGYAcwAzADEAXABjAGYAMQBcAHAAYQByAH0A" SizeF="2000,211.878372" LocationFloat="0, 0" Dpi="254" Font="TH SarabunIT๙, 15.749999pt, charSet=222" Padding="2,2,0,0,96" />
+      </Controls>
+    </Item3>
+    <Item4 Ref="9" ControlType="GroupHeaderBand" Name="GroupHeader1" GroupUnion="WithFirstDetail" HeightF="142.24" Dpi="254">
+      <Controls>
+        <Item1 Ref="10" ControlType="XRTable" Name="table1" SizeF="2000,142.24" LocationFloat="0, 0" Dpi="254" Font="TH SarabunPSK, 16pt">
+          <Rows>
+            <Item1 Ref="11" ControlType="XRTableRow" Name="tableRow1" Weight="1" Dpi="254">
+              <Cells>
+                <Item1 Ref="12" ControlType="XRTableCell" Name="tableCell1" Weight="0.78919986595518132" RowSpan="2" Text="ตัวชี้วัดผลการปฏิบัติราชการ" TextAlignment="MiddleCenter" Dpi="254" StyleName="DetailCaption1" Font="TH SarabunIT๙, 12pt, style=Bold, charSet=222" Borders="None">
+                  <StylePriority Ref="13" UseFont="false" UseBorders="false" UseTextAlignment="false" />
+                </Item1>
+                <Item2 Ref="14" ControlType="XRTableCell" Name="tableCell2" Weight="0.081272238656871512" RowSpan="2" Multiline="true" Text="น้ำหนัก&#xD;&#xA;ร้อยละ" TextAlignment="MiddleRight" Dpi="254" StyleName="DetailCaption1" Font="TH SarabunIT๙, 12pt, style=Bold, charSet=222">
+                  <StylePriority Ref="15" UseFont="false" UseTextAlignment="false" />
+                </Item2>
+                <Item3 Ref="16" ControlType="XRTableCell" Name="tableCell3" Weight="0.14102864827825024" RowSpan="2" Multiline="true" Text="ผลการ&#xD;&#xA;ดำเนินการ" TextAlignment="MiddleRight" Dpi="254" StyleName="DetailCaption1" Font="TH SarabunIT๙, 12pt, style=Bold, charSet=222">
+                  <StylePriority Ref="17" UseFont="false" UseTextAlignment="false" />
+                </Item3>
+                <Item4 Ref="18" ControlType="XRTableCell" Name="tableCell9" Weight="0.20452641588202533" Multiline="true" Text="ผลประเมินของหน่วยงาน" TextAlignment="MiddleCenter" Dpi="254" StyleName="DetailCaption1" Font="TH SarabunIT๙, 12pt, style=Bold, charSet=222" Borders="All">
+                  <StylePriority Ref="19" UseFont="false" UseBorders="false" UseTextAlignment="false" />
+                </Item4>
+              </Cells>
+            </Item1>
+            <Item2 Ref="20" ControlType="XRTableRow" Name="tableRow2" Weight="1" Dpi="254">
+              <Cells>
+                <Item1 Ref="21" ControlType="XRTableCell" Name="tableCell5" Weight="0.78919986595518155" Multiline="true" Text="tableCell5" TextAlignment="MiddleRight" Dpi="254" StyleName="DetailCaption1" Borders="None">
+                  <StylePriority Ref="22" UseBorders="false" UseTextAlignment="false" />
+                </Item1>
+                <Item2 Ref="23" ControlType="XRTableCell" Name="tableCell6" Weight="0.081272238656871443" Multiline="true" Text="tableCell6" TextAlignment="MiddleRight" Dpi="254" StyleName="DetailCaption1">
+                  <StylePriority Ref="24" UseTextAlignment="false" />
+                </Item2>
+                <Item3 Ref="25" ControlType="XRTableCell" Name="tableCell7" Weight="0.14102872372711978" Multiline="true" Text="tableCell7" TextAlignment="MiddleRight" Dpi="254" StyleName="DetailCaption1">
+                  <StylePriority Ref="26" UseTextAlignment="false" />
+                </Item3>
+                <Item4 Ref="27" ControlType="XRTableCell" Name="tableCell10" Weight="0.10285457001068167" Multiline="true" Text="ค่าคะแนน&#xD;&#xA;ที่ได้" TextAlignment="MiddleRight" Dpi="254" StyleName="DetailCaption1" Font="TH SarabunIT๙, 12pt, style=Bold, charSet=222">
+                  <StylePriority Ref="28" UseFont="false" UseTextAlignment="false" />
+                </Item4>
+                <Item5 Ref="29" ControlType="XRTableCell" Name="tableCell8" Weight="0.10167177042247412" Text="คะแนนถ่วง" TextAlignment="MiddleRight" Dpi="254" StyleName="DetailCaption1" Font="TH SarabunIT๙, 12pt, style=Bold, charSet=222">
+                  <StylePriority Ref="30" UseFont="false" UseTextAlignment="false" />
+                </Item5>
+              </Cells>
+            </Item2>
+          </Rows>
+          <StylePriority Ref="31" UseFont="false" />
+        </Item1>
+      </Controls>
+    </Item4>
+    <Item5 Ref="32" ControlType="DetailBand" Name="Detail" HeightF="254" Dpi="254">
+      <HierarchyPrintOptions Ref="33" Indent="20" />
+    </Item5>
+    <Item6 Ref="34" ControlType="ReportFooterBand" Name="ReportFooter" HeightF="100.436539" Dpi="254">
+      <Controls>
+        <Item1 Ref="35" ControlType="XRPanel" Name="panel1" SizeF="2000,100.436539" LocationFloat="0, 0" Dpi="254" StyleName="GrandTotalBackground1" />
+      </Controls>
+    </Item6>
+  </Bands>
+  <StyleSheet>
+    <Item1 Ref="36" Name="Title" BorderStyle="Inset" Font="Arial, 14.25pt" ForeColor="255,64,70,80" BackColor="Transparent" BorderColor="Black" Sides="None" StringFormat="Near;Near;0;None;Character;Default" BorderWidthSerializable="1" />
+    <Item2 Ref="37" Name="DetailCaption1" BorderStyle="Inset" Padding="15,15,0,0,254" Font="Arial, 8.25pt, style=Bold" ForeColor="White" BackColor="255,23,104,196" BorderColor="White" Sides="Left" StringFormat="Near;Center;0;None;Character;Default" TextAlignment="MiddleLeft" BorderWidthSerializable="2" />
+    <Item3 Ref="38" Name="DetailData1" BorderStyle="Inset" Padding="15,15,0,0,254" Font="Arial, 8.25pt" ForeColor="Black" BorderColor="Transparent" Sides="Left" StringFormat="Near;Center;0;None;Character;Default" TextAlignment="MiddleLeft" BorderWidthSerializable="2" />
+    <Item4 Ref="39" Name="DetailData3_Odd" BorderStyle="Inset" Padding="15,15,0,0,254" Font="Arial, 8.25pt" ForeColor="Black" BackColor="255,243,245,248" BorderColor="Transparent" Sides="None" StringFormat="Near;Center;0;None;Character;Default" TextAlignment="MiddleLeft" BorderWidthSerializable="1" />
+    <Item5 Ref="40" Name="GrandTotalCaption1" BorderStyle="Inset" Padding="15,5,0,0,254" Font="Arial, 8.25pt, style=Bold" ForeColor="255,147,147,147" Sides="None" StringFormat="Near;Center;0;None;Character;Default" TextAlignment="MiddleLeft" />
+    <Item6 Ref="41" Name="GrandTotalData1" BorderStyle="Inset" Padding="5,15,0,0,254" Font="Arial, 8.25pt, style=Bold" ForeColor="255,75,75,75" Sides="None" StringFormat="Near;Center;0;None;Character;Default" TextAlignment="MiddleLeft" />
+    <Item7 Ref="42" Name="GrandTotalBackground1" BorderStyle="Inset" BackColor="White" BorderColor="255,75,75,75" Sides="Bottom" StringFormat="Near;Near;0;None;Character;Default" BorderWidthSerializable="2" />
+    <Item8 Ref="43" Name="PageInfo" BorderStyle="Inset" Padding="5,5,0,0,254" Font="Arial, 8.25pt, style=Bold" ForeColor="255,64,70,80" StringFormat="Near;Near;0;None;Character;Default" />
+  </StyleSheet>
+  <ComponentStorage>
+    <Item1 Ref="0" ObjectType="DevExpress.DataAccess.Sql.SqlDataSource,DevExpress.DataAccess.v19.1" Name="sqlDataSource1" Base64="PFNxbERhdGFTb3VyY2UgTmFtZT0ic3FsRGF0YVNvdXJjZTEiPjxDb25uZWN0aW9uIE5hbWU9IkRlZmF1bHRDb25uZWN0aW9uIiBGcm9tQXBwQ29uZmlnPSJ0cnVlIiAvPjxRdWVyeSBUeXBlPSJTZWxlY3RRdWVyeSIgTmFtZT0iT2ZmaWNlcyI+PFRhYmxlcz48VGFibGUgTmFtZT0iT2ZmaWNlcyIgWD0iMzAiIFk9IjMwIiBXaWR0aD0iMTI1IiBIZWlnaHQ9IjE1MyIgLz48VGFibGUgTmFtZT0iUG9pbnRPZkV2YWx1YXRpb25zIiBYPSIxODUiIFk9IjMwIiBXaWR0aD0iMTI1IiBIZWlnaHQ9Ijk4OSIgLz48VGFibGUgTmFtZT0iU2NvcmVEcmFmdHMiIFg9IjM0MCIgWT0iMzAiIFdpZHRoPSIxMjUiIEhlaWdodD0iMTUzIiAvPjxSZWxhdGlvbiBUeXBlPSJJbm5lciIgUGFyZW50PSJPZmZpY2VzIiBOZXN0ZWQ9IlBvaW50T2ZFdmFsdWF0aW9ucyI+PEtleUNvbHVtbiBQYXJlbnQ9IklkIiBOZXN0ZWQ9Ik93bmVyT2ZmaWNlSWQiIC8+PC9SZWxhdGlvbj48UmVsYXRpb24gVHlwZT0iSW5uZXIiIFBhcmVudD0iT2ZmaWNlcyIgTmVzdGVkPSJTY29yZURyYWZ0cyI+PEtleUNvbHVtbiBQYXJlbnQ9IklkIiBOZXN0ZWQ9Ik9mZmljZUlkIiAvPjwvUmVsYXRpb24+PFJlbGF0aW9uIFR5cGU9IklubmVyIiBQYXJlbnQ9IlBvaW50T2ZFdmFsdWF0aW9ucyIgTmVzdGVkPSJTY29yZURyYWZ0cyI+PEtleUNvbHVtbiBQYXJlbnQ9IklkIiBOZXN0ZWQ9IlBvaW50T2ZFdmFsdWF0aW9uSWQiIC8+PC9SZWxhdGlvbj48L1RhYmxlcz48Q29sdW1ucz48Q29sdW1uIFRhYmxlPSJPZmZpY2VzIiBOYW1lPSJOYW1lIiAvPjxDb2x1bW4gVGFibGU9IlBvaW50T2ZFdmFsdWF0aW9ucyIgTmFtZT0iWWVhciIgLz48Q29sdW1uIFRhYmxlPSJQb2ludE9mRXZhbHVhdGlvbnMiIE5hbWU9IlBvaW50IiAvPjxDb2x1bW4gVGFibGU9IlBvaW50T2ZFdmFsdWF0aW9ucyIgTmFtZT0iTmFtZSIgQWxpYXM9IlBvaW50T2ZFdmFsdWF0aW9uc19OYW1lIiAvPjxDb2x1bW4gVGFibGU9IlBvaW50T2ZFdmFsdWF0aW9ucyIgTmFtZT0iV2VpZ2h0IiAvPjxDb2x1bW4gVGFibGU9IlBvaW50T2ZFdmFsdWF0aW9ucyIgTmFtZT0iUGxhbiIgLz48Q29sdW1uIFRhYmxlPSJTY29yZURyYWZ0cyIgTmFtZT0iU2NvcmVWYWx1ZSIgLz48Q29sdW1uIFRhYmxlPSJPZmZpY2VzIiBOYW1lPSJJZCIgLz48Q29sdW1uIFRhYmxlPSJTY29yZURyYWZ0cyIgTmFtZT0iTGFzdE1vbnRoIiAvPjwvQ29sdW1ucz48L1F1ZXJ5PjxSZXN1bHRTY2hlbWE+PERhdGFTZXQgTmFtZT0ic3FsRGF0YVNvdXJjZTEiPjxWaWV3IE5hbWU9Ik9mZmljZXMiPjxGaWVsZCBOYW1lPSJOYW1lIiBUeXBlPSJTdHJpbmciIC8+PEZpZWxkIE5hbWU9IlllYXIiIFR5cGU9IkRhdGVUaW1lIiAvPjxGaWVsZCBOYW1lPSJQb2ludCIgVHlwZT0iSW50MzIiIC8+PEZpZWxkIE5hbWU9IlBvaW50T2ZFdmFsdWF0aW9uc19OYW1lIiBUeXBlPSJTdHJpbmciIC8+PEZpZWxkIE5hbWU9IldlaWdodCIgVHlwZT0iRGVjaW1hbCIgLz48RmllbGQgTmFtZT0iUGxhbiIgVHlwZT0iSW50MzIiIC8+PEZpZWxkIE5hbWU9IlNjb3JlVmFsdWUiIFR5cGU9IkRlY2ltYWwiIC8+PEZpZWxkIE5hbWU9IklkIiBUeXBlPSJJbnQzMiIgLz48RmllbGQgTmFtZT0iTGFzdE1vbnRoIiBUeXBlPSJJbnQzMiIgLz48L1ZpZXc+PC9EYXRhU2V0PjwvUmVzdWx0U2NoZW1hPjxDb25uZWN0aW9uT3B0aW9ucyBDbG9zZUNvbm5lY3Rpb249InRydWUiIC8+PC9TcWxEYXRhU291cmNlPg==" />
+  </ComponentStorage>
+</XtraReportsLayoutSerializer>

@@ -14,21 +14,18 @@
 
     <form asp-action="Index">
         <div class="row justify-content-between">
-            <div class="col-md-6">
+            <div class="form-group form-inline">
                 @if (User.IsInRole("Admin") || User.IsInRole("Manager"))
                 {
-                    <div class="row">
-                        <label class="col-form-label col-md-3 text-md-right">หน่วยงาน: </label>
-                        <select name="selectoffice" class="form-control col-md-7" asp-items="ViewBag.OfficeCode" onchange="this.form.submit()">
+                        <label class="form-label text-md-right">หน่วยงาน: </label>
+                        <select asp-for="selectoffice" class="form-control" asp-items="ViewBag.OfficeCode" onchange="this.form.submit()">
                             <option value="">เลือกหน่วยงาน</option>
                         </select>
-                    </div>
                 }
             </div>
-            <div class="col-md-6">
-                <div class="row">
-                    <label class="col-form-label col-md-6 text-md-right">ปีงบประมาณ: </label>
-                    <select asp-for="yearPoint" class="form-control col-md-6" onchange="this.form.submit()">
+            <div class="form-group form-inline">
+                    <label class="form-label text-md-right">ปีงบประมาณ: </label>
+                    <select asp-for="yearPoint" class="form-control" onchange="this.form.submit()">
                         <option value="-1">
                             @{
                                 if (DateTime.Now.Month == 10 || DateTime.Now.Month == 11 || DateTime.Now.Month == 12)
@@ -66,7 +63,6 @@
                             }
                         </option>
                     </select>
-                </div>
             </div>
         </div>
     </form>
@@ -93,7 +89,7 @@
                                     ตัวชี้วัด
                                 </th>
                                 <th>
-                                    หน่วยนับ
+                                    หน่วยวัด
                                 </th>
                                 <th>
                                     น้ำหนัก

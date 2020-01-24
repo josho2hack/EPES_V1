@@ -115,10 +115,10 @@ namespace EPES
 
             app.UseHttpsRedirection();
 
-            var reportDirectory = Path.Combine(env.ContentRootPath, "Reports");
-            DevExpress.XtraReports.Web.Extensions.ReportStorageWebExtension.RegisterExtensionGlobal(new ReportStorageWebExtension1(reportDirectory));
+            //var reportDirectory = Path.Combine(env.ContentRootPath, "Reports");
+            //DevExpress.XtraReports.Web.Extensions.ReportStorageWebExtension.RegisterExtensionGlobal(new ReportStorageWebExtension1(reportDirectory));
 
-            DevExpress.XtraReports.Configuration.Settings.Default.UserDesignerOptions.DataBindingMode = DevExpress.XtraReports.UI.DataBindingMode.ExpressionsAdvanced;
+            //DevExpress.XtraReports.Configuration.Settings.Default.UserDesignerOptions.DataBindingMode = DevExpress.XtraReports.UI.DataBindingMode.ExpressionsAdvanced;
 
             app.UseDevExpressControls();
             if (env.IsDevelopment())

@@ -115,7 +115,7 @@ namespace EPES.Controllers
                 }
             }
 
-            ViewBag.selectoffice = selectoffice;
+            viewModel.selectoffice = selectoffice;
             viewModel.yearPoint = yearPoint;
             return View(viewModel);
         }
@@ -460,50 +460,48 @@ namespace EPES.Controllers
             return View();
         }
 
-        // POST: PointOfEvaluations/Create
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("DetailPlan,Point,SubPoint,Plan,ExpectPlan,Ddrive,Name,Unit,Weight,Rate1,DetailRate1,Rate2,DetailRate2,Rate3,DetailRate3,Rate4,DetailRate4,Rate5,DetailRate5,Detail2Rate1,Detail2Rate2,Detail2Rate3,Detail2Rate4,Detail2Rate5,OwnerOfficeId,AuditOfficeId,R1MStart,R1MStop,R1MStart2,R1MStop2,R2MStart,R2MStop,R2MStart2,R2MStop2,R3MStart,R3MStop,R3MStart2,R3MStop2,R4MStart,R4MStop,R4MStart2,R4MStop2,R5MStart,R5MStop,R5MStart2,R5MStop2,LRate1,LRate2,LRate3,LRate4,LRate5")] PointOfEvaluation dataView, string selectoffice, int yearPoint, decimal expect1, decimal expect2, decimal expect3, decimal expect4, decimal expect5, decimal expect6, decimal expect7, decimal expect8, decimal expect9, decimal expect10, decimal expect11, decimal expect12)
+        public async Task<IActionResult> Create([Bind("point.Point,point.SubPoint,point.Plan,point.DetailPlan,point.ExpectPlan,point.Ddrive,point.Name,point.Unit,point.Weight,point.OwnerOfficeId,point.AuditOfficeId,Round.Rate1,Round.Rate2,Round.Rate3,Round.Rate4,Round.Rate5,Round.DetailRate1,Round.DetailRate2,Round.DetailRate3,Round.DetailRate4,Round.DetailRate5,Round.R1MStart,Round.R1MStop,Round.R2MStart,Round.R2MStop,Round.R3MStart,Round.R3MStop,Round.R4MStart,Round.R4MStop,Round.R5MStart,Round.R5MStop,expect1,expect2,expec3,expect4,expect5,expect6,expect7,expect8,expect9,expect10,expect11,expect12,selectoffice,yearPoint,roundNumber,Round2.Rate1,Round2.Rate2,Round2.Rate3,Round2.Rate4,Round2.Rate5,Round2.DetailRate1,Round2.DetailRate2,Round2.DetailRate3,Round2.DetailRate4,Round2.DetailRate5,Round2.R1MStart,Round2.R1MStop,Round2.R2MStart,Round2.R2MStop,Round2.R3MStart,Round2.R3MStop,Round2.R4MStart,Round2.R4MStop,Round2.R5MStart,Round2.R5MStop")] PointOfEvaluationViewModel dataView)
         {
             var user = await _userManager.GetUserAsync(User);
 
             if (DateTime.Now.Month == 10 || DateTime.Now.Month == 11 || DateTime.Now.Month == 12)
             {
-                dataView.Year = new DateTime(DateTime.Now.AddYears(yearPoint + 1).Year, 1, 1);
+                dataView.point.Year = new DateTime(DateTime.Now.AddYears(dataView.yearPoint + 1).Year, 1, 1);
             }
             else
             {
-                dataView.Year = new DateTime(DateTime.Now.AddYears(yearPoint).Year, 1, 1);
+                dataView.point.Year = new DateTime(DateTime.Now.AddYears(dataView.yearPoint).Year, 1, 1);
             }
 
-            dataView.UpdateUserId = user.Id;
+            dataView.point.UpdateUserId = user.Id;
             //dataView.SubPoint = 0;
 
             try
             {
                 if (ModelState.IsValid)
                 {
-                    _context.Add(dataView);
+                    _context.Add(dataView.point);
+                    _context.Add(dataView.Round);
                     await _context.SaveChangesAsync();
-                    if (dataView.OwnerOffice != null)  //บันทึกเฉพาะมอบให้หน่วยงานเดียวเท่านั้น
+                    if (dataView.point.OwnerOffice != null)  //บันทึกเฉพาะมอบให้หน่วยงานเดียวเท่านั้น
                     {
-                        await SaveExpect(dataView.Id, dataView.OwnerOffice.Id, 10, expect10, user.Id);
-                        await SaveExpect(dataView.Id, dataView.OwnerOffice.Id, 11, expect11, user.Id);
-                        await SaveExpect(dataView.Id, dataView.OwnerOffice.Id, 12, expect12, user.Id);
-                        await SaveExpect(dataView.Id, dataView.OwnerOffice.Id, 1, expect1, user.Id);
-                        await SaveExpect(dataView.Id, dataView.OwnerOffice.Id, 2, expect2, user.Id);
-                        await SaveExpect(dataView.Id, dataView.OwnerOffice.Id, 3, expect3, user.Id);
-                        await SaveExpect(dataView.Id, dataView.OwnerOffice.Id, 4, expect4, user.Id);
-                        await SaveExpect(dataView.Id, dataView.OwnerOffice.Id, 5, expect5, user.Id);
-                        await SaveExpect(dataView.Id, dataView.OwnerOffice.Id, 6, expect6, user.Id);
-                        await SaveExpect(dataView.Id, dataView.OwnerOffice.Id, 7, expect7, user.Id);
-                        await SaveExpect(dataView.Id, dataView.OwnerOffice.Id, 8, expect8, user.Id);
-                        await SaveExpect(dataView.Id, dataView.OwnerOffice.Id, 9, expect9, user.Id);
+                        await SaveExpect(dataView.point.Id, dataView.point.OwnerOffice.Id, 10, dataView.expect10, user.Id);
+                        await SaveExpect(dataView.point.Id, dataView.point.OwnerOffice.Id, 11, dataView.expect11, user.Id);
+                        await SaveExpect(dataView.point.Id, dataView.point.OwnerOffice.Id, 12, dataView.expect12, user.Id);
+                        await SaveExpect(dataView.point.Id, dataView.point.OwnerOffice.Id, 1, dataView.expect1, user.Id);
+                        await SaveExpect(dataView.point.Id, dataView.point.OwnerOffice.Id, 2, dataView.expect2, user.Id);
+                        await SaveExpect(dataView.point.Id, dataView.point.OwnerOffice.Id, 3, dataView.expect3, user.Id);
+                        await SaveExpect(dataView.point.Id, dataView.point.OwnerOffice.Id, 4, dataView.expect4, user.Id);
+                        await SaveExpect(dataView.point.Id, dataView.point.OwnerOffice.Id, 5, dataView.expect5, user.Id);
+                        await SaveExpect(dataView.point.Id, dataView.point.OwnerOffice.Id, 6, dataView.expect6, user.Id);
+                        await SaveExpect(dataView.point.Id, dataView.point.OwnerOffice.Id, 7, dataView.expect7, user.Id);
+                        await SaveExpect(dataView.point.Id, dataView.point.OwnerOffice.Id, 8, dataView.expect8, user.Id);
+                        await SaveExpect(dataView.point.Id, dataView.point.OwnerOffice.Id, 9, dataView.expect9, user.Id);
                     }
 
-                    return RedirectToAction(nameof(Index), new { yearPoint = yearPoint, selectoffice = selectoffice });
+                    return RedirectToAction(nameof(Index), new { yearPoint = dataView.yearPoint, selectoffice = dataView.selectoffice });
                 }
             }
             catch (DbUpdateException)
@@ -515,9 +513,9 @@ namespace EPES.Controllers
             }
 
             var office = await _context.Offices.Where(o => o.Code == user.OfficeId).FirstOrDefaultAsync();
-            var officeselect = await _context.Offices.Where(o => o.Code == selectoffice).FirstOrDefaultAsync();
+            var officeselect = await _context.Offices.Where(o => o.Code == dataView.selectoffice).FirstOrDefaultAsync();
 
-            switch (dataView.Plan)
+            switch (dataView.point.Plan)
             {
                 case TypeOfPlan.A:
                     ViewBag.Plan = "A";
@@ -525,7 +523,7 @@ namespace EPES.Controllers
 
                     if (User.IsInRole("Admin"))
                     {
-                        if (String.IsNullOrEmpty(selectoffice))
+                        if (String.IsNullOrEmpty(dataView.selectoffice))
                         {
                             ViewBag.OfficeId = new SelectList(_context.Offices.Where(d => d.Code != "00000000" && d.Code.Substring(0, 3) == "000"), "Id", "Name", office.Id);
                         }
@@ -550,7 +548,7 @@ namespace EPES.Controllers
 
                     if (User.IsInRole("Admin") || (User.IsInRole("Manager") && user.OfficeId.StartsWith("000")))
                     {
-                        if (String.IsNullOrEmpty(selectoffice))
+                        if (String.IsNullOrEmpty(dataView.selectoffice))
                         {
                             ViewBag.OfficeId = new SelectList(_context.Offices.Where(d => d.Code != "00000000" && d.Code.Substring(5, 3) == "000"), "Id", "Name", office.Id);
                         }
@@ -562,7 +560,7 @@ namespace EPES.Controllers
 
                     if (User.IsInRole("Manager") && user.OfficeId.Substring(2, 6) == "000000")
                     {
-                        if (String.IsNullOrEmpty(selectoffice))
+                        if (String.IsNullOrEmpty(dataView.selectoffice))
                         {
                             ViewBag.OfficeId = new SelectList(_context.Offices.Where(d => d.Code != "00000000" && d.Code.StartsWith(user.OfficeId.Substring(0, 2)) && d.Code.Substring(5, 3) == "000"), "Id", "Name", office.Id);
                         }
@@ -582,13 +580,13 @@ namespace EPES.Controllers
 
                     if (User.IsInRole("Admin") || User.IsInRole("User") || (User.IsInRole("Manager") && user.OfficeId.Substring(2, 6) == "000000"))
                     {
-                        if (String.IsNullOrEmpty(selectoffice))
+                        if (String.IsNullOrEmpty(dataView.selectoffice))
                         {
                             ViewBag.AuditOfficeId = new SelectList(_context.Offices.Where(d => d.Code != "00000000" && d.Code.Substring(0, 3) == "000"), "Id", "Name", office.Id);
                         }
                         else
                         {
-                            if (selectoffice.Substring(0, 3) == "000")
+                            if (dataView.selectoffice.Substring(0, 3) == "000")
                             {
                                 ViewBag.AuditOfficeId = new SelectList(_context.Offices.Where(d => d.Code != "00000000" && d.Code.Substring(0, 3) == "000"), "Id", "Name", officeselect.Id);
                             }
@@ -612,7 +610,7 @@ namespace EPES.Controllers
 
                     if (User.IsInRole("Admin"))
                     {
-                        if (String.IsNullOrEmpty(selectoffice))
+                        if (String.IsNullOrEmpty(dataView.selectoffice))
                         {
                             ViewBag.OfficeId = new SelectList(_context.Offices.Where(d => d.Code != "00000000" && d.Code.Substring(5, 3) == "000"), "Id", "Name", office.Id);
                         }
@@ -633,7 +631,7 @@ namespace EPES.Controllers
                             item.Add(itemAdd);
                         }
 
-                        if (String.IsNullOrEmpty(selectoffice))
+                        if (String.IsNullOrEmpty(dataView.selectoffice))
                         {
                             ViewBag.OfficeId = new SelectList(selectitem, "Id", "Name", office.Id);
                             ViewBag.AuditOfficeId = new SelectList(item, "Id", "Name", office.Id);
@@ -668,7 +666,7 @@ namespace EPES.Controllers
 
                     if (User.IsInRole("Admin") || (User.IsInRole("Manager") && user.OfficeId.StartsWith("000")))
                     {
-                        if (String.IsNullOrEmpty(selectoffice))
+                        if (String.IsNullOrEmpty(dataView.selectoffice))
                         {
                             ViewBag.OfficeId = new SelectList(_context.Offices.Where(d => d.Code != "00000000" && d.Code.Substring(5, 3) == "000"), "Id", "Name", office.Id);
                         }
@@ -680,7 +678,7 @@ namespace EPES.Controllers
 
                     if (User.IsInRole("Manager") && user.OfficeId.Substring(2, 6) == "000000")
                     {
-                        if (String.IsNullOrEmpty(selectoffice))
+                        if (String.IsNullOrEmpty(dataView.selectoffice))
                         {
                             ViewBag.OfficeId = new SelectList(_context.Offices.Where(d => d.Code != "00000000" && d.Code.StartsWith(user.OfficeId.Substring(0, 2)) && d.Code.Substring(5, 3) == "000"), "Id", "Name", office.Id);
                         }
@@ -700,13 +698,13 @@ namespace EPES.Controllers
 
                     if (User.IsInRole("Admin") || User.IsInRole("User") || (User.IsInRole("Manager") && user.OfficeId.Substring(2, 6) == "000000"))
                     {
-                        if (String.IsNullOrEmpty(selectoffice))
+                        if (String.IsNullOrEmpty(dataView.selectoffice))
                         {
                             ViewBag.AuditOfficeId = new SelectList(_context.Offices.Where(d => d.Code != "00000000" && d.Code.Substring(0, 3) == "000"), "Id", "Name", office.Id);
                         }
                         else
                         {
-                            if (selectoffice.Substring(0, 3) == "000")
+                            if (dataView.selectoffice.Substring(0, 3) == "000")
                             {
                                 ViewBag.AuditOfficeId = new SelectList(_context.Offices.Where(d => d.Code != "00000000" && d.Code.Substring(0, 3) == "000"), "Id", "Name", officeselect.Id);
                             }
@@ -726,8 +724,8 @@ namespace EPES.Controllers
                     break;
             }
 
-            ViewBag.selectoffice = selectoffice;
-            ViewBag.yearPoint = yearPoint;
+            ViewBag.selectoffice = dataView.selectoffice;
+            ViewBag.yearPoint = dataView.yearPoint;
             return View(dataView);
         }
 
@@ -981,7 +979,7 @@ namespace EPES.Controllers
 
             if (await TryUpdateModelAsync<PointOfEvaluation>(
                 pointOfEvaluationToUpdate, "",
-                p => p.Year, p => p.DetailPlan, p => p.Point, p => p.SubPoint, p => p.Plan, p => p.ExpectPlan, p => p.Ddrive, p => p.Name, p => p.Unit, p => p.Weight, p => p.Rate1, p => p.DetailRate1, p => p.Rate2, p => p.DetailRate2, p => p.Rate3, p => p.DetailRate3, p => p.Rate4, p => p.DetailRate4, p => p.Rate5, p => p.DetailRate5, p => p.OwnerOfficeId, p => p.AuditOfficeId, p => p.UpdateUserId, p => p.Detail2Rate1, p => p.Detail2Rate2, p => p.Detail2Rate3, p => p.Detail2Rate4, p => p.Detail2Rate5, p => p.R1MStart, p => p.R1MStop, p => p.R1MStart2, p => p.R1MStop2, p => p.R2MStart, p => p.R2MStop, p => p.R2MStart2, p => p.R2MStop2, p => p.R3MStart, p => p.R3MStop, p => p.R3MStart2, p => p.R3MStop2, p => p.R4MStart, p => p.R4MStop, p => p.R4MStart2, p => p.R4MStop2, p => p.R5MStart, p => p.R5MStop, p => p.R5MStart2, p => p.R5MStop2 , p => p.LRate1, p => p.LRate2, p => p.LRate3, p => p.LRate4, p => p.LRate5))
+                p => p.Year, p => p.DetailPlan, p => p.Point, p => p.SubPoint, p => p.Plan, p => p.ExpectPlan, p => p.Ddrive, p => p.Name, p => p.Unit, p => p.Weight))
             {
                 try
                 {
@@ -1275,23 +1273,6 @@ namespace EPES.Controllers
             return _context.PointOfEvaluations.Any(e => e.Id == id);
         }
 
-        //private void PopulateOfficesDropDownList(object selectedOffice = null)
-        //{
-        //    var officesQuery = from d in _context.Offices
-        //                       where (d.Code.Substring(5, 3) == "000")
-        //                       orderby d.Id
-        //                       select d;
-        //    ViewBag.OfficeId = new SelectList(officesQuery.AsNoTracking(), "Id", "Name", selectedOffice);
-        //}
-
-        //private void PopulateAuditOfficesDropDownList(object selectedOffice = null)
-        //{
-        //    var officesQuery = from d in _context.Offices
-        //                       where (d.Code != "00000000" && d.Code.Substring(5, 3) == "000")
-        //                       orderby d.Id
-        //                       select d;
-        //    ViewBag.AuditOfficeId = new SelectList(officesQuery.AsNoTracking(), "Id", "Name", selectedOffice);
-        //}
 
         public async Task SaveExpect(int poeid, int ownerofficeid, int month, decimal expect, string userid)
         {
@@ -1374,42 +1355,42 @@ namespace EPES.Controllers
                             dataToCopy.Weight = data.Weight;
                             dataToCopy.Unit = data.Unit;
 
-                            dataToCopy.Rate1 = data.Rate1;
-                            dataToCopy.Rate2 = data.Rate2;
-                            dataToCopy.Rate3 = data.Rate3;
-                            dataToCopy.Rate4 = data.Rate4;
-                            dataToCopy.Rate5 = data.Rate5;
-                            dataToCopy.DetailRate1 = data.DetailRate1;
-                            dataToCopy.DetailRate2 = data.DetailRate2;
-                            dataToCopy.DetailRate3 = data.DetailRate3;
-                            dataToCopy.DetailRate4 = data.DetailRate4;
-                            dataToCopy.DetailRate5 = data.DetailRate5;
-                            dataToCopy.Detail2Rate1 = data.Detail2Rate1;
-                            dataToCopy.Detail2Rate2 = data.Detail2Rate2;
-                            dataToCopy.Detail2Rate3 = data.Detail2Rate3;
-                            dataToCopy.Detail2Rate4 = data.Detail2Rate4;
-                            dataToCopy.Detail2Rate5 = data.Detail2Rate5;
-                            dataToCopy.Rate1MonthStart = data.Rate1MonthStart;
-                            dataToCopy.Rate1MonthStop = data.Rate1MonthStop;
-                            dataToCopy.Rate1MonthStart2 = data.Rate1MonthStart2;
-                            dataToCopy.Rate1MonthStop2 = data.Rate1MonthStop2;
-                            dataToCopy.Rate2MonthStart = data.Rate2MonthStart;
-                            dataToCopy.Rate2MonthStop = data.Rate2MonthStop;
-                            dataToCopy.Rate2MonthStart2 = data.Rate2MonthStart2;
-                            dataToCopy.Rate2MonthStop2 = data.Rate2MonthStop2;
-                            dataToCopy.Rate3MonthStart = data.Rate3MonthStart;
-                            dataToCopy.Rate3MonthStop = data.Rate3MonthStop;
-                            dataToCopy.Rate3MonthStart2 = data.Rate3MonthStart2;
-                            dataToCopy.Rate3MonthStop2 = data.Rate3MonthStop2;
-                            dataToCopy.Rate4MonthStart = data.Rate4MonthStart;
-                            dataToCopy.Rate4MonthStop = data.Rate4MonthStop;
-                            dataToCopy.Rate4MonthStart2 = data.Rate4MonthStart2;
-                            dataToCopy.Rate4MonthStop2 = data.Rate4MonthStop2;
-                            dataToCopy.Rate5MonthStart = data.Rate5MonthStart;
-                            dataToCopy.Rate5MonthStop = data.Rate5MonthStop;
-                            dataToCopy.Rate5MonthStart2 = data.Rate5MonthStart2;
-                            dataToCopy.Rate5MonthStop2 = data.Rate5MonthStop2;
-                            dataToCopy.UpdateUserId = user.Id;
+                            //dataToCopy.Rate1 = data.Rate1;
+                            //dataToCopy.Rate2 = data.Rate2;
+                            //dataToCopy.Rate3 = data.Rate3;
+                            //dataToCopy.Rate4 = data.Rate4;
+                            //dataToCopy.Rate5 = data.Rate5;
+                            //dataToCopy.DetailRate1 = data.DetailRate1;
+                            //dataToCopy.DetailRate2 = data.DetailRate2;
+                            //dataToCopy.DetailRate3 = data.DetailRate3;
+                            //dataToCopy.DetailRate4 = data.DetailRate4;
+                            //dataToCopy.DetailRate5 = data.DetailRate5;
+                            //dataToCopy.Detail2Rate1 = data.Detail2Rate1;
+                            //dataToCopy.Detail2Rate2 = data.Detail2Rate2;
+                            //dataToCopy.Detail2Rate3 = data.Detail2Rate3;
+                            //dataToCopy.Detail2Rate4 = data.Detail2Rate4;
+                            //dataToCopy.Detail2Rate5 = data.Detail2Rate5;
+                            //dataToCopy.Rate1MonthStart = data.Rate1MonthStart;
+                            //dataToCopy.Rate1MonthStop = data.Rate1MonthStop;
+                            //dataToCopy.Rate1MonthStart2 = data.Rate1MonthStart2;
+                            //dataToCopy.Rate1MonthStop2 = data.Rate1MonthStop2;
+                            //dataToCopy.Rate2MonthStart = data.Rate2MonthStart;
+                            //dataToCopy.Rate2MonthStop = data.Rate2MonthStop;
+                            //dataToCopy.Rate2MonthStart2 = data.Rate2MonthStart2;
+                            //dataToCopy.Rate2MonthStop2 = data.Rate2MonthStop2;
+                            //dataToCopy.Rate3MonthStart = data.Rate3MonthStart;
+                            //dataToCopy.Rate3MonthStop = data.Rate3MonthStop;
+                            //dataToCopy.Rate3MonthStart2 = data.Rate3MonthStart2;
+                            //dataToCopy.Rate3MonthStop2 = data.Rate3MonthStop2;
+                            //dataToCopy.Rate4MonthStart = data.Rate4MonthStart;
+                            //dataToCopy.Rate4MonthStop = data.Rate4MonthStop;
+                            //dataToCopy.Rate4MonthStart2 = data.Rate4MonthStart2;
+                            //dataToCopy.Rate4MonthStop2 = data.Rate4MonthStop2;
+                            //dataToCopy.Rate5MonthStart = data.Rate5MonthStart;
+                            //dataToCopy.Rate5MonthStop = data.Rate5MonthStop;
+                            //dataToCopy.Rate5MonthStart2 = data.Rate5MonthStart2;
+                            //dataToCopy.Rate5MonthStop2 = data.Rate5MonthStop2;
+                            //dataToCopy.UpdateUserId = user.Id;
 
                             _context.Add(dataToCopy);
                             await _context.SaveChangesAsync();

@@ -163,21 +163,6 @@
                                         @if (Model.pointA[i].Unit == UnitOfPoint.ร้อยละ)
                                         {
                                             <td>
-                                                @*@{
-                                                        //@Html.TextBox("UpdateData[" + @i + "].Result", de?.Result, new { @class = "form-control" })
-                                                        if (de != null)
-                                                        {
-                                                            double v = (double)de.Result;
-                                                            Html.DevExtreme().NumberBox()
-                                                            .Mode(NumberBoxMode.Number)
-                                                            .Format("#,###.####")
-                                                            .ID("UpdateData[" + @i + "].Result")
-                                                            .Value(v)
-                                                            .Option("class", "form-control")
-                                                            .Width("100%")
-                                                            .Render();
-                                                        }
-                                                    }*@
                                                 <input type="text" name="UpdateData[@i].Result" value="@String.Format("{0:N4}", de?.Result)" />
                                                 <input type="hidden" name="UpdateData[@i].Id" value=@de?.Id />
                                                 <input type="hidden" name="UpdateData[@i].poeid" value=@Model.pointA[i].Id />

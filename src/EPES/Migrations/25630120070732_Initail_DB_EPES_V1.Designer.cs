@@ -7,17 +7,17 @@ using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
-namespace EPES.Data.Migrations
+namespace EPES.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("25621028095352_RemoveLevelRate")]
-    partial class RemoveLevelRate
+    [Migration("25630120070732_Initail_DB_EPES_V1")]
+    partial class Initail_DB_EPES_V1
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "2.2.2-servicing-10034")
+                .HasAnnotation("ProductVersion", "2.2.6-servicing-10079")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
@@ -102,9 +102,13 @@ namespace EPES.Data.Migrations
 
                     b.Property<string>("AttachFile");
 
-                    b.Property<string>("AuditComment");
+                    b.Property<string>("CommentApproveLevel1");
 
-                    b.Property<string>("CommentApprove");
+                    b.Property<string>("CommentApproveLevel2");
+
+                    b.Property<string>("CommentApproveLevel3");
+
+                    b.Property<string>("CommentApproveLevel4");
 
                     b.Property<DateTime?>("CompletedDate");
 
@@ -127,6 +131,8 @@ namespace EPES.Data.Migrations
                         .HasColumnType("decimal(38, 10)")
                         .HasDefaultValue(0m);
 
+                    b.Property<int>("RoundId");
+
                     b.Property<byte[]>("RowVersion")
                         .IsConcurrencyToken()
                         .ValueGeneratedOnAddOrUpdate();
@@ -140,6 +146,8 @@ namespace EPES.Data.Migrations
                     b.HasIndex("OfficeId");
 
                     b.HasIndex("PointOfEvaluationId");
+
+                    b.HasIndex("RoundId");
 
                     b.HasIndex("UpdateUserId");
 
@@ -176,46 +184,13 @@ namespace EPES.Data.Migrations
 
                     b.Property<int?>("AuditOfficeId");
 
+                    b.Property<int>("AutoApp");
+
                     b.Property<int?>("Ddrive");
-
-                    b.Property<string>("Detail2Rate1");
-
-                    b.Property<string>("Detail2Rate2");
-
-                    b.Property<string>("Detail2Rate3");
-
-                    b.Property<string>("Detail2Rate4");
-
-                    b.Property<string>("Detail2Rate5");
 
                     b.Property<string>("DetailPlan");
 
-                    b.Property<string>("DetailRate1");
-
-                    b.Property<string>("DetailRate2");
-
-                    b.Property<string>("DetailRate3");
-
-                    b.Property<string>("DetailRate4");
-
-                    b.Property<string>("DetailRate5");
-
                     b.Property<int?>("ExpectPlan");
-
-                    b.Property<decimal>("LRate1")
-                        .HasColumnType("decimal(18, 4)");
-
-                    b.Property<decimal>("LRate2")
-                        .HasColumnType("decimal(18, 4)");
-
-                    b.Property<decimal>("LRate3")
-                        .HasColumnType("decimal(18, 4)");
-
-                    b.Property<decimal>("LRate4")
-                        .HasColumnType("decimal(18, 4)");
-
-                    b.Property<decimal>("LRate5")
-                        .HasColumnType("decimal(18, 4)");
 
                     b.Property<string>("Name");
 
@@ -224,61 +199,6 @@ namespace EPES.Data.Migrations
                     b.Property<int>("Plan");
 
                     b.Property<int>("Point");
-
-                    b.Property<decimal>("Rate1")
-                        .HasColumnType("decimal(18, 4)");
-
-                    b.Property<DateTime?>("Rate1MonthStart");
-
-                    b.Property<DateTime?>("Rate1MonthStart2");
-
-                    b.Property<DateTime?>("Rate1MonthStop");
-
-                    b.Property<DateTime?>("Rate1MonthStop2");
-
-                    b.Property<decimal>("Rate2")
-                        .HasColumnType("decimal(18, 4)");
-
-                    b.Property<DateTime?>("Rate2MonthStart");
-
-                    b.Property<DateTime?>("Rate2MonthStart2");
-
-                    b.Property<DateTime?>("Rate2MonthStop");
-
-                    b.Property<DateTime?>("Rate2MonthStop2");
-
-                    b.Property<decimal>("Rate3")
-                        .HasColumnType("decimal(18, 4)");
-
-                    b.Property<DateTime?>("Rate3MonthStart");
-
-                    b.Property<DateTime?>("Rate3MonthStart2");
-
-                    b.Property<DateTime?>("Rate3MonthStop");
-
-                    b.Property<DateTime?>("Rate3MonthStop2");
-
-                    b.Property<decimal>("Rate4")
-                        .HasColumnType("decimal(18, 4)");
-
-                    b.Property<DateTime?>("Rate4MonthStart");
-
-                    b.Property<DateTime?>("Rate4MonthStart2");
-
-                    b.Property<DateTime?>("Rate4MonthStop");
-
-                    b.Property<DateTime?>("Rate4MonthStop2");
-
-                    b.Property<decimal>("Rate5")
-                        .HasColumnType("decimal(18, 4)");
-
-                    b.Property<DateTime?>("Rate5MonthStart");
-
-                    b.Property<DateTime?>("Rate5MonthStart2");
-
-                    b.Property<DateTime?>("Rate5MonthStop");
-
-                    b.Property<DateTime?>("Rate5MonthStop2");
 
                     b.Property<int>("SubPoint")
                         .ValueGeneratedOnAdd()
@@ -302,6 +222,70 @@ namespace EPES.Data.Migrations
                     b.HasIndex("UpdateUserId");
 
                     b.ToTable("PointOfEvaluations");
+                });
+
+            modelBuilder.Entity("EPES.Models.Round", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("DetailRate1");
+
+                    b.Property<string>("DetailRate2");
+
+                    b.Property<string>("DetailRate3");
+
+                    b.Property<string>("DetailRate4");
+
+                    b.Property<string>("DetailRate5");
+
+                    b.Property<int?>("LevelNumber");
+
+                    b.Property<int>("PointOfEvaluationId");
+
+                    b.Property<decimal>("Rate1")
+                        .HasColumnType("decimal(18, 4)");
+
+                    b.Property<DateTime?>("Rate1MonthStart");
+
+                    b.Property<DateTime?>("Rate1MonthStop");
+
+                    b.Property<decimal>("Rate2")
+                        .HasColumnType("decimal(18, 4)");
+
+                    b.Property<DateTime?>("Rate2MonthStart");
+
+                    b.Property<DateTime?>("Rate2MonthStop");
+
+                    b.Property<decimal>("Rate3")
+                        .HasColumnType("decimal(18, 4)");
+
+                    b.Property<DateTime?>("Rate3MonthStart");
+
+                    b.Property<DateTime?>("Rate3MonthStop");
+
+                    b.Property<decimal>("Rate4")
+                        .HasColumnType("decimal(18, 4)");
+
+                    b.Property<DateTime?>("Rate4MonthStart");
+
+                    b.Property<DateTime?>("Rate4MonthStop");
+
+                    b.Property<decimal>("Rate5")
+                        .HasColumnType("decimal(18, 4)");
+
+                    b.Property<DateTime?>("Rate5MonthStart");
+
+                    b.Property<DateTime?>("Rate5MonthStop");
+
+                    b.Property<int>("RoundNumber");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("PointOfEvaluationId");
+
+                    b.ToTable("Rounds");
                 });
 
             modelBuilder.Entity("EPES.Models.Score", b =>
@@ -474,6 +458,11 @@ namespace EPES.Data.Migrations
                         .HasForeignKey("PointOfEvaluationId")
                         .OnDelete(DeleteBehavior.Restrict);
 
+                    b.HasOne("EPES.Models.Round", "Round")
+                        .WithMany("DataForEvaluations")
+                        .HasForeignKey("RoundId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
                     b.HasOne("EPES.Models.ApplicationUser", "UpdateUser")
                         .WithMany("DataForEvaluations")
                         .HasForeignKey("UpdateUserId");
@@ -499,6 +488,14 @@ namespace EPES.Data.Migrations
                     b.HasOne("EPES.Models.ApplicationUser", "UpdateUser")
                         .WithMany()
                         .HasForeignKey("UpdateUserId");
+                });
+
+            modelBuilder.Entity("EPES.Models.Round", b =>
+                {
+                    b.HasOne("EPES.Models.PointOfEvaluation", "PointOfEvaluation")
+                        .WithMany("Rounds")
+                        .HasForeignKey("PointOfEvaluationId")
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
 
             modelBuilder.Entity("EPES.Models.Score", b =>

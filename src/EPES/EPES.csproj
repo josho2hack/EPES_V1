@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk.Web">
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup>
     <TargetFramework>netcoreapp2.2</TargetFramework>
@@ -15,36 +15,49 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="Data\Migrations\25620522023507_editPOE.cs" />
-    <Compile Remove="Data\Migrations\25620522023507_editPOE.Designer.cs" />
-    <Compile Remove="Data\Migrations\25620522065450_editDpoe.cs" />
-    <Compile Remove="Data\Migrations\25620522065450_editDpoe.Designer.cs" />
-    <Compile Remove="Data\Migrations\25620522150226_updateDtoPoe.cs" />
-    <Compile Remove="Data\Migrations\25620522150226_updateDtoPoe.Designer.cs" />
-    <Compile Remove="Data\Migrations\25620522151335_updateDtoPoe.cs" />
-    <Compile Remove="Data\Migrations\25620522151335_updateDtoPoe.Designer.cs" />
-    <Compile Remove="Data\Migrations\25620523063556_updatedata.cs" />
-    <Compile Remove="Data\Migrations\25620523063556_updatedata.Designer.cs" />
-    <Compile Remove="Data\Migrations\25620523063921_updatedata.cs" />
-    <Compile Remove="Data\Migrations\25620523063921_updatedata.Designer.cs" />
-    <Compile Remove="Data\Migrations\25620524024646_updatedata.cs" />
-    <Compile Remove="Data\Migrations\25620524024646_updatedata.Designer.cs" />
-    <Compile Remove="Data\Migrations\25620701084736_updateCompleteDate.cs" />
-    <Compile Remove="Data\Migrations\25620701084736_updateCompleteDate.Designer.cs" />
-    <Compile Remove="Data\Migrations\25620801120122_ScoreUpdateMonth.cs" />
-    <Compile Remove="Data\Migrations\25620801120122_ScoreUpdateMonth.Designer.cs" />
-    <Compile Remove="Data\Migrations\25621009042149_UpdatePoint.cs" />
-    <Compile Remove="Data\Migrations\25621009042149_UpdatePoint.Designer.cs" />
+    <Compile Remove="Reports\**" />
+    <Compile Remove="Views\Audit\**" />
+    <Compile Remove="Views\DataForEvaluations\**" />
+    <Compile Remove="Views\Reports\**" />
+    <Compile Remove="Views\Results\**" />
+    <Content Remove="Reports\**" />
+    <Content Remove="Views\Audit\**" />
+    <Content Remove="Views\DataForEvaluations\**" />
+    <Content Remove="Views\Reports\**" />
+    <Content Remove="Views\Results\**" />
+    <EmbeddedResource Remove="Reports\**" />
+    <EmbeddedResource Remove="Views\Audit\**" />
+    <EmbeddedResource Remove="Views\DataForEvaluations\**" />
+    <EmbeddedResource Remove="Views\Reports\**" />
+    <EmbeddedResource Remove="Views\Results\**" />
+    <None Remove="Reports\**" />
+    <None Remove="Views\Audit\**" />
+    <None Remove="Views\DataForEvaluations\**" />
+    <None Remove="Views\Reports\**" />
+    <None Remove="Views\Results\**" />
   </ItemGroup>
 
   <ItemGroup>
-    <None Remove="Reports\PakReport.repx" />
-    <None Remove="Reports\Report.repx" />
+    <Compile Remove="Controllers\AuditController.cs" />
+    <Compile Remove="Controllers\DataForEvaluationsController.cs" />
+    <Compile Remove="Controllers\ReportsController.cs" />
+    <Compile Remove="Controllers\ResultsController.cs" />
+    <Compile Remove="PakReport.cs" />
+    <Compile Remove="PakReport.Designer.cs" />
+    <Compile Remove="Report.cs" />
+    <Compile Remove="Report.Designer.cs" />
+    <Compile Remove="ReportStorageWebExtension.cs" />
   </ItemGroup>
 
   <ItemGroup>
-    <EmbeddedResource Include="Reports\PakReport.repx" />
-    <EmbeddedResource Include="Reports\Report.repx" />
+    <Content Remove="Views\PointOfEvaluations\Delete.cshtml" />
+    <Content Remove="Views\PointOfEvaluations\Details.cshtml" />
+    <Content Remove="Views\PointOfEvaluations\Edit.cshtml" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Remove="PakReport.repx" />
+    <None Remove="Report.repx" />
   </ItemGroup>
 
 
@@ -135,22 +148,6 @@
     <None Include="wwwroot\js\devextreme\vectormap-utils\dx.vectormaputils.debug.js" />
     <None Include="wwwroot\js\devextreme\vectormap-utils\dx.vectormaputils.js" />
     <None Include="wwwroot\js\devextreme\vectormap-utils\dx.vectormaputils.node.js" />
-  </ItemGroup>
-
-
-  <ItemGroup>
-    <Compile Update="Reports\PakReport.cs">
-      <DependentUpon>PakReport.repx</DependentUpon>
-    </Compile>
-    <Compile Update="Reports\PakReport.Designer.cs">
-      <DependentUpon>PakReport.repx</DependentUpon>
-    </Compile>
-    <Compile Update="Reports\Report.cs">
-      <DependentUpon>Report.repx</DependentUpon>
-    </Compile>
-    <Compile Update="Reports\Report.Designer.cs">
-      <DependentUpon>Report.repx</DependentUpon>
-    </Compile>
   </ItemGroup>
 
 

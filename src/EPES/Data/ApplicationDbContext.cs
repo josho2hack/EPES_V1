@@ -20,6 +20,11 @@ namespace EPES.Data
             base.OnModelCreating(builder);
 
             builder.Entity<DataForEvaluation>()
+                .HasOne(d => d.Round)
+                .WithMany(r => r.DataForEvaluations)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            builder.Entity<DataForEvaluation>()
                 .HasOne(d => d.PointOfEvaluation)
                 .WithMany(p => p.DataForEvaluations)
                 .OnDelete(DeleteBehavior.Restrict);
@@ -42,11 +47,12 @@ namespace EPES.Data
             .HasDefaultValue(0);
         }
 
+        public DbSet<ApplicationUser> ApplicationUsers { get; set; }
         public DbSet<Office> Offices { get; set; }
         public DbSet<PointOfEvaluation> PointOfEvaluations { get; set; }
         public DbSet<DataForEvaluation> DataForEvaluations { get; set; }
         public DbSet<Score> Scores { get; set; }
         public DbSet<ScoreDraft> ScoreDrafts { get; set; }
-        public DbSet<ApplicationUser> ApplicationUsers { get; set; }
+        public DbSet<Round> Rounds { get; set; }
     }
 }
