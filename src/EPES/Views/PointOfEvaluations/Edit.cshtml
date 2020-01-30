@@ -1,4 +1,5 @@
-﻿@model EPES.Models.PointOfEvaluation
+﻿@using Microsoft.AspNetCore.Identity
+@model EPES.ViewModels.PointOfEvaluationViewModel
 
 @{
     ViewData["Title"] = "Edit";
@@ -15,256 +16,822 @@
             <div class="row">
                 <div class="col-md-8">
                     <form asp-action="Edit">
-                        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-                        <div class="form-group">
-                            <label asp-for="Year" class="control-label"></label>
-                            <select asp-for="Year" class="form-control">
-                                <option value="@(new DateTime(DateTime.Now.AddYears(-1).Year,1,1))">@DateTime.Now.AddYears(-1).ToString("yyyy")</option>
-                                <option value="@(new DateTime(DateTime.Now.Year,1,1))">@DateTime.Now.ToString("yyyy")</option>
-                                <option value="@(new DateTime(DateTime.Now.AddYears(1).Year,1,1))">@DateTime.Now.AddYears(1).ToString("yyyy")</option>
-                            </select>
-                            <span asp-validation-for="Year" class="text-danger"></span>
-                        </div>
-                        <div class="form-group">
-                            <label asp-for="OwnerOfficeId" class="control-label"></label>
-                            <select asp-for="OwnerOfficeId" class="form-control" asp-items="ViewBag.OfficeId"></select>
-                            <span asp-validation-for="OwnerOfficeId" class="text-danger"></span>
-                        </div>
-                        <div class="form-group">
-                            <label asp-for="AuditOfficeId" class="control-label"></label>
-                            <select asp-for="AuditOfficeId" class="form-control" asp-items="ViewBag.AuditOfficeId"></select>
-                            <span asp-validation-for="AuditOfficeId" class="text-danger"></span>
-                        </div>
-                        <div class="form-group">
-                            <label asp-for="Point" class="control-label"></label>
-                            <input asp-for="Point" class="form-control" />
-                            <span asp-validation-for="Point" class="text-danger"></span>
-                        </div>
-                        <div class="form-group">
-                            <label asp-for="SubPoint" class="control-label"></label>
-                            <input asp-for="SubPoint" class="form-control" />
-                            <span asp-validation-for="SubPoint" class="text-danger"></span>
-                        </div>
-                        <div class="form-group">
-                            <label asp-for="ExpectPlan" class="control-label"></label>
-                            <select asp-for="ExpectPlan" class="form-control" asp-items="Html.GetEnumSelectList<ExpectPlanRD>()"></select>
-                        </div>
-                        <div class="form-group">
-                            <label asp-for="Ddrive" class="control-label"></label>
-                            <select asp-for="Ddrive" class="form-control" asp-items="Html.GetEnumSelectList<DdriveRD>()"></select>
-                        </div>
-                        <div class="form-group">
-                            <label asp-for="Plan" class="control-label"></label>
-                            <select asp-for="Plan" class="control-label">
-                                <option value="0">A</option>
-                                <option value="1">B</option>
-                                <option value="2">C</option>
-                                <option value="3">D</option>
-                            </select>
-                            <span asp-validation-for="Plan" class="text-danger"></span>
-                        </div>
-                        <div class="form-group">
-                            <label asp-for="DetailPlan" class="control-label"></label>
-                            <input asp-for="DetailPlan" class="form-control" />
-                            <span asp-validation-for="DetailPlan" class="text-danger"></span>
-                        </div>
-                        <div class="form-group">
-                            <label asp-for="Name" class="control-label"></label>
-                            <input asp-for="Name" class="form-control" />
-                            <span asp-validation-for="Name" class="text-danger"></span>
-                        </div>
-                        <div class="form-group">
-                            <label asp-for="Weight" class="control-label"></label>
-                            <input asp-for="Weight" class="form-control" />
-                            <span asp-validation-for="Weight" class="text-danger"></span>
-                        </div>
-                        <fieldset>
-                            <legend>เกณฑ์การประเมิน</legend>
+                        <div class="card-body">
                             <div class="row">
-                                <div class="form-group col-md-6">
-                                    <label asp-for="Unit" class="control-label"></label>
-                                    <select asp-for="Unit" class="form-control" asp-items="Html.GetEnumSelectList<UnitOfPoint>()"></select>
-                                </div>
-                                <div class="form-group col-md-6" name="round">
-                                    <label class="control-label">รอบการประเมิน</label>
-                                    <select id="round-select" class="form-control">
-                                        <option value="1">1</option>
-                                        <option value="2">2</option>
-                                    </select>
+                                <div class="col-md-8">
+                                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                                    <div class="form-group">
+                                        <label asp-for="point.OwnerOfficeId" class="control-label"></label>
+                                        <select asp-for="point.OwnerOfficeId" class="form-control" asp-items="ViewBag.OfficeId"></select>
+                                        <span asp-validation-for="point.OwnerOfficeId" class="text-danger"></span>
+                                    </div>
+                                    <div class="form-group">
+                                        <label asp-for="point.AuditOfficeId" class="control-label"></label>
+                                        <select asp-for="point.AuditOfficeId" class="form-control" asp-items="ViewBag.AuditOfficeId"></select>
+                                        <span asp-validation-for="point.AuditOfficeId" class="text-danger"></span>
+                                    </div>
+                                    <div class="form-group">
+                                        <label asp-for="point.Point" class="control-label"></label>
+                                        <input asp-for="point.Point" class="form-control" min="1" value="1" />
+                                        <span asp-validation-for="point.Point" class="text-danger"></span>
+                                    </div>
+                                    <div class="form-group">
+                                        <label asp-for="point.SubPoint" class="control-label"></label>
+                                        <select id="point.SubPoint" name="point.SubPoint" class="form-control">
+                                            <option selected="selected" value=0>ไม่มี</option>
+                                            <option value=1>ตัวชี้วัดย่อย 1</option>
+                                            <option value=2>ตัวชี้วัดย่อย 2</option>
+                                            <option value=3>ตัวชี้วัดย่อย 3</option>
+                                            <option value=4>ตัวชี้วัดย่อย 4</option>
+                                            <option value=5>ตัวชี้วัดย่อย 5</option>
+                                        </select>
+                                        <span asp-validation-for="point.SubPoint" class="text-danger"></span>
+                                    </div>
+                                    <div class="form-group">
+                                        <label asp-for="point.ExpectPlan" class="control-label"></label>
+                                        <select asp-for="point.ExpectPlan" class="form-control" asp-items="Html.GetEnumSelectList<ExpectPlanRD>()"></select>
+                                        <span asp-validation-for="point.ExpectPlan" class="text-danger"></span>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="control-label">D<sup>2</sup>RIVE</label>
+                                        <select asp-for="point.Ddrive" class="form-control" asp-items="Html.GetEnumSelectList<DdriveRD>()"></select>
+                                        <span asp-validation-for="point.Ddrive" class="text-danger"></span>
+                                    </div>
+                                    <div class="form-group">
+                                        <label asp-for="point.Plan" class="control-label"></label>
+                                        <select asp-for="point.Plan" class="form-control" asp-items="Html.GetEnumSelectList<TypeOfPlan>()"></select>
+                                        <span asp-validation-for="point.Plan" class="text-danger"></span>
+                                    </div>
+                                    <div class="form-group">
+                                        <label asp-for="point.DetailPlan" class="control-label"></label>
+                                        <input asp-for="point.DetailPlan" class="form-control" />
+                                        <span asp-validation-for="point.DetailPlan" class="text-danger"></span>
+                                    </div>
+                                    <div class="form-group">
+                                        <label asp-for="point.Name" class="control-label"></label>
+                                        <input asp-for="point.Name" class="form-control" />
+                                        <span asp-validation-for="point.Name" class="text-danger"></span>
+                                    </div>
+                                    <div class="form-group">
+                                        <label asp-for="point.Weight" class="control-label"></label>
+                                        <input asp-for="point.Weight" class="form-control" />
+                                        <span asp-validation-for="point.Weight" class="text-danger"></span>
+                                    </div>
+                                    <div class="form-group">
+                                        <label asp-for="point.AutoApp" class="control-label"></label>
+                                        <select asp-for="point.AutoApp" class="form-control" asp-items="Html.GetEnumSelectList<AutoApps>()"></select>
+                                        <span asp-validation-for="point.AutoApp" class="text-danger"></span>
+                                    </div>
+                                    <fieldset>
+                                        <legend>เกณฑ์การประเมิน</legend>
+                                        <div class="row">
+                                            <div class="form-group col-md-6 form-inline">
+                                                <label asp-for="point.Unit" class="control-label"></label>
+                                                <select asp-for="point.Unit" class="form-control" asp-items="Html.GetEnumSelectList<UnitOfPoint>()"></select>
+                                            </div>
+                                            <div class="form-group col-md-6 form-inline">
+                                                <label class="card-text control-label">รอบการประเมิน</label>
+                                                <input asp-for="roundNumber" min="1" max="2" value="1" class="form-control" />
+                                            </div>
+                                        </div>
+                                        <div class="accordion" id="round">
+                                            <div class="card" id="RateRound1">
+                                                <div class="card-header" id="RateHeading1">
+                                                    <h5 class="mb-0">
+                                                        <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#RateCollapse1" aria-expanded="true" aria-controls="RateCollapse1">
+                                                            รอบที่ 1
+                                                        </button>
+                                                    </h5>
+                                                </div>
+                                                <div id="RateCollapse1" class="collapse show" aria-labelledby="RateHeading1" data-parent="#round">
+                                                    <div class="card-body">
+                                                        <div class="row">
+                                                            <div class="form-group col-md-6">
+                                                                <label asp-for="Round.Rate1" class="control-label"></label>
+                                                                <div class="input-group">
+                                                                    <input asp-for="Round.Rate1" class="form-control" value="96" />
+                                                                    <div class="input-group-append">
+                                                                        <span class="input-group-text">%</span>
+                                                                    </div>
+                                                                </div>
+                                                                <span asp-validation-for="Round.Rate1" class="text-danger"></span>
+                                                            </div>
+                                                            <div class="form-group col-md-6">
+                                                                <label asp-for="Round.R1MStart" class="control-label"></label>
+                                                                <input asp-for="Round.R1MStart" class="form-control" />
+                                                                <span asp-validation-for="Round.R1MStart" class="text-danger"></span>
+                                                            </div>
+                                                        </div>
+                                                        <div class="row">
+                                                            <div class="form-group col-md-6">
+                                                                <label asp-for="Round.Rate2" class="control-label"></label>
+                                                                <div class="input-group">
+                                                                    <input asp-for="Round.Rate2" class="form-control" value="97" />
+                                                                    <div class="input-group-append">
+                                                                        <span class="input-group-text">%</span>
+                                                                    </div>
+                                                                </div>
+                                                                <span asp-validation-for="Round.Rate2" class="text-danger"></span>
+                                                            </div>
+                                                        </div>
+                                                        <div class="row">
+                                                            <div class="form-group col-md-6">
+                                                                <label asp-for="Round.Rate3" class="control-label"></label>
+                                                                <div class="input-group">
+                                                                    <input asp-for="Round.Rate3" class="form-control" value="98" />
+                                                                    <div class="input-group-append">
+                                                                        <span class="input-group-text">%</span>
+                                                                    </div>
+                                                                </div>
+                                                                <span asp-validation-for="Round.Rate3" class="text-danger"></span>
+                                                            </div>
+                                                        </div>
+                                                        <div class="row">
+                                                            <div class="form-group col-md-6">
+                                                                <label asp-for="Round.Rate4" class="control-label"></label>
+                                                                <div class="input-group">
+                                                                    <input asp-for="Round.Rate4" class="form-control" value="99" />
+                                                                    <div class="input-group-append">
+                                                                        <span class="input-group-text">%</span>
+                                                                    </div>
+                                                                </div>
+                                                                <span asp-validation-for="Round.Rate4" class="text-danger"></span>
+                                                            </div>
+                                                        </div>
+                                                        <div class="row">
+                                                            <div class="form-group col-md-6">
+                                                                <label asp-for="Round.Rate5" class="control-label"></label>
+                                                                <div class="input-group">
+                                                                    <input asp-for="Round.Rate5" class="form-control" value="100" />
+                                                                    <div class="input-group-append">
+                                                                        <span class="input-group-text">%</span>
+                                                                    </div>
+                                                                </div>
+                                                                <span asp-validation-for="Round.Rate5" class="text-danger"></span>
+                                                            </div>
+                                                            <div class="form-group col-md-6">
+                                                                <label asp-for="Round.R5MStop" class="control-label"></label>
+                                                                <input asp-for="Round.R5MStop" class="form-control" />
+                                                                <span asp-validation-for="Round.R5MStop" class="text-danger"></span>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="card" id="RateRound2" style="display:none">
+                                                <div class="card-header" id="RateHeading2">
+                                                    <h5 class="mb-0">
+                                                        <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#RateCollapse2" aria-expanded="false" aria-controls="RateCollapse2">
+                                                            รอบที่ 2
+                                                        </button>
+                                                    </h5>
+                                                </div>
+                                                <div id="RateCollapse2" class="collapse show" aria-labelledby="RateHeading2" data-parent="#round">
+                                                    <div class="card-body">
+                                                        <div class="row">
+                                                            <div class="form-group col-md-6">
+                                                                <label asp-for="Round2.Rate1" class="control-label"></label>
+                                                                <div class="input-group">
+                                                                    <input asp-for="Round2.Rate1" class="form-control" value="96" />
+                                                                    <div class="input-group-append">
+                                                                        <span class="input-group-text">%</span>
+                                                                    </div>
+                                                                </div>
+                                                                <span asp-validation-for="Round2.Rate1" class="text-danger"></span>
+                                                            </div>
+                                                            <div class="form-group col-md-6">
+                                                                <label asp-for="Round2.R1MStart" class="control-label"></label>
+                                                                <input asp-for="Round2.R1MStart" class="form-control" />
+                                                                <span asp-validation-for="Round2.R1MStart" class="text-danger"></span>
+                                                            </div>
+                                                        </div>
+                                                        <div class="row">
+                                                            <div class="form-group col-md-6">
+                                                                <label asp-for="Round2.Rate2" class="control-label"></label>
+                                                                <div class="input-group">
+                                                                    <input asp-for="Round2.Rate2" class="form-control" value="97" />
+                                                                    <div class="input-group-append">
+                                                                        <span class="input-group-text">%</span>
+                                                                    </div>
+                                                                </div>
+                                                                <span asp-validation-for="Round2.Rate2" class="text-danger"></span>
+                                                            </div>
+                                                        </div>
+                                                        <div class="row">
+                                                            <div class="form-group col-md-6">
+                                                                <label asp-for="Round2.Rate3" class="control-label"></label>
+                                                                <div class="input-group">
+                                                                    <input asp-for="Round2.Rate3" class="form-control" value="98" />
+                                                                    <div class="input-group-append">
+                                                                        <span class="input-group-text">%</span>
+                                                                    </div>
+                                                                </div>
+                                                                <span asp-validation-for="Round2.Rate3" class="text-danger"></span>
+                                                            </div>
+                                                        </div>
+                                                        <div class="row">
+                                                            <div class="form-group col-md-6">
+                                                                <label asp-for="Round2.Rate4" class="control-label"></label>
+                                                                <div class="input-group">
+                                                                    <input asp-for="Round2.Rate4" class="form-control" value="99" />
+                                                                    <div class="input-group-append">
+                                                                        <span class="input-group-text">%</span>
+                                                                    </div>
+                                                                </div>
+                                                                <span asp-validation-for="Round2.Rate4" class="text-danger"></span>
+                                                            </div>
+                                                        </div>
+                                                        <div class="row">
+                                                            <div class="form-group col-md-6">
+                                                                <label asp-for="Round2.Rate5" class="control-label"></label>
+                                                                <div class="input-group">
+                                                                    <input asp-for="Round2.Rate5" class="form-control" value="100" />
+                                                                    <div class="input-group-append">
+                                                                        <span class="input-group-text">%</span>
+                                                                    </div>
+                                                                </div>
+                                                                <span asp-validation-for="Round2.Rate5" class="text-danger"></span>
+                                                            </div>
+                                                            <div class="form-group col-md-6">
+                                                                <label asp-for="Round2.R5MStop" class="control-label"></label>
+                                                                <input asp-for="Round2.R5MStop" class="form-control" />
+                                                                <span asp-validation-for="Round2.R5MStop" class="text-danger"></span>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            @*------------Rate End-----------------------------*@
+                                            <div class="card" id="LevelRound1" style="display:none">
+                                                <div class="card-header" id="LevelHeading1">
+                                                    <h5 class="mb-0">
+                                                        <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#LevelCollapse1" aria-expanded="true" aria-controls="LevelCollapse1">
+                                                            รอบที่ 1
+                                                        </button>
+                                                    </h5>
+                                                </div>
+                                                <div id="LevelCollapse1" class="collapse show" aria-labelledby="LevelHeading1" data-parent="#round">
+                                                    <div class="card-body">
+                                                        <div class="row">
+                                                            <div class="form-group col-md-6">
+                                                                <label class="control-label">รายละเอียดเกณฑ์การให้คะแนน 1</label>
+                                                                <input asp-for="LRound.Rate1" value="1" hidden />
+                                                                <input asp-for="LRound.DetailRate1" class="form-control" />
+                                                                <span asp-validation-for="LRound.DetailRate1" class="text-danger"></span>
+                                                            </div>
+                                                            <div class="form-group col-md-3">
+                                                                <label asp-for="LRound.R1MStart" class="control-label"></label>
+                                                                <input asp-for="LRound.R1MStart" class="form-control" />
+                                                                <span asp-validation-for="LRound.R1MStart" class="text-danger"></span>
+                                                            </div>
+                                                            <div class="form-group col-md-3">
+                                                                <label asp-for="LRound.R1MStop" class="control-label"></label>
+                                                                <input asp-for="LRound.R1MStop" class="form-control" />
+                                                                <span asp-validation-for="LRound.R1MStop" class="text-danger"></span>
+                                                            </div>
+                                                        </div>
+                                                        <div class="row">
+                                                            <div class="form-group col-md-6">
+                                                                <label class="control-label">รายละเอียดเกณฑ์การให้คะแนน 2</label>
+                                                                <input asp-for="LRound.Rate2" value="2" hidden />
+                                                                <input asp-for="LRound.DetailRate2" class="form-control" />
+                                                                <span asp-validation-for="LRound.DetailRate2" class="text-danger"></span>
+                                                            </div>
+                                                            <div class="form-group col-md-3">
+                                                                <label asp-for="LRound.R2MStart" class="control-label"></label>
+                                                                <input asp-for="LRound.R2MStart" class="form-control" />
+                                                                <span asp-validation-for="LRound.R2MStart" class="text-danger"></span>
+                                                            </div>
+                                                            <div class="form-group col-md-3">
+                                                                <label asp-for="LRound.R2MStop" class="control-label"></label>
+                                                                <input asp-for="LRound.R2MStop" class="form-control" />
+                                                                <span asp-validation-for="LRound.R2MStop" class="text-danger"></span>
+                                                            </div>
+                                                        </div>
+                                                        <div class="row">
+                                                            <div class="form-group col-md-6">
+                                                                <label class="control-label">รายละเอียดเกณฑ์การให้คะแนน 3</label>
+                                                                <input asp-for="LRound.Rate3" value="3" hidden />
+                                                                <input asp-for="LRound.DetailRate3" class="form-control" />
+                                                                <span asp-validation-for="LRound.DetailRate3" class="text-danger"></span>
+                                                            </div>
+                                                            <div class="form-group col-md-3">
+                                                                <label asp-for="LRound.R3MStart" class="control-label"></label>
+                                                                <input asp-for="LRound.R3MStart" class="form-control" />
+                                                                <span asp-validation-for="LRound.R3MStart" class="text-danger"></span>
+                                                            </div>
+                                                            <div class="form-group col-md-3">
+                                                                <label asp-for="LRound.R3MStop" class="control-label"></label>
+                                                                <input asp-for="LRound.R3MStop" class="form-control" />
+                                                                <span asp-validation-for="LRound.R3MStop" class="text-danger"></span>
+                                                            </div>
+                                                        </div>
+                                                        <div class="row">
+                                                            <div class="form-group col-md-6">
+                                                                <label class="control-label">รายละเอียดเกณฑ์การให้คะแนน 4</label>
+                                                                <input asp-for="LRound.Rate4" value="4" hidden />
+                                                                <input asp-for="LRound.DetailRate4" class="form-control" />
+                                                                <span asp-validation-for="LRound.DetailRate4" class="text-danger"></span>
+                                                            </div>
+                                                            <div class="form-group col-md-3">
+                                                                <label asp-for="LRound.R4MStart" class="control-label"></label>
+                                                                <input asp-for="LRound.R4MStart" class="form-control" />
+                                                                <span asp-validation-for="LRound.R4MStart" class="text-danger"></span>
+                                                            </div>
+                                                            <div class="form-group col-md-3">
+                                                                <label asp-for="LRound.R4MStop" class="control-label"></label>
+                                                                <input asp-for="LRound.R4MStop" class="form-control" />
+                                                                <span asp-validation-for="LRound.R4MStop" class="text-danger"></span>
+                                                            </div>
+                                                        </div>
+                                                        <div class="row">
+                                                            <div class="form-group col-md-6">
+                                                                <label class="control-label">รายละเอียดเกณฑ์การให้คะแนน 5</label>
+                                                                <input asp-for="LRound.Rate5" value="5" hidden />
+                                                                <input asp-for="LRound.DetailRate5" class="form-control" />
+                                                                <span asp-validation-for="LRound.DetailRate5" class="text-danger"></span>
+                                                            </div>
+                                                            <div class="form-group col-md-3">
+                                                                <label asp-for="LRound.R5MStart" class="control-label"></label>
+                                                                <input asp-for="LRound.R5MStart" class="form-control" />
+                                                                <span asp-validation-for="LRound.R5MStart" class="text-danger"></span>
+                                                            </div>
+                                                            <div class="form-group col-md-3">
+                                                                <label asp-for="LRound.R5MStop" class="control-label"></label>
+                                                                <input asp-for="LRound.R5MStop" class="form-control" />
+                                                                <span asp-validation-for="LRound.R5MStop" class="text-danger"></span>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="card" id="LevelRound2" style="display:none">
+                                                <div class="card-header" id="LevelHeading2">
+                                                    <h5 class="mb-0">
+                                                        <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#LevelCollapse2" aria-expanded="false" aria-controls="LevelCollapse2">
+                                                            รอบที่ 2
+                                                        </button>
+                                                    </h5>
+                                                </div>
+                                                <div id="LevelCollapse2" class="collapse show" aria-labelledby="LevelHeading2" data-parent="#round">
+                                                    <div class="card-body">
+                                                        <div class="row">
+                                                            <div class="form-group col-md-6">
+                                                                <label class="control-label">รายละเอียดเกณฑ์การให้คะแนน 1</label>
+                                                                <input asp-for="LRound2.Rate1" value="1" hidden />
+                                                                <input asp-for="LRound2.DetailRate1" class="form-control" />
+                                                                <span asp-validation-for="LRound2.DetailRate1" class="text-danger"></span>
+                                                            </div>
+                                                            <div class="form-group col-md-3">
+                                                                <label asp-for="LRound2.R1MStart" class="control-label"></label>
+                                                                <input asp-for="LRound2.R1MStart" class="form-control" />
+                                                                <span asp-validation-for="LRound2.R1MStart" class="text-danger"></span>
+                                                            </div>
+                                                            <div class="form-group col-md-3">
+                                                                <label asp-for="LRound2.R1MStop" class="control-label"></label>
+                                                                <input asp-for="LRound2.R1MStop" class="form-control" />
+                                                                <span asp-validation-for="LRound2.R1MStop" class="text-danger"></span>
+                                                            </div>
+                                                        </div>
+                                                        <div class="row">
+                                                            <div class="form-group col-md-6">
+                                                                <label class="control-label">รายละเอียดเกณฑ์การให้คะแนน 2</label>
+                                                                <input asp-for="LRound2.Rate2" value="2" hidden />
+                                                                <input asp-for="LRound2.DetailRate2" class="form-control" />
+                                                                <span asp-validation-for="LRound2.DetailRate2" class="text-danger"></span>
+                                                            </div>
+                                                            <div class="form-group col-md-3">
+                                                                <label asp-for="LRound2.R2MStart" class="control-label"></label>
+                                                                <input asp-for="LRound2.R2MStart" class="form-control" />
+                                                                <span asp-validation-for="LRound2.R2MStart" class="text-danger"></span>
+                                                            </div>
+                                                            <div class="form-group col-md-3">
+                                                                <label asp-for="LRound2.R2MStop" class="control-label"></label>
+                                                                <input asp-for="LRound2.R2MStop" class="form-control" />
+                                                                <span asp-validation-for="LRound2.R2MStop" class="text-danger"></span>
+                                                            </div>
+                                                        </div>
+                                                        <div class="row">
+                                                            <div class="form-group col-md-6">
+                                                                <label class="control-label">รายละเอียดเกณฑ์การให้คะแนน 3</label>
+                                                                <input asp-for="LRound2.Rate3" value="3" hidden />
+                                                                <input asp-for="LRound2.DetailRate3" class="form-control" />
+                                                                <span asp-validation-for="LRound2.DetailRate3" class="text-danger"></span>
+                                                            </div>
+                                                            <div class="form-group col-md-3">
+                                                                <label asp-for="LRound2.R3MStart" class="control-label"></label>
+                                                                <input asp-for="LRound2.R3MStart" class="form-control" />
+                                                                <span asp-validation-for="LRound2.R3MStart" class="text-danger"></span>
+                                                            </div>
+                                                            <div class="form-group col-md-3">
+                                                                <label asp-for="LRound2.R3MStop" class="control-label"></label>
+                                                                <input asp-for="LRound2.R3MStop" class="form-control" />
+                                                                <span asp-validation-for="LRound2.R3MStop" class="text-danger"></span>
+                                                            </div>
+                                                        </div>
+                                                        <div class="row">
+                                                            <div class="form-group col-md-6">
+                                                                <label class="control-label">รายละเอียดเกณฑ์การให้คะแนน 4</label>
+                                                                <input asp-for="LRound2.Rate4" value="4" hidden />
+                                                                <input asp-for="LRound2.DetailRate4" class="form-control" />
+                                                                <span asp-validation-for="LRound2.DetailRate4" class="text-danger"></span>
+                                                            </div>
+                                                            <div class="form-group col-md-3">
+                                                                <label asp-for="LRound2.R4MStart" class="control-label"></label>
+                                                                <input asp-for="LRound2.R4MStart" class="form-control" />
+                                                                <span asp-validation-for="LRound2.R4MStart" class="text-danger"></span>
+                                                            </div>
+                                                            <div class="form-group col-md-3">
+                                                                <label asp-for="Round2.R4MStop" class="control-label"></label>
+                                                                <input asp-for="Round2.R4MStop" class="form-control" />
+                                                                <span asp-validation-for="Round2.R4MStop" class="text-danger"></span>
+                                                            </div>
+                                                        </div>
+                                                        <div class="row">
+                                                            <div class="form-group col-md-6">
+                                                                <label class="control-label">รายละเอียดเกณฑ์การให้คะแนน 5</label>
+                                                                <input asp-for="LRound2.Rate5" value="5" hidden />
+                                                                <input asp-for="LRound2.DetailRate5" class="form-control" />
+                                                                <span asp-validation-for="LRound2.DetailRate5" class="text-danger"></span>
+                                                            </div>
+                                                            <div class="form-group col-md-3">
+                                                                <label asp-for="LRound2.R5MStart" class="control-label"></label>
+                                                                <input asp-for="LRound2.R5MStart" class="form-control" />
+                                                                <span asp-validation-for="LRound2.R5MStart" class="text-danger"></span>
+                                                            </div>
+                                                            <div class="form-group col-md-3">
+                                                                <label asp-for="LRound2.R5MStop" class="control-label"></label>
+                                                                <input asp-for="LRound2.R5MStop" class="form-control" />
+                                                                <span asp-validation-for="LRound2.R5MStop" class="text-danger"></span>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            @*----------------Level End --------------------*@
+                                            <div class="card" id="LevelRateRound1" style="display:none">
+                                                <div class="card-header" id="LevelRateHeading1">
+                                                    <h5 class="mb-0">
+                                                        <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#LevelRateCollapse1" aria-expanded="true" aria-controls="LevelRateCollapse1">
+                                                            รอบที่ 1
+                                                        </button>
+                                                    </h5>
+                                                </div>
+                                                <div id="LevelRateCollapse1" class="collapse show" aria-labelledby="LevelRateHeading1" data-parent="#round">
+                                                    <div class="card-body">
+                                                        <div class="row form-group col-md-6">
+                                                            <label asp-for="LRRound.LevelNumber" class="card-text control-label"></label>
+                                                            <input asp-for="LRRound.LevelNumber" min="1" max="4" value="4" class="form-control" />
+                                                        </div>
+                                                        <div class="row">
+                                                            <div class="form-group col-md-6">
+                                                                <label class="control-label">รายละเอียดเกณฑ์การให้คะแนน 1</label>
+                                                                <input asp-for="LRRound.DetailRate1" class="form-control" />
+                                                                <span asp-validation-for="LRRound.DetailRate1" class="text-danger"></span>
+                                                            </div>
+                                                            <div class="form-group col-md-3">
+                                                                <label asp-for="LRRound.R1MStart" class="control-label"></label>
+                                                                <input asp-for="LRRound.R1MStart" class="form-control" />
+                                                                <span asp-validation-for="LRRound.R1MStart" class="text-danger"></span>
+                                                            </div>
+                                                            <div class="form-group col-md-3">
+                                                                <label asp-for="LRRound.R1MStop" class="control-label"></label>
+                                                                <input asp-for="LRRound.R1MStop" class="form-control" />
+                                                                <span asp-validation-for="LRRound.R1MStop" class="text-danger"></span>
+                                                            </div>
+                                                        </div>
+                                                        <div class="row">
+                                                            <div class="form-group col-md-6">
+                                                                <label id="LRRound.Label2" class="control-label">รายละเอียดเกณฑ์การให้คะแนน 2</label>
+                                                                <label asp-for="LRRound.Rate2" class="control-label" id="LRRound.LabelRate2" style="display:none"></label>
+                                                                <div class="input-group" style="display:none" id="LRRound.GRate2">
+                                                                    <input asp-for="LRRound.Rate2" class="form-control" value="2" />
+                                                                    <div class="input-group-append">
+                                                                        <div class="input-group-text">%</div>
+                                                                    </div>
+                                                                </div>
+                                                                <span asp-validation-for="LRRound.Rate2" class="text-danger"></span>
+                                                                <input asp-for="LRRound.DetailRate2" class="form-control" />
+                                                                <span asp-validation-for="LRRound.DetailRate2" class="text-danger"></span>
+                                                            </div>
+                                                            <div class="form-group col-md-3" id="LRRound.Start2">
+                                                                <label asp-for="LRRound.R2MStart" class="control-label"></label>
+                                                                <input asp-for="LRRound.R2MStart" class="form-control" />
+                                                                <span asp-validation-for="LRRound.R2MStart" class="text-danger"></span>
+                                                            </div>
+                                                            <div class="form-group col-md-3" id="LRRound.Stop2">
+                                                                <label asp-for="LRRound.R2MStop" class="control-label"></label>
+                                                                <input asp-for="LRRound.R2MStop" class="form-control" />
+                                                                <span asp-validation-for="LRRound.R2MStop" class="text-danger"></span>
+                                                            </div>
+                                                        </div>
+                                                        <div class="row">
+                                                            <div class="form-group col-md-6">
+                                                                <label id="LRRound.Label3" class="control-label">รายละเอียดเกณฑ์การให้คะแนน 3</label>
+                                                                <label asp-for="LRRound.Rate3" class="control-label" id="LRRound.LabelRate3" style="display:none"></label>
+                                                                <div class="input-group" style="display:none" id="LRRound.GRate3">
+                                                                    <input asp-for="LRRound.Rate3" class="form-control" value="3" />
+                                                                    <div class="input-group-append">
+                                                                        <div class="input-group-text">%</div>
+                                                                    </div>
+                                                                </div>
+                                                                <span asp-validation-for="LRRound.Rate3" class="text-danger"></span>
+                                                                <input asp-for="LRRound.DetailRate3" class="form-control" />
+                                                                <span asp-validation-for="LRRound.DetailRate3" class="text-danger"></span>
+                                                            </div>
+                                                            <div class="form-group col-md-3" id="LRRound.Start3">
+                                                                <label asp-for="LRRound.R3MStart" class="control-label"></label>
+                                                                <input asp-for="LRRound.R3MStart" class="form-control" />
+                                                                <span asp-validation-for="LRRound.R3MStart" class="text-danger"></span>
+                                                            </div>
+                                                            <div class="form-group col-md-3" id="LRRound.Stop3">
+                                                                <label asp-for="LRRound.R3MStop" class="control-label"></label>
+                                                                <input asp-for="LRRound.R3MStop" class="form-control" />
+                                                                <span asp-validation-for="LRRound.R3MStop" class="text-danger"></span>
+                                                            </div>
+                                                        </div>
+                                                        <div class="row">
+                                                            <div class="form-group col-md-6">
+                                                                <label id="LRRound.Label4" class="control-label">รายละเอียดเกณฑ์การให้คะแนน 4</label>
+                                                                <label asp-for="LRRound.Rate4" class="control-label" id="LRRound.LabelRate4" style="display:none"></label>
+                                                                <div class="input-group" style="display:none" id="LRRound.GRate4">
+                                                                    <input asp-for="LRRound.Rate4" class="form-control" value="4" />
+                                                                    <div class="input-group-append">
+                                                                        <div class="input-group-text">%</div>
+                                                                    </div>
+                                                                </div>
+                                                                <span asp-validation-for="LRRound.Rate4" class="text-danger"></span>
+                                                                <input asp-for="LRRound.DetailRate4" class="form-control" />
+                                                                <span asp-validation-for="LRRound.DetailRate4" class="text-danger"></span>
+                                                            </div>
+                                                            <div class="form-group col-md-3" id="LRRound.Start4">
+                                                                <label asp-for="LRRound.R4MStart" class="control-label"></label>
+                                                                <input asp-for="LRRound.R4MStart" class="form-control" />
+                                                                <span asp-validation-for="LRRound.R4MStart" class="text-danger"></span>
+                                                            </div>
+                                                            <div class="form-group col-md-3" id="LRRound.Stop4">
+                                                                <label asp-for="LRRound.R4MStop" class="control-label"></label>
+                                                                <input asp-for="LRRound.R4MStop" class="form-control" />
+                                                                <span asp-validation-for="LRRound.R4MStop" class="text-danger"></span>
+                                                            </div>
+                                                        </div>
+                                                        <div class="row">
+                                                            <div class="form-group col-md-6">
+                                                                <label asp-for="LRRound.Rate5" class="control-label"></label>
+                                                                <div class="input-group" id="LRRound.GRate5">
+                                                                    <input asp-for="LRRound.Rate5" class="form-control" value="100" />
+                                                                    <div class="input-group-append">
+                                                                        <span class="input-group-text">%</span>
+                                                                    </div>
+                                                                </div>
+                                                                <span asp-validation-for="LRRound.Rate5" class="text-danger"></span>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="card" id="LevelRateRound2" style="display:none">
+                                                <div class="card-header" id="LevelRateHeading2">
+                                                    <h5 class="mb-0">
+                                                        <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#LevelRateCollapse2" aria-expanded="false" aria-controls="LevelRateCollapse2">
+                                                            รอบที่ 2
+                                                        </button>
+                                                    </h5>
+                                                </div>
+                                                <div id="LevelRateCollapse2" class="collapse show" aria-labelledby="LevelRateHeading2" data-parent="#round">
+                                                    <div class="card-body">
+                                                        <div class="row form-group col-md-6">
+                                                            <label asp-for="LRRound2.LevelNumber" class="card-text control-label"></label>
+                                                            <input asp-for="LRRound2.LevelNumber" min="1" max="4" value="4" class="form-control" />
+                                                        </div>
+                                                        <div class="row">
+                                                            <div class="form-group col-md-6">
+                                                                <label class="control-label">รายละเอียดเกณฑ์การให้คะแนน 1</label>
+                                                                <input asp-for="LRRound2.DetailRate1" class="form-control" />
+                                                                <span asp-validation-for="LRRound2.DetailRate1" class="text-danger"></span>
+                                                            </div>
+                                                            <div class="form-group col-md-3">
+                                                                <label asp-for="LRRound2.R1MStart" class="control-label"></label>
+                                                                <input asp-for="LRRound2.R1MStart" class="form-control" />
+                                                                <span asp-validation-for="LRRound2.R1MStart" class="text-danger"></span>
+                                                            </div>
+                                                            <div class="form-group col-md-3">
+                                                                <label asp-for="LRRound2.R1MStop" class="control-label"></label>
+                                                                <input asp-for="LRRound2.R1MStop" class="form-control" />
+                                                                <span asp-validation-for="LRRound2.R1MStop" class="text-danger"></span>
+                                                            </div>
+                                                        </div>
+                                                        <div class="row">
+                                                            <div class="form-group col-md-6">
+                                                                <label id="LRRound2.Label2" class="control-label">รายละเอียดเกณฑ์การให้คะแนน 2</label>
+                                                                <label asp-for="LRRound2.Rate2" class="control-label" id="LRRound2.LabelRate2" style="display:none"></label>
+                                                                <div class="input-group" style="display:none" id="LRRound2.GRate2">
+                                                                    <input asp-for="LRRound2.Rate2" class="form-control" value="2" />
+                                                                    <div class="input-group-append">
+                                                                        <span class="input-group-text">%</span>
+                                                                    </div>
+                                                                </div>
+                                                                <span asp-validation-for="LRRound2.Rate2" class="text-danger"></span>
+                                                                <input asp-for="LRRound2.DetailRate2" class="form-control" />
+                                                                <span asp-validation-for="LRRound2.DetailRate2" class="text-danger"></span>
+                                                            </div>
+                                                            <div class="form-group col-md-3" id="LRRound2.Start2">
+                                                                <label asp-for="LRRound2.R2MStart" class="control-label"></label>
+                                                                <input asp-for="LRRound2.R2MStart" class="form-control" />
+                                                                <span asp-validation-for="LRRound2.R2MStart" class="text-danger"></span>
+                                                            </div>
+                                                            <div class="form-group col-md-3" id="LRRound2.Stop2">
+                                                                <label asp-for="LRRound2.R2MStop" class="control-label"></label>
+                                                                <input asp-for="LRRound2.R2MStop" class="form-control" />
+                                                                <span asp-validation-for="LRRound2.R2MStop" class="text-danger"></span>
+                                                            </div>
+                                                        </div>
+                                                        <div class="row">
+                                                            <div class="form-group col-md-6">
+                                                                <label id="LRRound2.Label3" class="control-label">รายละเอียดเกณฑ์การให้คะแนน 3</label>
+                                                                <label asp-for="LRRound2.Rate3" class="control-label" id="LRRound2.LabelRate3" style="display:none"></label>
+                                                                <div class="input-group" style="display:none" id="LRRound2.GRate3">
+                                                                    <input asp-for="LRRound2.Rate3" class="form-control" value="3" />
+                                                                    <div class="input-group-append">
+                                                                        <span class="input-group-text">%</span>
+                                                                    </div>
+                                                                </div>
+                                                                <span asp-validation-for="LRRound2.Rate3" class="text-danger"></span>
+                                                                <input asp-for="LRRound2.DetailRate3" class="form-control" />
+                                                                <span asp-validation-for="LRRound2.DetailRate3" class="text-danger"></span>
+                                                            </div>
+                                                            <div class="form-group col-md-3" id="LRRound2.Start3">
+                                                                <label asp-for="LRRound2.R3MStart" class="control-label"></label>
+                                                                <input asp-for="LRRound2.R3MStart" class="form-control" />
+                                                                <span asp-validation-for="LRRound2.R3MStart" class="text-danger"></span>
+                                                            </div>
+                                                            <div class="form-group col-md-3" id="LRRound2.Stop3">
+                                                                <label asp-for="LRRound2.R3MStop" class="control-label"></label>
+                                                                <input asp-for="LRRound2.R3MStop" class="form-control" />
+                                                                <span asp-validation-for="LRRound2.R3MStop" class="text-danger"></span>
+                                                            </div>
+                                                        </div>
+                                                        <div class="row">
+                                                            <div class="form-group col-md-6">
+                                                                <label id="LRRound2.Label4" class="control-label">รายละเอียดเกณฑ์การให้คะแนน 4</label>
+                                                                <label asp-for="LRRound2.Rate4" class="control-label" id="LRRound2.LabelRate4" style="display:none"></label>
+                                                                <div class="input-group" style="display:none" id="LRRound2.GRate4">
+                                                                    <input asp-for="LRRound2.Rate4" class="form-control" value="4" />
+                                                                    <div class="input-group-append">
+                                                                        <span class="input-group-text">%</span>
+                                                                    </div>
+                                                                </div>
+                                                                <span asp-validation-for="LRRound2.Rate4" class="text-danger"></span>
+                                                                <input asp-for="LRRound2.DetailRate4" class="form-control" />
+                                                                <span asp-validation-for="LRRound2.DetailRate4" class="text-danger"></span>
+                                                            </div>
+                                                            <div class="form-group col-md-3" id="LRRound2.Start4">
+                                                                <label asp-for="LRRound2.R4MStart" class="control-label"></label>
+                                                                <input asp-for="LRRound2.R4MStart" class="form-control" />
+                                                                <span asp-validation-for="LRRound2.R4MStart" class="text-danger"></span>
+                                                            </div>
+                                                            <div class="form-group col-md-3" id="LRRound2.Stop4">
+                                                                <label asp-for="LRRound2.R4MStop" class="control-label"></label>
+                                                                <input asp-for="LRRound2.R4MStop" class="form-control" />
+                                                                <span asp-validation-for="LRRound2.R4MStop" class="text-danger"></span>
+                                                            </div>
+                                                        </div>
+                                                        <div class="row">
+                                                            <div class="form-group col-md-6">
+                                                                <label asp-for="LRRound2.Rate5" class="control-label"></label>
+                                                                <div class="input-group" id="LRRound2.GRate5">
+                                                                    <input asp-for="LRRound2.Rate5" class="form-control" value="100" />
+                                                                    <div class="input-group-append">
+                                                                        <span class="input-group-text">%</span>
+                                                                    </div>
+                                                                </div>
+                                                                <span asp-validation-for="LRRound2.Rate5" class="text-danger"></span>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            @*-----------------Level_Rate End------------------*@
+                                        </div>
+                                    </fieldset>
+                                    @*----------------------------ตารางประมาณการ-------------------------------*@
+                                    <table class="table table-bordered form-group mt-4" id="DataForEvalutionTable">
+                                        <thead>
+                                            <tr>
+                                                <th>
+                                                    เดือน
+                                                </th>
+                                                <th>
+                                                    เป้าหมาย/ประมาณการ
+                                                </th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td>
+                                                    @(new DateTime(1, 10, 1).ToString("MMMM"))
+                                                </td>
+                                                <td>
+                                                    <input type="number" name="expect10" class="form-control" value="0" />
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>
+                                                    @(new DateTime(1, 11, 1).ToString("MMMM"))
+                                                </td>
+                                                <td>
+                                                    <input type="number" name="expect11" class="form-control" value="0" />
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>
+                                                    @(new DateTime(1, 12, 1).ToString("MMMM"))
+                                                </td>
+                                                <td>
+                                                    <input type="number" name="expect12" class="form-control" value="0" />
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>
+                                                    @(new DateTime(1, 1, 1).ToString("MMMM"))
+                                                </td>
+                                                <td>
+                                                    <input type="number" name="expect1" class="form-control" value="0" />
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>
+                                                    @(new DateTime(1, 2, 1).ToString("MMMM"))
+                                                </td>
+                                                <td>
+                                                    <input type="number" name="expect2" class="form-control" value="0" />
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>
+                                                    @(new DateTime(1, 3, 1).ToString("MMMM"))
+                                                </td>
+                                                <td>
+                                                    <input type="number" name="expect3" class="form-control" value="0" />
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>
+                                                    @(new DateTime(1, 4, 1).ToString("MMMM"))
+                                                </td>
+                                                <td>
+                                                    <input type="number" name="expect4" class="form-control" value="0" />
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>
+                                                    @(new DateTime(1, 5, 1).ToString("MMMM"))
+                                                </td>
+                                                <td>
+                                                    <input type="number" name="expect5" class="form-control" value="0" />
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>
+                                                    @(new DateTime(1, 6, 1).ToString("MMMM"))
+                                                </td>
+                                                <td>
+                                                    <input type="number" name="expect6" class="form-control" value="0" />
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>
+                                                    @(new DateTime(1, 7, 1).ToString("MMMM"))
+                                                </td>
+                                                <td>
+                                                    <input type="number" name="expect7" class="form-control" value="0" />
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>
+                                                    @(new DateTime(1, 8, 1).ToString("MMMM"))
+                                                </td>
+                                                <td>
+                                                    <input type="number" name="expect8" class="form-control" value="0" />
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>
+                                                    @(new DateTime(1, 9, 1).ToString("MMMM"))
+                                                </td>
+                                                <td>
+                                                    <input type="number" name="expect9" class="form-control" value="0" />
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
                                 </div>
                             </div>
-                            <div class="row" name="mainrate1">
-                                <div class="form-group col-md-2 percent">
-                                    <label class='control-label'>เกณฑ์ 1 คะแนน</label>
-                                    <input asp-for="Rate1" class="form-control" />
-                                    <span asp-validation-for="Rate1" class="text-danger"></span>
-                                </div>
-                                @if (Model.Unit != UnitOfPoint.ร้อยละ)
-                                {
-                                <div class='form-group col-md-5'>
-                                    <label class='control-label'>รายละเอียดเกณฑ์การให้คะแนน 1 คะแนน รอบที่ 1</label>
-                                    <input asp-for='DetailRate1' class='form-control' />
-                                    <label class='control-label'>วันเริ่ม</label>
-                                    <input asp-for='R1MStart' class='form-control' />
-                                    <label class='control-label'>วันสิ้นสุด</label>
-                                    <input asp-for='R1MStop' class='form-control' />
-                                </div>
-                                @if (!String.IsNullOrEmpty(Model.Detail2Rate1))
-                                {
-                                <div class='form-group col-md-5'>
-                                    <label class='control-label'>รายละเอียดเกณฑ์การให้คะแนน 1 คะแนน รอบที่ 2</label>
-                                    <input asp-for='Detail2Rate1' class='form-control' />
-                                    <label class='control-label'>วันเริ่ม</label>
-                                    <input asp-for='R1MStart2' class='form-control' />
-                                    <label class='control-label'>วันสิ้นสุด</label>
-                                    <input asp-for='R1MStop2' class='form-control' />
-                                </div>
-                                }
-                                }
-                            </div>
-                            <div class="row" name="mainrate2">
-                                <div class="form-group col-md-2 percent">
-                                    <label class='control-label'>เกณฑ์ 2 คะแนน</label>
-                                    <input asp-for="Rate2" class="form-control" />
-                                    <span asp-validation-for="Rate2" class="text-danger"></span>
-                                </div>
-                                @if (Model.Unit != UnitOfPoint.ร้อยละ)
-                                {
-                                <div class='form-group col-md-5'>
-                                    <label class='control-label'>รายละเอียดเกณฑ์การให้คะแนน 2 คะแนน รอบที่ 1</label>
-                                    <input asp-for='DetailRate2' class='form-control' />
-                                    <label class='control-label'>วันเริ่ม</label>
-                                    <input asp-for='R2MStart' class='form-control' />
-                                    <label class='control-label'>วันสิ้นสุด</label>
-                                    <input asp-for='R2MStop' class='form-control' />
-                                </div>
-                                @if (!String.IsNullOrEmpty(Model.Detail2Rate2))
-                                {
-                                <div class='form-group col-md-5'>
-                                    <label class='control-label'>รายละเอียดเกณฑ์การให้คะแนน 2 คะแนน รอบที่ 2</label>
-                                    <input asp-for='Detail2Rate2' class='form-control' />
-                                    <label class='control-label'>วันเริ่ม</label>
-                                    <input asp-for='R2MStart2' class='form-control' />
-                                    <label class='control-label'>วันสิ้นสุด</label>
-                                    <input asp-for='R2MStop2' class='form-control' />
-                                </div>
-                                }
-                                }
-                            </div>
-                            <div class="row" name="mainrate3">
-                                <div class="form-group col-md-2 percent percent">
-                                    <label class='control-label'>เกณฑ์ 3 คะแนน</label>
-                                    <input asp-for="Rate3" class="form-control" />
-                                    <span asp-validation-for="Rate3" class="text-danger"></span>
-                                </div>
-                                @if (Model.Unit != UnitOfPoint.ร้อยละ)
-                                {
-                                <div class='form-group col-md-5'>
-                                    <label class='control-label'>รายละเอียดเกณฑ์การให้คะแนน 3 คะแนน รอบที่ 1</label>
-                                    <input asp-for='DetailRate3' class='form-control' />
-                                    <label class='control-label'>วันเริ่ม</label>
-                                    <input asp-for='R3MStart' class='form-control' />
-                                    <label class='control-label'>วันสิ้นสุด</label>
-                                    <input asp-for='R3MStop' class='form-control' />
-                                </div>
-                                @if (!String.IsNullOrEmpty(Model.Detail2Rate3))
-                                {
-                                <div class='form-group col-md-5'>
-                                    <label class='control-label'>รายละเอียดเกณฑ์การให้คะแนน 3 คะแนน รอบที่ 2</label>
-                                    <input asp-for='Detail2Rate3' class='form-control' />
-                                    <label class='control-label'>วันเริ่ม</label>
-                                    <input asp-for='R3MStart2' class='form-control' />
-                                    <label class='control-label'>วันสิ้นสุด</label>
-                                    <input asp-for='R3MStop2' class='form-control' />
-                                </div>
-                                }
-                                }
-                            </div>
-                            <div class="row" name="mainrate4">
-                                <div class="form-group col-md-2 percent">
-                                    <label class='control-label'>เกณฑ์ 4 คะแนน</label>
-                                    <input asp-for="Rate4" class="form-control" />
-                                    <span asp-validation-for="Rate4" class="text-danger"></span>
-                                </div>
-                                @if (Model.Unit != UnitOfPoint.ร้อยละ)
-                                {
-                                <div class='form-group col-md-5'>
-                                    <label class='control-label'>รายละเอียดเกณฑ์การให้คะแนน 4 คะแนน รอบที่ 1</label>
-                                    <input asp-for='DetailRate4' class='form-control' />
-                                    <label class='control-label'>วันเริ่ม</label>
-                                    <input asp-for='R4MStart' class='form-control' />
-                                    <label class='control-label'>วันสิ้นสุด</label>
-                                    <input asp-for='R4MStop' class='form-control' />
-                                </div>
-                                @if (!String.IsNullOrEmpty(Model.Detail2Rate4))
-                                {
-                                <div class='form-group col-md-5'>
-                                    <label class='control-label'>รายละเอียดเกณฑ์การให้คะแนน 4 คะแนน รอบที่ 2</label>
-                                    <input asp-for='Detail2Rate4' class='form-control' />
-                                    <label class='control-label'>วันเริ่ม</label>
-                                    <input asp-for='R4MStart2' class='form-control' />
-                                    <label class='control-label'>วันสิ้นสุด</label>
-                                    <input asp-for='R4MStop2' class='form-control' />
-                                </div>
-                                }
-                                }
-                            </div>
-                            <div class="row" name="mainrate5">
-                                @if (Model.Unit != UnitOfPoint.ระดับ_ร้อยละ)
-                                {
-                                <div class="form-group col-md-2 percent">
-                                    <label class='control-label'>เกณฑ์ 5 คะแนน</label>
-                                    <input asp-for="Rate5" class="form-control" />
-                                    <span asp-validation-for="Rate5" class="text-danger"></span>
-                                </div>
-                                }
-
-                                @if (Model.Unit == UnitOfPoint.ระดับ)
-                                {
-                                <div class='form-group col-md-5'>
-                                    <label class='control-label'>รายละเอียดเกณฑ์การให้คะแนน 5 คะแนน รอบที่ 1</label>
-                                    <input asp-for='DetailRate5' class='form-control' />
-                                    <label class='control-label'>วันเริ่ม</label>
-                                    <input asp-for='R5MStart' class='form-control' />
-                                    <label class='control-label'>วันสิ้นสุด</label>
-                                    <input asp-for='R5MStop' class='form-control' />
-                                </div>
-                                @if (!String.IsNullOrEmpty(Model.Detail2Rate5))
-                                {
-                                <div class='form-group col-md-5'>
-                                    <label class='control-label'>รายละเอียดเกณฑ์การให้คะแนน 5 คะแนน รอบที่ 2</label>
-                                    <input asp-for='Detail2Rate5' class='form-control' />
-                                    <label class='control-label'>วันเริ่ม</label>
-                                    <input asp-for='R5MStart2' class='form-control' />
-                                    <label class='control-label'>วันสิ้นสุด</label>
-                                    <input asp-for='R5MStop2' class='form-control' />
-                                </div>
-                                }
-                                }
-                                @if (Model.Unit == UnitOfPoint.ระดับ_ร้อยละ)
-                                {
-                                <div class='form-group col-md-12'><label class='control-label'>เกณฑ์การให้คะแนน 4.2 คะแนน</label><input asp-for='LRate1' class='form-control' /></div>
-                                <div class='form-group col-md-12'><label class='control-label'>เกณฑ์การให้คะแนน 4.4 คะแนน</label><input asp-for='LRate2' class='form-control' /></div>
-                                <div class='form-group col-md-12'><label class='control-label'>เกณฑ์การให้คะแนน 4.6 คะแนน</label><input asp-for='LRate3' class='form-control' /></div>
-                                <div class='form-group col-md-12'><label class='control-label'>เกณฑ์การให้คะแนน 4.8 คะแนน</label><input asp-for='LRate4' class='form-control' /></div>
-                                <div class='form-group col-md-12'><label class='control-label'>เกณฑ์การให้คะแนน 5.0 คะแนน</label><input asp-for='LRate5' class='form-control' /></div>
-                                }
-                            </div>
-                            <div class="row" name="mainrate6">
-                            </div>
-                            <div class="row" name="mainrate7">
-                            </div>
-                            <div class="row" name="mainrate8">
-                            </div>
-                            <div class="row" name="mainrate9">
-                            </div>
-                            <div class="row" name="mainrate10">
-                            </div>
-                        </fieldset>
-                        <div class="form-group">
-                            <input type="hidden" name="yearPoint" value="@ViewBag.yearPoint" />
-                            <input type="hidden" name="selectoffice" value="@ViewBag.selectoffice" />
-                            <input type="submit" value="บันทึกการแก้ไข" class="btn btn-primary" />
+                        </div>
+                        <div class="card-footer">
+                            <input asp-for="yearPoint" value="@ViewBag.yearPoint" hidden />
+                            <input asp-for="selectoffice" value="@ViewBag.selectoffice" hidden />
+                            <button type="submit" class="btn btn-primary">บันทึก</button>
                             <a asp-area="" asp-controller="PointOfEvaluations" asp-action="Index" asp-route-yearPoint="@ViewBag.yearPoint" asp-route-selectoffice="@ViewBag.selectoffice" class="btn btn-secondary">ยกเลิก</a>
                         </div>
                     </form>
@@ -276,158 +843,278 @@
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
-<script type="text/javascript">
-    $(document).ready(function () {
-        $("div[name='round']").hide();
-
-        $("#Unit").change(function () {
-            if ($(this).children("option:selected").val() == 1) {
-                $("div[name='round']").show();
-                $("#DataForEvalutionTable").hide();
-
-                $("#round-select").val('1');
-                $("div[name^='mainrate']").empty();
-
-                $("div[name='mainrate1']").append(
-                    '<div class="form-group col-md-6">' +
-                    '   <label class="control-label">รายละเอียดเกณฑ์การให้คะแนน 1 คะแนน</label>' +
-                    '   <div class="row">' +
-                    '       <div class="col-md-2 text-md-right"> 1.</div >' +
-                    '       <div class="col-md-10">' +
-                    '           <input id ="DetailRate1" name ="DetailRate1" class="form-control" />'+
-                    '   </div > ' +
-                    '   </div >' +
-                    '</div > ' +
-                    '<div class="form-group col-md-3" > ' +
-                    '   <label class= "control-label"> วันที่เริ่ม</label >' +
-                    '   <input type="date" name="R1MStart" class="form - control" />'+
-                    '</div > '+
-                    '< div class= "form-group col-md-3' >
-                    '   <label class="control-label">วันที่สิ้นสุด</label> '+
-                    '   < input type ="date" name = "R1MStop" class= "form-control" />' +
-                    '</div >'
-                );
-                $("div[name='mainrate2']").append(
-                    "<div class='form-group col-md-6'><label class='control-label'>รายละเอียดเกณฑ์การให้คะแนน 2 คะแนน รอบที่ 1</label><div class='row'><div class='col-md-2 text-md-right'>2.</div><div class='col-md-10'><input id='DetailRate2' name='DetailRate2' class='form-control' /></div></div></div><div class='form-group col-md-3'><label class='control-label'>วันที่เริ่ม</label><input type='date' name='R2MStart' class='form-control' /></div><div class='form-group col-md-3'><label class='control-label'>วันที่สิ้นสุด</label><input type='date' name='R2MStop' class='form-control' /></div>"
-                );
-                $("div[name='mainrate3']").append(
-                    "<div class='form-group col-md-6'><label class='control-label'>รายละเอียดเกณฑ์การให้คะแนน 3 คะแนน รอบที่ 1</label><div class='row'><div class='col-md-2 text-md-right'>3.</div><div class='col-md-10'><input id='DetailRate3' name='DetailRate3' class='form-control' /></div></div></div><div class='form-group col-md-3'><label class='control-label'>วันที่เริ่ม</label><input type='date' name='R3MStart' class='form-control' /></div><div class='form-group col-md-3'><label class='control-label'>วันที่สิ้นสุด</label><input type='date' name='R3MStop' class='form-control' /></div>"
-                );
-                $("div[name='mainrate4']").append(
-                    "<div class='form-group col-md-6'><label class='control-label'>รายละเอียดเกณฑ์การให้คะแนน 4 คะแนน รอบที่ 1</label><div class='row'><div class='col-md-2 text-md-right'>4.</div><div class='col-md-10'><input id='DetailRate4' name='DetailRate4' class='form-control' /></div></div></div><div class='form-group col-md-3'><label class='control-label'>วันที่เริ่ม</label><input type='date' name='R4MStart' class='form-control' /></div><div class='form-group col-md-3'><label class='control-label'>วันที่สิ้นสุด</label><input type='date' name='R4MStop' class='form-control' /></div>"
-                );
-                $("div[name='mainrate5']").append(
-                    "<div class='form-group col-md-6'><label class='control-label'>รายละเอียดเกณฑ์การให้คะแนน 5 คะแนน รอบที่ 1</label><div class='row'><div class='col-md-2 text-md-right'>5.</div><div class='col-md-10'><input id='DetailRate5' name='DetailRate5' class='form-control' /></div></div></div><div class='form-group col-md-3'><label class='control-label'>วันที่เริ่ม</label><input type='date' name='R5MStart' class='form-control' /></div><div class='form-group col-md-3'><label class='control-label'>วันที่สิ้นสุด</label><input type='date' name='R5MStop' class='form-control' /></div>"
-                );
-            }
-            else if ($(this).children("option:selected").val() == 2) {
-                $("div[name='round']").hide();
-                $("#DataForEvalutionTable").show();
-
-                $("#round-select").val('1');
-                $("div[name^='mainrate']").empty();
-
-                $("div[name='mainrate1']").append(
-                    "<div class='form-group col-md-6'><label class='control-label'>รายละเอียดเกณฑ์การให้คะแนน 1 คะแนน</label><div class='row'><div class='col-md-2 text-md-right'>1.</div><div class='col-md-10'><input id='DetailRate1' name='DetailRate1' class='form-control' /></div></div></div><div class='form-group col-md-3'><label class='control-label'>วันที่เริ่ม</label><input type='date' name='R1MStart' class='form-control' /></div><div class='form-group col-md-3'><label class='control-label'>วันที่สิ้นสุด</label><input type='date' name='R1MStop' class='form-control' /></div>"
-                );
-                $("div[name='mainrate2']").append(
-                    "<div class='form-group col-md-6'><label class='control-label'>รายละเอียดเกณฑ์การให้คะแนน 2 คะแนน</label><div class='row'><div class='col-md-2 text-md-right'>2.</div><div class='col-md-10'><input id='DetailRate2' name='DetailRate2' class='form-control' /></div></div></div><div class='form-group col-md-3'><label class='control-label'>วันที่เริ่ม</label><input type='date' name='R2MStart' class='form-control' /></div><div class='form-group col-md-3'><label class='control-label'>วันที่สิ้นสุด</label><input type='date' name='R2MStop' class='form-control' /></div>"
-                );
-                $("div[name='mainrate3']").append(
-                    "<div class='form-group col-md-6'><label class='control-label'>รายละเอียดเกณฑ์การให้คะแนน 3 คะแนน</label><div class='row'><div class='col-md-2 text-md-right'>3.</div><div class='col-md-10'><input id='DetailRate3' name='DetailRate3' class='form-control' /></div></div></div><div class='form-group col-md-3'><label class='control-label'>วันที่เริ่ม</label><input type='date' name='R3MStart' class='form-control' /></div><div class='form-group col-md-3'><label class='control-label'>วันที่สิ้นสุด</label><input type='date' name='R3MStop' class='form-control' /></div>"
-                );
-                $("div[name='mainrate4']").append(
-                    "<div class='form-group col-md-6'><label class='control-label'>รายละเอียดเกณฑ์การให้คะแนน 4 คะแนน</label><div class='row'><div class='col-md-2 text-md-right'>4.</div><div class='col-md-10'><input id='DetailRate4' name='DetailRate4' class='form-control' /></div></div></div><div class='form-group col-md-3'><label class='control-label'>วันที่เริ่ม</label><input type='date' name='R4MStart' class='form-control' /></div><div class='form-group col-md-3'><label class='control-label'>วันที่สิ้นสุด</label><input type='date' name='R4MStop' class='form-control' /></div>"
-                );
-                $("div[name='mainrate5']").append(
-                    "<div class='form-group col-md-12'><label class='control-label'>เกณฑ์การให้คะแนน 4.2 คะแนน</label><input id='LRate1' name='LRate1' class='form-control' /></div>" +
-                    "<div class='form-group col-md-12'><label class='control-label'>เกณฑ์การให้คะแนน 4.4 คะแนน</label><input id='LRate2' name='LRate2' class='form-control' /></div>" +
-                    "<div class='form-group col-md-12'><label class='control-label'>เกณฑ์การให้คะแนน 4.6 คะแนน</label><input id='LRate3' name='LRate3' class='form-control' /></div>" +
-                    "<div class='form-group col-md-12'><label class='control-label'>เกณฑ์การให้คะแนน 4.8 คะแนน</label><input id='LRate4' name='LRate4' class='form-control' /></div>" +
-                    "<div class='form-group col-md-12'><label class='control-label'>เกณฑ์การให้คะแนน 5.0 คะแนน</label><input id='LRate5' name='LRate5' class='form-control' /></div>"
-                );
-            }
-            else {
-
-                $("div[name='round']").hide();
-                $("div[name^='mainrate']").empty();
-
-                if ($("#OwnerOfficeId").val() == "") {
-                    $("#DataForEvalutionTable").hide();
+    <script>
+        $(function () {
+            $("#roundNumber").change(function () {
+                if ($(this).val() == 2) {
+                    if ($("#point_Unit").children("option:selected").val() == 0) {
+                        $("#RateRound2").show();
+                    } else if ($("#point_Unit").children("option:selected").val() == 1) {
+                        $("#LevelRound2").show();
+                    } else if ($("#point_Unit").children("option:selected").val() == 2) {
+                        $("#LevelRateRound2").show();
+                    }
                 } else {
-                    $("#DataForEvalutionTable").show();
+                    $("#RateRound2").hide();
+                    $("#LevelRound2").hide();
+                    $("#LevelRateRound2").hide();
                 }
+            });
 
-                $("div[name='mainrate1']").append(
-                    "<div class='form-group col-md-6'><label class='control-label'>เกณฑ์การให้คะแนน 1 คะแนน</label><input id='Rate1' name='Rate1' class='form-control' /></div>"
-                );
-                $("div[name='mainrate2']").append(
-                    "<div class='form-group col-md-6'><label class='control-label'>เกณฑ์การให้คะแนน 2 คะแนน</label><input id='Rate2' name='Rate2' class='form-control' /></div>"
-                );
-                $("div[name='mainrate3']").append(
-                    "<div class='form-group col-md-6'><label class='control-label'>เกณฑ์การให้คะแนน 3 คะแนน</label><input id='Rate3' name='Rate3' class='form-control' /></div>"
-                );
-                $("div[name='mainrate4']").append(
-                    "<div class='form-group col-md-6'><label class='control-label'>เกณฑ์การให้คะแนน 4 คะแนน</label><input id='Rate4' name='Rate4' class='form-control' /></div>"
-                );
-                $("div[name='mainrate5']").append(
-                    "<div class='form-group col-md-6'><label class='control-label'>เกณฑ์การให้คะแนน 5 คะแนน</label><input id='Rate5' name='Rate5' class='form-control' /></div>"
-                );
-            }
-        });
+            $("#point_Unit").change(function () {
+                if ($(this).children("option:selected").val() == 0) {
+                    $("#DataForEvalutionTable").show();
+                    $("#roundNumber").val(1);
+                    $("#RateRound1").show();
+                    $("#RateRound2").hide();
+                    $("#LevelRound1").hide();
+                    $("#LevelRound2").hide();
+                    $("#LevelRateRound1").hide();
+                    $("#LevelRateRound2").hide();
+                } else if ($(this).children("option:selected").val() == 1) {
+                    $("#DataForEvalutionTable").hide();
+                    $("#roundNumber").val(1);
+                    $("#RateRound1").hide();
+                    $("#RateRound2").hide();
+                    $("#LevelRound1").show();
+                    $("#LevelRound2").hide();
+                    $("#LevelRateRound1").hide();
+                    $("#LevelRateRound2").hide();
+                } else if ($(this).children("option:selected").val() == 2) {
+                    $("#DataForEvalutionTable").show();
+                    $("#roundNumber").val(1);
+                    $("#RateRound1").hide();
+                    $("#RateRound2").hide();
+                    $("#LevelRound1").hide();
+                    $("#LevelRound2").hide();
+                    $("#LevelRateRound1").show();
+                    $("#LevelRateRound2").hide();
+                } else {
+                    if ($("#OwnerOfficeId").val() == "") {
+                        $("#DataForEvalutionTable").hide();
+                    } else {
+                        $("#DataForEvalutionTable").show();
+                    }
+                }
+            });
 
-        $("#round-select").change(function () {
-            if ($(this).children("option:selected").val() == 2) {
-                $("div[name='mainrate6']").append(
-                    "<div class='form-group col-md-6'><label class='control-label'>รายละเอียดเกณฑ์การให้คะแนน 1 คะแนน รอบที่ 2</label><div class='row'><div class='col-md-2 text-md-right'>1.</div><div class='col-md-10'><input id='Detail2Rate1' name='Detail2Rate1' class='form-control' /></div></div></div><div class='form-group col-md-3'><label class='control-label'>วันที่เริ่ม</label><input type='date' name='R1MStart2' class='form-control' /></div><div class='form-group col-md-3'><label class='control-label'>วันที่สิ้นสุด</label><input type='date' name='R1MStop2' class='form-control' /></div>"
-                );
-                $("div[name='mainrate7']").append(
-                    "<div class='form-group col-md-6'><label class='control-label'>รายละเอียดเกณฑ์การให้คะแนน 2 คะแนน รอบที่ 2</label><div class='row'><div class='col-md-2 text-md-right'>2.</div><div class='col-md-10'><input id='Detail2Rate2' name='Detail2Rate2' class='form-control' /></div></div></div><div class='form-group col-md-3'><label class='control-label'>วันที่เริ่ม</label><input type='date' name='R2MStart2' class='form-control' /></div><div class='form-group col-md-3'><label class='control-label'>วันที่สิ้นสุด</label><input type='date' name='R2MStop2' class='form-control' /></div>"
-                );
-                $("div[name='mainrate8']").append(
-                    "<div class='form-group col-md-6'><label class='control-label'>รายละเอียดเกณฑ์การให้คะแนน 3 คะแนน รอบที่ 2</label><div class='row'><div class='col-md-2 text-md-right'>3.</div><div class='col-md-10'><input id='Detail2Rate3' name='Detail2Rate3' class='form-control' /></div></div></div><div class='form-group col-md-3'><label class='control-label'>วันที่เริ่ม</label><input type='date' name='R3MStart2' class='form-control' /></div><div class='form-group col-md-3'><label class='control-label'>วันที่สิ้นสุด</label><input type='date' name='R3MStop2' class='form-control' /></div>"
-                );
-                $("div[name='mainrate9']").append(
-                    "<div class='form-group col-md-6'><label class='control-label'>รายละเอียดเกณฑ์การให้คะแนน 4 คะแนน รอบที่ 2</label><div class='row'><div class='col-md-2 text-md-right'>4.</div><div class='col-md-10'><input id='Detail2Rate4' name='Detail2Rate4' class='form-control' /></div></div></div><div class='form-group col-md-3'><label class='control-label'>วันที่เริ่ม</label><input type='date' name='R4MStart2' class='form-control' /></div><div class='form-group col-md-3'><label class='control-label'>วันที่สิ้นสุด</label><input type='date' name='R4MStop2' class='form-control' /></div>"
-                );
-                $("div[name='mainrate10']").append(
-                    "<div class='form-group col-md-6'><label class='control-label'>รายละเอียดเกณฑ์การให้คะแนน 5 คะแนน รอบที่ 2</label><div class='row'><div class='col-md-2 text-md-right'>5.</div><div class='col-md-10'><input id='Detail2Rate5' name='Detail2Rate5' class='form-control' /></div></div></div><div class='form-group col-md-3'><label class='control-label'>วันที่เริ่ม</label><input type='date' name='R5MStart2' class='form-control' /></div><div class='form-group col-md-3'><label class='control-label'>วันที่สิ้นสุด</label><input type='date' name='R5MStop2' class='form-control' /></div>"
-                );
-            }
-            else {
-                $("div[name^='mainrate']").empty();
+            $(":input[name='LRRound.LevelNumber']").change(function () {
+                //console.log($(":input[name='LRRound.LevelNumber']").val());
+                var valueOfLevelNumber = $(":input[name='LRRound.LevelNumber']").val();
+                switch (valueOfLevelNumber) {
+                    case "1":
+                        $("label[id='LRRound.Label2']").hide();
+                        $("label[id='LRRound.LabelRate2']").show();
+                        $("div[id='LRRound.GRate2']").show();
+                        $(":input[name='LRRound.DetailRate2']").hide();
+                        $("div[id='LRRound.Start2']").hide();
+                        $("div[id='LRRound.Stop2']").hide();
 
-                $("div[name='mainrate1']").append(
-                    "<div class='form-group col-md-6'><label class='control-label'>รายละเอียดเกณฑ์การให้คะแนน 1 คะแนน รอบที่ 1</label><div class='row'><div class='col-md-2 text-md-right'>1.</div><div class='col-md-10'><input id='DetailRate1' name='DetailRate1' class='form-control' /></div></div></div><div class='form-group col-md-3'><label class='control-label'>วันที่เริ่ม</label><input type='date' name='R1MStart' class='form-control' /></div><div class='form-group col-md-3'><label class='control-label'>วันที่สิ้นสุด</label><input type='date' name='R1MStop' class='form-control' /></div>"
-                );
-                $("div[name='mainrate2']").append(
-                    "<div class='form-group col-md-6'><label class='control-label'>รายละเอียดเกณฑ์การให้คะแนน 2 คะแนน รอบที่ 1</label><div class='row'><div class='col-md-2 text-md-right'>2.</div><div class='col-md-10'><input id='DetailRate2' name='DetailRate2' class='form-control' /></div></div></div><div class='form-group col-md-3'><label class='control-label'>วันที่เริ่ม</label><input type='date' name='R2MStart' class='form-control' /></div><div class='form-group col-md-3'><label class='control-label'>วันที่สิ้นสุด</label><input type='date' name='R2MStop' class='form-control' /></div>"
-                );
-                $("div[name='mainrate3']").append(
-                    "<div class='form-group col-md-6'><label class='control-label'>รายละเอียดเกณฑ์การให้คะแนน 3 คะแนน รอบที่ 1</label><div class='row'><div class='col-md-2 text-md-right'>3.</div><div class='col-md-10'><input id='DetailRate3' name='DetailRate3' class='form-control' /></div></div></div><div class='form-group col-md-3'><label class='control-label'>วันที่เริ่ม</label><input type='date' name='R3MStart' class='form-control' /></div><div class='form-group col-md-3'><label class='control-label'>วันที่สิ้นสุด</label><input type='date' name='R3MStop' class='form-control' /></div>"
-                );
-                $("div[name='mainrate4']").append(
-                    "<div class='form-group col-md-6'><label class='control-label'>รายละเอียดเกณฑ์การให้คะแนน 4 คะแนน รอบที่ 1</label><div class='row'><div class='col-md-2 text-md-right'>4.</div><div class='col-md-10'><input id='DetailRate4' name='DetailRate4' class='form-control' /></div></div></div><div class='form-group col-md-3'><label class='control-label'>วันที่เริ่ม</label><input type='date' name='R4MStart' class='form-control' /></div><div class='form-group col-md-3'><label class='control-label'>วันที่สิ้นสุด</label><input type='date' name='R4MStop' class='form-control' /></div>"
-                );
-                $("div[name='mainrate5']").append(
-                    "<div class='form-group col-md-6'><label class='control-label'>รายละเอียดเกณฑ์การให้คะแนน 5 คะแนน รอบที่ 1</label><div class='row'><div class='col-md-2 text-md-right'>5.</div><div class='col-md-10'><input id='DetailRate5' name='DetailRate5' class='form-control' /></div></div></div><div class='form-group col-md-3'><label class='control-label'>วันที่เริ่ม</label><input type='date' name='R5MStart' class='form-control' /></div><div class='form-group col-md-3'><label class='control-label'>วันที่สิ้นสุด</label><input type='date' name='R5MStop' class='form-control' /></div>"
-                );
-            }
-        });
+                        $("label[id='LRRound.Label3']").hide();
+                        $("label[id='LRRound.LabelRate3']").show();
+                        $("div[id='LRRound.GRate3']").show();
+                        $(":input[name='LRRound.DetailRate3']").hide();
+                        $("div[id='LRRound.Start3']").hide();
+                        $("div[id='LRRound.Stop3']").hide();
 
-        if ($("#OwnerOfficeId").val() == "") {
-            $("#DataForEvalutionTable").hide();
-        } else {
-            $("#DataForEvalutionTable").show();
-        }
+                        $("label[id='LRRound.Label4']").hide();
+                        $("label[id='LRRound.LabelRate4']").show();
+                        $("div[id='LRRound.GRate4']").show();
+                        $(":input[name='LRRound.DetailRate4']").hide();
+                        $("div[id='LRRound.Start4']").hide();
+                        $("div[id='LRRound.Stop4']").hide();
+                        //alert($(this).val());
+                        break;
+                    case "2":
+                        $("label[id='LRRound.Label2']").show();
+                        $("label[id='LRRound.LabelRate2']").hide();
+                        $("div[id='LRRound.GRate2']").hide();
+                        $(":input[name='LRRound.DetailRate2']").show();
+                        $("div[id='LRRound.Start2']").show();
+                        $("div[id='LRRound.Stop2']").show();
 
-        $("#OwnerOfficeId").change(function () {
-            if ($(this).children("option:selected").val() == "") {
+                        $("label[id='LRRound.Label3']").hide();
+                        $("label[id='LRRound.LabelRate3']").show();
+                        $("div[id='LRRound.GRate3']").show();
+                        $(":input[name='LRRound.DetailRate3']").hide();
+                        $("div[id='LRRound.Start3']").hide();
+                        $("div[id='LRRound.Stop3']").hide();
+
+                        $("label[id='LRRound.Label4']").hide();
+                        $("label[id='LRRound.LabelRate4']").show();
+                        $("div[id='LRRound.GRate4']").show();
+                        $(":input[name='LRRound.DetailRate4']").hide();
+                        $("div[id='LRRound.Start4']").hide();
+                        $("div[id='LRRound.Stop4']").hide();
+                        //alert($(this).val());
+                        break;
+                    case "3":
+                        $("label[id='LRRound.Label2']").show();
+                        $("label[id='LRRound.LabelRate2']").hide();
+                        $("div[id='LRRound.GRate2']").hide();
+                        $(":input[name='LRRound.DetailRate2']").show();
+                        $("div[id='LRRound.Start2']").show();
+                        $("div[id='LRRound.Stop2']").show();
+
+                        $("label[id='LRRound.Label3']").show();
+                        $("label[id='LRRound.LabelRate3']").hide();
+                        $("div[id='LRRound.GRate3']").hide();
+                        $(":input[name='LRRound.DetailRate3']").show();
+                        $("div[id='LRRound.Start3']").show();
+                        $("div[id='LRRound.Stop3']").show();
+
+                        $("label[id='LRRound.Label4']").hide();
+                        $("label[id='LRRound.LabelRate4']").show();
+                        $("div[id='LRRound.GRate4']").show();
+                        $(":input[name='LRRound.DetailRate4']").hide();
+                        $("div[id='LRRound.Start4']").hide();
+                        $("div[id='LRRound.Stop4']").hide();
+                        //alert($(this).val());
+                        break;
+                    case "4":
+                        $("label[id='LRRound.Label2']").show();
+                        $("label[id='LRRound.LabelRate2']").hide();
+                        $("div[id='LRRound.GRate2']").hide();
+                        $(":input[name='LRRound.DetailRate2']").show();
+                        $("div[id='LRRound.Start2']").show();
+                        $("div[id='LRRound.Stop2']").show();
+
+                        $("label[id='LRRound.Label3']").show();
+                        $("label[id='LRRound.LabelRate3']").hide();
+                        $("div[id='LRRound.GRate3']").hide();
+                        $(":input[name='LRRound.DetailRate3']").show();
+                        $("div[id='LRRound.Start3']").show();
+                        $("div[id='LRRound.Stop3']").show();
+
+                        $("label[id='LRRound.Label4']").show();
+                        $("label[id='LRRound.LabelRate4']").hide();
+                        $("div[id='LRRound.GRate4']").hide();
+                        $(":input[name='LRRound.DetailRate4']").show();
+                        $("div[id='LRRound.Start4']").show();
+                        $("div[id='LRRound.Stop4']").show();
+                        //alert($(this).val());
+                        break;
+                    default:
+
+                    // code block
+                }
+            });
+
+            $(":input[name='LRRound2.LevelNumber']").change(function () {
+                //console.log($(":input[name='LRRound.LevelNumber']").val());
+                var valueOfLevelNumber = $(":input[name='LRRound2.LevelNumber']").val();
+                switch (valueOfLevelNumber) {
+                    case "1":
+                        $("label[id='LRRound2.Label2']").hide();
+                        $("label[id='LRRound2.LabelRate2']").show();
+                        $("div[id='LRRound2.GRate2']").show();
+                        $(":input[name='LRRound2.DetailRate2']").hide();
+                        $("div[id='LRRound2.Start2']").hide();
+                        $("div[id='LRRound2.Stop2']").hide();
+
+                        $("label[id='LRRound2.Label3']").hide();
+                        $("label[id='LRRound2.LabelRate3']").show();
+                        $("div[id='LRRound2.GRate3']").show();
+                        $(":input[name='LRRound2.DetailRate3']").hide();
+                        $("div[id='LRRound2.Start3']").hide();
+                        $("div[id='LRRound2.Stop3']").hide();
+
+                        $("label[id='LRRound2.Label4']").hide();
+                        $("label[id='LRRound2.LabelRate4']").show();
+                        $("div[id='LRRound2.GRate4']").show();
+                        $(":input[name='LRRound2.DetailRate4']").hide();
+                        $("div[id='LRRound2.Start4']").hide();
+                        $("div[id='LRRound2.Stop4']").hide();
+                        //alert($(this).val());
+                        break;
+                    case "2":
+                        $("label[id='LRRound2.Label2']").show();
+                        $("label[id='LRRound2.LabelRate2']").hide();
+                        $("div[id='LRRound2.GRate2']").hide();
+                        $(":input[name='LRRound2.DetailRate2']").show();
+                        $("div[id='LRRound2.Start2']").show();
+                        $("div[id='LRRound2.Stop2']").show();
+
+                        $("label[id='LRRound2.Label3']").hide();
+                        $("label[id='LRRound2.LabelRate3']").show();
+                        $("div[id='LRRound2.GRate3']").show();
+                        $(":input[name='LRRound2.DetailRate3']").hide();
+                        $("div[id='LRRound2.Start3']").hide();
+                        $("div[id='LRRound2.Stop3']").hide();
+
+                        $("label[id='LRRound2.Label4']").hide();
+                        $("label[id='LRRound2.LabelRate4']").show();
+                        $("div[id='LRRound2.GRate4']").show();
+                        $(":input[name='LRRound2.DetailRate4']").hide();
+                        $("div[id='LRRound2.Start4']").hide();
+                        $("div[id='LRRound2.Stop4']").hide();
+                        //alert($(this).val());
+                        break;
+                    case "3":
+                        $("label[id='LRRound2.Label2']").show();
+                        $("label[id='LRRound2.LabelRate2']").hide();
+                        $("div[id='LRRound2.GRate2']").hide();
+                        $(":input[name='LRRound2.DetailRate2']").show();
+                        $("div[id='LRRound2.Start2']").show();
+                        $("div[id='LRRound2.Stop2']").show();
+
+                        $("label[id='LRRound2.Label3']").show();
+                        $("label[id='LRRound2.LabelRate3']").hide();
+                        $("div[id='LRRound2.GRate3']").hide();
+                        $(":input[name='LRRound2.DetailRate3']").show();
+                        $("div[id='LRRound2.Start3']").show();
+                        $("div[id='LRRound2.Stop3']").show();
+
+                        $("label[id='LRRound2.Label4']").hide();
+                        $("label[id='LRRound2.LabelRate4']").show();
+                        $("div[id='LRRound2.GRate4']").show();
+                        $(":input[name='LRRound2.DetailRate4']").hide();
+                        $("div[id='LRRound2.Start4']").hide();
+                        $("div[id='LRRound2.Stop4']").hide();
+                        //alert($(this).val());
+                        break;
+                    case "4":
+                        $("label[id='LRRound2.Label2']").show();
+                        $("label[id='LRRound2.LabelRate2']").hide();
+                        $("div[id='LRRound2.GRate2']").hide();
+                        $(":input[name='LRRound2.DetailRate2']").show();
+                        $("div[id='LRRound2.Start2']").show();
+                        $("div[id='LRRound2.Stop2']").show();
+
+                        $("label[id='LRRound2.Label3']").show();
+                        $("label[id='LRRound2.LabelRate3']").hide();
+                        $("div[id='LRRound2.GRate3']").hide();
+                        $(":input[name='LRRound2.DetailRate3']").show();
+                        $("div[id='LRRound2.Start3']").show();
+                        $("div[id='LRRound2.Stop3']").show();
+
+                        $("label[id='LRRound2.Label4']").show();
+                        $("label[id='LRRound2.LabelRate4']").hide();
+                        $("div[id='LRRound2.GRate4']").hide();
+                        $(":input[name='LRRound2.DetailRate4']").show();
+                        $("div[id='LRRound2.Start4']").show();
+                        $("div[id='LRRound2.Stop4']").show();
+                        //alert($(this).val());
+                        break;
+                    default:
+
+                    // code block
+                }
+            });
+
+            if ($("#OwnerOfficeId").val() == "") {
                 $("#DataForEvalutionTable").hide();
             } else {
                 $("#DataForEvalutionTable").show();
             }
+
+            $("#OwnerOfficeId").change(function () {
+                if ($(this).children("option:selected").val() == "") {
+                    $("#DataForEvalutionTable").hide();
+                } else {
+                    $("#DataForEvalutionTable").show();
+                }
+            });
         });
-    });
-</script>
+    </script>
 }

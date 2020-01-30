@@ -49,9 +49,9 @@ namespace EPES.Models
         [Column(TypeName = "decimal(7, 4)")]
         public decimal Weight { get; set; }
 
-        [Display(Name = "จำนวนรอบการประเมิน")]
-        [NotMapped]
-        public int CountRound { get { return Rounds.Count; } }
+        //[Display(Name = "จำนวนรอบการประเมิน")]
+        //[NotMapped]
+        //public int CountRound { get { return Rounds.Count; } }
 
         [Display(Name = "รอบการประเมิน")]
         public List<Round> Rounds { get; set; }

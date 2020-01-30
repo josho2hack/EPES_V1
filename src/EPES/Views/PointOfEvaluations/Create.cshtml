@@ -19,7 +19,6 @@
             <div class="card-body">
                 <div class="row">
                     <div class="col-md-8">
-
                         <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                         <div class="form-group">
                             <label asp-for="point.OwnerOfficeId" class="control-label"></label>
@@ -73,6 +72,11 @@
                             <input asp-for="point.Weight" class="form-control" />
                             <span asp-validation-for="point.Weight" class="text-danger"></span>
                         </div>
+                        <div class="form-group">
+                            <label asp-for="point.AutoApp" class="control-label"></label>
+                            <select asp-for="point.AutoApp" class="form-control" asp-items="Html.GetEnumSelectList<AutoApps>()"></select>
+                            <span asp-validation-for="point.AutoApp" class="text-danger"></span>
+                        </div>
                         <fieldset>
                             <legend>เกณฑ์การประเมิน</legend>
                             <div class="row">
@@ -99,7 +103,12 @@
                                             <div class="row">
                                                 <div class="form-group col-md-6">
                                                     <label asp-for="Round.Rate1" class="control-label"></label>
-                                                    <input asp-for="Round.Rate1" class="form-control" />
+                                                    <div class="input-group">
+                                                        <input asp-for="Round.Rate1" class="form-control" value="96"/>
+                                                        <div class="input-group-append">
+                                                            <span class="input-group-text">%</span>
+                                                        </div>
+                                                    </div>
                                                     <span asp-validation-for="Round.Rate1" class="text-danger"></span>
                                                 </div>
                                                 <div class="form-group col-md-6">
@@ -111,28 +120,48 @@
                                             <div class="row">
                                                 <div class="form-group col-md-6">
                                                     <label asp-for="Round.Rate2" class="control-label"></label>
-                                                    <input asp-for="Round.Rate2" class="form-control" />
+                                                    <div class="input-group">
+                                                        <input asp-for="Round.Rate2" class="form-control" value="97"/>
+                                                        <div class="input-group-append">
+                                                            <span class="input-group-text">%</span>
+                                                        </div>
+                                                    </div>
                                                     <span asp-validation-for="Round.Rate2" class="text-danger"></span>
                                                 </div>
                                             </div>
                                             <div class="row">
                                                 <div class="form-group col-md-6">
                                                     <label asp-for="Round.Rate3" class="control-label"></label>
-                                                    <input asp-for="Round.Rate3" class="form-control" />
+                                                    <div class="input-group">
+                                                        <input asp-for="Round.Rate3" class="form-control" value="98"/>
+                                                        <div class="input-group-append">
+                                                            <span class="input-group-text">%</span>
+                                                        </div>
+                                                    </div>
                                                     <span asp-validation-for="Round.Rate3" class="text-danger"></span>
                                                 </div>
                                             </div>
                                             <div class="row">
                                                 <div class="form-group col-md-6">
                                                     <label asp-for="Round.Rate4" class="control-label"></label>
-                                                    <input asp-for="Round.Rate4" class="form-control" />
+                                                    <div class="input-group">
+                                                        <input asp-for="Round.Rate4" class="form-control" value="99"/>
+                                                        <div class="input-group-append">
+                                                            <span class="input-group-text">%</span>
+                                                        </div>
+                                                    </div>
                                                     <span asp-validation-for="Round.Rate4" class="text-danger"></span>
                                                 </div>
                                             </div>
                                             <div class="row">
                                                 <div class="form-group col-md-6">
                                                     <label asp-for="Round.Rate5" class="control-label"></label>
-                                                    <input asp-for="Round.Rate5" class="form-control" />
+                                                    <div class="input-group">
+                                                        <input asp-for="Round.Rate5" class="form-control" value="100"/>
+                                                        <div class="input-group-append">
+                                                            <span class="input-group-text">%</span>
+                                                        </div>
+                                                    </div>
                                                     <span asp-validation-for="Round.Rate5" class="text-danger"></span>
                                                 </div>
                                                 <div class="form-group col-md-6">
@@ -157,7 +186,12 @@
                                             <div class="row">
                                                 <div class="form-group col-md-6">
                                                     <label asp-for="Round2.Rate1" class="control-label"></label>
-                                                    <input asp-for="Round2.Rate1" class="form-control" />
+                                                    <div class="input-group">
+                                                        <input asp-for="Round2.Rate1" class="form-control" value="96"/>
+                                                        <div class="input-group-append">
+                                                            <span class="input-group-text">%</span>
+                                                        </div>
+                                                    </div>
                                                     <span asp-validation-for="Round2.Rate1" class="text-danger"></span>
                                                 </div>
                                                 <div class="form-group col-md-6">
@@ -169,28 +203,48 @@
                                             <div class="row">
                                                 <div class="form-group col-md-6">
                                                     <label asp-for="Round2.Rate2" class="control-label"></label>
-                                                    <input asp-for="Round2.Rate2" class="form-control" />
+                                                    <div class="input-group">
+                                                        <input asp-for="Round2.Rate2" class="form-control" value="97"/>
+                                                        <div class="input-group-append">
+                                                            <span class="input-group-text">%</span>
+                                                        </div>
+                                                    </div>
                                                     <span asp-validation-for="Round2.Rate2" class="text-danger"></span>
                                                 </div>
                                             </div>
                                             <div class="row">
                                                 <div class="form-group col-md-6">
                                                     <label asp-for="Round2.Rate3" class="control-label"></label>
-                                                    <input asp-for="Round2.Rate3" class="form-control" />
+                                                    <div class="input-group">
+                                                        <input asp-for="Round2.Rate3" class="form-control" value="98"/>
+                                                        <div class="input-group-append">
+                                                            <span class="input-group-text">%</span>
+                                                        </div>
+                                                    </div>
                                                     <span asp-validation-for="Round2.Rate3" class="text-danger"></span>
                                                 </div>
                                             </div>
                                             <div class="row">
                                                 <div class="form-group col-md-6">
                                                     <label asp-for="Round2.Rate4" class="control-label"></label>
-                                                    <input asp-for="Round2.Rate4" class="form-control" />
+                                                    <div class="input-group">
+                                                        <input asp-for="Round2.Rate4" class="form-control" value="99"/>
+                                                        <div class="input-group-append">
+                                                            <span class="input-group-text">%</span>
+                                                        </div>
+                                                    </div>
                                                     <span asp-validation-for="Round2.Rate4" class="text-danger"></span>
                                                 </div>
                                             </div>
                                             <div class="row">
                                                 <div class="form-group col-md-6">
                                                     <label asp-for="Round2.Rate5" class="control-label"></label>
-                                                    <input asp-for="Round2.Rate5" class="form-control" />
+                                                    <div class="input-group">
+                                                        <input asp-for="Round2.Rate5" class="form-control" value="100"/>
+                                                        <div class="input-group-append">
+                                                            <span class="input-group-text">%</span>
+                                                        </div>
+                                                    </div>
                                                     <span asp-validation-for="Round2.Rate5" class="text-danger"></span>
                                                 </div>
                                                 <div class="form-group col-md-6">
@@ -216,7 +270,7 @@
                                             <div class="row">
                                                 <div class="form-group col-md-6">
                                                     <label class="control-label">รายละเอียดเกณฑ์การให้คะแนน 1</label>
-                                                    <input asp-for="LRound.Rate1" value="1" hidden/>
+                                                    <input asp-for="LRound.Rate1" value="1" hidden />
                                                     <input asp-for="LRound.DetailRate1" class="form-control" />
                                                     <span asp-validation-for="LRound.DetailRate1" class="text-danger"></span>
                                                 </div>
@@ -234,7 +288,7 @@
                                             <div class="row">
                                                 <div class="form-group col-md-6">
                                                     <label class="control-label">รายละเอียดเกณฑ์การให้คะแนน 2</label>
-                                                    <input asp-for="LRound.Rate2" value="2" hidden/>
+                                                    <input asp-for="LRound.Rate2" value="2" hidden />
                                                     <input asp-for="LRound.DetailRate2" class="form-control" />
                                                     <span asp-validation-for="LRound.DetailRate2" class="text-danger"></span>
                                                 </div>
@@ -427,7 +481,6 @@
                                             <div class="row">
                                                 <div class="form-group col-md-6">
                                                     <label class="control-label">รายละเอียดเกณฑ์การให้คะแนน 1</label>
-                                                    <input asp-for="LRRound.Rate1" value="1" hidden />
                                                     <input asp-for="LRRound.DetailRate1" class="form-control" />
                                                     <span asp-validation-for="LRRound.DetailRate1" class="text-danger"></span>
                                                 </div>
@@ -444,24 +497,24 @@
                                             </div>
                                             <div class="row">
                                                 <div class="form-group col-md-6">
-                                                    <label class="control-label level">รายละเอียดเกณฑ์การให้คะแนน 2</label>
-                                                    <label asp-for="LRRound.Rate2" class="control-label rate" id="LLRRound.Rate2" style="display:none"></label>
-                                                    <div class="input-group rate" style="display:none" id="GLRRound.Rate2">
-                                                        <input asp-for="LRRound.Rate2" value="2" class="form-control"/>
+                                                    <label id="LRRound.Label2" class="control-label">รายละเอียดเกณฑ์การให้คะแนน 2</label>
+                                                    <label asp-for="LRRound.Rate2" class="control-label" id="LRRound.LabelRate2" style="display:none"></label>
+                                                    <div class="input-group" style="display:none" id="LRRound.GRate2">
+                                                        <input asp-for="LRRound.Rate2"  class="form-control" value="2"/>
                                                         <div class="input-group-append">
                                                             <div class="input-group-text">%</div>
                                                         </div>
                                                     </div>
-                                                    <span asp-validation-for="LRRound.Rate2" class="text-danger rate"></span>
-                                                    <input asp-for="LRRound.DetailRate2" class="form-control level" />
-                                                    <span asp-validation-for="LRRound.DetailRate2" class="text-danger level"></span>
+                                                    <span asp-validation-for="LRRound.Rate2" class="text-danger"></span>
+                                                    <input asp-for="LRRound.DetailRate2" class="form-control" />
+                                                    <span asp-validation-for="LRRound.DetailRate2" class="text-danger"></span>
                                                 </div>
-                                                <div class="form-group col-md-3 level" id="LRR.Start2">
+                                                <div class="form-group col-md-3" id="LRRound.Start2">
                                                     <label asp-for="LRRound.R2MStart" class="control-label"></label>
                                                     <input asp-for="LRRound.R2MStart" class="form-control" />
                                                     <span asp-validation-for="LRRound.R2MStart" class="text-danger"></span>
                                                 </div>
-                                                <div class="form-group col-md-3 level" id="LRR.Stop2">
+                                                <div class="form-group col-md-3" id="LRRound.Stop2">
                                                     <label asp-for="LRRound.R2MStop" class="control-label"></label>
                                                     <input asp-for="LRRound.R2MStop" class="form-control" />
                                                     <span asp-validation-for="LRRound.R2MStop" class="text-danger"></span>
@@ -469,24 +522,24 @@
                                             </div>
                                             <div class="row">
                                                 <div class="form-group col-md-6">
-                                                    <label class="control-label level">รายละเอียดเกณฑ์การให้คะแนน 3</label>
-                                                    <label asp-for="LRRound.Rate3" class="control-label rate" style="display:none"></label>
-                                                    <div class="input-group rate" style="display:none">
-                                                        <input asp-for="LRRound.Rate3" value="3" class="form-control" />
+                                                    <label id="LRRound.Label3" class="control-label">รายละเอียดเกณฑ์การให้คะแนน 3</label>
+                                                    <label asp-for="LRRound.Rate3" class="control-label" id="LRRound.LabelRate3" style="display:none"></label>
+                                                    <div class="input-group" style="display:none" id="LRRound.GRate3">
+                                                        <input asp-for="LRRound.Rate3" class="form-control" value="3"/>
                                                         <div class="input-group-append">
                                                             <div class="input-group-text">%</div>
                                                         </div>
                                                     </div>
-                                                    <span asp-validation-for="LRRound.Rate3" class="text-danger rate"></span>
-                                                    <input asp-for="LRRound.DetailRate3" class="form-control level" />
+                                                    <span asp-validation-for="LRRound.Rate3" class="text-danger"></span>
+                                                    <input asp-for="LRRound.DetailRate3" class="form-control" />
                                                     <span asp-validation-for="LRRound.DetailRate3" class="text-danger"></span>
                                                 </div>
-                                                <div class="form-group col-md-3">
+                                                <div class="form-group col-md-3" id="LRRound.Start3">
                                                     <label asp-for="LRRound.R3MStart" class="control-label"></label>
                                                     <input asp-for="LRRound.R3MStart" class="form-control" />
                                                     <span asp-validation-for="LRRound.R3MStart" class="text-danger"></span>
                                                 </div>
-                                                <div class="form-group col-md-3">
+                                                <div class="form-group col-md-3" id="LRRound.Stop3">
                                                     <label asp-for="LRRound.R3MStop" class="control-label"></label>
                                                     <input asp-for="LRRound.R3MStop" class="form-control" />
                                                     <span asp-validation-for="LRRound.R3MStop" class="text-danger"></span>
@@ -494,10 +547,10 @@
                                             </div>
                                             <div class="row">
                                                 <div class="form-group col-md-6">
-                                                    <label class="control-label">รายละเอียดเกณฑ์การให้คะแนน 4</label>
-                                                    <label asp-for="LRRound.Rate4" class="control-label" id="LLRRound.Rate4" style="display:none"></label>
-                                                    <div class="input-group" style="display:none" id="GLRRound.Rate4">
-                                                        <input asp-for="LRRound.Rate4" value="4" class="form-control"/>
+                                                    <label id="LRRound.Label4" class="control-label">รายละเอียดเกณฑ์การให้คะแนน 4</label>
+                                                    <label asp-for="LRRound.Rate4" class="control-label" id="LRRound.LabelRate4" style="display:none"></label>
+                                                    <div class="input-group" style="display:none" id="LRRound.GRate4">
+                                                        <input asp-for="LRRound.Rate4" class="form-control" value="4"/>
                                                         <div class="input-group-append">
                                                             <div class="input-group-text">%</div>
                                                         </div>
@@ -506,12 +559,12 @@
                                                     <input asp-for="LRRound.DetailRate4" class="form-control" />
                                                     <span asp-validation-for="LRRound.DetailRate4" class="text-danger"></span>
                                                 </div>
-                                                <div class="form-group col-md-3">
+                                                <div class="form-group col-md-3" id="LRRound.Start4">
                                                     <label asp-for="LRRound.R4MStart" class="control-label"></label>
                                                     <input asp-for="LRRound.R4MStart" class="form-control" />
                                                     <span asp-validation-for="LRRound.R4MStart" class="text-danger"></span>
                                                 </div>
-                                                <div class="form-group col-md-3">
+                                                <div class="form-group col-md-3" id="LRRound.Stop4">
                                                     <label asp-for="LRRound.R4MStop" class="control-label"></label>
                                                     <input asp-for="LRRound.R4MStop" class="form-control" />
                                                     <span asp-validation-for="LRRound.R4MStop" class="text-danger"></span>
@@ -520,8 +573,8 @@
                                             <div class="row">
                                                 <div class="form-group col-md-6">
                                                     <label asp-for="LRRound.Rate5" class="control-label"></label>
-                                                    <div class="input-group" id="GLRRound.Rate5">
-                                                        <input asp-for="LRRound.Rate5" class="form-control" />
+                                                    <div class="input-group" id="LRRound.GRate5">
+                                                        <input asp-for="LRRound.Rate5" class="form-control" value="100"/>
                                                         <div class="input-group-append">
                                                             <span class="input-group-text">%</span>
                                                         </div>
@@ -549,7 +602,6 @@
                                             <div class="row">
                                                 <div class="form-group col-md-6">
                                                     <label class="control-label">รายละเอียดเกณฑ์การให้คะแนน 1</label>
-                                                    <input asp-for="LRRound2.Rate1" value="1" hidden />
                                                     <input asp-for="LRRound2.DetailRate1" class="form-control" />
                                                     <span asp-validation-for="LRRound2.DetailRate1" class="text-danger"></span>
                                                 </div>
@@ -566,10 +618,10 @@
                                             </div>
                                             <div class="row">
                                                 <div class="form-group col-md-6">
-                                                    <label class="control-label">รายละเอียดเกณฑ์การให้คะแนน 2</label>
-                                                    <label asp-for="LRRound2.Rate2" class="control-label" id="LLRRound2.Rate2" style="display:none"></label>
-                                                    <div class="input-group" style="display:none" id="GLRRound2.Rate2">
-                                                        <input asp-for="LRRound2.Rate2" value="2" class="form-control"/>
+                                                    <label id="LRRound2.Label2" class="control-label">รายละเอียดเกณฑ์การให้คะแนน 2</label>
+                                                    <label asp-for="LRRound2.Rate2" class="control-label" id="LRRound2.LabelRate2" style="display:none"></label>
+                                                    <div class="input-group" style="display:none" id="LRRound2.GRate2">
+                                                        <input asp-for="LRRound2.Rate2" class="form-control" value="2"/>
                                                         <div class="input-group-append">
                                                             <span class="input-group-text">%</span>
                                                         </div>
@@ -578,12 +630,12 @@
                                                     <input asp-for="LRRound2.DetailRate2" class="form-control" />
                                                     <span asp-validation-for="LRRound2.DetailRate2" class="text-danger"></span>
                                                 </div>
-                                                <div class="form-group col-md-3">
+                                                <div class="form-group col-md-3" id="LRRound2.Start2">
                                                     <label asp-for="LRRound2.R2MStart" class="control-label"></label>
                                                     <input asp-for="LRRound2.R2MStart" class="form-control" />
                                                     <span asp-validation-for="LRRound2.R2MStart" class="text-danger"></span>
                                                 </div>
-                                                <div class="form-group col-md-3">
+                                                <div class="form-group col-md-3" id="LRRound2.Stop2">
                                                     <label asp-for="LRRound2.R2MStop" class="control-label"></label>
                                                     <input asp-for="LRRound2.R2MStop" class="form-control" />
                                                     <span asp-validation-for="LRRound2.R2MStop" class="text-danger"></span>
@@ -591,10 +643,10 @@
                                             </div>
                                             <div class="row">
                                                 <div class="form-group col-md-6">
-                                                    <label class="control-label">รายละเอียดเกณฑ์การให้คะแนน 3</label>
-                                                    <label asp-for="LRRound2.Rate3" class="control-label" id="LLRRound2.Rate3" style="display:none"></label>
-                                                    <div class="input-group" style="display:none" id="GLRRound2.Rate3">
-                                                        <input asp-for="LRRound2.Rate3" value="3" class="form-control"/>
+                                                    <label id="LRRound2.Label3" class="control-label">รายละเอียดเกณฑ์การให้คะแนน 3</label>
+                                                    <label asp-for="LRRound2.Rate3" class="control-label" id="LRRound2.LabelRate3" style="display:none"></label>
+                                                    <div class="input-group" style="display:none" id="LRRound2.GRate3">
+                                                        <input asp-for="LRRound2.Rate3" class="form-control" value="3"/>
                                                         <div class="input-group-append">
                                                             <span class="input-group-text">%</span>
                                                         </div>
@@ -603,12 +655,12 @@
                                                     <input asp-for="LRRound2.DetailRate3" class="form-control" />
                                                     <span asp-validation-for="LRRound2.DetailRate3" class="text-danger"></span>
                                                 </div>
-                                                <div class="form-group col-md-3">
+                                                <div class="form-group col-md-3" id="LRRound2.Start3">
                                                     <label asp-for="LRRound2.R3MStart" class="control-label"></label>
                                                     <input asp-for="LRRound2.R3MStart" class="form-control" />
                                                     <span asp-validation-for="LRRound2.R3MStart" class="text-danger"></span>
                                                 </div>
-                                                <div class="form-group col-md-3">
+                                                <div class="form-group col-md-3" id="LRRound2.Stop3">
                                                     <label asp-for="LRRound2.R3MStop" class="control-label"></label>
                                                     <input asp-for="LRRound2.R3MStop" class="form-control" />
                                                     <span asp-validation-for="LRRound2.R3MStop" class="text-danger"></span>
@@ -616,10 +668,10 @@
                                             </div>
                                             <div class="row">
                                                 <div class="form-group col-md-6">
-                                                    <label class="control-label">รายละเอียดเกณฑ์การให้คะแนน 4</label>
-                                                    <label asp-for="LRRound2.Rate4" class="control-label" id="LLRRound2.Rate4" style="display:none"></label>
-                                                    <div class="input-group" style="display:none" id="GLRRound2.Rate4">
-                                                        <input asp-for="LRRound2.Rate4" value="4" class="form-control"/>
+                                                    <label id="LRRound2.Label4" class="control-label">รายละเอียดเกณฑ์การให้คะแนน 4</label>
+                                                    <label asp-for="LRRound2.Rate4" class="control-label" id="LRRound2.LabelRate4" style="display:none"></label>
+                                                    <div class="input-group" style="display:none" id="LRRound2.GRate4">
+                                                        <input asp-for="LRRound2.Rate4" class="form-control" value="4"/>
                                                         <div class="input-group-append">
                                                             <span class="input-group-text">%</span>
                                                         </div>
@@ -628,12 +680,12 @@
                                                     <input asp-for="LRRound2.DetailRate4" class="form-control" />
                                                     <span asp-validation-for="LRRound2.DetailRate4" class="text-danger"></span>
                                                 </div>
-                                                <div class="form-group col-md-3">
+                                                <div class="form-group col-md-3" id="LRRound2.Start4">
                                                     <label asp-for="LRRound2.R4MStart" class="control-label"></label>
                                                     <input asp-for="LRRound2.R4MStart" class="form-control" />
                                                     <span asp-validation-for="LRRound2.R4MStart" class="text-danger"></span>
                                                 </div>
-                                                <div class="form-group col-md-3">
+                                                <div class="form-group col-md-3" id="LRRound2.Stop4">
                                                     <label asp-for="LRRound2.R4MStop" class="control-label"></label>
                                                     <input asp-for="LRRound2.R4MStop" class="form-control" />
                                                     <span asp-validation-for="LRRound2.R4MStop" class="text-danger"></span>
@@ -642,8 +694,8 @@
                                             <div class="row">
                                                 <div class="form-group col-md-6">
                                                     <label asp-for="LRRound2.Rate5" class="control-label"></label>
-                                                    <div class="input-group" id="GLRRound2.Rate5">
-                                                        <input asp-for="LRRound2.Rate5" class="form-control" />
+                                                    <div class="input-group" id="LRRound2.GRate5">
+                                                        <input asp-for="LRRound2.Rate5" class="form-control" value="100"/>
                                                         <div class="input-group-append">
                                                             <span class="input-group-text">%</span>
                                                         </div>
@@ -772,7 +824,7 @@
                 </div>
             </div>
             <div class="card-footer">
-                <input asp-for="point.Plan" placeholder="@ViewBag.PlanValue" hidden />
+                <input asp-for="point.Plan" value="@ViewBag.PlanValue" hidden />
                 <input asp-for="yearPoint" value="@ViewBag.yearPoint" hidden />
                 <input asp-for="selectoffice" value="@ViewBag.selectoffice" hidden />
                 <button type="submit" class="btn btn-primary">บันทึก</button>
@@ -806,12 +858,12 @@
                 if ($(this).children("option:selected").val() == 0) {
                     $("#DataForEvalutionTable").show();
                     $("#roundNumber").val(1);
+                    $("#RateRound1").show();
+                    $("#RateRound2").hide();
                     $("#LevelRound1").hide();
                     $("#LevelRound2").hide();
                     $("#LevelRateRound1").hide();
-                    $("#LevelRateRound2").hide();
-                    $("#RateRound1").show();
-                    $("#RateRound2").hide();
+                    $("#LevelRateRound2").hide();    
                 } else if ($(this).children("option:selected").val() == 1) {
                     $("#DataForEvalutionTable").hide();
                     $("#roundNumber").val(1);
@@ -819,6 +871,8 @@
                     $("#RateRound2").hide();
                     $("#LevelRound1").show();
                     $("#LevelRound2").hide();
+                    $("#LevelRateRound1").hide();
+                    $("#LevelRateRound2").hide();
                 } else if ($(this).children("option:selected").val() == 2) {
                     $("#DataForEvalutionTable").show();
                     $("#roundNumber").val(1);
@@ -838,26 +892,207 @@
             });
 
             $(":input[name='LRRound.LevelNumber']").change(function () {
-                switch ($(this).val()) {
-                    case 1:
-                        (":input[name='LRRound.LevelNumber']")
+                //console.log($(":input[name='LRRound.LevelNumber']").val());
+                var valueOfLevelNumber = $(":input[name='LRRound.LevelNumber']").val();
+                switch (valueOfLevelNumber) {
+                    case "1":
+                        $("label[id='LRRound.Label2']").hide();
+                        $("label[id='LRRound.LabelRate2']").show();
+                        $("div[id='LRRound.GRate2']").show();
+                        $(":input[name='LRRound.DetailRate2']").hide();
+                        $("div[id='LRRound.Start2']").hide();
+                        $("div[id='LRRound.Stop2']").hide();
+
+                        $("label[id='LRRound.Label3']").hide();
+                        $("label[id='LRRound.LabelRate3']").show();
+                        $("div[id='LRRound.GRate3']").show();
+                        $(":input[name='LRRound.DetailRate3']").hide();
+                        $("div[id='LRRound.Start3']").hide();
+                        $("div[id='LRRound.Stop3']").hide();
+
+                        $("label[id='LRRound.Label4']").hide();
+                        $("label[id='LRRound.LabelRate4']").show();
+                        $("div[id='LRRound.GRate4']").show();
+                        $(":input[name='LRRound.DetailRate4']").hide();
+                        $("div[id='LRRound.Start4']").hide();
+                        $("div[id='LRRound.Stop4']").hide();
+                        //alert($(this).val());
                         break;
-                    case 2:
-                        // code block
+                    case "2":
+                        $("label[id='LRRound.Label2']").show();
+                        $("label[id='LRRound.LabelRate2']").hide();
+                        $("div[id='LRRound.GRate2']").hide();
+                        $(":input[name='LRRound.DetailRate2']").show();
+                        $("div[id='LRRound.Start2']").show();
+                        $("div[id='LRRound.Stop2']").show();
+
+                        $("label[id='LRRound.Label3']").hide();
+                        $("label[id='LRRound.LabelRate3']").show();
+                        $("div[id='LRRound.GRate3']").show();
+                        $(":input[name='LRRound.DetailRate3']").hide();
+                        $("div[id='LRRound.Start3']").hide();
+                        $("div[id='LRRound.Stop3']").hide();
+
+                        $("label[id='LRRound.Label4']").hide();
+                        $("label[id='LRRound.LabelRate4']").show();
+                        $("div[id='LRRound.GRate4']").show();
+                        $(":input[name='LRRound.DetailRate4']").hide();
+                        $("div[id='LRRound.Start4']").hide();
+                        $("div[id='LRRound.Stop4']").hide();
+                        //alert($(this).val());
                         break;
-                    case 3:
-                        // code block
+                    case "3":
+                        $("label[id='LRRound.Label2']").show();
+                        $("label[id='LRRound.LabelRate2']").hide();
+                        $("div[id='LRRound.GRate2']").hide();
+                        $(":input[name='LRRound.DetailRate2']").show();
+                        $("div[id='LRRound.Start2']").show();
+                        $("div[id='LRRound.Stop2']").show();
+
+                        $("label[id='LRRound.Label3']").show();
+                        $("label[id='LRRound.LabelRate3']").hide();
+                        $("div[id='LRRound.GRate3']").hide();
+                        $(":input[name='LRRound.DetailRate3']").show();
+                        $("div[id='LRRound.Start3']").show();
+                        $("div[id='LRRound.Stop3']").show();
+
+                        $("label[id='LRRound.Label4']").hide();
+                        $("label[id='LRRound.LabelRate4']").show();
+                        $("div[id='LRRound.GRate4']").show();
+                        $(":input[name='LRRound.DetailRate4']").hide();
+                        $("div[id='LRRound.Start4']").hide();
+                        $("div[id='LRRound.Stop4']").hide();
+                        //alert($(this).val());
                         break;
-                    case 4:
-                        // code block
+                    case "4":
+                        $("label[id='LRRound.Label2']").show();
+                        $("label[id='LRRound.LabelRate2']").hide();
+                        $("div[id='LRRound.GRate2']").hide();
+                        $(":input[name='LRRound.DetailRate2']").show();
+                        $("div[id='LRRound.Start2']").show();
+                        $("div[id='LRRound.Stop2']").show();
+
+                        $("label[id='LRRound.Label3']").show();
+                        $("label[id='LRRound.LabelRate3']").hide();
+                        $("div[id='LRRound.GRate3']").hide();
+                        $(":input[name='LRRound.DetailRate3']").show();
+                        $("div[id='LRRound.Start3']").show();
+                        $("div[id='LRRound.Stop3']").show();
+
+                        $("label[id='LRRound.Label4']").show();
+                        $("label[id='LRRound.LabelRate4']").hide();
+                        $("div[id='LRRound.GRate4']").hide();
+                        $(":input[name='LRRound.DetailRate4']").show();
+                        $("div[id='LRRound.Start4']").show();
+                        $("div[id='LRRound.Stop4']").show();
+                        //alert($(this).val());
                         break;
                     default:
+                        
                     // code block
                 }
             });
 
             $(":input[name='LRRound2.LevelNumber']").change(function () {
+                //console.log($(":input[name='LRRound.LevelNumber']").val());
+                var valueOfLevelNumber = $(":input[name='LRRound2.LevelNumber']").val();
+                switch (valueOfLevelNumber) {
+                    case "1":
+                        $("label[id='LRRound2.Label2']").hide();
+                        $("label[id='LRRound2.LabelRate2']").show();
+                        $("div[id='LRRound2.GRate2']").show();
+                        $(":input[name='LRRound2.DetailRate2']").hide();
+                        $("div[id='LRRound2.Start2']").hide();
+                        $("div[id='LRRound2.Stop2']").hide();
 
+                        $("label[id='LRRound2.Label3']").hide();
+                        $("label[id='LRRound2.LabelRate3']").show();
+                        $("div[id='LRRound2.GRate3']").show();
+                        $(":input[name='LRRound2.DetailRate3']").hide();
+                        $("div[id='LRRound2.Start3']").hide();
+                        $("div[id='LRRound2.Stop3']").hide();
+
+                        $("label[id='LRRound2.Label4']").hide();
+                        $("label[id='LRRound2.LabelRate4']").show();
+                        $("div[id='LRRound2.GRate4']").show();
+                        $(":input[name='LRRound2.DetailRate4']").hide();
+                        $("div[id='LRRound2.Start4']").hide();
+                        $("div[id='LRRound2.Stop4']").hide();
+                        //alert($(this).val());
+                        break;
+                    case "2":
+                        $("label[id='LRRound2.Label2']").show();
+                        $("label[id='LRRound2.LabelRate2']").hide();
+                        $("div[id='LRRound2.GRate2']").hide();
+                        $(":input[name='LRRound2.DetailRate2']").show();
+                        $("div[id='LRRound2.Start2']").show();
+                        $("div[id='LRRound2.Stop2']").show();
+
+                        $("label[id='LRRound2.Label3']").hide();
+                        $("label[id='LRRound2.LabelRate3']").show();
+                        $("div[id='LRRound2.GRate3']").show();
+                        $(":input[name='LRRound2.DetailRate3']").hide();
+                        $("div[id='LRRound2.Start3']").hide();
+                        $("div[id='LRRound2.Stop3']").hide();
+
+                        $("label[id='LRRound2.Label4']").hide();
+                        $("label[id='LRRound2.LabelRate4']").show();
+                        $("div[id='LRRound2.GRate4']").show();
+                        $(":input[name='LRRound2.DetailRate4']").hide();
+                        $("div[id='LRRound2.Start4']").hide();
+                        $("div[id='LRRound2.Stop4']").hide();
+                        //alert($(this).val());
+                        break;
+                    case "3":
+                        $("label[id='LRRound2.Label2']").show();
+                        $("label[id='LRRound2.LabelRate2']").hide();
+                        $("div[id='LRRound2.GRate2']").hide();
+                        $(":input[name='LRRound2.DetailRate2']").show();
+                        $("div[id='LRRound2.Start2']").show();
+                        $("div[id='LRRound2.Stop2']").show();
+
+                        $("label[id='LRRound2.Label3']").show();
+                        $("label[id='LRRound2.LabelRate3']").hide();
+                        $("div[id='LRRound2.GRate3']").hide();
+                        $(":input[name='LRRound2.DetailRate3']").show();
+                        $("div[id='LRRound2.Start3']").show();
+                        $("div[id='LRRound2.Stop3']").show();
+
+                        $("label[id='LRRound2.Label4']").hide();
+                        $("label[id='LRRound2.LabelRate4']").show();
+                        $("div[id='LRRound2.GRate4']").show();
+                        $(":input[name='LRRound2.DetailRate4']").hide();
+                        $("div[id='LRRound2.Start4']").hide();
+                        $("div[id='LRRound2.Stop4']").hide();
+                        //alert($(this).val());
+                        break;
+                    case "4":
+                        $("label[id='LRRound2.Label2']").show();
+                        $("label[id='LRRound2.LabelRate2']").hide();
+                        $("div[id='LRRound2.GRate2']").hide();
+                        $(":input[name='LRRound2.DetailRate2']").show();
+                        $("div[id='LRRound2.Start2']").show();
+                        $("div[id='LRRound2.Stop2']").show();
+
+                        $("label[id='LRRound2.Label3']").show();
+                        $("label[id='LRRound2.LabelRate3']").hide();
+                        $("div[id='LRRound2.GRate3']").hide();
+                        $(":input[name='LRRound2.DetailRate3']").show();
+                        $("div[id='LRRound2.Start3']").show();
+                        $("div[id='LRRound2.Stop3']").show();
+
+                        $("label[id='LRRound2.Label4']").show();
+                        $("label[id='LRRound2.LabelRate4']").hide();
+                        $("div[id='LRRound2.GRate4']").hide();
+                        $(":input[name='LRRound2.DetailRate4']").show();
+                        $("div[id='LRRound2.Start4']").show();
+                        $("div[id='LRRound2.Stop4']").show();
+                        //alert($(this).val());
+                        break;
+                    default:
+
+                    // code block
+                }
             });
 
             if ($("#OwnerOfficeId").val() == "") {
