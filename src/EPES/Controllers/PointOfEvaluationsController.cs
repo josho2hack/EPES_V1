@@ -476,8 +476,6 @@ namespace EPES.Controllers
             }
 
             dataView.point.UpdateUserId = user.Id;
-            //dataView.SubPoint = 0;
-            int roundid = 0;
             try
             {
                 if (ModelState.IsValid)
@@ -488,13 +486,11 @@ namespace EPES.Controllers
                         dataView.Round.PointOfEvaluationId = dataView.point.Id;
                         dataView.Round.RoundNumber = 1;
                         _context.Add(dataView.Round);
-                        roundid = dataView.Round.Id;
                         if (dataView.roundNumber == 2)
                         {
                             dataView.Round2.PointOfEvaluationId = dataView.point.Id;
                             dataView.Round2.RoundNumber = 2;
                             _context.Add(dataView.Round2);
-                            roundid = dataView.Round2.Id;
                         }
                     }
                     else if (dataView.point.Unit == UnitOfPoint.ระดับ)
@@ -502,13 +498,11 @@ namespace EPES.Controllers
                         dataView.LRound.PointOfEvaluationId = dataView.point.Id;
                         dataView.LRound.RoundNumber = 1;
                         _context.Add(dataView.LRound);
-                        roundid = dataView.LRound.Id;
                         if (dataView.roundNumber == 2)
                         {
                             dataView.LRound2.PointOfEvaluationId = dataView.point.Id;
                             dataView.LRound2.RoundNumber = 2;
                             _context.Add(dataView.LRound2);
-                            roundid = dataView.LRound2.Id;
                         }
                     }
                     else if (dataView.point.Unit == UnitOfPoint.ระดับ_ร้อยละ)
@@ -516,31 +510,29 @@ namespace EPES.Controllers
                         dataView.LRRound.PointOfEvaluationId = dataView.point.Id;
                         dataView.LRRound.RoundNumber = 1;
                         _context.Add(dataView.LRRound);
-                        roundid = dataView.LRRound.Id;
                         if (dataView.roundNumber == 2)
                         {
                             dataView.LRRound2.PointOfEvaluationId = dataView.point.Id;
                             dataView.LRRound2.RoundNumber = 2;
                             _context.Add(dataView.LRRound2);
-                            roundid = dataView.LRRound2.Id;
                         }
                     }
 
                     await _context.SaveChangesAsync();
                     if (dataView.point.OwnerOffice != null)  //บันทึกเฉพาะมอบให้หน่วยงานเดียวเท่านั้น
                     {
-                        await SaveExpect(roundid, dataView.point.Id, dataView.point.OwnerOffice.Id, 10, dataView.expect10, user.Id);
-                        await SaveExpect(roundid, dataView.point.Id, dataView.point.OwnerOffice.Id, 11, dataView.expect11, user.Id);
-                        await SaveExpect(roundid, dataView.point.Id, dataView.point.OwnerOffice.Id, 12, dataView.expect12, user.Id);
-                        await SaveExpect(roundid, dataView.point.Id, dataView.point.OwnerOffice.Id, 1, dataView.expect1, user.Id);
-                        await SaveExpect(roundid, dataView.point.Id, dataView.point.OwnerOffice.Id, 2, dataView.expect2, user.Id);
-                        await SaveExpect(roundid, dataView.point.Id, dataView.point.OwnerOffice.Id, 3, dataView.expect3, user.Id);
-                        await SaveExpect(roundid, dataView.point.Id, dataView.point.OwnerOffice.Id, 4, dataView.expect4, user.Id);
-                        await SaveExpect(roundid, dataView.point.Id, dataView.point.OwnerOffice.Id, 5, dataView.expect5, user.Id);
-                        await SaveExpect(roundid, dataView.point.Id, dataView.point.OwnerOffice.Id, 6, dataView.expect6, user.Id);
-                        await SaveExpect(roundid, dataView.point.Id, dataView.point.OwnerOffice.Id, 7, dataView.expect7, user.Id);
-                        await SaveExpect(roundid, dataView.point.Id, dataView.point.OwnerOffice.Id, 8, dataView.expect8, user.Id);
-                        await SaveExpect(roundid, dataView.point.Id, dataView.point.OwnerOffice.Id, 9, dataView.expect9, user.Id);
+                        await SaveExpect(dataView.point.Id, dataView.point.OwnerOffice.Id, 10, dataView.expect10, user.Id);
+                        await SaveExpect(dataView.point.Id, dataView.point.OwnerOffice.Id, 11, dataView.expect11, user.Id);
+                        await SaveExpect(dataView.point.Id, dataView.point.OwnerOffice.Id, 12, dataView.expect12, user.Id);
+                        await SaveExpect(dataView.point.Id, dataView.point.OwnerOffice.Id, 1, dataView.expect1, user.Id);
+                        await SaveExpect(dataView.point.Id, dataView.point.OwnerOffice.Id, 2, dataView.expect2, user.Id);
+                        await SaveExpect(dataView.point.Id, dataView.point.OwnerOffice.Id, 3, dataView.expect3, user.Id);
+                        await SaveExpect(dataView.point.Id, dataView.point.OwnerOffice.Id, 4, dataView.expect4, user.Id);
+                        await SaveExpect(dataView.point.Id, dataView.point.OwnerOffice.Id, 5, dataView.expect5, user.Id);
+                        await SaveExpect(dataView.point.Id, dataView.point.OwnerOffice.Id, 6, dataView.expect6, user.Id);
+                        await SaveExpect(dataView.point.Id, dataView.point.OwnerOffice.Id, 7, dataView.expect7, user.Id);
+                        await SaveExpect(dataView.point.Id, dataView.point.OwnerOffice.Id, 8, dataView.expect8, user.Id);
+                        await SaveExpect(dataView.point.Id, dataView.point.OwnerOffice.Id, 9, dataView.expect9, user.Id);
                     }
 
                     return RedirectToAction(nameof(Index), new { yearPoint = dataView.yearPoint, selectoffice = dataView.selectoffice });
@@ -786,12 +778,25 @@ namespace EPES.Controllers
                 return NotFound();
             }
 
-            dataView.Round = await _context.Rounds.Where(r => r.PointOfEvaluationId == id).FirstOrDefaultAsync();
-            dataView.Round2 = await _context.Rounds.Where(r => r.PointOfEvaluationId == id).FirstOrDefaultAsync();
-            dataView.LRound = await _context.Rounds.Where(r => r.PointOfEvaluationId == id).FirstOrDefaultAsync();
-            dataView.LRound2 = await _context.Rounds.Where(r => r.PointOfEvaluationId == id).FirstOrDefaultAsync();
-            dataView.LRRound = await _context.Rounds.Where(r => r.PointOfEvaluationId == id).FirstOrDefaultAsync();
-            dataView.LRRound2 = await _context.Rounds.Where(r => r.PointOfEvaluationId == id).FirstOrDefaultAsync();
+            dataView.Round = await _context.Rounds.Where(r => r.PointOfEvaluationId == id && r.RoundNumber == 1).FirstOrDefaultAsync();
+            dataView.Round2 = await _context.Rounds.Where(r => r.PointOfEvaluationId == id && r.RoundNumber == 2).FirstOrDefaultAsync();
+            dataView.LRound = await _context.Rounds.Where(r => r.PointOfEvaluationId == id && r.RoundNumber == 1).FirstOrDefaultAsync();
+            dataView.LRound2 = await _context.Rounds.Where(r => r.PointOfEvaluationId == id && r.RoundNumber == 2).FirstOrDefaultAsync();
+            dataView.LRRound = await _context.Rounds.Where(r => r.PointOfEvaluationId == id && r.RoundNumber == 1).FirstOrDefaultAsync();
+            dataView.LRRound2 = await _context.Rounds.Where(r => r.PointOfEvaluationId == id && r.RoundNumber == 2).FirstOrDefaultAsync();
+
+            dataView.expect10 = await _context.DataForEvaluations.Where(d => d.PointOfEvaluationId == id && d.Month == 10).Select(d => d.Expect).FirstOrDefaultAsync();
+            dataView.expect11 = await _context.DataForEvaluations.Where(d => d.PointOfEvaluationId == id && d.Month == 11).Select(d => d.Expect).FirstOrDefaultAsync();
+            dataView.expect12 = await _context.DataForEvaluations.Where(d => d.PointOfEvaluationId == id && d.Month == 12).Select(d => d.Expect).FirstOrDefaultAsync();
+            dataView.expect1 = await _context.DataForEvaluations.Where(d => d.PointOfEvaluationId == id && d.Month == 1).Select(d => d.Expect).FirstOrDefaultAsync();
+            dataView.expect2 = await _context.DataForEvaluations.Where(d => d.PointOfEvaluationId == id && d.Month == 2).Select(d => d.Expect).FirstOrDefaultAsync();
+            dataView.expect3 = await _context.DataForEvaluations.Where(d => d.PointOfEvaluationId == id && d.Month == 3).Select(d => d.Expect).FirstOrDefaultAsync();
+            dataView.expect4 = await _context.DataForEvaluations.Where(d => d.PointOfEvaluationId == id && d.Month == 4).Select(d => d.Expect).FirstOrDefaultAsync();
+            dataView.expect5 = await _context.DataForEvaluations.Where(d => d.PointOfEvaluationId == id && d.Month == 5).Select(d => d.Expect).FirstOrDefaultAsync();
+            dataView.expect6 = await _context.DataForEvaluations.Where(d => d.PointOfEvaluationId == id && d.Month == 6).Select(d => d.Expect).FirstOrDefaultAsync();
+            dataView.expect7 = await _context.DataForEvaluations.Where(d => d.PointOfEvaluationId == id && d.Month == 7).Select(d => d.Expect).FirstOrDefaultAsync();
+            dataView.expect8 = await _context.DataForEvaluations.Where(d => d.PointOfEvaluationId == id && d.Month == 8).Select(d => d.Expect).FirstOrDefaultAsync();
+            dataView.expect9 = await _context.DataForEvaluations.Where(d => d.PointOfEvaluationId == id && d.Month == 9).Select(d => d.Expect).FirstOrDefaultAsync();
 
             var user = await _userManager.GetUserAsync(User);
             var office = await _context.Offices.Where(o => o.Code == user.OfficeId).FirstOrDefaultAsync();
@@ -1011,9 +1016,6 @@ namespace EPES.Controllers
             return View(dataView);
         }
 
-        // POST: PointOfEvaluations/Edit/5
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost, ActionName("Edit")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> EditPost(string selectoffice, int? id, int yearpoint = 0)
@@ -1324,10 +1326,10 @@ namespace EPES.Controllers
         }
 
 
-        public async Task SaveExpect(int roundid,int poeid, int ownerofficeid, int month, decimal expect, string userid)
+        public async Task SaveExpect(int poeid, int ownerofficeid, int month, decimal expect, string userid)
         {
             DataForEvaluation dataForEvaluation;
-            dataForEvaluation = await _context.DataForEvaluations.Where(d => d.RoundId == roundid && d.PointOfEvaluationId == poeid && d.OfficeId == ownerofficeid && d.Month == month).FirstOrDefaultAsync();
+            dataForEvaluation = await _context.DataForEvaluations.Where(d => d.PointOfEvaluationId == poeid && d.OfficeId == ownerofficeid && d.Month == month).FirstOrDefaultAsync();
             if (dataForEvaluation != null)
             {
                 dataForEvaluation.UpdateUserId = userid;
@@ -1348,7 +1350,6 @@ namespace EPES.Controllers
             else
             {
                 dataForEvaluation = new DataForEvaluation();
-                dataForEvaluation.RoundId = roundid;
                 dataForEvaluation.UpdateUserId = userid;
                 dataForEvaluation.PointOfEvaluationId = poeid;
                 dataForEvaluation.OfficeId = ownerofficeid;

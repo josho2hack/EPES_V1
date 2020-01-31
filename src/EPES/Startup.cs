@@ -44,7 +44,7 @@ namespace EPES
 
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(
-                    Configuration.GetConnectionString("DefaultConnection")));
+                    Configuration.GetConnectionString("_Connect_local")));
 
             services.AddIdentity<ApplicationUser, IdentityRole>()
                     .AddDefaultUI(UIFramework.Bootstrap4)

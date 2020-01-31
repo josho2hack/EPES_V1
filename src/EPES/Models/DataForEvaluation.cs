@@ -91,10 +91,6 @@ namespace EPES.Models
         [Display(Name = "หน่วยงาน")]
         public Office Office { get; set; }
 
-        public int RoundId { get; set; }
-        [Display(Name = "รอบการวัด")]
-        public Round Round { get; set; }
-
         public int PointOfEvaluationId { get; set; }
         [Display(Name = "ตัวชี้วัด")]
         public PointOfEvaluation PointOfEvaluation { get; set; }

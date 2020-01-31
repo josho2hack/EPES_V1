@@ -178,8 +178,5 @@ namespace EPES.Models
         public int PointOfEvaluationId { get; set; }
         [Display(Name = "ตัวชี้วัด")]
         public PointOfEvaluation PointOfEvaluation { get; set; }
-
-        [Display(Name = "ข้อมูลในการประเมิน")]
-        public IList<DataForEvaluation> DataForEvaluations { get; set; }
     }
 }
