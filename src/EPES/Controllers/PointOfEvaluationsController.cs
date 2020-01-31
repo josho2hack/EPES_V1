@@ -1018,9 +1018,9 @@ namespace EPES.Controllers
 
         [HttpPost, ActionName("Edit")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> EditPost(string selectoffice, int? id, int yearpoint = 0)
+        public async Task<IActionResult> EditPost(DataForEvaluationViewModel dataViewToUpdate)
         {
-            if (id == null)
+            if (dataViewToUpdate.Point.Id == null)
             {
                 return NotFound();
             }
@@ -1029,7 +1029,7 @@ namespace EPES.Controllers
             var pointOfEvaluationToUpdate = await _context.PointOfEvaluations.FirstOrDefaultAsync(p => p.Id == id);
             pointOfEvaluationToUpdate.UpdateUserId = user.Id;
 
-            if (await TryUpdateModelAsync<PointOfEvaluation>(
+            if (await TryUpdateModelAsync<PointOfEvaluationViewModel>(
                 pointOfEvaluationToUpdate, "",
                 p => p.Year, p => p.DetailPlan, p => p.Point, p => p.SubPoint, p => p.Plan, p => p.ExpectPlan, p => p.Ddrive, p => p.Name, p => p.Unit, p => p.Weight))
             {

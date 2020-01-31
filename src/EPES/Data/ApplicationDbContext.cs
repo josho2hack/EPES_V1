@@ -20,11 +20,6 @@ namespace EPES.Data
             base.OnModelCreating(builder);
 
             builder.Entity<DataForEvaluation>()
-                .HasOne(d => d.Round)
-                .WithMany(r => r.DataForEvaluations)
-                .OnDelete(DeleteBehavior.Restrict);
-
-            builder.Entity<DataForEvaluation>()
                 .HasOne(d => d.PointOfEvaluation)
                 .WithMany(p => p.DataForEvaluations)
                 .OnDelete(DeleteBehavior.Restrict);

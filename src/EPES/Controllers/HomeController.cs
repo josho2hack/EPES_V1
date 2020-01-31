@@ -57,30 +57,43 @@ namespace EPES.Controllers
                 yearForRequest = new DateTime(DateTime.Now.Year, 1, 1);
             }
 
-            //string url = "";
-            //var m = DateTime.Now.Month;
-            //url = "http://10.20.37.11:7072/serviceTier/webapi/All/officeId/" + "00000000" + "/year/" + (yearForRequest.Year + 543).ToString("D4") + "/month/" + DateTime.Now.Month.ToString("D2");
+            string url = "";
+            var m = DateTime.Now.Month;
+            url = "http://10.20.37.11:7072/serviceTier/webapi/All/officeId/" + "00000000" + "/year/" + (yearForRequest.Year + 543).ToString("D4") + "/month/" + DateTime.Now.Month.ToString("D2");
 
-            //var webRequest = WebRequest.Create(url) as HttpWebRequest;
-
-            //if (webRequest != null)
-            //{
-            //    webRequest.ContentType = "application/json";
-            //    webRequest.UserAgent = "Nothing";
-            //    using (var s = webRequest.GetResponse().GetResponseStream())
-            //    {
-            //        using (var sr = new StreamReader(s))
-            //        {
-            //            var taxCollectionsAsJson = sr.ReadToEnd();
-            //            var taxCollections = JsonConvert.DeserializeObject<Rootobject>(taxCollectionsAsJson);
-            //            foreach (var t in taxCollections.taxCollection)
-            //            {
-            //                CYcurrentYear += t.CYcurrentYear;
-            //                CYforcast += t.CYforcast;
-            //            }
-            //        }
-            //    }
-            //}
+            var webRequest = WebRequest.Create(url) as HttpWebRequest;
+            
+            if (webRequest != null)
+            {
+                webRequest.ContentType = "application/json";
+                webRequest.UserAgent = "Nothing";
+                webRequest.Timeout = 3000;
+                try
+                {
+                    using (var s = webRequest.GetResponse().GetResponseStream())
+                    {
+                        using (var sr = new StreamReader(s))
+                        {
+                            var taxCollectionsAsJson = sr.ReadToEnd();
+                            var taxCollections = JsonConvert.DeserializeObject<Rootobject>(taxCollectionsAsJson);
+                            foreach (var t in taxCollections.taxCollection)
+                            {
+                                CYcurrentYear += t.CYcurrentYear;
+                                CYforcast += t.CYforcast;
+                            }
+                        }
+                    }
+                }
+                catch (WebException ex)
+                {
+                    if (ex.Status == WebExceptionStatus.Timeout)
+                    {
+                        CYcurrentYear = 9999999;
+                        CYforcast = 9999999;
+                    }
+                    
+                }
+            }
 
             ViewBag.CYcurrentYear = CYcurrentYear / 1000000;
             ViewBag.CYforcast = CYforcast / 1000000;
@@ -100,30 +113,43 @@ namespace EPES.Controllers
                 yearForRequest = new DateTime(DateTime.Now.Year, 1, 1);
             }
 
-            //string url = "";
-            //var m = DateTime.Now.Month;
-            //url = "http://10.20.37.11:7072/serviceTier/webapi/All/officeId/" + "00000000" + "/year/" + (yearForRequest.Year + 543).ToString("D4") + "/month/" + DateTime.Now.Month.ToString("D2");
+            string url = "";
+            var m = DateTime.Now.Month;
+            url = "http://10.20.37.11:7072/serviceTier/webapi/All/officeId/" + "00000000" + "/year/" + (yearForRequest.Year + 543).ToString("D4") + "/month/" + DateTime.Now.Month.ToString("D2");
 
-            //var webRequest = WebRequest.Create(url) as HttpWebRequest;
+            var webRequest = WebRequest.Create(url) as HttpWebRequest;
 
-            //if (webRequest != null)
-            //{
-            //    webRequest.ContentType = "application/json";
-            //    webRequest.UserAgent = "Nothing";
-            //    using (var s = webRequest.GetResponse().GetResponseStream())
-            //    {
-            //        using (var sr = new StreamReader(s))
-            //        {
-            //            var taxCollectionsAsJson = sr.ReadToEnd();
-            //            var taxCollections = JsonConvert.DeserializeObject<Rootobject>(taxCollectionsAsJson);
-            //            foreach (var t in taxCollections.taxCollection)
-            //            {
-            //                CYcurrentYear += t.CYcurrentYear;
-            //                CYforcast += t.CYforcast;
-            //            }
-            //        }
-            //    }
-            //}
+            if (webRequest != null)
+            {
+                webRequest.ContentType = "application/json";
+                webRequest.UserAgent = "Nothing";
+                webRequest.Timeout = 3000;
+                try
+                {
+                    using (var s = webRequest.GetResponse().GetResponseStream())
+                    {
+                        using (var sr = new StreamReader(s))
+                        {
+                            var taxCollectionsAsJson = sr.ReadToEnd();
+                            var taxCollections = JsonConvert.DeserializeObject<Rootobject>(taxCollectionsAsJson);
+                            foreach (var t in taxCollections.taxCollection)
+                            {
+                                CYcurrentYear += t.CYcurrentYear;
+                                CYforcast += t.CYforcast;
+                            }
+                        }
+                    }
+                }
+                catch (WebException ex)
+                {
+                    if (ex.Status == WebExceptionStatus.Timeout)
+                    {
+                        CYcurrentYear = 9999999;
+                        CYforcast = 9999999;
+                    }
+
+                }
+            }
 
             ViewBag.CYcurrentYear = CYcurrentYear / 1000000;
             ViewBag.CYforcast = CYforcast / 1000000;
