@@ -40,6 +40,16 @@ namespace EPES.Data
             builder.Entity<PointOfEvaluation>()
             .Property(p => p.SubPoint)
             .HasDefaultValue(0);
+
+            builder.Entity<Office>()
+            .HasMany(o => o.OwnerPointOfEvaluations)
+            .WithOne(p => p.OwnerOffice)
+            .OnDelete(DeleteBehavior.Restrict);
+
+            builder.Entity<Office>()
+            .HasMany(o => o.AuditPointOfEvaluations)
+            .WithOne(p => p.AuditOffice)
+            .OnDelete(DeleteBehavior.Restrict);
         }
 
         public DbSet<ApplicationUser> ApplicationUsers { get; set; }

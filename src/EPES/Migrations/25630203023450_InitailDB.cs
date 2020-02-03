@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace EPES.Migrations
 {
-    public partial class Initail_DB_EPES_V1 : Migration
+    public partial class InitailDB : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -201,8 +201,8 @@ namespace EPES.Migrations
                     Name = table.Column<string>(nullable: true),
                     Unit = table.Column<int>(nullable: true),
                     Weight = table.Column<decimal>(type: "decimal(7, 4)", nullable: false),
-                    OwnerOfficeId = table.Column<int>(nullable: true),
-                    AuditOfficeId = table.Column<int>(nullable: true),
+                    OwnerOfficeId = table.Column<int>(nullable: false),
+                    AuditOfficeId = table.Column<int>(nullable: false),
                     UpdateUserId = table.Column<string>(nullable: true),
                     AutoApp = table.Column<int>(nullable: false)
                 },
@@ -223,6 +223,52 @@ namespace EPES.Migrations
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_PointOfEvaluations_AspNetUsers_UpdateUserId",
+                        column: x => x.UpdateUserId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "DataForEvaluations",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                    Expect = table.Column<decimal>(type: "decimal(38, 10)", nullable: false, defaultValue: 0m),
+                    Result = table.Column<decimal>(type: "decimal(38, 10)", nullable: false, defaultValue: 0m),
+                    OldResult = table.Column<decimal>(type: "decimal(38, 10)", nullable: true),
+                    Month = table.Column<int>(nullable: false),
+                    Approve = table.Column<int>(nullable: false),
+                    CommentApproveLevel1 = table.Column<string>(nullable: true),
+                    CommentApproveLevel2 = table.Column<string>(nullable: true),
+                    CommentApproveLevel3 = table.Column<string>(nullable: true),
+                    CommentApproveLevel4 = table.Column<string>(nullable: true),
+                    CompletedDate = table.Column<DateTime>(nullable: true),
+                    AttachFile = table.Column<string>(nullable: true),
+                    RowVersion = table.Column<byte[]>(rowVersion: true, nullable: true),
+                    TimeUpdate = table.Column<DateTime>(nullable: false),
+                    UpdateUserId = table.Column<string>(nullable: true),
+                    OfficeId = table.Column<int>(nullable: false),
+                    PointOfEvaluationId = table.Column<int>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_DataForEvaluations", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_DataForEvaluations_Offices_OfficeId",
+                        column: x => x.OfficeId,
+                        principalTable: "Offices",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_DataForEvaluations_PointOfEvaluations_PointOfEvaluationId",
+                        column: x => x.PointOfEvaluationId,
+                        principalTable: "PointOfEvaluations",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_DataForEvaluations_AspNetUsers_UpdateUserId",
                         column: x => x.UpdateUserId,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
@@ -326,59 +372,6 @@ namespace EPES.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
-            migrationBuilder.CreateTable(
-                name: "DataForEvaluations",
-                columns: table => new
-                {
-                    Id = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
-                    Expect = table.Column<decimal>(type: "decimal(38, 10)", nullable: false, defaultValue: 0m),
-                    Result = table.Column<decimal>(type: "decimal(38, 10)", nullable: false, defaultValue: 0m),
-                    OldResult = table.Column<decimal>(type: "decimal(38, 10)", nullable: true),
-                    Month = table.Column<int>(nullable: false),
-                    Approve = table.Column<int>(nullable: false),
-                    CommentApproveLevel1 = table.Column<string>(nullable: true),
-                    CommentApproveLevel2 = table.Column<string>(nullable: true),
-                    CommentApproveLevel3 = table.Column<string>(nullable: true),
-                    CommentApproveLevel4 = table.Column<string>(nullable: true),
-                    CompletedDate = table.Column<DateTime>(nullable: true),
-                    AttachFile = table.Column<string>(nullable: true),
-                    RowVersion = table.Column<byte[]>(rowVersion: true, nullable: true),
-                    TimeUpdate = table.Column<DateTime>(nullable: false),
-                    UpdateUserId = table.Column<string>(nullable: true),
-                    OfficeId = table.Column<int>(nullable: false),
-                    RoundId = table.Column<int>(nullable: false),
-                    PointOfEvaluationId = table.Column<int>(nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_DataForEvaluations", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_DataForEvaluations_Offices_OfficeId",
-                        column: x => x.OfficeId,
-                        principalTable: "Offices",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
-                        name: "FK_DataForEvaluations_PointOfEvaluations_PointOfEvaluationId",
-                        column: x => x.PointOfEvaluationId,
-                        principalTable: "PointOfEvaluations",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
-                        name: "FK_DataForEvaluations_Rounds_RoundId",
-                        column: x => x.RoundId,
-                        principalTable: "Rounds",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
-                        name: "FK_DataForEvaluations_AspNetUsers_UpdateUserId",
-                        column: x => x.UpdateUserId,
-                        principalTable: "AspNetUsers",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                });
-
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",
                 table: "AspNetRoleClaims",
@@ -427,11 +420,6 @@ namespace EPES.Migrations
                 name: "IX_DataForEvaluations_PointOfEvaluationId",
                 table: "DataForEvaluations",
                 column: "PointOfEvaluationId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_DataForEvaluations_RoundId",
-                table: "DataForEvaluations",
-                column: "RoundId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_DataForEvaluations_UpdateUserId",
@@ -505,6 +493,9 @@ namespace EPES.Migrations
                 name: "DataForEvaluations");
 
             migrationBuilder.DropTable(
+                name: "Rounds");
+
+            migrationBuilder.DropTable(
                 name: "ScoreDrafts");
 
             migrationBuilder.DropTable(
@@ -512,9 +503,6 @@ namespace EPES.Migrations
 
             migrationBuilder.DropTable(
                 name: "AspNetRoles");
-
-            migrationBuilder.DropTable(
-                name: "Rounds");
 
             migrationBuilder.DropTable(
                 name: "PointOfEvaluations");

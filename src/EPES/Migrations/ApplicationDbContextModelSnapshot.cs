@@ -129,8 +129,6 @@ namespace EPES.Migrations
                         .HasColumnType("decimal(38, 10)")
                         .HasDefaultValue(0m);
 
-                    b.Property<int>("RoundId");
-
                     b.Property<byte[]>("RowVersion")
                         .IsConcurrencyToken()
                         .ValueGeneratedOnAddOrUpdate();
@@ -144,8 +142,6 @@ namespace EPES.Migrations
                     b.HasIndex("OfficeId");
 
                     b.HasIndex("PointOfEvaluationId");
-
-                    b.HasIndex("RoundId");
 
                     b.HasIndex("UpdateUserId");
 
@@ -180,7 +176,7 @@ namespace EPES.Migrations
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<int?>("AuditOfficeId");
+                    b.Property<int>("AuditOfficeId");
 
                     b.Property<int>("AutoApp");
 
@@ -192,7 +188,7 @@ namespace EPES.Migrations
 
                     b.Property<string>("Name");
 
-                    b.Property<int?>("OwnerOfficeId");
+                    b.Property<int>("OwnerOfficeId");
 
                     b.Property<int>("Plan");
 
@@ -456,11 +452,6 @@ namespace EPES.Migrations
                         .HasForeignKey("PointOfEvaluationId")
                         .OnDelete(DeleteBehavior.Restrict);
 
-                    b.HasOne("EPES.Models.Round", "Round")
-                        .WithMany("DataForEvaluations")
-                        .HasForeignKey("RoundId")
-                        .OnDelete(DeleteBehavior.Restrict);
-
                     b.HasOne("EPES.Models.ApplicationUser", "UpdateUser")
                         .WithMany("DataForEvaluations")
                         .HasForeignKey("UpdateUserId");
@@ -476,12 +467,14 @@ namespace EPES.Migrations
             modelBuilder.Entity("EPES.Models.PointOfEvaluation", b =>
                 {
                     b.HasOne("EPES.Models.Office", "AuditOffice")
-                        .WithMany()
-                        .HasForeignKey("AuditOfficeId");
+                        .WithMany("AuditPointOfEvaluations")
+                        .HasForeignKey("AuditOfficeId")
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.HasOne("EPES.Models.Office", "OwnerOffice")
-                        .WithMany()
-                        .HasForeignKey("OwnerOfficeId");
+                        .WithMany("OwnerPointOfEvaluations")
+                        .HasForeignKey("OwnerOfficeId")
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.HasOne("EPES.Models.ApplicationUser", "UpdateUser")
                         .WithMany()

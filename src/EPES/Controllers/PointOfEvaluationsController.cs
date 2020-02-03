@@ -227,6 +227,8 @@ namespace EPES.Controllers
             var pointOfEvaluation = await _context.PointOfEvaluations
                 .Include(p => p.OwnerOffice)
                 .Include(p => p.AuditOffice)
+                .Include(p => p.DataForEvaluations)
+                .Include(p => p.Rounds)
                 .AsNoTracking()
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (pointOfEvaluation == null)
@@ -519,21 +521,18 @@ namespace EPES.Controllers
                     }
 
                     await _context.SaveChangesAsync();
-                    if (dataView.point.OwnerOffice != null)  //บันทึกเฉพาะมอบให้หน่วยงานเดียวเท่านั้น
-                    {
-                        await SaveExpect(dataView.point.Id, dataView.point.OwnerOffice.Id, 10, dataView.expect10, user.Id);
-                        await SaveExpect(dataView.point.Id, dataView.point.OwnerOffice.Id, 11, dataView.expect11, user.Id);
-                        await SaveExpect(dataView.point.Id, dataView.point.OwnerOffice.Id, 12, dataView.expect12, user.Id);
-                        await SaveExpect(dataView.point.Id, dataView.point.OwnerOffice.Id, 1, dataView.expect1, user.Id);
-                        await SaveExpect(dataView.point.Id, dataView.point.OwnerOffice.Id, 2, dataView.expect2, user.Id);
-                        await SaveExpect(dataView.point.Id, dataView.point.OwnerOffice.Id, 3, dataView.expect3, user.Id);
-                        await SaveExpect(dataView.point.Id, dataView.point.OwnerOffice.Id, 4, dataView.expect4, user.Id);
-                        await SaveExpect(dataView.point.Id, dataView.point.OwnerOffice.Id, 5, dataView.expect5, user.Id);
-                        await SaveExpect(dataView.point.Id, dataView.point.OwnerOffice.Id, 6, dataView.expect6, user.Id);
-                        await SaveExpect(dataView.point.Id, dataView.point.OwnerOffice.Id, 7, dataView.expect7, user.Id);
-                        await SaveExpect(dataView.point.Id, dataView.point.OwnerOffice.Id, 8, dataView.expect8, user.Id);
-                        await SaveExpect(dataView.point.Id, dataView.point.OwnerOffice.Id, 9, dataView.expect9, user.Id);
-                    }
+                    await SaveExpect(dataView.point.Id, dataView.point.OwnerOfficeId, 10, dataView.expect10, user.Id);
+                    await SaveExpect(dataView.point.Id, dataView.point.OwnerOfficeId, 11, dataView.expect11, user.Id);
+                    await SaveExpect(dataView.point.Id, dataView.point.OwnerOfficeId, 12, dataView.expect12, user.Id);
+                    await SaveExpect(dataView.point.Id, dataView.point.OwnerOfficeId, 1, dataView.expect1, user.Id);
+                    await SaveExpect(dataView.point.Id, dataView.point.OwnerOfficeId, 2, dataView.expect2, user.Id);
+                    await SaveExpect(dataView.point.Id, dataView.point.OwnerOfficeId, 3, dataView.expect3, user.Id);
+                    await SaveExpect(dataView.point.Id, dataView.point.OwnerOfficeId, 4, dataView.expect4, user.Id);
+                    await SaveExpect(dataView.point.Id, dataView.point.OwnerOfficeId, 5, dataView.expect5, user.Id);
+                    await SaveExpect(dataView.point.Id, dataView.point.OwnerOfficeId, 6, dataView.expect6, user.Id);
+                    await SaveExpect(dataView.point.Id, dataView.point.OwnerOfficeId, 7, dataView.expect7, user.Id);
+                    await SaveExpect(dataView.point.Id, dataView.point.OwnerOfficeId, 8, dataView.expect8, user.Id);
+                    await SaveExpect(dataView.point.Id, dataView.point.OwnerOfficeId, 9, dataView.expect9, user.Id);
 
                     return RedirectToAction(nameof(Index), new { yearPoint = dataView.yearPoint, selectoffice = dataView.selectoffice });
                 }
@@ -1013,42 +1012,165 @@ namespace EPES.Controllers
 
             ViewBag.selectoffice = selectoffice;
             ViewBag.yearPoint = yearPoint;
+            dataView.roundNumber = dataView.point.Rounds.Count;
             return View(dataView);
         }
 
         [HttpPost, ActionName("Edit")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> EditPost(DataForEvaluationViewModel dataViewToUpdate)
+        public async Task<IActionResult> EditPost(PointOfEvaluationViewModel dataView)
         {
-            if (dataViewToUpdate.Point.Id == null)
-            {
-                return NotFound();
-            }
             var user = await _userManager.GetUserAsync(User);
 
-            var pointOfEvaluationToUpdate = await _context.PointOfEvaluations.FirstOrDefaultAsync(p => p.Id == id);
+            var pointOfEvaluationToUpdate = await _context.PointOfEvaluations.Include(p => p.Rounds).FirstAsync(p => p.Id == dataView.point.Id);
             pointOfEvaluationToUpdate.UpdateUserId = user.Id;
 
-            if (await TryUpdateModelAsync<PointOfEvaluationViewModel>(
-                pointOfEvaluationToUpdate, "",
-                p => p.Year, p => p.DetailPlan, p => p.Point, p => p.SubPoint, p => p.Plan, p => p.ExpectPlan, p => p.Ddrive, p => p.Name, p => p.Unit, p => p.Weight))
+            var unit = pointOfEvaluationToUpdate.Unit;
+            if (DateTime.Now.Month == 10 || DateTime.Now.Month == 11 || DateTime.Now.Month == 12)
             {
-                try
-                {
-                    await _context.SaveChangesAsync();
-                    return RedirectToAction(nameof(Index), new { yearPoint = yearpoint, selectoffice = selectoffice });
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    ModelState.AddModelError("", "ไม่สามารถบันทึกข้อมูล. " +
-                        "ลองพยายามบันทึกอีกครั้ง " +
-                        "โปรดแจ้งผู้ดูแลระบบ");
-                }
-                //return RedirectToAction(nameof(Index), new { yearPoint = yearpoint, selectoffice = pointOfEvaluationToUpdate.AuditOfficeId });
+                dataView.point.Year = new DateTime(DateTime.Now.AddYears(dataView.yearPoint + 1).Year, 1, 1);
             }
-            
+            else
+            {
+                dataView.point.Year = new DateTime(DateTime.Now.AddYears(dataView.yearPoint).Year, 1, 1);
+            }
+
+            pointOfEvaluationToUpdate.Year = dataView.point.Year;
+            pointOfEvaluationToUpdate.Point = dataView.point.Point;
+            pointOfEvaluationToUpdate.SubPoint = dataView.point.SubPoint;
+            pointOfEvaluationToUpdate.Plan = dataView.point.Plan;
+            pointOfEvaluationToUpdate.DetailPlan = dataView.point.DetailPlan;
+            pointOfEvaluationToUpdate.ExpectPlan = dataView.point.ExpectPlan;
+            pointOfEvaluationToUpdate.Ddrive = dataView.point.Ddrive;
+            pointOfEvaluationToUpdate.Name = dataView.point.Name;
+            pointOfEvaluationToUpdate.Unit = dataView.point.Unit;
+            pointOfEvaluationToUpdate.Weight = dataView.point.Weight;
+            pointOfEvaluationToUpdate.OwnerOfficeId = dataView.point.OwnerOfficeId;
+            pointOfEvaluationToUpdate.AuditOfficeId = dataView.point.AuditOfficeId;
+            pointOfEvaluationToUpdate.AutoApp = dataView.point.AutoApp;
+
+            //if (await TryUpdateModelAsync<PointOfEvaluationViewModel>(
+            //    dataView.point, "",
+            //    p => p.point.Year, p => p.DetailPlan, p => p.Point, p => p.SubPoint, p => p.Plan, p => p.ExpectPlan, p => p.Ddrive, p => p.Name, p => p.Unit, p => p.Weight, p => p.AuditOfficeId, p => p.OwnerOfficeId, p=>p.AutoApp))
+            //{
+            try
+            {
+                if (pointOfEvaluationToUpdate.Rounds != null)
+                {
+                    foreach (var item in pointOfEvaluationToUpdate.Rounds)
+                    {
+                        _context.Rounds.Remove(item);
+                    }
+                }
+
+
+                if (dataView.point.Unit == UnitOfPoint.ร้อยละ)
+                {
+                    dataView.Round.PointOfEvaluationId = dataView.point.Id;
+                    dataView.Round.RoundNumber = 1;
+                    _context.Add(dataView.Round);
+                    if (dataView.roundNumber == 2)
+                    {
+                        dataView.Round2.PointOfEvaluationId = dataView.point.Id;
+                        dataView.Round2.RoundNumber = 2;
+                        _context.Add(dataView.Round2);
+                    }
+                }
+                else if (dataView.point.Unit == UnitOfPoint.ระดับ)
+                {
+                    dataView.LRound.PointOfEvaluationId = dataView.point.Id;
+                    dataView.LRound.RoundNumber = 1;
+                    dataView.LRound.Rate1 = 1;
+                    dataView.LRound.Rate2 = 2;
+                    dataView.LRound.Rate3 = 3;
+                    dataView.LRound.Rate4 = 4;
+                    dataView.LRound.Rate5 = 5;
+                    _context.Add(dataView.LRound);
+                    if (dataView.roundNumber == 2)
+                    {
+                        dataView.LRound2.PointOfEvaluationId = dataView.point.Id;
+                        dataView.LRound2.RoundNumber = 2;
+                        dataView.LRound2.Rate1 = 1;
+                        dataView.LRound2.Rate2 = 2;
+                        dataView.LRound2.Rate3 = 3;
+                        dataView.LRound2.Rate4 = 4;
+                        dataView.LRound2.Rate5 = 5;
+                        _context.Add(dataView.LRound2);
+                    }
+                }
+                else if (dataView.point.Unit == UnitOfPoint.ระดับ_ร้อยละ)
+                {
+                    dataView.LRRound.PointOfEvaluationId = dataView.point.Id;
+                    dataView.LRRound.RoundNumber = 1;
+                    switch (dataView.LRRound.LevelNumber)
+                    {
+                        case 2:
+                            dataView.LRound.Rate2 = 2;
+                            break;
+                        case 3:
+                            dataView.LRound.Rate2 = 2;
+                            dataView.LRound.Rate3 = 3;
+                            break;
+                        case 4:
+                            dataView.LRound.Rate2 = 2;
+                            dataView.LRound.Rate3 = 3;
+                            dataView.LRound.Rate4 = 4;
+                            break;
+                        default:
+                            break;
+                    }
+                    _context.Add(dataView.LRRound);
+                    if (dataView.roundNumber == 2)
+                    {
+                        dataView.LRRound2.PointOfEvaluationId = dataView.point.Id;
+                        dataView.LRRound2.RoundNumber = 2;
+                        switch (dataView.LRRound2.LevelNumber)
+                        {
+                            case 2:
+                                dataView.LRound2.Rate2 = 2;
+                                break;
+                            case 3:
+                                dataView.LRound2.Rate2 = 2;
+                                dataView.LRound2.Rate3 = 3;
+                                break;
+                            case 4:
+                                dataView.LRound2.Rate2 = 2;
+                                dataView.LRound2.Rate3 = 3;
+                                dataView.LRound2.Rate4 = 4;
+                                break;
+                            default:
+                                break;
+                        }
+                        _context.Add(dataView.LRRound2);
+                    }
+                }
+
+                await SaveExpect(dataView.point.Id, dataView.point.OwnerOfficeId, 10, dataView.expect10, user.Id);
+                await SaveExpect(dataView.point.Id, dataView.point.OwnerOfficeId, 11, dataView.expect11, user.Id);
+                await SaveExpect(dataView.point.Id, dataView.point.OwnerOfficeId, 12, dataView.expect12, user.Id);
+                await SaveExpect(dataView.point.Id, dataView.point.OwnerOfficeId, 1, dataView.expect1, user.Id);
+                await SaveExpect(dataView.point.Id, dataView.point.OwnerOfficeId, 2, dataView.expect2, user.Id);
+                await SaveExpect(dataView.point.Id, dataView.point.OwnerOfficeId, 3, dataView.expect3, user.Id);
+                await SaveExpect(dataView.point.Id, dataView.point.OwnerOfficeId, 4, dataView.expect4, user.Id);
+                await SaveExpect(dataView.point.Id, dataView.point.OwnerOfficeId, 5, dataView.expect5, user.Id);
+                await SaveExpect(dataView.point.Id, dataView.point.OwnerOfficeId, 6, dataView.expect6, user.Id);
+                await SaveExpect(dataView.point.Id, dataView.point.OwnerOfficeId, 7, dataView.expect7, user.Id);
+                await SaveExpect(dataView.point.Id, dataView.point.OwnerOfficeId, 8, dataView.expect8, user.Id);
+                await SaveExpect(dataView.point.Id, dataView.point.OwnerOfficeId, 9, dataView.expect9, user.Id);
+
+                return RedirectToAction(nameof(Index), new { yearPoint = dataView.yearPoint, selectoffice = dataView.selectoffice });
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                ModelState.AddModelError("", "ไม่สามารถบันทึกข้อมูล. " +
+                    "ลองพยายามบันทึกอีกครั้ง " +
+                    "โปรดแจ้งผู้ดูแลระบบ");
+            }
+            //return RedirectToAction(nameof(Index), new { yearPoint = yearpoint, selectoffice = pointOfEvaluationToUpdate.AuditOfficeId });
+            //}
+
             var office = await _context.Offices.Where(o => o.Code == user.OfficeId).FirstOrDefaultAsync();
-            var officeselect = await _context.Offices.Where(o => o.Code == selectoffice).FirstOrDefaultAsync();
+            var officeselect = await _context.Offices.Where(o => o.Code == dataView.selectoffice).FirstOrDefaultAsync();
 
             switch (pointOfEvaluationToUpdate.Plan)
             {
@@ -1058,7 +1180,7 @@ namespace EPES.Controllers
 
                     if (User.IsInRole("Admin"))
                     {
-                        if (String.IsNullOrEmpty(selectoffice))
+                        if (String.IsNullOrEmpty(dataView.selectoffice))
                         {
                             ViewBag.OfficeId = new SelectList(_context.Offices.Where(d => d.Code != "00000000" && d.Code.Substring(0, 3) == "000"), "Id", "Name", office.Id);
                         }
@@ -1083,7 +1205,7 @@ namespace EPES.Controllers
 
                     if (User.IsInRole("Admin") || (User.IsInRole("Manager") && user.OfficeId.StartsWith("000")))
                     {
-                        if (String.IsNullOrEmpty(selectoffice))
+                        if (String.IsNullOrEmpty(dataView.selectoffice))
                         {
                             ViewBag.OfficeId = new SelectList(_context.Offices.Where(d => d.Code != "00000000" && d.Code.Substring(5, 3) == "000"), "Id", "Name", office.Id);
                         }
@@ -1095,7 +1217,7 @@ namespace EPES.Controllers
 
                     if (User.IsInRole("Manager") && user.OfficeId.Substring(2, 6) == "000000")
                     {
-                        if (String.IsNullOrEmpty(selectoffice))
+                        if (String.IsNullOrEmpty(dataView.selectoffice))
                         {
                             ViewBag.OfficeId = new SelectList(_context.Offices.Where(d => d.Code != "00000000" && d.Code.StartsWith(user.OfficeId.Substring(0, 2)) && d.Code.Substring(5, 3) == "000"), "Id", "Name", office.Id);
                         }
@@ -1115,13 +1237,13 @@ namespace EPES.Controllers
 
                     if (User.IsInRole("Admin") || User.IsInRole("User") || (User.IsInRole("Manager") && user.OfficeId.Substring(2, 6) == "000000"))
                     {
-                        if (String.IsNullOrEmpty(selectoffice))
+                        if (String.IsNullOrEmpty(dataView.selectoffice))
                         {
                             ViewBag.AuditOfficeId = new SelectList(_context.Offices.Where(d => d.Code != "00000000" && d.Code.Substring(0, 3) == "000"), "Id", "Name", office.Id);
                         }
                         else
                         {
-                            if (selectoffice.Substring(0, 3) == "000")
+                            if (dataView.selectoffice.Substring(0, 3) == "000")
                             {
                                 ViewBag.AuditOfficeId = new SelectList(_context.Offices.Where(d => d.Code != "00000000" && d.Code.Substring(0, 3) == "000"), "Id", "Name", officeselect.Id);
                             }
@@ -1145,7 +1267,7 @@ namespace EPES.Controllers
 
                     if (User.IsInRole("Admin"))
                     {
-                        if (String.IsNullOrEmpty(selectoffice))
+                        if (String.IsNullOrEmpty(dataView.selectoffice))
                         {
                             ViewBag.OfficeId = new SelectList(_context.Offices.Where(d => d.Code != "00000000" && d.Code.Substring(5, 3) == "000"), "Id", "Name", office.Id);
                         }
@@ -1166,7 +1288,7 @@ namespace EPES.Controllers
                             item.Add(itemAdd);
                         }
 
-                        if (String.IsNullOrEmpty(selectoffice))
+                        if (String.IsNullOrEmpty(dataView.selectoffice))
                         {
                             ViewBag.OfficeId = new SelectList(selectitem, "Id", "Name", office.Id);
                             ViewBag.AuditOfficeId = new SelectList(item, "Id", "Name", office.Id);
@@ -1201,7 +1323,7 @@ namespace EPES.Controllers
 
                     if (User.IsInRole("Admin") || (User.IsInRole("Manager") && user.OfficeId.StartsWith("000")))
                     {
-                        if (String.IsNullOrEmpty(selectoffice))
+                        if (String.IsNullOrEmpty(dataView.selectoffice))
                         {
                             ViewBag.OfficeId = new SelectList(_context.Offices.Where(d => d.Code != "00000000" && d.Code.Substring(5, 3) == "000"), "Id", "Name", office.Id);
                         }
@@ -1213,7 +1335,7 @@ namespace EPES.Controllers
 
                     if (User.IsInRole("Manager") && user.OfficeId.Substring(2, 6) == "000000")
                     {
-                        if (String.IsNullOrEmpty(selectoffice))
+                        if (String.IsNullOrEmpty(dataView.selectoffice))
                         {
                             ViewBag.OfficeId = new SelectList(_context.Offices.Where(d => d.Code != "00000000" && d.Code.StartsWith(user.OfficeId.Substring(0, 2)) && d.Code.Substring(5, 3) == "000"), "Id", "Name", office.Id);
                         }
@@ -1233,13 +1355,13 @@ namespace EPES.Controllers
 
                     if (User.IsInRole("Admin") || User.IsInRole("User") || (User.IsInRole("Manager") && user.OfficeId.Substring(2, 6) == "000000"))
                     {
-                        if (String.IsNullOrEmpty(selectoffice))
+                        if (String.IsNullOrEmpty(dataView.selectoffice))
                         {
                             ViewBag.AuditOfficeId = new SelectList(_context.Offices.Where(d => d.Code != "00000000" && d.Code.Substring(0, 3) == "000"), "Id", "Name", office.Id);
                         }
                         else
                         {
-                            if (selectoffice.Substring(0, 3) == "000")
+                            if (dataView.selectoffice.Substring(0, 3) == "000")
                             {
                                 ViewBag.AuditOfficeId = new SelectList(_context.Offices.Where(d => d.Code != "00000000" && d.Code.Substring(0, 3) == "000"), "Id", "Name", officeselect.Id);
                             }
@@ -1259,8 +1381,8 @@ namespace EPES.Controllers
                     break;
             }
 
-            ViewBag.selectoffice = selectoffice;
-            ViewBag.yearPoint = yearpoint;
+            ViewBag.selectoffice = dataView.selectoffice;
+            ViewBag.yearPoint = dataView.yearPoint;
             return View(pointOfEvaluationToUpdate);
         }
 
@@ -1336,7 +1458,7 @@ namespace EPES.Controllers
                 dataForEvaluation.Expect = expect;
                 try
                 {
-                    _context.Update(dataForEvaluation);
+                    //_context.Update(dataForEvaluation);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateException)
