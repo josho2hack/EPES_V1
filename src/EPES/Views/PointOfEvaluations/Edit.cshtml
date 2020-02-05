@@ -29,19 +29,12 @@
                         </div>
                         <div class="form-group">
                             <label asp-for="point.Point" class="control-label"></label>
-                            <input asp-for="point.Point" class="form-control" min="1" value="1" />
+                            <input asp-for="point.Point" class="form-control" min="1" />
                             <span asp-validation-for="point.Point" class="text-danger"></span>
                         </div>
                         <div class="form-group">
                             <label asp-for="point.SubPoint" class="control-label"></label>
-                            <select id="point.SubPoint" name="point.SubPoint" class="form-control">
-                                <option selected="selected" value=0>ไม่มี</option>
-                                <option value=1>ตัวชี้วัดย่อย 1</option>
-                                <option value=2>ตัวชี้วัดย่อย 2</option>
-                                <option value=3>ตัวชี้วัดย่อย 3</option>
-                                <option value=4>ตัวชี้วัดย่อย 4</option>
-                                <option value=5>ตัวชี้วัดย่อย 5</option>
-                            </select>
+                            <select asp-for="point.SubPoint" class="form-control" asp-items="ViewBag.SubPoint"></select>
                             <span asp-validation-for="point.SubPoint" class="text-danger"></span>
                         </div>
                         <div class="form-group">

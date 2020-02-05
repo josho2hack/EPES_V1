@@ -17,52 +17,52 @@
             <div class="form-group form-inline">
                 @if (User.IsInRole("Admin") || User.IsInRole("Manager"))
                 {
-                        <label class="form-label text-md-right">หน่วยงาน: </label>
-                        <select asp-for="selectoffice" class="form-control" asp-items="ViewBag.OfficeCode" onchange="this.form.submit()">
-                            <option value="">เลือกหน่วยงาน</option>
-                        </select>
+                    <label class="form-label text-md-right">หน่วยงาน: </label>
+                    <select asp-for="selectoffice" class="form-control" asp-items="ViewBag.OfficeCode" onchange="this.form.submit()">
+                        <option value="">เลือกหน่วยงาน</option>
+                    </select>
                 }
             </div>
             <div class="form-group form-inline">
-                    <label class="form-label text-md-right">ปีงบประมาณ: </label>
-                    <select asp-for="yearPoint" class="form-control" onchange="this.form.submit()">
-                        <option value="-1">
-                            @{
-                                if (DateTime.Now.Month == 10 || DateTime.Now.Month == 11 || DateTime.Now.Month == 12)
-                                {
-                                    @DateTime.Now.ToString("yyyy");
-                                }
-                                else
-                                {
-                                    @DateTime.Now.AddYears(-1).ToString("yyyy");
-                                }
+                <label class="form-label text-md-right">ปีงบประมาณ: </label>
+                <select asp-for="yearPoint" class="form-control" onchange="this.form.submit()">
+                    <option value="-1">
+                        @{
+                            if (DateTime.Now.Month == 10 || DateTime.Now.Month == 11 || DateTime.Now.Month == 12)
+                            {
+                                @DateTime.Now.ToString("yyyy");
                             }
-                        </option>
-                        <option value="0">
-                            @{
-                                if (DateTime.Now.Month == 10 || DateTime.Now.Month == 11 || DateTime.Now.Month == 12)
-                                {
-                                    @DateTime.Now.AddYears(1).ToString("yyyy");
-                                }
-                                else
-                                {
-                                    @DateTime.Now.ToString("yyyy");
-                                }
+                            else
+                            {
+                                @DateTime.Now.AddYears(-1).ToString("yyyy");
                             }
-                        </option>
-                        <option value="1">
-                            @{
-                                if (DateTime.Now.Month == 10 || DateTime.Now.Month == 11 || DateTime.Now.Month == 12)
-                                {
-                                    @DateTime.Now.AddYears(2).ToString("yyyy");
-                                }
-                                else
-                                {
-                                    @DateTime.Now.AddYears(1).ToString("yyyy");
-                                }
+                        }
+                    </option>
+                    <option value="0">
+                        @{
+                            if (DateTime.Now.Month == 10 || DateTime.Now.Month == 11 || DateTime.Now.Month == 12)
+                            {
+                                @DateTime.Now.AddYears(1).ToString("yyyy");
                             }
-                        </option>
-                    </select>
+                            else
+                            {
+                                @DateTime.Now.ToString("yyyy");
+                            }
+                        }
+                    </option>
+                    <option value="1">
+                        @{
+                            if (DateTime.Now.Month == 10 || DateTime.Now.Month == 11 || DateTime.Now.Month == 12)
+                            {
+                                @DateTime.Now.AddYears(2).ToString("yyyy");
+                            }
+                            else
+                            {
+                                @DateTime.Now.AddYears(1).ToString("yyyy");
+                            }
+                        }
+                    </option>
+                </select>
             </div>
         </div>
     </form>
@@ -108,7 +108,14 @@
                             {
                                 <tr>
                                     <td>
-                                        @Html.DisplayFor(modelItem => item.Point)
+                                        @if (item.SubPoint != 0)
+                                        {
+                                            @Html.DisplayFor(modelItem => item.Point)@:.@Html.DisplayFor(modelItem => item.SubPoint)
+                                        }
+                                        else
+                                        {
+                                            @Html.DisplayFor(modelItem => item.Point)
+                                        }
                                     </td>
                                     <td>
                                         @Html.DisplayFor(modelItem => item.DetailPlan)
@@ -192,7 +199,14 @@
                         {
                             <tr>
                                 <td>
-                                    @Html.DisplayFor(modelItem => item.Point)
+                                    @if (item.SubPoint != 0)
+                                    {
+                                        @Html.DisplayFor(modelItem => item.Point)@:.@Html.DisplayFor(modelItem => item.SubPoint)
+                                    }
+                                    else
+                                    {
+                                        @Html.DisplayFor(modelItem => item.Point)
+                                    }
                                 </td>
                                 <td>
                                     @Html.DisplayFor(modelItem => item.DetailPlan)
@@ -276,7 +290,14 @@
                         {
                             <tr>
                                 <td>
-                                    @Html.DisplayFor(modelItem => item.Point)
+                                    @if (item.SubPoint != 0)
+                                    {
+                                        @Html.DisplayFor(modelItem => item.Point)@:.@Html.DisplayFor(modelItem => item.SubPoint)
+                                    }
+                                    else
+                                    {
+                                        @Html.DisplayFor(modelItem => item.Point)
+                                    }
                                 </td>
                                 <td>
                                     @Html.DisplayFor(modelItem => item.DetailPlan)
@@ -360,7 +381,14 @@
                         {
                             <tr>
                                 <td>
-                                    @Html.DisplayFor(modelItem => item.Point)
+                                    @if (item.SubPoint != 0)
+                                    {
+                                        @Html.DisplayFor(modelItem => item.Point)@:.@Html.DisplayFor(modelItem => item.SubPoint)
+                                    }
+                                    else
+                                    {
+                                        @Html.DisplayFor(modelItem => item.Point)
+                                    }
                                 </td>
                                 <td>
                                     @Html.DisplayFor(modelItem => item.DetailPlan)

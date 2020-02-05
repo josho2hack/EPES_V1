@@ -772,6 +772,16 @@ namespace EPES.Controllers
 
             PointOfEvaluationViewModel dataView = new PointOfEvaluationViewModel();
             dataView.point = await _context.PointOfEvaluations.Include(p => p.OwnerOffice).Include(p => p.AuditOffice).Where(p => p.Id == id).FirstOrDefaultAsync();
+            
+            List<Object> listsubpoint = new List<object>();
+            listsubpoint.Add(new { value = 0, detail = "ไม่มี" });
+            listsubpoint.Add(new { value = 1, detail = "ตัวชี้วัดย่อย 1" });
+            listsubpoint.Add(new { value = 2, detail = "ตัวชี้วัดย่อย 2" });
+            listsubpoint.Add(new { value = 3, detail = "ตัวชี้วัดย่อย 3" });
+            listsubpoint.Add(new { value = 4, detail = "ตัวชี้วัดย่อย 4" });
+            listsubpoint.Add(new { value = 5, detail = "ตัวชี้วัดย่อย 5" });
+            ViewBag.SubPoint = new SelectList(listsubpoint, "value", "detail", dataView.point.SubPoint);
+
             if (dataView.point == null)
             {
                 return NotFound();
@@ -1009,7 +1019,7 @@ namespace EPES.Controllers
                     }
                     break;
             }
-
+            
             ViewBag.selectoffice = selectoffice;
             ViewBag.yearPoint = yearPoint;
             dataView.roundNumber = dataView.point.Rounds.Count;
@@ -1397,6 +1407,8 @@ namespace EPES.Controllers
             var pointOfEvaluation = await _context.PointOfEvaluations
                 .Include(p => p.OwnerOffice)
                 .Include(p => p.AuditOffice)
+                .Include(p => p.DataForEvaluations)
+                .Include(p => p.Rounds)
                 .AsNoTracking()
                 .FirstOrDefaultAsync(m => m.Id == id);
 
@@ -1422,16 +1434,32 @@ namespace EPES.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(string selectoffice, int Id, int yearP)
         {
-            var user = await _userManager.GetUserAsync(User);
+            PointOfEvaluation poe = await _context.PointOfEvaluations
+                .Include(p => p.DataForEvaluations)
+                .Include(p => p.Rounds)
+                .SingleAsync(p => p.Id == Id);
 
-            var pointOfEvaluation = await _context.PointOfEvaluations.FindAsync(Id);
-            if (pointOfEvaluation == null)
+            //var data = await _context.DataForEvaluations
+            //    .Where(d => d.PointOfEvaluationId == Id)
+            //    .ToListAsync();
+
+            //var round = await _context.Rounds
+            //    .Where(r => r.PointOfEvaluationId == Id)
+            //    .ToListAsync();
+
+            foreach (var data in poe.DataForEvaluations)
             {
-                return RedirectToAction(nameof(Index));
+                _context.DataForEvaluations.Remove(data);
             }
+
+            foreach (var round in poe.Rounds)
+            {
+                _context.Rounds.Remove(round);
+            }
+
             try
             {
-                _context.PointOfEvaluations.Remove(pointOfEvaluation);
+                _context.PointOfEvaluations.Remove(poe);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index), new { yearPoint = yearP, selectoffice = selectoffice });
             }
@@ -1441,12 +1469,6 @@ namespace EPES.Controllers
                 return RedirectToAction(nameof(Delete), new { id = Id, yearPoint = yearP, saveChangesError = true, selectoffice = selectoffice });
             }
         }
-
-        private bool PointOfEvaluationExists(int id)
-        {
-            return _context.PointOfEvaluations.Any(e => e.Id == id);
-        }
-
 
         public async Task SaveExpect(int poeid, int ownerofficeid, int month, decimal expect, string userid)
         {

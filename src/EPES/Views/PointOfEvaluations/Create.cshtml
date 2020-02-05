@@ -6,6 +6,22 @@
 @{
     ViewData["Title"] = "Create";
     var user = await UserManager.GetUserAsync(User);
+
+    var yearStart = 0;
+    var yearMid = 0;
+    var yearStop = 0;
+    if (DateTime.Now.Month == 10 || DateTime.Now.Month == 11 || DateTime.Now.Month == 12)
+    {
+        yearStart = DateTime.Now.Year;
+        yearMid = DateTime.Now.Year + 1;
+        yearStop = DateTime.Now.Year + 1;
+    }
+    else
+    {
+        yearStart = DateTime.Now.Year -1;
+        yearMid = DateTime.Now.Year;
+        yearStop = DateTime.Now.Year;
+    }
 }
 
 <div class="container-fluid">
@@ -113,7 +129,7 @@
                                                 </div>
                                                 <div class="form-group col-md-6">
                                                     <label asp-for="Round.R1MStart" class="control-label"></label>
-                                                    <input asp-for="Round.R1MStart" class="form-control" />
+                                                    <input asp-for="Round.R1MStart" class="form-control" value="@yearStart-10-01"/>
                                                     <span asp-validation-for="Round.R1MStart" class="text-danger"></span>
                                                 </div>
                                             </div>
@@ -166,7 +182,7 @@
                                                 </div>
                                                 <div class="form-group col-md-6">
                                                     <label asp-for="Round.R5MStop" class="control-label"></label>
-                                                    <input asp-for="Round.R5MStop" class="form-control" />
+                                                    <input asp-for="Round.R5MStop" class="form-control" value="@yearStop-09-30"/>
                                                     <span asp-validation-for="Round.R5MStop" class="text-danger"></span>
                                                 </div>
                                             </div>
@@ -196,7 +212,7 @@
                                                 </div>
                                                 <div class="form-group col-md-6">
                                                     <label asp-for="Round2.R1MStart" class="control-label"></label>
-                                                    <input asp-for="Round2.R1MStart" class="form-control" />
+                                                    <input asp-for="Round2.R1MStart" class="form-control" value="@yearMid-04-01"/>
                                                     <span asp-validation-for="Round2.R1MStart" class="text-danger"></span>
                                                 </div>
                                             </div>
@@ -249,7 +265,7 @@
                                                 </div>
                                                 <div class="form-group col-md-6">
                                                     <label asp-for="Round2.R5MStop" class="control-label"></label>
-                                                    <input asp-for="Round2.R5MStop" class="form-control" />
+                                                    <input asp-for="Round2.R5MStop" class="form-control" value="@yearStop-09-30"/>
                                                     <span asp-validation-for="Round2.R5MStop" class="text-danger"></span>
                                                 </div>
                                             </div>
@@ -276,7 +292,7 @@
                                                 </div>
                                                 <div class="form-group col-md-3">
                                                     <label asp-for="LRound.R1MStart" class="control-label"></label>
-                                                    <input asp-for="LRound.R1MStart" class="form-control" />
+                                                    <input asp-for="LRound.R1MStart" class="form-control" value="@yearStart-10-01"/>
                                                     <span asp-validation-for="LRound.R1MStart" class="text-danger"></span>
                                                 </div>
                                                 <div class="form-group col-md-3">
@@ -353,7 +369,7 @@
                                                 </div>
                                                 <div class="form-group col-md-3">
                                                     <label asp-for="LRound.R5MStop" class="control-label"></label>
-                                                    <input asp-for="LRound.R5MStop" class="form-control" />
+                                                    <input asp-for="LRound.R5MStop" class="form-control" value="@yearStop-09-30"/>
                                                     <span asp-validation-for="LRound.R5MStop" class="text-danger"></span>
                                                 </div>
                                             </div>
@@ -379,7 +395,7 @@
                                                 </div>
                                                 <div class="form-group col-md-3">
                                                     <label asp-for="LRound2.R1MStart" class="control-label"></label>
-                                                    <input asp-for="LRound2.R1MStart" class="form-control" />
+                                                    <input asp-for="LRound2.R1MStart" class="form-control" value="@yearMid-04-01"/>
                                                     <span asp-validation-for="LRound2.R1MStart" class="text-danger"></span>
                                                 </div>
                                                 <div class="form-group col-md-3">
@@ -456,7 +472,7 @@
                                                 </div>
                                                 <div class="form-group col-md-3">
                                                     <label asp-for="LRound2.R5MStop" class="control-label"></label>
-                                                    <input asp-for="LRound2.R5MStop" class="form-control" />
+                                                    <input asp-for="LRound2.R5MStop" class="form-control" value="@yearStop-09-30"/>
                                                     <span asp-validation-for="LRound2.R5MStop" class="text-danger"></span>
                                                 </div>
                                             </div>
@@ -486,12 +502,12 @@
                                                 </div>
                                                 <div class="form-group col-md-3">
                                                     <label asp-for="LRRound.R1MStart" class="control-label"></label>
-                                                    <input asp-for="LRRound.R1MStart" class="form-control" />
+                                                    <input asp-for="LRRound.R1MStart" class="form-control" value="@yearStart-10-01"/>
                                                     <span asp-validation-for="LRRound.R1MStart" class="text-danger"></span>
                                                 </div>
                                                 <div class="form-group col-md-3">
                                                     <label asp-for="LRRound.R1MStop" class="control-label"></label>
-                                                    <input asp-for="LRRound.R1MStop" class="form-control" />
+                                                    <input asp-for="LRRound.R1MStop" class="form-control" value="@yearStop-09-30"/>
                                                     <span asp-validation-for="LRRound.R1MStop" class="text-danger"></span>
                                                 </div>
                                             </div>
@@ -516,7 +532,7 @@
                                                 </div>
                                                 <div class="form-group col-md-3" id="LRRound.Stop2">
                                                     <label asp-for="LRRound.R2MStop" class="control-label"></label>
-                                                    <input asp-for="LRRound.R2MStop" class="form-control" />
+                                                    <input asp-for="LRRound.R2MStop" class="form-control" value="@yearStop-09-30"/>
                                                     <span asp-validation-for="LRRound.R2MStop" class="text-danger"></span>
                                                 </div>
                                             </div>
@@ -541,7 +557,7 @@
                                                 </div>
                                                 <div class="form-group col-md-3" id="LRRound.Stop3">
                                                     <label asp-for="LRRound.R3MStop" class="control-label"></label>
-                                                    <input asp-for="LRRound.R3MStop" class="form-control" />
+                                                    <input asp-for="LRRound.R3MStop" class="form-control" value="@yearStop-09-30"/>
                                                     <span asp-validation-for="LRRound.R3MStop" class="text-danger"></span>
                                                 </div>
                                             </div>
@@ -566,7 +582,7 @@
                                                 </div>
                                                 <div class="form-group col-md-3" id="LRRound.Stop4">
                                                     <label asp-for="LRRound.R4MStop" class="control-label"></label>
-                                                    <input asp-for="LRRound.R4MStop" class="form-control" />
+                                                    <input asp-for="LRRound.R4MStop" class="form-control" value="@yearStop-09-30"/>
                                                     <span asp-validation-for="LRRound.R4MStop" class="text-danger"></span>
                                                 </div>
                                             </div>
@@ -607,12 +623,12 @@
                                                 </div>
                                                 <div class="form-group col-md-3">
                                                     <label asp-for="LRRound2.R1MStart" class="control-label"></label>
-                                                    <input asp-for="LRRound2.R1MStart" class="form-control" />
+                                                    <input asp-for="LRRound2.R1MStart" class="form-control" value="@yearMid-04-01"/>
                                                     <span asp-validation-for="LRRound2.R1MStart" class="text-danger"></span>
                                                 </div>
                                                 <div class="form-group col-md-3">
                                                     <label asp-for="LRRound2.R1MStop" class="control-label"></label>
-                                                    <input asp-for="LRRound2.R1MStop" class="form-control" />
+                                                    <input asp-for="LRRound2.R1MStop" class="form-control" value="@yearStop-09-30"/>
                                                     <span asp-validation-for="LRRound2.R1MStop" class="text-danger"></span>
                                                 </div>
                                             </div>
@@ -637,7 +653,7 @@
                                                 </div>
                                                 <div class="form-group col-md-3" id="LRRound2.Stop2">
                                                     <label asp-for="LRRound2.R2MStop" class="control-label"></label>
-                                                    <input asp-for="LRRound2.R2MStop" class="form-control" />
+                                                    <input asp-for="LRRound2.R2MStop" class="form-control" value="@yearStop-09-30"/>
                                                     <span asp-validation-for="LRRound2.R2MStop" class="text-danger"></span>
                                                 </div>
                                             </div>
@@ -662,7 +678,7 @@
                                                 </div>
                                                 <div class="form-group col-md-3" id="LRRound2.Stop3">
                                                     <label asp-for="LRRound2.R3MStop" class="control-label"></label>
-                                                    <input asp-for="LRRound2.R3MStop" class="form-control" />
+                                                    <input asp-for="LRRound2.R3MStop" class="form-control" value="@yearStop-09-30"/>
                                                     <span asp-validation-for="LRRound2.R3MStop" class="text-danger"></span>
                                                 </div>
                                             </div>
@@ -687,7 +703,7 @@
                                                 </div>
                                                 <div class="form-group col-md-3" id="LRRound2.Stop4">
                                                     <label asp-for="LRRound2.R4MStop" class="control-label"></label>
-                                                    <input asp-for="LRRound2.R4MStop" class="form-control" />
+                                                    <input asp-for="LRRound2.R4MStop" class="form-control" value="@yearStop-09-30"/>
                                                     <span asp-validation-for="LRRound2.R4MStop" class="text-danger"></span>
                                                 </div>
                                             </div>
@@ -842,15 +858,27 @@
                 if ($(this).val() == 2) {
                     if ($("#point_Unit").children("option:selected").val() == 0) {
                         $("#RateRound2").show();
+                        $("#Round_R5MStop").val("@yearStop-03-31");
                     } else if ($("#point_Unit").children("option:selected").val() == 1){
                         $("#LevelRound2").show();
+                        $("#LRound_R5MStop").val("@yearStop-03-31");
                     } else if ($("#point_Unit").children("option:selected").val() == 2) {
                         $("#LevelRateRound2").show();
+                        $("#LRRound_R1MStop").val("@yearStop-03-31");
+                        $("#LRRound_R2MStop").val("@yearStop-03-31");
+                        $("#LRRound_R3MStop").val("@yearStop-03-31");
+                        $("#LRRound_R4MStop").val("@yearStop-03-31");
                     } 
                 } else {
                     $("#RateRound2").hide();
                     $("#LevelRound2").hide();
                     $("#LevelRateRound2").hide();
+                    $("#Round_R5MStop").val("@yearStop-09-30");
+                    $("#LRound_R5MStop").val("@yearStop-09-30");
+                    $("#LRRound_R1MStop").val("@yearStop-09-30");
+                    $("#LRRound_R2MStop").val("@yearStop-09-30");
+                    $("#LRRound_R3MStop").val("@yearStop-09-30");
+                    $("#LRRound_R4MStop").val("@yearStop-09-30");
                 }
             });
 

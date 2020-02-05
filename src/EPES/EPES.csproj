@@ -19,29 +19,24 @@
     <Compile Remove="Views\Audit\**" />
     <Compile Remove="Views\DataForEvaluations\**" />
     <Compile Remove="Views\Reports\**" />
-    <Compile Remove="Views\Results\**" />
     <Content Remove="Reports\**" />
     <Content Remove="Views\Audit\**" />
     <Content Remove="Views\DataForEvaluations\**" />
     <Content Remove="Views\Reports\**" />
-    <Content Remove="Views\Results\**" />
     <EmbeddedResource Remove="Reports\**" />
     <EmbeddedResource Remove="Views\Audit\**" />
     <EmbeddedResource Remove="Views\DataForEvaluations\**" />
     <EmbeddedResource Remove="Views\Reports\**" />
-    <EmbeddedResource Remove="Views\Results\**" />
     <None Remove="Reports\**" />
     <None Remove="Views\Audit\**" />
     <None Remove="Views\DataForEvaluations\**" />
     <None Remove="Views\Reports\**" />
-    <None Remove="Views\Results\**" />
   </ItemGroup>
 
   <ItemGroup>
     <Compile Remove="Controllers\AuditController.cs" />
     <Compile Remove="Controllers\DataForEvaluationsController.cs" />
     <Compile Remove="Controllers\ReportsController.cs" />
-    <Compile Remove="Controllers\ResultsController.cs" />
     <Compile Remove="Migrations\25630120070732_Initail_DB_EPES_V1.cs" />
     <Compile Remove="Migrations\25630120070732_Initail_DB_EPES_V1.Designer.cs" />
     <Compile Remove="Migrations\25630129083848_UpdateCreate.cs" />
@@ -64,8 +59,6 @@
   <ItemGroup>
     <Content Remove="package-lock.json" />
     <Content Remove="package.json" />
-    <Content Remove="Views\PointOfEvaluations\Delete.cshtml" />
-    <Content Remove="Views\PointOfEvaluations\Details.cshtml" />
   </ItemGroup>
 
   <ItemGroup>
@@ -99,6 +92,10 @@
 
 
   <ItemGroup>
+    <None Include="Views\Results\Details.cshtml" />
+    <None Include="Views\Results\Edit.cshtml" />
+    <None Include="Views\Results\Index.cshtml" />
+    <None Include="Views\Results\IndexMonth.cshtml" />
     <None Include="wwwroot\css\devextreme\fonts\Roboto-300.woff2" />
     <None Include="wwwroot\css\devextreme\fonts\Roboto-400.woff2" />
     <None Include="wwwroot\css\devextreme\fonts\Roboto-500.woff2" />
