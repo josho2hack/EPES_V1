@@ -24,6 +24,10 @@ namespace EPES.Models
         [Column(TypeName = "decimal(38, 10)")]
         public decimal Result { get; set; }
 
+        [Display(Name = "ผลการดำเนินการ (สำหรับหน่วยวัด ระดับ_ร้อนละ)")]
+        [Column(TypeName = "decimal(38, 10)")]
+        public decimal ResultLevelRate { get; set; }
+
         [Display(Name = "ผลการดำเนินการก่อนผู้ตรวจสอบแก้ไข")]
         [Column(TypeName = "decimal(38, 10)")]
         public decimal? OldResult { get; set; }

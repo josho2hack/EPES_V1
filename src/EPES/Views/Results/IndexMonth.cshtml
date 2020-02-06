@@ -4,7 +4,7 @@
 @inject UserManager<ApplicationUser> UserManager
 
 @{
-    ViewData["Title"] = "Data for Evaluation";
+    ViewData["Title"] = "บันทึกผลการปฏิบัติงาน รายเดือน";
     var user = await UserManager.GetUserAsync(User);
 }
 
@@ -147,61 +147,336 @@
                                         </td>
                                         <td>
                                             @Model.pointA[i].Weight.ToString("N2")
-                                        </td>
-                                        @{
-                                            DataForEvaluation de = null;
-                                        }
-                                        @foreach (var item in @Model.pointA[i].DataForEvaluations)
-                                        {
-                                            if (item.Month == Model.month && item.OfficeId == Model.pointA[i].OwnerOfficeId)
-                                            {
-                                                de = item;
+                                            @{
+                                                DataForEvaluation de = null;
                                             }
-                                        }
-                                        <td>@string.Format("{0:N4}", de?.Expect)</td>
-
+                                            @foreach (var item in @Model.pointA[i].DataForEvaluations)
+                                            {
+                                                if (item.Month == Model.month && item.OfficeId == Model.pointA[i].OwnerOfficeId)
+                                                {
+                                                    de = item;
+                                                }
+                                            }
+                                            <input type="hidden" name="UpdateData[@i].Id" value=@de?.Id />
+                                            <input type="hidden" name="UpdateData[@i].poeid" value=@Model.pointA[i].Id />
+                                            <input type="hidden" name="UpdateData[@i].officeid" value=@Model.pointA[i].OwnerOfficeId />
+                                        </td>
                                         @if (Model.pointA[i].Unit == UnitOfPoint.ร้อยละ)
                                         {
+                                            <td>@string.Format("{0:N4}", de?.Expect)</td>
                                             <td>
-                                                <input type="text" name="UpdateData[@i].Result" value="@String.Format("{0:N4}", de?.Result)" />
-                                                <input type="hidden" name="UpdateData[@i].Id" value=@de?.Id />
-                                                <input type="hidden" name="UpdateData[@i].poeid" value=@Model.pointA[i].Id />
-                                                <input type="hidden" name="UpdateData[@i].officeid" value=@Model.pointA[i].OwnerOfficeId />
-                                                <input type="hidden" name="UpdateData[@i].Completed" value=@(de?.Completed ??  DateTime.Now.ToString("yyyy-MM-dd", CultureInfo.CreateSpecificCulture("en-US"))) />
+                                                <input type="text" class="form-control" name="UpdateData[@i].Result" value="@String.Format("{0:N4}", de?.Result)" />
                                             </td>
-                                            <td></td>
+                                            <td><input type="date" class="form-control" name="UpdateData[@i].Completed" value=@(de?.Completed ?? new DateTime(DateTime.Now.Year, Model.month, 28).ToString("yyyy-MM-dd", CultureInfo.CreateSpecificCulture("en-US"))) /></td>
                                             <td></td>
                                         }
                                         else
                                         {
-                                            <td>
-                                                @{
-                                                    List<Object> list = new List<object>();
-                                                    list.Add(new { Value = 1, Detail = "1." + Model.pointA[i].DetailRate1 });
-                                                    list.Add(new { Value = 2, Detail = "2." + Model.pointA[i].DetailRate2 });
-                                                    list.Add(new { Value = 3, Detail = "3." + Model.pointA[i].DetailRate3 });
-                                                    list.Add(new { Value = 4, Detail = "4." + Model.pointA[i].DetailRate4 });
-                                                    list.Add(new { Value = 5, Detail = "5." + Model.pointA[i].DetailRate5 });
+                                            @if (Model.pointA[i].Unit == UnitOfPoint.ระดับ)
+                                            {
 
-                                                    if ((3 < Model.month) && (Model.month < 10) && !String.IsNullOrEmpty(Model.pointA[i].Detail2Rate1))
+                                                if ((3 < Model.month) && (Model.month < 10) && (Model.pointA[i].Rounds.Count == 2))
+                                                {
+                                                    if (new DateTime(DateTime.Now.Year, Model.month, 28) <= Model.pointA[i].Rounds[1].Rate1MonthStop)
                                                     {
-                                                        list.Clear();
-                                                        list.Add(new { Value = 1, Detail = "1." + Model.pointA[i].Detail2Rate1 });
-                                                        list.Add(new { Value = 2, Detail = "2." + Model.pointA[i].Detail2Rate2 });
-                                                        list.Add(new { Value = 3, Detail = "3." + Model.pointA[i].Detail2Rate3 });
-                                                        list.Add(new { Value = 4, Detail = "4." + Model.pointA[i].Detail2Rate4 });
-                                                        list.Add(new { Value = 5, Detail = "5." + Model.pointA[i].Detail2Rate5 });
+                                                        <td>1.@Model.pointA[i].Rounds[1].DetailRate1</td>
                                                     }
-
-                                                    ViewBag.SelectLevel = new SelectList(list, "Value", "Detail", de == null ? 1 : (int)de.Result);
+                                                    else if (new DateTime(DateTime.Now.Year, Model.month, 28) <= Model.pointA[i].Rounds[1].Rate2MonthStop)
+                                                    {
+                                                        <td>2.@Model.pointA[i].Rounds[1].DetailRate2</td>
+                                                    }
+                                                    else if (new DateTime(DateTime.Now.Year, Model.month, 28) <= Model.pointA[i].Rounds[1].Rate3MonthStop)
+                                                    {
+                                                        <td>3.@Model.pointA[i].Rounds[1].DetailRate3</td>
+                                                    }
+                                                    else if (new DateTime(DateTime.Now.Year, Model.month, 28) <= Model.pointA[i].Rounds[1].Rate4MonthStop)
+                                                    {
+                                                        <td>4.@Model.pointA[i].Rounds[1].DetailRate4</td>
+                                                    }
+                                                    else
+                                                    {
+                                                        <td>5.@Model.pointA[i].Rounds[1].DetailRate5</td>
+                                                    }
                                                 }
-                                                <select name="UpdateData[@i].Result" class="form-control" asp-items="ViewBag.SelectLevel"></select>
-                                            </td>
+                                                else
+                                                {
+                                                    if (new DateTime(DateTime.Now.Year, Model.month, 28) <= Model.pointA[i].Rounds[0].Rate1MonthStop)
+                                                    {
+                                                        <td>1.@Model.pointA[i].Rounds[0].DetailRate1</td>
+                                                    }
+                                                    else if (new DateTime(DateTime.Now.Year, Model.month, 28) <= Model.pointA[i].Rounds[0].Rate2MonthStop)
+                                                    {
+                                                        <td>2.@Model.pointA[i].Rounds[0].DetailRate2</td>
+                                                    }
+                                                    else if (new DateTime(DateTime.Now.Year, Model.month, 28) <= Model.pointA[i].Rounds[0].Rate3MonthStop)
+                                                    {
+                                                        <td>3.@Model.pointA[i].Rounds[0].DetailRate3</td>
+                                                    }
+                                                    else if (new DateTime(DateTime.Now.Year, Model.month, 28) <= Model.pointA[i].Rounds[0].Rate4MonthStop)
+                                                    {
+                                                        <td>4.@Model.pointA[i].Rounds[0].DetailRate4</td>
+                                                    }
+                                                    else
+                                                    {
+                                                        <td>5.@Model.pointA[i].Rounds[0].DetailRate5</td>
+                                                    }
+                                                }
+
+                                                <td>
+                                                    @{
+                                                        List<Object> list = new List<object>();
+                                                        list.Add(new { Value = 1, Detail = "1." + Model.pointA[i].Rounds[0].DetailRate1 });
+                                                        list.Add(new { Value = 2, Detail = "2." + Model.pointA[i].Rounds[0].DetailRate2 });
+                                                        list.Add(new { Value = 3, Detail = "3." + Model.pointA[i].Rounds[0].DetailRate3 });
+                                                        list.Add(new { Value = 4, Detail = "4." + Model.pointA[i].Rounds[0].DetailRate4 });
+                                                        list.Add(new { Value = 5, Detail = "5." + Model.pointA[i].Rounds[0].DetailRate5 });
+
+                                                        if ((3 < Model.month) && (Model.month < 10) && (Model.pointA[i].Rounds.Count == 2))
+                                                        {
+                                                            list.Clear();
+                                                            list.Add(new { Value = 1, Detail = "1." + Model.pointA[i].Rounds[1].DetailRate1 });
+                                                            list.Add(new { Value = 2, Detail = "2." + Model.pointA[i].Rounds[1].DetailRate2 });
+                                                            list.Add(new { Value = 3, Detail = "3." + Model.pointA[i].Rounds[1].DetailRate3 });
+                                                            list.Add(new { Value = 4, Detail = "4." + Model.pointA[i].Rounds[1].DetailRate4 });
+                                                            list.Add(new { Value = 5, Detail = "5." + Model.pointA[i].Rounds[1].DetailRate5 });
+                                                        }
+
+                                                        ViewBag.SelectLevel = new SelectList(list, "Value", "Detail", de == null ? 1 : (int)de.Result);
+                                                    }
+                                                    <select name="UpdateData[@i].Result" class="form-control" asp-items="ViewBag.SelectLevel"></select>
+                                                </td>
+                                            }
+                                            @if (Model.pointA[i].Unit == UnitOfPoint.ระดับ_ร้อยละ)
+                                            {
+                                                if ((3 < Model.month) && (Model.month < 10) && (Model.pointA[i].Rounds.Count == 2))
+                                                {
+                                                    if (Model.pointA[i].Rounds[0].LevelNumber == 1)
+                                                    {
+                                                        if (new DateTime(DateTime.Now.Year, Model.month, 28) <= Model.pointA[i].Rounds[1].Rate1MonthStop)
+                                                        {
+                                                            <td>
+                                                                1.@Model.pointA[i].Rounds[1].DetailRate1<br />
+                                                                @string.Format("{0:N4}", de?.Expect)
+                                                            </td>
+                                                        }
+
+                                                    }
+                                                    if (Model.pointA[i].Rounds[0].LevelNumber == 2)
+                                                    {
+                                                        if (new DateTime(DateTime.Now.Year, Model.month, 28) <= Model.pointA[i].Rounds[1].Rate1MonthStop)
+                                                        {
+                                                            <td>
+                                                                1.@Model.pointA[i].Rounds[1].DetailRate1<br />
+                                                                @string.Format("{0:N4}", de?.Expect)
+                                                            </td>
+                                                        }
+                                                        else if (new DateTime(DateTime.Now.Year, Model.month, 28) <= Model.pointA[i].Rounds[1].Rate2MonthStop)
+                                                        {
+                                                            <td>
+                                                                2.@Model.pointA[i].Rounds[1].DetailRate2 <br />
+                                                                @string.Format("{0:N4}", de?.Expect)
+                                                            </td>
+                                                        }
+
+                                                    }
+                                                    if (Model.pointA[i].Rounds[0].LevelNumber == 3)
+                                                    {
+                                                        if (new DateTime(DateTime.Now.Year, Model.month, 28) <= Model.pointA[i].Rounds[1].Rate1MonthStop)
+                                                        {
+                                                            <td>
+                                                                1.@Model.pointA[i].Rounds[1].DetailRate1 <br />
+                                                                @string.Format("{0:N4}", de?.Expect)
+                                                            </td>
+                                                        }
+                                                        else if (new DateTime(DateTime.Now.Year, Model.month, 28) <= Model.pointA[i].Rounds[1].Rate2MonthStop)
+                                                        {
+                                                            <td>
+                                                                2.@Model.pointA[i].Rounds[1].DetailRate2  <br />
+                                                                @string.Format("{0:N4}", de?.Expect)
+                                                            </td>
+                                                        }
+                                                        else if (new DateTime(DateTime.Now.Year, Model.month, 28) <= Model.pointA[i].Rounds[1].Rate2MonthStop)
+                                                        {
+                                                            <td>
+                                                                3.@Model.pointA[i].Rounds[1].DetailRate3 <br />
+                                                                @string.Format("{0:N4}", de?.Expect)
+                                                            </td>
+                                                        }
+
+                                                    }
+                                                    if (Model.pointA[i].Rounds[0].LevelNumber == 4)
+                                                    {
+                                                        if (new DateTime(DateTime.Now.Year, Model.month, 28) <= Model.pointA[i].Rounds[1].Rate1MonthStop)
+                                                        {
+                                                            <td>
+                                                                1.@Model.pointA[i].Rounds[1].DetailRate1<br />
+                                                                @string.Format("{0:N4}", de?.Expect)
+                                                            </td>
+                                                        }
+                                                        else if (new DateTime(DateTime.Now.Year, Model.month, 28) <= Model.pointA[i].Rounds[1].Rate2MonthStop)
+                                                        {
+                                                            <td>
+                                                                2.@Model.pointA[i].Rounds[1].DetailRate2 <br />
+                                                                @string.Format("{0:N4}", de?.Expect)
+                                                            </td>
+                                                        }
+                                                        else if (new DateTime(DateTime.Now.Year, Model.month, 28) <= Model.pointA[i].Rounds[1].Rate2MonthStop)
+                                                        {
+                                                            <td>
+                                                                3.@Model.pointA[i].Rounds[1].DetailRate3 <br />
+                                                                @string.Format("{0:N4}", de?.Expect)
+                                                            </td>
+                                                        }
+                                                        else if (new DateTime(DateTime.Now.Year, Model.month, 28) <= Model.pointA[i].Rounds[1].Rate4MonthStop)
+                                                        {
+                                                            <td>
+                                                                4.@Model.pointA[i].Rounds[1].DetailRate4<br />
+                                                                @string.Format("{0:N4}", de?.Expect)
+                                                            </td>
+                                                        }
+
+                                                    }
+                                                }
+                                                else
+                                                {
+                                                    if (Model.pointA[i].Rounds[0].LevelNumber == 1)
+                                                    {
+                                                        if (new DateTime(DateTime.Now.Year, Model.month, 28) <= Model.pointA[i].Rounds[0].Rate1MonthStop)
+                                                        {
+                                                            <td>
+                                                                1.@Model.pointA[i].Rounds[0].DetailRate1<br />
+                                                                @string.Format("{0:N4}", de?.Expect)
+                                                            </td>
+                                                        }
+
+                                                    }
+                                                    if (Model.pointA[i].Rounds[0].LevelNumber == 2)
+                                                    {
+                                                        if (new DateTime(DateTime.Now.Year, Model.month, 28) <= Model.pointA[i].Rounds[0].Rate1MonthStop)
+                                                        {
+                                                            <td>
+                                                                1.@Model.pointA[i].Rounds[0].DetailRate1<br />
+                                                                @string.Format("{0:N4}", de?.Expect)
+                                                            </td>
+                                                        }
+                                                        else if (new DateTime(DateTime.Now.Year, Model.month, 28) <= Model.pointA[i].Rounds[0].Rate2MonthStop)
+                                                        {
+                                                            <td>
+                                                                2.@Model.pointA[i].Rounds[0].DetailRate2<br />
+                                                                @string.Format("{0:N4}", de?.Expect)
+                                                            </td>
+                                                        }
+
+                                                    }
+                                                    if (Model.pointA[i].Rounds[0].LevelNumber == 3)
+                                                    {
+                                                        if (new DateTime(DateTime.Now.Year, Model.month, 28) <= Model.pointA[i].Rounds[0].Rate1MonthStop)
+                                                        {
+                                                            <td>
+                                                                1.@Model.pointA[i].Rounds[0].DetailRate1<br />
+                                                                @string.Format("{0:N4}", de?.Expect)
+                                                            </td>
+                                                        }
+                                                        else if (new DateTime(DateTime.Now.Year, Model.month, 28) <= Model.pointA[i].Rounds[0].Rate2MonthStop)
+                                                        {
+                                                            <td>
+                                                                2.@Model.pointA[i].Rounds[0].DetailRate2 <br />
+                                                                @string.Format("{0:N4}", de?.Expect)
+                                                            </td>
+                                                        }
+                                                        else if (new DateTime(DateTime.Now.Year, Model.month, 28) <= Model.pointA[i].Rounds[0].Rate2MonthStop)
+                                                        {
+                                                            <td>
+                                                                3.@Model.pointA[i].Rounds[0].DetailRate3<br />
+                                                                @string.Format("{0:N4}", de?.Expect)
+                                                            </td>
+                                                        }
+
+                                                    }
+                                                    if (Model.pointA[i].Rounds[0].LevelNumber == 4)
+                                                    {
+                                                        if (new DateTime(DateTime.Now.Year, Model.month, 28) <= Model.pointA[i].Rounds[0].Rate1MonthStop)
+                                                        {
+                                                            <td>
+                                                                1.@Model.pointA[i].Rounds[0].DetailRate1<br />
+                                                                @string.Format("{0:N4}", de?.Expect)
+                                                            </td>
+                                                        }
+                                                        else if (new DateTime(DateTime.Now.Year, Model.month, 28) <= Model.pointA[i].Rounds[0].Rate2MonthStop)
+                                                        {
+                                                            <td>
+                                                                2.@Model.pointA[i].Rounds[0].DetailRate2<br />
+                                                                @string.Format("{0:N4}", de?.Expect)
+                                                            </td>
+                                                        }
+                                                        else if (new DateTime(DateTime.Now.Year, Model.month, 28) <= Model.pointA[i].Rounds[0].Rate2MonthStop)
+                                                        {
+                                                            <td>
+                                                                3.@Model.pointA[i].Rounds[0].DetailRate3 <br />
+                                                                @string.Format("{0:N4}", de?.Expect)
+                                                            </td>
+                                                        }
+                                                        else if (new DateTime(DateTime.Now.Year, Model.month, 28) <= Model.pointA[i].Rounds[0].Rate4MonthStop)
+                                                        {
+                                                            <td>
+                                                                4.@Model.pointA[i].Rounds[0].DetailRate4<br />
+                                                                @string.Format("{0:N4}", de?.Expect)
+                                                            </td>
+                                                        }
+
+                                                    }
+                                                }
+                                                <td>
+                                                    @{
+                                                        List<Object> list = new List<object>();
+                                                        if (Model.pointA[i].Rounds[0].LevelNumber >= 1)
+                                                        {
+                                                            list.Add(new { Value = 1, Detail = "1." + Model.pointA[i].Rounds[0].DetailRate1 });
+
+                                                        }
+                                                        if (Model.pointA[i].Rounds[0].LevelNumber >= 2)
+                                                        {
+                                                            list.Add(new { Value = 2, Detail = "2." + Model.pointA[i].Rounds[0].DetailRate2 });
+                                                        }
+                                                        if (Model.pointA[i].Rounds[0].LevelNumber >= 3)
+                                                        {
+                                                            list.Add(new { Value = 3, Detail = "3." + Model.pointA[i].Rounds[0].DetailRate3 });
+                                                        }
+                                                        if (Model.pointA[i].Rounds[0].LevelNumber >= 4)
+                                                        {
+                                                            list.Add(new { Value = 4, Detail = "4." + Model.pointA[i].Rounds[0].DetailRate4 });
+                                                        }
+
+                                                        if ((3 < Model.month) && (Model.month < 10) && (Model.pointA[i].Rounds.Count == 2))
+                                                        {
+                                                            list.Clear();
+                                                            if (Model.pointA[i].Rounds[1].LevelNumber >= 1)
+                                                            {
+                                                                list.Add(new { Value = 1, Detail = "1." + Model.pointA[i].Rounds[1].DetailRate1 });
+                                                            }
+                                                            if (Model.pointA[i].Rounds[1].LevelNumber >= 2)
+                                                            {
+                                                                list.Add(new { Value = 2, Detail = "2." + Model.pointA[i].Rounds[1].DetailRate2 });
+                                                            }
+                                                            if (Model.pointA[i].Rounds[1].LevelNumber >= 3)
+                                                            {
+                                                                list.Add(new { Value = 3, Detail = "3." + Model.pointA[i].Rounds[1].DetailRate3 });
+                                                            }
+                                                            if (Model.pointA[i].Rounds[1].LevelNumber >= 4)
+                                                            {
+                                                                list.Add(new { Value = 4, Detail = "4." + Model.pointA[i].Rounds[1].DetailRate4 });
+                                                            }
+                                                        }
+
+                                                        ViewBag.SelectLevel = new SelectList(list, "Value", "Detail", de == null ? 1 : (int)de.Result);
+                                                    }
+                                                    <select name="UpdateData[@i].Result" class="form-control" asp-items="ViewBag.SelectLevel"></select>
+                                                    <br />
+                                                    <input type="text" class="form-control" name="UpdateData[@i].ResultLevelRate" value="@String.Format("{0:N4}", de?.Result)" />
+                                                </td>
+                                            }
                                             <td>
-                                                <input type="date" name="UpdateData[@i].Completed" value=@(de?.Completed ??  DateTime.Now.ToString("yyyy-MM-dd", CultureInfo.CreateSpecificCulture("en-US"))) />
-                                                <input type="hidden" name="UpdateData[@i].Id" value=@de?.Id />
-                                                <input type="hidden" name="UpdateData[@i].poeid" value=@Model.pointA[i].Id />
-                                                <input type="hidden" name="UpdateData[@i].officeid" value=@Model.pointA[i].OwnerOfficeId />
+                                                <input type="date" class="form-control" name="UpdateData[@i].Completed" value=@(de?.Completed ??  new DateTime(DateTime.Now.Year, Model.month, 28).ToString("yyyy-MM-dd", CultureInfo.CreateSpecificCulture("en-US"))) />
                                             </td>
                                             <td>
                                                 @if (de != null)
@@ -218,14 +493,14 @@
                                                                                                                                                                         .CloseOnOutsideClick(true)
                                                     )
                                                     @(Html.DevExtreme().Button()
-                                                                                                                                                                        .ElementAttr("class", "button-info")
+                                                                                                                                                                        //.ElementAttr("class", "button-info")
                                                                                                                                                                         .Text("แนบ")
                                                                                                                                                                         .OnClick(@<text>
-                                                                                                                                                                            function showInfo(data) {
-                                                                                                                                                                            var popup = $("#attach-popup").dxPopup("instance");
-                                                                                                                                                                            popup.option("contentTemplate", $("#popup-template-" + @de?.Id));
-                                                                                                                                                                            popup.show();
-                                                                                                                                                                            }
+                                                                                                                                                                                    function showInfo(data) {
+                                                                                                                                                                                    var popup = $("#attach-popup").dxPopup("instance");
+                                                                                                                                                                                    popup.option("contentTemplate", $("#popup-template-" + @de?.Id));
+                                                                                                                                                                                    popup.show();
+                                                                                                                                                                                    }
                                                                                                                                                                         </text>)
                                                     )
                                                     @if (de?.AttachFile != null)
@@ -236,11 +511,11 @@
                                                                                                                                                                         .Text("ลบ")
                                                                                                                                                                         .Type(ButtonType.Danger)
                                                                                                                                                                         .OnClick(@<text>
-                                                                                                                                                                            function showInfo(data) {
-                                                                                                                                                                            var popup = $("#attach-popup").dxPopup("instance");
-                                                                                                                                                                            popup.option("contentTemplate", $("#popup-template-del-" + @de?.Id));
-                                                                                                                                                                            popup.show();
-                                                                                                                                                                            }
+                                                                                                                                                                                    function showInfo(data) {
+                                                                                                                                                                                    var popup = $("#attach-popup").dxPopup("instance");
+                                                                                                                                                                                    popup.option("contentTemplate", $("#popup-template-del-" + @de?.Id));
+                                                                                                                                                                                    popup.show();
+                                                                                                                                                                                    }
                                                                                                                                                                         </text>)
                                                         )
                                                     }
@@ -364,10 +639,10 @@
                                                 de = item;
                                             }
                                         }
-                                        <td>@string.Format("{0:N4}", de?.Expect)</td>
 
                                         @if (Model.pointB[i].Unit == UnitOfPoint.ร้อยละ)
                                         {
+                                            <td>@string.Format("{0:N4}", de?.Expect)</td>
                                             <td>
                                                 @*@{
                                                         //@Html.TextBox("UpdateData[" + @i + "].Result", de?.Result, new { @class = "form-control" })
@@ -395,23 +670,24 @@
                                         }
                                         else
                                         {
+                                            <td></td>
                                             <td>
                                                 @{
                                                     List<Object> list = new List<object>();
-                                                    list.Add(new { Value = 1, Detail = "1." + Model.pointB[i].DetailRate1 });
-                                                    list.Add(new { Value = 2, Detail = "2." + Model.pointB[i].DetailRate2 });
-                                                    list.Add(new { Value = 3, Detail = "3." + Model.pointB[i].DetailRate3 });
-                                                    list.Add(new { Value = 4, Detail = "4." + Model.pointB[i].DetailRate4 });
-                                                    list.Add(new { Value = 5, Detail = "5." + Model.pointB[i].DetailRate5 });
+                                                    list.Add(new { Value = 1, Detail = "1." + Model.pointB[i].Rounds[0].DetailRate1 });
+                                                    list.Add(new { Value = 2, Detail = "2." + Model.pointB[i].Rounds[0].DetailRate2 });
+                                                    list.Add(new { Value = 3, Detail = "3." + Model.pointB[i].Rounds[0].DetailRate3 });
+                                                    list.Add(new { Value = 4, Detail = "4." + Model.pointB[i].Rounds[0].DetailRate4 });
+                                                    list.Add(new { Value = 5, Detail = "5." + Model.pointB[i].Rounds[0].DetailRate5 });
 
-                                                    if ((3 < Model.month) && (Model.month < 10) && !String.IsNullOrEmpty(Model.pointB[i].Detail2Rate1))
+                                                    if ((3 < Model.month) && (Model.month < 10) && (Model.pointB[i].Rounds.Count == 2))
                                                     {
                                                         list.Clear();
-                                                        list.Add(new { Value = 1, Detail = "1." + Model.pointB[i].Detail2Rate1 });
-                                                        list.Add(new { Value = 2, Detail = "2." + Model.pointB[i].Detail2Rate2 });
-                                                        list.Add(new { Value = 3, Detail = "3." + Model.pointB[i].Detail2Rate3 });
-                                                        list.Add(new { Value = 4, Detail = "4." + Model.pointB[i].Detail2Rate4 });
-                                                        list.Add(new { Value = 5, Detail = "5." + Model.pointB[i].Detail2Rate5 });
+                                                        list.Add(new { Value = 1, Detail = "1." + Model.pointB[i].Rounds[1].DetailRate1 });
+                                                        list.Add(new { Value = 2, Detail = "2." + Model.pointB[i].Rounds[1].DetailRate2 });
+                                                        list.Add(new { Value = 3, Detail = "3." + Model.pointB[i].Rounds[1].DetailRate3 });
+                                                        list.Add(new { Value = 4, Detail = "4." + Model.pointB[i].Rounds[1].DetailRate4 });
+                                                        list.Add(new { Value = 5, Detail = "5." + Model.pointB[i].Rounds[1].DetailRate5 });
                                                     }
 
                                                     ViewBag.SelectLevel = new SelectList(list, "Value", "Detail", de == null ? 1 : (int)de.Result);
@@ -442,11 +718,11 @@
                                                                                                                                                       .ElementAttr("class", "button-info")
                                                                                                                                                       .Text("แนบ")
                                                                                                                                                       .OnClick(@<text>
-                                                                                                                                                        function showInfo(data) {
-                                                                                                                                                        var popup = $("#attach-popup").dxPopup("instance");
-                                                                                                                                                        popup.option("contentTemplate", $("#popup-template-" + @de?.Id));
-                                                                                                                                                        popup.show();
-                                                                                                                                                        }
+                                                                                                                                                                function showInfo(data) {
+                                                                                                                                                                var popup = $("#attach-popup").dxPopup("instance");
+                                                                                                                                                                popup.option("contentTemplate", $("#popup-template-" + @de?.Id));
+                                                                                                                                                                popup.show();
+                                                                                                                                                                }
                                                                                                                                                     </text>)
                                                     )
                                                     @if (de?.AttachFile != null)
@@ -457,11 +733,11 @@
                                                                                                                                                                                         .Text("ลบ")
                                                                                                                                                                                         .Type(ButtonType.Danger)
                                                                                                                                                                                         .OnClick(@<text>
-                                                                                                                                                                                            function showInfo(data) {
-                                                                                                                                                                                            var popup = $("#attach-popup").dxPopup("instance");
-                                                                                                                                                                                            popup.option("contentTemplate", $("#popup-template-del-" + @de?.Id));
-                                                                                                                                                                                            popup.show();
-                                                                                                                                                                                            }
+                                                                                                                                                                                                    function showInfo(data) {
+                                                                                                                                                                                                    var popup = $("#attach-popup").dxPopup("instance");
+                                                                                                                                                                                                    popup.option("contentTemplate", $("#popup-template-del-" + @de?.Id));
+                                                                                                                                                                                                    popup.show();
+                                                                                                                                                                                                    }
                                                                                                                                                                                         </text>)
                                                         )
                                                     }
@@ -585,10 +861,10 @@
                                                 de = item;
                                             }
                                         }
-                                        <td>@string.Format("{0:N4}", de?.Expect)</td>
 
                                         @if (Model.pointC[i].Unit == UnitOfPoint.ร้อยละ)
                                         {
+                                            <td>@string.Format("{0:N4}", de?.Expect)</td>
                                             <td>
                                                 @*@{
                                                         //@Html.TextBox("UpdateData[" + @i + "].Result", de?.Result, new { @class = "form-control" })
@@ -616,23 +892,24 @@
                                         }
                                         else
                                         {
+                                            <td></td>
                                             <td>
                                                 @{
                                                     List<Object> list = new List<object>();
-                                                    list.Add(new { Value = 1, Detail = "1." + Model.pointC[i].DetailRate1 });
-                                                    list.Add(new { Value = 2, Detail = "2." + Model.pointC[i].DetailRate2 });
-                                                    list.Add(new { Value = 3, Detail = "3." + Model.pointC[i].DetailRate3 });
-                                                    list.Add(new { Value = 4, Detail = "4." + Model.pointC[i].DetailRate4 });
-                                                    list.Add(new { Value = 5, Detail = "5." + Model.pointC[i].DetailRate5 });
+                                                    list.Add(new { Value = 1, Detail = "1." + Model.pointC[i].Rounds[0].DetailRate1 });
+                                                    list.Add(new { Value = 2, Detail = "2." + Model.pointC[i].Rounds[0].DetailRate2 });
+                                                    list.Add(new { Value = 3, Detail = "3." + Model.pointC[i].Rounds[0].DetailRate3 });
+                                                    list.Add(new { Value = 4, Detail = "4." + Model.pointC[i].Rounds[0].DetailRate4 });
+                                                    list.Add(new { Value = 5, Detail = "5." + Model.pointC[i].Rounds[0].DetailRate5 });
 
-                                                    if ((3 < Model.month) && (Model.month < 10) && !String.IsNullOrEmpty(Model.pointC[i].Detail2Rate1))
+                                                    if ((3 < Model.month) && (Model.month < 10) && (Model.pointC[i].Rounds.Count == 2))
                                                     {
                                                         list.Clear();
-                                                        list.Add(new { Value = 1, Detail = "1." + Model.pointC[i].Detail2Rate1 });
-                                                        list.Add(new { Value = 2, Detail = "2." + Model.pointC[i].Detail2Rate2 });
-                                                        list.Add(new { Value = 3, Detail = "3." + Model.pointC[i].Detail2Rate3 });
-                                                        list.Add(new { Value = 4, Detail = "4." + Model.pointC[i].Detail2Rate4 });
-                                                        list.Add(new { Value = 5, Detail = "5." + Model.pointC[i].Detail2Rate5 });
+                                                        list.Add(new { Value = 1, Detail = "1." + Model.pointC[i].Rounds[1].DetailRate1 });
+                                                        list.Add(new { Value = 2, Detail = "2." + Model.pointC[i].Rounds[1].DetailRate2 });
+                                                        list.Add(new { Value = 3, Detail = "3." + Model.pointC[i].Rounds[1].DetailRate3 });
+                                                        list.Add(new { Value = 4, Detail = "4." + Model.pointC[i].Rounds[1].DetailRate4 });
+                                                        list.Add(new { Value = 5, Detail = "5." + Model.pointC[i].Rounds[1].DetailRate5 });
                                                     }
 
                                                     ViewBag.SelectLevel = new SelectList(list, "Value", "Detail", de == null ? 1 : (int)de.Result);
@@ -663,11 +940,11 @@
                                                                                                                                       .ElementAttr("class", "button-info")
                                                                                                                                       .Text("แนบ")
                                                                                                                                       .OnClick(@<text>
-                                                                                                                                        function showInfo(data) {
-                                                                                                                                        var popup = $("#attach-popup").dxPopup("instance");
-                                                                                                                                        popup.option("contentTemplate", $("#popup-template-" + @de?.Id));
-                                                                                                                                        popup.show();
-                                                                                                                                        }
+                                                                                                                                                function showInfo(data) {
+                                                                                                                                                var popup = $("#attach-popup").dxPopup("instance");
+                                                                                                                                                popup.option("contentTemplate", $("#popup-template-" + @de?.Id));
+                                                                                                                                                popup.show();
+                                                                                                                                                }
                                                                                                                                     </text>)
                                                     )
                                                     @if (de?.AttachFile != null)
@@ -678,11 +955,11 @@
                                                                                                                                                                         .Text("ลบ")
                                                                                                                                                                         .Type(ButtonType.Danger)
                                                                                                                                                                         .OnClick(@<text>
-                                                                                                                                                                            function showInfo(data) {
-                                                                                                                                                                            var popup = $("#attach-popup").dxPopup("instance");
-                                                                                                                                                                            popup.option("contentTemplate", $("#popup-template-del-" + @de?.Id));
-                                                                                                                                                                            popup.show();
-                                                                                                                                                                            }
+                                                                                                                                                                                    function showInfo(data) {
+                                                                                                                                                                                    var popup = $("#attach-popup").dxPopup("instance");
+                                                                                                                                                                                    popup.option("contentTemplate", $("#popup-template-del-" + @de?.Id));
+                                                                                                                                                                                    popup.show();
+                                                                                                                                                                                    }
                                                                                                                                                                         </text>)
                                                         )
                                                     }
@@ -806,10 +1083,10 @@
                                                 de = item;
                                             }
                                         }
-                                        <td>@string.Format("{0:N4}", de?.Expect)</td>
 
                                         @if (Model.pointD[i].Unit == UnitOfPoint.ร้อยละ)
                                         {
+                                            <td>@string.Format("{0:N4}", de?.Expect)</td>
                                             <td>
                                                 @*@{
                                                         //@Html.TextBox("UpdateData[" + @i + "].Result", de?.Result, new { @class = "form-control" })
@@ -837,23 +1114,24 @@
                                         }
                                         else
                                         {
+                                            <td></td>
                                             <td>
                                                 @{
                                                     List<Object> list = new List<object>();
-                                                    list.Add(new { Value = 1, Detail = "1." + Model.pointD[i].DetailRate1 });
-                                                    list.Add(new { Value = 2, Detail = "2." + Model.pointD[i].DetailRate2 });
-                                                    list.Add(new { Value = 3, Detail = "3." + Model.pointD[i].DetailRate3 });
-                                                    list.Add(new { Value = 4, Detail = "4." + Model.pointD[i].DetailRate4 });
-                                                    list.Add(new { Value = 5, Detail = "5." + Model.pointD[i].DetailRate5 });
+                                                    list.Add(new { Value = 1, Detail = "1." + Model.pointD[i].Rounds[0].DetailRate1 });
+                                                    list.Add(new { Value = 2, Detail = "2." + Model.pointD[i].Rounds[0].DetailRate2 });
+                                                    list.Add(new { Value = 3, Detail = "3." + Model.pointD[i].Rounds[0].DetailRate3 });
+                                                    list.Add(new { Value = 4, Detail = "4." + Model.pointD[i].Rounds[0].DetailRate4 });
+                                                    list.Add(new { Value = 5, Detail = "5." + Model.pointD[i].Rounds[0].DetailRate5 });
 
-                                                    if ((3 < Model.month) && (Model.month < 10) && !String.IsNullOrEmpty(Model.pointD[i].Detail2Rate1))
+                                                    if ((3 < Model.month) && (Model.month < 10) && (Model.pointD[i].Rounds.Count == 2))
                                                     {
                                                         list.Clear();
-                                                        list.Add(new { Value = 1, Detail = "1." + Model.pointD[i].Detail2Rate1 });
-                                                        list.Add(new { Value = 2, Detail = "2." + Model.pointD[i].Detail2Rate2 });
-                                                        list.Add(new { Value = 3, Detail = "3." + Model.pointD[i].Detail2Rate3 });
-                                                        list.Add(new { Value = 4, Detail = "4." + Model.pointD[i].Detail2Rate4 });
-                                                        list.Add(new { Value = 5, Detail = "5." + Model.pointD[i].Detail2Rate5 });
+                                                        list.Add(new { Value = 1, Detail = "1." + Model.pointD[i].Rounds[1].DetailRate1 });
+                                                        list.Add(new { Value = 2, Detail = "2." + Model.pointD[i].Rounds[1].DetailRate2 });
+                                                        list.Add(new { Value = 3, Detail = "3." + Model.pointD[i].Rounds[1].DetailRate3 });
+                                                        list.Add(new { Value = 4, Detail = "4." + Model.pointD[i].Rounds[1].DetailRate4 });
+                                                        list.Add(new { Value = 5, Detail = "5." + Model.pointD[i].Rounds[1].DetailRate5 });
                                                     }
 
                                                     ViewBag.SelectLevel = new SelectList(list, "Value", "Detail", de == null ? 1 : (int)de.Result);
@@ -884,11 +1162,11 @@
                                                                                                                                                               .ElementAttr("class", "button-info")
                                                                                                                                                               .Text("แนบ")
                                                                                                                                                               .OnClick(@<text>
-                                                                                                                                                                function showInfo(data) {
-                                                                                                                                                                var popup = $("#attach-popup").dxPopup("instance");
-                                                                                                                                                                popup.option("contentTemplate", $("#popup-template-" + @de?.Id));
-                                                                                                                                                                popup.show();
-                                                                                                                                                                }
+                                                                                                                                                                        function showInfo(data) {
+                                                                                                                                                                        var popup = $("#attach-popup").dxPopup("instance");
+                                                                                                                                                                        popup.option("contentTemplate", $("#popup-template-" + @de?.Id));
+                                                                                                                                                                        popup.show();
+                                                                                                                                                                        }
                                                                                                                                                             </text>)
                                                     )
                                                     @if (de?.AttachFile != null)
@@ -899,11 +1177,11 @@
                                                                                                                                                                                         .Text("ลบ")
                                                                                                                                                                                         .Type(ButtonType.Danger)
                                                                                                                                                                                         .OnClick(@<text>
-                                                                                                                                                                                            function showInfo(data) {
-                                                                                                                                                                                            var popup = $("#attach-popup").dxPopup("instance");
-                                                                                                                                                                                            popup.option("contentTemplate", $("#popup-template-del-" + @de?.Id));
-                                                                                                                                                                                            popup.show();
-                                                                                                                                                                                            }
+                                                                                                                                                                                                    function showInfo(data) {
+                                                                                                                                                                                                    var popup = $("#attach-popup").dxPopup("instance");
+                                                                                                                                                                                                    popup.option("contentTemplate", $("#popup-template-del-" + @de?.Id));
+                                                                                                                                                                                                    popup.show();
+                                                                                                                                                                                                    }
                                                                                                                                                                                         </text>)
                                                         )
                                                     }

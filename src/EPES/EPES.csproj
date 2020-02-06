@@ -92,9 +92,6 @@
 
 
   <ItemGroup>
-    <None Include="Views\Results\Details.cshtml" />
-    <None Include="Views\Results\Edit.cshtml" />
-    <None Include="Views\Results\Index.cshtml" />
     <None Include="Views\Results\IndexMonth.cshtml" />
     <None Include="wwwroot\css\devextreme\fonts\Roboto-300.woff2" />
     <None Include="wwwroot\css\devextreme\fonts\Roboto-400.woff2" />
