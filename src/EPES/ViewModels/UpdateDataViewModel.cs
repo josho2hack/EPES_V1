@@ -16,6 +16,7 @@ namespace EPES.ViewModels
         [DisplayFormat(DataFormatString = "{0:N4}", ApplyFormatInEditMode = true)]
         [Column(TypeName = "decimal(38, 10)")]
         public decimal Result { get; set; }
+        public decimal ResultLevelRate { get; set; }
 
         public string Completed { get; set; }
 
