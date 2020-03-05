@@ -16,25 +16,20 @@
 
   <ItemGroup>
     <Compile Remove="Reports\**" />
-    <Compile Remove="Views\Audit\**" />
     <Compile Remove="Views\DataForEvaluations\**" />
     <Compile Remove="Views\Reports\**" />
     <Content Remove="Reports\**" />
-    <Content Remove="Views\Audit\**" />
     <Content Remove="Views\DataForEvaluations\**" />
     <Content Remove="Views\Reports\**" />
     <EmbeddedResource Remove="Reports\**" />
-    <EmbeddedResource Remove="Views\Audit\**" />
     <EmbeddedResource Remove="Views\DataForEvaluations\**" />
     <EmbeddedResource Remove="Views\Reports\**" />
     <None Remove="Reports\**" />
-    <None Remove="Views\Audit\**" />
     <None Remove="Views\DataForEvaluations\**" />
     <None Remove="Views\Reports\**" />
   </ItemGroup>
 
   <ItemGroup>
-    <Compile Remove="Controllers\AuditController.cs" />
     <Compile Remove="Controllers\DataForEvaluationsController.cs" />
     <Compile Remove="Controllers\ReportsController.cs" />
     <Compile Remove="Migrations\25630120070732_Initail_DB_EPES_V1.cs" />
@@ -49,6 +44,8 @@
     <Compile Remove="Migrations\25630203014305_InitailDB.Designer.cs" />
     <Compile Remove="Migrations\25630203021315_InitailDB.cs" />
     <Compile Remove="Migrations\25630203021315_InitailDB.Designer.cs" />
+    <Compile Remove="Migrations\25630225043742_UpdatePoint.cs" />
+    <Compile Remove="Migrations\25630225043742_UpdatePoint.Designer.cs" />
     <Compile Remove="PakReport.cs" />
     <Compile Remove="PakReport.Designer.cs" />
     <Compile Remove="Report.cs" />
@@ -92,6 +89,7 @@
 
 
   <ItemGroup>
+    <None Include="Views\Audit\Index.cshtml" />
     <None Include="Views\Results\IndexMonth.cshtml" />
     <None Include="wwwroot\css\devextreme\fonts\Roboto-300.woff2" />
     <None Include="wwwroot\css\devextreme\fonts\Roboto-400.woff2" />

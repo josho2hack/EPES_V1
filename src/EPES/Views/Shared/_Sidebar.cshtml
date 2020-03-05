@@ -42,7 +42,8 @@
                 <div class="bg-white py-2 collapse-inner rounded">
                     <h6 class="collapse-header">รายเดือน:</h6>
                     <a class="collapse-item" asp-area="" asp-controller="Results" asp-action="IndexMonth">บันทึกผลปฏิบัติราชการ</a>
-                    @if (User.IsInRole("Admin") || User.IsInRole("Manager"))
+                    @if (User.IsInRole("Admin") || User.IsInRole("Manager")
+                        || (user.approver == true && user.OfficeId.Substring(5, 3) == "000"))
                     {
                         <a class="collapse-item" asp-area="" asp-controller="Audit" asp-action="Index">ตรวจสอบ/ยืนยัน</a>
                     }

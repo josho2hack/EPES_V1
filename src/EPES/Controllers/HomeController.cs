@@ -67,7 +67,7 @@ namespace EPES.Controllers
             {
                 webRequest.ContentType = "application/json";
                 webRequest.UserAgent = "Nothing";
-                webRequest.Timeout = 3000;
+                webRequest.Timeout = 5000;
                 try
                 {
                     using (var s = webRequest.GetResponse().GetResponseStream())
@@ -123,7 +123,7 @@ namespace EPES.Controllers
             {
                 webRequest.ContentType = "application/json";
                 webRequest.UserAgent = "Nothing";
-                webRequest.Timeout = 3000;
+                webRequest.Timeout = 5000;
                 try
                 {
                     using (var s = webRequest.GetResponse().GetResponseStream())

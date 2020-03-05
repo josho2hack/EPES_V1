@@ -10,11 +10,32 @@
                 {
                     targets: -1,
                     className: 'dt-body-center'
-                }
+                },
+                { "type": "num", "targets": 0 }
             ]
         });
     });
 </script>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('#EPEStableA').dataTable({
+            "language": {
+                "url": "@Url.Content("~/js/Thai.json")"
+            },
+            paging: false,
+            columnDefs: [
+                { 
+                    targets: -1,
+                    className: 'dt-body-center'
+                },
+                { "type": "num", "targets": 0 }
+            ]
+            //"lengthMenu": [[20, 40, 80, -1], [20, 40, 80, "All"]]
+        });
+    });
+</script>
+
 <script type="text/javascript">
     $(document).ready(function () {
         $('#EPEStableB').dataTable({
@@ -26,7 +47,8 @@
                 {
                     targets: -1,
                     className: 'dt-body-center'
-                }
+                },
+                { "type": "num", "targets": 0 }
             ]
             //"lengthMenu": [[20, 40, 80, -1], [20, 40, 80, "All"]]
         });
@@ -43,7 +65,8 @@
                 {
                     targets: -1,
                     className: 'dt-body-center'
-                }
+                },
+                { "type": "num", "targets": 0 }
             ]
         });
     });
@@ -59,7 +82,8 @@
                 {
                     targets: -1,
                     className: 'dt-body-center'
-                }
+                },
+                { "type": "num", "targets": 0 }
             ]
         });
     });

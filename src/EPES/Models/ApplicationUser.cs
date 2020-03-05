@@ -47,6 +47,10 @@ namespace EPES.Models
         [Display(Name = "วันเดือนปีเกิด")]
         public DateTime DOB { get; set; }
 
+        [PersonalData]
+        [Display(Name = "เป็นผู้อนุมัติ")]
+        public bool? approver { get; set; }
+
         [Display(Name = "ข้อมูลที่ใช้ในการประเมิน")]
         public ICollection<DataForEvaluation> DataForEvaluations { get; set; }
 

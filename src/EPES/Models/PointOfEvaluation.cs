@@ -27,6 +27,9 @@ namespace EPES.Models
         [Display(Name = "ตัวชี้วัดย่อย (ถ้ามี)")]
         public int SubPoint { get; set; }
 
+        [Display(Name = "มีตัวชี้วัดย่อย")]
+        public bool HasSub { get; set; }
+
         [Display(Name = "แผน")]
         public TypeOfPlan Plan { get; set; }
 

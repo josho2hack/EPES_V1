@@ -151,7 +151,7 @@
                         </tbody>
                     </table>
                     <p class="text-right">
-                        @if (User.IsInRole("Admin") || (User.IsInRole("Manager") && user.OfficeId.StartsWith("000")))
+                        @if (User.IsInRole("Admin") || ((User.IsInRole("Manager") || User.IsInRole("User")) && user.OfficeId.StartsWith("000")))
                         {
                             <a asp-action="Create" asp-route-plan="0" asp-route-yearPoint="@Model.yearPoint" asp-route-selectoffice="@ViewBag.selectoffice">เพิ่มแผน</a>
                         }

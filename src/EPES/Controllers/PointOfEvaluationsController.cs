@@ -77,7 +77,7 @@ namespace EPES.Controllers
                     ViewBag.OfficeCode = new SelectList(_context.Offices.Where(d => d.Code != "00000000" && d.Code.Substring(5, 3) == "000"), "Code", "Name", selectoffice);
                 }
             }
-            else
+            else  // No Admin
             {
                 if (String.IsNullOrEmpty(selectoffice))
                 {
@@ -85,7 +85,9 @@ namespace EPES.Controllers
                     {
                         viewModel.pointA = await _context.PointOfEvaluations.Where(p => p.Plan == TypeOfPlan.A && p.OwnerOffice.Code == user.OfficeId && p.Year == yearForQuery).Include(p => p.OwnerOffice).Include(p => p.AuditOffice).ToListAsync();
 
-                        ViewBag.OfficeCode = new SelectList(await _context.PointOfEvaluations.Where(p => p.Plan == TypeOfPlan.B && (p.OwnerOffice.Code == user.OfficeId || p.AuditOffice.Code == user.OfficeId) && p.Year == yearForQuery).Include(p => p.OwnerOffice).Include(p => p.AuditOffice).Select(b => new { Code = b.OwnerOffice.Code, Name = b.OwnerOffice.Name }).Distinct().ToListAsync(), "Code", "Name", user.OfficeId);
+                        var officeList = await _context.PointOfEvaluations.Where(p => (p.OwnerOffice.Code == user.OfficeId) || (p.Plan == TypeOfPlan.B && (p.OwnerOffice.Code == user.OfficeId || p.AuditOffice.Code == user.OfficeId) && p.Year == yearForQuery)).Include(p => p.OwnerOffice).Include(p => p.AuditOffice).Select(b => new { Code = b.OwnerOffice.Code, Name = b.OwnerOffice.Name }).Distinct().ToListAsync();
+
+                        ViewBag.OfficeCode = new SelectList(officeList, "Code", "Name", user.OfficeId);
                     }
                     else
                     {
@@ -102,7 +104,9 @@ namespace EPES.Controllers
                     {
                         viewModel.pointA = await _context.PointOfEvaluations.Where(p => p.Plan == TypeOfPlan.A && p.OwnerOffice.Code == selectoffice && p.Year == yearForQuery).Include(p => p.OwnerOffice).Include(p => p.AuditOffice).ToListAsync();
 
-                        ViewBag.OfficeCode = new SelectList(await _context.PointOfEvaluations.Where(p => p.Plan == TypeOfPlan.B && (p.OwnerOffice.Code == user.OfficeId || p.AuditOffice.Code == user.OfficeId) && p.Year == yearForQuery).Include(p => p.OwnerOffice).Include(p => p.AuditOffice).Select(b => new { Code = b.OwnerOffice.Code, Name = b.OwnerOffice.Name }).Distinct().ToListAsync(), "Code", "Name", selectoffice);
+                        var officeList = await _context.PointOfEvaluations.Where(p => (p.OwnerOffice.Code == user.OfficeId) || (p.Plan == TypeOfPlan.B && (p.OwnerOffice.Code == user.OfficeId || p.AuditOffice.Code == user.OfficeId) && p.Year == yearForQuery)).Include(p => p.OwnerOffice).Include(p => p.AuditOffice).Select(b => new { Code = b.OwnerOffice.Code, Name = b.OwnerOffice.Name }).Distinct().ToListAsync();
+
+                        ViewBag.OfficeCode = new SelectList(officeList, "Code", "Name", selectoffice);
                     }
                     else
                     {
@@ -181,7 +185,9 @@ namespace EPES.Controllers
                     {
                         viewModel.pointA = await _context.PointOfEvaluations.Where(p => p.Plan == TypeOfPlan.A && p.OwnerOffice.Code == user.OfficeId && p.Year == yearForQuery).Include(p => p.OwnerOffice).Include(p => p.AuditOffice).ToListAsync();
 
-                        ViewBag.OfficeCode = new SelectList(await _context.PointOfEvaluations.Where(p => p.Plan == TypeOfPlan.B && (p.OwnerOffice.Code == user.OfficeId || p.AuditOffice.Code == user.OfficeId) && p.Year == yearForQuery).Include(p => p.OwnerOffice).Include(p => p.AuditOffice).Select(b => new { Code = b.OwnerOffice.Code, Name = b.OwnerOffice.Name }).Distinct().ToListAsync(), "Code", "Name", user.OfficeId);
+                        var officeList = await _context.PointOfEvaluations.Where(p => (p.OwnerOffice.Code == user.OfficeId) || (p.Plan == TypeOfPlan.B && (p.OwnerOffice.Code == user.OfficeId || p.AuditOffice.Code == user.OfficeId) && p.Year == yearForQuery)).Include(p => p.OwnerOffice).Include(p => p.AuditOffice).Select(b => new { Code = b.OwnerOffice.Code, Name = b.OwnerOffice.Name }).Distinct().ToListAsync();
+
+                        ViewBag.OfficeCode = new SelectList(officeList, "Code", "Name", user.OfficeId);
                     }
                     else
                     {
@@ -198,7 +204,9 @@ namespace EPES.Controllers
                     {
                         viewModel.pointA = await _context.PointOfEvaluations.Where(p => p.Plan == TypeOfPlan.A && p.OwnerOffice.Code == selectoffice && p.Year == yearForQuery).Include(p => p.OwnerOffice).Include(p => p.AuditOffice).ToListAsync();
 
-                        ViewBag.OfficeCode = new SelectList(await _context.PointOfEvaluations.Where(p => p.Plan == TypeOfPlan.B && (p.OwnerOffice.Code == user.OfficeId || p.AuditOffice.Code == user.OfficeId) && p.Year == yearForQuery).Include(p => p.OwnerOffice).Include(p => p.AuditOffice).Select(b => new { Code = b.OwnerOffice.Code, Name = b.OwnerOffice.Name }).Distinct().ToListAsync(), "Code", "Name", selectoffice);
+                        var officeList = await _context.PointOfEvaluations.Where(p => (p.OwnerOffice.Code == user.OfficeId) || (p.Plan == TypeOfPlan.B && (p.OwnerOffice.Code == user.OfficeId || p.AuditOffice.Code == user.OfficeId) && p.Year == yearForQuery)).Include(p => p.OwnerOffice).Include(p => p.AuditOffice).Select(b => new { Code = b.OwnerOffice.Code, Name = b.OwnerOffice.Name }).Distinct().ToListAsync();
+
+                        ViewBag.OfficeCode = new SelectList(officeList, "Code", "Name", selectoffice);
                     }
                     else
                     {
@@ -213,10 +221,16 @@ namespace EPES.Controllers
 
             ViewBag.selectoffice = selectoffice;
             viewModel.yearPoint = yearPoint;
+
+            if (!User.IsInRole("Admin") && user.OfficeId != selectoffice)
+            {
+                //return RedirectToAction(nameof(IndexAudit), new { yearPoint = yearPoint, selectoffice = selectoffice });
+                return View("IndexAudit", viewModel);
+            }
+
             return View(viewModel);
         }
 
-        // GET: PointOfEvaluations/Details/5
         public async Task<IActionResult> Details(string selectoffice, int? id, int yearPoint = 0)
         {
             if (id == null)
@@ -483,6 +497,7 @@ namespace EPES.Controllers
                 if (ModelState.IsValid)
                 {
                     _context.Add(dataView.point);
+
                     if (dataView.point.Unit == UnitOfPoint.ร้อยละ)
                     {
                         dataView.Round.PointOfEvaluationId = dataView.point.Id;
@@ -520,7 +535,18 @@ namespace EPES.Controllers
                         }
                     }
 
+                    if (dataView.point.SubPoint == 1)
+                    {
+                        var pointMain = await _context.PointOfEvaluations.Where(p => p.Point == dataView.point.Point && p.SubPoint == 0 && p.Year == dataView.point.Year).FirstOrDefaultAsync();
+                        if (pointMain != null)
+                        {
+                            pointMain.HasSub = true;
+                            _context.Update(pointMain);
+                        }
+                    }
+
                     await _context.SaveChangesAsync();
+
                     await SaveExpect(dataView.point.Id, dataView.point.OwnerOfficeId, 10, dataView.expect10, user.Id);
                     await SaveExpect(dataView.point.Id, dataView.point.OwnerOfficeId, 11, dataView.expect11, user.Id);
                     await SaveExpect(dataView.point.Id, dataView.point.OwnerOfficeId, 12, dataView.expect12, user.Id);
@@ -772,7 +798,7 @@ namespace EPES.Controllers
 
             PointOfEvaluationViewModel dataView = new PointOfEvaluationViewModel();
             dataView.point = await _context.PointOfEvaluations.Include(p => p.OwnerOffice).Include(p => p.AuditOffice).Where(p => p.Id == id).FirstOrDefaultAsync();
-            
+
             List<Object> listsubpoint = new List<object>();
             listsubpoint.Add(new { value = 0, detail = "ไม่มี" });
             listsubpoint.Add(new { value = 1, detail = "ตัวชี้วัดย่อย 1" });
@@ -1019,7 +1045,7 @@ namespace EPES.Controllers
                     }
                     break;
             }
-            
+
             ViewBag.selectoffice = selectoffice;
             ViewBag.yearPoint = yearPoint;
             dataView.roundNumber = dataView.point.Rounds.Count;
@@ -1154,6 +1180,9 @@ namespace EPES.Controllers
                         _context.Add(dataView.LRRound2);
                     }
                 }
+
+                _context.Update(pointOfEvaluationToUpdate);
+                await _context.SaveChangesAsync();
 
                 await SaveExpect(dataView.point.Id, dataView.point.OwnerOfficeId, 10, dataView.expect10, user.Id);
                 await SaveExpect(dataView.point.Id, dataView.point.OwnerOfficeId, 11, dataView.expect11, user.Id);

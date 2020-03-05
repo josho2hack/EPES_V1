@@ -1,9 +1,12 @@
 ﻿using EPES.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Net;
 using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
@@ -96,6 +99,48 @@ namespace EPES.Controllers
                             OfficeName = locCls.LocName
                         };
 
+                        string url = "http://10.20.29.26:8002/webservices/GetHeadOffice.php";
+                        var webRequest = WebRequest.Create(url) as HttpWebRequest;
+                        if (webRequest != null)
+                        {
+                            webRequest.ContentType = "application/json";
+                            //webRequest.UserAgent = "Nothing";
+                            webRequest.Method = "POST";
+                            webRequest.Timeout = 5000;
+                            var USER_ID = "PB157094";
+                            var USER_PWD = "Wit4337new1";
+                            try
+                            {
+                                using (var streamWriter = new StreamWriter(webRequest.GetRequestStream()))
+                                {
+                                    string json = "{\"USER_ID\":\""+ USER_ID + "\"," +
+                                                  "\"USER_PWD\":\"" + USER_PWD + "\"," +
+                                                  "\"Region\":\"" + userCls.UserOfficeCode + "\"}";
+                                    streamWriter.Write(json);
+                                }
+
+                                using (var s = webRequest.GetResponse().GetResponseStream())
+                                {
+                                    using (var sr = new StreamReader(s))
+                                    {
+                                        var approverAsJson = sr.ReadToEnd();
+                                        var approver = JsonConvert.DeserializeObject<Approver>(approverAsJson);
+                                        if (approver != null)
+                                        {
+                                            if (approver.Detail.UserID == userCls.UserID)
+                                            {
+                                                user.approver = true;
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                            catch (WebException ex)
+                            {
+                                user.approver = false;
+                            }
+                        }
+
                         var resultCreate = await _userManager.CreateAsync(user, "P@ssw0rd");
 
                         SSOProductionService.TransCls transCls = await serviceSoapClient.Get_SSO_TransactionAsync(user.UserName, "EPES", "123456789");
@@ -150,6 +195,52 @@ namespace EPES.Controllers
                     else
                     {
                         SSOProductionService.TransCls transCls = await serviceSoapClient.Get_SSO_TransactionAsync(Username, "EPES", "123456789");
+
+                        string url = "http://10.20.29.26:8002/webservices/GetHeadOffice.php";
+                        var webRequest = WebRequest.Create(url) as HttpWebRequest;
+                        if (webRequest != null)
+                        {
+                            webRequest.ContentType = "application/json";
+                            //webRequest.UserAgent = "Nothing";
+                            webRequest.Method = "POST";
+                            webRequest.Timeout = 5000;
+                            var APP_ID = "EPES";
+                            var APP_PWD = "123456789";
+                            try
+                            {
+                                using (var streamWriter = new StreamWriter(webRequest.GetRequestStream()))
+                                {
+                                    string json = "{\"USER_ID\":\"" + APP_ID + "\"," +
+                                                  "\"USER_PWD\":\"" + APP_PWD + "\"," +
+                                                  "\"OFFICE_CODE\":\"" + userCls.UserOfficeCode + "\"}";
+                                    streamWriter.Write(json);
+                                }
+
+                                using (var s = webRequest.GetResponse().GetResponseStream())
+                                {
+                                    using (var sr = new StreamReader(s))
+                                    {
+                                        var approverAsJson = sr.ReadToEnd();
+                                        var approver = JsonConvert.DeserializeObject<Approver>(approverAsJson);
+                                        if (approver != null)
+                                        {
+                                            if (approver.Detail.UserID == userCls.UserID)
+                                            {
+                                                userLocal.approver = true;
+                                                await _userManager.UpdateAsync(userLocal);
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                            catch (WebException ex)
+                            {
+                                userLocal.approver = false;
+                                await _userManager.UpdateAsync(userLocal);
+                            }
+                        }
+
+
 
                         if (transCls.AppTransID == "EPES-Admin")
                         {
