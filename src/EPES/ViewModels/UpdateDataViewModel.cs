@@ -5,6 +5,7 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Threading.Tasks;
+using EPES.Models;
 
 namespace EPES.ViewModels
 {
@@ -24,6 +25,13 @@ namespace EPES.ViewModels
         public int officeid { get; set; }
 
         public bool hasSub { get; set; }
+
+        public Approve? Approve { get; set; }
+
+        public string Comment1 { get; set; }
+        public string Comment2 { get; set; }
+        public string Comment3 { get; set; }
+        public string Comment4 { get; set; }
 
         //public IFormFile FileUpload { get; set; }
     }

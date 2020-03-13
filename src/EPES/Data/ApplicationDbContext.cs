@@ -34,6 +34,10 @@ namespace EPES.Data
             .HasDefaultValue(0);
 
             builder.Entity<DataForEvaluation>()
+            .Property(d => d.ResultLevelRate)
+            .HasDefaultValue(0);
+
+            builder.Entity<DataForEvaluation>()
             .Property(d => d.Expect)
             .HasDefaultValue(0);
 

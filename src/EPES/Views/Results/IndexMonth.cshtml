@@ -8,10 +8,6 @@
     var user = await UserManager.GetUserAsync(User);
     //var dateLimitEntry = new DateTime(DateTime.Now.Year, DateTime.Now.Month, 15);
     var pointHasSub = ViewData["pointHasSub"] as int[];
-    Approve pointHasAppovedLevelA = Approve.รอพิจารณา;
-    Approve pointHasAppovedLevelB = Approve.รอพิจารณา;
-    Approve pointHasAppovedLevelC = Approve.รอพิจารณา;
-    Approve pointHasAppovedLevelD = Approve.รอพิจารณา;
 }
 
 <link href="~/css/devextreme/dx.common.css" rel="stylesheet" />
@@ -39,12 +35,12 @@
     <p class="mb-4">บันทึกผล</p>
     <form asp-action="IndexMonth">
         <div class="row justify-content-between">
-            <div class="col-md-4">
+            <div class="col-md-5">
                 <div class="row">
                     <label class="col-form-label col-md-3 text-md-right">หน่วยงาน: </label>
                     @if (User.IsInRole("Admin") || User.IsInRole("Manager"))
                     {
-                        <select name="selectoffice" class="form-control col-md-7" asp-items="ViewBag.OfficeCode" onchange="this.form.submit()">
+                        <select name="selectoffice" class="form-control col-md-9" asp-items="ViewBag.OfficeCode" onchange="this.form.submit()">
                             <option value="">เลือกหน่วยงาน</option>
                         </select>
                     }
@@ -56,7 +52,7 @@
                     }
                 </div>
             </div>
-            <div class="col-md-4">
+            <div class="col-md-3">
                 <div class="row">
                     <label class="col-form-label col-md-6 text-md-right">ปีงบประมาณ: </label>
                     <select asp-for="yearPoint" class="form-control col-md-6" onchange="this.form.submit()">
@@ -162,10 +158,6 @@
                                                     de = item;
                                                 }
                                             }
-                                            @if (de != null)
-                                            {
-                                                pointHasAppovedLevelA = de.Approve;
-                                            }
                                             <input type="hidden" name="UpdateData[@i].Id" value=@de?.Id />
                                             <input type="hidden" name="UpdateData[@i].poeid" value=@Model.pointA[i].Id />
                                             <input type="hidden" name="UpdateData[@i].officeid" value=@Model.pointA[i].OwnerOfficeId />
@@ -192,11 +184,22 @@
                                             }
                                             else
                                             {
-                                                <td>
-                                                    <input type="text" class="form-control" name="UpdateData[@i].Result" value="@String.Format("{0:N4}", de?.Result)" />
-                                                </td>
-                                                <td><input type="date" class="form-control" name="UpdateData[@i].Completed" value=@(de?.Completed ?? new DateTime(DateTime.Now.Year, Model.month, 28).ToString("yyyy-MM-dd", CultureInfo.CreateSpecificCulture("en-US"))) /></td>
-                                                <td></td>
+                                                if (de?.Approve > Approve.รอพิจารณา)
+                                                {
+                                                    <td>
+                                                        <input type="text" class="form-control" name="UpdateData[@i].Result" value="@String.Format("{0:N4}", de?.Result)" readonly />
+                                                    </td>
+                                                    <td><input type="date" class="form-control" name="UpdateData[@i].Completed" value=@(de?.Completed ?? new DateTime(DateTime.Now.Year, Model.month, 28).ToString("yyyy-MM-dd", CultureInfo.CreateSpecificCulture("en-US"))) readonly /></td>
+                                                    <td></td>
+                                                }
+                                                else
+                                                {
+                                                    <td>
+                                                        <input type="text" class="form-control" name="UpdateData[@i].Result" value="@String.Format("{0:N4}", de?.Result)" />
+                                                    </td>
+                                                    <td><input type="date" class="form-control" name="UpdateData[@i].Completed" value=@(de?.Completed ?? new DateTime(DateTime.Now.Year, Model.month, 28).ToString("yyyy-MM-dd", CultureInfo.CreateSpecificCulture("en-US"))) /></td>
+                                                    <td></td>
+                                                }
                                             }
                                         }
                                         else
@@ -277,7 +280,15 @@
 
                                                             ViewBag.SelectLevel = new SelectList(list, "Value", "Detail", de == null ? 1 : (int)de.Result);
                                                         }
-                                                        <select name="UpdateData[@i].Result" class="form-control" asp-items="ViewBag.SelectLevel"></select>
+                                                        @if (de?.Approve > Approve.รอพิจารณา)
+                                                        {
+                                                            <select name="UpdateData[@i].Result" class="form-control" asp-items="ViewBag.SelectLevel" disabled></select>
+                                                        }
+                                                        else
+                                                        {
+                                                            <select name="UpdateData[@i].Result" class="form-control" asp-items="ViewBag.SelectLevel"></select>
+                                                        }
+
                                                     </td>
                                                 }
                                             }
@@ -287,14 +298,10 @@
                                                 {
                                                     if (Model.pointA[i].Rounds[0].LevelNumber == 1)
                                                     {
-                                                        if (new DateTime(DateTime.Now.Year, Model.month, 28) <= Model.pointA[i].Rounds[1].Rate1MonthStop)
-                                                        {
-                                                            <td>
-                                                                1.@Model.pointA[i].Rounds[1].DetailRate1<br />
-                                                                @string.Format("{0:N4}", de?.Expect)
-                                                            </td>
-                                                        }
-
+                                                        <td>
+                                                            1.@Model.pointA[i].Rounds[1].DetailRate1<br />
+                                                            @string.Format("{0:N4}", de?.Expect)
+                                                        </td>
                                                     }
                                                     if (Model.pointA[i].Rounds[0].LevelNumber == 2)
                                                     {
@@ -305,7 +312,7 @@
                                                                 @string.Format("{0:N4}", de?.Expect)
                                                             </td>
                                                         }
-                                                        else if (new DateTime(DateTime.Now.Year, Model.month, 28) <= Model.pointA[i].Rounds[1].Rate2MonthStop)
+                                                        else
                                                         {
                                                             <td>
                                                                 2.@Model.pointA[i].Rounds[1].DetailRate2 <br />
@@ -330,14 +337,13 @@
                                                                 @string.Format("{0:N4}", de?.Expect)
                                                             </td>
                                                         }
-                                                        else if (new DateTime(DateTime.Now.Year, Model.month, 28) <= Model.pointA[i].Rounds[1].Rate2MonthStop)
+                                                        else
                                                         {
                                                             <td>
                                                                 3.@Model.pointA[i].Rounds[1].DetailRate3 <br />
                                                                 @string.Format("{0:N4}", de?.Expect)
                                                             </td>
                                                         }
-
                                                     }
                                                     if (Model.pointA[i].Rounds[0].LevelNumber == 4)
                                                     {
@@ -355,14 +361,14 @@
                                                                 @string.Format("{0:N4}", de?.Expect)
                                                             </td>
                                                         }
-                                                        else if (new DateTime(DateTime.Now.Year, Model.month, 28) <= Model.pointA[i].Rounds[1].Rate2MonthStop)
+                                                        else if (new DateTime(DateTime.Now.Year, Model.month, 28) <= Model.pointA[i].Rounds[1].Rate3MonthStop)
                                                         {
                                                             <td>
                                                                 3.@Model.pointA[i].Rounds[1].DetailRate3 <br />
                                                                 @string.Format("{0:N4}", de?.Expect)
                                                             </td>
                                                         }
-                                                        else if (new DateTime(DateTime.Now.Year, Model.month, 28) <= Model.pointA[i].Rounds[1].Rate4MonthStop)
+                                                        else
                                                         {
                                                             <td>
                                                                 4.@Model.pointA[i].Rounds[1].DetailRate4<br />
@@ -376,14 +382,10 @@
                                                 {
                                                     if (Model.pointA[i].Rounds[0].LevelNumber == 1)
                                                     {
-                                                        if (new DateTime(DateTime.Now.Year, Model.month, 28) <= Model.pointA[i].Rounds[0].Rate1MonthStop)
-                                                        {
-                                                            <td>
-                                                                1.@Model.pointA[i].Rounds[0].DetailRate1<br />
-                                                                @string.Format("{0:N4}", de?.Expect)
-                                                            </td>
-                                                        }
-
+                                                        <td>
+                                                            1.@Model.pointA[i].Rounds[0].DetailRate1<br />
+                                                            @string.Format("{0:N4}", de?.Expect)
+                                                        </td>
                                                     }
                                                     if (Model.pointA[i].Rounds[0].LevelNumber == 2)
                                                     {
@@ -394,7 +396,7 @@
                                                                 @string.Format("{0:N4}", de?.Expect)
                                                             </td>
                                                         }
-                                                        else if (new DateTime(DateTime.Now.Year, Model.month, 28) <= Model.pointA[i].Rounds[0].Rate2MonthStop)
+                                                        else
                                                         {
                                                             <td>
                                                                 2.@Model.pointA[i].Rounds[0].DetailRate2<br />
@@ -419,7 +421,7 @@
                                                                 @string.Format("{0:N4}", de?.Expect)
                                                             </td>
                                                         }
-                                                        else if (new DateTime(DateTime.Now.Year, Model.month, 28) <= Model.pointA[i].Rounds[0].Rate2MonthStop)
+                                                        else
                                                         {
                                                             <td>
                                                                 3.@Model.pointA[i].Rounds[0].DetailRate3<br />
@@ -444,14 +446,14 @@
                                                                 @string.Format("{0:N4}", de?.Expect)
                                                             </td>
                                                         }
-                                                        else if (new DateTime(DateTime.Now.Year, Model.month, 28) <= Model.pointA[i].Rounds[0].Rate2MonthStop)
+                                                        else if (new DateTime(DateTime.Now.Year, Model.month, 28) <= Model.pointA[i].Rounds[0].Rate3MonthStop)
                                                         {
                                                             <td>
                                                                 3.@Model.pointA[i].Rounds[0].DetailRate3 <br />
                                                                 @string.Format("{0:N4}", de?.Expect)
                                                             </td>
                                                         }
-                                                        else if (new DateTime(DateTime.Now.Year, Model.month, 28) <= Model.pointA[i].Rounds[0].Rate4MonthStop)
+                                                        else
                                                         {
                                                             <td>
                                                                 4.@Model.pointA[i].Rounds[0].DetailRate4<br />
@@ -511,9 +513,18 @@
 
                                                             ViewBag.SelectLevel = new SelectList(list, "Value", "Detail", de == null ? 1 : (int)de.Result);
                                                         }
-                                                        <select name="UpdateData[@i].Result" class="form-control" asp-items="ViewBag.SelectLevel"></select>
-                                                        <br />
-                                                        <input type="text" class="form-control" name="UpdateData[@i].ResultLevelRate" value="@String.Format("{0:N4}", de?.ResultLevelRate)" />
+                                                        @if (de?.Approve > Approve.รอพิจารณา)
+                                                        {
+                                                            <select name="UpdateData[@i].Result" class="form-control" asp-items="ViewBag.SelectLevel" disabled></select>
+                                                            <br />
+                                                            <input type="text" class="form-control" name="UpdateData[@i].ResultLevelRate" value="@String.Format("{0:N4}", de?.ResultLevelRate)" readonly />
+                                                        }
+                                                        else
+                                                        {
+                                                            <select name="UpdateData[@i].Result" class="form-control" asp-items="ViewBag.SelectLevel"></select>
+                                                            <br />
+                                                            <input type="text" class="form-control" name="UpdateData[@i].ResultLevelRate" value="@String.Format("{0:N4}", de?.ResultLevelRate)" />
+                                                        }
                                                     </td>
                                                 }
                                             }
@@ -525,67 +536,80 @@
                                             else
                                             {
                                                 <td>
-                                                    <input type="date" class="form-control" name="UpdateData[@i].Completed" value=@(de?.Completed ??  new DateTime(DateTime.Now.Year, Model.month, 28).ToString("yyyy-MM-dd", CultureInfo.CreateSpecificCulture("en-US"))) />
+                                                    @if (de?.Approve > Approve.รอพิจารณา)
+                                                    {
+                                                        <input type="date" class="form-control" name="UpdateData[@i].Completed" value=@(de?.Completed ??  new DateTime(DateTime.Now.Year, Model.month, 28).ToString("yyyy-MM-dd", CultureInfo.CreateSpecificCulture("en-US"))) readonly />
+                                                    }
+                                                    else
+                                                    {
+                                                        <input type="date" class="form-control" name="UpdateData[@i].Completed" value=@(de?.Completed ??  new DateTime(DateTime.Now.Year, Model.month, 28).ToString("yyyy-MM-dd", CultureInfo.CreateSpecificCulture("en-US"))) />
+                                                    }
                                                 </td>
                                                 <td>
                                                     @if (de != null)
                                                     {
                                                         @(Html.DevExtreme().Popup()
-                                                                                                                                                                            .ID("attach-popup")
-                                                                                                                                                                            .ElementAttr("class", "popup")
-                                                                                                                                                                            .Width(500)
-                                                                                                                                                                            .Height(400)
-                                                                                                                                                                            .ShowTitle(true)
-                                                                                                                                                                            .Title("แนบไฟล์")
-                                                                                                                                                                            .Visible(false)
-                                                                                                                                                                            .DragEnabled(false)
-                                                                                                                                                                            .CloseOnOutsideClick(true)
+                                                                .ID("attach-popup")
+                                                                .ElementAttr("class", "popup")
+                                                                .Width(500)
+                                                                .Height(400)
+                                                                .ShowTitle(true)
+                                                                .Title("แนบไฟล์")
+                                                                .Visible(false)
+                                                                .DragEnabled(false)
+                                                                .CloseOnOutsideClick(true)
                                                         )
-                                                        @(Html.DevExtreme().Button()
-                                                                                                                                                                            //.ElementAttr("class", "button-info")
-                                                                                                                                                                            .Text("แนบ")
-                                                                                                                                                                            .OnClick(@<text>
-                                                                                                                                                                                        function showInfo(data) {
-                                                                                                                                                                                        var popup = $("#attach-popup").dxPopup("instance");
-                                                                                                                                                                                        popup.option("contentTemplate", $("#popup-template-" + @de?.Id));
-                                                                                                                                                                                        popup.show();
-                                                                                                                                                                                        }
-                                                                                                                                                                            </text>)
-                                                        )
+                                                        @if (de?.Approve == Approve.รอพิจารณา)
+                                                        {
+                                                            @(Html.DevExtreme().Button()
+                                                                        //.ElementAttr("class", "button-info")
+                                                                        .Text("แนบ")
+                                                                        .OnClick(@<text>
+                                                                                    function showInfo(data) {
+                                                                                    var popup = $("#attach-popup").dxPopup("instance");
+                                                                                    popup.option("contentTemplate", $("@("#popup-template-" + de?.Id)"));
+                                                                                    popup.show();
+                                                                                    }
+                                                                        </text>)
+                                                            )
+                                                        }
                                                         @if (de?.AttachFile != null)
                                                         {
                                                             <a href="~/attach_files/@de?.AttachFile" target="_blank"><i class="fas fa-file-pdf fa-2x"></i></a><br />
-                                                            @(Html.DevExtreme().Button()
-                                                                                                                                                                            .ElementAttr("class", "button-danger")
-                                                                                                                                                                            .Text("ลบ")
-                                                                                                                                                                            .Type(ButtonType.Danger)
-                                                                                                                                                                            .OnClick(@<text>
-                                                                                                                                                                                        function showInfo(data) {
-                                                                                                                                                                                        var popup = $("#attach-popup").dxPopup("instance");
-                                                                                                                                                                                        popup.option("contentTemplate", $("#popup-template-del-" + @de?.Id));
-                                                                                                                                                                                        popup.show();
-                                                                                                                                                                                        }
-                                                                                                                                                                            </text>)
-                                                            )
+                                                            @if (de?.Approve == Approve.รอพิจารณา)
+                                                            {
+                                                                @(Html.DevExtreme().Button()
+                                                                .ElementAttr("class", "button-danger")
+                                                                .Text("ลบ")
+                                                                .Type(ButtonType.Danger)
+                                                                .OnClick(@<text>
+                                                                            function showInfo(data) {
+                                                                            var popup = $("#attach-popup").dxPopup("instance");
+                                                                            popup.option("contentTemplate", $("@("#popup-template-del-" + de?.Id)"));
+                                                                            popup.show();
+                                                                            }
+                                                                </text>)
+                                                                )
+                                                            }
                                                         }
-                                                        @using (Html.DevExtreme().NamedTemplate("popup-template-" + @de?.Id))
+                                                        @using (Html.DevExtreme().NamedTemplate("popup-template-" + de?.Id))
                                                         {
                                                             <form id="form" method="post" enctype="multipart/form-data" action="FileSelection">
                                                                 <h3>แนบไฟล์ประกอบผลการปฏิบัติ</h3>
                                                                 <div id="fileuploader-container">
                                                                     @(Html.DevExtreme().FileUploader()
-                                                                                                                                                                                          .Name("AttachFile")
-                                                                                                                                                                                          .SelectButtonText("เลือกไฟล์แนบ")
-                                                                                                                                                                                          .LabelText("")
-                                                                                                                                                                                          .Accept("application/pdf")
-                                                                                                                                                                                          .UploadMode(FileUploadMode.UseForm)
+                                                                        .Name("AttachFile")
+                                                                        .SelectButtonText("เลือกไฟล์แนบ")
+                                                                        .LabelText("")
+                                                                        .Accept("application/pdf")
+                                                                        .UploadMode(FileUploadMode.UseForm)
                                                                     )
                                                                 </div>
                                                                 @(Html.DevExtreme().Button()
-                                                                                                                                                                                      .ID("button")
-                                                                                                                                                                                      .Text("ส่งไฟล์แนบ")
-                                                                                                                                                                                      .Type(ButtonType.Success)
-                                                                                                                                                                                      .UseSubmitBehavior(true)
+                                                                    .ID("button")
+                                                                    .Text("ส่งไฟล์แนบ")
+                                                                    .Type(ButtonType.Success)
+                                                                    .UseSubmitBehavior(true)
                                                                 )
                                                                 <input type="hidden" name="deid" value=@de?.Id />
                                                                 <input asp-for="yearPoint" class="form-control" hidden />
@@ -593,16 +617,16 @@
                                                                 <input type="hidden" name="selectoffice" value="@ViewBag.selectoffice" />
                                                             </form>
                                                         }
-                                                        @using (Html.DevExtreme().NamedTemplate("popup-template-del-" + @de?.Id))
+                                                        @using (Html.DevExtreme().NamedTemplate("popup-template-del-" + de?.Id))
                                                         {
                                                             <form id="form" method="post" action="FileDelete">
                                                                 <h3>ลบไฟล์ประกอบผลการปฏิบัติ</h3>
                                                                 <h5>@de.AttachFile</h5>
                                                                 @(Html.DevExtreme().Button()
-                                                                                                                                                                                      .ID("button")
-                                                                                                                                                                                      .Text("ลบไฟล์แนบ")
-                                                                                                                                                                                      .Type(ButtonType.Danger)
-                                                                                                                                                                                      .UseSubmitBehavior(true)
+                                                                    .ID("button")
+                                                                    .Text("ลบไฟล์แนบ")
+                                                                    .Type(ButtonType.Danger)
+                                                                    .UseSubmitBehavior(true)
                                                                 )
                                                                 <input type="hidden" name="deid" value=@de?.Id />
                                                                 <input asp-for="yearPoint" class="form-control" hidden />
@@ -621,9 +645,7 @@
                         <input asp-for="yearPoint" class="form-control" hidden />
                         <input asp-for="month" class="form-control" hidden />
                         <input type="hidden" name="selectoffice" value="@ViewBag.selectoffice" />
-                        <input type="submit" name="Update" value="บันทึก" class="btn btn-primary"
-                               @if (pointHasAppovedLevelA > Approve.รอพิจารณา) { @: disabled
-                               } />
+                        <input type="submit" name="Update" value="บันทึก" class="btn btn-primary" />
                         <a asp-area="" asp-controller="Results" asp-action="IndexMonth" asp-route-yearPoint="@Model.yearPoint" asp-route-selectoffice="@ViewBag.selectoffice" asp-route-month="@Model.month" class="btn btn-secondary">ยกเลิก</a>
                     </form>
                 </div>
@@ -670,6 +692,7 @@
                                 @for (int i = 0; i < Model.pointB.Count(); i++)
                                 {
                                     bool HasSub = false;
+
                                     <tr>
                                         <td>
                                             @if (Model.pointB[i].SubPoint != 0)
@@ -695,10 +718,6 @@
                                                 {
                                                     de = item;
                                                 }
-                                            }
-                                            @if (de != null)
-                                            {
-                                                pointHasAppovedLevelB = de.Approve;
                                             }
                                             <input type="hidden" name="UpdateData[@i].Id" value=@de?.Id />
                                             <input type="hidden" name="UpdateData[@i].poeid" value=@Model.pointB[i].Id />
@@ -726,17 +745,29 @@
                                             }
                                             else
                                             {
-                                                <td>
-                                                    <input type="text" class="form-control" name="UpdateData[@i].Result" value="@String.Format("{0:N4}", de?.Result)" />
-                                                </td>
-                                                <td><input type="date" class="form-control" name="UpdateData[@i].Completed" value=@(de?.Completed ?? new DateTime(DateTime.Now.Year, Model.month, 28).ToString("yyyy-MM-dd", CultureInfo.CreateSpecificCulture("en-US"))) /></td>
-                                                <td></td>
+                                                if (de?.Approve > Approve.รอพิจารณา)
+                                                {
+                                                    <td>
+                                                        <input type="text" class="form-control" name="UpdateData[@i].Result" value="@String.Format("{0:N4}", de?.Result)" readonly />
+                                                    </td>
+                                                    <td><input type="date" class="form-control" name="UpdateData[@i].Completed" value=@(de?.Completed ?? new DateTime(DateTime.Now.Year, Model.month, 28).ToString("yyyy-MM-dd", CultureInfo.CreateSpecificCulture("en-US"))) readonly /></td>
+                                                    <td></td>
+                                                }
+                                                else
+                                                {
+                                                    <td>
+                                                        <input type="text" class="form-control" name="UpdateData[@i].Result" value="@String.Format("{0:N4}", de?.Result)" />
+                                                    </td>
+                                                    <td><input type="date" class="form-control" name="UpdateData[@i].Completed" value=@(de?.Completed ?? new DateTime(DateTime.Now.Year, Model.month, 28).ToString("yyyy-MM-dd", CultureInfo.CreateSpecificCulture("en-US"))) /></td>
+                                                    <td></td>
+                                                }
                                             }
                                         }
                                         else
                                         {
                                             @if (Model.pointB[i].Unit == UnitOfPoint.ระดับ)
                                             {
+
                                                 if ((3 < Model.month) && (Model.month < 10) && (Model.pointB[i].Rounds.Count == 2))
                                                 {
                                                     if (new DateTime(DateTime.Now.Year, Model.month, 28) <= Model.pointB[i].Rounds[1].Rate1MonthStop)
@@ -810,7 +841,14 @@
 
                                                             ViewBag.SelectLevel = new SelectList(list, "Value", "Detail", de == null ? 1 : (int)de.Result);
                                                         }
-                                                        <select name="UpdateData[@i].Result" class="form-control" asp-items="ViewBag.SelectLevel"></select>
+                                                        @if (de?.Approve > Approve.รอพิจารณา)
+                                                        {
+                                                            <select name="UpdateData[@i].Result" class="form-control" asp-items="ViewBag.SelectLevel" disabled></select>
+                                                        }
+                                                        else
+                                                        {
+                                                            <select name="UpdateData[@i].Result" class="form-control" asp-items="ViewBag.SelectLevel"></select>
+                                                        }
                                                     </td>
                                                 }
                                             }
@@ -820,14 +858,10 @@
                                                 {
                                                     if (Model.pointB[i].Rounds[0].LevelNumber == 1)
                                                     {
-                                                        if (new DateTime(DateTime.Now.Year, Model.month, 28) <= Model.pointB[i].Rounds[1].Rate1MonthStop)
-                                                        {
-                                                            <td>
-                                                                1.@Model.pointB[i].Rounds[1].DetailRate1<br />
-                                                                @string.Format("{0:N4}", de?.Expect)
-                                                            </td>
-                                                        }
-
+                                                        <td>
+                                                            1.@Model.pointB[i].Rounds[1].DetailRate1<br />
+                                                            @string.Format("{0:N4}", de?.Expect)
+                                                        </td>
                                                     }
                                                     if (Model.pointB[i].Rounds[0].LevelNumber == 2)
                                                     {
@@ -838,7 +872,7 @@
                                                                 @string.Format("{0:N4}", de?.Expect)
                                                             </td>
                                                         }
-                                                        else if (new DateTime(DateTime.Now.Year, Model.month, 28) <= Model.pointB[i].Rounds[1].Rate2MonthStop)
+                                                        else
                                                         {
                                                             <td>
                                                                 2.@Model.pointB[i].Rounds[1].DetailRate2 <br />
@@ -863,14 +897,13 @@
                                                                 @string.Format("{0:N4}", de?.Expect)
                                                             </td>
                                                         }
-                                                        else if (new DateTime(DateTime.Now.Year, Model.month, 28) <= Model.pointB[i].Rounds[1].Rate2MonthStop)
+                                                        else
                                                         {
                                                             <td>
                                                                 3.@Model.pointB[i].Rounds[1].DetailRate3 <br />
                                                                 @string.Format("{0:N4}", de?.Expect)
                                                             </td>
                                                         }
-
                                                     }
                                                     if (Model.pointB[i].Rounds[0].LevelNumber == 4)
                                                     {
@@ -888,14 +921,14 @@
                                                                 @string.Format("{0:N4}", de?.Expect)
                                                             </td>
                                                         }
-                                                        else if (new DateTime(DateTime.Now.Year, Model.month, 28) <= Model.pointB[i].Rounds[1].Rate2MonthStop)
+                                                        else if (new DateTime(DateTime.Now.Year, Model.month, 28) <= Model.pointB[i].Rounds[1].Rate3MonthStop)
                                                         {
                                                             <td>
                                                                 3.@Model.pointB[i].Rounds[1].DetailRate3 <br />
                                                                 @string.Format("{0:N4}", de?.Expect)
                                                             </td>
                                                         }
-                                                        else if (new DateTime(DateTime.Now.Year, Model.month, 28) <= Model.pointB[i].Rounds[1].Rate4MonthStop)
+                                                        else
                                                         {
                                                             <td>
                                                                 4.@Model.pointB[i].Rounds[1].DetailRate4<br />
@@ -909,14 +942,10 @@
                                                 {
                                                     if (Model.pointB[i].Rounds[0].LevelNumber == 1)
                                                     {
-                                                        if (new DateTime(DateTime.Now.Year, Model.month, 28) <= Model.pointB[i].Rounds[0].Rate1MonthStop)
-                                                        {
-                                                            <td>
-                                                                1.@Model.pointB[i].Rounds[0].DetailRate1<br />
-                                                                @string.Format("{0:N4}", de?.Expect)
-                                                            </td>
-                                                        }
-
+                                                        <td>
+                                                            1.@Model.pointB[i].Rounds[0].DetailRate1<br />
+                                                            @string.Format("{0:N4}", de?.Expect)
+                                                        </td>
                                                     }
                                                     if (Model.pointB[i].Rounds[0].LevelNumber == 2)
                                                     {
@@ -927,7 +956,7 @@
                                                                 @string.Format("{0:N4}", de?.Expect)
                                                             </td>
                                                         }
-                                                        else if (new DateTime(DateTime.Now.Year, Model.month, 28) <= Model.pointB[i].Rounds[0].Rate2MonthStop)
+                                                        else
                                                         {
                                                             <td>
                                                                 2.@Model.pointB[i].Rounds[0].DetailRate2<br />
@@ -952,7 +981,7 @@
                                                                 @string.Format("{0:N4}", de?.Expect)
                                                             </td>
                                                         }
-                                                        else if (new DateTime(DateTime.Now.Year, Model.month, 28) <= Model.pointB[i].Rounds[0].Rate2MonthStop)
+                                                        else
                                                         {
                                                             <td>
                                                                 3.@Model.pointB[i].Rounds[0].DetailRate3<br />
@@ -977,14 +1006,14 @@
                                                                 @string.Format("{0:N4}", de?.Expect)
                                                             </td>
                                                         }
-                                                        else if (new DateTime(DateTime.Now.Year, Model.month, 28) <= Model.pointB[i].Rounds[0].Rate2MonthStop)
+                                                        else if (new DateTime(DateTime.Now.Year, Model.month, 28) <= Model.pointB[i].Rounds[0].Rate3MonthStop)
                                                         {
                                                             <td>
                                                                 3.@Model.pointB[i].Rounds[0].DetailRate3 <br />
                                                                 @string.Format("{0:N4}", de?.Expect)
                                                             </td>
                                                         }
-                                                        else if (new DateTime(DateTime.Now.Year, Model.month, 28) <= Model.pointB[i].Rounds[0].Rate4MonthStop)
+                                                        else
                                                         {
                                                             <td>
                                                                 4.@Model.pointB[i].Rounds[0].DetailRate4<br />
@@ -1044,9 +1073,18 @@
 
                                                             ViewBag.SelectLevel = new SelectList(list, "Value", "Detail", de == null ? 1 : (int)de.Result);
                                                         }
-                                                        <select name="UpdateData[@i].Result" class="form-control" asp-items="ViewBag.SelectLevel"></select>
-                                                        <br />
-                                                        <input type="text" class="form-control" name="UpdateData[@i].ResultLevelRate" value="@String.Format("{0:N4}", de?.ResultLevelRate)" />
+                                                        @if (de?.Approve > Approve.รอพิจารณา)
+                                                        {
+                                                            <select name="UpdateData[@i].Result" class="form-control" asp-items="ViewBag.SelectLevel" disabled></select>
+                                                            <br />
+                                                            <input type="text" class="form-control" name="UpdateData[@i].ResultLevelRate" value="@String.Format("{0:N4}", de?.ResultLevelRate)" readonly />
+                                                        }
+                                                        else
+                                                        {
+                                                            <select name="UpdateData[@i].Result" class="form-control" asp-items="ViewBag.SelectLevel"></select>
+                                                            <br />
+                                                            <input type="text" class="form-control" name="UpdateData[@i].ResultLevelRate" value="@String.Format("{0:N4}", de?.ResultLevelRate)" />
+                                                        }
                                                     </td>
                                                 }
                                             }
@@ -1058,67 +1096,80 @@
                                             else
                                             {
                                                 <td>
-                                                    <input type="date" class="form-control" name="UpdateData[@i].Completed" value=@(de?.Completed ?? new DateTime(DateTime.Now.Year, Model.month, 28).ToString("yyyy-MM-dd", CultureInfo.CreateSpecificCulture("en-US"))) />
+                                                    @if (de?.Approve > Approve.รอพิจารณา)
+                                                    {
+                                                        <input type="date" class="form-control" name="UpdateData[@i].Completed" value=@(de?.Completed ??  new DateTime(DateTime.Now.Year, Model.month, 28).ToString("yyyy-MM-dd", CultureInfo.CreateSpecificCulture("en-US"))) readonly />
+                                                    }
+                                                    else
+                                                    {
+                                                        <input type="date" class="form-control" name="UpdateData[@i].Completed" value=@(de?.Completed ??  new DateTime(DateTime.Now.Year, Model.month, 28).ToString("yyyy-MM-dd", CultureInfo.CreateSpecificCulture("en-US"))) />
+                                                    }
                                                 </td>
                                                 <td>
                                                     @if (de != null)
                                                     {
                                                         @(Html.DevExtreme().Popup()
-                                                                                                                                                                                                .ID("attach-popup")
-                                                                                                                                                                                                .ElementAttr("class", "popup")
-                                                                                                                                                                                                .Width(500)
-                                                                                                                                                                                                .Height(400)
-                                                                                                                                                                                                .ShowTitle(true)
-                                                                                                                                                                                                .Title("แนบไฟล์")
-                                                                                                                                                                                                .Visible(false)
-                                                                                                                                                                                                .DragEnabled(false)
-                                                                                                                                                                                                .CloseOnOutsideClick(true)
+                                                                .ID("attach-popup")
+                                                                .ElementAttr("class", "popup")
+                                                                .Width(500)
+                                                                .Height(400)
+                                                                .ShowTitle(true)
+                                                                .Title("แนบไฟล์")
+                                                                .Visible(false)
+                                                                .DragEnabled(false)
+                                                                .CloseOnOutsideClick(true)
                                                         )
-                                                        @(Html.DevExtreme().Button()
-                                                                                                                                                                                                //.ElementAttr("class", "button-info")
-                                                                                                                                                                                                .Text("แนบ")
-                                                                                                                                                                                                .OnClick(@<text>
-                                                                                                                                                                                                            function showInfo(data) {
-                                                                                                                                                                                                            var popup = $("#attach-popup").dxPopup("instance");
-                                                                                                                                                                                                            popup.option("contentTemplate", $("#popup-template-" + @de?.Id));
-                                                                                                                                                                                                            popup.show();
-                                                                                                                                                                                                            }
-                                                                                                                                                                                                </text>)
-                                                        )
+                                                        @if (de?.Approve == Approve.รอพิจารณา)
+                                                        {
+                                                            @(Html.DevExtreme().Button()
+                                                                        //.ElementAttr("class", "button-info")
+                                                                        .Text("แนบ")
+                                                                        .OnClick(@<text>
+                                                                                    function showInfo(data) {
+                                                                                    var popup = $("#attach-popup").dxPopup("instance");
+                                                                                    popup.option("contentTemplate", $("@("#popup-template-" + de?.Id)"));
+                                                                                    popup.show();
+                                                                                    }
+                                                                        </text>)
+                                                            )
+                                                        }
                                                         @if (de?.AttachFile != null)
                                                         {
                                                             <a href="~/attach_files/@de?.AttachFile" target="_blank"><i class="fas fa-file-pdf fa-2x"></i></a><br />
-                                                            @(Html.DevExtreme().Button()
-                                                                                                                                                                                                .ElementAttr("class", "button-danger")
-                                                                                                                                                                                                .Text("ลบ")
-                                                                                                                                                                                                .Type(ButtonType.Danger)
-                                                                                                                                                                                                .OnClick(@<text>
-                                                                                                                                                                                                            function showInfo(data) {
-                                                                                                                                                                                                            var popup = $("#attach-popup").dxPopup("instance");
-                                                                                                                                                                                                            popup.option("contentTemplate", $("#popup-template-del-" + @de?.Id));
-                                                                                                                                                                                                            popup.show();
-                                                                                                                                                                                                            }
-                                                                                                                                                                                                </text>)
-                                                            )
+                                                            @if (de?.Approve == Approve.รอพิจารณา)
+                                                            {
+                                                                @(Html.DevExtreme().Button()
+                                                                .ElementAttr("class", "button-danger")
+                                                                .Text("ลบ")
+                                                                .Type(ButtonType.Danger)
+                                                                .OnClick(@<text>
+                                                                            function showInfo(data) {
+                                                                            var popup = $("#attach-popup").dxPopup("instance");
+                                                                            popup.option("contentTemplate", $("@("#popup-template-del-" + de?.Id)"));
+                                                                            popup.show();
+                                                                            }
+                                                                </text>)
+                                                                )
+                                                            }
                                                         }
-                                                        @using (Html.DevExtreme().NamedTemplate("popup-template-" + @de?.Id))
+                                                        @using (Html.DevExtreme().NamedTemplate("popup-template-" + de?.Id))
                                                         {
                                                             <form id="form" method="post" enctype="multipart/form-data" action="FileSelection">
                                                                 <h3>แนบไฟล์ประกอบผลการปฏิบัติ</h3>
                                                                 <div id="fileuploader-container">
                                                                     @(Html.DevExtreme().FileUploader()
-                                                                                                                                                                                                      .Name("AttachFile")
-                                                                                                                                                                                                      .SelectButtonText("เลือกไฟล์แนบ")
-                                                                                                                                                                                                      .LabelText("")
-                                                                                                                                                                                                      .Accept("application/pdf")
-                                                                                                                                                                                                      .UploadMode(FileUploadMode.UseForm)
+                                                                        .Name("AttachFile")
+                                                                        .SelectButtonText("เลือกไฟล์แนบ")
+                                                                        .LabelText("")
+                                                                        .Accept("application/pdf")
+                                                                        .UploadMode(FileUploadMode.UseForm)
                                                                     )
                                                                 </div>
                                                                 @(Html.DevExtreme().Button()
-                                                                                                                                                                                                      .ID("button")
-                                                                                                                                                                                                      .Text("ส่งไฟล์แนบ")
-                                                                                                                                                                                                      .Type(ButtonType.Success)
-                                                                                                                                                                                                      .UseSubmitBehavior(true)
+                                                                    .ID("button")
+                                                                    .Text("ส่งไฟล์แนบ")
+                                                                    .Type(ButtonType.Success)
+                                                                    .UseSubmitBehavior(true)
                                                                 )
                                                                 <input type="hidden" name="deid" value=@de?.Id />
                                                                 <input asp-for="yearPoint" class="form-control" hidden />
@@ -1126,16 +1177,16 @@
                                                                 <input type="hidden" name="selectoffice" value="@ViewBag.selectoffice" />
                                                             </form>
                                                         }
-                                                        @using (Html.DevExtreme().NamedTemplate("popup-template-del-" + @de?.Id))
+                                                        @using (Html.DevExtreme().NamedTemplate("popup-template-del-" + de?.Id))
                                                         {
                                                             <form id="form" method="post" action="FileDelete">
                                                                 <h3>ลบไฟล์ประกอบผลการปฏิบัติ</h3>
                                                                 <h5>@de.AttachFile</h5>
                                                                 @(Html.DevExtreme().Button()
-                                                                                                                                                                                                      .ID("button")
-                                                                                                                                                                                                      .Text("ลบไฟล์แนบ")
-                                                                                                                                                                                                      .Type(ButtonType.Danger)
-                                                                                                                                                                                                      .UseSubmitBehavior(true)
+                                                                    .ID("button")
+                                                                    .Text("ลบไฟล์แนบ")
+                                                                    .Type(ButtonType.Danger)
+                                                                    .UseSubmitBehavior(true)
                                                                 )
                                                                 <input type="hidden" name="deid" value=@de?.Id />
                                                                 <input asp-for="yearPoint" class="form-control" hidden />
@@ -1154,9 +1205,7 @@
                         <input asp-for="yearPoint" class="form-control" hidden />
                         <input asp-for="month" class="form-control" hidden />
                         <input type="hidden" name="selectoffice" value="@ViewBag.selectoffice" />
-                        <input type="submit" name="Update" value="บันทึก" class="btn btn-primary"
-                               @if (pointHasAppovedLevelB > Approve.รอพิจารณา) { @: disabled
-                               } />
+                        <input type="submit" name="Update" value="บันทึก" class="btn btn-primary" />
                         <a asp-area="" asp-controller="Results" asp-action="IndexMonth" asp-route-yearPoint="@Model.yearPoint" asp-route-selectoffice="@ViewBag.selectoffice" asp-route-month="@Model.month" class="btn btn-secondary">ยกเลิก</a>
                     </form>
                 </div>
@@ -1203,11 +1252,12 @@
                                 @for (int i = 0; i < Model.pointC.Count(); i++)
                                 {
                                     bool HasSub = false;
+
                                     <tr>
                                         <td>
                                             @if (Model.pointC[i].SubPoint != 0)
                                             {
-                                                @Model.pointC[i].Point@:.@Model.pointC[i].SubPoint / 10)
+                                                @Model.pointC[i].Point@:.@Model.pointC[i].SubPoint
                                             }
                                             else
                                             {
@@ -1229,10 +1279,6 @@
                                                     de = item;
                                                 }
                                             }
-                                            @if (de != null)
-                                            {
-                                                pointHasAppovedLevelC = de.Approve;
-                                            }
                                             <input type="hidden" name="UpdateData[@i].Id" value=@de?.Id />
                                             <input type="hidden" name="UpdateData[@i].poeid" value=@Model.pointC[i].Id />
                                             <input type="hidden" name="UpdateData[@i].officeid" value=@Model.pointC[i].OwnerOfficeId />
@@ -1247,6 +1293,7 @@
                                                 }
                                             }
                                         }
+
                                         @if (Model.pointC[i].Unit == UnitOfPoint.ร้อยละ)
                                         {
                                             <td>@string.Format("{0:N4}", de?.Expect)</td>
@@ -1258,11 +1305,22 @@
                                             }
                                             else
                                             {
-                                                <td>
-                                                    <input type="text" class="form-control" name="UpdateData[@i].Result" value="@String.Format("{0:N4}", de?.Result)" />
-                                                </td>
-                                                <td><input type="date" class="form-control" name="UpdateData[@i].Completed" value=@(de?.Completed ?? new DateTime(DateTime.Now.Year, Model.month, 28).ToString("yyyy-MM-dd", CultureInfo.CreateSpecificCulture("en-US"))) /></td>
-                                                <td></td>
+                                                if (de?.Approve > Approve.รอพิจารณา)
+                                                {
+                                                    <td>
+                                                        <input type="text" class="form-control" name="UpdateData[@i].Result" value="@String.Format("{0:N4}", de?.Result)" readonly />
+                                                    </td>
+                                                    <td><input type="date" class="form-control" name="UpdateData[@i].Completed" value=@(de?.Completed ?? new DateTime(DateTime.Now.Year, Model.month, 28).ToString("yyyy-MM-dd", CultureInfo.CreateSpecificCulture("en-US"))) readonly /></td>
+                                                    <td></td>
+                                                }
+                                                else
+                                                {
+                                                    <td>
+                                                        <input type="text" class="form-control" name="UpdateData[@i].Result" value="@String.Format("{0:N4}", de?.Result)" />
+                                                    </td>
+                                                    <td><input type="date" class="form-control" name="UpdateData[@i].Completed" value=@(de?.Completed ?? new DateTime(DateTime.Now.Year, Model.month, 28).ToString("yyyy-MM-dd", CultureInfo.CreateSpecificCulture("en-US"))) /></td>
+                                                    <td></td>
+                                                }
                                             }
                                         }
                                         else
@@ -1343,7 +1401,14 @@
 
                                                             ViewBag.SelectLevel = new SelectList(list, "Value", "Detail", de == null ? 1 : (int)de.Result);
                                                         }
-                                                        <select name="UpdateData[@i].Result" class="form-control" asp-items="ViewBag.SelectLevel"></select>
+                                                        @if (de?.Approve > Approve.รอพิจารณา)
+                                                        {
+                                                            <select name="UpdateData[@i].Result" class="form-control" asp-items="ViewBag.SelectLevel" disabled></select>
+                                                        }
+                                                        else
+                                                        {
+                                                            <select name="UpdateData[@i].Result" class="form-control" asp-items="ViewBag.SelectLevel"></select>
+                                                        }
                                                     </td>
                                                 }
                                             }
@@ -1353,14 +1418,10 @@
                                                 {
                                                     if (Model.pointC[i].Rounds[0].LevelNumber == 1)
                                                     {
-                                                        if (new DateTime(DateTime.Now.Year, Model.month, 28) <= Model.pointC[i].Rounds[1].Rate1MonthStop)
-                                                        {
-                                                            <td>
-                                                                1.@Model.pointC[i].Rounds[1].DetailRate1<br />
-                                                                @string.Format("{0:N4}", de?.Expect)
-                                                            </td>
-                                                        }
-
+                                                        <td>
+                                                            1.@Model.pointC[i].Rounds[1].DetailRate1<br />
+                                                            @string.Format("{0:N4}", de?.Expect)
+                                                        </td>
                                                     }
                                                     if (Model.pointC[i].Rounds[0].LevelNumber == 2)
                                                     {
@@ -1371,7 +1432,7 @@
                                                                 @string.Format("{0:N4}", de?.Expect)
                                                             </td>
                                                         }
-                                                        else if (new DateTime(DateTime.Now.Year, Model.month, 28) <= Model.pointC[i].Rounds[1].Rate2MonthStop)
+                                                        else
                                                         {
                                                             <td>
                                                                 2.@Model.pointC[i].Rounds[1].DetailRate2 <br />
@@ -1396,14 +1457,13 @@
                                                                 @string.Format("{0:N4}", de?.Expect)
                                                             </td>
                                                         }
-                                                        else if (new DateTime(DateTime.Now.Year, Model.month, 28) <= Model.pointC[i].Rounds[1].Rate2MonthStop)
+                                                        else
                                                         {
                                                             <td>
                                                                 3.@Model.pointC[i].Rounds[1].DetailRate3 <br />
                                                                 @string.Format("{0:N4}", de?.Expect)
                                                             </td>
                                                         }
-
                                                     }
                                                     if (Model.pointC[i].Rounds[0].LevelNumber == 4)
                                                     {
@@ -1421,14 +1481,14 @@
                                                                 @string.Format("{0:N4}", de?.Expect)
                                                             </td>
                                                         }
-                                                        else if (new DateTime(DateTime.Now.Year, Model.month, 28) <= Model.pointC[i].Rounds[1].Rate2MonthStop)
+                                                        else if (new DateTime(DateTime.Now.Year, Model.month, 28) <= Model.pointC[i].Rounds[1].Rate3MonthStop)
                                                         {
                                                             <td>
                                                                 3.@Model.pointC[i].Rounds[1].DetailRate3 <br />
                                                                 @string.Format("{0:N4}", de?.Expect)
                                                             </td>
                                                         }
-                                                        else if (new DateTime(DateTime.Now.Year, Model.month, 28) <= Model.pointC[i].Rounds[1].Rate4MonthStop)
+                                                        else
                                                         {
                                                             <td>
                                                                 4.@Model.pointC[i].Rounds[1].DetailRate4<br />
@@ -1442,14 +1502,10 @@
                                                 {
                                                     if (Model.pointC[i].Rounds[0].LevelNumber == 1)
                                                     {
-                                                        if (new DateTime(DateTime.Now.Year, Model.month, 28) <= Model.pointC[i].Rounds[0].Rate1MonthStop)
-                                                        {
-                                                            <td>
-                                                                1.@Model.pointC[i].Rounds[0].DetailRate1<br />
-                                                                @string.Format("{0:N4}", de?.Expect)
-                                                            </td>
-                                                        }
-
+                                                        <td>
+                                                            1.@Model.pointC[i].Rounds[0].DetailRate1<br />
+                                                            @string.Format("{0:N4}", de?.Expect)
+                                                        </td>
                                                     }
                                                     if (Model.pointC[i].Rounds[0].LevelNumber == 2)
                                                     {
@@ -1460,7 +1516,7 @@
                                                                 @string.Format("{0:N4}", de?.Expect)
                                                             </td>
                                                         }
-                                                        else if (new DateTime(DateTime.Now.Year, Model.month, 28) <= Model.pointC[i].Rounds[0].Rate2MonthStop)
+                                                        else
                                                         {
                                                             <td>
                                                                 2.@Model.pointC[i].Rounds[0].DetailRate2<br />
@@ -1485,7 +1541,7 @@
                                                                 @string.Format("{0:N4}", de?.Expect)
                                                             </td>
                                                         }
-                                                        else if (new DateTime(DateTime.Now.Year, Model.month, 28) <= Model.pointC[i].Rounds[0].Rate2MonthStop)
+                                                        else
                                                         {
                                                             <td>
                                                                 3.@Model.pointC[i].Rounds[0].DetailRate3<br />
@@ -1510,21 +1566,20 @@
                                                                 @string.Format("{0:N4}", de?.Expect)
                                                             </td>
                                                         }
-                                                        else if (new DateTime(DateTime.Now.Year, Model.month, 28) <= Model.pointC[i].Rounds[0].Rate2MonthStop)
+                                                        else if (new DateTime(DateTime.Now.Year, Model.month, 28) <= Model.pointC[i].Rounds[0].Rate3MonthStop)
                                                         {
                                                             <td>
                                                                 3.@Model.pointC[i].Rounds[0].DetailRate3 <br />
                                                                 @string.Format("{0:N4}", de?.Expect)
                                                             </td>
                                                         }
-                                                        else if (new DateTime(DateTime.Now.Year, Model.month, 28) <= Model.pointC[i].Rounds[0].Rate4MonthStop)
+                                                        else
                                                         {
                                                             <td>
                                                                 4.@Model.pointC[i].Rounds[0].DetailRate4<br />
                                                                 @string.Format("{0:N4}", de?.Expect)
                                                             </td>
                                                         }
-
                                                     }
                                                 }
                                                 @if (HasSub)
@@ -1577,9 +1632,18 @@
 
                                                             ViewBag.SelectLevel = new SelectList(list, "Value", "Detail", de == null ? 1 : (int)de.Result);
                                                         }
-                                                        <select name="UpdateData[@i].Result" class="form-control" asp-items="ViewBag.SelectLevel"></select>
-                                                        <br />
-                                                        <input type="text" class="form-control" name="UpdateData[@i].ResultLevelRate" value="@String.Format("{0:N4}", de?.ResultLevelRate)" />
+                                                        @if (de?.Approve > Approve.รอพิจารณา)
+                                                        {
+                                                            <select name="UpdateData[@i].Result" class="form-control" asp-items="ViewBag.SelectLevel" disabled></select>
+                                                            <br />
+                                                            <input type="text" class="form-control" name="UpdateData[@i].ResultLevelRate" value="@String.Format("{0:N4}", de?.ResultLevelRate)" readonly />
+                                                        }
+                                                        else
+                                                        {
+                                                            <select name="UpdateData[@i].Result" class="form-control" asp-items="ViewBag.SelectLevel"></select>
+                                                            <br />
+                                                            <input type="text" class="form-control" name="UpdateData[@i].ResultLevelRate" value="@String.Format("{0:N4}", de?.ResultLevelRate)" />
+                                                        }
                                                     </td>
                                                 }
                                             }
@@ -1591,67 +1655,80 @@
                                             else
                                             {
                                                 <td>
-                                                    <input type="date" class="form-control" name="UpdateData[@i].Completed" value=@(de?.Completed ?? new DateTime(DateTime.Now.Year, Model.month, 28).ToString("yyyy-MM-dd", CultureInfo.CreateSpecificCulture("en-US"))) />
+                                                    @if (de?.Approve > Approve.รอพิจารณา)
+                                                    {
+                                                        <input type="date" class="form-control" name="UpdateData[@i].Completed" value=@(de?.Completed ??  new DateTime(DateTime.Now.Year, Model.month, 28).ToString("yyyy-MM-dd", CultureInfo.CreateSpecificCulture("en-US"))) readonly />
+                                                    }
+                                                    else
+                                                    {
+                                                        <input type="date" class="form-control" name="UpdateData[@i].Completed" value=@(de?.Completed ??  new DateTime(DateTime.Now.Year, Model.month, 28).ToString("yyyy-MM-dd", CultureInfo.CreateSpecificCulture("en-US"))) />
+                                                    }
                                                 </td>
                                                 <td>
                                                     @if (de != null)
                                                     {
                                                         @(Html.DevExtreme().Popup()
-                                                                                                                                                                                                .ID("attach-popup")
-                                                                                                                                                                                                .ElementAttr("class", "popup")
-                                                                                                                                                                                                .Width(500)
-                                                                                                                                                                                                .Height(400)
-                                                                                                                                                                                                .ShowTitle(true)
-                                                                                                                                                                                                .Title("แนบไฟล์")
-                                                                                                                                                                                                .Visible(false)
-                                                                                                                                                                                                .DragEnabled(false)
-                                                                                                                                                                                                .CloseOnOutsideClick(true)
+                                                                .ID("attach-popup")
+                                                                .ElementAttr("class", "popup")
+                                                                .Width(500)
+                                                                .Height(400)
+                                                                .ShowTitle(true)
+                                                                .Title("แนบไฟล์")
+                                                                .Visible(false)
+                                                                .DragEnabled(false)
+                                                                .CloseOnOutsideClick(true)
                                                         )
-                                                        @(Html.DevExtreme().Button()
-                                                                                                                                                                                                //.ElementAttr("class", "button-info")
-                                                                                                                                                                                                .Text("แนบ")
-                                                                                                                                                                                                .OnClick(@<text>
-                                                                                                                                                                                                            function showInfo(data) {
-                                                                                                                                                                                                            var popup = $("#attach-popup").dxPopup("instance");
-                                                                                                                                                                                                            popup.option("contentTemplate", $("#popup-template-" + @de?.Id));
-                                                                                                                                                                                                            popup.show();
-                                                                                                                                                                                                            }
-                                                                                                                                                                                                </text>)
-                                                        )
+                                                        @if (de?.Approve == Approve.รอพิจารณา)
+                                                        {
+                                                            @(Html.DevExtreme().Button()
+                                                                        //.ElementAttr("class", "button-info")
+                                                                        .Text("แนบ")
+                                                                        .OnClick(@<text>
+                                                                                    function showInfo(data) {
+                                                                                    var popup = $("#attach-popup").dxPopup("instance");
+                                                                                    popup.option("contentTemplate", $("@("#popup-template-" + de?.Id)"));
+                                                                                    popup.show();
+                                                                                    }
+                                                                        </text>)
+                                                            )
+                                                        }
                                                         @if (de?.AttachFile != null)
                                                         {
                                                             <a href="~/attach_files/@de?.AttachFile" target="_blank"><i class="fas fa-file-pdf fa-2x"></i></a><br />
-                                                            @(Html.DevExtreme().Button()
-                                                                                                                                                                                                .ElementAttr("class", "button-danger")
-                                                                                                                                                                                                .Text("ลบ")
-                                                                                                                                                                                                .Type(ButtonType.Danger)
-                                                                                                                                                                                                .OnClick(@<text>
-                                                                                                                                                                                                            function showInfo(data) {
-                                                                                                                                                                                                            var popup = $("#attach-popup").dxPopup("instance");
-                                                                                                                                                                                                            popup.option("contentTemplate", $("#popup-template-del-" + @de?.Id));
-                                                                                                                                                                                                            popup.show();
-                                                                                                                                                                                                            }
-                                                                                                                                                                                                </text>)
-                                                            )
+                                                            @if (de?.Approve == Approve.รอพิจารณา)
+                                                            {
+                                                                @(Html.DevExtreme().Button()
+                                                                .ElementAttr("class", "button-danger")
+                                                                .Text("ลบ")
+                                                                .Type(ButtonType.Danger)
+                                                                .OnClick(@<text>
+                                                                            function showInfo(data) {
+                                                                            var popup = $("#attach-popup").dxPopup("instance");
+                                                                            popup.option("contentTemplate", $("@("#popup-template-del-" + de?.Id)"));
+                                                                            popup.show();
+                                                                            }
+                                                                </text>)
+                                                                )
+                                                            }
                                                         }
-                                                        @using (Html.DevExtreme().NamedTemplate("popup-template-" + @de?.Id))
+                                                        @using (Html.DevExtreme().NamedTemplate("popup-template-" + de?.Id))
                                                         {
                                                             <form id="form" method="post" enctype="multipart/form-data" action="FileSelection">
                                                                 <h3>แนบไฟล์ประกอบผลการปฏิบัติ</h3>
                                                                 <div id="fileuploader-container">
                                                                     @(Html.DevExtreme().FileUploader()
-                                                                                                                                                                                                      .Name("AttachFile")
-                                                                                                                                                                                                      .SelectButtonText("เลือกไฟล์แนบ")
-                                                                                                                                                                                                      .LabelText("")
-                                                                                                                                                                                                      .Accept("application/pdf")
-                                                                                                                                                                                                      .UploadMode(FileUploadMode.UseForm)
+                                                                        .Name("AttachFile")
+                                                                        .SelectButtonText("เลือกไฟล์แนบ")
+                                                                        .LabelText("")
+                                                                        .Accept("application/pdf")
+                                                                        .UploadMode(FileUploadMode.UseForm)
                                                                     )
                                                                 </div>
                                                                 @(Html.DevExtreme().Button()
-                                                                                                                                                                                                      .ID("button")
-                                                                                                                                                                                                      .Text("ส่งไฟล์แนบ")
-                                                                                                                                                                                                      .Type(ButtonType.Success)
-                                                                                                                                                                                                      .UseSubmitBehavior(true)
+                                                                    .ID("button")
+                                                                    .Text("ส่งไฟล์แนบ")
+                                                                    .Type(ButtonType.Success)
+                                                                    .UseSubmitBehavior(true)
                                                                 )
                                                                 <input type="hidden" name="deid" value=@de?.Id />
                                                                 <input asp-for="yearPoint" class="form-control" hidden />
@@ -1659,16 +1736,16 @@
                                                                 <input type="hidden" name="selectoffice" value="@ViewBag.selectoffice" />
                                                             </form>
                                                         }
-                                                        @using (Html.DevExtreme().NamedTemplate("popup-template-del-" + @de?.Id))
+                                                        @using (Html.DevExtreme().NamedTemplate("popup-template-del-" + de?.Id))
                                                         {
                                                             <form id="form" method="post" action="FileDelete">
                                                                 <h3>ลบไฟล์ประกอบผลการปฏิบัติ</h3>
                                                                 <h5>@de.AttachFile</h5>
                                                                 @(Html.DevExtreme().Button()
-                                                                                                                                                                                                      .ID("button")
-                                                                                                                                                                                                      .Text("ลบไฟล์แนบ")
-                                                                                                                                                                                                      .Type(ButtonType.Danger)
-                                                                                                                                                                                                      .UseSubmitBehavior(true)
+                                                                    .ID("button")
+                                                                    .Text("ลบไฟล์แนบ")
+                                                                    .Type(ButtonType.Danger)
+                                                                    .UseSubmitBehavior(true)
                                                                 )
                                                                 <input type="hidden" name="deid" value=@de?.Id />
                                                                 <input asp-for="yearPoint" class="form-control" hidden />
@@ -1687,9 +1764,7 @@
                         <input asp-for="yearPoint" class="form-control" hidden />
                         <input asp-for="month" class="form-control" hidden />
                         <input type="hidden" name="selectoffice" value="@ViewBag.selectoffice" />
-                        <input type="submit" name="Update" value="บันทึก" class="btn btn-primary"
-                               @if (pointHasAppovedLevelC > Approve.รอพิจารณา) { @: disabled
-                               } />
+                        <input type="submit" name="Update" value="บันทึก" class="btn btn-primary" />
                         <a asp-area="" asp-controller="Results" asp-action="IndexMonth" asp-route-yearPoint="@Model.yearPoint" asp-route-selectoffice="@ViewBag.selectoffice" asp-route-month="@Model.month" class="btn btn-secondary">ยกเลิก</a>
                     </form>
                 </div>
@@ -1736,6 +1811,7 @@
                                 @for (int i = 0; i < Model.pointD.Count(); i++)
                                 {
                                     bool HasSub = false;
+
                                     <tr>
                                         <td>
                                             @if (Model.pointD[i].SubPoint != 0)
@@ -1762,10 +1838,6 @@
                                                     de = item;
                                                 }
                                             }
-                                            @if (de != null)
-                                            {
-                                                pointHasAppovedLevelD = de.Approve;
-                                            }
                                             <input type="hidden" name="UpdateData[@i].Id" value=@de?.Id />
                                             <input type="hidden" name="UpdateData[@i].poeid" value=@Model.pointD[i].Id />
                                             <input type="hidden" name="UpdateData[@i].officeid" value=@Model.pointD[i].OwnerOfficeId />
@@ -1780,6 +1852,7 @@
                                                 }
                                             }
                                         }
+
                                         @if (Model.pointD[i].Unit == UnitOfPoint.ร้อยละ)
                                         {
                                             <td>@string.Format("{0:N4}", de?.Expect)</td>
@@ -1791,11 +1864,22 @@
                                             }
                                             else
                                             {
-                                                <td>
-                                                    <input type="text" class="form-control" name="UpdateData[@i].Result" value="@String.Format("{0:N4}", de?.Result)" />
-                                                </td>
-                                                <td><input type="date" class="form-control" name="UpdateData[@i].Completed" value=@(de?.Completed ?? new DateTime(DateTime.Now.Year, Model.month, 28).ToString("yyyy-MM-dd", CultureInfo.CreateSpecificCulture("en-US"))) /></td>
-                                                <td></td>
+                                                if (de?.Approve > Approve.รอพิจารณา)
+                                                {
+                                                    <td>
+                                                        <input type="text" class="form-control" name="UpdateData[@i].Result" value="@String.Format("{0:N4}", de?.Result)" readonly />
+                                                    </td>
+                                                    <td><input type="date" class="form-control" name="UpdateData[@i].Completed" value=@(de?.Completed ?? new DateTime(DateTime.Now.Year, Model.month, 28).ToString("yyyy-MM-dd", CultureInfo.CreateSpecificCulture("en-US"))) readonly /></td>
+                                                    <td></td>
+                                                }
+                                                else
+                                                {
+                                                    <td>
+                                                        <input type="text" class="form-control" name="UpdateData[@i].Result" value="@String.Format("{0:N4}", de?.Result)" />
+                                                    </td>
+                                                    <td><input type="date" class="form-control" name="UpdateData[@i].Completed" value=@(de?.Completed ?? new DateTime(DateTime.Now.Year, Model.month, 28).ToString("yyyy-MM-dd", CultureInfo.CreateSpecificCulture("en-US"))) /></td>
+                                                    <td></td>
+                                                }
                                             }
                                         }
                                         else
@@ -1876,7 +1960,14 @@
 
                                                             ViewBag.SelectLevel = new SelectList(list, "Value", "Detail", de == null ? 1 : (int)de.Result);
                                                         }
-                                                        <select name="UpdateData[@i].Result" class="form-control" asp-items="ViewBag.SelectLevel"></select>
+                                                        @if (de?.Approve > Approve.รอพิจารณา)
+                                                        {
+                                                            <select name="UpdateData[@i].Result" class="form-control" asp-items="ViewBag.SelectLevel" disabled></select>
+                                                        }
+                                                        else
+                                                        {
+                                                            <select name="UpdateData[@i].Result" class="form-control" asp-items="ViewBag.SelectLevel"></select>
+                                                        }
                                                     </td>
                                                 }
                                             }
@@ -1886,14 +1977,10 @@
                                                 {
                                                     if (Model.pointD[i].Rounds[0].LevelNumber == 1)
                                                     {
-                                                        if (new DateTime(DateTime.Now.Year, Model.month, 28) <= Model.pointD[i].Rounds[1].Rate1MonthStop)
-                                                        {
-                                                            <td>
-                                                                1.@Model.pointD[i].Rounds[1].DetailRate1<br />
-                                                                @string.Format("{0:N4}", de?.Expect)
-                                                            </td>
-                                                        }
-
+                                                        <td>
+                                                            1.@Model.pointD[i].Rounds[1].DetailRate1<br />
+                                                            @string.Format("{0:N4}", de?.Expect)
+                                                        </td>
                                                     }
                                                     if (Model.pointD[i].Rounds[0].LevelNumber == 2)
                                                     {
@@ -1904,7 +1991,7 @@
                                                                 @string.Format("{0:N4}", de?.Expect)
                                                             </td>
                                                         }
-                                                        else if (new DateTime(DateTime.Now.Year, Model.month, 28) <= Model.pointD[i].Rounds[1].Rate2MonthStop)
+                                                        else
                                                         {
                                                             <td>
                                                                 2.@Model.pointD[i].Rounds[1].DetailRate2 <br />
@@ -1929,14 +2016,13 @@
                                                                 @string.Format("{0:N4}", de?.Expect)
                                                             </td>
                                                         }
-                                                        else if (new DateTime(DateTime.Now.Year, Model.month, 28) <= Model.pointD[i].Rounds[1].Rate2MonthStop)
+                                                        else
                                                         {
                                                             <td>
                                                                 3.@Model.pointD[i].Rounds[1].DetailRate3 <br />
                                                                 @string.Format("{0:N4}", de?.Expect)
                                                             </td>
                                                         }
-
                                                     }
                                                     if (Model.pointD[i].Rounds[0].LevelNumber == 4)
                                                     {
@@ -1954,14 +2040,14 @@
                                                                 @string.Format("{0:N4}", de?.Expect)
                                                             </td>
                                                         }
-                                                        else if (new DateTime(DateTime.Now.Year, Model.month, 28) <= Model.pointD[i].Rounds[1].Rate2MonthStop)
+                                                        else if (new DateTime(DateTime.Now.Year, Model.month, 28) <= Model.pointD[i].Rounds[1].Rate3MonthStop)
                                                         {
                                                             <td>
                                                                 3.@Model.pointD[i].Rounds[1].DetailRate3 <br />
                                                                 @string.Format("{0:N4}", de?.Expect)
                                                             </td>
                                                         }
-                                                        else if (new DateTime(DateTime.Now.Year, Model.month, 28) <= Model.pointD[i].Rounds[1].Rate4MonthStop)
+                                                        else
                                                         {
                                                             <td>
                                                                 4.@Model.pointD[i].Rounds[1].DetailRate4<br />
@@ -1975,14 +2061,10 @@
                                                 {
                                                     if (Model.pointD[i].Rounds[0].LevelNumber == 1)
                                                     {
-                                                        if (new DateTime(DateTime.Now.Year, Model.month, 28) <= Model.pointD[i].Rounds[0].Rate1MonthStop)
-                                                        {
-                                                            <td>
-                                                                1.@Model.pointD[i].Rounds[0].DetailRate1<br />
-                                                                @string.Format("{0:N4}", de?.Expect)
-                                                            </td>
-                                                        }
-
+                                                        <td>
+                                                            1.@Model.pointD[i].Rounds[0].DetailRate1<br />
+                                                            @string.Format("{0:N4}", de?.Expect)
+                                                        </td>
                                                     }
                                                     if (Model.pointD[i].Rounds[0].LevelNumber == 2)
                                                     {
@@ -1993,7 +2075,7 @@
                                                                 @string.Format("{0:N4}", de?.Expect)
                                                             </td>
                                                         }
-                                                        else if (new DateTime(DateTime.Now.Year, Model.month, 28) <= Model.pointD[i].Rounds[0].Rate2MonthStop)
+                                                        else
                                                         {
                                                             <td>
                                                                 2.@Model.pointD[i].Rounds[0].DetailRate2<br />
@@ -2018,7 +2100,7 @@
                                                                 @string.Format("{0:N4}", de?.Expect)
                                                             </td>
                                                         }
-                                                        else if (new DateTime(DateTime.Now.Year, Model.month, 28) <= Model.pointD[i].Rounds[0].Rate2MonthStop)
+                                                        else
                                                         {
                                                             <td>
                                                                 3.@Model.pointD[i].Rounds[0].DetailRate3<br />
@@ -2043,14 +2125,14 @@
                                                                 @string.Format("{0:N4}", de?.Expect)
                                                             </td>
                                                         }
-                                                        else if (new DateTime(DateTime.Now.Year, Model.month, 28) <= Model.pointD[i].Rounds[0].Rate2MonthStop)
+                                                        else if (new DateTime(DateTime.Now.Year, Model.month, 28) <= Model.pointD[i].Rounds[0].Rate3MonthStop)
                                                         {
                                                             <td>
                                                                 3.@Model.pointD[i].Rounds[0].DetailRate3 <br />
                                                                 @string.Format("{0:N4}", de?.Expect)
                                                             </td>
                                                         }
-                                                        else if (new DateTime(DateTime.Now.Year, Model.month, 28) <= Model.pointD[i].Rounds[0].Rate4MonthStop)
+                                                        else
                                                         {
                                                             <td>
                                                                 4.@Model.pointD[i].Rounds[0].DetailRate4<br />
@@ -2110,9 +2192,18 @@
 
                                                             ViewBag.SelectLevel = new SelectList(list, "Value", "Detail", de == null ? 1 : (int)de.Result);
                                                         }
-                                                        <select name="UpdateData[@i].Result" class="form-control" asp-items="ViewBag.SelectLevel"></select>
-                                                        <br />
-                                                        <input type="text" class="form-control" name="UpdateData[@i].ResultLevelRate" value="@String.Format("{0:N4}", de?.ResultLevelRate)" />
+                                                        @if (de?.Approve > Approve.รอพิจารณา)
+                                                        {
+                                                            <select name="UpdateData[@i].Result" class="form-control" asp-items="ViewBag.SelectLevel" disabled></select>
+                                                            <br />
+                                                            <input type="text" class="form-control" name="UpdateData[@i].ResultLevelRate" value="@String.Format("{0:N4}", de?.ResultLevelRate)" readonly />
+                                                        }
+                                                        else
+                                                        {
+                                                            <select name="UpdateData[@i].Result" class="form-control" asp-items="ViewBag.SelectLevel"></select>
+                                                            <br />
+                                                            <input type="text" class="form-control" name="UpdateData[@i].ResultLevelRate" value="@String.Format("{0:N4}", de?.ResultLevelRate)" />
+                                                        }
                                                     </td>
                                                 }
                                             }
@@ -2124,67 +2215,80 @@
                                             else
                                             {
                                                 <td>
-                                                    <input type="date" class="form-control" name="UpdateData[@i].Completed" value=@(de?.Completed ?? new DateTime(DateTime.Now.Year, Model.month, 28).ToString("yyyy-MM-dd", CultureInfo.CreateSpecificCulture("en-US"))) />
+                                                    @if (de?.Approve > Approve.รอพิจารณา)
+                                                    {
+                                                        <input type="date" class="form-control" name="UpdateData[@i].Completed" value=@(de?.Completed ??  new DateTime(DateTime.Now.Year, Model.month, 28).ToString("yyyy-MM-dd", CultureInfo.CreateSpecificCulture("en-US"))) readonly />
+                                                    }
+                                                    else
+                                                    {
+                                                        <input type="date" class="form-control" name="UpdateData[@i].Completed" value=@(de?.Completed ??  new DateTime(DateTime.Now.Year, Model.month, 28).ToString("yyyy-MM-dd", CultureInfo.CreateSpecificCulture("en-US"))) />
+                                                    }
                                                 </td>
                                                 <td>
                                                     @if (de != null)
                                                     {
                                                         @(Html.DevExtreme().Popup()
-                                                                                                                                                                                                .ID("attach-popup")
-                                                                                                                                                                                                .ElementAttr("class", "popup")
-                                                                                                                                                                                                .Width(500)
-                                                                                                                                                                                                .Height(400)
-                                                                                                                                                                                                .ShowTitle(true)
-                                                                                                                                                                                                .Title("แนบไฟล์")
-                                                                                                                                                                                                .Visible(false)
-                                                                                                                                                                                                .DragEnabled(false)
-                                                                                                                                                                                                .CloseOnOutsideClick(true)
+                                                                .ID("attach-popup")
+                                                                .ElementAttr("class", "popup")
+                                                                .Width(500)
+                                                                .Height(400)
+                                                                .ShowTitle(true)
+                                                                .Title("แนบไฟล์")
+                                                                .Visible(false)
+                                                                .DragEnabled(false)
+                                                                .CloseOnOutsideClick(true)
                                                         )
-                                                        @(Html.DevExtreme().Button()
-                                                                                                                                                                                                //.ElementAttr("class", "button-info")
-                                                                                                                                                                                                .Text("แนบ")
-                                                                                                                                                                                                .OnClick(@<text>
-                                                                                                                                                                                                            function showInfo(data) {
-                                                                                                                                                                                                            var popup = $("#attach-popup").dxPopup("instance");
-                                                                                                                                                                                                            popup.option("contentTemplate", $("#popup-template-" + @de?.Id));
-                                                                                                                                                                                                            popup.show();
-                                                                                                                                                                                                            }
-                                                                                                                                                                                                </text>)
-                                                        )
+                                                        @if (de?.Approve == Approve.รอพิจารณา)
+                                                        {
+                                                            @(Html.DevExtreme().Button()
+                                                                        //.ElementAttr("class", "button-info")
+                                                                        .Text("แนบ")
+                                                                        .OnClick(@<text>
+                                                                                    function showInfo(data) {
+                                                                                    var popup = $("#attach-popup").dxPopup("instance");
+                                                                                    popup.option("contentTemplate", $("@("#popup-template-" + de?.Id)"));
+                                                                                    popup.show();
+                                                                                    }
+                                                                        </text>)
+                                                            )
+                                                        }
                                                         @if (de?.AttachFile != null)
                                                         {
                                                             <a href="~/attach_files/@de?.AttachFile" target="_blank"><i class="fas fa-file-pdf fa-2x"></i></a><br />
-                                                            @(Html.DevExtreme().Button()
-                                                                                                                                                                                                .ElementAttr("class", "button-danger")
-                                                                                                                                                                                                .Text("ลบ")
-                                                                                                                                                                                                .Type(ButtonType.Danger)
-                                                                                                                                                                                                .OnClick(@<text>
-                                                                                                                                                                                                            function showInfo(data) {
-                                                                                                                                                                                                            var popup = $("#attach-popup").dxPopup("instance");
-                                                                                                                                                                                                            popup.option("contentTemplate", $("#popup-template-del-" + @de?.Id));
-                                                                                                                                                                                                            popup.show();
-                                                                                                                                                                                                            }
-                                                                                                                                                                                                </text>)
-                                                            )
+                                                            @if (de?.Approve == Approve.รอพิจารณา)
+                                                            {
+                                                                @(Html.DevExtreme().Button()
+                                                                .ElementAttr("class", "button-danger")
+                                                                .Text("ลบ")
+                                                                .Type(ButtonType.Danger)
+                                                                .OnClick(@<text>
+                                                                            function showInfo(data) {
+                                                                            var popup = $("#attach-popup").dxPopup("instance");
+                                                                            popup.option("contentTemplate", $("@("#popup-template-del-" + de?.Id)"));
+                                                                            popup.show();
+                                                                            }
+                                                                </text>)
+                                                                )
+                                                            }
                                                         }
-                                                        @using (Html.DevExtreme().NamedTemplate("popup-template-" + @de?.Id))
+                                                        @using (Html.DevExtreme().NamedTemplate("popup-template-" + de?.Id))
                                                         {
                                                             <form id="form" method="post" enctype="multipart/form-data" action="FileSelection">
                                                                 <h3>แนบไฟล์ประกอบผลการปฏิบัติ</h3>
                                                                 <div id="fileuploader-container">
                                                                     @(Html.DevExtreme().FileUploader()
-                                                                                                                                                                                                      .Name("AttachFile")
-                                                                                                                                                                                                      .SelectButtonText("เลือกไฟล์แนบ")
-                                                                                                                                                                                                      .LabelText("")
-                                                                                                                                                                                                      .Accept("application/pdf")
-                                                                                                                                                                                                      .UploadMode(FileUploadMode.UseForm)
+                                                                        .Name("AttachFile")
+                                                                        .SelectButtonText("เลือกไฟล์แนบ")
+                                                                        .LabelText("")
+                                                                        .Accept("application/pdf")
+                                                                        .UploadMode(FileUploadMode.UseForm)
                                                                     )
                                                                 </div>
                                                                 @(Html.DevExtreme().Button()
-                                                                                                                                                                                                      .ID("button")
-                                                                                                                                                                                                      .Text("ส่งไฟล์แนบ")
-                                                                                                                                                                                                      .Type(ButtonType.Success)
-                                                                                                                                                                                                      .UseSubmitBehavior(true)
+                                                                    .ID("button")
+                                                                    .Text("ส่งไฟล์แนบ")
+                                                                    .Type(ButtonType.Success)
+                                                                    .UseSubmitBehavior(true)
                                                                 )
                                                                 <input type="hidden" name="deid" value=@de?.Id />
                                                                 <input asp-for="yearPoint" class="form-control" hidden />
@@ -2192,16 +2296,16 @@
                                                                 <input type="hidden" name="selectoffice" value="@ViewBag.selectoffice" />
                                                             </form>
                                                         }
-                                                        @using (Html.DevExtreme().NamedTemplate("popup-template-del-" + @de?.Id))
+                                                        @using (Html.DevExtreme().NamedTemplate("popup-template-del-" + de?.Id))
                                                         {
                                                             <form id="form" method="post" action="FileDelete">
                                                                 <h3>ลบไฟล์ประกอบผลการปฏิบัติ</h3>
                                                                 <h5>@de.AttachFile</h5>
                                                                 @(Html.DevExtreme().Button()
-                                                                                                                                                                                                      .ID("button")
-                                                                                                                                                                                                      .Text("ลบไฟล์แนบ")
-                                                                                                                                                                                                      .Type(ButtonType.Danger)
-                                                                                                                                                                                                      .UseSubmitBehavior(true)
+                                                                    .ID("button")
+                                                                    .Text("ลบไฟล์แนบ")
+                                                                    .Type(ButtonType.Danger)
+                                                                    .UseSubmitBehavior(true)
                                                                 )
                                                                 <input type="hidden" name="deid" value=@de?.Id />
                                                                 <input asp-for="yearPoint" class="form-control" hidden />
@@ -2220,9 +2324,7 @@
                         <input asp-for="yearPoint" class="form-control" hidden />
                         <input asp-for="month" class="form-control" hidden />
                         <input type="hidden" name="selectoffice" value="@ViewBag.selectoffice" />
-                        <input type="submit" name="Update" value="บันทึก" class="btn btn-primary"
-                               @if (pointHasAppovedLevelD > Approve.รอพิจารณา) { @: disabled
-                               } />
+                        <input type="submit" name="Update" value="บันทึก" class="btn btn-primary" />
                         <a asp-area="" asp-controller="Results" asp-action="IndexMonth" asp-route-yearPoint="@Model.yearPoint" asp-route-selectoffice="@ViewBag.selectoffice" asp-route-month="@Model.month" class="btn btn-secondary">ยกเลิก</a>
                     </form>
                 </div>

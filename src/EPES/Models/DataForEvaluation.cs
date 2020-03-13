@@ -37,7 +37,7 @@ namespace EPES.Models
         public int Month { get; set; }
 
         [Display(Name = "การอนุมัติ")]
-        public Approve Approve { get; set; } = Approve.รอพิจารณา;
+        public Approve? Approve { get; set; }// = Approve.รอพิจารณา;
 
         [Display(Name = "หมายเหตุการอนุมัติ (หัวหน้าหน่วยงาน)")]
         public string CommentApproveLevel1 { get; set; }

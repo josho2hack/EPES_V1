@@ -1,0 +1,243 @@
+<script src="~/js/demo/datatables-demo.js"></script>
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('#EPEStable').dataTable({
+            "language": {
+                "url": "@Url.Content("~/js/Thai.json")"
+            },
+            paging: false,
+            columnDefs: [
+                {
+                    targets: -1,
+                    className: 'dt-body-center'
+                },
+                { "type": "num", "targets": 0 }
+            ]
+        });
+    });
+</script>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('#EPEStableA').dataTable({
+            "language": {
+                "url": "@Url.Content("~/js/Thai.json")"
+            },
+            paging: false,
+            columnDefs: [
+                {
+                    targets: -1,
+                    className: 'dt-body-center'
+                },
+                { "type": "num", "targets": 0 }
+            ],
+            //"lengthMenu": [[20, 40, 80, -1], [20, 40, 80, "All"]]
+
+            "footerCallback": function (row, data, start, end, display) {
+                var api = this.api(), data;
+
+                // converting to interger to find total
+                var intVal = function (i) {
+                    return typeof i === 'string' ?
+                        i.replace(/[\$,]/g, '') * 1 :
+                        typeof i === 'number' ?
+                            i : 0;
+                };
+
+                // computing column Total of the complete result
+                var unitTotal = api
+                    .column(2)
+                    .data()
+                    .reduce(function (a, b) {
+                        return intVal(a) + intVal(b);
+                    }, 0);
+
+                var scoreTotal = api
+                    .column(3)
+                    .data()
+                    .reduce(function (a, b) {
+                        return intVal(a) + intVal(b);
+                    }, 0);
+
+                // Update footer by showing the total with the reference of the column index
+
+                var numFormatUnit = $.fn.dataTable.render.number(',', '.', 2).display;
+                var numFormatScore = $.fn.dataTable.render.number(',', '.', 4).display;
+
+                $(api.column(2).footer()).html(numFormatUnit(unitTotal));
+                $(api.column(3).footer()).html(numFormatScore(scoreTotal));
+            },
+        //"processing": true,
+        //"serverSide": true,
+        //"ajax": "server.php"
+        });
+    });
+</script>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('#EPEStableB').dataTable({
+            "language": {
+                "url": "@Url.Content("~/js/Thai.json")"
+            },
+            paging: false,
+            columnDefs: [
+                {
+                    targets: -1,
+                    className: 'dt-body-center'
+                },
+                { "type": "num", "targets": 0 }
+            ],
+            //"lengthMenu": [[20, 40, 80, -1], [20, 40, 80, "All"]]
+            "footerCallback": function (row, data, start, end, display) {
+                var api = this.api(), data;
+
+                // converting to interger to find total
+                var intVal = function (i) {
+                    return typeof i === 'string' ?
+                        i.replace(/[\$,]/g, '') * 1 :
+                        typeof i === 'number' ?
+                            i : 0;
+                };
+
+                // computing column Total of the complete result
+                var unitTotal = api
+                    .column(2)
+                    .data()
+                    .reduce(function (a, b) {
+                        return intVal(a) + intVal(b);
+                    }, 0);
+
+                var scoreTotal = api
+                    .column(3)
+                    .data()
+                    .reduce(function (a, b) {
+                        return intVal(a) + intVal(b);
+                    }, 0);
+
+                // Update footer by showing the total with the reference of the column index
+
+                var numFormatUnit = $.fn.dataTable.render.number(',', '.', 2).display;
+                var numFormatScore = $.fn.dataTable.render.number(',', '.', 4).display;
+
+                $(api.column(2).footer()).html(numFormatUnit(unitTotal));
+                $(api.column(3).footer()).html(numFormatScore(scoreTotal));
+            },
+        });
+    });
+</script>
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('#EPEStableC').dataTable({
+            "language": {
+                "url": "@Url.Content("~/js/Thai.json")"
+            },
+            paging: false,
+            columnDefs: [
+                {
+                    targets: -1,
+                    className: 'dt-body-center'
+                },
+                { "type": "num", "targets": 0 }
+            ],
+            "footerCallback": function (row, data, start, end, display) {
+                var api = this.api(), data;
+
+                // converting to interger to find total
+                var intVal = function (i) {
+                    return typeof i === 'string' ?
+                        i.replace(/[\$,]/g, '') * 1 :
+                        typeof i === 'number' ?
+                            i : 0;
+                };
+
+                // computing column Total of the complete result
+                var unitTotal = api
+                    .column(2)
+                    .data()
+                    .reduce(function (a, b) {
+                        return intVal(a) + intVal(b);
+                    }, 0);
+
+                var scoreTotal = api
+                    .column(3)
+                    .data()
+                    .reduce(function (a, b) {
+                        return intVal(a) + intVal(b);
+                    }, 0);
+
+                // Update footer by showing the total with the reference of the column index
+
+                var numFormatUnit = $.fn.dataTable.render.number(',', '.', 2).display;
+                var numFormatScore = $.fn.dataTable.render.number(',', '.', 4).display;
+
+                $(api.column(2).footer()).html(numFormatUnit(unitTotal));
+                $(api.column(3).footer()).html(numFormatScore(scoreTotal));
+            },
+        });
+    });
+</script>
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('#EPEStableD').dataTable({
+            "language": {
+                "url": "@Url.Content("~/js/Thai.json")"
+            },
+            paging: false,
+            columnDefs: [
+                {
+                    targets: -1,
+                    className: 'dt-body-center'
+                },
+                { "type": "num", "targets": 0 }
+            ],
+            "footerCallback": function (row, data, start, end, display) {
+                var api = this.api(), data;
+
+                // converting to interger to find total
+                var intVal = function (i) {
+                    return typeof i === 'string' ?
+                        i.replace(/[\$,]/g, '') * 1 :
+                        typeof i === 'number' ?
+                            i : 0;
+                };
+
+                // computing column Total of the complete result
+                var unitTotal = api
+                    .column(2)
+                    .data()
+                    .reduce(function (a, b) {
+                        return intVal(a) + intVal(b);
+                    }, 0);
+
+                var scoreTotal = api
+                    .column(3)
+                    .data()
+                    .reduce(function (a, b) {
+                        return intVal(a) + intVal(b);
+                    }, 0);
+
+                // Update footer by showing the total with the reference of the column index
+
+                var numFormatUnit = $.fn.dataTable.render.number(',', '.', 2).display;
+                var numFormatScore = $.fn.dataTable.render.number(',', '.', 4).display;
+
+                $(api.column(2).footer()).html(numFormatUnit(unitTotal));
+                $(api.column(3).footer()).html(numFormatScore(scoreTotal));
+            },
+        });
+    });
+</script>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('#DataForEvalutionTable').dataTable({
+            "language": {
+                "url": "@Url.Content("~/js/Thai.json")"
+            },
+            paging: false
+            //"lengthMenu": [[20, 40, 80, -1], [20, 40, 80, "All"]],
+            //"ordering": false
+        });
+    });
+</script>

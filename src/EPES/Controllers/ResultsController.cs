@@ -100,11 +100,11 @@ namespace EPES.Controllers
 
                 for (int i = 10; i <= 12; i++)
                 {
-                    list.Add(new { Value = i, Month = new DateTime(DateTime.Now.Year, i, 1).ToString("MMMM") + " " + new DateTime(DateTime.Now.AddYears(-1).Year, i, 1).ToString("yyyy") });
+                    list.Add(new { Value = i, Month = new DateTime(DateTime.Now.Year, i, 1).ToString("MMMM") + " " + new DateTime(DateTime.Now.AddYears(-1 + yearPoint).Year, i, 1).ToString("yyyy") });
                 }
                 for (int i = 1; i <= 9; i++)
                 {
-                    list.Add(new { Value = i, Month = new DateTime(DateTime.Now.Year, i, 1).ToString("MMMM") + " " + new DateTime(DateTime.Now.Year, i, 1).ToString("yyyy") });
+                    list.Add(new { Value = i, Month = new DateTime(DateTime.Now.Year, i, 1).ToString("MMMM") + " " + new DateTime(DateTime.Now.AddYears(yearPoint).Year, i, 1).ToString("yyyy") });
                 }
             }
 
@@ -142,11 +142,19 @@ namespace EPES.Controllers
 
                         var officeList = await _context.PointOfEvaluations.Where(p => (p.OwnerOffice.Code == user.OfficeId) || (p.Plan == TypeOfPlan.B && (p.OwnerOffice.Code == user.OfficeId || p.AuditOffice.Code == user.OfficeId) && p.Year == yearForQuery)).Include(p => p.OwnerOffice).Include(p => p.AuditOffice).Select(b => new { Code = b.OwnerOffice.Code, Name = b.OwnerOffice.Name }).Distinct().ToListAsync();
 
+                        if (officeList.Count < 1)
+                        {
+                            officeList.Add(new { Code = user.OfficeId, Name = user.OfficeName });
+                        }
+
                         ViewBag.OfficeCode = new SelectList(officeList, "Code", "Name", user.OfficeId);
+
                     }
                     else // Pak or ST
                     {
-                        ViewBag.OfficeCode = new SelectList(_context.Offices.Where(d => d.Code != "00000000" && d.Code.StartsWith(user.OfficeId.Substring(0, 2)) && d.Code.Substring(5, 3) == "000"), "Code", "Name", user.OfficeId);
+                        var officeList = await _context.Offices.Where(d => d.Code != "00000000" && d.Code.StartsWith(user.OfficeId.Substring(0, 2)) && d.Code.Substring(5, 3) == "000").ToListAsync();
+
+                        ViewBag.OfficeCode = new SelectList(officeList, "Code", "Name", user.OfficeId);
                     }
 
                     viewModel.pointB = await _context.PointOfEvaluations.Where(p => p.Plan == TypeOfPlan.B && p.OwnerOffice.Code == user.OfficeId && p.Year == yearForQuery).Include(p => p.OwnerOffice).Include(p => p.AuditOffice).Include(p => p.DataForEvaluations).Include(p => p.Rounds).ToListAsync();
@@ -160,6 +168,11 @@ namespace EPES.Controllers
                         viewModel.pointA = await _context.PointOfEvaluations.Where(p => p.Plan == TypeOfPlan.A && p.OwnerOffice.Code == selectoffice && p.Year == yearForQuery).Include(p => p.OwnerOffice).Include(p => p.AuditOffice).Include(p => p.DataForEvaluations).Include(p => p.Rounds).ToListAsync();
 
                         var officeList = await _context.PointOfEvaluations.Where(p => (p.OwnerOffice.Code == user.OfficeId) || (p.Plan == TypeOfPlan.B && (p.OwnerOffice.Code == user.OfficeId || p.AuditOffice.Code == user.OfficeId) && p.Year == yearForQuery)).Include(p => p.OwnerOffice).Include(p => p.AuditOffice).Select(b => new { Code = b.OwnerOffice.Code, Name = b.OwnerOffice.Name }).Distinct().ToListAsync();
+
+                        if (officeList.Count < 1)
+                        {
+                            officeList.Add(new { Code = user.OfficeId, Name = user.OfficeName });
+                        }
 
                         ViewBag.OfficeCode = new SelectList(officeList, "Code", "Name", selectoffice);
                     }
@@ -301,11 +314,11 @@ namespace EPES.Controllers
 
                 for (int i = 10; i <= 12; i++)
                 {
-                    list.Add(new { Value = i, Month = new DateTime(DateTime.Now.Year, i, 1).ToString("MMMM") + " " + new DateTime(DateTime.Now.AddYears(-1).Year, i, 1).ToString("yyyy") });
+                    list.Add(new { Value = i, Month = new DateTime(DateTime.Now.Year, i, 1).ToString("MMMM") + " " + new DateTime(DateTime.Now.AddYears(-1 + yearPoint).Year, i, 1).ToString("yyyy") });
                 }
                 for (int i = 1; i <= 9; i++)
                 {
-                    list.Add(new { Value = i, Month = new DateTime(DateTime.Now.Year, i, 1).ToString("MMMM") + " " + new DateTime(DateTime.Now.Year, i, 1).ToString("yyyy") });
+                    list.Add(new { Value = i, Month = new DateTime(DateTime.Now.Year, i, 1).ToString("MMMM") + " " + new DateTime(DateTime.Now.AddYears(yearPoint).Year, i, 1).ToString("yyyy") });
                 }
             }
 
@@ -343,6 +356,11 @@ namespace EPES.Controllers
 
                         var officeList = await _context.PointOfEvaluations.Where(p => (p.OwnerOffice.Code == user.OfficeId) || (p.Plan == TypeOfPlan.B && (p.OwnerOffice.Code == user.OfficeId || p.AuditOffice.Code == user.OfficeId) && p.Year == yearForQuery)).Include(p => p.OwnerOffice).Include(p => p.AuditOffice).Select(b => new { Code = b.OwnerOffice.Code, Name = b.OwnerOffice.Name }).Distinct().ToListAsync();
 
+                        if (officeList.Count < 1)
+                        {
+                            officeList.Add(new { Code = user.OfficeId, Name = user.OfficeName });
+                        }
+
                         ViewBag.OfficeCode = new SelectList(officeList, "Code", "Name", user.OfficeId);
                     }
                     else // Pak or ST
@@ -361,6 +379,11 @@ namespace EPES.Controllers
                         viewModel.pointA = await _context.PointOfEvaluations.Where(p => p.Plan == TypeOfPlan.A && p.OwnerOffice.Code == selectoffice && p.Year == yearForQuery).Include(p => p.OwnerOffice).Include(p => p.AuditOffice).Include(p => p.DataForEvaluations).Include(p => p.Rounds).ToListAsync();
 
                         var officeList = await _context.PointOfEvaluations.Where(p => (p.OwnerOffice.Code == user.OfficeId) || (p.Plan == TypeOfPlan.B && (p.OwnerOffice.Code == user.OfficeId || p.AuditOffice.Code == user.OfficeId) && p.Year == yearForQuery)).Include(p => p.OwnerOffice).Include(p => p.AuditOffice).Select(b => new { Code = b.OwnerOffice.Code, Name = b.OwnerOffice.Name }).Distinct().ToListAsync();
+
+                        if (officeList.Count < 1)
+                        {
+                            officeList.Add(new { Code = user.OfficeId, Name = user.OfficeName });
+                        }
 
                         ViewBag.OfficeCode = new SelectList(officeList, "Code", "Name", selectoffice);
                     }
@@ -442,13 +465,14 @@ namespace EPES.Controllers
                             if (item.Id != null)
                             {
                                 var de = await _context.DataForEvaluations.FirstOrDefaultAsync(d => d.Id == item.Id);
-                                if (de != null)
+                                if (de.Approve == null || de.Approve == Approve.รอพิจารณา)
                                 {
                                     de.Result = item.Result;
                                     de.ResultLevelRate = item.ResultLevelRate;
                                     de.UpdateUserId = user.Id;
                                     de.Completed = item.Completed;
                                     de.TimeUpdate = DateTime.Now;
+                                    de.Approve = Approve.รอพิจารณา;
 
                                     await _context.SaveChangesAsync();
                                 }
@@ -464,6 +488,7 @@ namespace EPES.Controllers
                                 de.Month = month;
                                 de.Completed = item.Completed;
                                 de.TimeUpdate = DateTime.Now;
+                                de.Approve = Approve.รอพิจารณา;
 
                                 _context.Add(de);
                                 await _context.SaveChangesAsync();

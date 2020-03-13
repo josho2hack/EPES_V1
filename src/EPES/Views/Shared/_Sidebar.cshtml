@@ -42,7 +42,7 @@
                 <div class="bg-white py-2 collapse-inner rounded">
                     <h6 class="collapse-header">รายเดือน:</h6>
                     <a class="collapse-item" asp-area="" asp-controller="Results" asp-action="IndexMonth">บันทึกผลปฏิบัติราชการ</a>
-                    @if (User.IsInRole("Admin") || User.IsInRole("Manager")
+                    @if (User.IsInRole("Admin") || (User.IsInRole("Manager") && user.OfficeId.Substring(0, 3) == "000")
                         || (user.approver == true && user.OfficeId.Substring(5, 3) == "000"))
                     {
                         <a class="collapse-item" asp-area="" asp-controller="Audit" asp-action="Index">ตรวจสอบ/ยืนยัน</a>
@@ -60,10 +60,17 @@
         <div id="collapseReport" class="collapse" aria-labelledby="headingReport" data-parent="#accordionSidebar">
             <div class="bg-white py-2 collapse-inner rounded">
                 <h6 class="collapse-header">ผลการปฏิบัติงาน:</h6>
-                @*<a class="collapse-item" href="#">กรมสรรพากร</a>
-                    <a class="collapse-item" href="#">กอง สำนัก ศูนย์</a>
-                    <a class="collapse-item" href="#">สภ./สท.</a>*@
-                <a class="collapse-item" asp-area="" asp-controller="Reports" asp-action="OwnerScoreReport">รายงาน</a>
+                <a class="collapse-item" href="#">กรมสรรพากร</a>
+                <a class="collapse-item" href="#">กอง สำนัก ศูนย์</a>
+                <a class="collapse-item" href="#">สภ.1 - 12</a>
+                <a class="collapse-item" href="#">สท.กทม.1 - 30 (30 สท.)</a>
+                <a class="collapse-item" href="#">สท.ต่างจังหวัด (89 สท.)</a>
+                <a class="collapse-item" href="#">สท.ทั่วประเทศ (119 สท.)</a>
+                @if (user.OfficeId != "00000000" || user.OfficeId != "00020000" || user.OfficeId != "00021000" || user.OfficeId != "00022000" ||
+                   user.OfficeId != "00023000" || user.OfficeId != "00024000" || user.OfficeId != "00025000")
+                {
+                    <a class="collapse-item" asp-area="" asp-controller="Reports" asp-action="OwnerScoreReport">@user.OfficeName</a>
+                }
             </div>
         </div>
     </li>
@@ -117,9 +124,12 @@
                     <div class="collapse-divider"></div>
                     <h6 class="collapse-header">พิเศษ: </h6>
                     @*<h6 class="collapse-header">เชื่อมโยงข้อมูลอัตโนมัติ: </h6>
-                        <a class="collapse-item" asp-area="" asp-controller="PointOfEvaluations" asp-action="#">ตัวชี้วัดที่ 1 (สภ./สท.)</a>*@
+        <a class="collapse-item" asp-area="" asp-controller="PointOfEvaluations" asp-action="#">ตัวชี้วัดที่ 1 (สภ./สท.)</a>*@
                     <div class="collapse-divider"></div>
-                    <a class="collapse-item text-danger" asp-area="" asp-controller="PointOfEvaluations" asp-action="Copy">คัดลอก สภ.1 (1-18,22)-> สภ./สท.</a>
+                    <a class="collapse-item text-danger" asp-area="" asp-controller="PointOfEvaluations" asp-action="CopyPak1ToPak">คัดลอก สภ.1 (1-17,21)-> สภ.</a>
+                    <a class="collapse-item text-danger" asp-area="" asp-controller="PointOfEvaluations" asp-action="CopyPak1ToST1">คัดลอก สภ.1 (1-16,21)-> สท.1</a>
+                    <a class="collapse-item text-danger" asp-area="" asp-controller="PointOfEvaluations" asp-action="CopyST1ToSTAll">คัดลอก สท.1 (1-17,21)-> สท.ทั่วประเทศ</a>
+                    <a class="collapse-item text-danger" asp-area="" asp-controller="PointOfEvaluations" asp-action="CopyPak1ToHQ">คัดลอก สภ.1 (19-21)-> ส่วนกลาง</a>
                 </div>
             </div>
         </li>

@@ -129,7 +129,7 @@
                                                 </div>
                                                 <div class="form-group col-md-6">
                                                     <label asp-for="Round.R1MStart" class="control-label"></label>
-                                                    <input asp-for="Round.R1MStart" class="form-control" value="@yearStart-10-01" disabled/>
+                                                    <input asp-for="Round.R1MStart" class="form-control" value="@yearStart-10-01" readonly/>
                                                     <span asp-validation-for="Round.R1MStart" class="text-danger"></span>
                                                 </div>
                                             </div>
@@ -182,7 +182,7 @@
                                                 </div>
                                                 <div class="form-group col-md-6">
                                                     <label asp-for="Round.R5MStop" class="control-label"></label>
-                                                    <input asp-for="Round.R5MStop" class="form-control" value="@yearStop-09-30" disabled/>
+                                                    <input asp-for="Round.R5MStop" class="form-control" value="@yearStop-09-30" readonly/>
                                                     <span asp-validation-for="Round.R5MStop" class="text-danger"></span>
                                                 </div>
                                             </div>
@@ -212,7 +212,7 @@
                                                 </div>
                                                 <div class="form-group col-md-6">
                                                     <label asp-for="Round2.R1MStart" class="control-label"></label>
-                                                    <input asp-for="Round2.R1MStart" class="form-control" value="@yearMid-04-01" disabled/>
+                                                    <input asp-for="Round2.R1MStart" class="form-control" value="@yearMid-04-01" readonly/>
                                                     <span asp-validation-for="Round2.R1MStart" class="text-danger"></span>
                                                 </div>
                                             </div>
@@ -265,7 +265,7 @@
                                                 </div>
                                                 <div class="form-group col-md-6">
                                                     <label asp-for="Round2.R5MStop" class="control-label"></label>
-                                                    <input asp-for="Round2.R5MStop" class="form-control" value="@yearStop-09-30" disabled/>
+                                                    <input asp-for="Round2.R5MStop" class="form-control" value="@yearStop-09-30" readonly/>
                                                     <span asp-validation-for="Round2.R5MStop" class="text-danger"></span>
                                                 </div>
                                             </div>
@@ -292,7 +292,7 @@
                                                 </div>
                                                 <div class="form-group col-md-3">
                                                     <label asp-for="LRound.R1MStart" class="control-label"></label>
-                                                    <input asp-for="LRound.R1MStart" class="form-control" value="@yearStart-10-01" disabled/>
+                                                    <input asp-for="LRound.R1MStart" class="form-control" value="@yearStart-10-01" readonly/>
                                                     <span asp-validation-for="LRound.R1MStart" class="text-danger"></span>
                                                 </div>
                                                 <div class="form-group col-md-3">
@@ -369,7 +369,7 @@
                                                 </div>
                                                 <div class="form-group col-md-3">
                                                     <label asp-for="LRound.R5MStop" class="control-label"></label>
-                                                    <input asp-for="LRound.R5MStop" class="form-control" value="@yearStop-09-30" disabled/>
+                                                    <input asp-for="LRound.R5MStop" class="form-control" value="@yearStop-09-30" readonly/>
                                                     <span asp-validation-for="LRound.R5MStop" class="text-danger"></span>
                                                 </div>
                                             </div>
@@ -395,7 +395,7 @@
                                                 </div>
                                                 <div class="form-group col-md-3">
                                                     <label asp-for="LRound2.R1MStart" class="control-label"></label>
-                                                    <input asp-for="LRound2.R1MStart" class="form-control" value="@yearMid-04-01" disabled/>
+                                                    <input asp-for="LRound2.R1MStart" class="form-control" value="@yearMid-04-01" readonly/>
                                                     <span asp-validation-for="LRound2.R1MStart" class="text-danger"></span>
                                                 </div>
                                                 <div class="form-group col-md-3">
@@ -453,9 +453,9 @@
                                                     <span asp-validation-for="LRound2.R4MStart" class="text-danger"></span>
                                                 </div>
                                                 <div class="form-group col-md-3">
-                                                    <label asp-for="Round2.R4MStop" class="control-label"></label>
-                                                    <input asp-for="Round2.R4MStop" class="form-control" value="@yearStop-09-30"/>
-                                                    <span asp-validation-for="Round2.R4MStop" class="text-danger"></span>
+                                                    <label asp-for="LRound2.R4MStop" class="control-label"></label>
+                                                    <input asp-for="LRound2.R4MStop" class="form-control" value="@yearStop-09-30"/>
+                                                    <span asp-validation-for="LRound2.R4MStop" class="text-danger"></span>
                                                 </div>
                                             </div>
                                             <div class="row">
@@ -472,7 +472,7 @@
                                                 </div>
                                                 <div class="form-group col-md-3">
                                                     <label asp-for="LRound2.R5MStop" class="control-label"></label>
-                                                    <input asp-for="LRound2.R5MStop" class="form-control" value="@yearStop-09-30" disabled/>
+                                                    <input asp-for="LRound2.R5MStop" class="form-control" value="@yearStop-09-30" readonly/>
                                                     <span asp-validation-for="LRound2.R5MStop" class="text-danger"></span>
                                                 </div>
                                             </div>
@@ -502,7 +502,7 @@
                                                 </div>
                                                 <div class="form-group col-md-3">
                                                     <label asp-for="LRRound.R1MStart" class="control-label"></label>
-                                                    <input asp-for="LRRound.R1MStart" class="form-control" value="@yearStart-10-01" disabled/>
+                                                    <input asp-for="LRRound.R1MStart" class="form-control" value="@yearStart-10-01" readonly/>
                                                     <span asp-validation-for="LRRound.R1MStart" class="text-danger"></span>
                                                 </div>
                                                 <div class="form-group col-md-3">
@@ -582,7 +582,7 @@
                                                 </div>
                                                 <div class="form-group col-md-3" id="LRRound.Stop4">
                                                     <label asp-for="LRRound.R4MStop" class="control-label"></label>
-                                                    <input asp-for="LRRound.R4MStop" class="form-control" value="@yearStop-09-30" disabled/>
+                                                    <input asp-for="LRRound.R4MStop" class="form-control" value="@yearStop-09-30" readonly/>
                                                     <span asp-validation-for="LRRound.R4MStop" class="text-danger"></span>
                                                 </div>
                                             </div>
@@ -623,7 +623,7 @@
                                                 </div>
                                                 <div class="form-group col-md-3">
                                                     <label asp-for="LRRound2.R1MStart" class="control-label"></label>
-                                                    <input asp-for="LRRound2.R1MStart" class="form-control" value="@yearMid-04-01" disabled/>
+                                                    <input asp-for="LRRound2.R1MStart" class="form-control" value="@yearMid-04-01" readonly/>
                                                     <span asp-validation-for="LRRound2.R1MStart" class="text-danger"></span>
                                                 </div>
                                                 <div class="form-group col-md-3">
@@ -703,7 +703,7 @@
                                                 </div>
                                                 <div class="form-group col-md-3" id="LRRound2.Stop4">
                                                     <label asp-for="LRRound2.R4MStop" class="control-label"></label>
-                                                    <input asp-for="LRRound2.R4MStop" class="form-control" value="@yearStop-09-30" disabled/>
+                                                    <input asp-for="LRRound2.R4MStop" class="form-control" value="@yearStop-09-30" readonly/>
                                                     <span asp-validation-for="LRRound2.R4MStop" class="text-danger"></span>
                                                 </div>
                                             </div>

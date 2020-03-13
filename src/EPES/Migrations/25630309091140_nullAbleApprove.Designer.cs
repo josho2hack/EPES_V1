@@ -4,14 +4,16 @@ using EPES.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace EPES.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("25630309091140_nullAbleApprove")]
+    partial class nullAbleApprove
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -132,9 +134,7 @@ namespace EPES.Migrations
                         .HasDefaultValue(0m);
 
                     b.Property<decimal>("ResultLevelRate")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("decimal(38, 10)")
-                        .HasDefaultValue(0m);
+                        .HasColumnType("decimal(38, 10)");
 
                     b.Property<byte[]>("RowVersion")
                         .IsConcurrencyToken()
