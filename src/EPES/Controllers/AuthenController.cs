@@ -86,7 +86,7 @@ namespace EPES.Controllers
 
                     if (userLocal == null)
                     {
-                        SSOProductionService.LocCls locCls = await serviceSoapClient.Get_Location_NameAsync("EPES", "123456789", userCls.UserOfficeCode);
+                        SSOProductionService.LocCls locCls = await serviceSoapClient.Get_Location_NameAsync("EPES", "123456789", userCls.UserWorkCode);
 
                         var user = new ApplicationUser
                         {
@@ -99,7 +99,7 @@ namespace EPES.Controllers
                             PosName = userCls.UserRank,
                             Class = userCls.UserLevelNew,
                             OfficeName = locCls.LocName,
-                            OfficeId = userCls.UserOfficeCode
+                            OfficeId = userCls.UserWorkCode
                         };
 
                         //string url = "http://10.20.29.26:8002/webservices/GetHeadOffice.php";
@@ -215,7 +215,13 @@ namespace EPES.Controllers
                     }// End Create New User Local
                     else
                     {
+                        SSOProductionService.LocCls locCls = await serviceSoapClient.Get_Location_NameAsync("EPES", "123456789", userCls.UserWorkCode);
+
+                        userLocal.OfficeName = locCls.LocName;
+                        userLocal.OfficeId = userCls.UserWorkCode;
+
                         SSOProductionService.TransCls transCls = await serviceSoapClient.Get_SSO_TransactionAsync(Username, "EPES", "123456789");
+
                         if (transCls.AppTransID == "EPES-Admin")
                         {
                             if (!(await _userManager.IsInRoleAsync(userLocal, "Admin")))
@@ -280,13 +286,15 @@ namespace EPES.Controllers
                         }
                         else
                         {
+                            //return Redirect("~/Home/");
                             return Unauthorized(); // Http status code 401
                         }
                     }
                 }
                 else
                 {
-                    return Unauthorized(); // Http status code 401
+                    return Redirect("~/Home/");
+                    //return Unauthorized(); // Http status code 401
                 }
             }
             else

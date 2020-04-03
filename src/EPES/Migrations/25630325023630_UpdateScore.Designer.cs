@@ -4,14 +4,16 @@ using EPES.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace EPES.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("25630325023630_UpdateScore")]
+    partial class UpdateScore
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -329,8 +331,7 @@ namespace EPES.Migrations
 
                     b.Property<int>("PointOfEvaluationId");
 
-                    b.Property<decimal>("ScoreApprove")
-                        .HasColumnType("decimal(5, 4)");
+                    b.Property<int?>("ScoreId");
 
                     b.Property<decimal>("ScoreValue")
                         .HasColumnType("decimal(5, 4)");
@@ -340,6 +341,8 @@ namespace EPES.Migrations
                     b.HasIndex("OfficeId");
 
                     b.HasIndex("PointOfEvaluationId");
+
+                    b.HasIndex("ScoreId");
 
                     b.ToTable("ScoreDrafts");
                 });
@@ -527,6 +530,10 @@ namespace EPES.Migrations
                         .WithMany("ScoreDrafts")
                         .HasForeignKey("PointOfEvaluationId")
                         .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("EPES.Models.Score", "Score")
+                        .WithMany()
+                        .HasForeignKey("ScoreId");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>

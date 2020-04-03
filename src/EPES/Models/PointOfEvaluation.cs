@@ -59,13 +59,13 @@ namespace EPES.Models
         [Display(Name = "รอบการประเมิน")]
         public List<Round> Rounds { get; set; }
 
-        [Display(Name = "ตัวชี้วัดสำหรับ (ID)")]
+        [Display(Name = "ตัวชี้วัดสำหรับ")]
         public int OwnerOfficeId { get; set; }
         //[DisplayFormat(NullDisplayText = "สภ./สท.")]
         [Display(Name = "ตัวชี้วัดสำหรับ")]
         public Office OwnerOffice { get; set; }
 
-        [Display(Name = "หน่วยงานกำกับ(ID)")]
+        [Display(Name = "หน่วยงานกำกับ")]
         public int AuditOfficeId { get; set; }
         [Display(Name = "หน่วยงานกำกับ")]
         public Office AuditOffice { get; set; }

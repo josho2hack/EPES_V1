@@ -14,7 +14,7 @@ namespace EPES.Models
 
         [Display(Name = "คะแนน")]
         [Column(TypeName = "decimal(5, 4)")]
-        public decimal ScoreValue { get; set; }
+        public decimal Value { get; set; }
 
         [Display(Name = "เดือนล่าสุด")]
         [Range(1, 12)]

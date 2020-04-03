@@ -848,7 +848,7 @@ namespace EPES.Controllers
 
             var user = await _userManager.GetUserAsync(User);
             var office = await _context.Offices.Where(o => o.Code == user.OfficeId).FirstOrDefaultAsync();
-            var officeselect = await _context.Offices.Where(o => o.Code == selectoffice).FirstOrDefaultAsync();
+            //var officeselect = await _context.Offices.Where(o => o.Code == selectoffice).FirstOrDefaultAsync();
 
             switch (dataView.point.Plan)
             {
@@ -858,131 +858,68 @@ namespace EPES.Controllers
 
                     if (User.IsInRole("Admin"))
                     {
-                        if (String.IsNullOrEmpty(selectoffice))
-                        {
-                            ViewBag.OfficeId = new SelectList(_context.Offices.Where(d => d.Code != "00000000" && d.Code.Substring(0, 3) == "000"), "Id", "Name", office.Id);
-                        }
-                        else
-                        {
-                            ViewBag.OfficeId = new SelectList(_context.Offices.Where(d => d.Code != "00000000" && d.Code.Substring(0, 3) == "000"), "Id", "Name", officeselect.Id);
-                        }
+                        ViewBag.OfficeId = new SelectList(_context.Offices.Where(d => d.Code != "00000000" && d.Code.Substring(0, 3) == "000"), "Id", "Name");
                     }
                     else
                     {
                         List<Object> list = new List<object>();
                         list.Add(new { Id = office.Id, Name = office.Name });
 
-                        ViewBag.OfficeId = new SelectList(list, "Id", "Name", office.Id);
+                        ViewBag.OfficeId = new SelectList(list, "Id", "Name");
                     }
-
                     ViewBag.AuditOfficeId = ViewBag.OfficeId;
                     break;
+
                 case TypeOfPlan.B:
                     ViewBag.Plan = "B";
                     ViewBag.PlanValue = 1;
 
                     if (User.IsInRole("Admin") || (User.IsInRole("Manager") && user.OfficeId.StartsWith("000")))
                     {
-                        if (String.IsNullOrEmpty(selectoffice))
-                        {
-                            ViewBag.OfficeId = new SelectList(_context.Offices.Where(d => d.Code != "00000000" && d.Code.Substring(5, 3) == "000"), "Id", "Name", office.Id);
-                        }
-                        else
-                        {
-                            ViewBag.OfficeId = new SelectList(_context.Offices.Where(d => d.Code != "00000000" && d.Code.Substring(5, 3) == "000"), "Id", "Name", officeselect.Id);
-                        }
+                        ViewBag.OfficeId = new SelectList(_context.Offices.Where(d => d.Code != "00000000" && d.Code.Substring(5, 3) == "000"), "Id", "Name");
                     }
-
-                    if (User.IsInRole("Manager") && user.OfficeId.Substring(2, 6) == "000000")
+                    else if (User.IsInRole("Manager") && user.OfficeId.Substring(2, 6) == "000000")
                     {
-                        if (String.IsNullOrEmpty(selectoffice))
-                        {
-                            ViewBag.OfficeId = new SelectList(_context.Offices.Where(d => d.Code != "00000000" && d.Code.StartsWith(user.OfficeId.Substring(0, 2)) && d.Code.Substring(5, 3) == "000"), "Id", "Name", office.Id);
-                        }
-                        else
-                        {
-                            ViewBag.OfficeId = new SelectList(_context.Offices.Where(d => d.Code != "00000000" && d.Code.StartsWith(user.OfficeId.Substring(0, 2)) && d.Code.Substring(5, 3) == "000"), "Id", "Name", officeselect.Id);
-                        }
-                    }
-
-                    if (User.IsInRole("User"))
-                    {
-                        List<Object> list = new List<object>();
-                        list.Add(new { Id = office.Id, Name = office.Name });
-
-                        ViewBag.OfficeId = new SelectList(list, "Id", "Name", office.Id);
-                    }
-
-                    if (User.IsInRole("Admin") || User.IsInRole("User") || (User.IsInRole("Manager") && user.OfficeId.Substring(2, 6) == "000000"))
-                    {
-                        if (String.IsNullOrEmpty(selectoffice))
-                        {
-                            ViewBag.AuditOfficeId = new SelectList(_context.Offices.Where(d => d.Code != "00000000" && d.Code.Substring(0, 3) == "000"), "Id", "Name", office.Id);
-                        }
-                        else
-                        {
-                            if (selectoffice.Substring(0, 3) == "000")
-                            {
-                                ViewBag.AuditOfficeId = new SelectList(_context.Offices.Where(d => d.Code != "00000000" && d.Code.Substring(0, 3) == "000"), "Id", "Name", officeselect.Id);
-                            }
-                            else
-                            {
-                                ViewBag.AuditOfficeId = new SelectList(_context.Offices.Where(d => d.Code != "00000000" && d.Code.Substring(0, 3) == "000"), "Id", "Name", office.Id);
-                            }
-                        }
+                        ViewBag.OfficeId = new SelectList(_context.Offices.Where(d => d.Code != "00000000" && d.Code.StartsWith(user.OfficeId.Substring(0, 2)) && d.Code.Substring(5, 3) == "000"), "Id", "Name");
                     }
                     else
                     {
                         List<Object> list = new List<object>();
                         list.Add(new { Id = office.Id, Name = office.Name });
 
-                        ViewBag.AuditOfficeId = new SelectList(list, "Id", "Name", office.Id);
+                        ViewBag.OfficeId = new SelectList(list, "Id", "Name");
                     }
+
+                    ViewBag.AuditOfficeId = new SelectList(_context.Offices.Where(d => d.Code != "00000000" && d.Code.Substring(0, 3) == "000"), "Id", "Name");
                     break;
+
                 case TypeOfPlan.C:
                     ViewBag.Plan = "C";
                     ViewBag.PlanValue = 2;
 
-                    if (User.IsInRole("Admin"))
-                    {
-                        if (String.IsNullOrEmpty(selectoffice))
-                        {
-                            ViewBag.OfficeId = new SelectList(_context.Offices.Where(d => d.Code != "00000000" && d.Code.Substring(5, 3) == "000"), "Id", "Name", office.Id);
-                        }
-                        else
-                        {
-                            ViewBag.OfficeId = new SelectList(_context.Offices.Where(d => d.Code != "00000000" && d.Code.Substring(5, 3) == "000"), "Id", "Name", officeselect.Id);
-                        }
-                        ViewBag.AuditOfficeId = ViewBag.OfficeId;
-                    }
-
                     var item = await _context.Offices.Where(d => d.Code != "00000000" && d.Code.Substring(0, 3) == "000").Select(d => new { Id = d.Id, Name = d.Name }).ToListAsync();
 
-                    if (User.IsInRole("Manager") && user.OfficeId.Substring(2, 6) == "000000")
+                    if (User.IsInRole("Admin"))
+                    {
+                        ViewBag.OfficeId = new SelectList(_context.Offices.Where(d => d.Code != "00000000" && d.Code.Substring(5, 3) == "000"), "Id", "Name");
+
+                        ViewBag.AuditOfficeId = ViewBag.OfficeId;
+                    }
+                    else if (User.IsInRole("Manager") && user.OfficeId.Substring(2, 6) == "000000")
                     {
                         var selectitem = await _context.Offices.Where(d => d.Code != "00000000" && d.Code.StartsWith(user.OfficeId.Substring(0, 2)) && d.Code.Substring(5, 3) == "000").Select(d => new { Id = d.Id, Name = d.Name }).ToListAsync();
                         foreach (var itemAdd in selectitem)
                         {
                             item.Add(itemAdd);
                         }
-
-                        if (String.IsNullOrEmpty(selectoffice))
-                        {
-                            ViewBag.OfficeId = new SelectList(selectitem, "Id", "Name", office.Id);
-                            ViewBag.AuditOfficeId = new SelectList(item, "Id", "Name", office.Id);
-                        }
-                        else
-                        {
-                            ViewBag.OfficeId = new SelectList(selectitem, "Id", "Name", officeselect.Id);
-                            ViewBag.AuditOfficeId = new SelectList(item, "Id", "Name", officeselect.Id);
-                        }
+                        ViewBag.OfficeId = new SelectList(selectitem, "Id", "Name");
+                        ViewBag.AuditOfficeId = new SelectList(item, "Id", "Name");
                     }
-
-                    if ((User.IsInRole("Manager") && user.OfficeId.Substring(0, 3) == "000") || User.IsInRole("User"))
+                    else
                     {
                         List<Object> list = new List<object>();
                         list.Add(new { Id = office.Id, Name = office.Name });
-                        ViewBag.OfficeId = new SelectList(list, "Id", "Name", office.Id);
+                        ViewBag.OfficeId = new SelectList(list, "Id", "Name");
 
                         if (User.IsInRole("Manager") && user.OfficeId.Substring(0, 3) == "000")
                         {
@@ -991,71 +928,33 @@ namespace EPES.Controllers
                         else
                         {
                             item.Add(new { Id = office.Id, Name = office.Name });
-                            ViewBag.AuditOfficeId = new SelectList(item, "Id", "Name", office.Id);
+                            ViewBag.AuditOfficeId = new SelectList(item, "Id", "Name");
                         }
                     }
                     break;
+
                 case TypeOfPlan.D:
                     ViewBag.Plan = "D";
                     ViewBag.PlanValue = 3;
 
                     if (User.IsInRole("Admin") || (User.IsInRole("Manager") && user.OfficeId.StartsWith("000")))
                     {
-                        if (String.IsNullOrEmpty(selectoffice))
-                        {
-                            ViewBag.OfficeId = new SelectList(_context.Offices.Where(d => d.Code != "00000000" && d.Code.Substring(5, 3) == "000"), "Id", "Name", office.Id);
-                        }
-                        else
-                        {
-                            ViewBag.OfficeId = new SelectList(_context.Offices.Where(d => d.Code != "00000000" && d.Code.Substring(5, 3) == "000"), "Id", "Name", officeselect.Id);
-                        }
+                        ViewBag.OfficeId = new SelectList(_context.Offices.Where(d => d.Code != "00000000" && d.Code.Substring(5, 3) == "000"), "Id", "Name");
                     }
-
-                    if (User.IsInRole("Manager") && user.OfficeId.Substring(2, 6) == "000000")
+                    else if (User.IsInRole("Manager") && user.OfficeId.Substring(2, 6) == "000000")
                     {
-                        if (String.IsNullOrEmpty(selectoffice))
-                        {
-                            ViewBag.OfficeId = new SelectList(_context.Offices.Where(d => d.Code != "00000000" && d.Code.StartsWith(user.OfficeId.Substring(0, 2)) && d.Code.Substring(5, 3) == "000"), "Id", "Name", office.Id);
-                        }
-                        else
-                        {
-                            ViewBag.OfficeId = new SelectList(_context.Offices.Where(d => d.Code != "00000000" && d.Code.StartsWith(user.OfficeId.Substring(0, 2)) && d.Code.Substring(5, 3) == "000"), "Id", "Name", officeselect.Id);
-                        }
-                    }
-
-                    if (User.IsInRole("User"))
-                    {
-                        List<Object> list = new List<object>();
-                        list.Add(new { Id = office.Id, Name = office.Name });
-
-                        ViewBag.OfficeId = new SelectList(list, "Id", "Name", office.Id);
-                    }
-
-                    if (User.IsInRole("Admin") || User.IsInRole("User") || (User.IsInRole("Manager") && user.OfficeId.Substring(2, 6) == "000000"))
-                    {
-                        if (String.IsNullOrEmpty(selectoffice))
-                        {
-                            ViewBag.AuditOfficeId = new SelectList(_context.Offices.Where(d => d.Code != "00000000" && d.Code.Substring(0, 3) == "000"), "Id", "Name", office.Id);
-                        }
-                        else
-                        {
-                            if (selectoffice.Substring(0, 3) == "000")
-                            {
-                                ViewBag.AuditOfficeId = new SelectList(_context.Offices.Where(d => d.Code != "00000000" && d.Code.Substring(0, 3) == "000"), "Id", "Name", officeselect.Id);
-                            }
-                            else
-                            {
-                                ViewBag.AuditOfficeId = new SelectList(_context.Offices.Where(d => d.Code != "00000000" && d.Code.Substring(0, 3) == "000"), "Id", "Name", office.Id);
-                            }
-                        }
+                        ViewBag.OfficeId = new SelectList(_context.Offices.Where(d => d.Code != "00000000" && d.Code.StartsWith(user.OfficeId.Substring(0, 2)) && d.Code.Substring(5, 3) == "000"), "Id", "Name");
                     }
                     else
                     {
                         List<Object> list = new List<object>();
                         list.Add(new { Id = office.Id, Name = office.Name });
 
-                        ViewBag.AuditOfficeId = new SelectList(list, "Id", "Name", office.Id);
+                        ViewBag.OfficeId = new SelectList(list, "Id", "Name");
                     }
+
+                    ViewBag.AuditOfficeId = new SelectList(_context.Offices.Where(d => d.Code != "00000000" && d.Code.Substring(0, 3) == "000"), "Id", "Name");
+
                     break;
             }
 
@@ -1572,7 +1471,7 @@ namespace EPES.Controllers
                     {
                         continue;
                     }
-                    
+
                     var dataPoint = await _context.PointOfEvaluations.Include(p => p.Rounds).Include(p => p.DataForEvaluations).Include(p => p.OwnerOffice).FirstOrDefaultAsync(p => p.Point == i && p.OwnerOffice.Code == "01000000");
 
                     var dataRounds = await _context.Rounds.Where(r => r.PointOfEvaluationId == dataPoint.Id).ToListAsync();
@@ -1581,26 +1480,26 @@ namespace EPES.Controllers
 
                     foreach (var item in target)
                     {
-                        if (i == 1)
-                        {
-                            PointOfEvaluation poe = await _context.PointOfEvaluations
-                                                    .Include(p => p.DataForEvaluations)
-                                                    .Include(p => p.Rounds)
-                                                    .SingleAsync(p => p.Point == 1 && p.OwnerOfficeId == item.Id);
+                        //if (i == 1)
+                        //{
+                        //    PointOfEvaluation poe = await _context.PointOfEvaluations
+                        //                            .Include(p => p.DataForEvaluations)
+                        //                            .Include(p => p.Rounds)
+                        //                            .SingleAsync(p => p.Point == 1 && p.OwnerOfficeId == item.Id);
 
-                            foreach (var data in poe.DataForEvaluations)
-                            {
-                                _context.DataForEvaluations.Remove(data);
-                            }
+                        //    foreach (var data in poe.DataForEvaluations)
+                        //    {
+                        //        _context.DataForEvaluations.Remove(data);
+                        //    }
 
-                            foreach (var round in poe.Rounds)
-                            {
-                                _context.Rounds.Remove(round);
-                            }
+                        //    foreach (var round in poe.Rounds)
+                        //    {
+                        //        _context.Rounds.Remove(round);
+                        //    }
 
-                            _context.PointOfEvaluations.Remove(poe);
-                            await _context.SaveChangesAsync();
-                        }
+                        //    _context.PointOfEvaluations.Remove(poe);
+                        //    await _context.SaveChangesAsync();
+                        //}
                         var pointToCopy = await _context.PointOfEvaluations.Include(p => p.OwnerOffice).Where(p => p.OwnerOffice.Code == item.Code && p.Name == dataPoint.Name && p.Plan == dataPoint.Plan).FirstOrDefaultAsync();
                         if (pointToCopy == null)
                         {
@@ -1708,26 +1607,26 @@ namespace EPES.Controllers
 
                         foreach (var item in target)
                         {
-                            if (i == 1)
-                            {
-                                PointOfEvaluation poe = await _context.PointOfEvaluations
-                                                        .Include(p => p.DataForEvaluations)
-                                                        .Include(p => p.Rounds)
-                                                        .SingleAsync(p => p.Point == 1 && p.OwnerOfficeId == item.Id);
+                            //if (i == 1)
+                            //{
+                            //    PointOfEvaluation poe = await _context.PointOfEvaluations
+                            //                            .Include(p => p.DataForEvaluations)
+                            //                            .Include(p => p.Rounds)
+                            //                            .SingleAsync(p => p.Point == 1 && p.OwnerOfficeId == item.Id);
 
-                                foreach (var data in poe.DataForEvaluations)
-                                {
-                                    _context.DataForEvaluations.Remove(data);
-                                }
+                            //    foreach (var data in poe.DataForEvaluations)
+                            //    {
+                            //        _context.DataForEvaluations.Remove(data);
+                            //    }
 
-                                foreach (var round in poe.Rounds)
-                                {
-                                    _context.Rounds.Remove(round);
-                                }
+                            //    foreach (var round in poe.Rounds)
+                            //    {
+                            //        _context.Rounds.Remove(round);
+                            //    }
 
-                                _context.PointOfEvaluations.Remove(poe);
-                                await _context.SaveChangesAsync();
-                            }
+                            //    _context.PointOfEvaluations.Remove(poe);
+                            //    await _context.SaveChangesAsync();
+                            //}
                             var pointToCopy = await _context.PointOfEvaluations.Include(p => p.OwnerOffice).Where(p => p.OwnerOffice.Code == item.Code && p.Name == dataPoint.Name && p.Plan == dataPoint.Plan).FirstOrDefaultAsync();
                             if (pointToCopy == null)
                             {
@@ -1899,143 +1798,58 @@ namespace EPES.Controllers
             var user = await _userManager.GetUserAsync(User);
             try
             {
-                for (int i = 1; i <= 21; i++)
+                for (int i = 1; i <= 22; i++)
                 {
-                    if (i == 18)
-                    {
-                        continue;
-                    }
-                    
                     var dataPoint = await _context.PointOfEvaluations.Include(p => p.OwnerOffice).FirstOrDefaultAsync(p => p.Point == i && p.OwnerOffice.Code == "01001000");
-
-                    if (!dataPoint.HasSub)
+                    if (dataPoint != null)
                     {
-                        var dataRounds = await _context.Rounds.Where(r => r.PointOfEvaluationId == dataPoint.Id).ToListAsync();
-
-                        var dataForEPES = await _context.DataForEvaluations.Where(r => r.PointOfEvaluationId == dataPoint.Id).ToListAsync();
-
-                        foreach (var item in target)
+                        if (!dataPoint.HasSub && dataPoint.SubPoint == 0)
                         {
-                            if (i == 1)
-                            {
-                                PointOfEvaluation poe = await _context.PointOfEvaluations
-                                                        .Include(p => p.DataForEvaluations)
-                                                        .Include(p => p.Rounds)
-                                                        .SingleAsync(p => p.Point == 1 && p.OwnerOfficeId == item.Id);
+                            var dataRounds = await _context.Rounds.Where(r => r.PointOfEvaluationId == dataPoint.Id).ToListAsync();
 
-                                foreach (var data in poe.DataForEvaluations)
-                                {
-                                    _context.DataForEvaluations.Remove(data);
-                                }
-
-                                foreach (var round in poe.Rounds)
-                                {
-                                    _context.Rounds.Remove(round);
-                                }
-
-                                _context.PointOfEvaluations.Remove(poe);
-                                await _context.SaveChangesAsync();
-                            }
-                            var pointToCopy = await _context.PointOfEvaluations.Include(p => p.OwnerOffice).Where(p => p.OwnerOffice.Code == item.Code && p.Name == dataPoint.Name && p.Plan == dataPoint.Plan).FirstOrDefaultAsync();
-                            if (pointToCopy == null)
-                            {
-                                pointToCopy = new PointOfEvaluation();
-                                pointToCopy.AuditOfficeId = dataPoint.AuditOfficeId;
-                                pointToCopy.AutoApp = dataPoint.AutoApp;
-                                pointToCopy.Ddrive = dataPoint.Ddrive;
-                                pointToCopy.DetailPlan = dataPoint.DetailPlan;
-                                pointToCopy.ExpectPlan = dataPoint.ExpectPlan;
-                                pointToCopy.HasSub = dataPoint.HasSub;
-                                pointToCopy.Name = dataPoint.Name;
-                                pointToCopy.OwnerOfficeId = item.Id;
-                                pointToCopy.Plan = dataPoint.Plan;
-                                pointToCopy.Point = dataPoint.Point;
-                                pointToCopy.SubPoint = dataPoint.SubPoint;
-                                pointToCopy.Unit = dataPoint.Unit;
-                                pointToCopy.UpdateUserId = user.Id;
-                                pointToCopy.Weight = dataPoint.Weight;
-                                pointToCopy.Year = dataPoint.Year;
-
-                                _context.PointOfEvaluations.Add(pointToCopy);
-                                await _context.SaveChangesAsync();
-
-                                foreach (var round in dataRounds)
-                                {
-                                    var roundToCopy = new Round();
-                                    roundToCopy.PointOfEvaluationId = pointToCopy.Id;
-                                    roundToCopy.DetailRate1 = round.DetailRate1;
-                                    roundToCopy.DetailRate2 = round.DetailRate2;
-                                    roundToCopy.DetailRate3 = round.DetailRate3;
-                                    roundToCopy.DetailRate4 = round.DetailRate4;
-                                    roundToCopy.DetailRate5 = round.DetailRate5;
-                                    roundToCopy.LevelNumber = round.LevelNumber;
-                                    roundToCopy.Rate1MonthStart = round.Rate1MonthStart;
-                                    roundToCopy.Rate1MonthStop = round.Rate1MonthStop;
-                                    roundToCopy.Rate2MonthStart = round.Rate2MonthStart;
-                                    roundToCopy.Rate2MonthStop = round.Rate2MonthStop;
-                                    roundToCopy.Rate3MonthStart = round.Rate3MonthStart;
-                                    roundToCopy.Rate3MonthStop = round.Rate3MonthStop;
-                                    roundToCopy.Rate4MonthStart = round.Rate4MonthStart;
-                                    roundToCopy.Rate4MonthStop = round.Rate4MonthStop;
-                                    roundToCopy.Rate5MonthStart = round.Rate5MonthStart;
-                                    roundToCopy.Rate5MonthStop = round.Rate5MonthStop;
-                                    roundToCopy.Rate1 = round.Rate1;
-                                    roundToCopy.Rate2 = round.Rate2;
-                                    roundToCopy.Rate3 = round.Rate3;
-                                    roundToCopy.Rate4 = round.Rate4;
-                                    roundToCopy.Rate5 = round.Rate5;
-                                    roundToCopy.RoundNumber = round.RoundNumber;
-
-                                    _context.Rounds.Add(roundToCopy);
-                                    await _context.SaveChangesAsync();
-
-                                }
-
-                                foreach (var dataforE in dataForEPES)
-                                {
-                                    var dataForEvaluation = new DataForEvaluation();
-                                    dataForEvaluation.UpdateUserId = user.Id;
-                                    dataForEvaluation.PointOfEvaluationId = pointToCopy.Id;
-                                    dataForEvaluation.OfficeId = item.Id;
-                                    dataForEvaluation.Month = dataforE.Month;
-                                    dataForEvaluation.Expect = dataforE.Expect;
-
-                                    _context.DataForEvaluations.Add(dataForEvaluation);
-                                    await _context.SaveChangesAsync();
-                                }
-                            }
-                        }
-                    }
-                    else
-                    {
-                        var dataPointHasSub = await _context.PointOfEvaluations.Include(p => p.OwnerOffice).Where(p => p.Point == i && p.OwnerOffice.Code == "01001000").ToListAsync();
-                        foreach (var dataPointS in dataPointHasSub)
-                        {
-                            var dataRounds = await _context.Rounds.Where(r => r.PointOfEvaluationId == dataPointS.Id).ToListAsync();
-
-                            var dataForEPES = await _context.DataForEvaluations.Where(r => r.PointOfEvaluationId == dataPointS.Id).ToListAsync();
+                            var dataForEPES = await _context.DataForEvaluations.Where(r => r.PointOfEvaluationId == dataPoint.Id).ToListAsync();
 
                             foreach (var item in target)
                             {
-                                var pointToCopy = await _context.PointOfEvaluations.Include(p => p.OwnerOffice).Where(p => p.OwnerOffice.Code == item.Code && p.Name == dataPointS.Name && p.Plan == dataPointS.Plan).FirstOrDefaultAsync();
+                                //if (i == 1)
+                                //{
+                                //    PointOfEvaluation poe = await _context.PointOfEvaluations
+                                //                            .Include(p => p.DataForEvaluations)
+                                //                            .Include(p => p.Rounds)
+                                //                            .SingleAsync(p => p.Point == 1 && p.OwnerOfficeId == item.Id);
+
+                                //    foreach (var data in poe.DataForEvaluations)
+                                //    {
+                                //        _context.DataForEvaluations.Remove(data);
+                                //    }
+
+                                //    foreach (var round in poe.Rounds)
+                                //    {
+                                //        _context.Rounds.Remove(round);
+                                //    }
+
+                                //    _context.PointOfEvaluations.Remove(poe);
+                                //    await _context.SaveChangesAsync();
+                                //}
+                                var pointToCopy = await _context.PointOfEvaluations.Include(p => p.OwnerOffice).Where(p => p.OwnerOffice.Code == item.Code && p.Name == dataPoint.Name && p.Plan == dataPoint.Plan).FirstOrDefaultAsync();
                                 if (pointToCopy == null)
                                 {
                                     pointToCopy = new PointOfEvaluation();
-                                    pointToCopy.AuditOfficeId = dataPointS.AuditOfficeId;
-                                    pointToCopy.AutoApp = dataPointS.AutoApp;
-                                    pointToCopy.Ddrive = dataPointS.Ddrive;
-                                    pointToCopy.DetailPlan = dataPointS.DetailPlan;
-                                    pointToCopy.ExpectPlan = dataPointS.ExpectPlan;
-                                    pointToCopy.HasSub = dataPointS.HasSub;
-                                    pointToCopy.Name = dataPointS.Name;
+                                    pointToCopy.AuditOfficeId = dataPoint.AuditOfficeId;
+                                    pointToCopy.AutoApp = dataPoint.AutoApp;
+                                    pointToCopy.Ddrive = dataPoint.Ddrive;
+                                    pointToCopy.DetailPlan = dataPoint.DetailPlan;
+                                    pointToCopy.ExpectPlan = dataPoint.ExpectPlan;
+                                    pointToCopy.HasSub = dataPoint.HasSub;
+                                    pointToCopy.Name = dataPoint.Name;
                                     pointToCopy.OwnerOfficeId = item.Id;
-                                    pointToCopy.Plan = dataPointS.Plan;
-                                    pointToCopy.Point = dataPointS.Point;
-                                    pointToCopy.SubPoint = dataPointS.SubPoint;
-                                    pointToCopy.Unit = dataPointS.Unit;
+                                    pointToCopy.Plan = dataPoint.Plan;
+                                    pointToCopy.Point = dataPoint.Point;
+                                    pointToCopy.SubPoint = dataPoint.SubPoint;
+                                    pointToCopy.Unit = dataPoint.Unit;
                                     pointToCopy.UpdateUserId = user.Id;
-                                    pointToCopy.Weight = dataPointS.Weight;
-                                    pointToCopy.Year = dataPointS.Year;
+                                    pointToCopy.Weight = dataPoint.Weight;
+                                    pointToCopy.Year = dataPoint.Year;
 
                                     _context.PointOfEvaluations.Add(pointToCopy);
                                     await _context.SaveChangesAsync();
@@ -2068,7 +1882,8 @@ namespace EPES.Controllers
                                         roundToCopy.RoundNumber = round.RoundNumber;
 
                                         _context.Rounds.Add(roundToCopy);
-                                        await _context.SaveChangesAsync();
+                                        //await _context.SaveChangesAsync();
+
                                     }
 
                                     foreach (var dataforE in dataForEPES)
@@ -2081,6 +1896,89 @@ namespace EPES.Controllers
                                         dataForEvaluation.Expect = dataforE.Expect;
 
                                         _context.DataForEvaluations.Add(dataForEvaluation);
+                                        //await _context.SaveChangesAsync();
+                                    }
+                                    await _context.SaveChangesAsync();
+                                }
+                            }
+                        }
+                        else
+                        {
+                            var dataPointHasSub = await _context.PointOfEvaluations.Include(p => p.OwnerOffice).Where(p => p.Point == i && p.OwnerOffice.Code == "01001000").ToListAsync();
+                            foreach (var dataPointS in dataPointHasSub)
+                            {
+                                var dataRounds = await _context.Rounds.Where(r => r.PointOfEvaluationId == dataPointS.Id).ToListAsync();
+
+                                var dataForEPES = await _context.DataForEvaluations.Where(r => r.PointOfEvaluationId == dataPointS.Id).ToListAsync();
+
+                                foreach (var item in target)
+                                {
+                                    var pointToCopy = await _context.PointOfEvaluations.Include(p => p.OwnerOffice).Where(p => p.OwnerOffice.Code == item.Code && p.Name == dataPointS.Name && p.Plan == dataPointS.Plan).FirstOrDefaultAsync();
+                                    if (pointToCopy == null)
+                                    {
+                                        pointToCopy = new PointOfEvaluation();
+                                        pointToCopy.AuditOfficeId = dataPointS.AuditOfficeId;
+                                        pointToCopy.AutoApp = dataPointS.AutoApp;
+                                        pointToCopy.Ddrive = dataPointS.Ddrive;
+                                        pointToCopy.DetailPlan = dataPointS.DetailPlan;
+                                        pointToCopy.ExpectPlan = dataPointS.ExpectPlan;
+                                        pointToCopy.HasSub = dataPointS.HasSub;
+                                        pointToCopy.Name = dataPointS.Name;
+                                        pointToCopy.OwnerOfficeId = item.Id;
+                                        pointToCopy.Plan = dataPointS.Plan;
+                                        pointToCopy.Point = dataPointS.Point;
+                                        pointToCopy.SubPoint = dataPointS.SubPoint;
+                                        pointToCopy.Unit = dataPointS.Unit;
+                                        pointToCopy.UpdateUserId = user.Id;
+                                        pointToCopy.Weight = dataPointS.Weight;
+                                        pointToCopy.Year = dataPointS.Year;
+
+                                        _context.PointOfEvaluations.Add(pointToCopy);
+                                        await _context.SaveChangesAsync();
+
+                                        foreach (var round in dataRounds)
+                                        {
+                                            var roundToCopy = new Round();
+                                            roundToCopy.PointOfEvaluationId = pointToCopy.Id;
+                                            roundToCopy.DetailRate1 = round.DetailRate1;
+                                            roundToCopy.DetailRate2 = round.DetailRate2;
+                                            roundToCopy.DetailRate3 = round.DetailRate3;
+                                            roundToCopy.DetailRate4 = round.DetailRate4;
+                                            roundToCopy.DetailRate5 = round.DetailRate5;
+                                            roundToCopy.LevelNumber = round.LevelNumber;
+                                            roundToCopy.Rate1MonthStart = round.Rate1MonthStart;
+                                            roundToCopy.Rate1MonthStop = round.Rate1MonthStop;
+                                            roundToCopy.Rate2MonthStart = round.Rate2MonthStart;
+                                            roundToCopy.Rate2MonthStop = round.Rate2MonthStop;
+                                            roundToCopy.Rate3MonthStart = round.Rate3MonthStart;
+                                            roundToCopy.Rate3MonthStop = round.Rate3MonthStop;
+                                            roundToCopy.Rate4MonthStart = round.Rate4MonthStart;
+                                            roundToCopy.Rate4MonthStop = round.Rate4MonthStop;
+                                            roundToCopy.Rate5MonthStart = round.Rate5MonthStart;
+                                            roundToCopy.Rate5MonthStop = round.Rate5MonthStop;
+                                            roundToCopy.Rate1 = round.Rate1;
+                                            roundToCopy.Rate2 = round.Rate2;
+                                            roundToCopy.Rate3 = round.Rate3;
+                                            roundToCopy.Rate4 = round.Rate4;
+                                            roundToCopy.Rate5 = round.Rate5;
+                                            roundToCopy.RoundNumber = round.RoundNumber;
+
+                                            _context.Rounds.Add(roundToCopy);
+                                            //await _context.SaveChangesAsync();
+                                        }
+
+                                        foreach (var dataforE in dataForEPES)
+                                        {
+                                            var dataForEvaluation = new DataForEvaluation();
+                                            dataForEvaluation.UpdateUserId = user.Id;
+                                            dataForEvaluation.PointOfEvaluationId = pointToCopy.Id;
+                                            dataForEvaluation.OfficeId = item.Id;
+                                            dataForEvaluation.Month = dataforE.Month;
+                                            dataForEvaluation.Expect = dataforE.Expect;
+
+                                            _context.DataForEvaluations.Add(dataForEvaluation);
+                                            //await _context.SaveChangesAsync();
+                                        }
                                         await _context.SaveChangesAsync();
                                     }
                                 }

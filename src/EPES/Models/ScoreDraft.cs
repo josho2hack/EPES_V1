@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -9,6 +10,8 @@ namespace EPES.Models
 {
     public class ScoreDraft
     {
+        private static IFormatProvider enCulture = CultureInfo.CreateSpecificCulture("en-US");
+
         [Key]
         public int Id { get; set; }
 
@@ -22,10 +25,14 @@ namespace EPES.Models
 
         public int PointOfEvaluationId { get; set; }
         [Display(Name = "ตัวชี้วัด")]
-        public PointOfEvaluation PointOfEvaluation { get; set; }
+        public virtual PointOfEvaluation PointOfEvaluation { get; set; }
 
         public int OfficeId { get; set; }
         [Display(Name = "หน่วยงาน")]
         public Office Office { get; set; }
+
+        [Display(Name = "คะแนนที่อนุมัติ")]
+        [Column(TypeName = "decimal(5, 4)")]
+        public decimal ScoreApprove { get; set; } = 0;
     }
 }
