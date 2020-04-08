@@ -13,10 +13,10 @@ namespace EPES.Models
 
         private readonly ApplicationDbContext _context;
 
-        public Office(ApplicationDbContext context)
-        {
-            _context = context;
-        }
+        //public Office(ApplicationDbContext context)
+        //{
+        //    _context = context;
+        //}
 
         [Key]
         public int Id { get; set; }
