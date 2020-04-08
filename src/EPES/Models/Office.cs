@@ -1,11 +1,23 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using Microsoft.EntityFrameworkCore;
+using EPES.Data;
+using EPES.Models;
+using System.Linq;
 
 namespace EPES.Models
 {
     public class Office
     {
+
+        private readonly ApplicationDbContext _context;
+
+        public Office(ApplicationDbContext context)
+        {
+            _context = context;
+        }
+
         [Key]
         public int Id { get; set; }
 
@@ -21,9 +33,34 @@ namespace EPES.Models
         [Display(Name = "หมายเหตุ")]
         public string Remark { get; set; }
         
-        public int? OfficeGroupId { get; set; }
+        //public int? OfficeGroupId { get; set; }
+        [NotMapped]
         [Display(Name = "สังกัดหน่วยงาน")]
-        public Office OfficeGroup { get; set; }
+        public Office OfficeGroup
+        {
+            get
+            {
+                if (this.Code.StartsWith("000"))
+                {
+                    return this;
+                }
+                else
+                {
+                    var group = this.Code.Substring(0, 2) + "000000";
+                    return _context.Offices.Where(o => o.Code == group).FirstOrDefault();
+                }
+            }
+        }
+
+        [NotMapped]
+        [Display(Name = "ชื่อสังกัดหน่วยงาน")]
+        public string NameGroup
+        {
+            get
+            {
+                return this.Name;
+            }
+        }
 
         [Display(Name = "ตัวชี้วัดของหน่วยงาน")]
         //[InverseProperty("OwnerOffice")]

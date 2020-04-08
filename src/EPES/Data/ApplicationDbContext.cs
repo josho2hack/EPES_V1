@@ -59,10 +59,10 @@ namespace EPES.Data
             .WithOne(p => p.AuditOffice)
             .OnDelete(DeleteBehavior.Restrict);
 
-            builder.Entity<Office>()
-                        .HasOne(x => x.OfficeGroup)
-                        .WithOne()
-                        .HasForeignKey<Office>(s => s.OfficeGroupId);
+            //builder.Entity<Office>()
+            //            .HasOne(x => x.OfficeGroup)
+            //            .WithOne()
+            //            .HasForeignKey<Office>(s => s.OfficeGroupId);
         }
 
         public DbSet<ApplicationUser> ApplicationUsers { get; set; }
