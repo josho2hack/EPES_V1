@@ -67,21 +67,19 @@ namespace EPES.Controllers
 
             var user = await _userManager.GetUserAsync(User);
 
-            var scoretemp = _context.ScoreDrafts.Where(sd => sd.PointOfEvaluation.Year == yearForQuery &&
+            var scoreDrafts = _context.ScoreDrafts.Include(s => s.Office)
+                                                  .Where(sd => sd.PointOfEvaluation.Year == yearForQuery &&
                                                     sd.LastMonth == month &&
                                                     sd.Office.Code.Substring(0, 3) != "00000000" &&
-                                                    !sd.PointOfEvaluation.HasSub);
-
-
-            var scoreDrafts = scoretemp
+                                                    !sd.PointOfEvaluation.HasSub)
                                                     .Select(i => new {
                                                     i.Id,
                                                     i.PointOfEvaluation.Plan,
                                                     //i.PointOfEvaluation.Point,
                                                     //i.PointOfEvaluation.SubPoint,
                                                     //i.PointOfEvaluation.Name,
-                                                    i.Office.Code,
-                                                    i.Office.Name,
+                                                    //i.Office.Name,
+                                                    i.Office.OfficeGroup.Name,
                                                     i.ScoreValue,
                                                     i.ScoreApprove,
                                                     i.LastMonth,

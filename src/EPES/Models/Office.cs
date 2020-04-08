@@ -20,6 +20,10 @@ namespace EPES.Models
 
         [Display(Name = "หมายเหตุ")]
         public string Remark { get; set; }
+        
+        public int? OfficeGroupId { get; set; }
+        [Display(Name = "สังกัดหน่วยงาน")]
+        public Office OfficeGroup { get; set; }
 
         [Display(Name = "ตัวชี้วัดของหน่วยงาน")]
         //[InverseProperty("OwnerOffice")]
