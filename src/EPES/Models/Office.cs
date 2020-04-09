@@ -11,7 +11,7 @@ namespace EPES.Models
     public class Office
     {
 
-        private readonly ApplicationDbContext _context;
+        //private readonly ApplicationDbContext _context;
 
         //public Office(ApplicationDbContext context)
         //{
@@ -34,23 +34,8 @@ namespace EPES.Models
         public string Remark { get; set; }
         
         //public int? OfficeGroupId { get; set; }
-        [NotMapped]
         [Display(Name = "สังกัดหน่วยงาน")]
-        public Office OfficeGroup
-        {
-            get
-            {
-                if (this.Code.StartsWith("000"))
-                {
-                    return this;
-                }
-                else
-                {
-                    var group = this.Code.Substring(0, 2) + "000000";
-                    return _context.Offices.Where(o => o.Code == group).FirstOrDefault();
-                }
-            }
-        }
+        public Office OfficeGroup { get; set; }
 
         [NotMapped]
         [Display(Name = "ชื่อสังกัดหน่วยงาน")]

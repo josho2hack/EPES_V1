@@ -4,14 +4,16 @@ using EPES.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace EPES.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("25630408131525_updateOfficeaddGroup")]
+    partial class updateOfficeaddGroup
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -176,7 +178,9 @@ namespace EPES.Migrations
 
                     b.HasIndex("ApplicationUserId");
 
-                    b.HasIndex("OfficeGroupId");
+                    b.HasIndex("OfficeGroupId")
+                        .IsUnique()
+                        .HasFilter("[OfficeGroupId] IS NOT NULL");
 
                     b.ToTable("Offices");
                 });
@@ -482,8 +486,8 @@ namespace EPES.Migrations
                         .HasForeignKey("ApplicationUserId");
 
                     b.HasOne("EPES.Models.Office", "OfficeGroup")
-                        .WithMany()
-                        .HasForeignKey("OfficeGroupId");
+                        .WithOne()
+                        .HasForeignKey("EPES.Models.Office", "OfficeGroupId");
                 });
 
             modelBuilder.Entity("EPES.Models.PointOfEvaluation", b =>
