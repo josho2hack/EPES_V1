@@ -41,7 +41,32 @@ namespace EPES.Controllers
             return View();
         }
 
+        public IActionResult AllScore()
+        {
+            return View();
+        }
+
         public IActionResult HQScore()
+        {
+            return View();
+        }
+
+        public IActionResult PAKScore()
+        {
+            return View();
+        }
+
+        public IActionResult BKKScore()
+        {
+            return View();
+        }
+
+        public IActionResult NBKKScore()
+        {
+            return View();
+        }
+
+        public IActionResult STScore()
         {
             return View();
         }

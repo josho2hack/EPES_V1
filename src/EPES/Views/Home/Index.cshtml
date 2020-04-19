@@ -3,6 +3,26 @@
     ViewData["Title"] = "Home Page";
 }
 
+<link href="~/css/devextreme/dx.common.css" rel="stylesheet" />
+<link href="~/css/devextreme/dx.light.css" rel="stylesheet" />
+<script src="~/js/devextreme/jquery.js"></script>
+<script src="~/js/devextreme/cldr.js"></script>
+<script src="~/js/devextreme/cldr/event.js"></script>
+<script src="~/js/devextreme/cldr/supplemental.js"></script>
+<script src="~/js/devextreme/cldr/unresolved.js"></script>
+<script src="~/js/devextreme/globalize.js"></script>
+<script src="~/js/devextreme/globalize/message.js"></script>
+<script src="~/js/devextreme/globalize/number.js"></script>
+<script src="~/js/devextreme/globalize/currency.js"></script>
+<script src="~/js/devextreme/globalize/date.js"></script>
+<!-- Uncomment to enable the client-side export feature -->
+<!-- script src="~/js/devextreme/jszip.js"></script -->
+<!-- Uncomment to provide geo-data for the VectorMap control -->
+<!-- script src="~/js/devextreme/vectormap-data/world.js"></script -->
+<script src="~/js/devextreme/dx.all.js"></script>
+<script src="~/js/devextreme/aspnet/dx.aspnet.mvc.js"></script>
+<script src="~/js/devextreme/aspnet/dx.aspnet.data.js"></script>
+
 <!-- Begin Page Content -->
 <div class="container-fluid">
     <!-- Page Heading -->
@@ -52,17 +72,8 @@
                 <div class="card-body">
                     <div class="row no-gutters align-items-center">
                         <div class="col mr-2">
-                            <div class="text-xs font-weight-bold text-info text-uppercase mb-1">รับรองคะแนนแล้วเสร็จ @DateTime.Now.ToString("MMMMM yyyy")</div>
-                            <div class="row no-gutters align-items-center">
-                                <div class="col-auto">
-                                    <div class="h5 mb-0 mr-3 font-weight-bold text-gray-800">50%</div>
-                                </div>
-                                <div class="col">
-                                    <div class="progress progress-sm mr-2">
-                                        <div class="progress-bar bg-info" role="progressbar" style="width: 50%" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100"></div>
-                                    </div>
-                                </div>
-                            </div>
+                            <div class="text-xs font-weight-bold text-info text-uppercase mb-1">รับรองคะแนนแล้วเสร็จ @DateTime.Now.AddMonths(-1).ToString("MMMMM yyyy")</div>
+                            <div class="h5 mb-0 mr-3 font-weight-bold text-gray-800">152/@ViewBag.Approved</div>
                         </div>
                         <div class="col-auto">
                             <i class="fas fa-clipboard fa-2x text-gray-300"></i>
@@ -77,8 +88,8 @@
                 <div class="card-body">
                     <div class="row no-gutters align-items-center">
                         <div class="col mr-2">
-                            <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">หน่วยงานประเมินแล้วเสร็จ @DateTime.Now.ToString("MMMMM yyyy")</div>
-                            <div class="h5 mb-0 font-weight-bold text-gray-800">119/147</div>
+                            <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">หน่วยงานประเมินแล้วเสร็จ @DateTime.Now.AddMonths(-1).ToString("MMMMM yyyy")</div>
+                            <div class="h5 mb-0 font-weight-bold text-gray-800">152/@ViewBag.Entry</div>
                         </div>
                         <div class="col-auto">
                             <i class="fas fa-comments fa-2x text-gray-300"></i>
@@ -88,105 +99,94 @@
             </div>
         </div>
     </div>
+    <h5 class="m-0 font-weight-bold text-gray-800">ผลการปฏิบัติราชการ ณ เดือน @DateTime.Now.AddMonths(-1).ToString("MMMM") ปีงบประมาณ @(DateTime.Now.Month > 9 ? DateTime.Now.AddYears(1).ToString("yyyy") : DateTime.Now.ToString("yyyy"))</h5>
     <!-- Content Row -->
     <div class="row">
-        <!-- Area Chart -->
-        <div class="col-xl-8 col-lg-7">
+        <!-- Chart -->
+        <div class="col-xl-6 col-lg-6">
             <div class="card shadow mb-4">
-                <!-- Card Header - Dropdown -->
+                <!-- Card Header  -->
                 <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                    <h6 class="m-0 font-weight-bold text-primary">ภาพรวมผลการประเมิน</h6>
-                    <div class="dropdown no-arrow">
-                        <a class="dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            <i class="fas fa-ellipsis-v fa-sm fa-fw text-gray-400"></i>
-                        </a>
-                        <div class="dropdown-menu dropdown-menu-right shadow animated--fade-in" aria-labelledby="dropdownMenuLink1">
-                            <div class="dropdown-header">####:</div>
-                            <a class="dropdown-item" href="#">####</a>
-                            <a class="dropdown-item" href="#">####</a>
-                            <div class="dropdown-divider"></div>
-                            <a class="dropdown-item" href="#">####</a>
-                        </div>
-                    </div>
+                    <h6 class="m-0 font-weight-bold text-primary">
+                        I. กอง กลุ่ม งานตรวจราชการ และ ศูนย์
+                    </h6>
                 </div>
                 <!-- Card Body -->
                 <div class="card-body">
-                    <div class="chart-area">
-                        <canvas id="myAreaChart"></canvas>
-                    </div>
+                    @(Html.DevExtreme().Chart()
+                            .ID("chart")
+                            .CommonSeriesSettings(s => s
+                                .ArgumentField("office")
+                                .ValueField("score")
+                                .Type(SeriesType.Bar)
+                                .IgnoreEmptyPoints(true)
+                                .Label(l => l
+                                    .Visible(true)
+                                    .Format(f => f
+                                        .Type(Format.FixedPoint)
+                                        .Precision(4)
+                                    )
+                                )
+                            )
+                            .ArgumentAxis(a => a
+                                    .Label(l => l
+                                    .OverlappingBehavior(OverlappingBehavior.None)
+                                )
+                            )
+                            .Legend(l => l
+                                .Visible(false)
+                            )
+                            .SeriesTemplate(t => t.NameField("office"))
+                            //.DataSource(d => d.StaticJson().Url("api/ReportsApi/GetDBHQScore"))
+                            .DataSource(d => d.Mvc().Controller("ReportsApi").LoadAction("GetDBHQScore"))
+                        )
+                </div>
                 </div>
             </div>
-        </div>
-        <!-- Pie Chart -->
-        <div class="col-xl-4 col-lg-5">
-            <div class="card shadow mb-4">
-                <!-- Card Header - Dropdown -->
-                <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                    <h6 class="m-0 font-weight-bold text-primary">อัตราส่วน แผนงาน/โครงการ</h6>
-                    <div class="dropdown no-arrow">
-                        <a class="dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            <i class="fas fa-ellipsis-v fa-sm fa-fw text-gray-400"></i>
-                        </a>
-                        <div class="dropdown-menu dropdown-menu-right shadow animated--fade-in" aria-labelledby="dropdownMenuLink2">
-                            <div class="dropdown-header">####:</div>
-                            <a class="dropdown-item" href="#">####</a>
-                            <a class="dropdown-item" href="#">####</a>
-                            <div class="dropdown-divider"></div>
-                            <a class="dropdown-item" href="#">####</a>
-                        </div>
+            <!-- Chart -->
+            <div class="col-xl-6 col-lg-6">
+                <div class="card shadow mb-4">
+                    <!-- Card Header -->
+                    <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                        <h6 class="m-0 font-weight-bold text-primary">
+                            II. สภ. และ สท.
+                        </h6>
                     </div>
-                </div>
-                <!-- Card Body -->
-                <div class="card-body">
-                    <div class="chart-pie pt-4 pb-2">
-                        <canvas id="myPieChart"></canvas>
-                    </div>
-                    <div class="mt-4 text-center small">
-                        <span class="mr-2">
-                            <i class="fas fa-circle text-primary"></i> แผน AB
-                        </span>
-                        <span class="mr-2">
-                            <i class="fas fa-circle text-success"></i> แผน B
-                        </span>
-                        <span class="mr-2">
-                            <i class="fas fa-circle text-info"></i>  แผน C
-                        </span>
+                    <!-- Card Body -->
+                    <div class="card-body">
+                        @(Html.DevExtreme().Chart()
+                            .ID("chart2")
+                            .CommonSeriesSettings(s => s
+                                .ArgumentField("office")
+                                .ValueField("score")
+                                .Type(SeriesType.Bar)
+                                .IgnoreEmptyPoints(true)
+                                .Label(l => l
+                                    .Visible(true)
+                                    .Format(f => f
+                                        .Type(Format.FixedPoint)
+                                        .Precision(4)
+                                    )
+                                )
+                            )
+                            .ArgumentAxis(a => a
+                                    .Label(l => l
+                                    .OverlappingBehavior(OverlappingBehavior.None)
+                                )
+                            )
+                            .Legend(l => l
+                                .Visible(false)
+                            )
+                            .SeriesTemplate(t => t.NameField("office"))
+                            .DataSource(d => d.Mvc().Controller("ReportsApi").LoadAction("GetDBPScore"))
+                        )
                     </div>
                 </div>
             </div>
         </div>
     </div>
-    <!-- Project Card Example -->
-    <div class="card shadow mb-4">
-        <div class="card-header py-3">
-            <h6 class="m-0 font-weight-bold text-primary">Projects</h6>
-        </div>
-        <div class="card-body">
-            <h4 class="small font-weight-bold">Server Migration <span class="float-right">20%</span></h4>
-            <div class="progress mb-4">
-                <div class="progress-bar bg-danger" role="progressbar" style="width: 20%" aria-valuenow="20" aria-valuemin="0" aria-valuemax="100"></div>
-            </div>
-            <h4 class="small font-weight-bold">Sales Tracking <span class="float-right">40%</span></h4>
-            <div class="progress mb-4">
-                <div class="progress-bar bg-warning" role="progressbar" style="width: 40%" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100"></div>
-            </div>
-            <h4 class="small font-weight-bold">Customer Database <span class="float-right">60%</span></h4>
-            <div class="progress mb-4">
-                <div class="progress-bar" role="progressbar" style="width: 60%" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100"></div>
-            </div>
-            <h4 class="small font-weight-bold">Payout Details <span class="float-right">80%</span></h4>
-            <div class="progress mb-4">
-                <div class="progress-bar bg-info" role="progressbar" style="width: 80%" aria-valuenow="80" aria-valuemin="0" aria-valuemax="100"></div>
-            </div>
-            <h4 class="small font-weight-bold">Account Setup <span class="float-right">Complete!</span></h4>
-            <div class="progress">
-                <div class="progress-bar bg-success" role="progressbar" style="width: 100%" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"></div>
-            </div>
-        </div>
-    </div>
-</div>
 <!-- /.container-fluid -->
 
-@section Scripts {
+@*@section Scripts {
     <partial name="_ChartScript" />
-}
+}*@

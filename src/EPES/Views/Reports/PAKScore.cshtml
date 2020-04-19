@@ -4,7 +4,7 @@
 @inject UserManager<ApplicationUser> UserManager
 
 @{
-    ViewData["Title"] = "รายงานผลการปฏิบัติงาน กอง สำนัก ศูนย์";
+    ViewData["Title"] = "รายงานผลการปฏิบัติงาน สภ.1 - 12";
     var user = await UserManager.GetUserAsync(User);
 }
 
@@ -29,7 +29,7 @@
 <script src="~/js/devextreme/aspnet/dx.aspnet.data.js"></script>
 
 <div class="container-fluid">
-    <h1 class="h3 mb-2 text-gray-800">รายงานผลการปฏิบัติราชการ กอง สำนัก ศูนย์</h1>
+    <h1 class="h3 mb-2 text-gray-800">รายงานผลการปฏิบัติราชการ สภ.1 - 12</h1>
 </div>
 
 <div id="pivotgrid-demo">
@@ -57,7 +57,7 @@
 .RowHeaderLayout(PivotGridRowHeadersLayout.Tree)
 //.AllowExpandAll(true)
 .DataSource(d => d
-    .Store(s => s.Mvc().Controller("ReportsApi").Key("Id").LoadAction("GetHQScore"))
+    .Store(s => s.Mvc().Controller("ReportsApi").Key("Id").LoadAction("GetPAKScore"))
 
     .Fields(fields => {
 
@@ -147,7 +147,7 @@
 .RowHeaderLayout(PivotGridRowHeadersLayout.Tree)
 //.AllowExpandAll(true)
 .DataSource(d => d
-.Store(s => s.Mvc().Controller("ReportsApi").Key("Id").LoadAction("GetHQScore"))
+.Store(s => s.Mvc().Controller("ReportsApi").Key("Id").LoadAction("GetPAKScore"))
 
 .Fields(fields => {
 fields.Add()

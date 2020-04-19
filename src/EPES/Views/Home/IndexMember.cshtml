@@ -2,6 +2,26 @@
     ViewData["Title"] = "Home Page";
 }
 
+<link href="~/css/devextreme/dx.common.css" rel="stylesheet" />
+<link href="~/css/devextreme/dx.light.css" rel="stylesheet" />
+<script src="~/js/devextreme/jquery.js"></script>
+<script src="~/js/devextreme/cldr.js"></script>
+<script src="~/js/devextreme/cldr/event.js"></script>
+<script src="~/js/devextreme/cldr/supplemental.js"></script>
+<script src="~/js/devextreme/cldr/unresolved.js"></script>
+<script src="~/js/devextreme/globalize.js"></script>
+<script src="~/js/devextreme/globalize/message.js"></script>
+<script src="~/js/devextreme/globalize/number.js"></script>
+<script src="~/js/devextreme/globalize/currency.js"></script>
+<script src="~/js/devextreme/globalize/date.js"></script>
+<!-- Uncomment to enable the client-side export feature -->
+<!-- script src="~/js/devextreme/jszip.js"></script -->
+<!-- Uncomment to provide geo-data for the VectorMap control -->
+<!-- script src="~/js/devextreme/vectormap-data/world.js"></script -->
+<script src="~/js/devextreme/dx.all.js"></script>
+<script src="~/js/devextreme/aspnet/dx.aspnet.mvc.js"></script>
+<script src="~/js/devextreme/aspnet/dx.aspnet.data.js"></script>
+
 <!-- Begin Page Content -->
 <div class="container-fluid">
     <!-- Page Heading -->
@@ -51,17 +71,8 @@
                 <div class="card-body">
                     <div class="row no-gutters align-items-center">
                         <div class="col mr-2">
-                            <div class="text-xs font-weight-bold text-info text-uppercase mb-1">รับรองคะแนนแล้วเสร็จ @DateTime.Now.ToString("MMMMM yyyy")</div>
-                            <div class="row no-gutters align-items-center">
-                                <div class="col-auto">
-                                    <div class="h5 mb-0 mr-3 font-weight-bold text-gray-800">50%</div>
-                                </div>
-                                <div class="col">
-                                    <div class="progress progress-sm mr-2">
-                                        <div class="progress-bar bg-info" role="progressbar" style="width: 50%" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100"></div>
-                                    </div>
-                                </div>
-                            </div>
+                            <div class="text-xs font-weight-bold text-info text-uppercase mb-1">รับรองคะแนนแล้วเสร็จ @DateTime.Now.AddMonths(-1).ToString("MMMMM yyyy")</div>
+                            <div class="h5 mb-0 mr-3 font-weight-bold text-gray-800">152/@ViewBag.Approved</div>
                         </div>
                         <div class="col-auto">
                             <i class="fas fa-clipboard fa-2x text-gray-300"></i>
@@ -76,8 +87,8 @@
                 <div class="card-body">
                     <div class="row no-gutters align-items-center">
                         <div class="col mr-2">
-                            <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">หน่วยงานประเมินแล้วเสร็จ @DateTime.Now.ToString("MMMMM yyyy")</div>
-                            <div class="h5 mb-0 font-weight-bold text-gray-800">119/147</div>
+                            <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">หน่วยงานประเมินแล้วเสร็จ @DateTime.Now.AddMonths(-1).ToString("MMMMM yyyy")</div>
+                            <div class="h5 mb-0 font-weight-bold text-gray-800">152/@ViewBag.Entry</div>
                         </div>
                         <div class="col-auto">
                             <i class="fas fa-comments fa-2x text-gray-300"></i>
@@ -87,105 +98,2004 @@
             </div>
         </div>
     </div>
+    <h5 class="m-0 font-weight-bold text-gray-800">ผลการปฏิบัติราชการ ณ เดือน @DateTime.Now.AddMonths(-1).ToString("MMMM") ปีงบประมาณ @(DateTime.Now.Month > 9 ? DateTime.Now.AddYears(1).ToString("yyyy") : DateTime.Now.ToString("yyyy"))</h5>
     <!-- Content Row -->
     <div class="row">
-        <!-- Area Chart -->
-        <div class="col-xl-8 col-lg-7">
+        <!-- Chart -->
+        <div class="col-xl-6 col-lg-6">
             <div class="card shadow mb-4">
-                <!-- Card Header - Dropdown -->
+                <!-- Card Header  -->
                 <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                    <h6 class="m-0 font-weight-bold text-primary">ภาพรวมผลการประเมิน</h6>
-                    <div class="dropdown no-arrow">
-                        <a class="dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            <i class="fas fa-ellipsis-v fa-sm fa-fw text-gray-400"></i>
-                        </a>
-                        <div class="dropdown-menu dropdown-menu-right shadow animated--fade-in" aria-labelledby="dropdownMenuLink1">
-                            <div class="dropdown-header">####:</div>
-                            <a class="dropdown-item" href="#">####</a>
-                            <a class="dropdown-item" href="#">####</a>
-                            <div class="dropdown-divider"></div>
-                            <a class="dropdown-item" href="#">####</a>
-                        </div>
-                    </div>
+                    <h6 class="m-0 font-weight-bold text-primary">
+                        I. กอง กลุ่ม งานตรวจราชการ และ ศูนย์
+                    </h6>
                 </div>
                 <!-- Card Body -->
                 <div class="card-body">
-                    <div class="chart-area">
-                        <canvas id="myAreaChart"></canvas>
-                    </div>
+                    @(Html.DevExtreme().Chart()
+                            .ID("chart")
+                            .CommonSeriesSettings(s => s
+                                .ArgumentField("office")
+                                .ValueField("score")
+                                .Type(SeriesType.Bar)
+                                .IgnoreEmptyPoints(true)
+                                .Label(l => l
+                                    .Visible(true)
+                                    .Format(f => f
+                                        .Type(Format.FixedPoint)
+                                        .Precision(4)
+                                    )
+                                )
+                            )
+                            .ArgumentAxis(a => a
+                                    .Label(l => l
+                                    .OverlappingBehavior(OverlappingBehavior.None)
+                                )
+                            )
+                            .Legend(l => l
+                                .Visible(false)
+                            )
+                            .SeriesTemplate(t => t.NameField("office"))
+                            //.DataSource(d => d.StaticJson().Url("api/ReportsApi/GetDBHQScore"))
+                            .DataSource(d => d.Mvc().Controller("ReportsApi").LoadAction("GetDBHQScore"))
+                        )
                 </div>
             </div>
         </div>
-        <!-- Pie Chart -->
-        <div class="col-xl-4 col-lg-5">
+        <!-- Chart -->
+        <div class="col-xl-6 col-lg-6">
             <div class="card shadow mb-4">
-                <!-- Card Header - Dropdown -->
+                <!-- Card Header -->
                 <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                    <h6 class="m-0 font-weight-bold text-primary">อัตราส่วน แผนงาน/โครงการ</h6>
-                    <div class="dropdown no-arrow">
-                        <a class="dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            <i class="fas fa-ellipsis-v fa-sm fa-fw text-gray-400"></i>
-                        </a>
-                        <div class="dropdown-menu dropdown-menu-right shadow animated--fade-in" aria-labelledby="dropdownMenuLink2">
-                            <div class="dropdown-header">####:</div>
-                            <a class="dropdown-item" href="#">####</a>
-                            <a class="dropdown-item" href="#">####</a>
-                            <div class="dropdown-divider"></div>
-                            <a class="dropdown-item" href="#">####</a>
-                        </div>
-                    </div>
+                    <h6 class="m-0 font-weight-bold text-primary">
+                        II. สภ. และ สท.
+                    </h6>
                 </div>
                 <!-- Card Body -->
                 <div class="card-body">
-                    <div class="chart-pie pt-4 pb-2">
-                        <canvas id="myPieChart"></canvas>
+                    @(Html.DevExtreme().Chart()
+                            .ID("chart2")
+                            .CommonSeriesSettings(s => s
+                                .ArgumentField("office")
+                                .ValueField("score")
+                                .Type(SeriesType.Bar)
+                                .IgnoreEmptyPoints(true)
+                                .Label(l => l
+                                    .Visible(true)
+                                    .Format(f => f
+                                        .Type(Format.FixedPoint)
+                                        .Precision(4)
+                                    )
+                                )
+                            )
+                            .ArgumentAxis(a => a
+                                    .Label(l => l
+                                    .OverlappingBehavior(OverlappingBehavior.None)
+                                )
+                            )
+                            .Legend(l => l
+                                .Visible(false)
+                            )
+                            .SeriesTemplate(t => t.NameField("office"))
+                            .DataSource(d => d.Mvc().Controller("ReportsApi").LoadAction("GetDBPScore"))
+                        )
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Content Row หมวด 1 : ด้านจัดเก็บ  -->
+    <h5 class="m-0 font-weight-bold text-gray-800">
+        ตัวชี้วัดที่สำคัญ ของ ภญ สภ. และ สท.
+    </h5>
+    <div class="row">
+        <!-- Chart -->
+        <div class="col-xl-12 col-lg-12">
+            <div class="card shadow mb-4">
+                <!-- Card Header -->
+                <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                    <h6 class="m-0 font-weight-bold text-primary">
+                        หมวด 1 : ด้านจัดเก็บ
+                    </h6>
+                    <h6 class="m-0 font-weight-bold text-primary">
+                        ตัวชี้วัดที่ 1 : ร้อยละของผลการจัดเก็บเทียบกับประมาณการ
+                    </h6>
+                </div>
+                <!-- Card Body -->
+                <div class="card-body">
+                    <div class="row">
+                        <div id="all" class="col-xl-4 mb-3">
+                            <div class="card">
+                                <div class="card-header bg-light">
+                                    ภาพรวม
+                                </div>
+                                <div class="card-body">
+                                    <div class="row">
+                                        <div class="col-xl-6 mb-3">
+                                            @(Html.DevExtreme().PieChart()
+                                        .ID("pie11")
+                                        .Palette(VizPalette.SoftBlue)
+                                        .Title(t => t
+                                            .Text("ผลสะสม ณ เดือน" + DateTime.Now.AddMonths(-1).ToString("MMMM") + "เทียบกับเป้าหมายรวมปี งปม. " + (DateTime.Now.Month > 9 ? DateTime.Now.AddYears(1).ToString("yyyy") : DateTime.Now.ToString("yyyy")))
+                                            .Font(f => f.Size(13))
+                                        )
+                                        .Legend(l => l
+                                            .Visible(false)
+                                        )
+                                        .Export(e => e.Enabled(false))
+                                        .Series(s => s
+                                            .Add()
+                                            .ArgumentField("office")
+                                            .ValueField("value")
+                                            .Label(l => l
+                                                .Visible(true)
+                                                .Font(f => f.Size(16))
+                                                .Connector(c => c
+                                                    .Visible(false)
+                                                    .Width(0.5)
+                                                )
+                                                .Position(PieChartLabelPosition.Inside)
+                                                .CustomizeText(@<text>
+                                                    function(arg) {
+                                                        return arg.percentText;
+                                                    }
+                                                </text>)
+                                            )
+                                        )
+                                        .DataSource(new[] {
+                                            new { office = "diff", value = (ViewBag.Expect[0] + ViewBag.Expect[1] - (ViewBag.ResultLastMonth[0] + ViewBag.ResultLastMonth[1])) },
+                                            new { office = "all", value = (ViewBag.ResultLastMonth[0] + ViewBag.ResultLastMonth[1]) }
+                                        })
+                                    )
+                                        </div>
+                                        <div class="col-xl-6 mb-3">
+                                            @(Html.DevExtreme().PieChart()
+                                        .ID("pie12")
+                                        .Palette(VizPalette.SoftPastel)
+                                        .Title(t => t
+                                            .Text("ผลสะสม ณ เดือน" + DateTime.Now.AddMonths(-1).ToString("MMMM") + "เทียบกับเป้าหมาย ณ เดือน " + DateTime.Now.AddMonths(-1).ToString("MMMM"))
+                                            .Font(f => f.Size(13))
+                                        )
+                                        .Legend(l => l
+                                            .Visible(false)
+                                        )
+                                        .Export(e => e.Enabled(false))
+                                        .Series(s => s
+                                            .Add()
+                                            .ArgumentField("office")
+                                            .ValueField("value")
+                                            .Label(l => l
+                                                .Visible(true)
+                                                .Font(f => f.Size(16))
+                                                .Connector(c => c
+                                                    .Visible(false)
+                                                    .Width(0.5)
+                                                )
+                                                .Position(PieChartLabelPosition.Inside)
+                                                .CustomizeText(@<text>
+                                                    function(arg) {
+                                                        return arg.percentText;
+                                                    }
+                                                </text>)
+                                            )
+                                        )
+                                        .DataSource(new[] {
+                                            new { office = "diff", value = (ViewBag.ExpectLastMonth[0] + ViewBag.ExpectLastMonth[1] - (ViewBag.ResultLastMonth[0] + ViewBag.ResultLastMonth[1])) },
+                                            new { office = "all", value = (ViewBag.ResultLastMonth[0] + ViewBag.ResultLastMonth[1]) }
+                                        })
+                                    )
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div id="hq" class="col-xl-4 mb-3">
+                            <div class="card">
+                                <div class="card-header bg-light">
+                                    ภญ.
+                                </div>
+                                <div class="card-body">
+                                    <div class="row">
+                                        <div class="col-xl-6 mb-3">
+                                            @(Html.DevExtreme().PieChart()
+                                        .ID("pie21")
+                                        .Palette(VizPalette.SoftBlue)
+                                        .Title(t => t
+                                            .Text("ผลสะสม ณ เดือน" + DateTime.Now.AddMonths(-1).ToString("MMMM") + "เทียบกับเป้าหมายรวมปี งปม. " + (DateTime.Now.Month > 9 ? DateTime.Now.AddYears(1).ToString("yyyy") : DateTime.Now.ToString("yyyy")))
+                                            .Font(f => f.Size(13))
+                                        )
+                                        .Legend(l => l
+                                            .Visible(false)
+                                        )
+                                        .Export(e => e.Enabled(false))
+                                        .Series(s => s
+                                            .Add()
+                                            .ArgumentField("office")
+                                            .ValueField("value")
+                                            .Label(l => l
+                                                .Visible(true)
+                                                .Font(f => f.Size(16))
+                                                .Connector(c => c
+                                                    .Visible(false)
+                                                    .Width(0.5)
+                                                )
+                                                .Position(PieChartLabelPosition.Inside)
+                                                .CustomizeText(@<text>
+                                                    function(arg) {
+                                                        return arg.percentText;
+                                                    }
+                                                </text>)
+                                            )
+                                        )
+                                        .DataSource(new[] {
+                                            new { office = "diff", value = (ViewBag.Expect[0] - ViewBag.ResultLastMonth[0]) },
+                                            new { office = "hq", value = ViewBag.ResultLastMonth[0] }
+                                        })
+                                    )
+                                        </div>
+                                        <div class="col-xl-6 mb-3">
+                                            @(Html.DevExtreme().PieChart()
+                                        .ID("pie22")
+                                        .Palette(VizPalette.SoftPastel)
+                                        .Title(t => t
+                                            .Text("ผลสะสม ณ เดือน" + DateTime.Now.AddMonths(-1).ToString("MMMM") + "เทียบกับเป้าหมาย ณ เดือน " + DateTime.Now.AddMonths(-1).ToString("MMMM"))
+                                            .Font(f => f.Size(13))
+                                        )
+                                        .Legend(l => l
+                                            .Visible(false)
+                                        )
+                                        .Export(e => e.Enabled(false))
+                                        .Series(s => s
+                                            .Add()
+                                            .ArgumentField("office")
+                                            .ValueField("value")
+                                            .Label(l => l
+                                                .Visible(true)
+                                                .Font(f => f.Size(16))
+                                                .Connector(c => c
+                                                    .Visible(false)
+                                                    .Width(0.5)
+                                                )
+                                                .Position(PieChartLabelPosition.Inside)
+                                                .CustomizeText(@<text>
+                                                    function(arg) {
+                                                        return arg.percentText;
+                                                    }
+                                                </text>)
+                                            )
+                                        )
+                                        .DataSource(new[] {
+                                            new { office = "diff", value = (ViewBag.ExpectLastMonth[0] - ViewBag.ResultLastMonth[0]) },
+                                            new { office = "all", value = ViewBag.ResultLastMonth[0] }
+                                        })
+                                    )
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div id="nhq" runat="server" class="col-xl-4 mb-3">
+                            <div class="card">
+                                <div class="card-header bg-light">
+                                    สภ. และ สท.
+                                </div>
+                                <div class="card-body">
+                                    <div class="row">
+                                        <div class="col-xl-6 mb-3">
+                                            @(Html.DevExtreme().PieChart()
+                                        .ID("pie31")
+                                        .Palette(VizPalette.SoftBlue)
+                                        .Title(t => t
+                                            .Text("ผลสะสม ณ เดือน" + DateTime.Now.AddMonths(-1).ToString("MMMM") + "เทียบกับเป้าหมายรวมปี งปม. " + (DateTime.Now.Month > 9 ? DateTime.Now.AddYears(1).ToString("yyyy") : DateTime.Now.ToString("yyyy")))
+                                            .Font(f => f.Size(13))
+                                        )
+                                        .Legend(l => l
+                                            .Visible(false)
+                                        )
+                                        .Export(e => e.Enabled(false))
+                                        .Series(s => s
+                                            .Add()
+                                            .ArgumentField("office")
+                                            .ValueField("value")
+                                            .Label(l => l
+                                                .Visible(true)
+                                                .Font(f => f.Size(16))
+                                                .Connector(c => c
+                                                    .Visible(false)
+                                                    .Width(0.5)
+                                                )
+                                                .Position(PieChartLabelPosition.Inside)
+                                                .CustomizeText(@<text>
+                                                    function(arg) {
+                                                        return arg.percentText;
+                                                    }
+                                                </text>)
+                                            )
+                                        )
+                                        .DataSource(new[] {
+                                            new { office = "diff", value = (ViewBag.Expect[1] - ViewBag.ResultLastMonth[1]) },
+                                            new { office = "hq", value = ViewBag.ResultLastMonth[1] }
+                                        })
+                                    )
+                                        </div>
+                                        <div class="col-xl-6 mb-3">
+                                            @(Html.DevExtreme().PieChart()
+                                        .ID("pie32")
+                                        .Palette(VizPalette.SoftPastel)
+                                        .Title(t => t
+                                            .Text("ผลสะสม ณ เดือน" + DateTime.Now.AddMonths(-1).ToString("MMMM") + "เทียบกับเป้าหมาย ณ เดือน " + DateTime.Now.AddMonths(-1).ToString("MMMM"))
+                                            .Font(f => f.Size(13))
+                                        )
+                                        .Legend(l => l
+                                            .Visible(false)
+                                        )
+                                        .Export(e => e.Enabled(false))
+                                        .Series(s => s
+                                            .Add()
+                                            .ArgumentField("office")
+                                            .ValueField("value")
+                                            .Label(l => l
+                                                .Visible(true)
+                                                .Font(f => f.Size(16))
+                                                .Connector(c => c
+                                                    .Visible(false)
+                                                    .Width(0.5)
+                                                )
+                                                .Position(PieChartLabelPosition.Inside)
+                                                .CustomizeText(@<text>
+                                                    function(arg) {
+                                                        return arg.percentText;
+                                                    }
+                                                </text>)
+                                            )
+                                        )
+                                        .DataSource(new[] {
+                                            new { office = "diff", value = (ViewBag.ExpectLastMonth[1] - ViewBag.ResultLastMonth[1]) },
+                                            new { office = "all", value = ViewBag.ResultLastMonth[1] }
+                                        })
+                                    )
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
-                    <div class="mt-4 text-center small">
-                        <span class="mr-2">
-                            <i class="fas fa-circle text-primary"></i> แผน AB
-                        </span>
-                        <span class="mr-2">
-                            <i class="fas fa-circle text-success"></i> แผน B
-                        </span>
-                        <span class="mr-2">
-                            <i class="fas fa-circle text-info"></i>  แผน C
-                        </span>
+                    <div class="row">
+                        <div id="detail" class="col-xl-12 mb-3">
+                            <div class="card">
+                                <div class="card-header bg-light">
+                                    ผลการจัดเก็บ (ล้านบาท)
+                                </div>
+                                <div class="card-body">
+                                    <table class="table table-bordered">
+                                        <thead>
+                                            <tr>
+                                                <th scope="col"></th>
+                                                <th scope="col">รวม</th>
+                                                <th scope="col">ภญ.</th>
+                                                <th scope="col">สภ. และ สท.</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <th scope="row">เป้าหมายรวมปีงบประมาณ </th>
+                                                <td>@(((ViewBag.Expect[0] + ViewBag.Expect[1])/1000000).ToString("N4"))</td>
+                                                <td>@((ViewBag.Expect[0]/1000000).ToString("N4"))</td>
+                                                <td>@((ViewBag.Expect[1]/1000000).ToString("N4"))</td>
+                                            </tr>
+                                            <tr>
+                                                <th scope="row">เป้าหมาย ณ เดือน @DateTime.Now.AddMonths(-1).ToString("MMMM")   ปีงบประมาณ @(DateTime.Now.Month > 9 ? DateTime.Now.AddYears(1).ToString("yyyy") : DateTime.Now.ToString("yyyy"))</th>
+                                                <td>@(((ViewBag.ExpectLastMonth[0] + ViewBag.ExpectLastMonth[1])/1000000).ToString("N4"))</td>
+                                                <td>@((ViewBag.ExpectLastMonth[0]/1000000).ToString("N4"))</td>
+                                                <td>@((ViewBag.ExpectLastMonth[1]/1000000).ToString("N4"))</td>
+                                            </tr>
+                                            <tr>
+                                                <th scope="row">ผลสะสม ณ เดือน @DateTime.Now.AddMonths(-1).ToString("MMMM")   ปีงบประมาณ @(DateTime.Now.Month > 9 ? DateTime.Now.AddYears(1).ToString("yyyy") : DateTime.Now.ToString("yyyy"))</th>
+                                                <td>@(((ViewBag.ResultLastMonth[0] + ViewBag.ResultLastMonth[1])/1000000).ToString("N4"))</td>
+                                                <td>@((ViewBag.ResultLastMonth[0]/1000000).ToString("N4"))</td>
+                                                <td>@((ViewBag.ResultLastMonth[1]/1000000).ToString("N4")) </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-    <!-- Project Card Example -->
-    <div class="card shadow mb-4">
-        <div class="card-header py-3">
-            <h6 class="m-0 font-weight-bold text-primary">Projects</h6>
+    <!-- Content Row หมวด 2 : ด้านสำรวจ    -->
+    <div class="row">
+        <!-- Chart -->
+        <div class="col-xl-12 col-lg-12">
+            <div class="card shadow mb-4">
+                <!-- Card Header -->
+                <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                    <h6 class="m-0 font-weight-bold text-primary">
+                        หมวด 2 : ด้านสำรวจ
+                    </h6>
+                    <h6 class="m-0 font-weight-bold text-primary">
+                        ตัวชี้วัดที่ 12 : จำนวนผู้เสียภาษีรายใหม่ที่เพิ่มขึ้นจากการปฏิบัติงานสำรวจเปรียบเทียบกับประมาณการที่กรมสรรพากรกำหนด
+                    </h6>
+                </div>
+                <!-- Card Body -->
+                <div class="card-body">
+                    <div class="row">
+                        <div id="all" class="col-xl-4 mb-3">
+                            <div class="card">
+                                <div class="card-header bg-light">
+                                    ภาพรวม
+                                </div>
+                                <div class="card-body">
+                                    <div class="row">
+                                        <div class="col-xl-6 mb-3">
+                                            @(Html.DevExtreme().PieChart()
+                                        .ID("pie211")
+                                        .Palette(VizPalette.SoftBlue)
+                                        .Title(t => t
+                                            .Text("ผลสะสม ณ เดือน" + DateTime.Now.AddMonths(-1).ToString("MMMM") + "เทียบกับเป้าหมายรวมปี งปม. " + (DateTime.Now.Month > 9 ? DateTime.Now.AddYears(1).ToString("yyyy") : DateTime.Now.ToString("yyyy")))
+                                            .Font(f => f.Size(13))
+                                        )
+                                        .Legend(l => l
+                                            .Visible(false)
+                                        )
+                                        .Export(e => e.Enabled(false))
+                                        .Series(s => s
+                                            .Add()
+                                            .ArgumentField("office")
+                                            .ValueField("value")
+                                            .Label(l => l
+                                                .Visible(true)
+                                                .Font(f => f.Size(16))
+                                                .Connector(c => c
+                                                    .Visible(false)
+                                                    .Width(0.5)
+                                                )
+                                                .Position(PieChartLabelPosition.Inside)
+                                                .CustomizeText(@<text>
+                                                    function(arg) {
+                                                        return arg.percentText;
+                                                    }
+                                                </text>)
+                                            )
+                                        )
+                                        .DataSource(new[] {
+                                            new { office = "diff", value = (ViewBag.ExpectM2[0] + ViewBag.ExpectM2[1] - (ViewBag.ResultLastMonthM2[0] + ViewBag.ResultLastMonthM2[1])) },
+                                            new { office = "all", value = (ViewBag.ResultLastMonthM2[0] + ViewBag.ResultLastMonthM2[1]) }
+                                        })
+                                    )
+                                        </div>
+                                        <div class="col-xl-6 mb-3">
+                                            @(Html.DevExtreme().PieChart()
+                                        .ID("pie212")
+                                        .Palette(VizPalette.SoftPastel)
+                                        .Title(t => t
+                                            .Text("ผลสะสม ณ เดือน" + DateTime.Now.AddMonths(-1).ToString("MMMM") + "เทียบกับเป้าหมาย ณ เดือน " + DateTime.Now.AddMonths(-1).ToString("MMMM"))
+                                            .Font(f => f.Size(13))
+                                        )
+                                        .Legend(l => l
+                                            .Visible(false)
+                                        )
+                                        .Export(e => e.Enabled(false))
+                                        .Series(s => s
+                                            .Add()
+                                            .ArgumentField("office")
+                                            .ValueField("value")
+                                            .Label(l => l
+                                                .Visible(true)
+                                                .Font(f => f.Size(16))
+                                                .Connector(c => c
+                                                    .Visible(false)
+                                                    .Width(0.5)
+                                                )
+                                                .Position(PieChartLabelPosition.Inside)
+                                                .CustomizeText(@<text>
+                                                    function(arg) {
+                                                        return arg.percentText;
+                                                    }
+                                                </text>)
+                                            )
+                                        )
+                                        .DataSource(new[] {
+                                            new { office = "diff", value = (ViewBag.ExpectLastMonthM2[0] + ViewBag.ExpectLastMonthM2[1] - (ViewBag.ResultLastMonthM2[0] + ViewBag.ResultLastMonthM2[1])) },
+                                            new { office = "all", value = (ViewBag.ResultLastMonthM2[0] + ViewBag.ResultLastMonthM2[1]) }
+                                        })
+                                    )
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div id="hq" class="col-xl-4 mb-3">
+                            <div class="card">
+                                <div class="card-header bg-light">
+                                    ภญ.
+                                </div>
+                                <div class="card-body">
+                                    <div class="row">
+                                        <div class="col-xl-6 mb-3">
+                                            @(Html.DevExtreme().PieChart()
+                                        .ID("pie221")
+                                        .Palette(VizPalette.SoftBlue)
+                                        .Title(t => t
+                                            .Text("ผลสะสม ณ เดือน" + DateTime.Now.AddMonths(-1).ToString("MMMM") + "เทียบกับเป้าหมายรวมปี งปม. " + (DateTime.Now.Month > 9 ? DateTime.Now.AddYears(1).ToString("yyyy") : DateTime.Now.ToString("yyyy")))
+                                            .Font(f => f.Size(13))
+                                        )
+                                        .Legend(l => l
+                                            .Visible(false)
+                                        )
+                                        .Export(e => e.Enabled(false))
+                                        .Series(s => s
+                                            .Add()
+                                            .ArgumentField("office")
+                                            .ValueField("value")
+                                            .Label(l => l
+                                                .Visible(true)
+                                                .Font(f => f.Size(16))
+                                                .Connector(c => c
+                                                    .Visible(false)
+                                                    .Width(0.5)
+                                                )
+                                                .Position(PieChartLabelPosition.Inside)
+                                                .CustomizeText(@<text>
+                                                    function(arg) {
+                                                        return arg.percentText;
+                                                    }
+                                                </text>)
+                                            )
+                                        )
+                                        .DataSource(new[] {
+                                            new { office = "diff", value = (ViewBag.ExpectM2[0] - ViewBag.ResultLastMonthM2[0]) },
+                                            new { office = "hq", value = ViewBag.ResultLastMonthM2[0] }
+                                        })
+                                    )
+                                        </div>
+                                        <div class="col-xl-6 mb-3">
+                                            @(Html.DevExtreme().PieChart()
+                                        .ID("pie222")
+                                        .Palette(VizPalette.SoftPastel)
+                                        .Title(t => t
+                                            .Text("ผลสะสม ณ เดือน" + DateTime.Now.AddMonths(-1).ToString("MMMM") + "เทียบกับเป้าหมาย ณ เดือน " + DateTime.Now.AddMonths(-1).ToString("MMMM"))
+                                            .Font(f => f.Size(13))
+                                        )
+                                        .Legend(l => l
+                                            .Visible(false)
+                                        )
+                                        .Export(e => e.Enabled(false))
+                                        .Series(s => s
+                                            .Add()
+                                            .ArgumentField("office")
+                                            .ValueField("value")
+                                            .Label(l => l
+                                                .Visible(true)
+                                                .Font(f => f.Size(16))
+                                                .Connector(c => c
+                                                    .Visible(false)
+                                                    .Width(0.5)
+                                                )
+                                                .Position(PieChartLabelPosition.Inside)
+                                                .CustomizeText(@<text>
+                                                    function(arg) {
+                                                        return arg.percentText;
+                                                    }
+                                                </text>)
+                                            )
+                                        )
+                                        .DataSource(new[] {
+                                            new { office = "diff", value = (ViewBag.ExpectLastMonthM2[0] - ViewBag.ResultLastMonthM2[0]) },
+                                            new { office = "all", value = ViewBag.ResultLastMonthM2[0] }
+                                        })
+                                    )
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div id="nhq" runat="server" class="col-xl-4 mb-3">
+                            <div class="card">
+                                <div class="card-header bg-light">
+                                    สภ. และ สท.
+                                </div>
+                                <div class="card-body">
+                                    <div class="row">
+                                        <div class="col-xl-6 mb-3">
+                                            @(Html.DevExtreme().PieChart()
+                                        .ID("pie231")
+                                        .Palette(VizPalette.SoftBlue)
+                                        .Title(t => t
+                                            .Text("ผลสะสม ณ เดือน" + DateTime.Now.AddMonths(-1).ToString("MMMM") + "เทียบกับเป้าหมายรวมปี งปม. " + (DateTime.Now.Month > 9 ? DateTime.Now.AddYears(1).ToString("yyyy") : DateTime.Now.ToString("yyyy")))
+                                            .Font(f => f.Size(13))
+                                        )
+                                        .Legend(l => l
+                                            .Visible(false)
+                                        )
+                                        .Export(e => e.Enabled(false))
+                                        .Series(s => s
+                                            .Add()
+                                            .ArgumentField("office")
+                                            .ValueField("value")
+                                            .Label(l => l
+                                                .Visible(true)
+                                                .Font(f => f.Size(16))
+                                                .Connector(c => c
+                                                    .Visible(false)
+                                                    .Width(0.5)
+                                                )
+                                                .Position(PieChartLabelPosition.Inside)
+                                                .CustomizeText(@<text>
+                                                    function(arg) {
+                                                        return arg.percentText;
+                                                    }
+                                                </text>)
+                                            )
+                                        )
+                                        .DataSource(new[] {
+                                            new { office = "diff", value = (ViewBag.ExpectM2[1] - ViewBag.ResultLastMonthM2[1]) },
+                                            new { office = "hq", value = ViewBag.ResultLastMonthM2[1] }
+                                        })
+                                    )
+                                        </div>
+                                        <div class="col-xl-6 mb-3">
+                                            @(Html.DevExtreme().PieChart()
+                                        .ID("pie232")
+                                        .Palette(VizPalette.SoftPastel)
+                                        .Title(t => t
+                                            .Text("ผลสะสม ณ เดือน" + DateTime.Now.AddMonths(-1).ToString("MMMM") + "เทียบกับเป้าหมาย ณ เดือน " + DateTime.Now.AddMonths(-1).ToString("MMMM"))
+                                            .Font(f => f.Size(13))
+                                        )
+                                        .Legend(l => l
+                                            .Visible(false)
+                                        )
+                                        .Export(e => e.Enabled(false))
+                                        .Series(s => s
+                                            .Add()
+                                            .ArgumentField("office")
+                                            .ValueField("value")
+                                            .Label(l => l
+                                                .Visible(true)
+                                                .Font(f => f.Size(16))
+                                                .Connector(c => c
+                                                    .Visible(false)
+                                                    .Width(0.5)
+                                                )
+                                                .Position(PieChartLabelPosition.Inside)
+                                                .CustomizeText(@<text>
+                                                    function(arg) {
+                                                        return arg.percentText;
+                                                    }
+                                                </text>)
+                                            )
+                                        )
+                                        .DataSource(new[] {
+                                            new { office = "diff", value = (ViewBag.ExpectLastMonthM2[1] - ViewBag.ResultLastMonthM2[1]) },
+                                            new { office = "all", value = ViewBag.ResultLastMonthM2[1] }
+                                        })
+                                    )
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div id="detail" class="col-xl-12 mb-3">
+                            <div class="card">
+                                <div class="card-header bg-light">
+                                    จำนวนราย (ราย)
+                                </div>
+                                <div class="card-body">
+                                    <table class="table table-bordered">
+                                        <thead>
+                                            <tr>
+                                                <th scope="col"></th>
+                                                <th scope="col">รวม</th>
+                                                <th scope="col">ภญ.</th>
+                                                <th scope="col">สภ. และ สท.</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <th scope="row">เป้าหมายรวมปีงบประมาณ </th>
+                                                <td>@((ViewBag.ExpectM2[0] + ViewBag.ExpectM2[1]).ToString("N4"))</td>
+                                                <td>@(ViewBag.ExpectM2[0].ToString("N4"))</td>
+                                                <td>@(ViewBag.ExpectM2[1].ToString("N4"))</td>
+                                            </tr>
+                                            <tr>
+                                                <th scope="row">เป้าหมาย ณ เดือน @DateTime.Now.AddMonths(-1).ToString("MMMM")   ปีงบประมาณ @(DateTime.Now.Month > 9 ? DateTime.Now.AddYears(1).ToString("yyyy") : DateTime.Now.ToString("yyyy"))</th>
+                                                <td>@((ViewBag.ExpectLastMonthM2[0] + ViewBag.ExpectLastMonthM2[1]).ToString("N4"))</td>
+                                                <td>@(ViewBag.ExpectLastMonthM2[0].ToString("N4"))</td>
+                                                <td>@(ViewBag.ExpectLastMonthM2[1].ToString("N4"))</td>
+                                            </tr>
+                                            <tr>
+                                                <th scope="row">ผลสะสม ณ เดือน @DateTime.Now.AddMonths(-1).ToString("MMMM")   ปีงบประมาณ @(DateTime.Now.Month > 9 ? DateTime.Now.AddYears(1).ToString("yyyy") : DateTime.Now.ToString("yyyy"))</th>
+                                                <td>@((ViewBag.ResultLastMonthM2[0] + ViewBag.ResultLastMonthM2[1]).ToString("N4"))</td>
+                                                <td>@(ViewBag.ResultLastMonthM2[0].ToString("N4"))</td>
+                                                <td>@(ViewBag.ResultLastMonthM2[1].ToString("N4")) </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
-        <div class="card-body">
-            <h4 class="small font-weight-bold">Server Migration <span class="float-right">20%</span></h4>
-            <div class="progress mb-4">
-                <div class="progress-bar bg-danger" role="progressbar" style="width: 20%" aria-valuenow="20" aria-valuemin="0" aria-valuemax="100"></div>
+    </div>
+    <!-- Content Row หมวด 3 : ด้านเร่งรัด    -->
+    <div class="row">
+        <!-- Chart -->
+        <div class="col-xl-12 col-lg-12">
+            <div class="card shadow mb-4">
+                <!-- Card Header -->
+                <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                    <h6 class="m-0 font-weight-bold text-primary">
+                        หมวด 3 : ด้านเร่งรัด
+                    </h6>
+                    <h6 class="m-0 font-weight-bold text-primary">
+                        ตัวชี้วัดที่ 8 : ร้อยละของผลการเร่งรัดได้เม็ดเงินเปรียบเทียบกับประมาณการ
+                    </h6>
+                </div>
+                <!-- Card Body -->
+                <div class="card-body">
+                    <div class="row">
+                        <div id="all" class="col-xl-4 mb-3">
+                            <div class="card">
+                                <div class="card-header bg-light">
+                                    ภาพรวม
+                                </div>
+                                <div class="card-body">
+                                    <div class="row">
+                                        <div class="col-xl-6 mb-3">
+                                            @(Html.DevExtreme().PieChart()
+                                        .ID("pie311")
+                                        .Palette(VizPalette.SoftBlue)
+                                        .Title(t => t
+                                            .Text("ผลสะสม ณ เดือน" + DateTime.Now.AddMonths(-1).ToString("MMMM") + "เทียบกับเป้าหมายรวมปี งปม. " + (DateTime.Now.Month > 9 ? DateTime.Now.AddYears(1).ToString("yyyy") : DateTime.Now.ToString("yyyy")))
+                                            .Font(f => f.Size(13))
+                                        )
+                                        .Legend(l => l
+                                            .Visible(false)
+                                        )
+                                        .Export(e => e.Enabled(false))
+                                        .Series(s => s
+                                            .Add()
+                                            .ArgumentField("office")
+                                            .ValueField("value")
+                                            .Label(l => l
+                                                .Visible(true)
+                                                .Font(f => f.Size(16))
+                                                .Connector(c => c
+                                                    .Visible(false)
+                                                    .Width(0.5)
+                                                )
+                                                .Position(PieChartLabelPosition.Inside)
+                                                .CustomizeText(@<text>
+                                                    function(arg) {
+                                                        return arg.percentText;
+                                                    }
+                                                </text>)
+                                            )
+                                        )
+                                        .DataSource(new[] {
+                                            new { office = "diff", value = (ViewBag.ExpectM3[0] + ViewBag.ExpectM3[1] - (ViewBag.ResultLastMonthM3[0] + ViewBag.ResultLastMonthM3[1])) },
+                                            new { office = "all", value = (ViewBag.ResultLastMonthM3[0] + ViewBag.ResultLastMonthM3[1]) }
+                                        })
+                                    )
+                                        </div>
+                                        <div class="col-xl-6 mb-3">
+                                            @(Html.DevExtreme().PieChart()
+                                        .ID("pie312")
+                                        .Palette(VizPalette.SoftPastel)
+                                        .Title(t => t
+                                            .Text("ผลสะสม ณ เดือน" + DateTime.Now.AddMonths(-1).ToString("MMMM") + "เทียบกับเป้าหมาย ณ เดือน " + DateTime.Now.AddMonths(-1).ToString("MMMM"))
+                                            .Font(f => f.Size(13))
+                                        )
+                                        .Legend(l => l
+                                            .Visible(false)
+                                        )
+                                        .Export(e => e.Enabled(false))
+                                        .Series(s => s
+                                            .Add()
+                                            .ArgumentField("office")
+                                            .ValueField("value")
+                                            .Label(l => l
+                                                .Visible(true)
+                                                .Font(f => f.Size(16))
+                                                .Connector(c => c
+                                                    .Visible(false)
+                                                    .Width(0.5)
+                                                )
+                                                .Position(PieChartLabelPosition.Inside)
+                                                .CustomizeText(@<text>
+                                                    function(arg) {
+                                                        return arg.percentText;
+                                                    }
+                                                </text>)
+                                            )
+                                        )
+                                        .DataSource(new[] {
+                                            new { office = "diff", value = (ViewBag.ExpectLastMonthM3[0] + ViewBag.ExpectLastMonthM3[1] - (ViewBag.ResultLastMonthM3[0] + ViewBag.ResultLastMonthM3[1])) },
+                                            new { office = "all", value = (ViewBag.ResultLastMonthM3[0] + ViewBag.ResultLastMonthM3[1]) }
+                                        })
+                                    )
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div id="hq" class="col-xl-4 mb-3">
+                            <div class="card">
+                                <div class="card-header bg-light">
+                                    ภญ.
+                                </div>
+                                <div class="card-body">
+                                    <div class="row">
+                                        <div class="col-xl-6 mb-3">
+                                            @(Html.DevExtreme().PieChart()
+                                        .ID("pie321")
+                                        .Palette(VizPalette.SoftBlue)
+                                        .Title(t => t
+                                            .Text("ผลสะสม ณ เดือน" + DateTime.Now.AddMonths(-1).ToString("MMMM") + "เทียบกับเป้าหมายรวมปี งปม. " + (DateTime.Now.Month > 9 ? DateTime.Now.AddYears(1).ToString("yyyy") : DateTime.Now.ToString("yyyy")))
+                                            .Font(f => f.Size(13))
+                                        )
+                                        .Legend(l => l
+                                            .Visible(false)
+                                        )
+                                        .Export(e => e.Enabled(false))
+                                        .Series(s => s
+                                            .Add()
+                                            .ArgumentField("office")
+                                            .ValueField("value")
+                                            .Label(l => l
+                                                .Visible(true)
+                                                .Font(f => f.Size(16))
+                                                .Connector(c => c
+                                                    .Visible(false)
+                                                    .Width(0.5)
+                                                )
+                                                .Position(PieChartLabelPosition.Inside)
+                                                .CustomizeText(@<text>
+                                                    function(arg) {
+                                                        return arg.percentText;
+                                                    }
+                                                </text>)
+                                            )
+                                        )
+                                        .DataSource(new[] {
+                                            new { office = "diff", value = (ViewBag.ExpectM3[0] - ViewBag.ResultLastMonthM3[0]) },
+                                            new { office = "hq", value = ViewBag.ResultLastMonthM3[0] }
+                                        })
+                                    )
+                                        </div>
+                                        <div class="col-xl-6 mb-3">
+                                            @(Html.DevExtreme().PieChart()
+                                        .ID("pie322")
+                                        .Palette(VizPalette.SoftPastel)
+                                        .Title(t => t
+                                            .Text("ผลสะสม ณ เดือน" + DateTime.Now.AddMonths(-1).ToString("MMMM") + "เทียบกับเป้าหมาย ณ เดือน " + DateTime.Now.AddMonths(-1).ToString("MMMM"))
+                                            .Font(f => f.Size(13))
+                                        )
+                                        .Legend(l => l
+                                            .Visible(false)
+                                        )
+                                        .Export(e => e.Enabled(false))
+                                        .Series(s => s
+                                            .Add()
+                                            .ArgumentField("office")
+                                            .ValueField("value")
+                                            .Label(l => l
+                                                .Visible(true)
+                                                .Font(f => f.Size(16))
+                                                .Connector(c => c
+                                                    .Visible(false)
+                                                    .Width(0.5)
+                                                )
+                                                .Position(PieChartLabelPosition.Inside)
+                                                .CustomizeText(@<text>
+                                                    function(arg) {
+                                                        return arg.percentText;
+                                                    }
+                                                </text>)
+                                            )
+                                        )
+                                        .DataSource(new[] {
+                                            new { office = "diff", value = (ViewBag.ExpectLastMonthM3[0] - ViewBag.ResultLastMonthM3[0]) },
+                                            new { office = "all", value = ViewBag.ResultLastMonthM3[0] }
+                                        })
+                                    )
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div id="nhq" runat="server" class="col-xl-4 mb-3">
+                            <div class="card">
+                                <div class="card-header bg-light">
+                                    สภ. และ สท.
+                                </div>
+                                <div class="card-body">
+                                    <div class="row">
+                                        <div class="col-xl-6 mb-3">
+                                            @(Html.DevExtreme().PieChart()
+                                        .ID("pie331")
+                                        .Palette(VizPalette.SoftBlue)
+                                        .Title(t => t
+                                            .Text("ผลสะสม ณ เดือน" + DateTime.Now.AddMonths(-1).ToString("MMMM") + "เทียบกับเป้าหมายรวมปี งปม. " + (DateTime.Now.Month > 9 ? DateTime.Now.AddYears(1).ToString("yyyy") : DateTime.Now.ToString("yyyy")))
+                                            .Font(f => f.Size(13))
+                                        )
+                                        .Legend(l => l
+                                            .Visible(false)
+                                        )
+                                        .Export(e => e.Enabled(false))
+                                        .Series(s => s
+                                            .Add()
+                                            .ArgumentField("office")
+                                            .ValueField("value")
+                                            .Label(l => l
+                                                .Visible(true)
+                                                .Font(f => f.Size(16))
+                                                .Connector(c => c
+                                                    .Visible(false)
+                                                    .Width(0.5)
+                                                )
+                                                .Position(PieChartLabelPosition.Inside)
+                                                .CustomizeText(@<text>
+                                                    function(arg) {
+                                                        return arg.percentText;
+                                                    }
+                                                </text>)
+                                            )
+                                        )
+                                        .DataSource(new[] {
+                                            new { office = "diff", value = (ViewBag.ExpectM3[1] - ViewBag.ResultLastMonthM3[1]) },
+                                            new { office = "hq", value = ViewBag.ResultLastMonthM3[1] }
+                                        })
+                                    )
+                                        </div>
+                                        <div class="col-xl-6 mb-3">
+                                            @(Html.DevExtreme().PieChart()
+                                        .ID("pie332")
+                                        .Palette(VizPalette.SoftPastel)
+                                        .Title(t => t
+                                            .Text("ผลสะสม ณ เดือน" + DateTime.Now.AddMonths(-1).ToString("MMMM") + "เทียบกับเป้าหมาย ณ เดือน " + DateTime.Now.AddMonths(-1).ToString("MMMM"))
+                                            .Font(f => f.Size(13))
+                                        )
+                                        .Legend(l => l
+                                            .Visible(false)
+                                        )
+                                        .Export(e => e.Enabled(false))
+                                        .Series(s => s
+                                            .Add()
+                                            .ArgumentField("office")
+                                            .ValueField("value")
+                                            .Label(l => l
+                                                .Visible(true)
+                                                .Font(f => f.Size(16))
+                                                .Connector(c => c
+                                                    .Visible(false)
+                                                    .Width(0.5)
+                                                )
+                                                .Position(PieChartLabelPosition.Inside)
+                                                .CustomizeText(@<text>
+                                                    function(arg) {
+                                                        return arg.percentText;
+                                                    }
+                                                </text>)
+                                            )
+                                        )
+                                        .DataSource(new[] {
+                                            new { office = "diff", value = (ViewBag.ExpectLastMonthM3[1] - ViewBag.ResultLastMonthM3[1]) },
+                                            new { office = "all", value = ViewBag.ResultLastMonthM3[1] }
+                                        })
+                                    )
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div id="detail" class="col-xl-12 mb-3">
+                            <div class="card">
+                                <div class="card-header bg-light">
+                                    ผลการเร่งรัด (ล้านบาท)
+                                </div>
+                                <div class="card-body">
+                                    <table class="table table-bordered">
+                                        <thead>
+                                            <tr>
+                                                <th scope="col"></th>
+                                                <th scope="col">รวม</th>
+                                                <th scope="col">ภญ.</th>
+                                                <th scope="col">สภ. และ สท.</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <th scope="row">เป้าหมายรวมปีงบประมาณ </th>
+                                                <td>@(((ViewBag.ExpectM3[0] + ViewBag.ExpectM3[1])/1000000).ToString("N4"))</td>
+                                                <td>@((ViewBag.ExpectM3[0]/1000000).ToString("N4"))</td>
+                                                <td>@((ViewBag.ExpectM3[1]/1000000).ToString("N4"))</td>
+                                            </tr>
+                                            <tr>
+                                                <th scope="row">เป้าหมาย ณ เดือน @DateTime.Now.AddMonths(-1).ToString("MMMM")   ปีงบประมาณ @(DateTime.Now.Month > 9 ? DateTime.Now.AddYears(1).ToString("yyyy") : DateTime.Now.ToString("yyyy"))</th>
+                                                <td>@(((ViewBag.ExpectLastMonthM3[0] + ViewBag.ExpectLastMonthM3[1])/1000000).ToString("N4"))</td>
+                                                <td>@((ViewBag.ExpectLastMonthM3[0]/1000000).ToString("N4"))</td>
+                                                <td>@((ViewBag.ExpectLastMonthM3[1]/1000000).ToString("N4"))</td>
+                                            </tr>
+                                            <tr>
+                                                <th scope="row">ผลสะสม ณ เดือน @DateTime.Now.AddMonths(-1).ToString("MMMM")   ปีงบประมาณ @(DateTime.Now.Month > 9 ? DateTime.Now.AddYears(1).ToString("yyyy") : DateTime.Now.ToString("yyyy"))</th>
+                                                <td>@(((ViewBag.ResultLastMonthM3[0] + ViewBag.ResultLastMonthM3[1])/1000000).ToString("N4"))</td>
+                                                <td>@((ViewBag.ResultLastMonthM3[0]/1000000).ToString("N4"))</td>
+                                                <td>@((ViewBag.ResultLastMonthM3[1]/1000000).ToString("N4")) </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
-            <h4 class="small font-weight-bold">Sales Tracking <span class="float-right">40%</span></h4>
-            <div class="progress mb-4">
-                <div class="progress-bar bg-warning" role="progressbar" style="width: 40%" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100"></div>
+        </div>
+    </div>
+    <!-- Content Row หมวด 4 : ด้านคืนภาษี    -->
+    <div class="row">
+        <!-- Chart -->
+        <div class="col-xl-12 col-lg-12">
+            <div class="card shadow mb-4">
+                <!-- Card Header -->
+                <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                    <h6 class="m-0 font-weight-bold text-primary">
+                        หมวด 4 : ด้านคืนภาษี
+                    </h6>
+                    <h6 class="m-0 font-weight-bold text-primary">
+                        ตัวชี้วัดที่ 11 : ร้อยละของการบริหารการคืนภาษีเงินได้บุคคลธรรมดาประจำปีภาษี @(DateTime.Now.Month > 9 ? DateTime.Now.ToString("yyyy") : DateTime.Now.AddYears(-1).ToString("yyyy"))
+                    </h6>
+                </div>
+                <!-- Card Body -->
+                <div class="card-body">
+                    <div class="row">
+                        <div id="all" class="col-xl-4 mb-3">
+                            <div class="card">
+                                <div class="card-header bg-light">
+                                    ภาพรวม
+                                </div>
+                                <div class="card-body">
+                                    <div class="row">
+                                        <div class="col-xl-6 mb-3">
+                                            @(Html.DevExtreme().PieChart()
+                                        .ID("pie411")
+                                        .Palette(VizPalette.SoftBlue)
+                                        .Title(t => t
+                                            .Text("ผลสะสม ณ เดือน" + DateTime.Now.AddMonths(-1).ToString("MMMM") + "เทียบกับเป้าหมายรวมปี งปม. " + (DateTime.Now.Month > 9 ? DateTime.Now.AddYears(1).ToString("yyyy") : DateTime.Now.ToString("yyyy")))
+                                            .Font(f => f.Size(13))
+                                        )
+                                        .Legend(l => l
+                                            .Visible(false)
+                                        )
+                                        .Export(e => e.Enabled(false))
+                                        .Series(s => s
+                                            .Add()
+                                            .ArgumentField("office")
+                                            .ValueField("value")
+                                            .Label(l => l
+                                                .Visible(true)
+                                                .Font(f => f.Size(16))
+                                                .Connector(c => c
+                                                    .Visible(false)
+                                                    .Width(0.5)
+                                                )
+                                                .Position(PieChartLabelPosition.Inside)
+                                                .CustomizeText(@<text>
+                                                    function(arg) {
+                                                        return arg.percentText;
+                                                    }
+                                                </text>)
+                                            )
+                                        )
+                                        .DataSource(new[] {
+                                            new { office = "diff", value = (ViewBag.ExpectM4[0] + ViewBag.ExpectM4[1] - (ViewBag.ResultLastMonthM4[0] + ViewBag.ResultLastMonthM4[1])) },
+                                            new { office = "all", value = (ViewBag.ResultLastMonthM4[0] + ViewBag.ResultLastMonthM4[1]) }
+                                        })
+                                    )
+                                        </div>
+                                        <div class="col-xl-6 mb-3">
+                                            @(Html.DevExtreme().PieChart()
+                                        .ID("pie412")
+                                        .Palette(VizPalette.SoftPastel)
+                                        .Title(t => t
+                                            .Text("ผลสะสม ณ เดือน" + DateTime.Now.AddMonths(-1).ToString("MMMM") + "เทียบกับเป้าหมาย ณ เดือน " + DateTime.Now.AddMonths(-1).ToString("MMMM"))
+                                            .Font(f => f.Size(13))
+                                        )
+                                        .Legend(l => l
+                                            .Visible(false)
+                                        )
+                                        .Export(e => e.Enabled(false))
+                                        .Series(s => s
+                                            .Add()
+                                            .ArgumentField("office")
+                                            .ValueField("value")
+                                            .Label(l => l
+                                                .Visible(true)
+                                                .Font(f => f.Size(16))
+                                                .Connector(c => c
+                                                    .Visible(false)
+                                                    .Width(0.5)
+                                                )
+                                                .Position(PieChartLabelPosition.Inside)
+                                                .CustomizeText(@<text>
+                                                    function(arg) {
+                                                        return arg.percentText;
+                                                    }
+                                                </text>)
+                                            )
+                                        )
+                                        .DataSource(new[] {
+                                            new { office = "diff", value = (ViewBag.ExpectLastMonthM4[0] + ViewBag.ExpectLastMonthM4[1] - (ViewBag.ResultLastMonthM4[0] + ViewBag.ResultLastMonthM4[1])) },
+                                            new { office = "all", value = (ViewBag.ResultLastMonthM4[0] + ViewBag.ResultLastMonthM4[1]) }
+                                        })
+                                    )
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div id="hq" class="col-xl-4 mb-3">
+                            <div class="card">
+                                <div class="card-header bg-light">
+                                    ภญ.
+                                </div>
+                                <div class="card-body">
+                                    <div class="row">
+                                        <div class="col-xl-6 mb-3">
+                                            @(Html.DevExtreme().PieChart()
+                                        .ID("pie421")
+                                        .Palette(VizPalette.SoftBlue)
+                                        .Title(t => t
+                                            .Text("ผลสะสม ณ เดือน" + DateTime.Now.AddMonths(-1).ToString("MMMM") + "เทียบกับเป้าหมายรวมปี งปม. " + (DateTime.Now.Month > 9 ? DateTime.Now.AddYears(1).ToString("yyyy") : DateTime.Now.ToString("yyyy")))
+                                            .Font(f => f.Size(13))
+                                        )
+                                        .Legend(l => l
+                                            .Visible(false)
+                                        )
+                                        .Export(e => e.Enabled(false))
+                                        .Series(s => s
+                                            .Add()
+                                            .ArgumentField("office")
+                                            .ValueField("value")
+                                            .Label(l => l
+                                                .Visible(true)
+                                                .Font(f => f.Size(16))
+                                                .Connector(c => c
+                                                    .Visible(false)
+                                                    .Width(0.5)
+                                                )
+                                                .Position(PieChartLabelPosition.Inside)
+                                                .CustomizeText(@<text>
+                                                    function(arg) {
+                                                        return arg.percentText;
+                                                    }
+                                                </text>)
+                                            )
+                                        )
+                                        .DataSource(new[] {
+                                            new { office = "diff", value = (ViewBag.ExpectM4[0] - ViewBag.ResultLastMonthM4[0]) },
+                                            new { office = "hq", value = ViewBag.ResultLastMonthM4[0] }
+                                        })
+                                    )
+                                        </div>
+                                        <div class="col-xl-6 mb-3">
+                                            @(Html.DevExtreme().PieChart()
+                                        .ID("pie422")
+                                        .Palette(VizPalette.SoftPastel)
+                                        .Title(t => t
+                                            .Text("ผลสะสม ณ เดือน" + DateTime.Now.AddMonths(-1).ToString("MMMM") + "เทียบกับเป้าหมาย ณ เดือน " + DateTime.Now.AddMonths(-1).ToString("MMMM"))
+                                            .Font(f => f.Size(13))
+                                        )
+                                        .Legend(l => l
+                                            .Visible(false)
+                                        )
+                                        .Export(e => e.Enabled(false))
+                                        .Series(s => s
+                                            .Add()
+                                            .ArgumentField("office")
+                                            .ValueField("value")
+                                            .Label(l => l
+                                                .Visible(true)
+                                                .Font(f => f.Size(16))
+                                                .Connector(c => c
+                                                    .Visible(false)
+                                                    .Width(0.5)
+                                                )
+                                                .Position(PieChartLabelPosition.Inside)
+                                                .CustomizeText(@<text>
+                                                    function(arg) {
+                                                        return arg.percentText;
+                                                    }
+                                                </text>)
+                                            )
+                                        )
+                                        .DataSource(new[] {
+                                            new { office = "diff", value = (ViewBag.ExpectLastMonthM4[0] - ViewBag.ResultLastMonthM4[0]) },
+                                            new { office = "all", value = ViewBag.ResultLastMonthM4[0] }
+                                        })
+                                    )
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div id="nhq" runat="server" class="col-xl-4 mb-3">
+                            <div class="card">
+                                <div class="card-header bg-light">
+                                    สภ. และ สท.
+                                </div>
+                                <div class="card-body">
+                                    <div class="row">
+                                        <div class="col-xl-6 mb-3">
+                                            @(Html.DevExtreme().PieChart()
+                                        .ID("pie431")
+                                        .Palette(VizPalette.SoftBlue)
+                                        .Title(t => t
+                                            .Text("ผลสะสม ณ เดือน" + DateTime.Now.AddMonths(-1).ToString("MMMM") + "เทียบกับเป้าหมายรวมปี งปม. " + (DateTime.Now.Month > 9 ? DateTime.Now.AddYears(1).ToString("yyyy") : DateTime.Now.ToString("yyyy")))
+                                            .Font(f => f.Size(13))
+                                        )
+                                        .Legend(l => l
+                                            .Visible(false)
+                                        )
+                                        .Export(e => e.Enabled(false))
+                                        .Series(s => s
+                                            .Add()
+                                            .ArgumentField("office")
+                                            .ValueField("value")
+                                            .Label(l => l
+                                                .Visible(true)
+                                                .Font(f => f.Size(16))
+                                                .Connector(c => c
+                                                    .Visible(false)
+                                                    .Width(0.5)
+                                                )
+                                                .Position(PieChartLabelPosition.Inside)
+                                                .CustomizeText(@<text>
+                                                    function(arg) {
+                                                        return arg.percentText;
+                                                    }
+                                                </text>)
+                                            )
+                                        )
+                                        .DataSource(new[] {
+                                            new { office = "diff", value = (ViewBag.ExpectM4[1] - ViewBag.ResultLastMonthM4[1]) },
+                                            new { office = "hq", value = ViewBag.ResultLastMonthM4[1] }
+                                        })
+                                    )
+                                        </div>
+                                        <div class="col-xl-6 mb-3">
+                                            @(Html.DevExtreme().PieChart()
+                                        .ID("pie432")
+                                        .Palette(VizPalette.SoftPastel)
+                                        .Title(t => t
+                                            .Text("ผลสะสม ณ เดือน" + DateTime.Now.AddMonths(-1).ToString("MMMM") + "เทียบกับเป้าหมาย ณ เดือน " + DateTime.Now.AddMonths(-1).ToString("MMMM"))
+                                            .Font(f => f.Size(13))
+                                        )
+                                        .Legend(l => l
+                                            .Visible(false)
+                                        )
+                                        .Export(e => e.Enabled(false))
+                                        .Series(s => s
+                                            .Add()
+                                            .ArgumentField("office")
+                                            .ValueField("value")
+                                            .Label(l => l
+                                                .Visible(true)
+                                                .Font(f => f.Size(16))
+                                                .Connector(c => c
+                                                    .Visible(false)
+                                                    .Width(0.5)
+                                                )
+                                                .Position(PieChartLabelPosition.Inside)
+                                                .CustomizeText(@<text>
+                                                    function(arg) {
+                                                        return arg.percentText;
+                                                    }
+                                                </text>)
+                                            )
+                                        )
+                                        .DataSource(new[] {
+                                            new { office = "diff", value = (ViewBag.ExpectLastMonthM4[1] - ViewBag.ResultLastMonthM4[1]) },
+                                            new { office = "all", value = ViewBag.ResultLastMonthM4[1] }
+                                        })
+                                    )
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div id="detail" class="col-xl-12 mb-3">
+                            <div class="card">
+                                <div class="card-header bg-light">
+                                    ร้อยละ (%)
+                                </div>
+                                <div class="card-body">
+                                    <table class="table table-bordered">
+                                        <thead>
+                                            <tr>
+                                                <th scope="col"></th>
+                                                <th scope="col">รวม</th>
+                                                <th scope="col">ภญ.</th>
+                                                <th scope="col">สภ. และ สท.</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <th scope="row">เป้าหมายรวมปีงบประมาณ </th>
+                                                <td>@((ViewBag.ExpectM4[0] + ViewBag.ExpectM4[1]).ToString("N4")) %</td>
+                                                <td>@(ViewBag.ExpectM4[0].ToString("N4")) %</td>
+                                                <td>@(ViewBag.ExpectM4[1].ToString("N4")) %</td>
+                                            </tr>
+                                            <tr>
+                                                <th scope="row">เป้าหมาย ณ เดือน @DateTime.Now.AddMonths(-1).ToString("MMMM")   ปีงบประมาณ @(DateTime.Now.Month > 9 ? DateTime.Now.AddYears(1).ToString("yyyy") : DateTime.Now.ToString("yyyy"))</th>
+                                                <td>@((ViewBag.ExpectLastMonthM4[0] + ViewBag.ExpectLastMonthM4[1]).ToString("N4")) %</td>
+                                                <td>@(ViewBag.ExpectLastMonthM4[0].ToString("N4")) %</td>
+                                                <td>@(ViewBag.ExpectLastMonthM4[1].ToString("N4")) %</td>
+                                            </tr>
+                                            <tr>
+                                                <th scope="row">ผลสะสม ณ เดือน @DateTime.Now.AddMonths(-1).ToString("MMMM")   ปีงบประมาณ @(DateTime.Now.Month > 9 ? DateTime.Now.AddYears(1).ToString("yyyy") : DateTime.Now.ToString("yyyy"))</th>
+                                                <td>@((ViewBag.ResultLastMonthM4[0] + ViewBag.ResultLastMonthM4[1]).ToString("N4")) %</td>
+                                                <td>@(ViewBag.ResultLastMonthM4[0].ToString("N4")) %</td>
+                                                <td>@(ViewBag.ResultLastMonthM4[1].ToString("N4")) %</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
-            <h4 class="small font-weight-bold">Customer Database <span class="float-right">60%</span></h4>
-            <div class="progress mb-4">
-                <div class="progress-bar" role="progressbar" style="width: 60%" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100"></div>
+        </div>
+    </div>
+    <!-- Content Row หมวด 5 : ด้านบริการ    -->
+    <div class="row">
+        <!-- Chart -->
+        <div class="col-xl-12 col-lg-12">
+            <div class="card shadow mb-4">
+                <!-- Card Header -->
+                <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                    <h6 class="m-0 font-weight-bold text-primary">
+                        หมวด 5 : ด้านบริการ
+                    </h6>
+                    <h6 class="m-0 font-weight-bold text-primary">
+                        ตัวชี้วัดที่ 15 : ร้อยละของจำนวนแบบฯ ที่ยื่นผ่านอินเทอรืเนตเทียบกับเป้าหมายที่กำหนด
+                    </h6>
+                </div>
+                <!-- Card Body -->
+                <div class="card-body">
+                    <div class="row">
+                        <div id="all" class="col-xl-4 mb-3">
+                            <div class="card">
+                                <div class="card-header bg-light">
+                                    ภาพรวม
+                                </div>
+                                <div class="card-body">
+                                    <div class="row">
+                                        <div class="col-xl-6 mb-3">
+                                            @(Html.DevExtreme().PieChart()
+                                        .ID("pie511")
+                                        .Palette(VizPalette.SoftBlue)
+                                        .Title(t => t
+                                            .Text("ผลสะสม ณ เดือน" + DateTime.Now.AddMonths(-1).ToString("MMMM") + "เทียบกับเป้าหมายรวมปี งปม. " + (DateTime.Now.Month > 9 ? DateTime.Now.AddYears(1).ToString("yyyy") : DateTime.Now.ToString("yyyy")))
+                                            .Font(f => f.Size(13))
+                                        )
+                                        .Legend(l => l
+                                            .Visible(false)
+                                        )
+                                        .Export(e => e.Enabled(false))
+                                        .Series(s => s
+                                            .Add()
+                                            .ArgumentField("office")
+                                            .ValueField("value")
+                                            .Label(l => l
+                                                .Visible(true)
+                                                .Font(f => f.Size(16))
+                                                .Connector(c => c
+                                                    .Visible(false)
+                                                    .Width(0.5)
+                                                )
+                                                .Position(PieChartLabelPosition.Inside)
+                                                .CustomizeText(@<text>
+                                                    function(arg) {
+                                                        return arg.percentText;
+                                                    }
+                                                </text>)
+                                            )
+                                        )
+                                        .DataSource(new[] {
+                                            new { office = "diff", value = (ViewBag.ExpectM5[0] + ViewBag.ExpectM5[1] - (ViewBag.ResultLastMonthM5[0] + ViewBag.ResultLastMonthM5[1])) },
+                                            new { office = "all", value = (ViewBag.ResultLastMonthM5[0] + ViewBag.ResultLastMonthM5[1]) }
+                                        })
+                                    )
+                                        </div>
+                                        <div class="col-xl-6 mb-3">
+                                            @(Html.DevExtreme().PieChart()
+                                        .ID("pie512")
+                                        .Palette(VizPalette.SoftPastel)
+                                        .Title(t => t
+                                            .Text("ผลสะสม ณ เดือน" + DateTime.Now.AddMonths(-1).ToString("MMMM") + "เทียบกับเป้าหมาย ณ เดือน " + DateTime.Now.AddMonths(-1).ToString("MMMM"))
+                                            .Font(f => f.Size(13))
+                                        )
+                                        .Legend(l => l
+                                            .Visible(false)
+                                        )
+                                        .Export(e => e.Enabled(false))
+                                        .Series(s => s
+                                            .Add()
+                                            .ArgumentField("office")
+                                            .ValueField("value")
+                                            .Label(l => l
+                                                .Visible(true)
+                                                .Font(f => f.Size(16))
+                                                .Connector(c => c
+                                                    .Visible(false)
+                                                    .Width(0.5)
+                                                )
+                                                .Position(PieChartLabelPosition.Inside)
+                                                .CustomizeText(@<text>
+                                                    function(arg) {
+                                                        return arg.percentText;
+                                                    }
+                                                </text>)
+                                            )
+                                        )
+                                        .DataSource(new[] {
+                                            new { office = "diff", value = (ViewBag.ExpectLastMonthM5[0] + ViewBag.ExpectLastMonthM5[1] - (ViewBag.ResultLastMonthM5[0] + ViewBag.ResultLastMonthM5[1])) },
+                                            new { office = "all", value = (ViewBag.ResultLastMonthM5[0] + ViewBag.ResultLastMonthM5[1]) }
+                                        })
+                                    )
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div id="hq" class="col-xl-4 mb-3">
+                            <div class="card">
+                                <div class="card-header bg-light">
+                                    ภญ.
+                                </div>
+                                <div class="card-body">
+                                    <div class="row">
+                                        <div class="col-xl-6 mb-3">
+                                            @(Html.DevExtreme().PieChart()
+                                        .ID("pie521")
+                                        .Palette(VizPalette.SoftBlue)
+                                        .Title(t => t
+                                            .Text("ผลสะสม ณ เดือน" + DateTime.Now.AddMonths(-1).ToString("MMMM") + "เทียบกับเป้าหมายรวมปี งปม. " + (DateTime.Now.Month > 9 ? DateTime.Now.AddYears(1).ToString("yyyy") : DateTime.Now.ToString("yyyy")))
+                                            .Font(f => f.Size(13))
+                                        )
+                                        .Legend(l => l
+                                            .Visible(false)
+                                        )
+                                        .Export(e => e.Enabled(false))
+                                        .Series(s => s
+                                            .Add()
+                                            .ArgumentField("office")
+                                            .ValueField("value")
+                                            .Label(l => l
+                                                .Visible(true)
+                                                .Font(f => f.Size(16))
+                                                .Connector(c => c
+                                                    .Visible(false)
+                                                    .Width(0.5)
+                                                )
+                                                .Position(PieChartLabelPosition.Inside)
+                                                .CustomizeText(@<text>
+                                                    function(arg) {
+                                                        return arg.percentText;
+                                                    }
+                                                </text>)
+                                            )
+                                        )
+                                        .DataSource(new[] {
+                                            new { office = "diff", value = (ViewBag.ExpectM5[0] - ViewBag.ResultLastMonthM5[0]) },
+                                            new { office = "hq", value = ViewBag.ResultLastMonthM5[0] }
+                                        })
+                                    )
+                                        </div>
+                                        <div class="col-xl-6 mb-3">
+                                            @(Html.DevExtreme().PieChart()
+                                        .ID("pie522")
+                                        .Palette(VizPalette.SoftPastel)
+                                        .Title(t => t
+                                            .Text("ผลสะสม ณ เดือน" + DateTime.Now.AddMonths(-1).ToString("MMMM") + "เทียบกับเป้าหมาย ณ เดือน " + DateTime.Now.AddMonths(-1).ToString("MMMM"))
+                                            .Font(f => f.Size(13))
+                                        )
+                                        .Legend(l => l
+                                            .Visible(false)
+                                        )
+                                        .Export(e => e.Enabled(false))
+                                        .Series(s => s
+                                            .Add()
+                                            .ArgumentField("office")
+                                            .ValueField("value")
+                                            .Label(l => l
+                                                .Visible(true)
+                                                .Font(f => f.Size(16))
+                                                .Connector(c => c
+                                                    .Visible(false)
+                                                    .Width(0.5)
+                                                )
+                                                .Position(PieChartLabelPosition.Inside)
+                                                .CustomizeText(@<text>
+                                                    function(arg) {
+                                                        return arg.percentText;
+                                                    }
+                                                </text>)
+                                            )
+                                        )
+                                        .DataSource(new[] {
+                                            new { office = "diff", value = (ViewBag.ExpectLastMonthM5[0] - ViewBag.ResultLastMonthM5[0]) },
+                                            new { office = "all", value = ViewBag.ResultLastMonthM5[0] }
+                                        })
+                                    )
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div id="nhq" runat="server" class="col-xl-4 mb-3">
+                            <div class="card">
+                                <div class="card-header bg-light">
+                                    สภ. และ สท.
+                                </div>
+                                <div class="card-body">
+                                    <div class="row">
+                                        <div class="col-xl-6 mb-3">
+                                            @(Html.DevExtreme().PieChart()
+                                        .ID("pie531")
+                                        .Palette(VizPalette.SoftBlue)
+                                        .Title(t => t
+                                            .Text("ผลสะสม ณ เดือน" + DateTime.Now.AddMonths(-1).ToString("MMMM") + "เทียบกับเป้าหมายรวมปี งปม. " + (DateTime.Now.Month > 9 ? DateTime.Now.AddYears(1).ToString("yyyy") : DateTime.Now.ToString("yyyy")))
+                                            .Font(f => f.Size(13))
+                                        )
+                                        .Legend(l => l
+                                            .Visible(false)
+                                        )
+                                        .Export(e => e.Enabled(false))
+                                        .Series(s => s
+                                            .Add()
+                                            .ArgumentField("office")
+                                            .ValueField("value")
+                                            .Label(l => l
+                                                .Visible(true)
+                                                .Font(f => f.Size(16))
+                                                .Connector(c => c
+                                                    .Visible(false)
+                                                    .Width(0.5)
+                                                )
+                                                .Position(PieChartLabelPosition.Inside)
+                                                .CustomizeText(@<text>
+                                                    function(arg) {
+                                                        return arg.percentText;
+                                                    }
+                                                </text>)
+                                            )
+                                        )
+                                        .DataSource(new[] {
+                                            new { office = "diff", value = (ViewBag.ExpectM5[1] - ViewBag.ResultLastMonthM5[1]) },
+                                            new { office = "hq", value = ViewBag.ResultLastMonthM5[1] }
+                                        })
+                                    )
+                                        </div>
+                                        <div class="col-xl-6 mb-3">
+                                            @(Html.DevExtreme().PieChart()
+                                        .ID("pie532")
+                                        .Palette(VizPalette.SoftPastel)
+                                        .Title(t => t
+                                            .Text("ผลสะสม ณ เดือน" + DateTime.Now.AddMonths(-1).ToString("MMMM") + "เทียบกับเป้าหมาย ณ เดือน " + DateTime.Now.AddMonths(-1).ToString("MMMM"))
+                                            .Font(f => f.Size(13))
+                                        )
+                                        .Legend(l => l
+                                            .Visible(false)
+                                        )
+                                        .Export(e => e.Enabled(false))
+                                        .Series(s => s
+                                            .Add()
+                                            .ArgumentField("office")
+                                            .ValueField("value")
+                                            .Label(l => l
+                                                .Visible(true)
+                                                .Font(f => f.Size(16))
+                                                .Connector(c => c
+                                                    .Visible(false)
+                                                    .Width(0.5)
+                                                )
+                                                .Position(PieChartLabelPosition.Inside)
+                                                .CustomizeText(@<text>
+                                                    function(arg) {
+                                                        return arg.percentText;
+                                                    }
+                                                </text>)
+                                            )
+                                        )
+                                        .DataSource(new[] {
+                                            new { office = "diff", value = (ViewBag.ExpectLastMonthM5[1] - ViewBag.ResultLastMonthM5[1]) },
+                                            new { office = "all", value = ViewBag.ResultLastMonthM5[1] }
+                                        })
+                                    )
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div id="detail" class="col-xl-12 mb-3">
+                            <div class="card">
+                                <div class="card-header bg-light">
+                                    จำนวนแบบ (แบบ)
+                                </div>
+                                <div class="card-body">
+                                    <table class="table table-bordered">
+                                        <thead>
+                                            <tr>
+                                                <th scope="col"></th>
+                                                <th scope="col">รวม</th>
+                                                <th scope="col">ภญ.</th>
+                                                <th scope="col">สภ. และ สท.</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <th scope="row">เป้าหมายรวมปีงบประมาณ </th>
+                                                <td>@((ViewBag.ExpectM5[0] + ViewBag.ExpectM5[1]).ToString("N4"))</td>
+                                                <td>@(ViewBag.ExpectM5[0].ToString("N4"))</td>
+                                                <td>@(ViewBag.ExpectM5[1].ToString("N4"))</td>
+                                            </tr>
+                                            <tr>
+                                                <th scope="row">เป้าหมาย ณ เดือน @DateTime.Now.AddMonths(-1).ToString("MMMM")   ปีงบประมาณ @(DateTime.Now.Month > 9 ? DateTime.Now.AddYears(1).ToString("yyyy") : DateTime.Now.ToString("yyyy"))</th>
+                                                <td>@((ViewBag.ExpectLastMonthM5[0] + ViewBag.ExpectLastMonthM5[1]).ToString("N4"))</td>
+                                                <td>@(ViewBag.ExpectLastMonthM5[0].ToString("N4"))</td>
+                                                <td>@(ViewBag.ExpectLastMonthM5[1].ToString("N4"))</td>
+                                            </tr>
+                                            <tr>
+                                                <th scope="row">ผลสะสม ณ เดือน @DateTime.Now.AddMonths(-1).ToString("MMMM")   ปีงบประมาณ @(DateTime.Now.Month > 9 ? DateTime.Now.AddYears(1).ToString("yyyy") : DateTime.Now.ToString("yyyy"))</th>
+                                                <td>@((ViewBag.ResultLastMonthM5[0] + ViewBag.ResultLastMonthM5[1]).ToString("N4"))</td>
+                                                <td>@(ViewBag.ResultLastMonthM5[0].ToString("N4"))</td>
+                                                <td>@(ViewBag.ResultLastMonthM5[1].ToString("N4")) </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
-            <h4 class="small font-weight-bold">Payout Details <span class="float-right">80%</span></h4>
-            <div class="progress mb-4">
-                <div class="progress-bar bg-info" role="progressbar" style="width: 80%" aria-valuenow="80" aria-valuemin="0" aria-valuemax="100"></div>
-            </div>
-            <h4 class="small font-weight-bold">Account Setup <span class="float-right">Complete!</span></h4>
-            <div class="progress">
-                <div class="progress-bar bg-success" role="progressbar" style="width: 100%" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"></div>
+        </div>
+    </div>
+    <!-- Content Row หมวด 6 : ด้านเบิกจ่าย    -->
+    <div class="row">
+        <!-- Chart -->
+        <div class="col-xl-12 col-lg-12">
+            <div class="card shadow mb-4">
+                <!-- Card Header -->
+                <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                    <h6 class="m-0 font-weight-bold text-primary">
+                        หมวด 6 : ด้านเบิกจ่าย
+                    </h6>
+                    <h6 class="m-0 font-weight-bold text-primary">
+                        ตัวชี้วัดที่ 17 : ร้อยละของความสำเร็จของการเบิกจ่ายงบประมาณ ประจำปีงบประมาณ @(DateTime.Now.Month > 9 ? DateTime.Now.AddYears(1).ToString("yyyy") : DateTime.Now.ToString("yyyy"))
+                    </h6>
+                </div>
+                <!-- Card Body -->
+                <div class="card-body">
+                    <div class="row">
+                        <div id="all" class="col-xl-4 mb-3">
+                            <div class="card">
+                                <div class="card-header bg-light">
+                                    ภาพรวม
+                                </div>
+                                <div class="card-body">
+                                    <div class="row">
+                                        <div class="col-xl-6 mb-3">
+                                            @(Html.DevExtreme().PieChart()
+                                        .ID("pie611")
+                                        .Palette(VizPalette.SoftBlue)
+                                        .Title(t => t
+                                            .Text("ผลสะสม ณ เดือน" + DateTime.Now.AddMonths(-1).ToString("MMMM") + "เทียบกับเป้าหมายรวมปี งปม. " + (DateTime.Now.Month > 9 ? DateTime.Now.AddYears(1).ToString("yyyy") : DateTime.Now.ToString("yyyy")))
+                                            .Font(f => f.Size(13))
+                                        )
+                                        .Legend(l => l
+                                            .Visible(false)
+                                        )
+                                        .Export(e => e.Enabled(false))
+                                        .Series(s => s
+                                            .Add()
+                                            .ArgumentField("office")
+                                            .ValueField("value")
+                                            .Label(l => l
+                                                .Visible(true)
+                                                .Font(f => f.Size(16))
+                                                .Connector(c => c
+                                                    .Visible(false)
+                                                    .Width(0.5)
+                                                )
+                                                .Position(PieChartLabelPosition.Inside)
+                                                .CustomizeText(@<text>
+                                                    function(arg) {
+                                                        return arg.percentText;
+                                                    }
+                                                </text>)
+                                            )
+                                        )
+                                        .DataSource(new[] {
+                                            new { office = "diff", value = (ViewBag.ExpectM6[0] + ViewBag.ExpectM6[1] - (ViewBag.ResultLastMonthM6[0] + ViewBag.ResultLastMonthM6[1])) },
+                                            new { office = "all", value = (ViewBag.ResultLastMonthM6[0] + ViewBag.ResultLastMonthM6[1]) }
+                                        })
+                                    )
+                                        </div>
+                                        <div class="col-xl-6 mb-3">
+                                            @(Html.DevExtreme().PieChart()
+                                        .ID("pie612")
+                                        .Palette(VizPalette.SoftPastel)
+                                        .Title(t => t
+                                            .Text("ผลสะสม ณ เดือน" + DateTime.Now.AddMonths(-1).ToString("MMMM") + "เทียบกับเป้าหมาย ณ เดือน " + DateTime.Now.AddMonths(-1).ToString("MMMM"))
+                                            .Font(f => f.Size(13))
+                                        )
+                                        .Legend(l => l
+                                            .Visible(false)
+                                        )
+                                        .Export(e => e.Enabled(false))
+                                        .Series(s => s
+                                            .Add()
+                                            .ArgumentField("office")
+                                            .ValueField("value")
+                                            .Label(l => l
+                                                .Visible(true)
+                                                .Font(f => f.Size(16))
+                                                .Connector(c => c
+                                                    .Visible(false)
+                                                    .Width(0.5)
+                                                )
+                                                .Position(PieChartLabelPosition.Inside)
+                                                .CustomizeText(@<text>
+                                                    function(arg) {
+                                                        return arg.percentText;
+                                                    }
+                                                </text>)
+                                            )
+                                        )
+                                        .DataSource(new[] {
+                                            new { office = "diff", value = (ViewBag.ExpectLastMonthM6[0] + ViewBag.ExpectLastMonthM6[1] - (ViewBag.ResultLastMonthM6[0] + ViewBag.ResultLastMonthM6[1])) },
+                                            new { office = "all", value = (ViewBag.ResultLastMonthM6[0] + ViewBag.ResultLastMonthM6[1]) }
+                                        })
+                                    )
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div id="hq" class="col-xl-4 mb-3">
+                            <div class="card">
+                                <div class="card-header bg-light">
+                                    ภญ.
+                                </div>
+                                <div class="card-body">
+                                    <div class="row">
+                                        <div class="col-xl-6 mb-3">
+                                            @(Html.DevExtreme().PieChart()
+                                        .ID("pie621")
+                                        .Palette(VizPalette.SoftBlue)
+                                        .Title(t => t
+                                            .Text("ผลสะสม ณ เดือน" + DateTime.Now.AddMonths(-1).ToString("MMMM") + "เทียบกับเป้าหมายรวมปี งปม. " + (DateTime.Now.Month > 9 ? DateTime.Now.AddYears(1).ToString("yyyy") : DateTime.Now.ToString("yyyy")))
+                                            .Font(f => f.Size(13))
+                                        )
+                                        .Legend(l => l
+                                            .Visible(false)
+                                        )
+                                        .Export(e => e.Enabled(false))
+                                        .Series(s => s
+                                            .Add()
+                                            .ArgumentField("office")
+                                            .ValueField("value")
+                                            .Label(l => l
+                                                .Visible(true)
+                                                .Font(f => f.Size(16))
+                                                .Connector(c => c
+                                                    .Visible(false)
+                                                    .Width(0.5)
+                                                )
+                                                .Position(PieChartLabelPosition.Inside)
+                                                .CustomizeText(@<text>
+                                                    function(arg) {
+                                                        return arg.percentText;
+                                                    }
+                                                </text>)
+                                            )
+                                        )
+                                        .DataSource(new[] {
+                                            new { office = "diff", value = (ViewBag.ExpectM6[0] - ViewBag.ResultLastMonthM6[0]) },
+                                            new { office = "hq", value = ViewBag.ResultLastMonthM6[0] }
+                                        })
+                                    )
+                                        </div>
+                                        <div class="col-xl-6 mb-3">
+                                            @(Html.DevExtreme().PieChart()
+                                        .ID("pie622")
+                                        .Palette(VizPalette.SoftPastel)
+                                        .Title(t => t
+                                            .Text("ผลสะสม ณ เดือน" + DateTime.Now.AddMonths(-1).ToString("MMMM") + "เทียบกับเป้าหมาย ณ เดือน " + DateTime.Now.AddMonths(-1).ToString("MMMM"))
+                                            .Font(f => f.Size(13))
+                                        )
+                                        .Legend(l => l
+                                            .Visible(false)
+                                        )
+                                        .Export(e => e.Enabled(false))
+                                        .Series(s => s
+                                            .Add()
+                                            .ArgumentField("office")
+                                            .ValueField("value")
+                                            .Label(l => l
+                                                .Visible(true)
+                                                .Font(f => f.Size(16))
+                                                .Connector(c => c
+                                                    .Visible(false)
+                                                    .Width(0.5)
+                                                )
+                                                .Position(PieChartLabelPosition.Inside)
+                                                .CustomizeText(@<text>
+                                                    function(arg) {
+                                                        return arg.percentText;
+                                                    }
+                                                </text>)
+                                            )
+                                        )
+                                        .DataSource(new[] {
+                                            new { office = "diff", value = (ViewBag.ExpectLastMonthM6[0] - ViewBag.ResultLastMonthM6[0]) },
+                                            new { office = "all", value = ViewBag.ResultLastMonthM6[0] }
+                                        })
+                                    )
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div id="nhq" runat="server" class="col-xl-4 mb-3">
+                            <div class="card">
+                                <div class="card-header bg-light">
+                                    สภ. และ สท.
+                                </div>
+                                <div class="card-body">
+                                    <div class="row">
+                                        <div class="col-xl-6 mb-3">
+                                            @(Html.DevExtreme().PieChart()
+                                        .ID("pie631")
+                                        .Palette(VizPalette.SoftBlue)
+                                        .Title(t => t
+                                            .Text("ผลสะสม ณ เดือน" + DateTime.Now.AddMonths(-1).ToString("MMMM") + "เทียบกับเป้าหมายรวมปี งปม. " + (DateTime.Now.Month > 9 ? DateTime.Now.AddYears(1).ToString("yyyy") : DateTime.Now.ToString("yyyy")))
+                                            .Font(f => f.Size(13))
+                                        )
+                                        .Legend(l => l
+                                            .Visible(false)
+                                        )
+                                        .Export(e => e.Enabled(false))
+                                        .Series(s => s
+                                            .Add()
+                                            .ArgumentField("office")
+                                            .ValueField("value")
+                                            .Label(l => l
+                                                .Visible(true)
+                                                .Font(f => f.Size(16))
+                                                .Connector(c => c
+                                                    .Visible(false)
+                                                    .Width(0.5)
+                                                )
+                                                .Position(PieChartLabelPosition.Inside)
+                                                .CustomizeText(@<text>
+                                                    function(arg) {
+                                                        return arg.percentText;
+                                                    }
+                                                </text>)
+                                            )
+                                        )
+                                        .DataSource(new[] {
+                                            new { office = "diff", value = (ViewBag.ExpectM6[1] - ViewBag.ResultLastMonthM6[1]) },
+                                            new { office = "hq", value = ViewBag.ResultLastMonthM6[1] }
+                                        })
+                                    )
+                                        </div>
+                                        <div class="col-xl-6 mb-3">
+                                            @(Html.DevExtreme().PieChart()
+                                        .ID("pie632")
+                                        .Palette(VizPalette.SoftPastel)
+                                        .Title(t => t
+                                            .Text("ผลสะสม ณ เดือน" + DateTime.Now.AddMonths(-1).ToString("MMMM") + "เทียบกับเป้าหมาย ณ เดือน " + DateTime.Now.AddMonths(-1).ToString("MMMM"))
+                                            .Font(f => f.Size(13))
+                                        )
+                                        .Legend(l => l
+                                            .Visible(false)
+                                        )
+                                        .Export(e => e.Enabled(false))
+                                        .Series(s => s
+                                            .Add()
+                                            .ArgumentField("office")
+                                            .ValueField("value")
+                                            .Label(l => l
+                                                .Visible(true)
+                                                .Font(f => f.Size(16))
+                                                .Connector(c => c
+                                                    .Visible(false)
+                                                    .Width(0.5)
+                                                )
+                                                .Position(PieChartLabelPosition.Inside)
+                                                .CustomizeText(@<text>
+                                                    function(arg) {
+                                                        return arg.percentText;
+                                                    }
+                                                </text>)
+                                            )
+                                        )
+                                        .DataSource(new[] {
+                                            new { office = "diff", value = (ViewBag.ExpectLastMonthM6[1] - ViewBag.ResultLastMonthM6[1]) },
+                                            new { office = "all", value = ViewBag.ResultLastMonthM6[1] }
+                                        })
+                                    )
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div id="detail" class="col-xl-12 mb-3">
+                            <div class="card">
+                                <div class="card-header bg-light">
+                                    ผลการเบิกจ่าย (บาท)
+                                </div>
+                                <div class="card-body">
+                                    <table class="table table-bordered">
+                                        <thead>
+                                            <tr>
+                                                <th scope="col"></th>
+                                                <th scope="col">รวม</th>
+                                                <th scope="col">ภญ.</th>
+                                                <th scope="col">สภ. และ สท.</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <th scope="row">เป้าหมายรวมปีงบประมาณ </th>
+                                                <td>@((ViewBag.ExpectM6[0] + ViewBag.ExpectM6[1]).ToString("N4"))</td>
+                                                <td>@(ViewBag.ExpectM6[0].ToString("N4"))</td>
+                                                <td>@(ViewBag.ExpectM6[1].ToString("N4"))</td>
+                                            </tr>
+                                            <tr>
+                                                <th scope="row">เป้าหมาย ณ เดือน @DateTime.Now.AddMonths(-1).ToString("MMMM")   ปีงบประมาณ @(DateTime.Now.Month > 9 ? DateTime.Now.AddYears(1).ToString("yyyy") : DateTime.Now.ToString("yyyy"))</th>
+                                                <td>@((ViewBag.ExpectLastMonthM6[0] + ViewBag.ExpectLastMonthM6[1]).ToString("N4"))</td>
+                                                <td>@(ViewBag.ExpectLastMonthM6[0].ToString("N4"))</td>
+                                                <td>@(ViewBag.ExpectLastMonthM6[1].ToString("N4"))</td>
+                                            </tr>
+                                            <tr>
+                                                <th scope="row">ผลสะสม ณ เดือน @DateTime.Now.AddMonths(-1).ToString("MMMM")   ปีงบประมาณ @(DateTime.Now.Month > 9 ? DateTime.Now.AddYears(1).ToString("yyyy") : DateTime.Now.ToString("yyyy"))</th>
+                                                <td>@((ViewBag.ResultLastMonthM6[0] + ViewBag.ResultLastMonthM6[1]).ToString("N4"))</td>
+                                                <td>@(ViewBag.ResultLastMonthM6[0].ToString("N4"))</td>
+                                                <td>@(ViewBag.ResultLastMonthM6[1].ToString("N4")) </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
 </div>
 <!-- /.container-fluid -->
-
-@section Scripts {
-    <partial name="_ChartScript" />
-}
+@*@section Scripts {
+        <partial name="_ChartScript" />
+    }*@
