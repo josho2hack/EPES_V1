@@ -29,15 +29,24 @@ namespace EPES.Controllers
             return View();
         }
 
-        public IActionResult OwnerScoreReport()
+        public async Task<IActionResult> OwnerScoreReport()
         {
+            var user = await _userManager.GetUserAsync(User);
+            ViewBag.OfficeCode = new SelectList(_context.Offices.Where(d => d.Code != "00000000" && d.Code.StartsWith(user.OfficeId.Substring(0, 2)) && d.Code.Substring(5, 3) == "000"), "Code", "Name", user.OfficeId);
             return View();
         }
 
-        [HttpPost, ActionName("OwnerScoreReport")]
+        [HttpPost, ActionName("SubScoreReport")]
         [ValidateAntiForgeryToken]
-        public IActionResult OwnerScoreReportPost(string selectoffice, int month, int yearPoint)
+        public async Task<IActionResult> SubScoreReport(string selectoffice, int yearPoint)
         {
+            var user = await _userManager.GetUserAsync(User);
+            ViewBag.OfficeCode = new SelectList(_context.Offices.Where(d => d.Code != "00000000" && d.Code.StartsWith(user.OfficeId.Substring(0, 2)) && d.Code.Substring(5, 3) == "000"), "Code", "Name", selectoffice);
+
+            var of = await _context.Offices.Where(d => d.Code == selectoffice).FirstOrDefaultAsync();
+            ViewBag.selectoffice = selectoffice;
+            ViewBag.OfficeName = of.Name;
+            ViewBag.yearPoint = yearPoint;
             return View();
         }
 

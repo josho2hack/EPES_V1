@@ -29,26 +29,54 @@ namespace EPES.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> Get(DataSourceLoadOptions loadOptions)
+        public async Task<IActionResult> Get(DataSourceLoadOptions loadOptions, string selectoffice, int yearPoint)
         {
             var user = await _userManager.GetUserAsync(User);
-            var scoreDrafts = _context.ScoreDrafts//.Include(p => p.OwnerOffice)
-                                                  //.Include(p => p.ScoreDrafts)
-                                                  //.Include(p => p.Scores)
-                                                    //.Include(sd => sd.PointOfEvaluation)
-                                                   //     .ThenInclude(p => p.Scores)
-                                                    //.Include(p => p.Rounds)
-                                                    .Where(sd => sd.Office.Code == user.OfficeId && !sd.PointOfEvaluation.HasSub)
-                                                    .Select(i => new {
-                                                    i.Id,
-                                                    i.PointOfEvaluation.Plan,
-                                                    i.PointOfEvaluation.Point,
-                                                    i.PointOfEvaluation.SubPoint,
-                                                    i.PointOfEvaluation.Name,
-                                                    i.ScoreValue,
-                                                    i.ScoreApprove,
-                                                    i.LastMonth,
-                                                    i.PointOfEvaluation.Year.Year
+            string office;
+            if (selectoffice == null)
+            {
+                office = user.OfficeId;
+            }
+            else
+            {
+                office = selectoffice;
+            }
+            DateTime yearForQuery;
+            if (yearPoint == 0)
+            {
+                if (DateTime.Now.Month == 10 || DateTime.Now.Month == 11 || DateTime.Now.Month == 12)
+                {
+                    yearForQuery = new DateTime(DateTime.Now.AddYears(1).Year, 1, 1);
+                }
+                else
+                {
+                    yearForQuery = new DateTime(DateTime.Now.Year, 1, 1);
+                }
+            }
+            else
+            {
+                if (DateTime.Now.Month == 10 || DateTime.Now.Month == 11 || DateTime.Now.Month == 12)
+                {
+                    yearForQuery = new DateTime(DateTime.Now.AddYears(1 + yearPoint).Year, 1, 1);
+                }
+                else
+                {
+                    yearForQuery = new DateTime(DateTime.Now.AddYears(yearPoint).Year, 1, 1);
+                }
+            }
+
+            var scoreDrafts = _context.ScoreDrafts.Where(sd => sd.Office.Code == office && !sd.PointOfEvaluation.HasSub)
+                                                    .Select(i => new
+                                                    {
+                                                        i.Id,
+                                                        i.PointOfEvaluation.Plan,
+                                                        i.PointOfEvaluation.Point,
+                                                        i.PointOfEvaluation.SubPoint,
+                                                        i.PointOfEvaluation.Name,
+                                                        i.ScoreValue,
+                                                        i.ScoreApprove,
+                                                        i.LastMonth,
+                                                        i.PointOfEvaluation.Year.Year
                                                     });
 
             return Json(await DataSourceLoader.LoadAsync(scoreDrafts, loadOptions));

@@ -29,7 +29,7 @@
 <script src="~/js/devextreme/aspnet/dx.aspnet.data.js"></script>
 
 <div class="container-fluid">
-    <h1 class="h3 mb-2 text-gray-800">รายงานผลการปฏิบัติราชการ @user.OfficeName</h1>
+    <h1 class="h3 mb-2 text-gray-800">รายงานผลการปฏิบัติราชการ @ViewBag.OfficeName</h1>
 </div>
 <form asp-action="SubScoreReport">
     <div class="row justify-content-between">
@@ -108,8 +108,7 @@
     .RowHeaderLayout(PivotGridRowHeadersLayout.Tree)
     //.AllowExpandAll(true)
     .DataSource(d => d
-        .Store(s => s.Mvc().Controller("OwnerScore").Key("Id").LoadAction("Get"))
-
+        .Store(s => s.Mvc().Controller("OwnerScore").Key("Id").LoadAction("Get").LoadParams(new { selectoffice = ViewBag.selectoffice }))
         .Fields(fields => {
         fields.Add()
             .Caption("แผน")

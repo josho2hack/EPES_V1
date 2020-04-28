@@ -29,14 +29,14 @@
 <script src="~/js/devextreme/aspnet/dx.aspnet.data.js"></script>
 
 <div class="container-fluid">
-    <h1 class="h3 mb-2 text-gray-800">รายงานผลการปฏิบัติราชการ สท.ทั่วประเทศ (119 สท.)</h1>
+    <h1 class="h3 mb-2 text-gray-800">รายงานผลการปฏิบัติราชการ กลุ่ม สท.ทั่วประเทศ (119 สท.) เพื่อหาค่าเฉลี่ย</h1>
 </div>
 
 <div id="pivotgrid-demo">
     @(Html.DevExtreme().Chart()
         .ID("pivotgrid-chart")
         .CommonSeriesSettings(s => s.Type(SeriesType.Bar))
-        .Title("คะแนนเบื้องต้นจากการบันทึก")
+        .Title("คะแนนเบื้องต้นจากการประเมินตนเอง")
         .Tooltip(t => t.Enabled(true).CustomizeTooltip("customize_tooltip").Format(Format.Decimal))
         .Size(s => s.Height(350))
         .AdaptiveLayout(l => l.Width(450))

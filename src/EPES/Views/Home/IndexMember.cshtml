@@ -39,7 +39,7 @@
                 <div class="card-body">
                     <div class="row no-gutters align-items-center">
                         <div class="col mr-2">
-                            <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">ประมาณการผลจัดเก็บเดือน @DateTime.Now.ToString("MMMMM yyyy")</div>
+                            <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">ประมาณการสะสมผลจัดเก็บเดือน @DateTime.Now.AddMonths(-1).ToString("MMMMM yyyy")</div>
                             <div class="h5 mb-0 font-weight-bold text-gray-800">@ViewBag.CYforcast.ToString("N4") ล้าน</div>
                         </div>
                         <div class="col-auto">
@@ -55,7 +55,7 @@
                 <div class="card-body">
                     <div class="row no-gutters align-items-center">
                         <div class="col mr-2">
-                            <div class="text-xs font-weight-bold text-success text-uppercase mb-1">ผลการจัดเก็บเดือน @DateTime.Now.ToString("MMMMM yyyy")</div>
+                            <div class="text-xs font-weight-bold text-success text-uppercase mb-1">ผลสะสมการจัดเก็บเดือน @DateTime.Now.AddMonths(-1).ToString("MMMMM yyyy")</div>
                             <div class="h5 mb-0 font-weight-bold text-gray-800">@ViewBag.CYcurrentYear.ToString("N4") ล้าน</div>
                         </div>
                         <div class="col-auto">
@@ -219,7 +219,10 @@
                                             .Font(f => f.Size(13))
                                         )
                                         .Legend(l => l
-                                            .Visible(false)
+                                            .Orientation(Orientation.Horizontal)
+                                            .ItemTextPosition(Position.Right)
+                                            .HorizontalAlignment(HorizontalAlignment.Center)
+                                            .VerticalAlignment(VerticalEdge.Bottom)
                                         )
                                         .Export(e => e.Enabled(false))
                                         .Series(s => s
@@ -242,8 +245,8 @@
                                             )
                                         )
                                         .DataSource(new[] {
-                                            new { office = "diff", value = (ViewBag.Expect[0] + ViewBag.Expect[1] - (ViewBag.ResultLastMonth[0] + ViewBag.ResultLastMonth[1])) },
-                                            new { office = "all", value = (ViewBag.ResultLastMonth[0] + ViewBag.ResultLastMonth[1]) }
+                                            new { office = "ผลต่างกับ งปม. ปี", value = (ViewBag.Expect[0] + ViewBag.Expect[1] - (ViewBag.ResultLastMonth[0] + ViewBag.ResultLastMonth[1])) },
+                                            new { office = "ผลสะสม", value = (ViewBag.ResultLastMonth[0] + ViewBag.ResultLastMonth[1]) }
                                         })
                                     )
                                         </div>
@@ -256,7 +259,10 @@
                                             .Font(f => f.Size(13))
                                         )
                                         .Legend(l => l
-                                            .Visible(false)
+                                            .Orientation(Orientation.Horizontal)
+                                            .ItemTextPosition(Position.Right)
+                                            .HorizontalAlignment(HorizontalAlignment.Center)
+                                            .VerticalAlignment(VerticalEdge.Bottom)
                                         )
                                         .Export(e => e.Enabled(false))
                                         .Series(s => s
@@ -279,8 +285,8 @@
                                             )
                                         )
                                         .DataSource(new[] {
-                                            new { office = "diff", value = (ViewBag.ExpectLastMonth[0] + ViewBag.ExpectLastMonth[1] - (ViewBag.ResultLastMonth[0] + ViewBag.ResultLastMonth[1])) },
-                                            new { office = "all", value = (ViewBag.ResultLastMonth[0] + ViewBag.ResultLastMonth[1]) }
+                                            new { office = "ผลต่างกับ งปม.ดือน", value = (ViewBag.ExpectLastMonth[0] + ViewBag.ExpectLastMonth[1] - (ViewBag.ResultLastMonth[0] + ViewBag.ResultLastMonth[1])) },
+                                            new { office = "ผลสะสม", value = (ViewBag.ResultLastMonth[0] + ViewBag.ResultLastMonth[1]) }
                                         })
                                     )
                                         </div>
@@ -304,7 +310,10 @@
                                             .Font(f => f.Size(13))
                                         )
                                         .Legend(l => l
-                                            .Visible(false)
+                                            .Orientation(Orientation.Horizontal)
+                                            .ItemTextPosition(Position.Right)
+                                            .HorizontalAlignment(HorizontalAlignment.Center)
+                                            .VerticalAlignment(VerticalEdge.Bottom)
                                         )
                                         .Export(e => e.Enabled(false))
                                         .Series(s => s
@@ -327,8 +336,8 @@
                                             )
                                         )
                                         .DataSource(new[] {
-                                            new { office = "diff", value = (ViewBag.Expect[0] - ViewBag.ResultLastMonth[0]) },
-                                            new { office = "hq", value = ViewBag.ResultLastMonth[0] }
+                                            new { office = "ผลต่างกับ งปม. ปี", value = (ViewBag.Expect[0] - ViewBag.ResultLastMonth[0]) },
+                                            new { office = "ผลสะสม", value = ViewBag.ResultLastMonth[0] }
                                         })
                                     )
                                         </div>
@@ -341,7 +350,10 @@
                                             .Font(f => f.Size(13))
                                         )
                                         .Legend(l => l
-                                            .Visible(false)
+                                            .Orientation(Orientation.Horizontal)
+                                            .ItemTextPosition(Position.Right)
+                                            .HorizontalAlignment(HorizontalAlignment.Center)
+                                            .VerticalAlignment(VerticalEdge.Bottom)
                                         )
                                         .Export(e => e.Enabled(false))
                                         .Series(s => s
@@ -364,8 +376,8 @@
                                             )
                                         )
                                         .DataSource(new[] {
-                                            new { office = "diff", value = (ViewBag.ExpectLastMonth[0] - ViewBag.ResultLastMonth[0]) },
-                                            new { office = "all", value = ViewBag.ResultLastMonth[0] }
+                                            new { office = "ผลต่างกับ งปม. เดือน", value = (ViewBag.ExpectLastMonth[0] - ViewBag.ResultLastMonth[0]) },
+                                            new { office = "ผลสะสม", value = ViewBag.ResultLastMonth[0] }
                                         })
                                     )
                                         </div>
@@ -389,7 +401,10 @@
                                             .Font(f => f.Size(13))
                                         )
                                         .Legend(l => l
-                                            .Visible(false)
+                                            .Orientation(Orientation.Horizontal)
+                                            .ItemTextPosition(Position.Right)
+                                            .HorizontalAlignment(HorizontalAlignment.Center)
+                                            .VerticalAlignment(VerticalEdge.Bottom)
                                         )
                                         .Export(e => e.Enabled(false))
                                         .Series(s => s
@@ -412,8 +427,8 @@
                                             )
                                         )
                                         .DataSource(new[] {
-                                            new { office = "diff", value = (ViewBag.Expect[1] - ViewBag.ResultLastMonth[1]) },
-                                            new { office = "hq", value = ViewBag.ResultLastMonth[1] }
+                                            new { office = "ผลต่างกับ งปม. ปี", value = (ViewBag.Expect[1] - ViewBag.ResultLastMonth[1]) },
+                                            new { office = "ผลสะสม", value = ViewBag.ResultLastMonth[1] }
                                         })
                                     )
                                         </div>
@@ -426,7 +441,10 @@
                                             .Font(f => f.Size(13))
                                         )
                                         .Legend(l => l
-                                            .Visible(false)
+                                            .Orientation(Orientation.Horizontal)
+                                            .ItemTextPosition(Position.Right)
+                                            .HorizontalAlignment(HorizontalAlignment.Center)
+                                            .VerticalAlignment(VerticalEdge.Bottom)
                                         )
                                         .Export(e => e.Enabled(false))
                                         .Series(s => s
@@ -449,8 +467,8 @@
                                             )
                                         )
                                         .DataSource(new[] {
-                                            new { office = "diff", value = (ViewBag.ExpectLastMonth[1] - ViewBag.ResultLastMonth[1]) },
-                                            new { office = "all", value = ViewBag.ResultLastMonth[1] }
+                                            new { office = "ผลต่างกับ งปม. เดือน", value = (ViewBag.ExpectLastMonth[1] - ViewBag.ResultLastMonth[1]) },
+                                            new { office = "ผลสะสม", value = ViewBag.ResultLastMonth[1] }
                                         })
                                     )
                                         </div>
@@ -515,7 +533,7 @@
                         หมวด 2 : ด้านสำรวจ
                     </h6>
                     <h6 class="m-0 font-weight-bold text-primary">
-                        ตัวชี้วัดที่ 12 : จำนวนผู้เสียภาษีรายใหม่ที่เพิ่มขึ้นจากการปฏิบัติงานสำรวจเปรียบเทียบกับประมาณการที่กรมสรรพากรกำหนด
+                        ตัวชี้วัดที่ 10 : จำนวนผู้เสียภาษีรายใหม่ที่เพิ่มขึ้นจากการปฏิบัติงานสำรวจเปรียบเทียบกับประมาณการที่กรมสรรพากรกำหนด
                     </h6>
                 </div>
                 <!-- Card Body -->
@@ -537,7 +555,10 @@
                                             .Font(f => f.Size(13))
                                         )
                                         .Legend(l => l
-                                            .Visible(false)
+                                            .Orientation(Orientation.Horizontal)
+                                            .ItemTextPosition(Position.Right)
+                                            .HorizontalAlignment(HorizontalAlignment.Center)
+                                            .VerticalAlignment(VerticalEdge.Bottom)
                                         )
                                         .Export(e => e.Enabled(false))
                                         .Series(s => s
@@ -560,8 +581,8 @@
                                             )
                                         )
                                         .DataSource(new[] {
-                                            new { office = "diff", value = (ViewBag.ExpectM2[0] + ViewBag.ExpectM2[1] - (ViewBag.ResultLastMonthM2[0] + ViewBag.ResultLastMonthM2[1])) },
-                                            new { office = "all", value = (ViewBag.ResultLastMonthM2[0] + ViewBag.ResultLastMonthM2[1]) }
+                                            new { office = "ผลต่างกับ งปม. ปี", value = (ViewBag.ExpectM2[0] + ViewBag.ExpectM2[1] - (ViewBag.ResultLastMonthM2[0] + ViewBag.ResultLastMonthM2[1])) },
+                                            new { office = "ผลสะสม", value = (ViewBag.ResultLastMonthM2[0] + ViewBag.ResultLastMonthM2[1]) }
                                         })
                                     )
                                         </div>
@@ -574,7 +595,10 @@
                                             .Font(f => f.Size(13))
                                         )
                                         .Legend(l => l
-                                            .Visible(false)
+                                            .Orientation(Orientation.Horizontal)
+                                            .ItemTextPosition(Position.Right)
+                                            .HorizontalAlignment(HorizontalAlignment.Center)
+                                            .VerticalAlignment(VerticalEdge.Bottom)
                                         )
                                         .Export(e => e.Enabled(false))
                                         .Series(s => s
@@ -597,8 +621,8 @@
                                             )
                                         )
                                         .DataSource(new[] {
-                                            new { office = "diff", value = (ViewBag.ExpectLastMonthM2[0] + ViewBag.ExpectLastMonthM2[1] - (ViewBag.ResultLastMonthM2[0] + ViewBag.ResultLastMonthM2[1])) },
-                                            new { office = "all", value = (ViewBag.ResultLastMonthM2[0] + ViewBag.ResultLastMonthM2[1]) }
+                                            new { office = "ผลต่างกับ งปม. เดือน", value = (ViewBag.ExpectLastMonthM2[0] + ViewBag.ExpectLastMonthM2[1] - (ViewBag.ResultLastMonthM2[0] + ViewBag.ResultLastMonthM2[1])) },
+                                            new { office = "ผลสะสม", value = (ViewBag.ResultLastMonthM2[0] + ViewBag.ResultLastMonthM2[1]) }
                                         })
                                     )
                                         </div>
@@ -609,7 +633,7 @@
                         <div id="hq" class="col-xl-4 mb-3">
                             <div class="card">
                                 <div class="card-header bg-light">
-                                    ภญ.
+                                    สภ.
                                 </div>
                                 <div class="card-body">
                                     <div class="row">
@@ -622,7 +646,10 @@
                                             .Font(f => f.Size(13))
                                         )
                                         .Legend(l => l
-                                            .Visible(false)
+                                            .Orientation(Orientation.Horizontal)
+                                            .ItemTextPosition(Position.Right)
+                                            .HorizontalAlignment(HorizontalAlignment.Center)
+                                            .VerticalAlignment(VerticalEdge.Bottom)
                                         )
                                         .Export(e => e.Enabled(false))
                                         .Series(s => s
@@ -645,8 +672,8 @@
                                             )
                                         )
                                         .DataSource(new[] {
-                                            new { office = "diff", value = (ViewBag.ExpectM2[0] - ViewBag.ResultLastMonthM2[0]) },
-                                            new { office = "hq", value = ViewBag.ResultLastMonthM2[0] }
+                                            new { office = "ผลต่างกับ งปม. ปี", value = (ViewBag.ExpectM2[0] - ViewBag.ResultLastMonthM2[0]) },
+                                            new { office = "ผลสะสม", value = ViewBag.ResultLastMonthM2[0] }
                                         })
                                     )
                                         </div>
@@ -659,7 +686,10 @@
                                             .Font(f => f.Size(13))
                                         )
                                         .Legend(l => l
-                                            .Visible(false)
+                                            .Orientation(Orientation.Horizontal)
+                                            .ItemTextPosition(Position.Right)
+                                            .HorizontalAlignment(HorizontalAlignment.Center)
+                                            .VerticalAlignment(VerticalEdge.Bottom)
                                         )
                                         .Export(e => e.Enabled(false))
                                         .Series(s => s
@@ -682,8 +712,8 @@
                                             )
                                         )
                                         .DataSource(new[] {
-                                            new { office = "diff", value = (ViewBag.ExpectLastMonthM2[0] - ViewBag.ResultLastMonthM2[0]) },
-                                            new { office = "all", value = ViewBag.ResultLastMonthM2[0] }
+                                            new { office = "ผลต่างกับ งปม. เดือน", value = (ViewBag.ExpectLastMonthM2[0] - ViewBag.ResultLastMonthM2[0]) },
+                                            new { office = "ผลสะสม", value = ViewBag.ResultLastMonthM2[0] }
                                         })
                                     )
                                         </div>
@@ -694,7 +724,7 @@
                         <div id="nhq" runat="server" class="col-xl-4 mb-3">
                             <div class="card">
                                 <div class="card-header bg-light">
-                                    สภ. และ สท.
+                                    สท.
                                 </div>
                                 <div class="card-body">
                                     <div class="row">
@@ -707,7 +737,10 @@
                                             .Font(f => f.Size(13))
                                         )
                                         .Legend(l => l
-                                            .Visible(false)
+                                            .Orientation(Orientation.Horizontal)
+                                            .ItemTextPosition(Position.Right)
+                                            .HorizontalAlignment(HorizontalAlignment.Center)
+                                            .VerticalAlignment(VerticalEdge.Bottom)
                                         )
                                         .Export(e => e.Enabled(false))
                                         .Series(s => s
@@ -730,8 +763,8 @@
                                             )
                                         )
                                         .DataSource(new[] {
-                                            new { office = "diff", value = (ViewBag.ExpectM2[1] - ViewBag.ResultLastMonthM2[1]) },
-                                            new { office = "hq", value = ViewBag.ResultLastMonthM2[1] }
+                                            new { office = "ผลต่างกับ งปม. ปี", value = (ViewBag.ExpectM2[1] - ViewBag.ResultLastMonthM2[1]) },
+                                            new { office = "ผลสะสม", value = ViewBag.ResultLastMonthM2[1] }
                                         })
                                     )
                                         </div>
@@ -744,7 +777,10 @@
                                             .Font(f => f.Size(13))
                                         )
                                         .Legend(l => l
-                                            .Visible(false)
+                                            .Orientation(Orientation.Horizontal)
+                                            .ItemTextPosition(Position.Right)
+                                            .HorizontalAlignment(HorizontalAlignment.Center)
+                                            .VerticalAlignment(VerticalEdge.Bottom)
                                         )
                                         .Export(e => e.Enabled(false))
                                         .Series(s => s
@@ -767,8 +803,8 @@
                                             )
                                         )
                                         .DataSource(new[] {
-                                            new { office = "diff", value = (ViewBag.ExpectLastMonthM2[1] - ViewBag.ResultLastMonthM2[1]) },
-                                            new { office = "all", value = ViewBag.ResultLastMonthM2[1] }
+                                            new { office = "ผลต่างกับ งปม. ปี", value = (ViewBag.ExpectLastMonthM2[1] - ViewBag.ResultLastMonthM2[1]) },
+                                            new { office = "ผลสะสม", value = ViewBag.ResultLastMonthM2[1] }
                                         })
                                     )
                                         </div>
@@ -789,28 +825,28 @@
                                             <tr>
                                                 <th scope="col"></th>
                                                 <th scope="col">รวม</th>
-                                                <th scope="col">ภญ.</th>
-                                                <th scope="col">สภ. และ สท.</th>
+                                                <th scope="col">สภ.</th>
+                                                <th scope="col">สท.</th>
                                             </tr>
                                         </thead>
                                         <tbody>
                                             <tr>
                                                 <th scope="row">เป้าหมายรวมปีงบประมาณ </th>
-                                                <td>@((ViewBag.ExpectM2[0] + ViewBag.ExpectM2[1]).ToString("N4"))</td>
-                                                <td>@(ViewBag.ExpectM2[0].ToString("N4"))</td>
-                                                <td>@(ViewBag.ExpectM2[1].ToString("N4"))</td>
+                                                <td>@((ViewBag.ExpectM2[0] + ViewBag.ExpectM2[1]).ToString("N0"))</td>
+                                                <td>@(ViewBag.ExpectM2[0].ToString("N0"))</td>
+                                                <td>@(ViewBag.ExpectM2[1].ToString("N0"))</td>
                                             </tr>
                                             <tr>
                                                 <th scope="row">เป้าหมาย ณ เดือน @DateTime.Now.AddMonths(-1).ToString("MMMM")   ปีงบประมาณ @(DateTime.Now.Month > 9 ? DateTime.Now.AddYears(1).ToString("yyyy") : DateTime.Now.ToString("yyyy"))</th>
-                                                <td>@((ViewBag.ExpectLastMonthM2[0] + ViewBag.ExpectLastMonthM2[1]).ToString("N4"))</td>
-                                                <td>@(ViewBag.ExpectLastMonthM2[0].ToString("N4"))</td>
-                                                <td>@(ViewBag.ExpectLastMonthM2[1].ToString("N4"))</td>
+                                                <td>@((ViewBag.ExpectLastMonthM2[0] + ViewBag.ExpectLastMonthM2[1]).ToString("N0"))</td>
+                                                <td>@(ViewBag.ExpectLastMonthM2[0].ToString("N0"))</td>
+                                                <td>@(ViewBag.ExpectLastMonthM2[1].ToString("N0"))</td>
                                             </tr>
                                             <tr>
                                                 <th scope="row">ผลสะสม ณ เดือน @DateTime.Now.AddMonths(-1).ToString("MMMM")   ปีงบประมาณ @(DateTime.Now.Month > 9 ? DateTime.Now.AddYears(1).ToString("yyyy") : DateTime.Now.ToString("yyyy"))</th>
-                                                <td>@((ViewBag.ResultLastMonthM2[0] + ViewBag.ResultLastMonthM2[1]).ToString("N4"))</td>
-                                                <td>@(ViewBag.ResultLastMonthM2[0].ToString("N4"))</td>
-                                                <td>@(ViewBag.ResultLastMonthM2[1].ToString("N4")) </td>
+                                                <td>@((ViewBag.ResultLastMonthM2[0] + ViewBag.ResultLastMonthM2[1]).ToString("N0"))</td>
+                                                <td>@(ViewBag.ResultLastMonthM2[0].ToString("N0"))</td>
+                                                <td>@(ViewBag.ResultLastMonthM2[1].ToString("N0")) </td>
                                             </tr>
                                         </tbody>
                                     </table>
@@ -833,7 +869,7 @@
                         หมวด 3 : ด้านเร่งรัด
                     </h6>
                     <h6 class="m-0 font-weight-bold text-primary">
-                        ตัวชี้วัดที่ 8 : ร้อยละของผลการเร่งรัดได้เม็ดเงินเปรียบเทียบกับประมาณการ
+                        ตัวชี้วัดที่ 6 : ร้อยละของผลการเร่งรัดได้เม็ดเงินเปรียบเทียบกับประมาณการ
                     </h6>
                 </div>
                 <!-- Card Body -->
@@ -855,7 +891,10 @@
                                             .Font(f => f.Size(13))
                                         )
                                         .Legend(l => l
-                                            .Visible(false)
+                                            .Orientation(Orientation.Horizontal)
+                                            .ItemTextPosition(Position.Right)
+                                            .HorizontalAlignment(HorizontalAlignment.Center)
+                                            .VerticalAlignment(VerticalEdge.Bottom)
                                         )
                                         .Export(e => e.Enabled(false))
                                         .Series(s => s
@@ -878,8 +917,8 @@
                                             )
                                         )
                                         .DataSource(new[] {
-                                            new { office = "diff", value = (ViewBag.ExpectM3[0] + ViewBag.ExpectM3[1] - (ViewBag.ResultLastMonthM3[0] + ViewBag.ResultLastMonthM3[1])) },
-                                            new { office = "all", value = (ViewBag.ResultLastMonthM3[0] + ViewBag.ResultLastMonthM3[1]) }
+                                            new { office = "ผลต่างกับ งปม. ปี", value = (ViewBag.ExpectM3[0] + ViewBag.ExpectM3[1] - (ViewBag.ResultLastMonthM3[0] + ViewBag.ResultLastMonthM3[1])) },
+                                            new { office = "ผลสะสม", value = (ViewBag.ResultLastMonthM3[0] + ViewBag.ResultLastMonthM3[1]) }
                                         })
                                     )
                                         </div>
@@ -892,7 +931,10 @@
                                             .Font(f => f.Size(13))
                                         )
                                         .Legend(l => l
-                                            .Visible(false)
+                                            .Orientation(Orientation.Horizontal)
+                                            .ItemTextPosition(Position.Right)
+                                            .HorizontalAlignment(HorizontalAlignment.Center)
+                                            .VerticalAlignment(VerticalEdge.Bottom)
                                         )
                                         .Export(e => e.Enabled(false))
                                         .Series(s => s
@@ -915,8 +957,8 @@
                                             )
                                         )
                                         .DataSource(new[] {
-                                            new { office = "diff", value = (ViewBag.ExpectLastMonthM3[0] + ViewBag.ExpectLastMonthM3[1] - (ViewBag.ResultLastMonthM3[0] + ViewBag.ResultLastMonthM3[1])) },
-                                            new { office = "all", value = (ViewBag.ResultLastMonthM3[0] + ViewBag.ResultLastMonthM3[1]) }
+                                            new { office = "ผลต่างกับ งปม. เดือน", value = (ViewBag.ExpectLastMonthM3[0] + ViewBag.ExpectLastMonthM3[1] - (ViewBag.ResultLastMonthM3[0] + ViewBag.ResultLastMonthM3[1])) },
+                                            new { office = "ผลสะสม", value = (ViewBag.ResultLastMonthM3[0] + ViewBag.ResultLastMonthM3[1]) }
                                         })
                                     )
                                         </div>
@@ -940,7 +982,10 @@
                                             .Font(f => f.Size(13))
                                         )
                                         .Legend(l => l
-                                            .Visible(false)
+                                            .Orientation(Orientation.Horizontal)
+                                            .ItemTextPosition(Position.Right)
+                                            .HorizontalAlignment(HorizontalAlignment.Center)
+                                            .VerticalAlignment(VerticalEdge.Bottom)
                                         )
                                         .Export(e => e.Enabled(false))
                                         .Series(s => s
@@ -963,8 +1008,8 @@
                                             )
                                         )
                                         .DataSource(new[] {
-                                            new { office = "diff", value = (ViewBag.ExpectM3[0] - ViewBag.ResultLastMonthM3[0]) },
-                                            new { office = "hq", value = ViewBag.ResultLastMonthM3[0] }
+                                            new { office = "ผลต่างกับ งปม. ปี", value = (ViewBag.ExpectM3[0] - ViewBag.ResultLastMonthM3[0]) },
+                                            new { office = "ผลสะสม", value = ViewBag.ResultLastMonthM3[0] }
                                         })
                                     )
                                         </div>
@@ -977,7 +1022,10 @@
                                             .Font(f => f.Size(13))
                                         )
                                         .Legend(l => l
-                                            .Visible(false)
+                                            .Orientation(Orientation.Horizontal)
+                                            .ItemTextPosition(Position.Right)
+                                            .HorizontalAlignment(HorizontalAlignment.Center)
+                                            .VerticalAlignment(VerticalEdge.Bottom)
                                         )
                                         .Export(e => e.Enabled(false))
                                         .Series(s => s
@@ -1000,8 +1048,8 @@
                                             )
                                         )
                                         .DataSource(new[] {
-                                            new { office = "diff", value = (ViewBag.ExpectLastMonthM3[0] - ViewBag.ResultLastMonthM3[0]) },
-                                            new { office = "all", value = ViewBag.ResultLastMonthM3[0] }
+                                            new { office = "ผลต่างกับ งปม. เดือน", value = (ViewBag.ExpectLastMonthM3[0] - ViewBag.ResultLastMonthM3[0]) },
+                                            new { office = "ผลสะสม", value = ViewBag.ResultLastMonthM3[0] }
                                         })
                                     )
                                         </div>
@@ -1025,7 +1073,10 @@
                                             .Font(f => f.Size(13))
                                         )
                                         .Legend(l => l
-                                            .Visible(false)
+                                            .Orientation(Orientation.Horizontal)
+                                            .ItemTextPosition(Position.Right)
+                                            .HorizontalAlignment(HorizontalAlignment.Center)
+                                            .VerticalAlignment(VerticalEdge.Bottom)
                                         )
                                         .Export(e => e.Enabled(false))
                                         .Series(s => s
@@ -1048,8 +1099,8 @@
                                             )
                                         )
                                         .DataSource(new[] {
-                                            new { office = "diff", value = (ViewBag.ExpectM3[1] - ViewBag.ResultLastMonthM3[1]) },
-                                            new { office = "hq", value = ViewBag.ResultLastMonthM3[1] }
+                                            new { office = "ผลต่างกับ งปม. ปี", value = (ViewBag.ExpectM3[1] - ViewBag.ResultLastMonthM3[1]) },
+                                            new { office = "ผลสะสม", value = ViewBag.ResultLastMonthM3[1] }
                                         })
                                     )
                                         </div>
@@ -1062,7 +1113,10 @@
                                             .Font(f => f.Size(13))
                                         )
                                         .Legend(l => l
-                                            .Visible(false)
+                                            .Orientation(Orientation.Horizontal)
+                                            .ItemTextPosition(Position.Right)
+                                            .HorizontalAlignment(HorizontalAlignment.Center)
+                                            .VerticalAlignment(VerticalEdge.Bottom)
                                         )
                                         .Export(e => e.Enabled(false))
                                         .Series(s => s
@@ -1085,8 +1139,8 @@
                                             )
                                         )
                                         .DataSource(new[] {
-                                            new { office = "diff", value = (ViewBag.ExpectLastMonthM3[1] - ViewBag.ResultLastMonthM3[1]) },
-                                            new { office = "all", value = ViewBag.ResultLastMonthM3[1] }
+                                            new { office = "ผลต่างกับ งปม. เดือน", value = (ViewBag.ExpectLastMonthM3[1] - ViewBag.ResultLastMonthM3[1]) },
+                                            new { office = "ผลสะสม", value = ViewBag.ResultLastMonthM3[1] }
                                         })
                                     )
                                         </div>
@@ -1151,7 +1205,7 @@
                         หมวด 4 : ด้านคืนภาษี
                     </h6>
                     <h6 class="m-0 font-weight-bold text-primary">
-                        ตัวชี้วัดที่ 11 : ร้อยละของการบริหารการคืนภาษีเงินได้บุคคลธรรมดาประจำปีภาษี @(DateTime.Now.Month > 9 ? DateTime.Now.ToString("yyyy") : DateTime.Now.AddYears(-1).ToString("yyyy"))
+                        ตัวชี้วัดที่ 9 : ร้อยละของการบริหารการคืนภาษีเงินได้บุคคลธรรมดาประจำปีภาษี @(DateTime.Now.Month > 9 ? DateTime.Now.ToString("yyyy") : DateTime.Now.AddYears(-1).ToString("yyyy"))
                     </h6>
                 </div>
                 <!-- Card Body -->
@@ -1173,7 +1227,10 @@
                                             .Font(f => f.Size(13))
                                         )
                                         .Legend(l => l
-                                            .Visible(false)
+                                            .Orientation(Orientation.Horizontal)
+                                            .ItemTextPosition(Position.Right)
+                                            .HorizontalAlignment(HorizontalAlignment.Center)
+                                            .VerticalAlignment(VerticalEdge.Bottom)
                                         )
                                         .Export(e => e.Enabled(false))
                                         .Series(s => s
@@ -1196,8 +1253,8 @@
                                             )
                                         )
                                         .DataSource(new[] {
-                                            new { office = "diff", value = (ViewBag.ExpectM4[0] + ViewBag.ExpectM4[1] - (ViewBag.ResultLastMonthM4[0] + ViewBag.ResultLastMonthM4[1])) },
-                                            new { office = "all", value = (ViewBag.ResultLastMonthM4[0] + ViewBag.ResultLastMonthM4[1]) }
+                                            new { office = "ผลต่างกับ งปม. ปี", value = (ViewBag.ExpectM4[0] + ViewBag.ExpectM4[1] - (ViewBag.ResultLastMonthM4[0] + ViewBag.ResultLastMonthM4[1])) },
+                                            new { office = "ผลสะสม", value = (ViewBag.ResultLastMonthM4[0] + ViewBag.ResultLastMonthM4[1]) }
                                         })
                                     )
                                         </div>
@@ -1210,7 +1267,10 @@
                                             .Font(f => f.Size(13))
                                         )
                                         .Legend(l => l
-                                            .Visible(false)
+                                            .Orientation(Orientation.Horizontal)
+                                            .ItemTextPosition(Position.Right)
+                                            .HorizontalAlignment(HorizontalAlignment.Center)
+                                            .VerticalAlignment(VerticalEdge.Bottom)
                                         )
                                         .Export(e => e.Enabled(false))
                                         .Series(s => s
@@ -1233,8 +1293,8 @@
                                             )
                                         )
                                         .DataSource(new[] {
-                                            new { office = "diff", value = (ViewBag.ExpectLastMonthM4[0] + ViewBag.ExpectLastMonthM4[1] - (ViewBag.ResultLastMonthM4[0] + ViewBag.ResultLastMonthM4[1])) },
-                                            new { office = "all", value = (ViewBag.ResultLastMonthM4[0] + ViewBag.ResultLastMonthM4[1]) }
+                                            new { office = "ผลต่างกับ งปม. เดือน", value = (ViewBag.ExpectLastMonthM4[0] + ViewBag.ExpectLastMonthM4[1] - (ViewBag.ResultLastMonthM4[0] + ViewBag.ResultLastMonthM4[1])) },
+                                            new { office = "ผลสะสม", value = (ViewBag.ResultLastMonthM4[0] + ViewBag.ResultLastMonthM4[1]) }
                                         })
                                     )
                                         </div>
@@ -1245,7 +1305,7 @@
                         <div id="hq" class="col-xl-4 mb-3">
                             <div class="card">
                                 <div class="card-header bg-light">
-                                    ภญ.
+                                    สภ.
                                 </div>
                                 <div class="card-body">
                                     <div class="row">
@@ -1258,7 +1318,10 @@
                                             .Font(f => f.Size(13))
                                         )
                                         .Legend(l => l
-                                            .Visible(false)
+                                            .Orientation(Orientation.Horizontal)
+                                            .ItemTextPosition(Position.Right)
+                                            .HorizontalAlignment(HorizontalAlignment.Center)
+                                            .VerticalAlignment(VerticalEdge.Bottom)
                                         )
                                         .Export(e => e.Enabled(false))
                                         .Series(s => s
@@ -1281,8 +1344,8 @@
                                             )
                                         )
                                         .DataSource(new[] {
-                                            new { office = "diff", value = (ViewBag.ExpectM4[0] - ViewBag.ResultLastMonthM4[0]) },
-                                            new { office = "hq", value = ViewBag.ResultLastMonthM4[0] }
+                                            new { office = "ผลต่างกับ งปม. ปี", value = (ViewBag.ExpectM4[0] - ViewBag.ResultLastMonthM4[0]) },
+                                            new { office = "ผลสะสม", value = ViewBag.ResultLastMonthM4[0] }
                                         })
                                     )
                                         </div>
@@ -1295,7 +1358,10 @@
                                             .Font(f => f.Size(13))
                                         )
                                         .Legend(l => l
-                                            .Visible(false)
+                                            .Orientation(Orientation.Horizontal)
+                                            .ItemTextPosition(Position.Right)
+                                            .HorizontalAlignment(HorizontalAlignment.Center)
+                                            .VerticalAlignment(VerticalEdge.Bottom)
                                         )
                                         .Export(e => e.Enabled(false))
                                         .Series(s => s
@@ -1318,8 +1384,8 @@
                                             )
                                         )
                                         .DataSource(new[] {
-                                            new { office = "diff", value = (ViewBag.ExpectLastMonthM4[0] - ViewBag.ResultLastMonthM4[0]) },
-                                            new { office = "all", value = ViewBag.ResultLastMonthM4[0] }
+                                            new { office = "ผลต่างกับ งปม. เดือน", value = (ViewBag.ExpectLastMonthM4[0] - ViewBag.ResultLastMonthM4[0]) },
+                                            new { office = "ผลสะสม", value = ViewBag.ResultLastMonthM4[0] }
                                         })
                                     )
                                         </div>
@@ -1330,7 +1396,7 @@
                         <div id="nhq" runat="server" class="col-xl-4 mb-3">
                             <div class="card">
                                 <div class="card-header bg-light">
-                                    สภ. และ สท.
+                                    สท.
                                 </div>
                                 <div class="card-body">
                                     <div class="row">
@@ -1343,7 +1409,10 @@
                                             .Font(f => f.Size(13))
                                         )
                                         .Legend(l => l
-                                            .Visible(false)
+                                            .Orientation(Orientation.Horizontal)
+                                            .ItemTextPosition(Position.Right)
+                                            .HorizontalAlignment(HorizontalAlignment.Center)
+                                            .VerticalAlignment(VerticalEdge.Bottom)
                                         )
                                         .Export(e => e.Enabled(false))
                                         .Series(s => s
@@ -1366,8 +1435,8 @@
                                             )
                                         )
                                         .DataSource(new[] {
-                                            new { office = "diff", value = (ViewBag.ExpectM4[1] - ViewBag.ResultLastMonthM4[1]) },
-                                            new { office = "hq", value = ViewBag.ResultLastMonthM4[1] }
+                                            new { office = "ผลต่างกับ งปม. ปี", value = (ViewBag.ExpectM4[1] - ViewBag.ResultLastMonthM4[1]) },
+                                            new { office = "ผลสะสม", value = ViewBag.ResultLastMonthM4[1] }
                                         })
                                     )
                                         </div>
@@ -1380,7 +1449,10 @@
                                             .Font(f => f.Size(13))
                                         )
                                         .Legend(l => l
-                                            .Visible(false)
+                                            .Orientation(Orientation.Horizontal)
+                                            .ItemTextPosition(Position.Right)
+                                            .HorizontalAlignment(HorizontalAlignment.Center)
+                                            .VerticalAlignment(VerticalEdge.Bottom)
                                         )
                                         .Export(e => e.Enabled(false))
                                         .Series(s => s
@@ -1403,8 +1475,8 @@
                                             )
                                         )
                                         .DataSource(new[] {
-                                            new { office = "diff", value = (ViewBag.ExpectLastMonthM4[1] - ViewBag.ResultLastMonthM4[1]) },
-                                            new { office = "all", value = ViewBag.ResultLastMonthM4[1] }
+                                            new { office = "ผลต่างกับ งปม. เดือน", value = (ViewBag.ExpectLastMonthM4[1] - ViewBag.ResultLastMonthM4[1]) },
+                                            new { office = "ผลสะสม", value = ViewBag.ResultLastMonthM4[1] }
                                         })
                                     )
                                         </div>
@@ -1425,8 +1497,8 @@
                                             <tr>
                                                 <th scope="col"></th>
                                                 <th scope="col">รวม</th>
-                                                <th scope="col">ภญ.</th>
-                                                <th scope="col">สภ. และ สท.</th>
+                                                <th scope="col">สภ.</th>
+                                                <th scope="col">สท.</th>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -1469,7 +1541,7 @@
                         หมวด 5 : ด้านบริการ
                     </h6>
                     <h6 class="m-0 font-weight-bold text-primary">
-                        ตัวชี้วัดที่ 15 : ร้อยละของจำนวนแบบฯ ที่ยื่นผ่านอินเทอรืเนตเทียบกับเป้าหมายที่กำหนด
+                        ตัวชี้วัดที่ 13 : ร้อยละของจำนวนแบบฯ ที่ยื่นผ่านอินเทอรืเนตเทียบกับเป้าหมายที่กำหนด
                     </h6>
                 </div>
                 <!-- Card Body -->
@@ -1491,7 +1563,10 @@
                                             .Font(f => f.Size(13))
                                         )
                                         .Legend(l => l
-                                            .Visible(false)
+                                            .Orientation(Orientation.Horizontal)
+                                            .ItemTextPosition(Position.Right)
+                                            .HorizontalAlignment(HorizontalAlignment.Center)
+                                            .VerticalAlignment(VerticalEdge.Bottom)
                                         )
                                         .Export(e => e.Enabled(false))
                                         .Series(s => s
@@ -1514,8 +1589,8 @@
                                             )
                                         )
                                         .DataSource(new[] {
-                                            new { office = "diff", value = (ViewBag.ExpectM5[0] + ViewBag.ExpectM5[1] - (ViewBag.ResultLastMonthM5[0] + ViewBag.ResultLastMonthM5[1])) },
-                                            new { office = "all", value = (ViewBag.ResultLastMonthM5[0] + ViewBag.ResultLastMonthM5[1]) }
+                                            new { office = "ผลต่างกับ งปม. ปี", value = (ViewBag.ExpectM5[0] + ViewBag.ExpectM5[1] - (ViewBag.ResultLastMonthM5[0] + ViewBag.ResultLastMonthM5[1])) },
+                                            new { office = "ผลสะสม", value = (ViewBag.ResultLastMonthM5[0] + ViewBag.ResultLastMonthM5[1]) }
                                         })
                                     )
                                         </div>
@@ -1528,7 +1603,10 @@
                                             .Font(f => f.Size(13))
                                         )
                                         .Legend(l => l
-                                            .Visible(false)
+                                            .Orientation(Orientation.Horizontal)
+                                            .ItemTextPosition(Position.Right)
+                                            .HorizontalAlignment(HorizontalAlignment.Center)
+                                            .VerticalAlignment(VerticalEdge.Bottom)
                                         )
                                         .Export(e => e.Enabled(false))
                                         .Series(s => s
@@ -1551,8 +1629,8 @@
                                             )
                                         )
                                         .DataSource(new[] {
-                                            new { office = "diff", value = (ViewBag.ExpectLastMonthM5[0] + ViewBag.ExpectLastMonthM5[1] - (ViewBag.ResultLastMonthM5[0] + ViewBag.ResultLastMonthM5[1])) },
-                                            new { office = "all", value = (ViewBag.ResultLastMonthM5[0] + ViewBag.ResultLastMonthM5[1]) }
+                                            new { office = "ผลต่างกับ งปม. เดือน", value = (ViewBag.ExpectLastMonthM5[0] + ViewBag.ExpectLastMonthM5[1] - (ViewBag.ResultLastMonthM5[0] + ViewBag.ResultLastMonthM5[1])) },
+                                            new { office = "ผลสะสม", value = (ViewBag.ResultLastMonthM5[0] + ViewBag.ResultLastMonthM5[1]) }
                                         })
                                     )
                                         </div>
@@ -1576,7 +1654,10 @@
                                             .Font(f => f.Size(13))
                                         )
                                         .Legend(l => l
-                                            .Visible(false)
+                                            .Orientation(Orientation.Horizontal)
+                                            .ItemTextPosition(Position.Right)
+                                            .HorizontalAlignment(HorizontalAlignment.Center)
+                                            .VerticalAlignment(VerticalEdge.Bottom)
                                         )
                                         .Export(e => e.Enabled(false))
                                         .Series(s => s
@@ -1599,8 +1680,8 @@
                                             )
                                         )
                                         .DataSource(new[] {
-                                            new { office = "diff", value = (ViewBag.ExpectM5[0] - ViewBag.ResultLastMonthM5[0]) },
-                                            new { office = "hq", value = ViewBag.ResultLastMonthM5[0] }
+                                            new { office = "ผลต่างกับ งปม. ปี", value = (ViewBag.ExpectM5[0] - ViewBag.ResultLastMonthM5[0]) },
+                                            new { office = "ผลสะสม", value = ViewBag.ResultLastMonthM5[0] }
                                         })
                                     )
                                         </div>
@@ -1613,7 +1694,10 @@
                                             .Font(f => f.Size(13))
                                         )
                                         .Legend(l => l
-                                            .Visible(false)
+                                            .Orientation(Orientation.Horizontal)
+                                            .ItemTextPosition(Position.Right)
+                                            .HorizontalAlignment(HorizontalAlignment.Center)
+                                            .VerticalAlignment(VerticalEdge.Bottom)
                                         )
                                         .Export(e => e.Enabled(false))
                                         .Series(s => s
@@ -1636,8 +1720,8 @@
                                             )
                                         )
                                         .DataSource(new[] {
-                                            new { office = "diff", value = (ViewBag.ExpectLastMonthM5[0] - ViewBag.ResultLastMonthM5[0]) },
-                                            new { office = "all", value = ViewBag.ResultLastMonthM5[0] }
+                                            new { office = "ผลต่างกับ งปม. เดือน", value = (ViewBag.ExpectLastMonthM5[0] - ViewBag.ResultLastMonthM5[0]) },
+                                            new { office = "ผลสะสม", value = ViewBag.ResultLastMonthM5[0] }
                                         })
                                     )
                                         </div>
@@ -1661,7 +1745,10 @@
                                             .Font(f => f.Size(13))
                                         )
                                         .Legend(l => l
-                                            .Visible(false)
+                                            .Orientation(Orientation.Horizontal)
+                                            .ItemTextPosition(Position.Right)
+                                            .HorizontalAlignment(HorizontalAlignment.Center)
+                                            .VerticalAlignment(VerticalEdge.Bottom)
                                         )
                                         .Export(e => e.Enabled(false))
                                         .Series(s => s
@@ -1684,8 +1771,8 @@
                                             )
                                         )
                                         .DataSource(new[] {
-                                            new { office = "diff", value = (ViewBag.ExpectM5[1] - ViewBag.ResultLastMonthM5[1]) },
-                                            new { office = "hq", value = ViewBag.ResultLastMonthM5[1] }
+                                            new { office = "ผลต่างกับ งปม. ปี", value = (ViewBag.ExpectM5[1] - ViewBag.ResultLastMonthM5[1]) },
+                                            new { office = "ผลสะสม", value = ViewBag.ResultLastMonthM5[1] }
                                         })
                                     )
                                         </div>
@@ -1698,7 +1785,10 @@
                                             .Font(f => f.Size(13))
                                         )
                                         .Legend(l => l
-                                            .Visible(false)
+                                            .Orientation(Orientation.Horizontal)
+                                            .ItemTextPosition(Position.Right)
+                                            .HorizontalAlignment(HorizontalAlignment.Center)
+                                            .VerticalAlignment(VerticalEdge.Bottom)
                                         )
                                         .Export(e => e.Enabled(false))
                                         .Series(s => s
@@ -1721,8 +1811,8 @@
                                             )
                                         )
                                         .DataSource(new[] {
-                                            new { office = "diff", value = (ViewBag.ExpectLastMonthM5[1] - ViewBag.ResultLastMonthM5[1]) },
-                                            new { office = "all", value = ViewBag.ResultLastMonthM5[1] }
+                                            new { office = "ผลต่างกับ งปม. เดือน", value = (ViewBag.ExpectLastMonthM5[1] - ViewBag.ResultLastMonthM5[1]) },
+                                            new { office = "ผลสะสม", value = ViewBag.ResultLastMonthM5[1] }
                                         })
                                     )
                                         </div>
@@ -1750,21 +1840,21 @@
                                         <tbody>
                                             <tr>
                                                 <th scope="row">เป้าหมายรวมปีงบประมาณ </th>
-                                                <td>@((ViewBag.ExpectM5[0] + ViewBag.ExpectM5[1]).ToString("N4"))</td>
-                                                <td>@(ViewBag.ExpectM5[0].ToString("N4"))</td>
-                                                <td>@(ViewBag.ExpectM5[1].ToString("N4"))</td>
+                                                <td>@((ViewBag.ExpectM5[0] + ViewBag.ExpectM5[1]).ToString("N0"))</td>
+                                                <td>@(ViewBag.ExpectM5[0].ToString("N0"))</td>
+                                                <td>@(ViewBag.ExpectM5[1].ToString("N0"))</td>
                                             </tr>
                                             <tr>
                                                 <th scope="row">เป้าหมาย ณ เดือน @DateTime.Now.AddMonths(-1).ToString("MMMM")   ปีงบประมาณ @(DateTime.Now.Month > 9 ? DateTime.Now.AddYears(1).ToString("yyyy") : DateTime.Now.ToString("yyyy"))</th>
-                                                <td>@((ViewBag.ExpectLastMonthM5[0] + ViewBag.ExpectLastMonthM5[1]).ToString("N4"))</td>
-                                                <td>@(ViewBag.ExpectLastMonthM5[0].ToString("N4"))</td>
-                                                <td>@(ViewBag.ExpectLastMonthM5[1].ToString("N4"))</td>
+                                                <td>@((ViewBag.ExpectLastMonthM5[0] + ViewBag.ExpectLastMonthM5[1]).ToString("N0"))</td>
+                                                <td>@(ViewBag.ExpectLastMonthM5[0].ToString("N0"))</td>
+                                                <td>@(ViewBag.ExpectLastMonthM5[1].ToString("N0"))</td>
                                             </tr>
                                             <tr>
                                                 <th scope="row">ผลสะสม ณ เดือน @DateTime.Now.AddMonths(-1).ToString("MMMM")   ปีงบประมาณ @(DateTime.Now.Month > 9 ? DateTime.Now.AddYears(1).ToString("yyyy") : DateTime.Now.ToString("yyyy"))</th>
-                                                <td>@((ViewBag.ResultLastMonthM5[0] + ViewBag.ResultLastMonthM5[1]).ToString("N4"))</td>
-                                                <td>@(ViewBag.ResultLastMonthM5[0].ToString("N4"))</td>
-                                                <td>@(ViewBag.ResultLastMonthM5[1].ToString("N4")) </td>
+                                                <td>@((ViewBag.ResultLastMonthM5[0] + ViewBag.ResultLastMonthM5[1]).ToString("N0"))</td>
+                                                <td>@(ViewBag.ResultLastMonthM5[0].ToString("N0"))</td>
+                                                <td>@(ViewBag.ResultLastMonthM5[1].ToString("N0")) </td>
                                             </tr>
                                         </tbody>
                                     </table>
@@ -1787,7 +1877,7 @@
                         หมวด 6 : ด้านเบิกจ่าย
                     </h6>
                     <h6 class="m-0 font-weight-bold text-primary">
-                        ตัวชี้วัดที่ 17 : ร้อยละของความสำเร็จของการเบิกจ่ายงบประมาณ ประจำปีงบประมาณ @(DateTime.Now.Month > 9 ? DateTime.Now.AddYears(1).ToString("yyyy") : DateTime.Now.ToString("yyyy"))
+                        ตัวชี้วัดที่ 15 : ร้อยละของความสำเร็จของการเบิกจ่ายงบประมาณ ประจำปีงบประมาณ @(DateTime.Now.Month > 9 ? DateTime.Now.AddYears(1).ToString("yyyy") : DateTime.Now.ToString("yyyy"))
                     </h6>
                 </div>
                 <!-- Card Body -->
@@ -1809,7 +1899,10 @@
                                             .Font(f => f.Size(13))
                                         )
                                         .Legend(l => l
-                                            .Visible(false)
+                                            .Orientation(Orientation.Horizontal)
+                                            .ItemTextPosition(Position.Right)
+                                            .HorizontalAlignment(HorizontalAlignment.Center)
+                                            .VerticalAlignment(VerticalEdge.Bottom)
                                         )
                                         .Export(e => e.Enabled(false))
                                         .Series(s => s
@@ -1832,8 +1925,8 @@
                                             )
                                         )
                                         .DataSource(new[] {
-                                            new { office = "diff", value = (ViewBag.ExpectM6[0] + ViewBag.ExpectM6[1] - (ViewBag.ResultLastMonthM6[0] + ViewBag.ResultLastMonthM6[1])) },
-                                            new { office = "all", value = (ViewBag.ResultLastMonthM6[0] + ViewBag.ResultLastMonthM6[1]) }
+                                            new { office = "ผลต่างกับ งปม. ปี", value = (ViewBag.ExpectM6[0] + ViewBag.ExpectM6[1] - (ViewBag.ResultLastMonthM6[0] + ViewBag.ResultLastMonthM6[1])) },
+                                            new { office = "ผลสะสม", value = (ViewBag.ResultLastMonthM6[0] + ViewBag.ResultLastMonthM6[1]) }
                                         })
                                     )
                                         </div>
@@ -1846,7 +1939,10 @@
                                             .Font(f => f.Size(13))
                                         )
                                         .Legend(l => l
-                                            .Visible(false)
+                                            .Orientation(Orientation.Horizontal)
+                                            .ItemTextPosition(Position.Right)
+                                            .HorizontalAlignment(HorizontalAlignment.Center)
+                                            .VerticalAlignment(VerticalEdge.Bottom)
                                         )
                                         .Export(e => e.Enabled(false))
                                         .Series(s => s
@@ -1869,8 +1965,8 @@
                                             )
                                         )
                                         .DataSource(new[] {
-                                            new { office = "diff", value = (ViewBag.ExpectLastMonthM6[0] + ViewBag.ExpectLastMonthM6[1] - (ViewBag.ResultLastMonthM6[0] + ViewBag.ResultLastMonthM6[1])) },
-                                            new { office = "all", value = (ViewBag.ResultLastMonthM6[0] + ViewBag.ResultLastMonthM6[1]) }
+                                            new { office = "ผลต่างกับ งปม. เดือน", value = (ViewBag.ExpectLastMonthM6[0] + ViewBag.ExpectLastMonthM6[1] - (ViewBag.ResultLastMonthM6[0] + ViewBag.ResultLastMonthM6[1])) },
+                                            new { office = "ผลสะสม", value = (ViewBag.ResultLastMonthM6[0] + ViewBag.ResultLastMonthM6[1]) }
                                         })
                                     )
                                         </div>
@@ -1881,7 +1977,7 @@
                         <div id="hq" class="col-xl-4 mb-3">
                             <div class="card">
                                 <div class="card-header bg-light">
-                                    ภญ.
+                                    สภ.
                                 </div>
                                 <div class="card-body">
                                     <div class="row">
@@ -1894,7 +1990,10 @@
                                             .Font(f => f.Size(13))
                                         )
                                         .Legend(l => l
-                                            .Visible(false)
+                                            .Orientation(Orientation.Horizontal)
+                                            .ItemTextPosition(Position.Right)
+                                            .HorizontalAlignment(HorizontalAlignment.Center)
+                                            .VerticalAlignment(VerticalEdge.Bottom)
                                         )
                                         .Export(e => e.Enabled(false))
                                         .Series(s => s
@@ -1917,8 +2016,8 @@
                                             )
                                         )
                                         .DataSource(new[] {
-                                            new { office = "diff", value = (ViewBag.ExpectM6[0] - ViewBag.ResultLastMonthM6[0]) },
-                                            new { office = "hq", value = ViewBag.ResultLastMonthM6[0] }
+                                            new { office = "ผลต่างกับ งปม. ปี", value = (ViewBag.ExpectM6[0] - ViewBag.ResultLastMonthM6[0]) },
+                                            new { office = "ผลสะสม", value = ViewBag.ResultLastMonthM6[0] }
                                         })
                                     )
                                         </div>
@@ -1931,7 +2030,10 @@
                                             .Font(f => f.Size(13))
                                         )
                                         .Legend(l => l
-                                            .Visible(false)
+                                            .Orientation(Orientation.Horizontal)
+                                            .ItemTextPosition(Position.Right)
+                                            .HorizontalAlignment(HorizontalAlignment.Center)
+                                            .VerticalAlignment(VerticalEdge.Bottom)
                                         )
                                         .Export(e => e.Enabled(false))
                                         .Series(s => s
@@ -1954,8 +2056,8 @@
                                             )
                                         )
                                         .DataSource(new[] {
-                                            new { office = "diff", value = (ViewBag.ExpectLastMonthM6[0] - ViewBag.ResultLastMonthM6[0]) },
-                                            new { office = "all", value = ViewBag.ResultLastMonthM6[0] }
+                                            new { office = "ผลต่างกับ งปม. เดือน", value = (ViewBag.ExpectLastMonthM6[0] - ViewBag.ResultLastMonthM6[0]) },
+                                            new { office = "ผลสะสม", value = ViewBag.ResultLastMonthM6[0] }
                                         })
                                     )
                                         </div>
@@ -1966,7 +2068,7 @@
                         <div id="nhq" runat="server" class="col-xl-4 mb-3">
                             <div class="card">
                                 <div class="card-header bg-light">
-                                    สภ. และ สท.
+                                    สท.
                                 </div>
                                 <div class="card-body">
                                     <div class="row">
@@ -1979,7 +2081,10 @@
                                             .Font(f => f.Size(13))
                                         )
                                         .Legend(l => l
-                                            .Visible(false)
+                                            .Orientation(Orientation.Horizontal)
+                                            .ItemTextPosition(Position.Right)
+                                            .HorizontalAlignment(HorizontalAlignment.Center)
+                                            .VerticalAlignment(VerticalEdge.Bottom)
                                         )
                                         .Export(e => e.Enabled(false))
                                         .Series(s => s
@@ -2002,8 +2107,8 @@
                                             )
                                         )
                                         .DataSource(new[] {
-                                            new { office = "diff", value = (ViewBag.ExpectM6[1] - ViewBag.ResultLastMonthM6[1]) },
-                                            new { office = "hq", value = ViewBag.ResultLastMonthM6[1] }
+                                            new { office = "ผลต่างกับ งปม. ปี", value = (ViewBag.ExpectM6[1] - ViewBag.ResultLastMonthM6[1]) },
+                                            new { office = "ผลสะสม", value = ViewBag.ResultLastMonthM6[1] }
                                         })
                                     )
                                         </div>
@@ -2016,7 +2121,10 @@
                                             .Font(f => f.Size(13))
                                         )
                                         .Legend(l => l
-                                            .Visible(false)
+                                            .Orientation(Orientation.Horizontal)
+                                            .ItemTextPosition(Position.Right)
+                                            .HorizontalAlignment(HorizontalAlignment.Center)
+                                            .VerticalAlignment(VerticalEdge.Bottom)
                                         )
                                         .Export(e => e.Enabled(false))
                                         .Series(s => s
@@ -2039,8 +2147,8 @@
                                             )
                                         )
                                         .DataSource(new[] {
-                                            new { office = "diff", value = (ViewBag.ExpectLastMonthM6[1] - ViewBag.ResultLastMonthM6[1]) },
-                                            new { office = "all", value = ViewBag.ResultLastMonthM6[1] }
+                                            new { office = "ผลต่างกับ งปม. เดือน", value = (ViewBag.ExpectLastMonthM6[1] - ViewBag.ResultLastMonthM6[1]) },
+                                            new { office = "ผลสะสม", value = ViewBag.ResultLastMonthM6[1] }
                                         })
                                     )
                                         </div>
@@ -2061,8 +2169,8 @@
                                             <tr>
                                                 <th scope="col"></th>
                                                 <th scope="col">รวม</th>
-                                                <th scope="col">ภญ.</th>
-                                                <th scope="col">สภ. และ สท.</th>
+                                                <th scope="col">สภ.</th>
+                                                <th scope="col">สท.</th>
                                             </tr>
                                         </thead>
                                         <tbody>
