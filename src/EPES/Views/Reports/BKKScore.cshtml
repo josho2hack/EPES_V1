@@ -55,7 +55,7 @@
 .ShowColumnTotals(false)
 .FieldChooser(c => c.Enabled(true).Height(400))
 .RowHeaderLayout(PivotGridRowHeadersLayout.Tree)
-//.AllowExpandAll(true)
+.AllowExpandAll(true)
 .DataSource(d => d
     .Store(s => s.Mvc().Controller("ReportsApi").Key("Id").LoadAction("GetBKKScore"))
 
@@ -145,7 +145,7 @@
 .ShowColumnTotals(false)
 .FieldChooser(c => c.Enabled(true).Height(400))
 .RowHeaderLayout(PivotGridRowHeadersLayout.Tree)
-//.AllowExpandAll(true)
+.AllowExpandAll(true)
 .DataSource(d => d
 .Store(s => s.Mvc().Controller("ReportsApi").Key("Id").LoadAction("GetBKKScore"))
 

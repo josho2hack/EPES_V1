@@ -55,20 +55,20 @@
 .ShowColumnTotals(false)
 .FieldChooser(c => c.Enabled(true).Height(400))
 .RowHeaderLayout(PivotGridRowHeadersLayout.Tree)
-//.AllowExpandAll(true)
+.AllowExpandAll(true)
 .DataSource(d => d
     .Store(s => s.Mvc().Controller("ReportsApi").Key("Id").LoadAction("GetPAKScore"))
 
     .Fields(fields => {
 
-    fields.Add()
-        .Caption("หน่วยงาน")
-        .DataField("nameGroup")
-        .Expanded(false)
-        //.SortBy(PivotGridSortBy.DisplayText)
-        //.SortOrder(SortOrder.Asc)
-        .Width(200)
-        .Area(PivotGridArea.Row);
+    //fields.Add()
+    //    .Caption("หน่วยงาน")
+    //    .DataField("nameGroup")
+    //    .Expanded(false)
+    //    //.SortBy(PivotGridSortBy.DisplayText)
+    //    //.SortOrder(SortOrder.Asc)
+    //    .Width(200)
+    //    .Area(PivotGridArea.Row);
 
     fields.Add()
         .Caption("หน่วยงาน")
@@ -145,19 +145,19 @@
 .ShowColumnTotals(false)
 .FieldChooser(c => c.Enabled(true).Height(400))
 .RowHeaderLayout(PivotGridRowHeadersLayout.Tree)
-//.AllowExpandAll(true)
+.AllowExpandAll(true)
 .DataSource(d => d
 .Store(s => s.Mvc().Controller("ReportsApi").Key("Id").LoadAction("GetPAKScore"))
 
 .Fields(fields => {
-fields.Add()
-        .Caption("สังกัดหน่วยงาน")
-        .DataField("nameGroup")
-        .Expanded(false)
-        //.SortBy(PivotGridSortBy.DisplayText)
-        //.SortOrder(SortOrder.Asc)
-        .Width(300)
-        .Area(PivotGridArea.Row);
+//fields.Add()
+//        .Caption("สังกัดหน่วยงาน")
+//        .DataField("nameGroup")
+//        .Expanded(false)
+//        //.SortBy(PivotGridSortBy.DisplayText)
+//        //.SortOrder(SortOrder.Asc)
+//        .Width(300)
+//        .Area(PivotGridArea.Row);
 
 fields.Add()
         .Caption("หน่วยงาน")

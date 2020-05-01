@@ -190,8 +190,7 @@ namespace EPES.Controllers
                                                   .Where(sd => sd.PointOfEvaluation.Year == yearForQuery &&
                                                     sd.LastMonth == month &&
                                                     sd.Office.Code != "00000000" &&
-                                                    sd.Office.Code.Substring(0, 3) != "000" &&
-                                                    sd.Office.Code.Substring(5, 3) == "000" &&
+                                                    sd.Office.Code.Substring(2, 6) == "000000" &&
                                                     !sd.PointOfEvaluation.HasSub)
                                                     .Select(i => new
                                                     {
