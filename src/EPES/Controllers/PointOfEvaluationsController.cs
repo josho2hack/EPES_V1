@@ -1798,7 +1798,7 @@ namespace EPES.Controllers
             var user = await _userManager.GetUserAsync(User);
             try
             {
-                for (int i = 1; i <= 22; i++)
+                for (int i = 20; i <= 22; i++)
                 {
                     var dataPoint = await _context.PointOfEvaluations.Include(p => p.OwnerOffice).FirstOrDefaultAsync(p => p.Point == i && p.OwnerOffice.Code == "01001000");
                     if (dataPoint != null)
@@ -2001,12 +2001,12 @@ namespace EPES.Controllers
         [HttpGet, ActionName("CopyPak1ToHQ")]
         public async Task<IActionResult> CopyPak1ToHQ()
         {
-            var target = await _context.Offices.Where(d => d.Code != "00000000" && d.Code.Substring(0, 3) == "000").ToListAsync();
+            var target = await _context.Offices.Where(d => d.Code != "00000000" && d.Code != "01000000" && (d.Code.Substring(0, 3) == "000" || d.Code.Substring(2, 6) == "000000")).ToListAsync();
 
             var user = await _userManager.GetUserAsync(User);
             try
             {
-                for (int i = 19; i <= 21; i++)
+                for (int i = 20; i <= 22; i++)
                 {
                     var dataPoint = await _context.PointOfEvaluations.Include(p => p.OwnerOffice).FirstOrDefaultAsync(p => p.Point == i && p.OwnerOffice.Code == "01000000");
 
@@ -2016,7 +2016,7 @@ namespace EPES.Controllers
 
                     foreach (var item in target)
                     {
-                        var pointToCopy = await _context.PointOfEvaluations.Include(p => p.OwnerOffice).Where(p => p.OwnerOffice.Code == item.Code && p.Name == dataPoint.Name && p.Plan == dataPoint.Plan).FirstOrDefaultAsync();
+                        var pointToCopy = await _context.PointOfEvaluations.Include(p => p.OwnerOffice).Include(p => p.Rounds).Include(p => p.DataForEvaluations).Where(p => p.OwnerOffice.Code == item.Code && p.Name == dataPoint.Name && p.Plan == dataPoint.Plan).FirstOrDefaultAsync();
                         if (pointToCopy == null)
                         {
                             pointToCopy = new PointOfEvaluation();
@@ -2084,201 +2084,91 @@ namespace EPES.Controllers
                             }
 
                         }
-                    }
-                }
-                return Ok();
-            }
-            catch (DbUpdateException)
-            {
-                //Log the error (uncomment ex variable name and write a log.
-                ModelState.AddModelError("", "ไม่สามารถบันทึกข้อมูล. " +
-                    "ลองพยายามบันทึกอีกครั้ง " +
-                    "โปรดแจ้งผู้ดูแลระบบ");
-                return NotFound();
-            }
-        }
-
-        public async Task<IActionResult> CopyPak1ST1X()
-        {
-            var target = await _context.Offices.Where(d => d.Code == "01001000").ToListAsync();
-
-            var user = await _userManager.GetUserAsync(User);
-
-            try
-            {
-                for (int i = 3; i <= 5; i++)
-                {
-                    if (i == 4)
-                    {
-                        continue;
-                    }
-                    if (i == 3)
-                    {
-                        var dataPointHasSub = await _context.PointOfEvaluations.Include(p => p.OwnerOffice).Where(p => p.Point == i && p.OwnerOffice.Code == "01000000").ToListAsync();
-                        foreach (var dataPointS in dataPointHasSub)
+                        else
                         {
-                            if (dataPointS.SubPoint == 1)
+                            if (pointToCopy.DataForEvaluations != null)
                             {
-                                continue;
-                            }
-                            var dataRounds = await _context.Rounds.Where(r => r.PointOfEvaluationId == dataPointS.Id).ToListAsync();
-
-                            var dataForEPES = await _context.DataForEvaluations.Where(r => r.PointOfEvaluationId == dataPointS.Id).ToListAsync();
-
-                            foreach (var item in target)
-                            {
-                                var pointToCopy = await _context.PointOfEvaluations.Include(p => p.OwnerOffice).Where(p => p.OwnerOffice.Code == item.Code && p.Name == dataPointS.Name && p.Plan == dataPointS.Plan).FirstOrDefaultAsync();
-                                if (pointToCopy == null)
+                                foreach (var dfe in pointToCopy.DataForEvaluations)
                                 {
-                                    pointToCopy = new PointOfEvaluation();
-                                    pointToCopy.AuditOfficeId = dataPointS.AuditOfficeId;
-                                    pointToCopy.AutoApp = dataPointS.AutoApp;
-                                    pointToCopy.Ddrive = dataPointS.Ddrive;
-                                    pointToCopy.DetailPlan = dataPointS.DetailPlan;
-                                    pointToCopy.ExpectPlan = dataPointS.ExpectPlan;
-                                    pointToCopy.HasSub = dataPointS.HasSub;
-                                    pointToCopy.Name = dataPointS.Name;
-                                    pointToCopy.OwnerOfficeId = item.Id;
-                                    pointToCopy.Plan = dataPointS.Plan;
-                                    pointToCopy.Point = dataPointS.Point;
-                                    pointToCopy.SubPoint = dataPointS.SubPoint;
-                                    pointToCopy.Unit = dataPointS.Unit;
-                                    pointToCopy.UpdateUserId = user.Id;
-                                    pointToCopy.Weight = dataPointS.Weight;
-                                    pointToCopy.Year = dataPointS.Year;
-
-                                    _context.PointOfEvaluations.Add(pointToCopy);
-                                    await _context.SaveChangesAsync();
-
-                                    foreach (var round in dataRounds)
-                                    {
-                                        var roundToCopy = new Round();
-                                        roundToCopy.PointOfEvaluationId = pointToCopy.Id;
-                                        roundToCopy.DetailRate1 = round.DetailRate1;
-                                        roundToCopy.DetailRate2 = round.DetailRate2;
-                                        roundToCopy.DetailRate3 = round.DetailRate3;
-                                        roundToCopy.DetailRate4 = round.DetailRate4;
-                                        roundToCopy.DetailRate5 = round.DetailRate5;
-                                        roundToCopy.LevelNumber = round.LevelNumber;
-                                        roundToCopy.Rate1MonthStart = round.Rate1MonthStart;
-                                        roundToCopy.Rate1MonthStop = round.Rate1MonthStop;
-                                        roundToCopy.Rate2MonthStart = round.Rate2MonthStart;
-                                        roundToCopy.Rate2MonthStop = round.Rate2MonthStop;
-                                        roundToCopy.Rate3MonthStart = round.Rate3MonthStart;
-                                        roundToCopy.Rate3MonthStop = round.Rate3MonthStop;
-                                        roundToCopy.Rate4MonthStart = round.Rate4MonthStart;
-                                        roundToCopy.Rate4MonthStop = round.Rate4MonthStop;
-                                        roundToCopy.Rate5MonthStart = round.Rate5MonthStart;
-                                        roundToCopy.Rate5MonthStop = round.Rate5MonthStop;
-                                        roundToCopy.Rate1 = round.Rate1;
-                                        roundToCopy.Rate2 = round.Rate2;
-                                        roundToCopy.Rate3 = round.Rate3;
-                                        roundToCopy.Rate4 = round.Rate4;
-                                        roundToCopy.Rate5 = round.Rate5;
-                                        roundToCopy.RoundNumber = round.RoundNumber;
-
-                                        _context.Rounds.Add(roundToCopy);
-                                        await _context.SaveChangesAsync();
-                                    }
-
-                                    foreach (var dataforE in dataForEPES)
-                                    {
-                                        var dataForEvaluation = new DataForEvaluation();
-                                        dataForEvaluation.UpdateUserId = user.Id;
-                                        dataForEvaluation.PointOfEvaluationId = pointToCopy.Id;
-                                        dataForEvaluation.OfficeId = item.Id;
-                                        dataForEvaluation.Month = dataforE.Month;
-                                        dataForEvaluation.Expect = dataforE.Expect;
-
-                                        _context.DataForEvaluations.Add(dataForEvaluation);
-                                        await _context.SaveChangesAsync();
-                                    }
+                                    _context.DataForEvaluations.Remove(dfe);
+                                    //await _context.SaveChangesAsync();
                                 }
                             }
-                        }
-                    } // i = 3
-                    if (i == 5)
-                    {
-                        var dataPointHasSub = await _context.PointOfEvaluations.Include(p => p.OwnerOffice).Where(p => p.Point == i && p.OwnerOffice.Code == "01000000").ToListAsync();
-                        foreach (var dataPointS in dataPointHasSub)
-                        {
-                            if (dataPointS.SubPoint == 0)
-                            {
-                                continue;
-                            }
-                            var dataRounds = await _context.Rounds.Where(r => r.PointOfEvaluationId == dataPointS.Id).ToListAsync();
 
-                            var dataForEPES = await _context.DataForEvaluations.Where(r => r.PointOfEvaluationId == dataPointS.Id).ToListAsync();
-
-                            foreach (var item in target)
+                            if (pointToCopy.Rounds != null)
                             {
-                                var pointToCopy = await _context.PointOfEvaluations.Include(p => p.OwnerOffice).Where(p => p.OwnerOffice.Code == item.Code && p.Name == dataPointS.Name && p.Plan == dataPointS.Plan).FirstOrDefaultAsync();
-                                if (pointToCopy == null)
+                                foreach (var r in pointToCopy.Rounds)
                                 {
-                                    pointToCopy = new PointOfEvaluation();
-                                    pointToCopy.AuditOfficeId = dataPointS.AuditOfficeId;
-                                    pointToCopy.AutoApp = dataPointS.AutoApp;
-                                    pointToCopy.Ddrive = dataPointS.Ddrive;
-                                    pointToCopy.DetailPlan = dataPointS.DetailPlan;
-                                    pointToCopy.ExpectPlan = dataPointS.ExpectPlan;
-                                    pointToCopy.HasSub = dataPointS.HasSub;
-                                    pointToCopy.Name = dataPointS.Name;
-                                    pointToCopy.OwnerOfficeId = item.Id;
-                                    pointToCopy.Plan = dataPointS.Plan;
-                                    pointToCopy.Point = dataPointS.Point;
-                                    pointToCopy.SubPoint = dataPointS.SubPoint;
-                                    pointToCopy.Unit = dataPointS.Unit;
-                                    pointToCopy.UpdateUserId = user.Id;
-                                    pointToCopy.Weight = dataPointS.Weight;
-                                    pointToCopy.Year = dataPointS.Year;
-
-                                    _context.PointOfEvaluations.Add(pointToCopy);
-                                    await _context.SaveChangesAsync();
-
-                                    foreach (var round in dataRounds)
-                                    {
-                                        var roundToCopy = new Round();
-                                        roundToCopy.PointOfEvaluationId = pointToCopy.Id;
-                                        roundToCopy.DetailRate1 = round.DetailRate1;
-                                        roundToCopy.DetailRate2 = round.DetailRate2;
-                                        roundToCopy.DetailRate3 = round.DetailRate3;
-                                        roundToCopy.DetailRate4 = round.DetailRate4;
-                                        roundToCopy.DetailRate5 = round.DetailRate5;
-                                        roundToCopy.LevelNumber = round.LevelNumber;
-                                        roundToCopy.Rate1MonthStart = round.Rate1MonthStart;
-                                        roundToCopy.Rate1MonthStop = round.Rate1MonthStop;
-                                        roundToCopy.Rate2MonthStart = round.Rate2MonthStart;
-                                        roundToCopy.Rate2MonthStop = round.Rate2MonthStop;
-                                        roundToCopy.Rate3MonthStart = round.Rate3MonthStart;
-                                        roundToCopy.Rate3MonthStop = round.Rate3MonthStop;
-                                        roundToCopy.Rate4MonthStart = round.Rate4MonthStart;
-                                        roundToCopy.Rate4MonthStop = round.Rate4MonthStop;
-                                        roundToCopy.Rate5MonthStart = round.Rate5MonthStart;
-                                        roundToCopy.Rate5MonthStop = round.Rate5MonthStop;
-                                        roundToCopy.Rate1 = round.Rate1;
-                                        roundToCopy.Rate2 = round.Rate2;
-                                        roundToCopy.Rate3 = round.Rate3;
-                                        roundToCopy.Rate4 = round.Rate4;
-                                        roundToCopy.Rate5 = round.Rate5;
-                                        roundToCopy.RoundNumber = round.RoundNumber;
-
-                                        _context.Rounds.Add(roundToCopy);
-                                        await _context.SaveChangesAsync();
-                                    }
-
-                                    foreach (var dataforE in dataForEPES)
-                                    {
-                                        var dataForEvaluation = new DataForEvaluation();
-                                        dataForEvaluation.UpdateUserId = user.Id;
-                                        dataForEvaluation.PointOfEvaluationId = pointToCopy.Id;
-                                        dataForEvaluation.OfficeId = item.Id;
-                                        dataForEvaluation.Month = dataforE.Month;
-                                        dataForEvaluation.Expect = dataforE.Expect;
-
-                                        _context.DataForEvaluations.Add(dataForEvaluation);
-                                        await _context.SaveChangesAsync();
-                                    }
+                                    _context.Rounds.Remove(r);
+                                    //await _context.SaveChangesAsync();
                                 }
+                            }
+
+                            _context.PointOfEvaluations.Remove(pointToCopy);
+                            await _context.SaveChangesAsync();
+
+                            pointToCopy = new PointOfEvaluation();
+                            pointToCopy.AuditOfficeId = dataPoint.AuditOfficeId;
+                            pointToCopy.AutoApp = dataPoint.AutoApp;
+                            pointToCopy.Ddrive = dataPoint.Ddrive;
+                            pointToCopy.DetailPlan = dataPoint.DetailPlan;
+                            pointToCopy.ExpectPlan = dataPoint.ExpectPlan;
+                            pointToCopy.HasSub = dataPoint.HasSub;
+                            pointToCopy.Name = dataPoint.Name;
+                            pointToCopy.OwnerOfficeId = item.Id;
+                            pointToCopy.Plan = dataPoint.Plan;
+                            pointToCopy.Point = dataPoint.Point;
+                            pointToCopy.SubPoint = dataPoint.SubPoint;
+                            pointToCopy.Unit = dataPoint.Unit;
+                            pointToCopy.UpdateUserId = user.Id;
+                            pointToCopy.Weight = dataPoint.Weight;
+                            pointToCopy.Year = dataPoint.Year;
+
+                            _context.PointOfEvaluations.Add(pointToCopy);
+                            await _context.SaveChangesAsync();
+
+                            foreach (var round in dataRounds)
+                            {
+                                var roundToCopy = new Round();
+                                roundToCopy.PointOfEvaluationId = pointToCopy.Id;
+                                roundToCopy.DetailRate1 = round.DetailRate1;
+                                roundToCopy.DetailRate2 = round.DetailRate2;
+                                roundToCopy.DetailRate3 = round.DetailRate3;
+                                roundToCopy.DetailRate4 = round.DetailRate4;
+                                roundToCopy.DetailRate5 = round.DetailRate5;
+                                roundToCopy.LevelNumber = round.LevelNumber;
+                                roundToCopy.Rate1MonthStart = round.Rate1MonthStart;
+                                roundToCopy.Rate1MonthStop = round.Rate1MonthStop;
+                                roundToCopy.Rate2MonthStart = round.Rate2MonthStart;
+                                roundToCopy.Rate2MonthStop = round.Rate2MonthStop;
+                                roundToCopy.Rate3MonthStart = round.Rate3MonthStart;
+                                roundToCopy.Rate3MonthStop = round.Rate3MonthStop;
+                                roundToCopy.Rate4MonthStart = round.Rate4MonthStart;
+                                roundToCopy.Rate4MonthStop = round.Rate4MonthStop;
+                                roundToCopy.Rate5MonthStart = round.Rate5MonthStart;
+                                roundToCopy.Rate5MonthStop = round.Rate5MonthStop;
+                                roundToCopy.Rate1 = round.Rate1;
+                                roundToCopy.Rate2 = round.Rate2;
+                                roundToCopy.Rate3 = round.Rate3;
+                                roundToCopy.Rate4 = round.Rate4;
+                                roundToCopy.Rate5 = round.Rate5;
+                                roundToCopy.RoundNumber = round.RoundNumber;
+
+                                _context.Rounds.Add(roundToCopy);
+                                await _context.SaveChangesAsync();
+                            }
+
+                            foreach (var dataforE in dataForEPES)
+                            {
+                                var dataForEvaluation = new DataForEvaluation();
+                                dataForEvaluation.UpdateUserId = user.Id;
+                                dataForEvaluation.PointOfEvaluationId = pointToCopy.Id;
+                                dataForEvaluation.OfficeId = item.Id;
+                                dataForEvaluation.Month = dataforE.Month;
+                                dataForEvaluation.Expect = dataforE.Expect;
+
+                                _context.DataForEvaluations.Add(dataForEvaluation);
+                                await _context.SaveChangesAsync();
                             }
                         }
                     }
@@ -2295,17 +2185,17 @@ namespace EPES.Controllers
             }
         }
 
-        [HttpGet, ActionName("CopyPoint16")]
-        public async Task<IActionResult> CopyPoint16()
+        [HttpGet, ActionName("CopyX")]
+        public async Task<IActionResult> CopyX()
         {
-            var target = await _context.Offices.Where(d => d.Code.Substring(0, 3) != "000" && d.Code != "01000000" && d.Code.Substring(5, 3) == "000").ToListAsync();
+            var target = await _context.Offices.Where(d => d.Code != "00000000" && d.Code != "01001000" && d.Code.Substring(2, 6) != "000000" && d.Code.Substring(5, 3) == "000" && d.Code.Substring(0, 3) != "000").ToListAsync();
 
             var user = await _userManager.GetUserAsync(User);
             try
             {
-                for (int i = 16; i <= 16; i++)
+                for (int i = 20; i <= 22; i++)
                 {
-                    var dataPoint = await _context.PointOfEvaluations.Include(p => p.OwnerOffice).FirstOrDefaultAsync(p => p.Point == i && p.OwnerOffice.Code == "01000000");
+                    var dataPoint = await _context.PointOfEvaluations.Include(p => p.OwnerOffice).FirstOrDefaultAsync(p => p.Point == i && p.OwnerOffice.Code == "01001000");
 
                     var dataRounds = await _context.Rounds.Where(r => r.PointOfEvaluationId == dataPoint.Id).ToListAsync();
 
@@ -2313,7 +2203,7 @@ namespace EPES.Controllers
 
                     foreach (var item in target)
                     {
-                        var pointToCopy = await _context.PointOfEvaluations.Include(p => p.OwnerOffice).Where(p => p.OwnerOffice.Code == item.Code && p.Name == dataPoint.Name && p.Plan == dataPoint.Plan).FirstOrDefaultAsync();
+                        var pointToCopy = await _context.PointOfEvaluations.Include(p => p.OwnerOffice).Include(p => p.Rounds).Include(p => p.DataForEvaluations).Where(p => p.OwnerOffice.Code == item.Code && p.Name == dataPoint.Name && p.Plan == dataPoint.Plan).FirstOrDefaultAsync();
                         if (pointToCopy == null)
                         {
                             pointToCopy = new PointOfEvaluation();
@@ -2381,6 +2271,93 @@ namespace EPES.Controllers
                             }
 
                         }
+                        else
+                        {
+                            if (pointToCopy.DataForEvaluations != null)
+                            {
+                                foreach (var dfe in pointToCopy.DataForEvaluations)
+                                {
+                                    _context.DataForEvaluations.Remove(dfe);
+                                    //await _context.SaveChangesAsync();
+                                }
+                            }
+
+                            if (pointToCopy.Rounds != null)
+                            {
+                                foreach (var r in pointToCopy.Rounds)
+                                {
+                                    _context.Rounds.Remove(r);
+                                    //await _context.SaveChangesAsync();
+                                }
+                            }
+
+                            _context.PointOfEvaluations.Remove(pointToCopy);
+                            await _context.SaveChangesAsync();
+
+                            pointToCopy = new PointOfEvaluation();
+                            pointToCopy.AuditOfficeId = dataPoint.AuditOfficeId;
+                            pointToCopy.AutoApp = dataPoint.AutoApp;
+                            pointToCopy.Ddrive = dataPoint.Ddrive;
+                            pointToCopy.DetailPlan = dataPoint.DetailPlan;
+                            pointToCopy.ExpectPlan = dataPoint.ExpectPlan;
+                            pointToCopy.HasSub = dataPoint.HasSub;
+                            pointToCopy.Name = dataPoint.Name;
+                            pointToCopy.OwnerOfficeId = item.Id;
+                            pointToCopy.Plan = dataPoint.Plan;
+                            pointToCopy.Point = dataPoint.Point;
+                            pointToCopy.SubPoint = dataPoint.SubPoint;
+                            pointToCopy.Unit = dataPoint.Unit;
+                            pointToCopy.UpdateUserId = user.Id;
+                            pointToCopy.Weight = dataPoint.Weight;
+                            pointToCopy.Year = dataPoint.Year;
+
+                            _context.PointOfEvaluations.Add(pointToCopy);
+                            await _context.SaveChangesAsync();
+
+                            foreach (var round in dataRounds)
+                            {
+                                var roundToCopy = new Round();
+                                roundToCopy.PointOfEvaluationId = pointToCopy.Id;
+                                roundToCopy.DetailRate1 = round.DetailRate1;
+                                roundToCopy.DetailRate2 = round.DetailRate2;
+                                roundToCopy.DetailRate3 = round.DetailRate3;
+                                roundToCopy.DetailRate4 = round.DetailRate4;
+                                roundToCopy.DetailRate5 = round.DetailRate5;
+                                roundToCopy.LevelNumber = round.LevelNumber;
+                                roundToCopy.Rate1MonthStart = round.Rate1MonthStart;
+                                roundToCopy.Rate1MonthStop = round.Rate1MonthStop;
+                                roundToCopy.Rate2MonthStart = round.Rate2MonthStart;
+                                roundToCopy.Rate2MonthStop = round.Rate2MonthStop;
+                                roundToCopy.Rate3MonthStart = round.Rate3MonthStart;
+                                roundToCopy.Rate3MonthStop = round.Rate3MonthStop;
+                                roundToCopy.Rate4MonthStart = round.Rate4MonthStart;
+                                roundToCopy.Rate4MonthStop = round.Rate4MonthStop;
+                                roundToCopy.Rate5MonthStart = round.Rate5MonthStart;
+                                roundToCopy.Rate5MonthStop = round.Rate5MonthStop;
+                                roundToCopy.Rate1 = round.Rate1;
+                                roundToCopy.Rate2 = round.Rate2;
+                                roundToCopy.Rate3 = round.Rate3;
+                                roundToCopy.Rate4 = round.Rate4;
+                                roundToCopy.Rate5 = round.Rate5;
+                                roundToCopy.RoundNumber = round.RoundNumber;
+
+                                _context.Rounds.Add(roundToCopy);
+                                await _context.SaveChangesAsync();
+                            }
+
+                            foreach (var dataforE in dataForEPES)
+                            {
+                                var dataForEvaluation = new DataForEvaluation();
+                                dataForEvaluation.UpdateUserId = user.Id;
+                                dataForEvaluation.PointOfEvaluationId = pointToCopy.Id;
+                                dataForEvaluation.OfficeId = item.Id;
+                                dataForEvaluation.Month = dataforE.Month;
+                                dataForEvaluation.Expect = dataforE.Expect;
+
+                                _context.DataForEvaluations.Add(dataForEvaluation);
+                                await _context.SaveChangesAsync();
+                            }
+                        }
                     }
                 }
                 return Ok();
@@ -2393,6 +2370,12 @@ namespace EPES.Controllers
                     "โปรดแจ้งผู้ดูแลระบบ");
                 return NotFound();
             }
+        }
+
+        [HttpGet, ActionName("CopySTALLX")]
+        public IActionResult CopySTAllX()
+        {
+            return Ok();
         }
     }
 }
