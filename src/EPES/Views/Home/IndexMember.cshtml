@@ -213,7 +213,7 @@
                                         <div class="col-xl-6 mb-3">
                                             @(Html.DevExtreme().PieChart()
                                         .ID("pie11")
-                                        .Palette(VizPalette.Material)
+                                        .Palette(new JS("#60a69f", "#78b6d9"))
                                         .PaletteExtensionMode(VizPaletteExtensionMode.Blend)
                                         .Title(t => t
                                             .Text("ผลสะสม ณ เดือน" + DateTime.Now.AddMonths(-1).ToString("MMMM") + "เทียบกับเป้าหมายรวมปี งปม. " + (DateTime.Now.Month > 9 ? DateTime.Now.AddYears(1).ToString("yyyy") : DateTime.Now.ToString("yyyy")))
@@ -2210,6 +2210,12 @@
     </div>
 </div>
 <!-- /.container-fluid -->
-@*@section Scripts {
-        <partial name="_ChartScript" />
-    }*@
+@section Scripts {
+    <script>
+        var myPalette = {
+            Set1: ['#89ccf7', '#015c93'],
+            Set2: ['#ff7b89', '#8a5082'],
+            Set3: ['#cce64f', '#94b447']
+        };
+    </script>
+}

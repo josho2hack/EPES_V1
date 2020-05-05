@@ -1998,17 +1998,17 @@ namespace EPES.Controllers
             }
         }
 
-        [HttpGet, ActionName("CopyPak1ToHQ")]
+        [HttpGet, ActionName("P1ST1ToPak1")]
         public async Task<IActionResult> CopyPak1ToHQ()
         {
-            var target = await _context.Offices.Where(d => d.Code != "00000000" && d.Code != "01000000" && (d.Code.Substring(0, 3) == "000" || d.Code.Substring(2, 6) == "000000")).ToListAsync();
+            var target = await _context.Offices.Where(d => d.Code == "01000000").ToListAsync();
 
             var user = await _userManager.GetUserAsync(User);
             try
             {
-                for (int i = 20; i <= 22; i++)
+                for (int i = 1; i <= 1; i++)
                 {
-                    var dataPoint = await _context.PointOfEvaluations.Include(p => p.OwnerOffice).FirstOrDefaultAsync(p => p.Point == i && p.OwnerOffice.Code == "01000000");
+                    var dataPoint = await _context.PointOfEvaluations.Include(p => p.OwnerOffice).FirstOrDefaultAsync(p => p.Point == i && p.OwnerOffice.Code == "01001000");
 
                     var dataRounds = await _context.Rounds.Where(r => r.PointOfEvaluationId == dataPoint.Id).ToListAsync();
 

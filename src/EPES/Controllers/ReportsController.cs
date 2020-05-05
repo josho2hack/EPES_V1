@@ -41,7 +41,7 @@ namespace EPES.Controllers
             {
                 ViewBag.OfficeCode = new SelectList(_context.Offices.Where(d => d.Code != "00000000" && d.Code.StartsWith(user.OfficeId.Substring(0, 2)) && d.Code.Substring(5, 3) == "000"), "Code", "Name", user.OfficeId);
             }
-            
+            ViewBag.yearPoint = 0;
             return View();
         }
 

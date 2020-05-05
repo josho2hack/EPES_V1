@@ -29,7 +29,7 @@ namespace EPES.Controllers
             _userManager = userManager;
         }
 
-        public async Task<string> Index()
+        public string Index()
         {
             //var office = await _context.Offices.Where(d => d.Code != "00000000" && d.Code.Substring(5, 3) == "000").ToListAsync();
             DateTime yearForRequest;
@@ -51,7 +51,7 @@ namespace EPES.Controllers
                 {
                     for (int pak = 0; pak <= 12; pak++)
                     {
-                        url = "http://10.20.37.11:7072/serviceTier/webapi/All/officeId/" + pak.ToString("D2") + "000000" + "/year/" + (yearForRequest.Year + 543).ToString("D4") + "/month/" + i.ToString("D2");
+                        url = "http://10.20.37.11:7072/serviceTier/webapi/All/officeId/" + pak.ToString("D2") + "000000" + "/year/" + (yearForRequest.Year + 543).ToString("D4") + "/month/" + i.ToString("D2") + "/";
                         GetTCL(url, yearForRequest, i);
                     }
                 }
@@ -60,9 +60,9 @@ namespace EPES.Controllers
             {
                 for (int i = 10; i <= 12; i++)
                 {
-                    for (int pak = 0; pak <= 12; pak++)
+                    for (int pak = 0; pak <= 0; pak++)
                     {
-                        url = "http://10.20.37.11:7072/serviceTier/webapi/All/officeId/" + pak.ToString("D2") + "000000" + "/year/" + (yearForRequest.Year + 543).ToString("D4") + "/month/" + i.ToString("D2");
+                        url = "http://10.20.37.11:7072/serviceTier/webapi/All/officeId/" + pak.ToString("D2") + "000000" + "/year/" + (yearForRequest.Year + 543).ToString("D4") + "/month/" + i.ToString("D2") + "/";
                         GetTCL(url, yearForRequest, i);
                     }
                 }
@@ -70,7 +70,7 @@ namespace EPES.Controllers
                 {
                     for (int pak = 0; pak <= 12; pak++)
                     {
-                        url = "http://10.20.37.11:7072/serviceTier/webapi/All/officeId/" + pak.ToString("D2") + "000000" + "/year/" + (yearForRequest.Year + 543).ToString("D4") + "/month/" + i.ToString("D2");
+                        url = "http://10.20.37.11:7072/serviceTier/webapi/All/officeId/" + pak.ToString("D2") + "000000" + "/year/" + (yearForRequest.Year + 543).ToString("D4") + "/month/" + i.ToString("D2") + "/";
                         GetTCL(url, yearForRequest, i);
                     }
                 }
@@ -78,15 +78,16 @@ namespace EPES.Controllers
             return "บันทึกข้อมูลผลจัดเก็บแล้ว";
         }
 
-        private async Task GetTCL(string url, DateTime yearForRequest, int i)
+        private void GetTCL(string url, DateTime yearForRequest, int i)
         {
-            var webRequest = WebRequest.Create(url) as HttpWebRequest;
+            HttpWebRequest webRequest = WebRequest.Create(url) as HttpWebRequest;
             if (webRequest == null)
             {
                 return;
             }
             webRequest.ContentType = "application/json";
             webRequest.UserAgent = "Nothing";
+
             using (var s = webRequest.GetResponse().GetResponseStream())
             {
                 using (var sr = new StreamReader(s))
@@ -95,59 +96,71 @@ namespace EPES.Controllers
                     var taxCollections = JsonConvert.DeserializeObject<Rootobject>(taxCollectionsAsJson);
                     foreach (var t in taxCollections.taxCollection)
                     {
-                        if (t.officeCode != "00000000")
+                        if (t.officeCode == "00000722")
                         {
-                            if (t.officeCode == "00000722")
-                            {
-                                var dataForEvaluation = await _context.DataForEvaluations
-                                                        //.Include(d => d.PointOfEvaluation)
-                                                        .Where(d => d.Office.Code == "00009000" && d.PointOfEvaluation.AutoApp == AutoApps.ข้อมูลการจัดเก็บภาษีอากร && d.PointOfEvaluation.Year == yearForRequest && d.Month == i)
-                                                        .FirstOrDefaultAsync();
+                            var dataForEvaluation = _context.DataForEvaluations
+                                                    //.Include(d => d.PointOfEvaluation)
+                                                    .Where(d => d.Office.Code == "00009000" && d.PointOfEvaluation.AutoApp == AutoApps.ข้อมูลการจัดเก็บภาษีอากร && d.PointOfEvaluation.Year == yearForRequest && d.Month == i)
+                                                    .FirstOrDefault();
 
-                                if (dataForEvaluation != null)
-                                {
-                                    dataForEvaluation.Expect = t.CMCYforcast;
-                                    dataForEvaluation.Result = t.CMcurrentYear;
-                                    _context.SaveChanges();
-                                }
-                                else
-                                {
-                                    dataForEvaluation = new DataForEvaluation();
-                                    dataForEvaluation.Expect = t.CMCYforcast;
-                                    dataForEvaluation.Result = t.CMcurrentYear;
-                                    dataForEvaluation.OfficeId = _context.Offices.Where(o => o.Code == "00009000").FirstOrDefault().Id;
-                                    dataForEvaluation.PointOfEvaluationId = _context.PointOfEvaluations.Where(poe => poe.OwnerOfficeId == dataForEvaluation.OfficeId && poe.Year == yearForRequest && poe.AutoApp == AutoApps.ข้อมูลการจัดเก็บภาษีอากร).FirstOrDefault().Id;
-                                    dataForEvaluation.Month = i;
-                                    _context.DataForEvaluations.Add(dataForEvaluation);
-                                    _context.SaveChanges();
-                                }
-                            } // ภญ.
-                            else
+                            if (dataForEvaluation != null)
                             {
-                                var dataForEvaluation = await _context.DataForEvaluations
-                                                        //.Include(d => d.PointOfEvaluation)
-                                                        .Where(d => d.Office.Code == t.officeCode && d.PointOfEvaluation.AutoApp == AutoApps.ข้อมูลการจัดเก็บภาษีอากร && d.PointOfEvaluation.Year == yearForRequest && d.Month == i)
-                                                        .FirstOrDefaultAsync();
+                                dataForEvaluation.Expect = t.CMCYforcast;
+                                dataForEvaluation.Result = t.CMcurrentYear;
+                                _context.SaveChanges();
+                            }
+                            //else
+                            //{
+                            //    dataForEvaluation = new DataForEvaluation();
+                            //    dataForEvaluation.Expect = t.CMCYforcast;
+                            //    dataForEvaluation.Result = t.CMcurrentYear;
+                            //    dataForEvaluation.OfficeId = _context.Offices.Where(o => o.Code == "00009000").FirstOrDefault().Id;
+                            //    dataForEvaluation.PointOfEvaluationId = _context.PointOfEvaluations.Where(poe => poe.OwnerOfficeId == dataForEvaluation.OfficeId && poe.Year == yearForRequest && poe.AutoApp == AutoApps.ข้อมูลการจัดเก็บภาษีอากร).FirstOrDefault().Id;
+                            //    dataForEvaluation.Month = i;
+                            //    _context.DataForEvaluations.Add(dataForEvaluation);
+                            //    _context.SaveChanges();
+                            //}
+                        } // ภญ.
+                        else if (t.officeCode == "01000000")
+                        {
+                            continue;
+                            //var dataForEvaluation = _context.DataForEvaluations
+                            //                        .Include(d => d.PointOfEvaluation)
+                            //                        .Where(d => d.Office.Code == t.officeCode && d.PointOfEvaluation.AutoApp == AutoApps.ข้อมูลการจัดเก็บภาษีอากร && d.PointOfEvaluation.Year == yearForRequest && d.Month == i || (d.PointOfEvaluationId == 6 && d.Month == i))
+                            //                        .First();
 
-                                if (dataForEvaluation != null)
-                                {
-                                    dataForEvaluation.Expect = t.CMCYforcast;
-                                    dataForEvaluation.Result = t.CMcurrentYear;
-                                    _context.SaveChanges();
-                                }
-                                else
-                                {
-                                    dataForEvaluation = new DataForEvaluation();
-                                    dataForEvaluation.Expect = t.CMCYforcast;
-                                    dataForEvaluation.Result = t.CMcurrentYear;
-                                    dataForEvaluation.OfficeId = _context.Offices.Where(o => o.Code == t.officeCode).FirstOrDefault().Id;
-                                    dataForEvaluation.PointOfEvaluationId = _context.PointOfEvaluations.Where(poe => poe.OwnerOfficeId == dataForEvaluation.OfficeId && poe.Year == yearForRequest && poe.Name.Contains("ผลการจัดเก็บภาษี") && poe.Unit == 0).FirstOrDefault().Id;
-                                    dataForEvaluation.Month = i;
-                                    _context.DataForEvaluations.Add(dataForEvaluation);
-                                    _context.SaveChanges();
-                                }
-                            } // สภ.
+                            //if (dataForEvaluation != null)
+                            //{
+                            //    dataForEvaluation.Expect = t.CMCYforcast;
+                            //    dataForEvaluation.Result = t.CMcurrentYear;
+                            //    _context.SaveChanges();
+                            //}
                         }
+                        else
+                        {
+                            var dataForEvaluation = _context.DataForEvaluations
+                                                    //.Include(d => d.PointOfEvaluation)
+                                                    .Where(d => d.Office.Code == t.officeCode && d.PointOfEvaluation.AutoApp == AutoApps.ข้อมูลการจัดเก็บภาษีอากร && d.PointOfEvaluation.Year == yearForRequest && d.Month == i)
+                                                    .FirstOrDefault();
+
+                            if (dataForEvaluation != null)
+                            {
+                                dataForEvaluation.Expect = t.CMCYforcast;
+                                dataForEvaluation.Result = t.CMcurrentYear;
+                                _context.SaveChanges();
+                            }
+                            //else
+                            //{
+                            //    dataForEvaluation = new DataForEvaluation();
+                            //    dataForEvaluation.Expect = t.CMCYforcast;
+                            //    dataForEvaluation.Result = t.CMcurrentYear;
+                            //    dataForEvaluation.OfficeId = _context.Offices.Where(o => o.Code == t.officeCode).FirstOrDefault().Id;
+                            //    dataForEvaluation.PointOfEvaluationId = _context.PointOfEvaluations.Where(poe => poe.OwnerOfficeId == dataForEvaluation.OfficeId && poe.Year == yearForRequest && poe.Name.Contains("ผลการจัดเก็บภาษี") && poe.Unit == 0).FirstOrDefault().Id;
+                            //    dataForEvaluation.Month = i;
+                            //    _context.DataForEvaluations.Add(dataForEvaluation);
+                            //    _context.SaveChanges();
+                            //}
+                        } // สภ.
                     }
                 }
             }
