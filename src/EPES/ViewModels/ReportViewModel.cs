@@ -60,6 +60,8 @@ namespace EPES.ViewModels
 
         public int Month { get; set; }
 
+        public int yearPoint { get; set; }
+
         //[Display(Name = "ปีงบประมาณ")]
         [DataType(DataType.Date)]
         [DisplayFormat(DataFormatString = "{0:yyyy}", ApplyFormatInEditMode = true)]

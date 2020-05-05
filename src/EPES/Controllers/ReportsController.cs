@@ -1,4 +1,5 @@
-﻿using EPES.Data;
+﻿using DevExtreme.AspNet.Mvc;
+using EPES.Data;
 using EPES.Models;
 using EPES.ViewModels;
 using Microsoft.AspNetCore.Authorization;
@@ -32,26 +33,50 @@ namespace EPES.Controllers
         public async Task<IActionResult> OwnerScoreReport()
         {
             var user = await _userManager.GetUserAsync(User);
-            ViewBag.OfficeCode = new SelectList(_context.Offices.Where(d => d.Code != "00000000" && d.Code.StartsWith(user.OfficeId.Substring(0, 2)) && d.Code.Substring(5, 3) == "000"), "Code", "Name", user.OfficeId);
+            if (User.IsInRole("Admin"))
+            {
+                ViewBag.OfficeCode = new SelectList(_context.Offices.Where(d => d.Code != "00000000" && d.Code.Substring(5, 3) == "000"), "Code", "Name", user.OfficeId);
+            }
+            else
+            {
+                ViewBag.OfficeCode = new SelectList(_context.Offices.Where(d => d.Code != "00000000" && d.Code.StartsWith(user.OfficeId.Substring(0, 2)) && d.Code.Substring(5, 3) == "000"), "Code", "Name", user.OfficeId);
+            }
+            
             return View();
         }
 
         [HttpPost, ActionName("SubScoreReport")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> SubScoreReport(string selectoffice, int yearPoint)
+        public async Task<IActionResult> SubScoreReport(string selectoffice, ReportViewModel model)
         {
             var user = await _userManager.GetUserAsync(User);
-            ViewBag.OfficeCode = new SelectList(_context.Offices.Where(d => d.Code != "00000000" && d.Code.StartsWith(user.OfficeId.Substring(0, 2)) && d.Code.Substring(5, 3) == "000"), "Code", "Name", selectoffice);
+            if (User.IsInRole("Admin"))
+            {
+                ViewBag.OfficeCode = new SelectList(_context.Offices.Where(d => d.Code != "00000000" && d.Code.Substring(5, 3) == "000"), "Code", "Name", user.OfficeId);
+            }
+            else
+            {
+                ViewBag.OfficeCode = new SelectList(_context.Offices.Where(d => d.Code != "00000000" && d.Code.StartsWith(user.OfficeId.Substring(0, 2)) && d.Code.Substring(5, 3) == "000"), "Code", "Name", user.OfficeId);
+            }
 
             var of = await _context.Offices.Where(d => d.Code == selectoffice).FirstOrDefaultAsync();
             ViewBag.selectoffice = selectoffice;
             ViewBag.OfficeName = of.Name;
-            ViewBag.yearPoint = yearPoint;
+            ViewBag.yearPoint = model.yearPoint;
             return View();
         }
 
         public IActionResult AllScore()
         {
+            return View();
+        }
+
+        [HttpPost, ActionName("AllScoreMonth")]
+        [ValidateAntiForgeryToken]
+        public IActionResult AllScoreMonthPost(ReportViewModel model)
+        {
+            ViewBag.yearPoint = model.yearPoint;
+            ViewBag.Month = model.Month;
             return View();
         }
 

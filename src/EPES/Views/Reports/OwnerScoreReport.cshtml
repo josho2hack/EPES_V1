@@ -1,6 +1,7 @@
 ﻿@using Microsoft.AspNetCore.Identity
 @using EPES.Models
 @using System.Globalization
+@model EPES.ViewModels.ReportViewModel
 @inject UserManager<ApplicationUser> UserManager
 
 @{
@@ -53,7 +54,7 @@
         <div class="col-md-6">
             <div class="row">
                 <label class="col-form-label col-md-6 text-md-right">ปีงบประมาณ: </label>
-                <select name="yearPoint" class="form-control col-md-6" onchange="this.form.submit()">
+                <select asp-for="yearPoint" class="form-control col-md-6" onchange="this.form.submit()">
                     <option value="-1">
                         @{
                             if (DateTime.Now.Month == 10 || DateTime.Now.Month == 11 || DateTime.Now.Month == 12)

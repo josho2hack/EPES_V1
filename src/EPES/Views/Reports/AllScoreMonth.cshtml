@@ -117,7 +117,7 @@
 .RowHeaderLayout(PivotGridRowHeadersLayout.Tree)
 //.AllowExpandAll(true)
 .DataSource(d => d
-    .Store(s => s.Mvc().Controller("ReportsApi").Key("Id").LoadAction("GetAllScore"))
+    .Store(s => s.Mvc().Controller("ReportsApi").Key("Id").LoadAction("GetAllScore").LoadParams(new { yearPoint = ViewBag.yearPoint, lastMonth = ViewBag.Month }))
 
     .Fields(fields => {
 
@@ -207,7 +207,7 @@
 .RowHeaderLayout(PivotGridRowHeadersLayout.Tree)
 //.AllowExpandAll(true)
 .DataSource(d => d
-.Store(s => s.Mvc().Controller("ReportsApi").Key("Id").LoadAction("GetAllScore"))
+.Store(s => s.Mvc().Controller("ReportsApi").Key("Id").LoadAction("GetAllScore").LoadParams(new { yearPoint = ViewBag.yearPoint, lastMonth = ViewBag.Month }))
 
 .Fields(fields => {
 fields.Add()

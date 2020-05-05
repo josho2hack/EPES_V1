@@ -65,7 +65,7 @@ namespace EPES.Controllers
                 }
             }
 
-            var scoreDrafts = _context.ScoreDrafts.Where(sd => sd.Office.Code == office && !sd.PointOfEvaluation.HasSub)
+            var scoreDrafts = _context.ScoreDrafts.Where(sd => sd.Office.Code == office && !sd.PointOfEvaluation.HasSub && sd.PointOfEvaluation.Year == yearForQuery)
                                                     .Select(i => new
                                                     {
                                                         i.Id,
