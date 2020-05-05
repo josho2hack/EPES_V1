@@ -213,7 +213,7 @@
                                         <div class="col-xl-6 mb-3">
                                             @(Html.DevExtreme().PieChart()
                                         .ID("pie11")
-                                        .Palette(new JS("#60a69f", "#78b6d9"))
+                                        .Palette(new[] { "#89ccf7", "#015c93" })
                                         .PaletteExtensionMode(VizPaletteExtensionMode.Blend)
                                         .Title(t => t
                                             .Text("ผลสะสม ณ เดือน" + DateTime.Now.AddMonths(-1).ToString("MMMM") + "เทียบกับเป้าหมายรวมปี งปม. " + (DateTime.Now.Month > 9 ? DateTime.Now.AddYears(1).ToString("yyyy") : DateTime.Now.ToString("yyyy")))
@@ -254,7 +254,7 @@
                                         <div class="col-xl-6 mb-3">
                                             @(Html.DevExtreme().PieChart()
                                         .ID("pie12")
-                                        .Palette(VizPalette.Material)
+                                        .Palette(new[] { "#89ccf7", "#015c93" })
                                         .PaletteExtensionMode(VizPaletteExtensionMode.Blend)
                                         .Title(t => t
                                             .Text("ผลสะสม ณ เดือน" + DateTime.Now.AddMonths(-1).ToString("MMMM") + "เทียบกับเป้าหมาย ณ เดือน " + DateTime.Now.AddMonths(-1).ToString("MMMM"))
@@ -306,7 +306,7 @@
                                         <div class="col-xl-6 mb-3">
                                             @(Html.DevExtreme().PieChart()
                                         .ID("pie21")
-                                        .Palette(VizPalette.Violet)
+                                        .Palette(new[] { "#ff7b89", "#8a5082" })
                                         .PaletteExtensionMode(VizPaletteExtensionMode.Blend)
                                         .Title(t => t
                                             .Text("ผลสะสม ณ เดือน" + DateTime.Now.AddMonths(-1).ToString("MMMM") + "เทียบกับเป้าหมายรวมปี งปม. " + (DateTime.Now.Month > 9 ? DateTime.Now.AddYears(1).ToString("yyyy") : DateTime.Now.ToString("yyyy")))
@@ -347,7 +347,7 @@
                                         <div class="col-xl-6 mb-3">
                                             @(Html.DevExtreme().PieChart()
                                         .ID("pie22")
-                                        .Palette(VizPalette.Violet)
+                                        .Palette(new[] { "#ff7b89", "#8a5082" })
                                         .PaletteExtensionMode(VizPaletteExtensionMode.Blend)
                                         .Title(t => t
                                             .Text("ผลสะสม ณ เดือน" + DateTime.Now.AddMonths(-1).ToString("MMMM") + "เทียบกับเป้าหมาย ณ เดือน " + DateTime.Now.AddMonths(-1).ToString("MMMM"))
@@ -399,7 +399,7 @@
                                         <div class="col-xl-6 mb-3">
                                             @(Html.DevExtreme().PieChart()
                                         .ID("pie31")
-                                        .Palette(VizPalette.DarkMoon)
+                                        .Palette(new[] { "#cce64f", "#94b447" })
                                         .PaletteExtensionMode(VizPaletteExtensionMode.Blend)
                                         .Title(t => t
                                             .Text("ผลสะสม ณ เดือน" + DateTime.Now.AddMonths(-1).ToString("MMMM") + "เทียบกับเป้าหมายรวมปี งปม. " + (DateTime.Now.Month > 9 ? DateTime.Now.AddYears(1).ToString("yyyy") : DateTime.Now.ToString("yyyy")))
@@ -440,7 +440,7 @@
                                         <div class="col-xl-6 mb-3">
                                             @(Html.DevExtreme().PieChart()
                                         .ID("pie32")
-                                        .Palette(VizPalette.DarkMoon)
+                                        .Palette(new[] { "#89ccf7", "#015c93" })
                                         .PaletteExtensionMode(VizPaletteExtensionMode.Blend)
                                         .Title(t => t
                                             .Text("ผลสะสม ณ เดือน" + DateTime.Now.AddMonths(-1).ToString("MMMM") + "เทียบกับเป้าหมาย ณ เดือน " + DateTime.Now.AddMonths(-1).ToString("MMMM"))
