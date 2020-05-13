@@ -113,11 +113,15 @@
 .ShowRowGrandTotals(true)
 .ShowRowTotals(false)
 .ShowColumnTotals(false)
-.FieldChooser(c => c.Enabled(true).Height(400))
+.FieldChooser(c => c.Enabled(false).Height(400))
+.Texts(t => t
+        .GrandTotal("ค่าเฉลี่ยทุกหน่วยงาน")
+        .Total("ค่าเฉลี่ย {0}")
+)
 .RowHeaderLayout(PivotGridRowHeadersLayout.Tree)
 //.AllowExpandAll(true)
 .DataSource(d => d
-    .Store(s => s.Mvc().Controller("ReportsApi").Key("Id").LoadAction("GetAllScore").LoadParams(new { yearPoint = ViewBag.yearPoint, lastMonth = ViewBag.Month }))
+    .Store(s => s.Mvc().Controller("ReportsApi").Key("Id").LoadAction("GetAllScore").LoadParams(new { yearPoint = Model.yearPoint, lastMonth = Model.Month }))
 
     .Fields(fields => {
 
@@ -203,11 +207,15 @@
 .ShowRowGrandTotals(true)
 .ShowRowTotals(false)
 .ShowColumnTotals(false)
-.FieldChooser(c => c.Enabled(true).Height(400))
+.FieldChooser(c => c.Enabled(false).Height(400))
+.Texts(t => t
+        .GrandTotal("ค่าเฉลี่ยทุกหน่วยงาน")
+        .Total("ค่าเฉลี่ย {0}")
+)
 .RowHeaderLayout(PivotGridRowHeadersLayout.Tree)
 //.AllowExpandAll(true)
 .DataSource(d => d
-.Store(s => s.Mvc().Controller("ReportsApi").Key("Id").LoadAction("GetAllScore").LoadParams(new { yearPoint = ViewBag.yearPoint, lastMonth = ViewBag.Month }))
+.Store(s => s.Mvc().Controller("ReportsApi").Key("Id").LoadAction("GetAllScore").LoadParams(new { yearPoint = Model.yearPoint, lastMonth = Model.Month }))
 
 .Fields(fields => {
 fields.Add()

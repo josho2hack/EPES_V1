@@ -43,7 +43,8 @@ namespace EPES.Models
         {
             get
             {
-                return "หน่วยงานในสังกัด " + this.Name;
+                return "" + this.Name;
+                //return "หน่วยงานในสังกัด " + this.Name;
             }
         }
 
