@@ -82,6 +82,10 @@ namespace EPES.Controllers
                             var taxCollections = JsonConvert.DeserializeObject<Rootobject>(taxCollectionsAsJson);
                             foreach (var t in taxCollections.taxCollection)
                             {
+                                if (t.officeCode == "00000000")
+                                {
+                                    continue;
+                                }
                                 CYcurrentYear += t.CYcurrentYear;
                                 CYforcast += t.CYforcast;
                             }
@@ -145,6 +149,10 @@ namespace EPES.Controllers
                             var taxCollections = JsonConvert.DeserializeObject<Rootobject>(taxCollectionsAsJson);
                             foreach (var t in taxCollections.taxCollection)
                             {
+                                if (t.officeCode == "00000000")
+                                {
+                                    continue;
+                                }
                                 CYcurrentYear += t.CYcurrentYear;
                                 CYforcast += t.CYforcast;
                             }
