@@ -34,13 +34,13 @@
     <!-- Content Row -->
     <div class="row">
         <!-- Earnings (Monthly) Card Example -->
-        <div class="col-xl-3 col-md-6 mb-4">
+        <div class="col-xl-4 col-md-6 mb-4">
             <div class="card border-left-primary shadow h-100 py-2">
                 <div class="card-body">
                     <div class="row no-gutters align-items-center">
                         <div class="col mr-2">
-                            <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">ประมาณการสะสมผลจัดเก็บเดือน @DateTime.Now.AddMonths(-1).ToString("MMMMM yyyy")</div>
-                            <div class="h5 mb-0 font-weight-bold text-gray-800">@ViewBag.CYforcast.ToString("N4") ล้าน</div>
+                            <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">ประมาณการสะสมผลจัดเก็บ (ภญ. และ สภ./สท.) เดือน @DateTime.Now.AddMonths(-1).ToString("MMMMM yyyy")</div>
+                            <div class="h5 mb-0 font-weight-bold text-gray-800">@(((ViewBag.ExpectLastMonth[0] + ViewBag.ExpectLastMonth[1])/1000000).ToString("N4")) ล้าน</div>
                         </div>
                         <div class="col-auto">
                             <i class="fas fa-calendar fa-2x text-gray-300"></i>
@@ -50,13 +50,13 @@
             </div>
         </div>
         <!-- Earnings (Monthly) Card Example -->
-        <div class="col-xl-3 col-md-6 mb-4">
+        <div class="col-xl-4 col-md-6 mb-4">
             <div class="card border-left-success shadow h-100 py-2">
                 <div class="card-body">
                     <div class="row no-gutters align-items-center">
                         <div class="col mr-2">
-                            <div class="text-xs font-weight-bold text-success text-uppercase mb-1">ผลสะสมการจัดเก็บเดือน @DateTime.Now.AddMonths(-1).ToString("MMMMM yyyy")</div>
-                            <div class="h5 mb-0 font-weight-bold text-gray-800">@ViewBag.CYcurrentYear.ToString("N4") ล้าน</div>
+                            <div class="text-xs font-weight-bold text-success text-uppercase mb-1">ผลสำรวจและติดตาม เดือน @DateTime.Now.AddMonths(-1).ToString("MMMMM yyyy")</div>
+                            <div class="h5 mb-0 font-weight-bold text-gray-800">@((ViewBag.ResultLastMonth[0] + ViewBag.ResultLastMonth[1]).ToString("N0")) ล้าน</div>
                         </div>
                         <div class="col-auto">
                             <i class="fas fa-dollar-sign fa-2x text-gray-300"></i>
@@ -65,30 +65,14 @@
                 </div>
             </div>
         </div>
-        <!-- Earnings (Monthly) Card Example -->
-        <div class="col-xl-3 col-md-6 mb-4">
-            <div class="card border-left-info shadow h-100 py-2">
-                <div class="card-body">
-                    <div class="row no-gutters align-items-center">
-                        <div class="col mr-2">
-                            <div class="text-xs font-weight-bold text-info text-uppercase mb-1">รับรองคะแนนแล้วเสร็จ @DateTime.Now.AddMonths(-1).ToString("MMMMM yyyy")</div>
-                            <div class="h5 mb-0 mr-3 font-weight-bold text-gray-800">152/@ViewBag.Approved</div>
-                        </div>
-                        <div class="col-auto">
-                            <i class="fas fa-clipboard fa-2x text-gray-300"></i>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
         <!-- Pending Requests Card Example -->
-        <div class="col-xl-3 col-md-6 mb-4">
+        <div class="col-xl-4 col-md-6 mb-4">
             <div class="card border-left-warning shadow h-100 py-2">
                 <div class="card-body">
                     <div class="row no-gutters align-items-center">
                         <div class="col mr-2">
                             <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">หน่วยงานประเมินแล้วเสร็จ @DateTime.Now.AddMonths(-1).ToString("MMMMM yyyy")</div>
-                            <div class="h5 mb-0 font-weight-bold text-gray-800">152/@ViewBag.Entry</div>
+                            <div class="h5 mb-0 font-weight-bold text-gray-800">@ViewBag.Entry/152</div>
                         </div>
                         <div class="col-auto">
                             <i class="fas fa-comments fa-2x text-gray-300"></i>
@@ -216,7 +200,7 @@
                                         .Palette(new[] { "#89ccf7", "#015c93" })
                                         .PaletteExtensionMode(VizPaletteExtensionMode.Blend)
                                         .Title(t => t
-                                            .Text("ผลสะสม ณ เดือน" + DateTime.Now.AddMonths(-1).ToString("MMMM") + "เทียบกับเป้าหมายรวมปี งปม. " + (DateTime.Now.Month > 9 ? DateTime.Now.AddYears(1).ToString("yyyy") : DateTime.Now.ToString("yyyy")))
+                                            .Text("เปรียบเทียบผลจัดเก็บสะสม " + (new DateTime(DateTime.Now.Month > 10 ? DateTime.Now.Year : DateTime.Now.AddYears(-1).Year, 10, 1)).ToString("MMMM yyyy") + " - " + DateTime.Now.AddMonths(-1).ToString("MMMM yyyy") + " กับประมาณการ ทั้งปีงบประมาณ " + (DateTime.Now.Month > 9 ? DateTime.Now.AddYears(1).ToString("yyyy") : DateTime.Now.ToString("yyyy")))
                                             .Font(f => f.Size(13))
                                         )
                                         .Legend(l => l
@@ -257,7 +241,7 @@
                                         .Palette(new[] { "#89ccf7", "#015c93" })
                                         .PaletteExtensionMode(VizPaletteExtensionMode.Blend)
                                         .Title(t => t
-                                            .Text("ผลสะสม ณ เดือน" + DateTime.Now.AddMonths(-1).ToString("MMMM") + "เทียบกับเป้าหมาย ณ เดือน " + DateTime.Now.AddMonths(-1).ToString("MMMM"))
+                                            .Text("เปรียบเทียบผลจัดเก็บสะสม " + (new DateTime(DateTime.Now.Month > 10 ? DateTime.Now.Year : DateTime.Now.AddYears(-1).Year, 10, 1)).ToString("MMMM yyyy") + " - " + DateTime.Now.AddMonths(-1).ToString("MMMM yyyy") + " กับประมาณการสะสม " + (new DateTime(DateTime.Now.Month > 10 ? DateTime.Now.Year : DateTime.Now.AddYears(-1).Year, 10, 1)).ToString("MMMM yyyy") + " - " + DateTime.Now.AddMonths(-1).ToString("MMMM yyyy"))
                                             .Font(f => f.Size(13))
                                         )
                                         .Legend(l => l
@@ -309,7 +293,7 @@
                                         .Palette(new[] { "#ff7b89", "#8a5082" })
                                         .PaletteExtensionMode(VizPaletteExtensionMode.Blend)
                                         .Title(t => t
-                                            .Text("ผลสะสม ณ เดือน" + DateTime.Now.AddMonths(-1).ToString("MMMM") + "เทียบกับเป้าหมายรวมปี งปม. " + (DateTime.Now.Month > 9 ? DateTime.Now.AddYears(1).ToString("yyyy") : DateTime.Now.ToString("yyyy")))
+                                            .Text("เปรียบเทียบผลจัดเก็บสะสม " + (new DateTime(DateTime.Now.Month > 10 ? DateTime.Now.Year : DateTime.Now.AddYears(-1).Year, 10, 1)).ToString("MMMM yyyy") + " - " + DateTime.Now.AddMonths(-1).ToString("MMMM yyyy") + " กับประมาณการ ทั้งปีงบประมาณ " + (DateTime.Now.Month > 9 ? DateTime.Now.AddYears(1).ToString("yyyy") : DateTime.Now.ToString("yyyy")))
                                             .Font(f => f.Size(13))
                                         )
                                         .Legend(l => l
@@ -350,7 +334,7 @@
                                         .Palette(new[] { "#ff7b89", "#8a5082" })
                                         .PaletteExtensionMode(VizPaletteExtensionMode.Blend)
                                         .Title(t => t
-                                            .Text("ผลสะสม ณ เดือน" + DateTime.Now.AddMonths(-1).ToString("MMMM") + "เทียบกับเป้าหมาย ณ เดือน " + DateTime.Now.AddMonths(-1).ToString("MMMM"))
+                                            .Text("เปรียบเทียบผลจัดเก็บสะสม " + (new DateTime(DateTime.Now.Month > 10 ? DateTime.Now.Year : DateTime.Now.AddYears(-1).Year, 10, 1)).ToString("MMMM yyyy") + " - " + DateTime.Now.AddMonths(-1).ToString("MMMM yyyy") + " กับประมาณการสะสม " + (new DateTime(DateTime.Now.Month > 10 ? DateTime.Now.Year : DateTime.Now.AddYears(-1).Year, 10, 1)).ToString("MMMM yyyy") + " - " + DateTime.Now.AddMonths(-1).ToString("MMMM yyyy"))
                                             .Font(f => f.Size(13))
                                         )
                                         .Legend(l => l
@@ -402,7 +386,7 @@
                                         .Palette(new[] { "#cce64f", "#94b447" })
                                         .PaletteExtensionMode(VizPaletteExtensionMode.Blend)
                                         .Title(t => t
-                                            .Text("ผลสะสม ณ เดือน" + DateTime.Now.AddMonths(-1).ToString("MMMM") + "เทียบกับเป้าหมายรวมปี งปม. " + (DateTime.Now.Month > 9 ? DateTime.Now.AddYears(1).ToString("yyyy") : DateTime.Now.ToString("yyyy")))
+                                            .Text("เปรียบเทียบผลจัดเก็บสะสม " + (new DateTime(DateTime.Now.Month > 10 ? DateTime.Now.Year : DateTime.Now.AddYears(-1).Year, 10, 1)).ToString("MMMM yyyy") + " - " + DateTime.Now.AddMonths(-1).ToString("MMMM yyyy") + " กับประมาณการ ทั้งปีงบประมาณ " + (DateTime.Now.Month > 9 ? DateTime.Now.AddYears(1).ToString("yyyy") : DateTime.Now.ToString("yyyy")))
                                             .Font(f => f.Size(13))
                                         )
                                         .Legend(l => l
@@ -443,7 +427,7 @@
                                         .Palette(new[] { "#cce64f", "#94b447" })
                                         .PaletteExtensionMode(VizPaletteExtensionMode.Blend)
                                         .Title(t => t
-                                            .Text("ผลสะสม ณ เดือน" + DateTime.Now.AddMonths(-1).ToString("MMMM") + "เทียบกับเป้าหมาย ณ เดือน " + DateTime.Now.AddMonths(-1).ToString("MMMM"))
+                                            .Text("เปรียบเทียบผลจัดเก็บสะสม " + (new DateTime(DateTime.Now.Month > 10 ? DateTime.Now.Year : DateTime.Now.AddYears(-1).Year, 10, 1)).ToString("MMMM yyyy") + " - " + DateTime.Now.AddMonths(-1).ToString("MMMM yyyy") + " กับประมาณการสะสม " + (new DateTime(DateTime.Now.Month > 10 ? DateTime.Now.Year : DateTime.Now.AddYears(-1).Year, 10, 1)).ToString("MMMM yyyy") + " - " + DateTime.Now.AddMonths(-1).ToString("MMMM yyyy"))
                                             .Font(f => f.Size(13))
                                         )
                                         .Legend(l => l
@@ -501,19 +485,19 @@
                                         </thead>
                                         <tbody>
                                             <tr>
-                                                <th scope="row">เป้าหมายรวมปีงบประมาณ </th>
+                                                <th scope="row">ประมาณการจัดเก็บรวมทั้งปีงบประมาณ @(DateTime.Now.Month > 10 ? DateTime.Now.AddYears(1).ToString("yyyy") : DateTime.Now.ToString("yyyy"))</th>
                                                 <td>@(((ViewBag.Expect[0] + ViewBag.Expect[1])/1000000).ToString("N4"))</td>
                                                 <td>@((ViewBag.Expect[0]/1000000).ToString("N4"))</td>
                                                 <td>@((ViewBag.Expect[1]/1000000).ToString("N4"))</td>
                                             </tr>
                                             <tr>
-                                                <th scope="row">เป้าหมาย ณ เดือน @DateTime.Now.AddMonths(-1).ToString("MMMM")   ปีงบประมาณ @(DateTime.Now.Month > 9 ? DateTime.Now.AddYears(1).ToString("yyyy") : DateTime.Now.ToString("yyyy"))</th>
+                                                <th scope="row">ประมาณการจัดเก็บสะสม @((new DateTime(DateTime.Now.Month > 10 ? DateTime.Now.Year : DateTime.Now.AddYears(-1).Year, 10, 1)).ToString("MMMM yyyy")) - @DateTime.Now.AddMonths(-1).ToString("MMMM yyyy") (ปีงบประมาณ @(DateTime.Now.Month > 10 ? DateTime.Now.AddYears(1).ToString("yyyy") : DateTime.Now.ToString("yyyy")))</th>
                                                 <td>@(((ViewBag.ExpectLastMonth[0] + ViewBag.ExpectLastMonth[1])/1000000).ToString("N4"))</td>
                                                 <td>@((ViewBag.ExpectLastMonth[0]/1000000).ToString("N4"))</td>
                                                 <td>@((ViewBag.ExpectLastMonth[1]/1000000).ToString("N4"))</td>
                                             </tr>
                                             <tr>
-                                                <th scope="row">ผลสะสม ณ เดือน @DateTime.Now.AddMonths(-1).ToString("MMMM")   ปีงบประมาณ @(DateTime.Now.Month > 9 ? DateTime.Now.AddYears(1).ToString("yyyy") : DateTime.Now.ToString("yyyy"))</th>
+                                                <th scope="row">ผลจัดเก็บสะสม @((new DateTime(DateTime.Now.Month > 10 ? DateTime.Now.Year : DateTime.Now.AddYears(-1).Year, 10, 1)).ToString("MMMM yyyy")) - @DateTime.Now.AddMonths(-1).ToString("MMMM yyyy") (ปีงบประมาณ @(DateTime.Now.Month > 10 ? DateTime.Now.AddYears(1).ToString("yyyy") : DateTime.Now.ToString("yyyy")))</th>
                                                 <td>@(((ViewBag.ResultLastMonth[0] + ViewBag.ResultLastMonth[1])/1000000).ToString("N4"))</td>
                                                 <td>@((ViewBag.ResultLastMonth[0]/1000000).ToString("N4"))</td>
                                                 <td>@((ViewBag.ResultLastMonth[1]/1000000).ToString("N4")) </td>

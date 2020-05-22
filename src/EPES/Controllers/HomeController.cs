@@ -52,7 +52,7 @@ namespace EPES.Controllers
                 return RedirectToAction("IndexMember");
             }
             DateTime yearForRequest;
-            if (DateTime.Now.Month == 10 || DateTime.Now.Month == 11 || DateTime.Now.Month == 12)
+            if (DateTime.Now.Month == 11 || DateTime.Now.Month == 12) // month 10 view for --> month 9 of now year.
             {
                 yearForRequest = new DateTime(DateTime.Now.AddYears(1).Year, 1, 1);
             }
@@ -61,127 +61,56 @@ namespace EPES.Controllers
                 yearForRequest = new DateTime(DateTime.Now.Year, 1, 1);
             }
 
-            string url = "";
-            //var m = DateTime.Now.Month;
-            url = "http://10.20.37.11:7072/serviceTier/webapi/All/officeId/" + "00000000" + "/year/" + (yearForRequest.Year + 543).ToString("D4") + "/month/" + DateTime.Now.AddMinutes(-1).Month.ToString("D2");
+            //string url = "";
+            ////var m = DateTime.Now.Month;
+            //url = "http://10.20.37.11:7072/serviceTier/webapi/All/officeId/" + "00000000" + "/year/" + (yearForRequest.Year + 543).ToString("D4") + "/month/" + DateTime.Now.AddMinutes(-1).Month.ToString("D2");
 
-            var webRequest = WebRequest.Create(url) as HttpWebRequest;
+            //var webRequest = WebRequest.Create(url) as HttpWebRequest;
 
-            if (webRequest != null)
-            {
-                webRequest.ContentType = "application/json";
-                webRequest.UserAgent = "Nothing";
-                webRequest.Timeout = 5000;
-                try
-                {
-                    using (var s = webRequest.GetResponse().GetResponseStream())
-                    {
-                        using (var sr = new StreamReader(s))
-                        {
-                            var taxCollectionsAsJson = sr.ReadToEnd();
-                            var taxCollections = JsonConvert.DeserializeObject<Rootobject>(taxCollectionsAsJson);
-                            foreach (var t in taxCollections.taxCollection)
-                            {
-                                if (t.officeCode == "00000000")
-                                {
-                                    continue;
-                                }
-                                CYcurrentYear += t.CYcurrentYear;
-                                CYforcast += t.CYforcast;
-                            }
-                        }
-                    }
-                }
-                catch (WebException ex)
-                {
-                    if (ex.Status == WebExceptionStatus.Timeout)
-                    {
-                        CYcurrentYear = 9999999;
-                        CYforcast = 9999999;
-                    }
+            //if (webRequest != null)
+            //{
+            //    webRequest.ContentType = "application/json";
+            //    webRequest.UserAgent = "Nothing";
+            //    webRequest.Timeout = 5000;
+            //    try
+            //    {
+            //        using (var s = webRequest.GetResponse().GetResponseStream())
+            //        {
+            //            using (var sr = new StreamReader(s))
+            //            {
+            //                var taxCollectionsAsJson = sr.ReadToEnd();
+            //                var taxCollections = JsonConvert.DeserializeObject<Rootobject>(taxCollectionsAsJson);
+            //                foreach (var t in taxCollections.taxCollection)
+            //                {
+            //                    if (t.officeCode == "00000000")
+            //                    {
+            //                        continue;
+            //                    }
+            //                    CYcurrentYear += t.CYcurrentYear;
+            //                    CYforcast += t.CYforcast;
+            //                }
+            //            }
+            //        }
+            //    }
+            //    catch (WebException ex)
+            //    {
+            //        if (ex.Status == WebExceptionStatus.Timeout)
+            //        {
+            //            CYcurrentYear = 9999999;
+            //            CYforcast = 9999999;
+            //        }
 
-                }
-            }
+            //    }
+            //}
 
-            ViewBag.CYcurrentYear = CYcurrentYear / 1000000;
-            ViewBag.CYforcast = CYforcast / 1000000;
+            //ViewBag.CYcurrentYear = CYcurrentYear / 1000000;
+            //ViewBag.CYforcast = CYforcast / 1000000;
 
-            var approvedOffice = await _context.Scores.Where(s => s.Office.Code != "00000000" && s.Office.Code.Substring(5, 3) == "000" && s.LastMonth == DateTime.Now.AddMonths(-1).Month).Select(o => new { o.OfficeId }).Distinct().CountAsync();
+            //var approvedOffice = await _context.Scores.Where(s => s.Office.Code != "00000000" && s.Office.Code.Substring(5, 3) == "000" && s.LastMonth == DateTime.Now.AddMonths(-1).Month).Select(o => new { o.OfficeId }).Distinct().CountAsync();
             var entryOffice = await _context.ScoreDrafts.Where(s => s.Office.Code != "00000000" && s.Office.Code.Substring(5, 3) == "000" && s.LastMonth == DateTime.Now.AddMonths(-1).Month).Select(o => new { o.OfficeId }).Distinct().CountAsync();
 
-            ViewBag.Approved = approvedOffice;
+            //ViewBag.Approved = approvedOffice;
             ViewBag.Entry = entryOffice;
-
-            return View();
-        }
-
-        [Authorize]
-        public async Task<IActionResult> IndexMember()
-        {
-            DateTime yearForRequest;
-            if (DateTime.Now.Month == 10 || DateTime.Now.Month == 11 || DateTime.Now.Month == 12)
-            {
-                yearForRequest = new DateTime(DateTime.Now.AddYears(1).Year, 1, 1);
-            }
-            else
-            {
-                yearForRequest = new DateTime(DateTime.Now.Year, 1, 1);
-            }
-
-            string url = "";
-            //var m = DateTime.Now.Month;
-            url = "http://10.20.37.11:7072/serviceTier/webapi/All/officeId/" + "00000000" + "/year/" + (yearForRequest.Year + 543).ToString("D4") + "/month/" + DateTime.Now.AddMinutes(-1).Month.ToString("D2");
-
-            var webRequest = WebRequest.Create(url) as HttpWebRequest;
-
-            if (webRequest != null)
-            {
-                webRequest.ContentType = "application/json";
-                webRequest.UserAgent = "Nothing";
-                webRequest.Timeout = 5000;
-                try
-                {
-                    using (var s = webRequest.GetResponse().GetResponseStream())
-                    {
-                        using (var sr = new StreamReader(s))
-                        {
-                            var taxCollectionsAsJson = sr.ReadToEnd();
-                            var taxCollections = JsonConvert.DeserializeObject<Rootobject>(taxCollectionsAsJson);
-                            foreach (var t in taxCollections.taxCollection)
-                            {
-                                if (t.officeCode == "00000000")
-                                {
-                                    continue;
-                                }
-                                CYcurrentYear += t.CYcurrentYear;
-                                CYforcast += t.CYforcast;
-                            }
-                        }
-                    }
-                }
-                catch (WebException ex)
-                {
-                    if (ex.Status == WebExceptionStatus.Timeout)
-                    {
-                        CYcurrentYear = 9999999;
-                        CYforcast = 9999999;
-                    }
-
-                }
-            }
-
-            ViewBag.CYcurrentYear = CYcurrentYear / 1000000;
-            ViewBag.CYforcast = CYforcast / 1000000;
-
-            var approvedOffice = await _context.Scores.Where(s => s.Office.Code != "00000000" && s.Office.Code.Substring(5, 3) == "000" && s.LastMonth == DateTime.Now.AddMonths(-1).Month).Select(o => new { o.OfficeId }).Distinct().CountAsync();
-            var entryOffice = await _context.ScoreDrafts.Where(s => s.Office.Code != "00000000" && s.Office.Code.Substring(5, 3) == "000" && s.LastMonth == DateTime.Now.AddMonths(-1).Month).Select(o => new { o.OfficeId }).Distinct().CountAsync();
-
-            ViewBag.Approved = approvedOffice;
-            ViewBag.Entry = entryOffice;
-
-            var expectHQ = await _context.DataForEvaluations.Where(s => s.PointOfEvaluation.Point == 2 && s.PointOfEvaluation.Year == yearForRequest && s.Office.Code == "00009000").Select(o => new { o.Expect }).SumAsync(s => s.Expect);
-
-            var expectNHQ = await _context.DataForEvaluations.Where(s => s.PointOfEvaluation.Point == 1 && s.PointOfEvaluation.Year == yearForRequest && s.Office.Code.Substring(0, 3) != "000" && s.Office.Code.Substring(2, 6) != "000000" && s.Office.Code.Substring(5, 3) == "000").Select(o => new { o.Expect }).SumAsync(s => s.Expect);
 
             decimal expectHQLastMonth = 0;
             if (DateTime.Now.AddMonths(-1).Month >= 10)
@@ -215,7 +144,7 @@ namespace EPES.Controllers
                 var m = DateTime.Now.AddMonths(-1).Month;
                 while (m >= 10)
                 {
-                    expectNHQLastMonth += await _context.DataForEvaluations.Where(s => s.PointOfEvaluation.Point == 1 && s.PointOfEvaluation.Year == yearForRequest && s.Office.Code.Substring(0, 3) != "000" && s.Office.Code.Substring(2, 6) != "000000" && s.Office.Code.Substring(5, 3) == "000" && s.Month == m).Select(o => new { o.Expect }).SumAsync(s => s.Expect);
+                    expectNHQLastMonth += await _context.DataForEvaluations.Where(s => s.PointOfEvaluation.Point == 1 && s.PointOfEvaluation.Year == yearForRequest && s.Office.Code != "00009000" & s.Office.Code.Substring(2, 6) != "000000" && s.Office.Code.Substring(5, 3) == "000" && s.Month == m).Select(o => new { o.Expect }).SumAsync(s => s.Expect);
                     m -= 1;
                 }
             }
@@ -224,13 +153,13 @@ namespace EPES.Controllers
                 var m = 12;
                 while (m >= 10)
                 {
-                    expectNHQLastMonth += await _context.DataForEvaluations.Where(s => s.PointOfEvaluation.Point == 1 && s.PointOfEvaluation.Year == yearForRequest && s.Office.Code.Substring(0, 3) != "000" && s.Office.Code.Substring(2, 6) != "000000" && s.Office.Code.Substring(5, 3) == "000" && s.Month == m).Select(o => new { o.Expect }).SumAsync(s => s.Expect);
+                    expectNHQLastMonth += await _context.DataForEvaluations.Where(s => s.PointOfEvaluation.Point == 1 && s.PointOfEvaluation.Year == yearForRequest && s.Office.Code != "00009000" & s.Office.Code.Substring(2, 6) != "000000" && s.Office.Code.Substring(5, 3) == "000" && s.Month == m).Select(o => new { o.Expect }).SumAsync(s => s.Expect);
                     m -= 1;
                 }
                 m = 1;
                 while (m <= DateTime.Now.AddMonths(-1).Month)
                 {
-                    expectNHQLastMonth += await _context.DataForEvaluations.Where(s => s.PointOfEvaluation.Point == 1 && s.PointOfEvaluation.Year == yearForRequest && s.Office.Code.Substring(0, 3) != "000" && s.Office.Code.Substring(2, 6) != "000000" && s.Office.Code.Substring(5, 3) == "000" && s.Month == m).Select(o => new { o.Expect }).SumAsync(s => s.Expect);
+                    expectNHQLastMonth += await _context.DataForEvaluations.Where(s => s.PointOfEvaluation.Point == 1 && s.PointOfEvaluation.Year == yearForRequest && s.Office.Code != "00009000" & s.Office.Code.Substring(2, 6) != "000000" && s.Office.Code.Substring(5, 3) == "000" && s.Month == m).Select(o => new { o.Expect }).SumAsync(s => s.Expect);
                     m += 1;
                 }
             }
@@ -268,7 +197,7 @@ namespace EPES.Controllers
                 var m = DateTime.Now.AddMonths(-1).Month;
                 while (m >= 10)
                 {
-                    resultNHQLastMonth += await _context.DataForEvaluations.Where(s => s.PointOfEvaluation.Point == 1 && s.PointOfEvaluation.Year == yearForRequest && s.Office.Code.Substring(0, 3) != "000" && s.Office.Code.Substring(2, 6) != "000000" && s.Office.Code.Substring(5, 3) == "000" && s.Month == m).Select(o => new { o.Result }).SumAsync(s => s.Result);
+                    resultNHQLastMonth += await _context.DataForEvaluations.Where(s => s.PointOfEvaluation.Point == 1 && s.PointOfEvaluation.Year == yearForRequest && s.Office.Code != "00009000" & s.Office.Code.Substring(2, 6) != "000000" && s.Office.Code.Substring(5, 3) == "000" && s.Month == m).Select(o => new { o.Result }).SumAsync(s => s.Result);
                     m -= 1;
                 }
             }
@@ -277,13 +206,194 @@ namespace EPES.Controllers
                 var m = 12;
                 while (m >= 10)
                 {
-                    resultNHQLastMonth += await _context.DataForEvaluations.Where(s => s.PointOfEvaluation.Point == 1 && s.PointOfEvaluation.Year == yearForRequest && s.Office.Code.Substring(0, 3) != "000" && s.Office.Code.Substring(2, 6) != "000000" && s.Office.Code.Substring(5, 3) == "000" && s.Month == m).Select(o => new { o.Result }).SumAsync(s => s.Result);
+                    resultNHQLastMonth += await _context.DataForEvaluations.Where(s => s.PointOfEvaluation.Point == 1 && s.PointOfEvaluation.Year == yearForRequest && s.Office.Code != "00009000" & s.Office.Code.Substring(2, 6) != "000000" && s.Office.Code.Substring(5, 3) == "000" && s.Month == m).Select(o => new { o.Result }).SumAsync(s => s.Result);
                     m -= 1;
                 }
                 m = 1;
                 while (m <= DateTime.Now.AddMonths(-1).Month)
                 {
-                    resultNHQLastMonth += await _context.DataForEvaluations.Where(s => s.PointOfEvaluation.Point == 1 && s.PointOfEvaluation.Year == yearForRequest && s.Office.Code.Substring(0, 3) != "000" && s.Office.Code.Substring(2, 6) != "000000" && s.Office.Code.Substring(5, 3) == "000" && s.Month == m).Select(o => new { o.Result }).SumAsync(s => s.Result);
+                    resultNHQLastMonth += await _context.DataForEvaluations.Where(s => s.PointOfEvaluation.Point == 1 && s.PointOfEvaluation.Year == yearForRequest && s.Office.Code != "00009000" & s.Office.Code.Substring(2, 6) != "000000" && s.Office.Code.Substring(5, 3) == "000" && s.Month == m).Select(o => new { o.Result }).SumAsync(s => s.Result);
+                    m += 1;
+                }
+            }
+
+            List<decimal> expectLastMonth = new List<decimal>() { expectHQLastMonth, expectNHQLastMonth };
+            List<decimal> result = new List<decimal>() { resultHQLastMonth, resultNHQLastMonth };
+            ViewBag.ExpectLastMonth = expectLastMonth;
+            ViewBag.ResultLastMonth = result;
+
+            return View();
+        }
+
+        [Authorize]
+        public async Task<IActionResult> IndexMember()
+        {
+            DateTime yearForRequest;
+            if (DateTime.Now.Month == 11 || DateTime.Now.Month == 12) // month 10 view for --> month 9 of now year.
+            {
+                yearForRequest = new DateTime(DateTime.Now.AddYears(1).Year, 1, 1);
+            }
+            else
+            {
+                yearForRequest = new DateTime(DateTime.Now.Year, 1, 1);
+            }
+
+            //string url = "";
+            ////var m = DateTime.Now.Month;
+            //url = "http://10.20.37.11:7072/serviceTier/webapi/All/officeId/" + "00000000" + "/year/" + (yearForRequest.Year + 543).ToString("D4") + "/month/" + DateTime.Now.AddMinutes(-1).Month.ToString("D2");
+
+            //var webRequest = WebRequest.Create(url) as HttpWebRequest;
+
+            //if (webRequest != null)
+            //{
+            //    webRequest.ContentType = "application/json";
+            //    webRequest.UserAgent = "Nothing";
+            //    webRequest.Timeout = 5000;
+            //    try
+            //    {
+            //        using (var s = webRequest.GetResponse().GetResponseStream())
+            //        {
+            //            using (var sr = new StreamReader(s))
+            //            {
+            //                var taxCollectionsAsJson = sr.ReadToEnd();
+            //                var taxCollections = JsonConvert.DeserializeObject<Rootobject>(taxCollectionsAsJson);
+            //                foreach (var t in taxCollections.taxCollection)
+            //                {
+            //                    if (t.officeCode == "00000000")
+            //                    {
+            //                        continue;
+            //                    }
+            //                    CYcurrentYear += t.CYcurrentYear;
+            //                    CYforcast += t.CYforcast;
+            //                }
+            //            }
+            //        }
+            //    }
+            //    catch (WebException ex)
+            //    {
+            //        if (ex.Status == WebExceptionStatus.Timeout)
+            //        {
+            //            CYcurrentYear = 9999999;
+            //            CYforcast = 9999999;
+            //        }
+
+            //    }
+            //}
+
+            //ViewBag.CYcurrentYear = CYcurrentYear / 1000000;
+            //ViewBag.CYforcast = CYforcast / 1000000;
+
+            //var approvedOffice = await _context.Scores.Where(s => s.Office.Code != "00000000" && s.Office.Code.Substring(5, 3) == "000" && s.LastMonth == DateTime.Now.AddMonths(-1).Month).Select(o => new { o.OfficeId }).Distinct().CountAsync();
+            var entryOffice = await _context.ScoreDrafts.Where(s => s.Office.Code != "00000000" && s.Office.Code.Substring(5, 3) == "000" && s.LastMonth == DateTime.Now.AddMonths(-1).Month).Select(o => new { o.OfficeId }).Distinct().CountAsync();
+
+            //ViewBag.Approved = approvedOffice;
+            ViewBag.Entry = entryOffice;
+
+            var expectHQ = await _context.DataForEvaluations.Where(s => s.PointOfEvaluation.Point == 2 && s.PointOfEvaluation.Year == yearForRequest && s.Office.Code == "00009000").Select(o => new { o.Expect }).SumAsync(s => s.Expect);
+
+            var expectNHQ = await _context.DataForEvaluations.Where(s => s.PointOfEvaluation.Point == 1 && s.PointOfEvaluation.Year == yearForRequest && s.Office.Code != "00009000" && s.Office.Code.Substring(2, 6) != "000000" && s.Office.Code.Substring(5, 3) == "000").Select(o => new { o.Expect }).SumAsync(s => s.Expect);
+
+            decimal expectHQLastMonth = 0;
+            if (DateTime.Now.AddMonths(-1).Month >= 10)
+            {
+                var m = DateTime.Now.AddMonths(-1).Month;
+                while (m >= 10)
+                {
+                    expectHQLastMonth += await _context.DataForEvaluations.Where(s => s.PointOfEvaluation.Point == 2 && s.PointOfEvaluation.Year == yearForRequest && s.Office.Code == "00009000" && s.Month == m).Select(o => new { o.Expect }).SumAsync(s => s.Expect);
+                    m -= 1;
+                }
+            }
+            else
+            {
+                var m = 12;
+                while (m >= 10)
+                {
+                    expectHQLastMonth += await _context.DataForEvaluations.Where(s => s.PointOfEvaluation.Point == 2 && s.PointOfEvaluation.Year == yearForRequest && s.Office.Code == "00009000" && s.Month == m).Select(o => new { o.Expect }).SumAsync(s => s.Expect);
+                    m -= 1;
+                }
+                m = 1;
+                while (m <= DateTime.Now.AddMonths(-1).Month)
+                {
+                    expectHQLastMonth += await _context.DataForEvaluations.Where(s => s.PointOfEvaluation.Point == 2 && s.PointOfEvaluation.Year == yearForRequest && s.Office.Code == "00009000" && s.Month == m).Select(o => new { o.Expect }).SumAsync(s => s.Expect);
+                    m += 1;
+                }
+            }
+
+            decimal expectNHQLastMonth = 0;
+            if (DateTime.Now.AddMonths(-1).Month >= 10)
+            {
+                var m = DateTime.Now.AddMonths(-1).Month;
+                while (m >= 10)
+                {
+                    expectNHQLastMonth += await _context.DataForEvaluations.Where(s => s.PointOfEvaluation.Point == 1 && s.PointOfEvaluation.Year == yearForRequest && s.Office.Code != "00009000" & s.Office.Code.Substring(2, 6) != "000000" && s.Office.Code.Substring(5, 3) == "000" && s.Month == m).Select(o => new { o.Expect }).SumAsync(s => s.Expect);
+                    m -= 1;
+                }
+            }
+            else
+            {
+                var m = 12;
+                while (m >= 10)
+                {
+                    expectNHQLastMonth += await _context.DataForEvaluations.Where(s => s.PointOfEvaluation.Point == 1 && s.PointOfEvaluation.Year == yearForRequest && s.Office.Code != "00009000" & s.Office.Code.Substring(2, 6) != "000000" && s.Office.Code.Substring(5, 3) == "000" && s.Month == m).Select(o => new { o.Expect }).SumAsync(s => s.Expect);
+                    m -= 1;
+                }
+                m = 1;
+                while (m <= DateTime.Now.AddMonths(-1).Month)
+                {
+                    expectNHQLastMonth += await _context.DataForEvaluations.Where(s => s.PointOfEvaluation.Point == 1 && s.PointOfEvaluation.Year == yearForRequest && s.Office.Code != "00009000" & s.Office.Code.Substring(2, 6) != "000000" && s.Office.Code.Substring(5, 3) == "000" && s.Month == m).Select(o => new { o.Expect }).SumAsync(s => s.Expect);
+                    m += 1;
+                }
+            }
+
+            //Result --------------------------------------
+            decimal resultHQLastMonth = 0;
+            if (DateTime.Now.AddMonths(-1).Month >= 10)
+            {
+                var m = DateTime.Now.AddMonths(-1).Month;
+                while (m >= 10)
+                {
+                    resultHQLastMonth += await _context.DataForEvaluations.Where(s => s.PointOfEvaluation.Point == 2 && s.PointOfEvaluation.Year == yearForRequest && s.Office.Code == "00009000" && s.Month == m).Select(o => new { o.Result }).SumAsync(s => s.Result);
+                    m -= 1;
+                }
+            }
+            else
+            {
+                var m = 12;
+                while (m >= 10)
+                {
+                    resultHQLastMonth += await _context.DataForEvaluations.Where(s => s.PointOfEvaluation.Point == 2 && s.PointOfEvaluation.Year == yearForRequest && s.Office.Code == "00009000" && s.Month == m).Select(o => new { o.Result }).SumAsync(s => s.Result);
+                    m -= 1;
+                }
+                m = 1;
+                while (m <= DateTime.Now.AddMonths(-1).Month)
+                {
+                    resultHQLastMonth += await _context.DataForEvaluations.Where(s => s.PointOfEvaluation.Point == 2 && s.PointOfEvaluation.Year == yearForRequest && s.Office.Code == "00009000" && s.Month == m).Select(o => new { o.Result }).SumAsync(s => s.Result);
+                    m += 1;
+                }
+            }
+
+            decimal resultNHQLastMonth = 0;
+            if (DateTime.Now.AddMonths(-1).Month >= 10)
+            {
+                var m = DateTime.Now.AddMonths(-1).Month;
+                while (m >= 10)
+                {
+                    resultNHQLastMonth += await _context.DataForEvaluations.Where(s => s.PointOfEvaluation.Point == 1 && s.PointOfEvaluation.Year == yearForRequest && s.Office.Code != "00009000" & s.Office.Code.Substring(2, 6) != "000000" && s.Office.Code.Substring(5, 3) == "000" && s.Month == m).Select(o => new { o.Result }).SumAsync(s => s.Result);
+                    m -= 1;
+                }
+            }
+            else
+            {
+                var m = 12;
+                while (m >= 10)
+                {
+                    resultNHQLastMonth += await _context.DataForEvaluations.Where(s => s.PointOfEvaluation.Point == 1 && s.PointOfEvaluation.Year == yearForRequest && s.Office.Code != "00009000" & s.Office.Code.Substring(2, 6) != "000000" && s.Office.Code.Substring(5, 3) == "000" && s.Month == m).Select(o => new { o.Result }).SumAsync(s => s.Result);
+                    m -= 1;
+                }
+                m = 1;
+                while (m <= DateTime.Now.AddMonths(-1).Month)
+                {
+                    resultNHQLastMonth += await _context.DataForEvaluations.Where(s => s.PointOfEvaluation.Point == 1 && s.PointOfEvaluation.Year == yearForRequest && s.Office.Code != "00009000" & s.Office.Code.Substring(2, 6) != "000000" && s.Office.Code.Substring(5, 3) == "000" && s.Month == m).Select(o => new { o.Result }).SumAsync(s => s.Result);
                     m += 1;
                 }
             }
@@ -415,7 +525,7 @@ namespace EPES.Controllers
             //---------------หมวด 3 ----------------------
             var expectHQM3 = await _context.DataForEvaluations.Where(s => s.PointOfEvaluation.Point == 8 && s.PointOfEvaluation.Year == yearForRequest && s.Office.Code == "00009000").Select(o => new { o.Expect }).SumAsync(s => s.Expect);
 
-            var expectNHQM3 = await _context.DataForEvaluations.Where(s => s.PointOfEvaluation.Point == 6 && s.PointOfEvaluation.Year == yearForRequest && s.Office.Code.Substring(0, 3) != "000" && s.Office.Code.Substring(5, 3) == "000").Select(o => new { o.Expect }).SumAsync(s => s.Expect);
+            var expectNHQM3 = await _context.DataForEvaluations.Where(s => s.PointOfEvaluation.Point == 6 && s.PointOfEvaluation.Year == yearForRequest && s.Office.Code != "00009000" && s.Office.Code.Substring(5, 3) == "000").Select(o => new { o.Expect }).SumAsync(s => s.Expect);
 
             decimal expectHQLastMonthM3 = 0;
             if (DateTime.Now.AddMonths(-1).Month >= 10)
