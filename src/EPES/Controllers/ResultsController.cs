@@ -528,8 +528,8 @@ namespace EPES.Controllers
         }
         public async Task SaveFile(IFormFile file, int deid)
         {
-
-            var uniqueFile = Guid.NewGuid().ToString() + "_" + file.FileName;
+            var result = Path.GetFileName(file.FileName);
+            var uniqueFile = Guid.NewGuid().ToString() + "_" + result;
             try
             {
                 var path = Path.Combine(_hostingEnvironment.WebRootPath, "attach_files");
@@ -538,21 +538,21 @@ namespace EPES.Controllers
 
                 using (var fileStream = System.IO.File.Create(Path.Combine(path, uniqueFile)))
                 {
-                    file.CopyTo(fileStream);
+                    await file.CopyToAsync(fileStream);
+                }
+
+                var user = await _userManager.GetUserAsync(User);
+                var de = await _context.DataForEvaluations.FirstAsync(d => d.Id == deid);
+                if (de != null)
+                {
+                    de.UpdateUserId = user.Id;
+                    de.AttachFile = uniqueFile;
+                    await _context.SaveChangesAsync();
                 }
             }
             catch
             {
                 Response.StatusCode = 400;
-            }
-
-            var user = await _userManager.GetUserAsync(User);
-            var de = await _context.DataForEvaluations.FirstAsync(d => d.Id == deid);
-            if (de != null)
-            {
-                de.UpdateUserId = user.Id;
-                de.AttachFile = uniqueFile;
-                await _context.SaveChangesAsync();
             }
         }
     }
