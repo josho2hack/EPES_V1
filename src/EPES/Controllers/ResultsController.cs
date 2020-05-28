@@ -528,8 +528,9 @@ namespace EPES.Controllers
         }
         public async Task SaveFile(IFormFile file, int deid)
         {
-            var result = Path.GetFileName(file.FileName);
-            var uniqueFile = Guid.NewGuid().ToString() + "_" + result;
+            //var result = Path.GetFileName(file.FileName);
+            //var uniqueFile = Guid.NewGuid().ToString() + "_" + result;
+            var uniqueFile = Guid.NewGuid().ToString() + ".pdf";
             try
             {
                 var path = Path.Combine(_hostingEnvironment.WebRootPath, "attach_files");
