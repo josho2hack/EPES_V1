@@ -186,27 +186,617 @@ namespace EPES.Controllers
 
         public IActionResult HQScore()
         {
-            return View();
+            var model = new ReportViewModel();
+            int m;
+            int yearPoint = 0;
+            List<Object> list = new List<object>();
+
+            if (DateTime.Now.Month == 10)
+            {
+                yearPoint = -1;
+            }
+
+            //บันทึกย้อนหลัง 1 เดือน
+            if (DateTime.Now.Month == 1)
+            {
+                m = 12;
+            }
+            else
+            {
+                m = DateTime.Now.Month - 1;
+            }
+
+            //ดึงข้อมูล เฉพาะในปีงบประมาณ ต.ค. (10) ปีก่อน - ก.ย. (09) ปีปัจจุบัน
+            if (yearPoint == 0)
+            {
+                if (m < 10)
+                {
+                    for (int i = 10; i <= 12; i++)
+                    {
+                        list.Add(new { Value = i, Month = new DateTime(DateTime.Now.Year, i, 1).ToString("MMMM") + " " + new DateTime(DateTime.Now.AddYears(-1).Year, i, 1).ToString("yyyy") });
+                    }
+                    for (int i = 1; i <= m; i++)
+                    {
+                        list.Add(new { Value = i, Month = new DateTime(DateTime.Now.Year, i, 1).ToString("MMMM") + " " + new DateTime(DateTime.Now.Year, i, 1).ToString("yyyy") });
+                    }
+                }
+                else
+                {
+                    for (int i = 10; i <= m; i++)
+                    {
+                        list.Add(new { Value = i, Month = new DateTime(DateTime.Now.Year, i, 1).ToString("MMMM") + " " + new DateTime(DateTime.Now.AddYears(-1).Year, i, 1).ToString("yyyy") });
+                    }
+                }
+            }
+            else
+            {
+                for (int i = 10; i <= 12; i++)
+                {
+                    list.Add(new { Value = i, Month = new DateTime(DateTime.Now.Year, i, 1).ToString("MMMM") + " " + new DateTime(DateTime.Now.AddYears(-1 + yearPoint).Year, i, 1).ToString("yyyy") });
+                }
+                for (int i = 1; i <= 9; i++)
+                {
+                    list.Add(new { Value = i, Month = new DateTime(DateTime.Now.Year, i, 1).ToString("MMMM") + " " + new DateTime(DateTime.Now.AddYears(yearPoint).Year, i, 1).ToString("yyyy") });
+                }
+            }
+
+            ViewBag.Month = new SelectList(list, "Value", "Month", m);
+            model.Month = m;
+            model.yearPoint = yearPoint;
+
+            return View(model);
+        }
+
+        [HttpPost, ActionName("HQScoreMonth")]
+        [ValidateAntiForgeryToken]
+        public IActionResult HQScoreMonth(ReportViewModel model)
+        {
+            int m;
+            List<Object> list = new List<object>();
+
+            if (DateTime.Now.Month == 10)
+            {
+                model.yearPoint = -1;
+            }
+
+            //บันทึกย้อนหลัง 1 เดือน
+            if (DateTime.Now.Month == 1)
+            {
+                m = 12;
+            }
+            else
+            {
+                m = DateTime.Now.Month - 1;
+            }
+
+            //ดึงข้อมูล เฉพาะในปีงบประมาณ ต.ค. (10) ปีก่อน - ก.ย. (09) ปีปัจจุบัน
+            if (model.yearPoint == 0)
+            {
+                if (m < 10)
+                {
+                    for (int i = 10; i <= 12; i++)
+                    {
+                        list.Add(new { Value = i, Month = new DateTime(DateTime.Now.Year, i, 1).ToString("MMMM") + " " + new DateTime(DateTime.Now.AddYears(-1).Year, i, 1).ToString("yyyy") });
+                    }
+                    for (int i = 1; i <= m; i++)
+                    {
+                        list.Add(new { Value = i, Month = new DateTime(DateTime.Now.Year, i, 1).ToString("MMMM") + " " + new DateTime(DateTime.Now.Year, i, 1).ToString("yyyy") });
+                    }
+                }
+                else
+                {
+                    for (int i = 10; i <= m; i++)
+                    {
+                        list.Add(new { Value = i, Month = new DateTime(DateTime.Now.Year, i, 1).ToString("MMMM") + " " + new DateTime(DateTime.Now.AddYears(-1).Year, i, 1).ToString("yyyy") });
+                    }
+                }
+            }
+            else
+            {
+                for (int i = 10; i <= 12; i++)
+                {
+                    list.Add(new { Value = i, Month = new DateTime(DateTime.Now.Year, i, 1).ToString("MMMM") + " " + new DateTime(DateTime.Now.AddYears(-1 + model.yearPoint).Year, i, 1).ToString("yyyy") });
+                }
+                for (int i = 1; i <= 9; i++)
+                {
+                    list.Add(new { Value = i, Month = new DateTime(DateTime.Now.Year, i, 1).ToString("MMMM") + " " + new DateTime(DateTime.Now.AddYears(model.yearPoint).Year, i, 1).ToString("yyyy") });
+                }
+            }
+
+            ViewBag.Month = new SelectList(list, "Value", "Month", m);
+            return View(model);
         }
 
         public IActionResult PAKScore()
         {
-            return View();
+            var model = new ReportViewModel();
+            int m;
+            int yearPoint = 0;
+            List<Object> list = new List<object>();
+
+            if (DateTime.Now.Month == 10)
+            {
+                yearPoint = -1;
+            }
+
+            //บันทึกย้อนหลัง 1 เดือน
+            if (DateTime.Now.Month == 1)
+            {
+                m = 12;
+            }
+            else
+            {
+                m = DateTime.Now.Month - 1;
+            }
+
+            //ดึงข้อมูล เฉพาะในปีงบประมาณ ต.ค. (10) ปีก่อน - ก.ย. (09) ปีปัจจุบัน
+            if (yearPoint == 0)
+            {
+                if (m < 10)
+                {
+                    for (int i = 10; i <= 12; i++)
+                    {
+                        list.Add(new { Value = i, Month = new DateTime(DateTime.Now.Year, i, 1).ToString("MMMM") + " " + new DateTime(DateTime.Now.AddYears(-1).Year, i, 1).ToString("yyyy") });
+                    }
+                    for (int i = 1; i <= m; i++)
+                    {
+                        list.Add(new { Value = i, Month = new DateTime(DateTime.Now.Year, i, 1).ToString("MMMM") + " " + new DateTime(DateTime.Now.Year, i, 1).ToString("yyyy") });
+                    }
+                }
+                else
+                {
+                    for (int i = 10; i <= m; i++)
+                    {
+                        list.Add(new { Value = i, Month = new DateTime(DateTime.Now.Year, i, 1).ToString("MMMM") + " " + new DateTime(DateTime.Now.AddYears(-1).Year, i, 1).ToString("yyyy") });
+                    }
+                }
+            }
+            else
+            {
+                for (int i = 10; i <= 12; i++)
+                {
+                    list.Add(new { Value = i, Month = new DateTime(DateTime.Now.Year, i, 1).ToString("MMMM") + " " + new DateTime(DateTime.Now.AddYears(-1 + yearPoint).Year, i, 1).ToString("yyyy") });
+                }
+                for (int i = 1; i <= 9; i++)
+                {
+                    list.Add(new { Value = i, Month = new DateTime(DateTime.Now.Year, i, 1).ToString("MMMM") + " " + new DateTime(DateTime.Now.AddYears(yearPoint).Year, i, 1).ToString("yyyy") });
+                }
+            }
+
+            ViewBag.Month = new SelectList(list, "Value", "Month", m);
+            model.Month = m;
+            model.yearPoint = yearPoint;
+
+            return View(model);
+        }
+
+        [HttpPost, ActionName("PAKScoreMonth")]
+        [ValidateAntiForgeryToken]
+        public IActionResult PAKScoreMonth(ReportViewModel model)
+        {
+            int m;
+            List<Object> list = new List<object>();
+
+            if (DateTime.Now.Month == 10)
+            {
+                model.yearPoint = -1;
+            }
+
+            //บันทึกย้อนหลัง 1 เดือน
+            if (DateTime.Now.Month == 1)
+            {
+                m = 12;
+            }
+            else
+            {
+                m = DateTime.Now.Month - 1;
+            }
+
+            //ดึงข้อมูล เฉพาะในปีงบประมาณ ต.ค. (10) ปีก่อน - ก.ย. (09) ปีปัจจุบัน
+            if (model.yearPoint == 0)
+            {
+                if (m < 10)
+                {
+                    for (int i = 10; i <= 12; i++)
+                    {
+                        list.Add(new { Value = i, Month = new DateTime(DateTime.Now.Year, i, 1).ToString("MMMM") + " " + new DateTime(DateTime.Now.AddYears(-1).Year, i, 1).ToString("yyyy") });
+                    }
+                    for (int i = 1; i <= m; i++)
+                    {
+                        list.Add(new { Value = i, Month = new DateTime(DateTime.Now.Year, i, 1).ToString("MMMM") + " " + new DateTime(DateTime.Now.Year, i, 1).ToString("yyyy") });
+                    }
+                }
+                else
+                {
+                    for (int i = 10; i <= m; i++)
+                    {
+                        list.Add(new { Value = i, Month = new DateTime(DateTime.Now.Year, i, 1).ToString("MMMM") + " " + new DateTime(DateTime.Now.AddYears(-1).Year, i, 1).ToString("yyyy") });
+                    }
+                }
+            }
+            else
+            {
+                for (int i = 10; i <= 12; i++)
+                {
+                    list.Add(new { Value = i, Month = new DateTime(DateTime.Now.Year, i, 1).ToString("MMMM") + " " + new DateTime(DateTime.Now.AddYears(-1 + model.yearPoint).Year, i, 1).ToString("yyyy") });
+                }
+                for (int i = 1; i <= 9; i++)
+                {
+                    list.Add(new { Value = i, Month = new DateTime(DateTime.Now.Year, i, 1).ToString("MMMM") + " " + new DateTime(DateTime.Now.AddYears(model.yearPoint).Year, i, 1).ToString("yyyy") });
+                }
+            }
+
+            ViewBag.Month = new SelectList(list, "Value", "Month", m);
+            return View(model);
         }
 
         public IActionResult BKKScore()
         {
-            return View();
+            var model = new ReportViewModel();
+            int m;
+            int yearPoint = 0;
+            List<Object> list = new List<object>();
+
+            if (DateTime.Now.Month == 10)
+            {
+                yearPoint = -1;
+            }
+
+            //บันทึกย้อนหลัง 1 เดือน
+            if (DateTime.Now.Month == 1)
+            {
+                m = 12;
+            }
+            else
+            {
+                m = DateTime.Now.Month - 1;
+            }
+
+            //ดึงข้อมูล เฉพาะในปีงบประมาณ ต.ค. (10) ปีก่อน - ก.ย. (09) ปีปัจจุบัน
+            if (yearPoint == 0)
+            {
+                if (m < 10)
+                {
+                    for (int i = 10; i <= 12; i++)
+                    {
+                        list.Add(new { Value = i, Month = new DateTime(DateTime.Now.Year, i, 1).ToString("MMMM") + " " + new DateTime(DateTime.Now.AddYears(-1).Year, i, 1).ToString("yyyy") });
+                    }
+                    for (int i = 1; i <= m; i++)
+                    {
+                        list.Add(new { Value = i, Month = new DateTime(DateTime.Now.Year, i, 1).ToString("MMMM") + " " + new DateTime(DateTime.Now.Year, i, 1).ToString("yyyy") });
+                    }
+                }
+                else
+                {
+                    for (int i = 10; i <= m; i++)
+                    {
+                        list.Add(new { Value = i, Month = new DateTime(DateTime.Now.Year, i, 1).ToString("MMMM") + " " + new DateTime(DateTime.Now.AddYears(-1).Year, i, 1).ToString("yyyy") });
+                    }
+                }
+            }
+            else
+            {
+                for (int i = 10; i <= 12; i++)
+                {
+                    list.Add(new { Value = i, Month = new DateTime(DateTime.Now.Year, i, 1).ToString("MMMM") + " " + new DateTime(DateTime.Now.AddYears(-1 + yearPoint).Year, i, 1).ToString("yyyy") });
+                }
+                for (int i = 1; i <= 9; i++)
+                {
+                    list.Add(new { Value = i, Month = new DateTime(DateTime.Now.Year, i, 1).ToString("MMMM") + " " + new DateTime(DateTime.Now.AddYears(yearPoint).Year, i, 1).ToString("yyyy") });
+                }
+            }
+
+            ViewBag.Month = new SelectList(list, "Value", "Month", m);
+            model.Month = m;
+            model.yearPoint = yearPoint;
+
+            return View(model);
+        }
+
+        [HttpPost, ActionName("BKKScoreMonth")]
+        [ValidateAntiForgeryToken]
+        public IActionResult BKKScore(ReportViewModel model)
+        {
+            int m;
+            List<Object> list = new List<object>();
+
+            if (DateTime.Now.Month == 10)
+            {
+                model.yearPoint = -1;
+            }
+
+            //บันทึกย้อนหลัง 1 เดือน
+            if (DateTime.Now.Month == 1)
+            {
+                m = 12;
+            }
+            else
+            {
+                m = DateTime.Now.Month - 1;
+            }
+
+            //ดึงข้อมูล เฉพาะในปีงบประมาณ ต.ค. (10) ปีก่อน - ก.ย. (09) ปีปัจจุบัน
+            if (model.yearPoint == 0)
+            {
+                if (m < 10)
+                {
+                    for (int i = 10; i <= 12; i++)
+                    {
+                        list.Add(new { Value = i, Month = new DateTime(DateTime.Now.Year, i, 1).ToString("MMMM") + " " + new DateTime(DateTime.Now.AddYears(-1).Year, i, 1).ToString("yyyy") });
+                    }
+                    for (int i = 1; i <= m; i++)
+                    {
+                        list.Add(new { Value = i, Month = new DateTime(DateTime.Now.Year, i, 1).ToString("MMMM") + " " + new DateTime(DateTime.Now.Year, i, 1).ToString("yyyy") });
+                    }
+                }
+                else
+                {
+                    for (int i = 10; i <= m; i++)
+                    {
+                        list.Add(new { Value = i, Month = new DateTime(DateTime.Now.Year, i, 1).ToString("MMMM") + " " + new DateTime(DateTime.Now.AddYears(-1).Year, i, 1).ToString("yyyy") });
+                    }
+                }
+            }
+            else
+            {
+                for (int i = 10; i <= 12; i++)
+                {
+                    list.Add(new { Value = i, Month = new DateTime(DateTime.Now.Year, i, 1).ToString("MMMM") + " " + new DateTime(DateTime.Now.AddYears(-1 + model.yearPoint).Year, i, 1).ToString("yyyy") });
+                }
+                for (int i = 1; i <= 9; i++)
+                {
+                    list.Add(new { Value = i, Month = new DateTime(DateTime.Now.Year, i, 1).ToString("MMMM") + " " + new DateTime(DateTime.Now.AddYears(model.yearPoint).Year, i, 1).ToString("yyyy") });
+                }
+            }
+
+            ViewBag.Month = new SelectList(list, "Value", "Month", m);
+            return View(model);
         }
 
         public IActionResult NBKKScore()
         {
-            return View();
+            var model = new ReportViewModel();
+            int m;
+            int yearPoint = 0;
+            List<Object> list = new List<object>();
+
+            if (DateTime.Now.Month == 10)
+            {
+                yearPoint = -1;
+            }
+
+            //บันทึกย้อนหลัง 1 เดือน
+            if (DateTime.Now.Month == 1)
+            {
+                m = 12;
+            }
+            else
+            {
+                m = DateTime.Now.Month - 1;
+            }
+
+            //ดึงข้อมูล เฉพาะในปีงบประมาณ ต.ค. (10) ปีก่อน - ก.ย. (09) ปีปัจจุบัน
+            if (yearPoint == 0)
+            {
+                if (m < 10)
+                {
+                    for (int i = 10; i <= 12; i++)
+                    {
+                        list.Add(new { Value = i, Month = new DateTime(DateTime.Now.Year, i, 1).ToString("MMMM") + " " + new DateTime(DateTime.Now.AddYears(-1).Year, i, 1).ToString("yyyy") });
+                    }
+                    for (int i = 1; i <= m; i++)
+                    {
+                        list.Add(new { Value = i, Month = new DateTime(DateTime.Now.Year, i, 1).ToString("MMMM") + " " + new DateTime(DateTime.Now.Year, i, 1).ToString("yyyy") });
+                    }
+                }
+                else
+                {
+                    for (int i = 10; i <= m; i++)
+                    {
+                        list.Add(new { Value = i, Month = new DateTime(DateTime.Now.Year, i, 1).ToString("MMMM") + " " + new DateTime(DateTime.Now.AddYears(-1).Year, i, 1).ToString("yyyy") });
+                    }
+                }
+            }
+            else
+            {
+                for (int i = 10; i <= 12; i++)
+                {
+                    list.Add(new { Value = i, Month = new DateTime(DateTime.Now.Year, i, 1).ToString("MMMM") + " " + new DateTime(DateTime.Now.AddYears(-1 + yearPoint).Year, i, 1).ToString("yyyy") });
+                }
+                for (int i = 1; i <= 9; i++)
+                {
+                    list.Add(new { Value = i, Month = new DateTime(DateTime.Now.Year, i, 1).ToString("MMMM") + " " + new DateTime(DateTime.Now.AddYears(yearPoint).Year, i, 1).ToString("yyyy") });
+                }
+            }
+
+            ViewBag.Month = new SelectList(list, "Value", "Month", m);
+            model.Month = m;
+            model.yearPoint = yearPoint;
+
+            return View(model);
+        }
+
+        [HttpPost, ActionName("NBKKScoreMonth")]
+        [ValidateAntiForgeryToken]
+        public IActionResult NBKKScoreMonth(ReportViewModel model)
+        {
+            int m;
+            List<Object> list = new List<object>();
+
+            if (DateTime.Now.Month == 10)
+            {
+                model.yearPoint = -1;
+            }
+
+            //บันทึกย้อนหลัง 1 เดือน
+            if (DateTime.Now.Month == 1)
+            {
+                m = 12;
+            }
+            else
+            {
+                m = DateTime.Now.Month - 1;
+            }
+
+            //ดึงข้อมูล เฉพาะในปีงบประมาณ ต.ค. (10) ปีก่อน - ก.ย. (09) ปีปัจจุบัน
+            if (model.yearPoint == 0)
+            {
+                if (m < 10)
+                {
+                    for (int i = 10; i <= 12; i++)
+                    {
+                        list.Add(new { Value = i, Month = new DateTime(DateTime.Now.Year, i, 1).ToString("MMMM") + " " + new DateTime(DateTime.Now.AddYears(-1).Year, i, 1).ToString("yyyy") });
+                    }
+                    for (int i = 1; i <= m; i++)
+                    {
+                        list.Add(new { Value = i, Month = new DateTime(DateTime.Now.Year, i, 1).ToString("MMMM") + " " + new DateTime(DateTime.Now.Year, i, 1).ToString("yyyy") });
+                    }
+                }
+                else
+                {
+                    for (int i = 10; i <= m; i++)
+                    {
+                        list.Add(new { Value = i, Month = new DateTime(DateTime.Now.Year, i, 1).ToString("MMMM") + " " + new DateTime(DateTime.Now.AddYears(-1).Year, i, 1).ToString("yyyy") });
+                    }
+                }
+            }
+            else
+            {
+                for (int i = 10; i <= 12; i++)
+                {
+                    list.Add(new { Value = i, Month = new DateTime(DateTime.Now.Year, i, 1).ToString("MMMM") + " " + new DateTime(DateTime.Now.AddYears(-1 + model.yearPoint).Year, i, 1).ToString("yyyy") });
+                }
+                for (int i = 1; i <= 9; i++)
+                {
+                    list.Add(new { Value = i, Month = new DateTime(DateTime.Now.Year, i, 1).ToString("MMMM") + " " + new DateTime(DateTime.Now.AddYears(model.yearPoint).Year, i, 1).ToString("yyyy") });
+                }
+            }
+
+            ViewBag.Month = new SelectList(list, "Value", "Month", m);
+            return View(model);
         }
 
         public IActionResult STScore()
         {
-            return View();
+            var model = new ReportViewModel();
+            int m;
+            int yearPoint = 0;
+            List<Object> list = new List<object>();
+
+            if (DateTime.Now.Month == 10)
+            {
+                yearPoint = -1;
+            }
+
+            //บันทึกย้อนหลัง 1 เดือน
+            if (DateTime.Now.Month == 1)
+            {
+                m = 12;
+            }
+            else
+            {
+                m = DateTime.Now.Month - 1;
+            }
+
+            //ดึงข้อมูล เฉพาะในปีงบประมาณ ต.ค. (10) ปีก่อน - ก.ย. (09) ปีปัจจุบัน
+            if (yearPoint == 0)
+            {
+                if (m < 10)
+                {
+                    for (int i = 10; i <= 12; i++)
+                    {
+                        list.Add(new { Value = i, Month = new DateTime(DateTime.Now.Year, i, 1).ToString("MMMM") + " " + new DateTime(DateTime.Now.AddYears(-1).Year, i, 1).ToString("yyyy") });
+                    }
+                    for (int i = 1; i <= m; i++)
+                    {
+                        list.Add(new { Value = i, Month = new DateTime(DateTime.Now.Year, i, 1).ToString("MMMM") + " " + new DateTime(DateTime.Now.Year, i, 1).ToString("yyyy") });
+                    }
+                }
+                else
+                {
+                    for (int i = 10; i <= m; i++)
+                    {
+                        list.Add(new { Value = i, Month = new DateTime(DateTime.Now.Year, i, 1).ToString("MMMM") + " " + new DateTime(DateTime.Now.AddYears(-1).Year, i, 1).ToString("yyyy") });
+                    }
+                }
+            }
+            else
+            {
+                for (int i = 10; i <= 12; i++)
+                {
+                    list.Add(new { Value = i, Month = new DateTime(DateTime.Now.Year, i, 1).ToString("MMMM") + " " + new DateTime(DateTime.Now.AddYears(-1 + yearPoint).Year, i, 1).ToString("yyyy") });
+                }
+                for (int i = 1; i <= 9; i++)
+                {
+                    list.Add(new { Value = i, Month = new DateTime(DateTime.Now.Year, i, 1).ToString("MMMM") + " " + new DateTime(DateTime.Now.AddYears(yearPoint).Year, i, 1).ToString("yyyy") });
+                }
+            }
+
+            ViewBag.Month = new SelectList(list, "Value", "Month", m);
+            model.Month = m;
+            model.yearPoint = yearPoint;
+
+            return View(model);
+        }
+
+        [HttpPost, ActionName("STScoreMonth")]
+        [ValidateAntiForgeryToken]
+        public IActionResult STScoreMonth(ReportViewModel model)
+        {
+            int m;
+            List<Object> list = new List<object>();
+
+            if (DateTime.Now.Month == 10)
+            {
+                model.yearPoint = -1;
+            }
+
+            //บันทึกย้อนหลัง 1 เดือน
+            if (DateTime.Now.Month == 1)
+            {
+                m = 12;
+            }
+            else
+            {
+                m = DateTime.Now.Month - 1;
+            }
+
+            //ดึงข้อมูล เฉพาะในปีงบประมาณ ต.ค. (10) ปีก่อน - ก.ย. (09) ปีปัจจุบัน
+            if (model.yearPoint == 0)
+            {
+                if (m < 10)
+                {
+                    for (int i = 10; i <= 12; i++)
+                    {
+                        list.Add(new { Value = i, Month = new DateTime(DateTime.Now.Year, i, 1).ToString("MMMM") + " " + new DateTime(DateTime.Now.AddYears(-1).Year, i, 1).ToString("yyyy") });
+                    }
+                    for (int i = 1; i <= m; i++)
+                    {
+                        list.Add(new { Value = i, Month = new DateTime(DateTime.Now.Year, i, 1).ToString("MMMM") + " " + new DateTime(DateTime.Now.Year, i, 1).ToString("yyyy") });
+                    }
+                }
+                else
+                {
+                    for (int i = 10; i <= m; i++)
+                    {
+                        list.Add(new { Value = i, Month = new DateTime(DateTime.Now.Year, i, 1).ToString("MMMM") + " " + new DateTime(DateTime.Now.AddYears(-1).Year, i, 1).ToString("yyyy") });
+                    }
+                }
+            }
+            else
+            {
+                for (int i = 10; i <= 12; i++)
+                {
+                    list.Add(new { Value = i, Month = new DateTime(DateTime.Now.Year, i, 1).ToString("MMMM") + " " + new DateTime(DateTime.Now.AddYears(-1 + model.yearPoint).Year, i, 1).ToString("yyyy") });
+                }
+                for (int i = 1; i <= 9; i++)
+                {
+                    list.Add(new { Value = i, Month = new DateTime(DateTime.Now.Year, i, 1).ToString("MMMM") + " " + new DateTime(DateTime.Now.AddYears(model.yearPoint).Year, i, 1).ToString("yyyy") });
+                }
+            }
+
+            ViewBag.Month = new SelectList(list, "Value", "Month", m);
+            return View(model);
         }
     }
 }
