@@ -32,6 +32,14 @@ namespace EPES.Controllers
 
         public async Task<IActionResult> OwnerScoreReport()
         {
+            var model = new ReportViewModel();
+            int yearPoint = 0;
+
+            if (DateTime.Now.Month == 10)
+            {
+                yearPoint = -1;
+            }
+
             var user = await _userManager.GetUserAsync(User);
             if (User.IsInRole("Admin") || User.IsInRole("Special"))
             {
@@ -41,8 +49,9 @@ namespace EPES.Controllers
             {
                 ViewBag.OfficeCode = new SelectList(_context.Offices.Where(d => d.Code != "00000000" && d.Code.StartsWith(user.OfficeId.Substring(0, 2)) && d.Code.Substring(5, 3) == "000"), "Code", "Name", user.OfficeId);
             }
-            ViewBag.yearPoint = 0;
-            return View();
+
+            model.yearPoint = yearPoint;
+            return View(model);
         }
 
         [HttpPost, ActionName("SubScoreReport")]
@@ -62,8 +71,8 @@ namespace EPES.Controllers
             var of = await _context.Offices.Where(d => d.Code == selectoffice).FirstOrDefaultAsync();
             ViewBag.selectoffice = selectoffice;
             ViewBag.OfficeName = of.Name;
-            ViewBag.yearPoint = model.yearPoint;
-            return View();
+
+            return View(model);
         }
 
         public IActionResult AllScore()
