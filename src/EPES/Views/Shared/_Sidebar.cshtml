@@ -26,7 +26,7 @@
 
     <!-- Divider -->
     <hr class="sidebar-divider">
-    @if (User.IsInRole("Admin") || User.IsInRole("Manager") || User.IsInRole("User"))
+    @if (User.IsInRole("Admin") || User.IsInRole("Manager") || User.IsInRole("User") || User.IsInRole("Special"))
     {
         <!-- Heading -->
         <div class="sidebar-heading">
