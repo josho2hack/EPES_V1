@@ -8,6 +8,8 @@
     var user = await UserManager.GetUserAsync(User);
     ScoreDraft sd = null;
     DataForEvaluation de = null;
+    decimal sumOfData = 0;
+    decimal sumOfExpect = 0;
 }
 
 <link href="~/css/devextreme/dx.common.css" rel="stylesheet" />
@@ -143,6 +145,8 @@
                             <tbody>
                                 @for (int i = 0; i < Model.pointA.Count(); i++)
                                 {
+                                    sumOfExpect = 0;
+                                    sumOfData = 0;
                                     <tr>
                                         <td>
                                             @if (Model.pointA[i].SubPoint != 0)
@@ -161,6 +165,11 @@
                                                 if (item.Month == Model.month && item.OfficeId == Model.pointA[i].OwnerOfficeId)
                                                 {
                                                     de = item;
+                                                }
+                                                if (Model.pointA[i].Unit != UnitOfPoint.ระดับ)
+                                                {
+                                                    sumOfData += item.Result;
+                                                    sumOfExpect += item.Expect;
                                                 }
                                             }
                                             <input type="hidden" name="UpdateData[@i].Id" value=@de?.Id />
@@ -422,6 +431,25 @@
                                                                         <input type="text" class="form-control" name="UpdateData.Result" value="@String.Format("{0:N4}", de?.Result)" disabled />
                                                                     }
 
+                                                                </dd>
+                                                                <dt class="col-3">เป้าหมายสะสม</dt>
+                                                                <dd class="col-9">
+                                                                    @string.Format("{0:N4}", sumOfExpect)
+                                                                </dd>
+                                                                <dt class="col-3">ผลการปฏิบัติสะสม</dt>
+                                                                <dd class="col-9">
+                                                                    @string.Format("{0:N4}", sumOfData)
+                                                                </dd>
+                                                                <dt class="col-3">ร้อยละ ผลสะสม/เป้าหมายสะสม</dt>
+                                                                <dd class="col-9">
+                                                                    @if (sumOfExpect != 0)
+                                                                    {
+                                                                        @string.Format("{0:N4}", sumOfData / sumOfExpect * 100) @: %
+                                                                    }
+                                                                    else
+                                                                    {
+                                                                        <span>เป้าหมายสะสม ไม่ได้บันทึก</span>
+                                                                    }
                                                                 </dd>
                                                                 <dt class="col-3">วันที่แล้วเสร็จ</dt>
                                                                 <dd class="col-9">
@@ -768,6 +796,25 @@
                                                                         }
 
                                                                     </dd>
+                                                                    <dt class="col-3">เป้าหมายสะสม</dt>
+                                                                    <dd class="col-9">
+                                                                        @string.Format("{0:N4}", sumOfExpect)
+                                                                    </dd>
+                                                                    <dt class="col-3">ผลการปฏิบัติสะสม</dt>
+                                                                    <dd class="col-9">
+                                                                        @string.Format("{0:N4}", sumOfData)
+                                                                    </dd>
+                                                                    <dt class="col-3">ร้อยละ ผลสะสม/เป้าหมายสะสม</dt>
+                                                                    <dd class="col-9">
+                                                                        @if (sumOfExpect != 0)
+                                                                        {
+                                                                            @string.Format("{0:N4}", sumOfData / sumOfExpect * 100) @: %
+                                                                        }
+                                                                        else
+                                                                        {
+                                                                            <span>เป้าหมายสะสม ไม่ได้บันทึก</span>
+                                                                        }
+                                                                    </dd>
                                                                 }
                                                                 <dt class="col-3">วันที่แล้วเสร็จ</dt>
                                                                 @if ((User.IsInRole("Admin") || (User.IsInRole("Manager") && user.OfficeId.Substring(0, 3) == "000" && Model.pointA[i].AuditOffice.Code == user.OfficeId)) && de?.Approve < Approve.ผษ_อนุมัติ)
@@ -873,6 +920,8 @@
                             <tbody>
                                 @for (int i = 0; i < Model.pointB.Count(); i++)
                                 {
+                                    sumOfExpect = 0;
+                                    sumOfData = 0;
                                     <tr>
                                         <td>
                                             @if (Model.pointB[i].SubPoint != 0)
@@ -891,6 +940,11 @@
                                                 if (item.Month == Model.month && item.OfficeId == Model.pointB[i].OwnerOfficeId)
                                                 {
                                                     de = item;
+                                                }
+                                                if (Model.pointB[i].Unit != UnitOfPoint.ระดับ)
+                                                {
+                                                    sumOfData += item.Result;
+                                                    sumOfExpect += item.Expect;
                                                 }
                                             }
                                             <input type="hidden" name="UpdateData[@i].Id" value=@de?.Id />
@@ -1152,6 +1206,25 @@
                                                                         <input type="text" class="form-control" name="UpdateData.Result" value="@String.Format("{0:N4}", de?.Result)" disabled />
                                                                     }
 
+                                                                </dd>
+                                                                <dt class="col-3">เป้าหมายสะสม</dt>
+                                                                <dd class="col-9">
+                                                                    @string.Format("{0:N4}", sumOfExpect)
+                                                                </dd>
+                                                                <dt class="col-3">ผลการปฏิบัติสะสม</dt>
+                                                                <dd class="col-9">
+                                                                    @string.Format("{0:N4}", sumOfData)
+                                                                </dd>
+                                                                <dt class="col-3">ร้อยละ ผลสะสม/เป้าหมายสะสม</dt>
+                                                                <dd class="col-9">
+                                                                    @if (sumOfExpect != 0)
+                                                                    {
+                                                                        @string.Format("{0:N4}", sumOfData / sumOfExpect * 100) @: %
+                                                                    }
+                                                                    else
+                                                                    {
+                                                                        <span>เป้าหมายสะสม ไม่ได้บันทึก</span>
+                                                                    }
                                                                 </dd>
                                                                 <dt class="col-3">วันที่แล้วเสร็จ</dt>
                                                                 <dd class="col-9">
@@ -1498,6 +1571,25 @@
                                                                         }
 
                                                                     </dd>
+                                                                    <dt class="col-3">เป้าหมายสะสม</dt>
+                                                                    <dd class="col-9">
+                                                                        @string.Format("{0:N4}", sumOfExpect)
+                                                                    </dd>
+                                                                    <dt class="col-3">ผลการปฏิบัติสะสม</dt>
+                                                                    <dd class="col-9">
+                                                                        @string.Format("{0:N4}", sumOfData)
+                                                                    </dd>
+                                                                    <dt class="col-3">ร้อยละ ผลสะสม/เป้าหมายสะสม</dt>
+                                                                    <dd class="col-9">
+                                                                        @if (sumOfExpect != 0)
+                                                                        {
+                                                                            @string.Format("{0:N4}", sumOfData / sumOfExpect * 100) @: %
+                                                                        }
+                                                                        else
+                                                                        {
+                                                                            <span>เป้าหมายสะสม ไม่ได้บันทึก</span>
+                                                                        }
+                                                                    </dd>
                                                                 }
                                                                 <dt class="col-3">วันที่แล้วเสร็จ</dt>
                                                                 @if ((User.IsInRole("Admin") || (User.IsInRole("Manager") && user.OfficeId.Substring(0, 3) == "000" && Model.pointB[i].AuditOffice.Code == user.OfficeId)) && de?.Approve < Approve.ผษ_อนุมัติ)
@@ -1603,6 +1695,8 @@
                             <tbody>
                                 @for (int i = 0; i < Model.pointC.Count(); i++)
                                 {
+                                    sumOfExpect = 0;
+                                    sumOfData = 0;
                                     <tr>
                                         <td>
                                             @if (Model.pointC[i].SubPoint != 0)
@@ -1621,6 +1715,11 @@
                                                 if (item.Month == Model.month && item.OfficeId == Model.pointC[i].OwnerOfficeId)
                                                 {
                                                     de = item;
+                                                }
+                                                if (Model.pointC[i].Unit != UnitOfPoint.ระดับ)
+                                                {
+                                                    sumOfData += item.Result;
+                                                    sumOfExpect += item.Expect;
                                                 }
                                             }
                                             <input type="hidden" name="UpdateData[@i].Id" value=@de?.Id />
@@ -1882,6 +1981,25 @@
                                                                         <input type="text" class="form-control" name="UpdateData.Result" value="@String.Format("{0:N4}", de?.Result)" disabled />
                                                                     }
 
+                                                                </dd>
+                                                                <dt class="col-3">เป้าหมายสะสม</dt>
+                                                                <dd class="col-9">
+                                                                    @string.Format("{0:N4}", sumOfExpect)
+                                                                </dd>
+                                                                <dt class="col-3">ผลการปฏิบัติสะสม</dt>
+                                                                <dd class="col-9">
+                                                                    @string.Format("{0:N4}", sumOfData)
+                                                                </dd>
+                                                                <dt class="col-3">ร้อยละ ผลสะสม/เป้าหมายสะสม</dt>
+                                                                <dd class="col-9">
+                                                                    @if (sumOfExpect != 0)
+                                                                    {
+                                                                        @string.Format("{0:N4}", sumOfData / sumOfExpect * 100) @: %
+                                                                    }
+                                                                    else
+                                                                    {
+                                                                        <span>เป้าหมายสะสม ไม่ได้บันทึก</span>
+                                                                    }
                                                                 </dd>
                                                                 <dt class="col-3">วันที่แล้วเสร็จ</dt>
                                                                 <dd class="col-9">
@@ -2228,6 +2346,25 @@
                                                                         }
 
                                                                     </dd>
+                                                                    <dt class="col-3">เป้าหมายสะสม</dt>
+                                                                    <dd class="col-9">
+                                                                        @string.Format("{0:N4}", sumOfExpect)
+                                                                    </dd>
+                                                                    <dt class="col-3">ผลการปฏิบัติสะสม</dt>
+                                                                    <dd class="col-9">
+                                                                        @string.Format("{0:N4}", sumOfData)
+                                                                    </dd>
+                                                                    <dt class="col-3">ร้อยละ ผลสะสม/เป้าหมายสะสม</dt>
+                                                                    <dd class="col-9">
+                                                                        @if (sumOfExpect != 0)
+                                                                        {
+                                                                            @string.Format("{0:N4}", sumOfData / sumOfExpect * 100) @: %
+                                                                        }
+                                                                        else
+                                                                        {
+                                                                            <span>เป้าหมายสะสม ไม่ได้บันทึก</span>
+                                                                        }
+                                                                    </dd>
                                                                 }
                                                                 <dt class="col-3">วันที่แล้วเสร็จ</dt>
                                                                 @if ((User.IsInRole("Admin") || (User.IsInRole("Manager") && user.OfficeId.Substring(0, 3) == "000" && Model.pointC[i].AuditOffice.Code == user.OfficeId)) && de?.Approve < Approve.ผษ_อนุมัติ)
@@ -2333,6 +2470,8 @@
                             <tbody>
                                 @for (int i = 0; i < Model.pointD.Count(); i++)
                                 {
+                                    sumOfExpect = 0;
+                                    sumOfData = 0;
                                     <tr>
                                         <td>
                                             @if (Model.pointD[i].SubPoint != 0)
@@ -2351,6 +2490,11 @@
                                                 if (item.Month == Model.month && item.OfficeId == Model.pointD[i].OwnerOfficeId)
                                                 {
                                                     de = item;
+                                                }
+                                                if (Model.pointD[i].Unit != UnitOfPoint.ระดับ)
+                                                {
+                                                    sumOfData += item.Result;
+                                                    sumOfExpect += item.Expect;
                                                 }
                                             }
                                             <input type="hidden" name="UpdateData[@i].Id" value=@de?.Id />
@@ -2612,6 +2756,25 @@
                                                                         <input type="text" class="form-control" name="UpdateData.Result" value="@String.Format("{0:N4}", de?.Result)" disabled />
                                                                     }
 
+                                                                </dd>
+                                                                <dt class="col-3">เป้าหมายสะสม</dt>
+                                                                <dd class="col-9">
+                                                                    @string.Format("{0:N4}", sumOfExpect)
+                                                                </dd>
+                                                                <dt class="col-3">ผลการปฏิบัติสะสม</dt>
+                                                                <dd class="col-9">
+                                                                    @string.Format("{0:N4}", sumOfData)
+                                                                </dd>
+                                                                <dt class="col-3">ร้อยละ ผลสะสม/เป้าหมายสะสม</dt>
+                                                                <dd class="col-9">
+                                                                    @if (sumOfExpect != 0)
+                                                                    {
+                                                                        @string.Format("{0:N4}", sumOfData / sumOfExpect * 100) @: %
+                                                                    }
+                                                                    else
+                                                                    {
+                                                                        <span>เป้าหมายสะสม ไม่ได้บันทึก</span>
+                                                                    }
                                                                 </dd>
                                                                 <dt class="col-3">วันที่แล้วเสร็จ</dt>
                                                                 <dd class="col-9">
@@ -2957,6 +3120,25 @@
                                                                             <input type="text" class="form-control" name="UpdateData.ResultLevelRate" value="@String.Format("{0:N4}", de?.ResultLevelRate)" readonly />
                                                                         }
 
+                                                                    </dd>
+                                                                    <dt class="col-3">เป้าหมายสะสม</dt>
+                                                                    <dd class="col-9">
+                                                                        @string.Format("{0:N4}", sumOfExpect)
+                                                                    </dd>
+                                                                    <dt class="col-3">ผลการปฏิบัติสะสม</dt>
+                                                                    <dd class="col-9">
+                                                                        @string.Format("{0:N4}", sumOfData)
+                                                                    </dd>
+                                                                    <dt class="col-3">ร้อยละ ผลสะสม/เป้าหมายสะสม</dt>
+                                                                    <dd class="col-9">
+                                                                        @if (sumOfExpect != 0)
+                                                                        {
+                                                                            @string.Format("{0:N4}", sumOfData / sumOfExpect * 100) @: %
+                                                                        }
+                                                                        else
+                                                                        {
+                                                                            <span>เป้าหมายสะสม ไม่ได้บันทึก</span>
+                                                                        }
                                                                     </dd>
                                                                 }
                                                                 <dt class="col-3">วันที่แล้วเสร็จ</dt>

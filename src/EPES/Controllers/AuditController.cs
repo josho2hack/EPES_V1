@@ -1,4 +1,5 @@
-﻿using EPES.Data;
+﻿using DevExpress.Charts.Native;
+using EPES.Data;
 using EPES.Models;
 using EPES.ViewModels;
 using Microsoft.AspNetCore.Authorization;
@@ -431,7 +432,8 @@ namespace EPES.Controllers
         public async Task SaveFile(IFormFile file, int deid)
         {
 
-            var uniqueFile = Guid.NewGuid().ToString() + "_" + file.FileName;
+            //var uniqueFile = Guid.NewGuid().ToString() + "_" + file.FileName;
+            var uniqueFile = Guid.NewGuid().ToString() + ".pdf";
             try
             {
                 var path = Path.Combine(_hostingEnvironment.WebRootPath, "attach_files");
