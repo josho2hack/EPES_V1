@@ -62,6 +62,8 @@ namespace EPES.ViewModels
 
         public int yearPoint { get; set; }
 
+        public string selectoffice { get; set; }
+
         //[Display(Name = "ปีงบประมาณ")]
         [DataType(DataType.Date)]
         [DisplayFormat(DataFormatString = "{0:yyyy}", ApplyFormatInEditMode = true)]

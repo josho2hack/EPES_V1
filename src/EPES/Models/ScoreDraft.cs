@@ -34,5 +34,40 @@ namespace EPES.Models
         [Display(Name = "คะแนนที่อนุมัติ")]
         [Column(TypeName = "decimal(5, 4)")]
         public decimal ScoreApprove { get; set; } = 0;
+
+        //[NotMapped]
+        //[Display(Name = "คะแนน")]
+        //[Column(TypeName = "decimal(5, 4)")]
+        //public decimal? ScoreValueToReport {
+        //    get
+        //    {
+        //        if (this.ScoreValue == 0)
+        //        {
+        //            return null;
+        //        }
+        //        else
+        //        {
+        //            return this.ScoreValue;
+        //        }
+        //    } 
+        //}
+
+        //[NotMapped]
+        //[Display(Name = "คะแนนที่อนุมัติ")]
+        //[Column(TypeName = "decimal(5, 4)")]
+        //public decimal? ScoreApproveToReport
+        //{
+        //    get
+        //    {
+        //        if (this.ScoreApprove == 0)
+        //        {
+        //            return null;
+        //        }
+        //        else
+        //        {
+        //            return this.ScoreApprove;
+        //        }
+        //    }
+        //}
     }
 }

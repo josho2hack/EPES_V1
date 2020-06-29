@@ -39,13 +39,13 @@
                 <label class="col-form-label col-md-3 text-md-right">หน่วยงาน: </label>
                 @if (User.IsInRole("Admin") || User.IsInRole("Manager"))
                 {
-                    <select name="selectoffice" class="form-control col-md-9" asp-items="ViewBag.OfficeCode" onchange="this.form.submit()">
+                    <select asp-for="selectoffice" class="form-control col-md-9" asp-items="ViewBag.OfficeCode" onchange="this.form.submit()">
                         <option value="">เลือกหน่วยงาน</option>
                     </select>
                 }
                 else
                 {
-                    <select name="selectoffice" class="form-control col-md-7" asp-items="ViewBag.OfficeCode" onchange="this.form.submit()" disabled>
+                    <select asp-for="selectoffice" class="form-control col-md-7" asp-items="ViewBag.OfficeCode" onchange="this.form.submit()" disabled>
                         <option value="">เลือกหน่วยงาน</option>
                     </select>
                 }
@@ -109,7 +109,7 @@
     .RowHeaderLayout(PivotGridRowHeadersLayout.Tree)
     //.AllowExpandAll(true)
     .DataSource(d => d
-        .Store(s => s.Mvc().Controller("OwnerScore").Key("Id").LoadAction("Get").LoadParams(new { selectoffice = ViewBag.selectoffice, yearPoint = ViewBag.yearPoint }))
+        .Store(s => s.Mvc().Controller("OwnerScore").Key("Id").LoadAction("Get").LoadParams(new { selectoffice = Model.selectoffice, yearPoint = Model.yearPoint }))
         .Fields(fields => {
         fields.Add()
             .Caption("แผน")
@@ -207,7 +207,8 @@
                 .DataField("scoreValue")
                 .SummaryType(SummaryType.Avg)
                 .Format(f => f.Type(Format.FixedPoint).Precision(4))
-                .Area(PivotGridArea.Data);
+                .Area(PivotGridArea.Data)
+                .CustomizeText("customizeText");
 
             //fields.Add()
             //    .Caption("อนุมัติ")
@@ -246,7 +247,7 @@
     .RowHeaderLayout(PivotGridRowHeadersLayout.Tree)
     //.AllowExpandAll(true)
     .DataSource(d => d
-        .Store(s => s.Mvc().Controller("OwnerScore").Key("Id").LoadAction("Get").LoadParams(new { selectoffice = ViewBag.selectoffice, yearPoint = ViewBag.yearPoint }))
+        .Store(s => s.Mvc().Controller("OwnerScore").Key("Id").LoadAction("Get").LoadParams(new { selectoffice = Model.selectoffice, yearPoint = Model.yearPoint }))
 
         .Fields(fields => {
         fields.Add()
@@ -370,7 +371,8 @@
                 .DataField("scoreApprove")
                 .SummaryType(SummaryType.Avg)
                 .Format(f => f.Type(Format.FixedPoint).Precision(4))
-                .Area(PivotGridArea.Data);
+                .Area(PivotGridArea.Data)
+                .CustomizeText("customizeText");
         })
         )
         .OnInitialized("bind_chart_app")
@@ -385,6 +387,13 @@
             return {
                 html: args.seriesName + " | <div class='currency'>" + args.valueText + " คะแนน</div>"
             };
+        }
+
+        function customizeText(args) {
+            if (args.valueText === "0.0000") {
+                return "";
+            }
+            return args.valueText;
         }
 
         function bind_chart(e) {

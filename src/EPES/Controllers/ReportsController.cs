@@ -56,7 +56,7 @@ namespace EPES.Controllers
 
         [HttpPost, ActionName("SubScoreReport")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> SubScoreReport(string selectoffice, ReportViewModel model)
+        public async Task<IActionResult> SubScoreReport(ReportViewModel model)
         {
             var user = await _userManager.GetUserAsync(User);
             if (User.IsInRole("Admin") || User.IsInRole("Special"))
@@ -68,8 +68,7 @@ namespace EPES.Controllers
                 ViewBag.OfficeCode = new SelectList(_context.Offices.Where(d => d.Code != "00000000" && d.Code.StartsWith(user.OfficeId.Substring(0, 2)) && d.Code.Substring(5, 3) == "000"), "Code", "Name", user.OfficeId);
             }
 
-            var of = await _context.Offices.Where(d => d.Code == selectoffice).FirstOrDefaultAsync();
-            ViewBag.selectoffice = selectoffice;
+            var of = await _context.Offices.Where(d => d.Code == model.selectoffice).FirstOrDefaultAsync();
             ViewBag.OfficeName = of.Name;
 
             return View(model);

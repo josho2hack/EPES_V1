@@ -208,7 +208,8 @@
                 .DataField("scoreValue")
                 .SummaryType(SummaryType.Avg)
                 .Format(f => f.Type(Format.FixedPoint).Precision(4))
-                .Area(PivotGridArea.Data);
+                .Area(PivotGridArea.Data)
+                .CustomizeText("customizeText");
 
             //fields.Add()
             //    .Caption("อนุมัติ")
@@ -371,7 +372,8 @@
                 .DataField("scoreApprove")
                 .SummaryType(SummaryType.Avg)
                 .Format(f => f.Type(Format.FixedPoint).Precision(4))
-                .Area(PivotGridArea.Data);
+                .Area(PivotGridArea.Data)
+                .CustomizeText("customizeText");
         })
         )
         .OnInitialized("bind_chart_app")
@@ -386,6 +388,13 @@
             return {
                 html: args.seriesName + " | <div class='currency'>" + args.valueText + " คะแนน</div>"
             };
+        }
+
+        function customizeText(args) {
+            if (args.valueText === "0.0000") {
+                return "";
+            }
+            return args.valueText;
         }
 
         function bind_chart(e) {
