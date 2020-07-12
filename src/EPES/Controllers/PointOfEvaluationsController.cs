@@ -55,7 +55,7 @@ namespace EPES.Controllers
             }
 
             var viewModel = new PointOfEvaluationViewModel();
-            if (User.IsInRole("Admin"))
+            if (User.IsInRole("Admin") || User.IsInRole("Special"))
             {
                 if (String.IsNullOrEmpty(selectoffice))
                 {
@@ -162,7 +162,7 @@ namespace EPES.Controllers
             }
 
             var viewModel = new PointOfEvaluationViewModel();
-            if (User.IsInRole("Admin"))
+            if (User.IsInRole("Admin") || User.IsInRole("Special"))
             {
                 if (String.IsNullOrEmpty(selectoffice))
                 {

@@ -26,31 +26,28 @@
 
     <!-- Divider -->
     <hr class="sidebar-divider">
-    @if (User.IsInRole("Admin") || User.IsInRole("Manager") || User.IsInRole("User") || User.IsInRole("Special"))
-    {
-        <!-- Heading -->
-        <div class="sidebar-heading">
-            การปฏิบัติราชการ
-        </div>
-        <!-- Nav Item - Collapse Menu -->
-        <li class="nav-item">
-            <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseEdit" aria-expanded="true" aria-controls="collapseEdit">
-                <i class="fas fa-fw fa-edit"></i>
-                <span>บันทึก</span>
-            </a>
-            <div id="collapseEdit" class="collapse" aria-labelledby="headingEdit" data-parent="#accordionSidebar">
-                <div class="bg-white py-2 collapse-inner rounded">
-                    <h6 class="collapse-header">รายเดือน:</h6>
-                    <a class="collapse-item" asp-area="" asp-controller="Results" asp-action="IndexMonth">บันทึกผลปฏิบัติราชการ</a>
-                    @if (User.IsInRole("Admin") || (User.IsInRole("Manager") && user.OfficeId.Substring(0, 3) == "000")
-                        || (user.approver == true && user.OfficeId.Substring(5, 3) == "000"))
-                    {
-                        <a class="collapse-item" asp-area="" asp-controller="Audit" asp-action="Index">ตรวจสอบ/ยืนยัน</a>
-                    }
-                    </div>
+    <!-- Heading -->
+    <div class="sidebar-heading">
+        การปฏิบัติราชการ
+    </div>
+    <!-- Nav Item - Collapse Menu -->
+    <li class="nav-item">
+        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseEdit" aria-expanded="true" aria-controls="collapseEdit">
+            <i class="fas fa-fw fa-edit"></i>
+            <span>บันทึก</span>
+        </a>
+        <div id="collapseEdit" class="collapse" aria-labelledby="headingEdit" data-parent="#accordionSidebar">
+            <div class="bg-white py-2 collapse-inner rounded">
+                <h6 class="collapse-header">รายเดือน:</h6>
+                <a class="collapse-item" asp-area="" asp-controller="Results" asp-action="IndexMonth">บันทึกผลปฏิบัติราชการ</a>
+                @if (User.IsInRole("Admin") || User.IsInRole("Special") || (User.IsInRole("Manager") && user.OfficeId.Substring(0, 3) == "000")
+                 || (user.approver == true && user.OfficeId.Substring(5, 3) == "000"))
+                {
+                    <a class="collapse-item" asp-area="" asp-controller="Audit" asp-action="Index">ตรวจสอบ/ยืนยัน</a>
+                }
             </div>
-        </li>
-    }
+        </div>
+    </li>
     <!-- Nav Item - Collapse Menu -->
     <li class="nav-item">
         <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseReport" aria-expanded="true" aria-controls="collapseReport">
@@ -60,7 +57,7 @@
         <div id="collapseReport" class="collapse" aria-labelledby="headingReport" data-parent="#accordionSidebar">
             <div class="bg-white py-2 collapse-inner rounded">
                 <h6 class="collapse-header">ผลการปฏิบัติงาน:</h6>
-                @if (User.IsInRole("Admin") || (User.IsInRole("Manager") && (user.OfficeId == "00013000" || (user.OfficeId.Substring(0,4) == "0002") && user.OfficeId != "00026000")) || User.IsInRole("Special"))
+                @if (User.IsInRole("Admin") || (User.IsInRole("Manager") && (user.OfficeId == "00013000" || (user.OfficeId.Substring(0, 4) == "0002") && user.OfficeId != "00026000")) || User.IsInRole("Special"))
                 {
                     <a class="collapse-item" asp-area="" asp-controller="Reports" asp-action="AllScore">กรมสรรพากร</a>
                     <a class="collapse-item" asp-area="" asp-controller="Reports" asp-action="HQScore">กอง สำนัก ศูนย์</a>
@@ -69,31 +66,27 @@
                     <a class="collapse-item" asp-area="" asp-controller="Reports" asp-action="NBKKScore">สท.ต่างจังหวัด (89 สท.)</a>
                     <a class="collapse-item" asp-area="" asp-controller="Reports" asp-action="STScore">สท.ทั่วประเทศ (119 สท.)</a>
                 }
-                    @if (user.OfficeId != "00000000")
-                    {
-                        <a class="collapse-item" asp-area="" asp-controller="Reports" asp-action="OwnerScoreReport">@user.OfficeName</a>
-                    }
-                </div>
+                @if (user.OfficeId != "00000000")
+                {
+                    <a class="collapse-item" asp-area="" asp-controller="Reports" asp-action="OwnerScoreReport">@user.OfficeName</a>
+                }
+            </div>
         </div>
     </li>
-
-    @if (User.IsInRole("Admin") || User.IsInRole("Manager") || User.IsInRole("User"))
-    {
-        <!-- Nav Item - Collapse Menu -->
-        <li class="nav-item">
-            <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseBasic" aria-expanded="true" aria-controls="collapseBasic">
-                <i class="fas fa-fw fa-cog"></i>
-                <span>ข้อมูลพื้นฐาน</span>
-            </a>
-            <div id="collapseBasic" class="collapse" aria-labelledby="headingBasic" data-parent="#accordionSidebar">
-                <div class="bg-white py-2 collapse-inner rounded">
-                    <h6 class="collapse-header">จัดการข้อมูลพื้นฐาน:</h6>
-                    <a class="collapse-item" asp-area="" asp-controller="PointOfEvaluations" asp-action="Index">แผนปฏิบัติราชการ</a>
-                    @*<a class="collapse-item" asp-area="" asp-controller="DataForEvaluations" asp-action="Index">เป้าหมาย/ประมาณการ</a>*@
-                </div>
+    <!-- Nav Item - Collapse Menu -->
+    <li class="nav-item">
+        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseBasic" aria-expanded="true" aria-controls="collapseBasic">
+            <i class="fas fa-fw fa-cog"></i>
+            <span>ข้อมูลพื้นฐาน</span>
+        </a>
+        <div id="collapseBasic" class="collapse" aria-labelledby="headingBasic" data-parent="#accordionSidebar">
+            <div class="bg-white py-2 collapse-inner rounded">
+                <h6 class="collapse-header">จัดการข้อมูลพื้นฐาน:</h6>
+                <a class="collapse-item" asp-area="" asp-controller="PointOfEvaluations" asp-action="Index">แผนปฏิบัติราชการ</a>
+                @*<a class="collapse-item" asp-area="" asp-controller="DataForEvaluations" asp-action="Index">เป้าหมาย/ประมาณการ</a>*@
             </div>
-        </li>
-    }
+        </div>
+    </li>
     <!-- Nav Item - Collapse Menu -->
     <li class="nav-item">
         <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseDoc" aria-expanded="true" aria-controls="collapseDoc">

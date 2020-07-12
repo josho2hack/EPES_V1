@@ -60,9 +60,9 @@ namespace EPES
                 options.Cookie.HttpOnly = true;
                 options.ExpireTimeSpan = TimeSpan.FromDays(1);
 
-                options.LoginPath = $"/Identity/Account/Login";
-                options.LogoutPath = $"/Identity/Account/Logout";
-                options.AccessDeniedPath = $"/Identity/Account/AccessDenied";
+                options.LoginPath = $"/EPES/Identity/Account/Login";
+                options.LogoutPath = $"/EPES/Identity/Account/Logout";
+                options.AccessDeniedPath = $"/EPES/Identity/Account/AccessDenied";
                 options.SlidingExpiration = true;
             });
 

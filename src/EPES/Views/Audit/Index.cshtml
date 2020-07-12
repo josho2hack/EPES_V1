@@ -40,7 +40,7 @@
             <div class="col-md-5">
                 <div class="row">
                     <label class="col-form-label col-md-3 text-md-right">หน่วยงาน: </label>
-                    @if (User.IsInRole("Admin") || User.IsInRole("Manager") || (user.approver == true && user.OfficeId.Substring(5, 3) == "000"))
+                    @if (User.IsInRole("Admin") || User.IsInRole("Special") || User.IsInRole("Manager") || (user.approver == true && user.OfficeId.Substring(5, 3) == "000"))
                     {
                         <select name="selectoffice" class="form-control col-md-9" asp-items="ViewBag.OfficeCode" onchange="this.form.submit()">
                             <option value="">เลือกหน่วยงาน</option>
@@ -105,7 +105,17 @@
             </div>
         </div>
     </form>
-
+    @(Html.DevExtreme().Popup()
+           .ID("detail-popup")
+           .ElementAttr("class", "popup")
+           .Width(700)
+           .Height(500)
+           .ShowTitle(true)
+           .Title("รายละเอียด")
+           .Visible(false)
+           .DragEnabled(false)
+           .CloseOnOutsideClick(true)
+     )
     <!-- Plan A -->
     @if (Model.pointA != null)
     {
@@ -168,8 +178,28 @@
                                                 }
                                                 if (Model.pointA[i].Unit != UnitOfPoint.ระดับ)
                                                 {
-                                                    sumOfData += item.Result;
-                                                    sumOfExpect += item.Expect;
+                                                    if (Model.month >= 10)
+                                                    {
+                                                        if (item.Month <= Model.month && item.Month >= 10)
+                                                        {
+                                                            sumOfData += item.Result;
+                                                            sumOfExpect += item.Expect;
+                                                        }
+                                                    }
+                                                    else
+                                                    {
+                                                        if (item.Month == 10 || item.Month == 11 || item.Month == 12)
+                                                        {
+                                                            sumOfData += item.Result;
+                                                            sumOfExpect += item.Expect;
+                                                        }
+                                                        if (item.Month <= Model.month)
+                                                        {
+                                                            sumOfData += item.Result;
+                                                            sumOfExpect += item.Expect;
+                                                        }
+                                                    }
+
                                                 }
                                             }
                                             <input type="hidden" name="UpdateData[@i].Id" value=@de?.Id />
@@ -368,32 +398,21 @@
                                                 <td></td>
                                             }
                                             <td>
-                                                @(Html.DevExtreme().Popup()
-                                                            .ID("detail-popup")
-                                                            .ElementAttr("class", "popup")
-                                                            .Width(700)
-                                                            .Height(500)
-                                                            .ShowTitle(true)
-                                                            .Title("รายละเอียด")
-                                                            .Visible(false)
-                                                            .DragEnabled(false)
-                                                            .CloseOnOutsideClick(true)
-                                                )
                                                 @(Html.DevExtreme().Button()
                                                                 //.ElementAttr("class", "button-info")
                                                                 .Text("รายละเอียด")
                                                                 .OnClick(@<text>
                                                                             function showInfo(data) {
                                                                             var popup = $("#detail-popup").dxPopup("instance");
-                                                                            popup.option("contentTemplate", $("@("#popup-template-" + de?.Id)"));
+                                                                            popup.option("contentTemplate", $("@("#popup-template-" + Model.pointA[i].Id)"));
                                                                             popup.show();
                                                                             }
                                                                 </text>)
                                                 )
 
-                                                @using (Html.DevExtreme().NamedTemplate("popup-template-" + de?.Id))
+                                                @using (Html.DevExtreme().NamedTemplate("popup-template-" + Model.pointA[i].Id))
                                                 {
-                                                    <form id="@("form" + de?.Id)" method="post" action="Audit\SaveAudit">
+                                                    <form id="@("form" + Model.pointA[i].Id)" method="post" action="Audit\SaveAudit">
                                                         <dl class="row">
                                                             <dt class="col-3">หมายเลขตัวชี้วัด</dt>
                                                             <dd class="col-9">
@@ -943,8 +962,27 @@
                                                 }
                                                 if (Model.pointB[i].Unit != UnitOfPoint.ระดับ)
                                                 {
-                                                    sumOfData += item.Result;
-                                                    sumOfExpect += item.Expect;
+                                                    if (Model.month >= 10)
+                                                    {
+                                                        if (item.Month <= Model.month && item.Month >= 10)
+                                                        {
+                                                            sumOfData += item.Result;
+                                                            sumOfExpect += item.Expect;
+                                                        }
+                                                    }
+                                                    else
+                                                    {
+                                                        if (item.Month == 10 || item.Month == 11 || item.Month == 12)
+                                                        {
+                                                            sumOfData += item.Result;
+                                                            sumOfExpect += item.Expect;
+                                                        }
+                                                        if (item.Month <= Model.month)
+                                                        {
+                                                            sumOfData += item.Result;
+                                                            sumOfExpect += item.Expect;
+                                                        }
+                                                    }
                                                 }
                                             }
                                             <input type="hidden" name="UpdateData[@i].Id" value=@de?.Id />
@@ -1143,32 +1181,21 @@
                                                 <td></td>
                                             }
                                             <td>
-                                                @(Html.DevExtreme().Popup()
-                                                            .ID("detail-popup")
-                                                            .ElementAttr("class", "popup")
-                                                            .Width(700)
-                                                            .Height(500)
-                                                            .ShowTitle(true)
-                                                            .Title("รายละเอียด")
-                                                            .Visible(false)
-                                                            .DragEnabled(false)
-                                                            .CloseOnOutsideClick(true)
-                                                )
                                                 @(Html.DevExtreme().Button()
                                                                 //.ElementAttr("class", "button-info")
                                                                 .Text("รายละเอียด")
                                                                 .OnClick(@<text>
                                                                             function showInfo(data) {
                                                                             var popup = $("#detail-popup").dxPopup("instance");
-                                                                            popup.option("contentTemplate", $("@("#popup-template-" + de?.Id)"));
+                                                                            popup.option("contentTemplate", $("@("#popup-template-" + Model.pointB[i].Id)"));
                                                                             popup.show();
                                                                             }
                                                                 </text>)
                                                 )
 
-                                                @using (Html.DevExtreme().NamedTemplate("popup-template-" + de?.Id))
+                                                @using (Html.DevExtreme().NamedTemplate("popup-template-" + Model.pointB[i].Id))
                                                 {
-                                                    <form id="@("form" + de?.Id)" method="post" action="Audit\SaveAudit">
+                                                    <form id="@("form" + Model.pointB[i].Id)" method="post" action="Audit\SaveAudit">
                                                         <dl class="row">
                                                             <dt class="col-3">หมายเลขตัวชี้วัด</dt>
                                                             <dd class="col-9">
@@ -1718,8 +1745,27 @@
                                                 }
                                                 if (Model.pointC[i].Unit != UnitOfPoint.ระดับ)
                                                 {
-                                                    sumOfData += item.Result;
-                                                    sumOfExpect += item.Expect;
+                                                    if (Model.month >= 10)
+                                                    {
+                                                        if (item.Month <= Model.month && item.Month >= 10)
+                                                        {
+                                                            sumOfData += item.Result;
+                                                            sumOfExpect += item.Expect;
+                                                        }
+                                                    }
+                                                    else
+                                                    {
+                                                        if (item.Month == 10 || item.Month == 11 || item.Month == 12)
+                                                        {
+                                                            sumOfData += item.Result;
+                                                            sumOfExpect += item.Expect;
+                                                        }
+                                                        if (item.Month <= Model.month)
+                                                        {
+                                                            sumOfData += item.Result;
+                                                            sumOfExpect += item.Expect;
+                                                        }
+                                                    }
                                                 }
                                             }
                                             <input type="hidden" name="UpdateData[@i].Id" value=@de?.Id />
@@ -1918,32 +1964,21 @@
                                                 <td></td>
                                             }
                                             <td>
-                                                @(Html.DevExtreme().Popup()
-                                                            .ID("detail-popup")
-                                                            .ElementAttr("class", "popup")
-                                                            .Width(700)
-                                                            .Height(500)
-                                                            .ShowTitle(true)
-                                                            .Title("รายละเอียด")
-                                                            .Visible(false)
-                                                            .DragEnabled(false)
-                                                            .CloseOnOutsideClick(true)
-                                                )
                                                 @(Html.DevExtreme().Button()
                                                                 //.ElementAttr("class", "button-info")
                                                                 .Text("รายละเอียด")
                                                                 .OnClick(@<text>
                                                                             function showInfo(data) {
                                                                             var popup = $("#detail-popup").dxPopup("instance");
-                                                                            popup.option("contentTemplate", $("@("#popup-template-" + de?.Id)"));
+                                                                            popup.option("contentTemplate", $("@("#popup-template-" + Model.pointC[i].Id)"));
                                                                             popup.show();
                                                                             }
                                                                 </text>)
                                                 )
 
-                                                @using (Html.DevExtreme().NamedTemplate("popup-template-" + de?.Id))
+                                                @using (Html.DevExtreme().NamedTemplate("popup-template-" + Model.pointC[i].Id))
                                                 {
-                                                    <form id="@("form" + de?.Id)" method="post" action="Audit\SaveAudit">
+                                                    <form id="@("form" + Model.pointC[i].Id)" method="post" action="Audit\SaveAudit">
                                                         <dl class="row">
                                                             <dt class="col-3">หมายเลขตัวชี้วัด</dt>
                                                             <dd class="col-9">
@@ -2493,8 +2528,27 @@
                                                 }
                                                 if (Model.pointD[i].Unit != UnitOfPoint.ระดับ)
                                                 {
-                                                    sumOfData += item.Result;
-                                                    sumOfExpect += item.Expect;
+                                                    if (Model.month >= 10)
+                                                    {
+                                                        if (item.Month <= Model.month && item.Month >= 10)
+                                                        {
+                                                            sumOfData += item.Result;
+                                                            sumOfExpect += item.Expect;
+                                                        }
+                                                    }
+                                                    else
+                                                    {
+                                                        if (item.Month == 10 || item.Month == 11 || item.Month == 12)
+                                                        {
+                                                            sumOfData += item.Result;
+                                                            sumOfExpect += item.Expect;
+                                                        }
+                                                        if (item.Month <= Model.month)
+                                                        {
+                                                            sumOfData += item.Result;
+                                                            sumOfExpect += item.Expect;
+                                                        }
+                                                    }
                                                 }
                                             }
                                             <input type="hidden" name="UpdateData[@i].Id" value=@de?.Id />
@@ -2693,32 +2747,21 @@
                                                 <td></td>
                                             }
                                             <td>
-                                                @(Html.DevExtreme().Popup()
-                                                            .ID("detail-popup")
-                                                            .ElementAttr("class", "popup")
-                                                            .Width(700)
-                                                            .Height(500)
-                                                            .ShowTitle(true)
-                                                            .Title("รายละเอียด")
-                                                            .Visible(false)
-                                                            .DragEnabled(false)
-                                                            .CloseOnOutsideClick(true)
-                                                )
                                                 @(Html.DevExtreme().Button()
                                                                 //.ElementAttr("class", "button-info")
                                                                 .Text("รายละเอียด")
                                                                 .OnClick(@<text>
                                                                             function showInfo(data) {
                                                                             var popup = $("#detail-popup").dxPopup("instance");
-                                                                            popup.option("contentTemplate", $("@("#popup-template-" + de?.Id)"));
+                                                                            popup.option("contentTemplate", $("@("#popup-template-" + Model.pointD[i].Id)"));
                                                                             popup.show();
                                                                             }
                                                                 </text>)
                                                 )
 
-                                                @using (Html.DevExtreme().NamedTemplate("popup-template-" + de?.Id))
+                                                @using (Html.DevExtreme().NamedTemplate("popup-template-" + Model.pointD[i].Id))
                                                 {
-                                                    <form id="@("form" + de?.Id)" method="post" action="Audit\SaveAudit">
+                                                    <form id="@("form" + Model.pointD[i].Id)" method="post" action="Audit\SaveAudit">
                                                         <dl class="row">
                                                             <dt class="col-3">หมายเลขตัวชี้วัด</dt>
                                                             <dd class="col-9">
