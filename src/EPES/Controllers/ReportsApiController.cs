@@ -71,7 +71,7 @@ namespace EPES.Controllers
                                                   .Where(sd => sd.PointOfEvaluation.Year == yearForQuery &&
                                                     sd.LastMonth == month &&
                                                     sd.Office.Code != "00000000" &&
-                                                    !sd.PointOfEvaluation.HasSub)
+                                                    sd.PointOfEvaluation.SubPoint == 0)
                                                     .Select(i => new
                                                     {
                                                         i.Id,
@@ -131,7 +131,7 @@ namespace EPES.Controllers
                                                     sd.LastMonth == month &&
                                                     sd.Office.Code != "00000000" &&
                                                     sd.Office.Code.Substring(0, 3) == "000" &&
-                                                    !sd.PointOfEvaluation.HasSub)
+                                                    sd.PointOfEvaluation.SubPoint == 0)
                                                     .Select(i => new
                                                     {
                                                         i.Id,
@@ -191,7 +191,7 @@ namespace EPES.Controllers
                                                     sd.LastMonth == month &&
                                                     sd.Office.Code != "00000000" &&
                                                     sd.Office.Code.Substring(2, 6) == "000000" &&
-                                                    !sd.PointOfEvaluation.HasSub)
+                                                    sd.PointOfEvaluation.SubPoint == 0)
                                                     .Select(i => new
                                                     {
                                                         i.Id,
@@ -255,7 +255,7 @@ namespace EPES.Controllers
                                                     sd.Office.Code.Substring(2, 6) != "000000" &&
                                                     sd.Office.Code.Substring(5, 3) == "000" &&
                                                     (sd.Office.Code.Substring(0, 2) == "01" || sd.Office.Code.Substring(0, 2) == "02"  || sd.Office.Code.Substring(0, 2) == "03") &&
-                                                    !sd.PointOfEvaluation.HasSub)
+                                                    sd.PointOfEvaluation.SubPoint == 0)
                                                     .Select(i => new
                                                     {
                                                         i.Id,
@@ -320,7 +320,7 @@ namespace EPES.Controllers
                                                     sd.Office.Code.Substring(0, 2) != "01" && 
                                                     sd.Office.Code.Substring(0, 2) != "02" && 
                                                     sd.Office.Code.Substring(0, 2) != "03" &&
-                                                    !sd.PointOfEvaluation.HasSub)
+                                                    sd.PointOfEvaluation.SubPoint == 0)
                                                     .Select(i => new
                                                     {
                                                         i.Id,
@@ -382,7 +382,7 @@ namespace EPES.Controllers
                                                     sd.Office.Code.Substring(0, 3) != "000" &&
                                                     sd.Office.Code.Substring(2, 6) != "000000" &&
                                                     sd.Office.Code.Substring(5, 3) == "000" &&
-                                                    !sd.PointOfEvaluation.HasSub)
+                                                    sd.PointOfEvaluation.SubPoint == 0)
                                                     .Select(i => new
                                                     {
                                                         i.Id,
@@ -438,7 +438,7 @@ namespace EPES.Controllers
                                                         sd.LastMonth == month &&
                                                         sd.Office.Code != "00000000" &&
                                                         sd.Office.Code.Substring(0, 3) == "000" &&
-                                                        !sd.PointOfEvaluation.HasSub)
+                                                        sd.PointOfEvaluation.SubPoint == 0)
                                              .Select(i => new
                                              {
                                                  i.ScoreValue
@@ -449,7 +449,7 @@ namespace EPES.Controllers
                                                         sd.LastMonth == month &&
                                                         sd.Office.Code != "00000000" &&
                                                         sd.Office.Code.Substring(0, 3) == "000" &&
-                                                        !sd.PointOfEvaluation.HasSub &&
+                                                        sd.PointOfEvaluation.SubPoint == 0 &&
                                                         (sd.PointOfEvaluation.Plan == TypeOfPlan.A || sd.PointOfEvaluation.Plan == TypeOfPlan.B))
                                              .Select(i => new
                                              {
@@ -460,7 +460,7 @@ namespace EPES.Controllers
                                                         sd.LastMonth == month &&
                                                         sd.Office.Code != "00000000" &&
                                                         sd.Office.Code.Substring(0, 3) == "000" &&
-                                                        !sd.PointOfEvaluation.HasSub &&
+                                                        sd.PointOfEvaluation.SubPoint == 0 &&
                                                         sd.PointOfEvaluation.Plan == TypeOfPlan.C)
                                              .Select(i => new
                                              {
@@ -471,7 +471,7 @@ namespace EPES.Controllers
                                                         sd.LastMonth == month &&
                                                         sd.Office.Code != "00000000" &&
                                                         sd.Office.Code.Substring(0, 3) == "000" &&
-                                                        !sd.PointOfEvaluation.HasSub &&
+                                                        sd.PointOfEvaluation.SubPoint == 0 &&
                                                         sd.PointOfEvaluation.Plan == TypeOfPlan.D)
                                              .Select(i => new
                                              {
@@ -524,7 +524,7 @@ namespace EPES.Controllers
                                                         sd.Office.Code != "00000000" &&
                                                         sd.Office.Code.Substring(0, 3) != "000" &&
                                                         sd.Office.Code.Substring(5, 3) == "000" &&
-                                                        !sd.PointOfEvaluation.HasSub)
+                                                        sd.PointOfEvaluation.SubPoint == 0)
                                              .Select(i => new
                                              {
                                                  i.ScoreValue
@@ -535,7 +535,7 @@ namespace EPES.Controllers
                                                         sd.Office.Code != "00000000" &&
                                                         sd.Office.Code.Substring(0, 3) != "000" &&
                                                         sd.Office.Code.Substring(5, 3) == "000" &&
-                                                        !sd.PointOfEvaluation.HasSub &&
+                                                        sd.PointOfEvaluation.SubPoint == 0 &&
                                                         (sd.PointOfEvaluation.Plan == TypeOfPlan.B))
                                              .Select(i => new
                                              {
@@ -547,7 +547,7 @@ namespace EPES.Controllers
                                                         sd.Office.Code != "00000000" &&
                                                         sd.Office.Code.Substring(0, 3) != "000" &&
                                                         sd.Office.Code.Substring(5, 3) == "000" &&
-                                                        !sd.PointOfEvaluation.HasSub &&
+                                                        sd.PointOfEvaluation.SubPoint == 0 &&
                                                         sd.PointOfEvaluation.Plan == TypeOfPlan.C)
                                              .Select(i => new
                                              {
@@ -559,7 +559,7 @@ namespace EPES.Controllers
                                                         sd.Office.Code != "00000000" &&
                                                         sd.Office.Code.Substring(0, 3) != "000" &&
                                                         sd.Office.Code.Substring(5, 3) == "000" &&
-                                                        !sd.PointOfEvaluation.HasSub &&
+                                                        sd.PointOfEvaluation.SubPoint == 0 &&
                                                         sd.PointOfEvaluation.Plan == TypeOfPlan.D)
                                              .Select(i => new
                                              {
