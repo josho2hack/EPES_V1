@@ -113,7 +113,7 @@
 .ShowRowGrandTotals(true)
 .ShowRowTotals(false)
 .ShowColumnTotals(false)
-.FieldChooser(c => c.Enabled(true).Height(400))
+.FieldChooser(c => c.Enabled(false).Height(400))
 .RowHeaderLayout(PivotGridRowHeadersLayout.Tree)
 //.AllowExpandAll(true)
 .DataSource(d => d
@@ -175,7 +175,8 @@
                 .DataField("scoreValue")
                 .SummaryType(SummaryType.Avg)
                 .Format(f => f.Type(Format.FixedPoint).Precision(4))
-                .Area(PivotGridArea.Data);
+                .Area(PivotGridArea.Data)
+                .CustomizeText("customizeText");
         })
         )
     .OnInitialized("bind_chart")
@@ -203,7 +204,7 @@
 .ShowRowGrandTotals(true)
 .ShowRowTotals(false)
 .ShowColumnTotals(false)
-.FieldChooser(c => c.Enabled(true).Height(400))
+.FieldChooser(c => c.Enabled(false).Height(400))
 .RowHeaderLayout(PivotGridRowHeadersLayout.Tree)
 //.AllowExpandAll(true)
 .DataSource(d => d
@@ -264,7 +265,8 @@ fields.Add()
                 .DataField("scoreApprove")
                 .SummaryType(SummaryType.Avg)
                 .Format(f => f.Type(Format.FixedPoint).Precision(4))
-                .Area(PivotGridArea.Data);
+                .Area(PivotGridArea.Data)
+                .CustomizeText("customizeText");
         })
         )
         .OnInitialized("bind_chart_app")
@@ -279,6 +281,13 @@ fields.Add()
             return {
                 html: args.seriesName + " | <div class='currency'>" + args.valueText + " คะแนน</div>"
             };
+        }
+
+        function customizeText(args) {
+            if (args.valueText === "0.0000") {
+                return "";
+            }
+            return args.valueText;
         }
 
         function bind_chart(e) {
