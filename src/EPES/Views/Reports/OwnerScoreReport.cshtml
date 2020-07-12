@@ -37,7 +37,7 @@
         <div class="col-md-6">
             <div class="row">
                 <label class="col-form-label col-md-3 text-md-right">หน่วยงาน: </label>
-                @if (User.IsInRole("Admin") || User.IsInRole("Manager"))
+                @if (User.IsInRole("Admin") || User.IsInRole("Special") || User.IsInRole("Manager"))
                 {
                     <select name="selectoffice" class="form-control col-md-9" asp-items="ViewBag.OfficeCode" onchange="this.form.submit()">
                         <option value="">เลือกหน่วยงาน</option>
@@ -86,7 +86,7 @@
 </form>
 <div id="pivotgrid-demo">
     @(Html.DevExtreme().Chart()
-        .ID("pivotgrid-chart")
+        .ID("pivotgrid-chart-draft")
         .CommonSeriesSettings(s => s.Type(SeriesType.Bar))
         .Title("คะแนนเบื้องต้นจากการประเมินตนเอง")
         .Tooltip(t => t.Enabled(true).CustomizeTooltip("customize_tooltip").Format(Format.Decimal))
@@ -97,7 +97,7 @@
     <br />
 
     @(Html.DevExtreme().PivotGrid<ScoreDraft>()
-    .ID("pivotgrid")
+    .ID("pivotgrid-draft")
     //.AllowSortingBySummary(true)
     .AllowFiltering(true)
     .ShowBorders(true)
@@ -105,7 +105,7 @@
     .ShowRowGrandTotals(true)
     .ShowRowTotals(false)
     .ShowColumnTotals(false)
-    .FieldChooser(c => c.Enabled(true).Height(400))
+    .FieldChooser(c => c.Enabled(false).Height(400))
     .RowHeaderLayout(PivotGridRowHeadersLayout.Tree)
     //.AllowExpandAll(true)
     .DataSource(d => d
@@ -122,13 +122,13 @@
             .Selector(@<text>
                     function(data) {
                         if(data.plan == 0){
-                            return  "A แผนงานตามนโยบายจากผู้บริหาร (Top - Down)";
+                            return  "แผน A";
                         }else if(data.plan == 1){
-                            return  "B แผนงานตามนโยบายที่ถ่ายทอดไปยังหน่วยปฏิบัติ (Top - Down)";
+                            return  "แผน B";
                         }else if(data.plan == 2){
-                            return  "C แผนงานตามความต้องการของหน่วยงาน (Bottom - Up)";
+                            return  "แผน C";
                         }else if(data.plan == 3){
-                            return  "D แผนงานร่วม (Joint KPI)";
+                            return  "แผน D";
                         }
                     }
                     </text>);
@@ -225,7 +225,7 @@
     <br />
 
     @(Html.DevExtreme().Chart()
-        .ID("pivotgrid-chart-app")
+        .ID("pivotgrid-chart-approved")
         .CommonSeriesSettings(s => s.Type(SeriesType.Bar))
         .Title("คะแนนที่ผ่านการอนุมัติ")
         .Tooltip(t => t.Enabled(true).CustomizeTooltip("customize_tooltip").Format(Format.Decimal))
@@ -236,7 +236,7 @@
     <br />
 
     @(Html.DevExtreme().PivotGrid<ScoreDraft>()
-    .ID("pivotgrid-app")
+    .ID("pivotgrid-approved")
     //.AllowSortingBySummary(true)
     .AllowFiltering(true)
     .ShowBorders(true)
@@ -244,7 +244,7 @@
     .ShowRowGrandTotals(true)
     .ShowRowTotals(false)
     .ShowColumnTotals(false)
-    .FieldChooser(c => c.Enabled(true).Height(400))
+    .FieldChooser(c => c.Enabled(false).Height(400))
     .RowHeaderLayout(PivotGridRowHeadersLayout.Tree)
     //.AllowExpandAll(true)
     .DataSource(d => d
@@ -261,13 +261,13 @@
             .Selector(@<text>
                     function(data) {
                         if(data.plan == 0){
-                            return  "A แผนงานตามนโยบายจากผู้บริหาร (Top - Down)";
+                            return  "แผน A";
                         }else if(data.plan == 1){
-                            return  "B แผนงานตามนโยบายที่ถ่ายทอดไปยังหน่วยปฏิบัติ (Top - Down)";
+                            return  "แผน B";
                         }else if(data.plan == 2){
-                            return  "C แผนงานตามความต้องการของหน่วยงาน (Bottom - Up)";
+                            return  "แผน C";
                         }else if(data.plan == 3){
-                            return  "D แผนงานร่วม (Joint KPI)";
+                            return  "แผน D";
                         }
                     }
                     </text>);
@@ -376,7 +376,7 @@
                 .CustomizeText("customizeText");
         })
         )
-        .OnInitialized("bind_chart_app")
+        .OnInitialized("bind_chart_approved")
     )
 </div>
 <br />
@@ -398,15 +398,15 @@
         }
 
         function bind_chart(e) {
-            e.component.bindChart($("#pivotgrid-chart"), {
+            e.component.bindChart($("#pivotgrid-chart-draft"), {
                 dataFieldsDisplayMode: "splitPanes",
                 alternateDataFields: false
             });
             //e.component.on("contentReady", contentReady);
         }
 
-        function bind_chart_app(e) {
-            e.component.bindChart($("#pivotgrid-chart-app"), {
+        function bind_chart_approved(e) {
+            e.component.bindChart($("#pivotgrid-chart-approved"), {
                 dataFieldsDisplayMode: "splitPanes",
                 alternateDataFields: false
             });
