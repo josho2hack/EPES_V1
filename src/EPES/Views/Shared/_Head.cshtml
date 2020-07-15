@@ -43,4 +43,30 @@
     <link href="~/css/fontawesome-all.css" rel="stylesheet" />
     <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i" rel="stylesheet">
     <link href="~/css/sb-admin-2.css" rel="stylesheet">
+    <link href="~/lib/jqueryui/jquery-ui.min.css" rel="stylesheet" />
+    <script src="~/lib/jqueryui/jquery-1.12.4.js"></script>
+    <script src="~/lib/modernizr/modernizr.min.js"></script>
+    <script src="~/lib/jqueryui/jquery-ui.min.js"></script>
+    <script src="~/lib/jqueryui/i18n/datepicker-th.js"></script>
+    <script>
+        //$(function () {
+        //    $(".datepicker").datepicker($.datepicker.regional["th"]);
+        //    // Getter
+        //    var dateFormat = $(".datepicker").datepicker("option", "dateFormat");
+
+        //    // Setter
+        //    $(".datepicker").datepicker("option", "dateFormat", "yy-mm-dd");
+        //});
+        if (Modernizr.inputtypes.date) {
+            /* just the alert message, don't worry about this bit! 
+            $('<div class="alert alert-success"><p>Yay! <code>input="date"</code> for you!</p></div>').appendTo('#alert');*/
+        } else {
+                $(function () {
+                    $('input[type="date"]').datepicker($.datepicker.regional["th"]);
+                    var dateFormat = $('input[type="date"]').datepicker('option', 'dateFormat');
+                    /* apply datepicker ui to selected element */
+                    $('input[type="date"]').datepicker("option", "dateFormat", "yy-mm-dd");
+                });
+        }
+    </script>
 </head>
