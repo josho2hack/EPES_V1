@@ -183,7 +183,14 @@
                                                     {
                                                         if (item.Month <= Model.month && item.Month >= 10)
                                                         {
-                                                            sumOfData += item.Result;
+                                                            if (Model.pointA[i].Unit == UnitOfPoint.ร้อยละ)
+                                                            {
+                                                                sumOfData += item.Result;
+                                                            }
+                                                            else
+                                                            {
+                                                                sumOfData += item.ResultLevelRate;
+                                                            }
                                                             sumOfExpect += item.Expect;
                                                         }
                                                     }
@@ -191,12 +198,26 @@
                                                     {
                                                         if (item.Month == 10 || item.Month == 11 || item.Month == 12)
                                                         {
-                                                            sumOfData += item.Result;
+                                                            if (Model.pointA[i].Unit == UnitOfPoint.ร้อยละ)
+                                                            {
+                                                                sumOfData += item.Result;
+                                                            }
+                                                            else
+                                                            {
+                                                                sumOfData += item.ResultLevelRate;
+                                                            }
                                                             sumOfExpect += item.Expect;
                                                         }
                                                         if (item.Month <= Model.month)
                                                         {
-                                                            sumOfData += item.Result;
+                                                            if (Model.pointA[i].Unit == UnitOfPoint.ร้อยละ)
+                                                            {
+                                                                sumOfData += item.Result;
+                                                            }
+                                                            else
+                                                            {
+                                                                sumOfData += item.ResultLevelRate;
+                                                            }
                                                             sumOfExpect += item.Expect;
                                                         }
                                                     }
@@ -971,7 +992,14 @@
                                                     {
                                                         if (item.Month <= Model.month && item.Month >= 10)
                                                         {
-                                                            sumOfData += item.Result;
+                                                            if (Model.pointB[i].Unit == UnitOfPoint.ร้อยละ)
+                                                            {
+                                                                sumOfData += item.Result;
+                                                            }
+                                                            else
+                                                            {
+                                                                sumOfData += item.ResultLevelRate;
+                                                            }
                                                             sumOfExpect += item.Expect;
                                                         }
                                                     }
@@ -979,12 +1007,26 @@
                                                     {
                                                         if (item.Month == 10 || item.Month == 11 || item.Month == 12)
                                                         {
-                                                            sumOfData += item.Result;
+                                                            if (Model.pointB[i].Unit == UnitOfPoint.ร้อยละ)
+                                                            {
+                                                                sumOfData += item.Result;
+                                                            }
+                                                            else
+                                                            {
+                                                                sumOfData += item.ResultLevelRate;
+                                                            }
                                                             sumOfExpect += item.Expect;
                                                         }
                                                         if (item.Month <= Model.month)
                                                         {
-                                                            sumOfData += item.Result;
+                                                            if (Model.pointB[i].Unit == UnitOfPoint.ร้อยละ)
+                                                            {
+                                                                sumOfData += item.Result;
+                                                            }
+                                                            else
+                                                            {
+                                                                sumOfData += item.ResultLevelRate;
+                                                            }
                                                             sumOfExpect += item.Expect;
                                                         }
                                                     }
@@ -1758,7 +1800,14 @@
                                                     {
                                                         if (item.Month <= Model.month && item.Month >= 10)
                                                         {
-                                                            sumOfData += item.Result;
+                                                            if (Model.pointC[i].Unit == UnitOfPoint.ร้อยละ)
+                                                            {
+                                                                sumOfData += item.Result;
+                                                            }
+                                                            else
+                                                            {
+                                                                sumOfData += item.ResultLevelRate;
+                                                            }
                                                             sumOfExpect += item.Expect;
                                                         }
                                                     }
@@ -1766,12 +1815,26 @@
                                                     {
                                                         if (item.Month == 10 || item.Month == 11 || item.Month == 12)
                                                         {
-                                                            sumOfData += item.Result;
+                                                            if (Model.pointC[i].Unit == UnitOfPoint.ร้อยละ)
+                                                            {
+                                                                sumOfData += item.Result;
+                                                            }
+                                                            else
+                                                            {
+                                                                sumOfData += item.ResultLevelRate;
+                                                            }
                                                             sumOfExpect += item.Expect;
                                                         }
                                                         if (item.Month <= Model.month)
                                                         {
-                                                            sumOfData += item.Result;
+                                                            if (Model.pointC[i].Unit == UnitOfPoint.ร้อยละ)
+                                                            {
+                                                                sumOfData += item.Result;
+                                                            }
+                                                            else
+                                                            {
+                                                                sumOfData += item.ResultLevelRate;
+                                                            }
                                                             sumOfExpect += item.Expect;
                                                         }
                                                     }
@@ -2545,7 +2608,14 @@
                                                     {
                                                         if (item.Month <= Model.month && item.Month >= 10)
                                                         {
-                                                            sumOfData += item.Result;
+                                                            if (Model.pointD[i].Unit == UnitOfPoint.ร้อยละ)
+                                                            {
+                                                                sumOfData += item.Result;
+                                                            }
+                                                            else
+                                                            {
+                                                                sumOfData += item.ResultLevelRate;
+                                                            }
                                                             sumOfExpect += item.Expect;
                                                         }
                                                     }
@@ -2553,12 +2623,26 @@
                                                     {
                                                         if (item.Month == 10 || item.Month == 11 || item.Month == 12)
                                                         {
-                                                            sumOfData += item.Result;
+                                                            if (Model.pointD[i].Unit == UnitOfPoint.ร้อยละ)
+                                                            {
+                                                                sumOfData += item.Result;
+                                                            }
+                                                            else
+                                                            {
+                                                                sumOfData += item.ResultLevelRate;
+                                                            }
                                                             sumOfExpect += item.Expect;
                                                         }
                                                         if (item.Month <= Model.month)
                                                         {
-                                                            sumOfData += item.Result;
+                                                            if (Model.pointD[i].Unit == UnitOfPoint.ร้อยละ)
+                                                            {
+                                                                sumOfData += item.Result;
+                                                            }
+                                                            else
+                                                            {
+                                                                sumOfData += item.ResultLevelRate;
+                                                            }
                                                             sumOfExpect += item.Expect;
                                                         }
                                                     }
