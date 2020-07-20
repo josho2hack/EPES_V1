@@ -40,7 +40,8 @@
             <div class="col-md-5">
                 <div class="row">
                     <label class="col-form-label col-md-3 text-md-right">หน่วยงาน: </label>
-                    @if (User.IsInRole("Admin") || User.IsInRole("Special") || User.IsInRole("Manager") || (user.approver == true && user.OfficeId.Substring(5, 3) == "000"))
+                    @if (User.IsInRole("Admin") || User.IsInRole("Special") || User.IsInRole("Manager")
+                       || (User.IsInRole("User") && user.OfficeId.Substring(2, 6) == "000000") || (user.approver == true && user.OfficeId.Substring(5, 3) == "000"))
                     {
                         <select name="selectoffice" class="form-control col-md-9" asp-items="ViewBag.OfficeCode" onchange="this.form.submit()">
                             <option value="">เลือกหน่วยงาน</option>
@@ -893,7 +894,11 @@
                         <input asp-for="yearPoint" class="form-control" hidden />
                         <input asp-for="month" class="form-control" hidden />
                         <input type="hidden" name="selectoffice" value="@ViewBag.selectoffice" />
-                        <input type="submit" name="Update" value="บันทึก" class="btn btn-primary" />
+                        @if (User.IsInRole("Admin") || User.IsInRole("Special") || (User.IsInRole("Manager") && user.OfficeId.Substring(0, 3) == "000")
+                            || (user.approver == true && user.OfficeId.Substring(5, 3) == "000"))
+                        {
+                            <input type="submit" name="Update" value="บันทึก" class="btn btn-primary" />
+                        }
                         <a asp-area="" asp-controller="Results" asp-action="Index" asp-route-yearPoint="@Model.yearPoint" asp-route-selectoffice="@ViewBag.selectoffice" asp-route-month="@Model.month" class="btn btn-secondary">ยกเลิก</a>
                     </form>
                 </div>
@@ -1676,7 +1681,11 @@
                         <input asp-for="yearPoint" class="form-control" hidden />
                         <input asp-for="month" class="form-control" hidden />
                         <input type="hidden" name="selectoffice" value="@ViewBag.selectoffice" />
-                        <input type="submit" name="Update" value="บันทึก" class="btn btn-primary" />
+                        @if (User.IsInRole("Admin") || User.IsInRole("Special") || (User.IsInRole("Manager") && user.OfficeId.Substring(0, 3) == "000")
+                            || (user.approver == true && user.OfficeId.Substring(5, 3) == "000"))
+                        {
+                            <input type="submit" name="Update" value="บันทึก" class="btn btn-primary" />
+                        }
                         <a asp-area="" asp-controller="Results" asp-action="Index" asp-route-yearPoint="@Model.yearPoint" asp-route-selectoffice="@ViewBag.selectoffice" asp-route-month="@Model.month" class="btn btn-secondary">ยกเลิก</a>
                     </form>
                 </div>
@@ -2459,7 +2468,11 @@
                         <input asp-for="yearPoint" class="form-control" hidden />
                         <input asp-for="month" class="form-control" hidden />
                         <input type="hidden" name="selectoffice" value="@ViewBag.selectoffice" />
-                        <input type="submit" name="Update" value="บันทึก" class="btn btn-primary" />
+                        @if (User.IsInRole("Admin") || User.IsInRole("Special") || (User.IsInRole("Manager") && user.OfficeId.Substring(0, 3) == "000")
+                           || (user.approver == true && user.OfficeId.Substring(5, 3) == "000"))
+                        {
+                            <input type="submit" name="Update" value="บันทึก" class="btn btn-primary" />
+                        }
                         <a asp-area="" asp-controller="Results" asp-action="Index" asp-route-yearPoint="@Model.yearPoint" asp-route-selectoffice="@ViewBag.selectoffice" asp-route-month="@Model.month" class="btn btn-secondary">ยกเลิก</a>
                     </form>
                 </div>
@@ -3242,7 +3255,11 @@
                         <input asp-for="yearPoint" class="form-control" hidden />
                         <input asp-for="month" class="form-control" hidden />
                         <input type="hidden" name="selectoffice" value="@ViewBag.selectoffice" />
-                        <input type="submit" name="Update" value="บันทึก" class="btn btn-primary" />
+                        @if (User.IsInRole("Admin") || User.IsInRole("Special") || (User.IsInRole("Manager") && user.OfficeId.Substring(0, 3) == "000")
+                           || (user.approver == true && user.OfficeId.Substring(5, 3) == "000"))
+                        {
+                            <input type="submit" name="Update" value="บันทึก" class="btn btn-primary" />
+                        }
                         <a asp-area="" asp-controller="Results" asp-action="Index" asp-route-yearPoint="@Model.yearPoint" asp-route-selectoffice="@ViewBag.selectoffice" asp-route-month="@Model.month" class="btn btn-secondary">ยกเลิก</a>
                     </form>
                 </div>

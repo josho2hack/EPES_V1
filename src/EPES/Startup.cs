@@ -102,6 +102,9 @@ namespace EPES
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env,RoleManager<IdentityRole> roleManager,UserManager<ApplicationUser> userManager)
         {
+            //CultureInfo.CurrentCulture = CultureInfo.CreateSpecificCulture("th-TH");
+            //CultureInfo.CurrentUICulture = CultureInfo.CreateSpecificCulture("th-TH");
+
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();

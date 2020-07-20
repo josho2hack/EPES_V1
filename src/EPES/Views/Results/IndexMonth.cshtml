@@ -44,7 +44,7 @@
             <div class="col-md-5">
                 <div class="row">
                     <label class="col-form-label col-md-3 text-md-right">หน่วยงาน: </label>
-                    @if (User.IsInRole("Admin") || User.IsInRole("Manager") || User.IsInRole("Special"))
+                    @if (User.IsInRole("Admin") || User.IsInRole("Manager") || (User.IsInRole("User") && user.OfficeId.Substring(2, 6) == "000000") || User.IsInRole("Special"))
                     {
                         <select name="selectoffice" class="form-control col-md-9" asp-items="ViewBag.OfficeCode" onchange="this.form.submit()">
                             <option value="">เลือกหน่วยงาน</option>
