@@ -86,6 +86,40 @@ namespace EPES.Models
         [Display(Name = "โปรแกรมดึงข้อมูลอัตโนมัติ")]
         public AutoApps AutoApp { get; set; } = AutoApps.ไม่มี;
 
+        [Display(Name = "คงค่าประมาณการเมื่อหมดรอบประเมิน")]
+        public bool? FixExpect { get; set; }
+
+        [Display(Name = "คำนวณคะแนน ผล/ประมาณการ รายเดือน")]
+        public bool? CalPerMonth { get; set; }
+
+        [NotMapped]
+        [Display(Name = "คงค่าประมาณการเมื่อหมดรอบประเมิน")]
+        public bool FixExpectProxy
+        {
+            get
+            {
+                return FixExpect == true;
+            }
+            set
+            {
+                FixExpect = value;
+            }
+        }
+
+        [NotMapped]
+        [Display(Name = "คำนวณคะแนน ผล/ประมาณการ รายเดือน")]
+        public bool CalPerMonthProxy
+        {
+            get
+            {
+                return CalPerMonth == true;
+            }
+            set
+            {
+                CalPerMonth = value;
+            }
+        }
+
     }
 
     public enum AutoApps

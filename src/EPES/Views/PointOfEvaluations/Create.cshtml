@@ -88,6 +88,16 @@
                             <input asp-for="point.Weight" class="form-control" />
                             <span asp-validation-for="point.Weight" class="text-danger"></span>
                         </div>
+                        <div class="form-check">
+                            <input asp-for="point.FixExpectProxy" class="form-check-input" />
+                            <label asp-for="point.FixExpect" class="form-check-label"></label>
+                            <span asp-validation-for="point.FixExpectProxy" class="text-danger"></span>
+                        </div>
+                        <div class="form-check">
+                            <input asp-for="point.CalPerMonthProxy" class="form-check-input" />
+                            <label asp-for="point.CalPerMonth" class="form-check-label"></label>
+                            <span asp-validation-for="point.CalPerMonthProxy" class="text-danger"></span>
+                        </div>
                         <div class="form-group">
                             <label asp-for="point.AutoApp" class="control-label"></label>
                             <select asp-for="point.AutoApp" class="form-control" asp-items="Html.GetEnumSelectList<AutoApps>()"></select>
@@ -120,7 +130,7 @@
                                                 <div class="form-group col-md-6">
                                                     <label asp-for="Round.Rate1" class="control-label"></label>
                                                     <div class="input-group">
-                                                        <input asp-for="Round.Rate1" class="form-control" value="96"/>
+                                                        <input asp-for="Round.Rate1" class="form-control" value="96" />
                                                         <div class="input-group-append">
                                                             <span class="input-group-text">%</span>
                                                         </div>
@@ -129,7 +139,7 @@
                                                 </div>
                                                 <div class="form-group col-md-6">
                                                     <label asp-for="Round.R1MStart" class="control-label"></label>
-                                                    <input asp-for="Round.R1MStart" class="form-control" value="@yearStart-10-01" readonly/>
+                                                    <input asp-for="Round.R1MStart" class="form-control" value="@yearStart-10-01" readonly />
                                                     <span asp-validation-for="Round.R1MStart" class="text-danger"></span>
                                                 </div>
                                             </div>
@@ -137,7 +147,7 @@
                                                 <div class="form-group col-md-6">
                                                     <label asp-for="Round.Rate2" class="control-label"></label>
                                                     <div class="input-group">
-                                                        <input asp-for="Round.Rate2" class="form-control" value="97"/>
+                                                        <input asp-for="Round.Rate2" class="form-control" value="97" />
                                                         <div class="input-group-append">
                                                             <span class="input-group-text">%</span>
                                                         </div>
@@ -149,7 +159,7 @@
                                                 <div class="form-group col-md-6">
                                                     <label asp-for="Round.Rate3" class="control-label"></label>
                                                     <div class="input-group">
-                                                        <input asp-for="Round.Rate3" class="form-control" value="98"/>
+                                                        <input asp-for="Round.Rate3" class="form-control" value="98" />
                                                         <div class="input-group-append">
                                                             <span class="input-group-text">%</span>
                                                         </div>
@@ -161,7 +171,7 @@
                                                 <div class="form-group col-md-6">
                                                     <label asp-for="Round.Rate4" class="control-label"></label>
                                                     <div class="input-group">
-                                                        <input asp-for="Round.Rate4" class="form-control" value="99"/>
+                                                        <input asp-for="Round.Rate4" class="form-control" value="99" />
                                                         <div class="input-group-append">
                                                             <span class="input-group-text">%</span>
                                                         </div>
@@ -173,7 +183,7 @@
                                                 <div class="form-group col-md-6">
                                                     <label asp-for="Round.Rate5" class="control-label"></label>
                                                     <div class="input-group">
-                                                        <input asp-for="Round.Rate5" class="form-control" value="100"/>
+                                                        <input asp-for="Round.Rate5" class="form-control" value="100" />
                                                         <div class="input-group-append">
                                                             <span class="input-group-text">%</span>
                                                         </div>
@@ -182,7 +192,7 @@
                                                 </div>
                                                 <div class="form-group col-md-6">
                                                     <label asp-for="Round.R5MStop" class="control-label"></label>
-                                                    <input asp-for="Round.R5MStop" class="form-control" value="@yearStop-09-30" readonly/>
+                                                    <input asp-for="Round.R5MStop" class="form-control" value="@yearStop-09-30" readonly />
                                                     <span asp-validation-for="Round.R5MStop" class="text-danger"></span>
                                                 </div>
                                             </div>
@@ -203,7 +213,7 @@
                                                 <div class="form-group col-md-6">
                                                     <label asp-for="Round2.Rate1" class="control-label"></label>
                                                     <div class="input-group">
-                                                        <input asp-for="Round2.Rate1" class="form-control" value="96"/>
+                                                        <input asp-for="Round2.Rate1" class="form-control" value="96" />
                                                         <div class="input-group-append">
                                                             <span class="input-group-text">%</span>
                                                         </div>
@@ -212,7 +222,7 @@
                                                 </div>
                                                 <div class="form-group col-md-6">
                                                     <label asp-for="Round2.R1MStart" class="control-label"></label>
-                                                    <input asp-for="Round2.R1MStart" class="form-control" value="@yearMid-04-01" readonly/>
+                                                    <input asp-for="Round2.R1MStart" class="form-control" value="@yearMid-04-01" readonly />
                                                     <span asp-validation-for="Round2.R1MStart" class="text-danger"></span>
                                                 </div>
                                             </div>
@@ -220,7 +230,7 @@
                                                 <div class="form-group col-md-6">
                                                     <label asp-for="Round2.Rate2" class="control-label"></label>
                                                     <div class="input-group">
-                                                        <input asp-for="Round2.Rate2" class="form-control" value="97"/>
+                                                        <input asp-for="Round2.Rate2" class="form-control" value="97" />
                                                         <div class="input-group-append">
                                                             <span class="input-group-text">%</span>
                                                         </div>
@@ -232,7 +242,7 @@
                                                 <div class="form-group col-md-6">
                                                     <label asp-for="Round2.Rate3" class="control-label"></label>
                                                     <div class="input-group">
-                                                        <input asp-for="Round2.Rate3" class="form-control" value="98"/>
+                                                        <input asp-for="Round2.Rate3" class="form-control" value="98" />
                                                         <div class="input-group-append">
                                                             <span class="input-group-text">%</span>
                                                         </div>
@@ -244,7 +254,7 @@
                                                 <div class="form-group col-md-6">
                                                     <label asp-for="Round2.Rate4" class="control-label"></label>
                                                     <div class="input-group">
-                                                        <input asp-for="Round2.Rate4" class="form-control" value="99"/>
+                                                        <input asp-for="Round2.Rate4" class="form-control" value="99" />
                                                         <div class="input-group-append">
                                                             <span class="input-group-text">%</span>
                                                         </div>
@@ -256,7 +266,7 @@
                                                 <div class="form-group col-md-6">
                                                     <label asp-for="Round2.Rate5" class="control-label"></label>
                                                     <div class="input-group">
-                                                        <input asp-for="Round2.Rate5" class="form-control" value="100"/>
+                                                        <input asp-for="Round2.Rate5" class="form-control" value="100" />
                                                         <div class="input-group-append">
                                                             <span class="input-group-text">%</span>
                                                         </div>
@@ -265,7 +275,7 @@
                                                 </div>
                                                 <div class="form-group col-md-6">
                                                     <label asp-for="Round2.R5MStop" class="control-label"></label>
-                                                    <input asp-for="Round2.R5MStop" class="form-control" value="@yearStop-09-30" readonly/>
+                                                    <input asp-for="Round2.R5MStop" class="form-control" value="@yearStop-09-30" readonly />
                                                     <span asp-validation-for="Round2.R5MStop" class="text-danger"></span>
                                                 </div>
                                             </div>
@@ -292,12 +302,12 @@
                                                 </div>
                                                 <div class="form-group col-md-3">
                                                     <label asp-for="LRound.R1MStart" class="control-label"></label>
-                                                    <input asp-for="LRound.R1MStart" class="form-control" value="@yearStart-10-01" readonly/>
+                                                    <input asp-for="LRound.R1MStart" class="form-control" value="@yearStart-10-01" readonly />
                                                     <span asp-validation-for="LRound.R1MStart" class="text-danger"></span>
                                                 </div>
                                                 <div class="form-group col-md-3">
                                                     <label asp-for="LRound.R1MStop" class="control-label"></label>
-                                                    <input asp-for="LRound.R1MStop" class="form-control datepicker" value="@yearStop-09-30"/>
+                                                    <input asp-for="LRound.R1MStop" class="form-control datepicker" value="@yearStop-09-30" />
                                                     <span asp-validation-for="LRound.R1MStop" class="text-danger"></span>
                                                 </div>
                                             </div>
@@ -315,7 +325,7 @@
                                                 </div>
                                                 <div class="form-group col-md-3">
                                                     <label asp-for="LRound.R2MStop" class="control-label"></label>
-                                                    <input asp-for="LRound.R2MStop" class="form-control datepicker" value="@yearStop-09-30"/>
+                                                    <input asp-for="LRound.R2MStop" class="form-control datepicker" value="@yearStop-09-30" />
                                                     <span asp-validation-for="LRound.R2MStop" class="text-danger"></span>
                                                 </div>
                                             </div>
@@ -333,7 +343,7 @@
                                                 </div>
                                                 <div class="form-group col-md-3">
                                                     <label asp-for="LRound.R3MStop" class="control-label"></label>
-                                                    <input asp-for="LRound.R3MStop" class="form-control datepicker" value="@yearStop-09-30"/>
+                                                    <input asp-for="LRound.R3MStop" class="form-control datepicker" value="@yearStop-09-30" />
                                                     <span asp-validation-for="LRound.R3MStop" class="text-danger"></span>
                                                 </div>
                                             </div>
@@ -351,7 +361,7 @@
                                                 </div>
                                                 <div class="form-group col-md-3">
                                                     <label asp-for="LRound.R4MStop" class="control-label"></label>
-                                                    <input asp-for="LRound.R4MStop" class="form-control datepicker" value="@yearStop-09-30"/>
+                                                    <input asp-for="LRound.R4MStop" class="form-control datepicker" value="@yearStop-09-30" />
                                                     <span asp-validation-for="LRound.R4MStop" class="text-danger"></span>
                                                 </div>
                                             </div>
@@ -369,7 +379,7 @@
                                                 </div>
                                                 <div class="form-group col-md-3">
                                                     <label asp-for="LRound.R5MStop" class="control-label"></label>
-                                                    <input asp-for="LRound.R5MStop" class="form-control" value="@yearStop-09-30" readonly/>
+                                                    <input asp-for="LRound.R5MStop" class="form-control" value="@yearStop-09-30" readonly />
                                                     <span asp-validation-for="LRound.R5MStop" class="text-danger"></span>
                                                 </div>
                                             </div>
@@ -395,12 +405,12 @@
                                                 </div>
                                                 <div class="form-group col-md-3">
                                                     <label asp-for="LRound2.R1MStart" class="control-label"></label>
-                                                    <input asp-for="LRound2.R1MStart" class="form-control" value="@yearMid-04-01" readonly/>
+                                                    <input asp-for="LRound2.R1MStart" class="form-control" value="@yearMid-04-01" readonly />
                                                     <span asp-validation-for="LRound2.R1MStart" class="text-danger"></span>
                                                 </div>
                                                 <div class="form-group col-md-3">
                                                     <label asp-for="LRound2.R1MStop" class="control-label"></label>
-                                                    <input asp-for="LRound2.R1MStop" class="form-control datepicker" value="@yearStop-09-30"/>
+                                                    <input asp-for="LRound2.R1MStop" class="form-control datepicker" value="@yearStop-09-30" />
                                                     <span asp-validation-for="LRound2.R1MStop" class="text-danger"></span>
                                                 </div>
                                             </div>
@@ -418,7 +428,7 @@
                                                 </div>
                                                 <div class="form-group col-md-3">
                                                     <label asp-for="LRound2.R2MStop" class="control-label"></label>
-                                                    <input asp-for="LRound2.R2MStop" class="form-control datepicker" value="@yearStop-09-30"/>
+                                                    <input asp-for="LRound2.R2MStop" class="form-control datepicker" value="@yearStop-09-30" />
                                                     <span asp-validation-for="LRound2.R2MStop" class="text-danger"></span>
                                                 </div>
                                             </div>
@@ -436,7 +446,7 @@
                                                 </div>
                                                 <div class="form-group col-md-3">
                                                     <label asp-for="LRound2.R3MStop" class="control-label"></label>
-                                                    <input asp-for="LRound2.R3MStop" class="form-control datepicker" value="@yearStop-09-30"/>
+                                                    <input asp-for="LRound2.R3MStop" class="form-control datepicker" value="@yearStop-09-30" />
                                                     <span asp-validation-for="LRound2.R3MStop" class="text-danger"></span>
                                                 </div>
                                             </div>
@@ -454,7 +464,7 @@
                                                 </div>
                                                 <div class="form-group col-md-3">
                                                     <label asp-for="LRound2.R4MStop" class="control-label"></label>
-                                                    <input asp-for="LRound2.R4MStop" class="form-control datepicker" value="@yearStop-09-30"/>
+                                                    <input asp-for="LRound2.R4MStop" class="form-control datepicker" value="@yearStop-09-30" />
                                                     <span asp-validation-for="LRound2.R4MStop" class="text-danger"></span>
                                                 </div>
                                             </div>
@@ -472,7 +482,7 @@
                                                 </div>
                                                 <div class="form-group col-md-3">
                                                     <label asp-for="LRound2.R5MStop" class="control-label"></label>
-                                                    <input asp-for="LRound2.R5MStop" class="form-control" value="@yearStop-09-30" readonly/>
+                                                    <input asp-for="LRound2.R5MStop" class="form-control" value="@yearStop-09-30" readonly />
                                                     <span asp-validation-for="LRound2.R5MStop" class="text-danger"></span>
                                                 </div>
                                             </div>
@@ -502,12 +512,12 @@
                                                 </div>
                                                 <div class="form-group col-md-3">
                                                     <label asp-for="LRRound.R1MStart" class="control-label"></label>
-                                                    <input asp-for="LRRound.R1MStart" class="form-control" value="@yearStart-10-01" readonly/>
+                                                    <input asp-for="LRRound.R1MStart" class="form-control" value="@yearStart-10-01" readonly />
                                                     <span asp-validation-for="LRRound.R1MStart" class="text-danger"></span>
                                                 </div>
                                                 <div class="form-group col-md-3">
                                                     <label asp-for="LRRound.R1MStop" class="control-label"></label>
-                                                    <input asp-for="LRRound.R1MStop" class="form-control datepicker" value="@yearStop-09-30"/>
+                                                    <input asp-for="LRRound.R1MStop" class="form-control datepicker" value="@yearStop-09-30" />
                                                     <span asp-validation-for="LRRound.R1MStop" class="text-danger"></span>
                                                 </div>
                                             </div>
@@ -516,7 +526,7 @@
                                                     <label id="LRRound.Label2" class="control-label">รายละเอียดเกณฑ์การให้คะแนน 2</label>
                                                     <label asp-for="LRRound.Rate2" class="control-label" id="LRRound.LabelRate2" style="display:none"></label>
                                                     <div class="input-group" style="display:none" id="LRRound.GRate2">
-                                                        <input asp-for="LRRound.Rate2"  class="form-control" value="2"/>
+                                                        <input asp-for="LRRound.Rate2" class="form-control" value="2" />
                                                         <div class="input-group-append">
                                                             <div class="input-group-text">%</div>
                                                         </div>
@@ -532,7 +542,7 @@
                                                 </div>
                                                 <div class="form-group col-md-3" id="LRRound.Stop2">
                                                     <label asp-for="LRRound.R2MStop" class="control-label"></label>
-                                                    <input asp-for="LRRound.R2MStop" class="form-control datepicker" value="@yearStop-09-30"/>
+                                                    <input asp-for="LRRound.R2MStop" class="form-control datepicker" value="@yearStop-09-30" />
                                                     <span asp-validation-for="LRRound.R2MStop" class="text-danger"></span>
                                                 </div>
                                             </div>
@@ -541,7 +551,7 @@
                                                     <label id="LRRound.Label3" class="control-label">รายละเอียดเกณฑ์การให้คะแนน 3</label>
                                                     <label asp-for="LRRound.Rate3" class="control-label" id="LRRound.LabelRate3" style="display:none"></label>
                                                     <div class="input-group" style="display:none" id="LRRound.GRate3">
-                                                        <input asp-for="LRRound.Rate3" class="form-control" value="3"/>
+                                                        <input asp-for="LRRound.Rate3" class="form-control" value="3" />
                                                         <div class="input-group-append">
                                                             <div class="input-group-text">%</div>
                                                         </div>
@@ -557,7 +567,7 @@
                                                 </div>
                                                 <div class="form-group col-md-3" id="LRRound.Stop3">
                                                     <label asp-for="LRRound.R3MStop" class="control-label"></label>
-                                                    <input asp-for="LRRound.R3MStop" class="form-control datepicker" value="@yearStop-09-30"/>
+                                                    <input asp-for="LRRound.R3MStop" class="form-control datepicker" value="@yearStop-09-30" />
                                                     <span asp-validation-for="LRRound.R3MStop" class="text-danger"></span>
                                                 </div>
                                             </div>
@@ -566,7 +576,7 @@
                                                     <label id="LRRound.Label4" class="control-label">รายละเอียดเกณฑ์การให้คะแนน 4</label>
                                                     <label asp-for="LRRound.Rate4" class="control-label" id="LRRound.LabelRate4" style="display:none"></label>
                                                     <div class="input-group" style="display:none" id="LRRound.GRate4">
-                                                        <input asp-for="LRRound.Rate4" class="form-control" value="4"/>
+                                                        <input asp-for="LRRound.Rate4" class="form-control" value="4" />
                                                         <div class="input-group-append">
                                                             <div class="input-group-text">%</div>
                                                         </div>
@@ -582,7 +592,7 @@
                                                 </div>
                                                 <div class="form-group col-md-3" id="LRRound.Stop4">
                                                     <label asp-for="LRRound.R4MStop" class="control-label"></label>
-                                                    <input asp-for="LRRound.R4MStop" class="form-control" value="@yearStop-09-30" readonly/>
+                                                    <input asp-for="LRRound.R4MStop" class="form-control" value="@yearStop-09-30" readonly />
                                                     <span asp-validation-for="LRRound.R4MStop" class="text-danger"></span>
                                                 </div>
                                             </div>
@@ -590,7 +600,7 @@
                                                 <div class="form-group col-md-6">
                                                     <label asp-for="LRRound.Rate5" class="control-label"></label>
                                                     <div class="input-group" id="LRRound.GRate5">
-                                                        <input asp-for="LRRound.Rate5" class="form-control" value="100"/>
+                                                        <input asp-for="LRRound.Rate5" class="form-control" value="100" />
                                                         <div class="input-group-append">
                                                             <span class="input-group-text">%</span>
                                                         </div>
@@ -623,12 +633,12 @@
                                                 </div>
                                                 <div class="form-group col-md-3">
                                                     <label asp-for="LRRound2.R1MStart" class="control-label"></label>
-                                                    <input asp-for="LRRound2.R1MStart" class="form-control" value="@yearMid-04-01" readonly/>
+                                                    <input asp-for="LRRound2.R1MStart" class="form-control" value="@yearMid-04-01" readonly />
                                                     <span asp-validation-for="LRRound2.R1MStart" class="text-danger"></span>
                                                 </div>
                                                 <div class="form-group col-md-3">
                                                     <label asp-for="LRRound2.R1MStop" class="control-label"></label>
-                                                    <input asp-for="LRRound2.R1MStop" class="form-control datepicker" value="@yearStop-09-30"/>
+                                                    <input asp-for="LRRound2.R1MStop" class="form-control datepicker" value="@yearStop-09-30" />
                                                     <span asp-validation-for="LRRound2.R1MStop" class="text-danger"></span>
                                                 </div>
                                             </div>
@@ -637,7 +647,7 @@
                                                     <label id="LRRound2.Label2" class="control-label">รายละเอียดเกณฑ์การให้คะแนน 2</label>
                                                     <label asp-for="LRRound2.Rate2" class="control-label" id="LRRound2.LabelRate2" style="display:none"></label>
                                                     <div class="input-group" style="display:none" id="LRRound2.GRate2">
-                                                        <input asp-for="LRRound2.Rate2" class="form-control" value="2"/>
+                                                        <input asp-for="LRRound2.Rate2" class="form-control" value="2" />
                                                         <div class="input-group-append">
                                                             <span class="input-group-text">%</span>
                                                         </div>
@@ -653,7 +663,7 @@
                                                 </div>
                                                 <div class="form-group col-md-3" id="LRRound2.Stop2">
                                                     <label asp-for="LRRound2.R2MStop" class="control-label"></label>
-                                                    <input asp-for="LRRound2.R2MStop" class="form-control datepicker" value="@yearStop-09-30"/>
+                                                    <input asp-for="LRRound2.R2MStop" class="form-control datepicker" value="@yearStop-09-30" />
                                                     <span asp-validation-for="LRRound2.R2MStop" class="text-danger"></span>
                                                 </div>
                                             </div>
@@ -662,7 +672,7 @@
                                                     <label id="LRRound2.Label3" class="control-label">รายละเอียดเกณฑ์การให้คะแนน 3</label>
                                                     <label asp-for="LRRound2.Rate3" class="control-label" id="LRRound2.LabelRate3" style="display:none"></label>
                                                     <div class="input-group" style="display:none" id="LRRound2.GRate3">
-                                                        <input asp-for="LRRound2.Rate3" class="form-control" value="3"/>
+                                                        <input asp-for="LRRound2.Rate3" class="form-control" value="3" />
                                                         <div class="input-group-append">
                                                             <span class="input-group-text">%</span>
                                                         </div>
@@ -678,7 +688,7 @@
                                                 </div>
                                                 <div class="form-group col-md-3" id="LRRound2.Stop3">
                                                     <label asp-for="LRRound2.R3MStop" class="control-label"></label>
-                                                    <input asp-for="LRRound2.R3MStop" class="form-control datepicker" value="@yearStop-09-30"/>
+                                                    <input asp-for="LRRound2.R3MStop" class="form-control datepicker" value="@yearStop-09-30" />
                                                     <span asp-validation-for="LRRound2.R3MStop" class="text-danger"></span>
                                                 </div>
                                             </div>
@@ -687,7 +697,7 @@
                                                     <label id="LRRound2.Label4" class="control-label">รายละเอียดเกณฑ์การให้คะแนน 4</label>
                                                     <label asp-for="LRRound2.Rate4" class="control-label" id="LRRound2.LabelRate4" style="display:none"></label>
                                                     <div class="input-group" style="display:none" id="LRRound2.GRate4">
-                                                        <input asp-for="LRRound2.Rate4" class="form-control" value="4"/>
+                                                        <input asp-for="LRRound2.Rate4" class="form-control" value="4" />
                                                         <div class="input-group-append">
                                                             <span class="input-group-text">%</span>
                                                         </div>
@@ -703,7 +713,7 @@
                                                 </div>
                                                 <div class="form-group col-md-3" id="LRRound2.Stop4">
                                                     <label asp-for="LRRound2.R4MStop" class="control-label"></label>
-                                                    <input asp-for="LRRound2.R4MStop" class="form-control" value="@yearStop-09-30" readonly/>
+                                                    <input asp-for="LRRound2.R4MStop" class="form-control" value="@yearStop-09-30" readonly />
                                                     <span asp-validation-for="LRRound2.R4MStop" class="text-danger"></span>
                                                 </div>
                                             </div>
@@ -711,7 +721,7 @@
                                                 <div class="form-group col-md-6">
                                                     <label asp-for="LRRound2.Rate5" class="control-label"></label>
                                                     <div class="input-group" id="LRRound2.GRate5">
-                                                        <input asp-for="LRRound2.Rate5" class="form-control" value="100"/>
+                                                        <input asp-for="LRRound2.Rate5" class="form-control" value="100" />
                                                         <div class="input-group-append">
                                                             <span class="input-group-text">%</span>
                                                         </div>

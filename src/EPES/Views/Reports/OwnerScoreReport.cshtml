@@ -86,14 +86,14 @@
 </form>
 <div id="pivotgrid-demo">
     @(Html.DevExtreme().Chart()
-        .ID("pivotgrid-chart-draft")
-        .CommonSeriesSettings(s => s.Type(SeriesType.Bar))
-        .Title("คะแนนเบื้องต้นจากการประเมินตนเอง")
-        .Tooltip(t => t.Enabled(true).CustomizeTooltip("customize_tooltip").Format(Format.Decimal))
-        .Size(s => s.Height(350))
-        .AdaptiveLayout(l => l.Width(450))
-    )
-
+            .ID("pivotgrid-chart-draft")
+            .CommonSeriesSettings(s => s.Type(SeriesType.Bar))
+            .Title("คะแนนเบื้องต้นจากการประเมินตนเอง")
+            .Tooltip(t => t.Enabled(true).CustomizeTooltip("customize_tooltip").Format(Format.Decimal))
+            .Size(s => s.Height(500))
+            .AdaptiveLayout(l => l.Width(450))
+        )
+    
     <br />
 
     @(Html.DevExtreme().PivotGrid<ScoreDraft>()
@@ -204,19 +204,27 @@
             //    .Visible(false);
 
             fields.Add()
-                .Caption("บันทึก")
+                .Caption("ผล")
                 .DataField("scoreValue")
                 .SummaryType(SummaryType.Avg)
+                
                 .Format(f => f.Type(Format.FixedPoint).Precision(4))
-                .Area(PivotGridArea.Data)
-                .CustomizeText("customizeText");
+                .Area(PivotGridArea.Data);
+                //.CustomizeText("customizeText");
 
-            //fields.Add()
-            //    .Caption("อนุมัติ")
-            //    .DataField("scoreApprove")
-            //    .SummaryType(SummaryType.Avg)
-            //    .Format(f => f.Type(Format.FixedPoint).Precision(4))
-            //    .Area(PivotGridArea.Data);
+            fields.Add()
+                .Caption("น้ำหนัก (%)")
+                .DataField("weight")
+                .SummaryType(SummaryType.Sum)
+                .Format(f => f.Type(Format.FixedPoint).Precision(4))
+                .Area(PivotGridArea.Data);
+
+            fields.Add()
+                .Caption("ถ่วงน้ำหนัก")
+                .DataField("cal")
+                .SummaryType(SummaryType.Sum)
+                .Format(f => f.Type(Format.FixedPoint).Precision(4))
+                .Area(PivotGridArea.Data);
         })
         )
         .OnInitialized("bind_chart")
@@ -354,26 +362,13 @@
                     }
                     </text>);
 
-            //fields.Add()
-            //    .GroupName("YearThai")
-            //    .Area(PivotGridArea.Column)
-            //    //.GroupInterval(PivotGridGroupInterval.Year)
-            //    .Visible(false);
-
-            //fields.Add()
-            //    .Caption("บันทึก")
-            //    .DataField("scoreValue")
-            //    .SummaryType(SummaryType.Avg)
-            //    .Format(f => f.Type(Format.FixedPoint).Precision(4))
-            //    .Area(PivotGridArea.Data);
-
             fields.Add()
                 .Caption("อนุมัติ")
                 .DataField("scoreApprove")
                 .SummaryType(SummaryType.Avg)
                 .Format(f => f.Type(Format.FixedPoint).Precision(4))
-                .Area(PivotGridArea.Data)
-                .CustomizeText("customizeText");
+                .Area(PivotGridArea.Data);
+                //.CustomizeText("customizeText");
         })
         )
         .OnInitialized("bind_chart_approved")
@@ -386,7 +381,7 @@
     <script>
         function customize_tooltip(args) {
             return {
-                html: args.seriesName + " | <div class='currency'>" + args.valueText + " คะแนน</div>"
+                html: args.seriesName + " | <div class='currency'>" + args.valueText + "</div>"
             };
         }
 
@@ -400,7 +395,11 @@
         function bind_chart(e) {
             e.component.bindChart($("#pivotgrid-chart-draft"), {
                 dataFieldsDisplayMode: "splitPanes",
-                alternateDataFields: false
+                alternateDataFields: false,
+                processCell: function (cellData) {
+                    cellData.dataIndex = 0;
+                    return cellData; // This line is optional
+                }
             });
             //e.component.on("contentReady", contentReady);
         }

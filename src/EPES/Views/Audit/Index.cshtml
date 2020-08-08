@@ -177,7 +177,7 @@
                                                 {
                                                     de = item;
                                                 }
-                                                if (Model.pointA[i].Unit != UnitOfPoint.ระดับ)
+                                                if (Model.pointA[i].Unit != UnitOfPoint.ระดับ && Model.pointA[i].Rounds.Count == 1)
                                                 {
                                                     if (Model.month >= 10)
                                                     {
@@ -221,6 +221,10 @@
                                                             sumOfExpect += item.Expect;
                                                         }
                                                     }
+
+                                                }
+                                                else
+                                                {
 
                                                 }
                                             }

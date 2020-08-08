@@ -218,6 +218,13 @@ namespace EPES.Controllers
                         SSOProductionService.LocCls locCls = await serviceSoapClient.Get_Location_NameAsync("EPES", "123456789", userCls.UserWorkCode);
 
                         userLocal.OfficeName = locCls.LocName;
+
+                        if (userCls.UserWorkCode == "00021000" || userCls.UserWorkCode == "00022000" || userCls.UserWorkCode == "00023000" || 
+                            userCls.UserWorkCode == "00024000" || userCls.UserWorkCode == "00025000")
+                        {
+                            userLocal.OfficeId = "00020000";
+                        }
+
                         userLocal.OfficeId = userCls.UserWorkCode;
 
                         SSOProductionService.TransCls transCls = await serviceSoapClient.Get_SSO_TransactionAsync(Username, "EPES", "123456789");

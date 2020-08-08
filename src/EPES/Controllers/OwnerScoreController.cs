@@ -65,7 +65,7 @@ namespace EPES.Controllers
                 }
             }
 
-            var scoreDrafts = _context.ScoreDrafts.Where(sd => sd.Office.Code == office && sd.PointOfEvaluation.SubPoint == 0 && sd.PointOfEvaluation.Year == yearForQuery)
+            var scoreDrafts = _context.ScoreDrafts.Include(p=>p.PointOfEvaluation).Where(sd => sd.Office.Code == office && sd.PointOfEvaluation.SubPoint == 0 && sd.PointOfEvaluation.Year == yearForQuery)
                                                     .Select(i => new
                                                     {
                                                         i.Id,
@@ -73,10 +73,12 @@ namespace EPES.Controllers
                                                         i.PointOfEvaluation.Point,
                                                         i.PointOfEvaluation.SubPoint,
                                                         i.PointOfEvaluation.Name,
+                                                        i.PointOfEvaluation.Weight,
                                                         i.ScoreValue,
                                                         i.ScoreApprove,
                                                         i.LastMonth,
-                                                        i.PointOfEvaluation.Year.Year
+                                                        i.PointOfEvaluation.Year.Year,
+                                                        cal = (i.PointOfEvaluation.Weight * i.ScoreValue /100 )
                                                     });
 
             return Json(await DataSourceLoader.LoadAsync(scoreDrafts, loadOptions));
