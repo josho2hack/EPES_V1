@@ -73,14 +73,14 @@
                             <span asp-validation-for="point.AutoApp" class="text-danger"></span>
                         </div>
                         <div class="form-check">
-                            <input asp-for="point.FixExpectProxy" class="form-check-input" />
+                            <input type="checkbox" asp-for="point.FixExpect" class="form-check-input" />
                             <label asp-for="point.FixExpect" class="form-check-label"></label>
-                            <span asp-validation-for="point.FixExpectProxy" class="text-danger"></span>
+                            <span asp-validation-for="point.FixExpect" class="text-danger"></span>
                         </div>
                         <div class="form-check">
-                            <input asp-for="point.CalPerMonthProxy" class="form-check-input" />
+                            <input type="checkbox" asp-for="point.CalPerMonth" class="form-check-input" />
                             <label asp-for="point.CalPerMonth" class="form-check-label"></label>
-                            <span asp-validation-for="point.CalPerMonthProxy" class="text-danger"></span>
+                            <span asp-validation-for="point.CalPerMonth" class="text-danger"></span>
                         </div>
                         <fieldset>
                             <legend>เกณฑ์การประเมิน</legend>

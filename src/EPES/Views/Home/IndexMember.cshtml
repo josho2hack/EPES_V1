@@ -41,10 +41,10 @@
                         <div class="col mr-2">
                             <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">การจัดเก็บ (ภญ. และ สภ./สท.) เดือน @DateTime.Now.AddMonths(-1).ToString("MMMMM yyyy")</div>
                             <div class="h5 mb-0 font-weight-bold text-gray-800">ประมาณการสะสม @(((ViewBag.ExpectLastMonth[0] + ViewBag.ExpectLastMonth[1])/1000000).ToString("N4")) ล้าน</div>
-                            <div class="h5 mb-0 font-weight-bold text-gray-800">ผลสะสม @((ViewBag.ResultLastMonth[0] + ViewBag.ResultLastMonth[1]).ToString("N0")) ล้าน</div>
+                            <div class="h5 mb-0 font-weight-bold text-gray-800">ผลสะสม @(((ViewBag.ResultLastMonth[0] + ViewBag.ResultLastMonth[1])/1000000).ToString("N4")) ล้าน</div>
                         </div>
                         <div class="col-auto">
-                            <i class="fas fa-calendar fa-2x text-gray-300"></i>
+                            <i class="fas fa-dollar-sign fa-2x text-gray-300"></i>
                         </div>
                     </div>
                 </div>
@@ -57,11 +57,11 @@
                     <div class="row no-gutters align-items-center">
                         <div class="col mr-2">
                             <div class="text-xs font-weight-bold text-success text-uppercase mb-1">จำนวนผู้เสียภาษีรายใหม่ เดือน @DateTime.Now.AddMonths(-1).ToString("MMMMM yyyy")</div>
-                            <div class="h5 mb-0 font-weight-bold text-gray-800">ประมาณการสะสม xxx ราย</div>
-                            <div class="h5 mb-0 font-weight-bold text-gray-800">ผลสะสม xxx ราย</div>
+                            <div class="h5 mb-0 font-weight-bold text-gray-800">ประมาณการสะสม @((ViewBag.ExpectLastMonthM2[0] + ViewBag.ExpectLastMonthM2[1]).ToString("N0")) ราย</div>
+                            <div class="h5 mb-0 font-weight-bold text-gray-800">ผลสะสม @((ViewBag.ResultLastMonthM2[0] + ViewBag.ResultLastMonthM2[1]).ToString("N0")) ราย</div>
                         </div>
                         <div class="col-auto">
-                            <i class="fas fa-dollar-sign fa-2x text-gray-300"></i>
+                            <i class="fas fa-calendar fa-2x text-gray-300"></i>
                         </div>
                     </div>
                 </div>
@@ -197,56 +197,99 @@
                                 <div class="card-body">
                                     <div class="row">
                                         <div class="col-xl-6 mb-3">
-                                            @(Html.DevExtreme().PieChart()
+                                       @(Html.DevExtreme().Chart()
                                         .ID("pie11")
+                                        .CommonSeriesSettings(s => s
+                                            .ArgumentField("office")
+                                            .ValueField("value")
+                                            .Type(SeriesType.Bar)
+                                            .IgnoreEmptyPoints(true)
+                                        //.Label(l => l
+                                        //    .Visible(true)
+                                        //    .Format(f => f
+                                        //        .Type(Format.FixedPoint)
+                                        //        .Precision(4)
+                                        //    )
+                                        //)
+                                        )
+                                        .SeriesTemplate(t => t.NameField("office"))
+                                        .Tooltip(t => t.Enabled(true).CustomizeTooltip(@<text>
+                                            function(arg) {
+                                                    return {
+                                                       html: args.seriesName + " | <div class='currency'>" + args.valueText + "</div>"
+                                                    };
+                                            }
+                                         </text>).Format(Format.Decimal))
+                                        //.AdaptiveLayout(l => l.Width(450))
                                         .Palette(new[] { "#89ccf7", "#015c93" })
                                         .PaletteExtensionMode(VizPaletteExtensionMode.Blend)
                                         .Title(t => t
                                             .Text("เปรียบเทียบผลจัดเก็บสะสม " + (new DateTime(DateTime.Now.Month > 10 ? DateTime.Now.Year : DateTime.Now.AddYears(-1).Year, 10, 1)).ToString("MMMM yyyy") + " - " + DateTime.Now.AddMonths(-1).ToString("MMMM yyyy") + " กับประมาณการ ทั้งปีงบประมาณ " + (DateTime.Now.Month > 9 ? DateTime.Now.AddYears(1).ToString("yyyy") : DateTime.Now.ToString("yyyy")))
                                             .Font(f => f.Size(13))
                                         )
-                                        .Legend(l => l
-                                            .Orientation(Orientation.Horizontal)
-                                            .ItemTextPosition(Position.Right)
-                                            .HorizontalAlignment(HorizontalAlignment.Center)
-                                            .VerticalAlignment(VerticalEdge.Bottom)
-                                        )
-                                        .Export(e => e.Enabled(false))
-                                        .Series(s => s
-                                            .Add()
-                                            .ArgumentField("office")
-                                            .ValueField("value")
-                                            .Label(l => l
-                                                .Visible(true)
-                                                .Font(f => f.Size(16))
-                                                .Connector(c => c
-                                                    .Visible(false)
-                                                    .Width(0.5)
-                                                )
-                                                .Position(PieChartLabelPosition.Inside)
-                                                .CustomizeText(@<text>
-                                                    function(arg) {
-                                                        return arg.percentText;
-                                                    }
-                                                </text>)
-                                            )
-                                        )
+                                        //.Legend(l => l
+                                        //    .Orientation(Orientation.Horizontal)
+                                        //    .ItemTextPosition(Position.Right)
+                                        //    .HorizontalAlignment(HorizontalAlignment.Center)
+                                        //    .VerticalAlignment(VerticalEdge.Bottom)
+                                        //)
+                                        //.Export(e => e.Enabled(false))
+                                        //.Series(s => s
+                                        //    .Add()
+                                        //    .ArgumentField("office")
+                                        //    .ValueField("value")
+                                        //.Label(l => l
+                                        //    .Visible(true)
+                                        //    .Font(f => f.Size(16))
+                                        //    .Connector(c => c
+                                        //        .Visible(false)
+                                        //        .Width(0.5)
+                                        //    )
+                                        //    //.Position(PieChartLabelPosition.Inside)
+                                        //    //.CustomizeText(@<text>
+                                        //    //    function(arg) {
+                                        //   //         return arg.percentText;
+                                        //  //      }
+                                        //   // </text>)
+                                        //)
+                                        //)
                                         .DataSource(new[] {
-                                            new { office = "เป้าหมาย", value = (ViewBag.Expect[0] + ViewBag.Expect[1] - (ViewBag.ResultLastMonth[0] + ViewBag.ResultLastMonth[1])) },
+                                            new { office = "เป้าหมาย", value = (ViewBag.Expect[0] + ViewBag.Expect[1]) },
                                             new { office = "ผล", value = (ViewBag.ResultLastMonth[0] + ViewBag.ResultLastMonth[1]) }
                                         })
                                     )
                                         </div>
                                         <div class="col-xl-6 mb-3">
-                                            @(Html.DevExtreme().PieChart()
+                                            @(Html.DevExtreme().Chart()
                                         .ID("pie12")
+                                        .CommonSeriesSettings(s => s
+                                            .ArgumentField("office")
+                                            .ValueField("value")
+                                            .Type(SeriesType.Bar)
+                                            .IgnoreEmptyPoints(true)
+                                        //.Label(l => l
+                                        //    .Visible(true)
+                                        //    .Format(f => f
+                                        //        .Type(Format.FixedPoint)
+                                        //        .Precision(4)
+                                        //    )
+                                        //)
+                                        )
+                                        .SeriesTemplate(t => t.NameField("office"))
+                                        .Tooltip(t => t.Enabled(true).CustomizeTooltip(@<text>
+                                            function(arg) {
+                                                    return {
+                                                       html: args.seriesName + " | <div class='currency'>" + args.valueText + "</div>"
+                                                    };
+                                            }
+                                         </text>).Format(Format.Decimal))
                                         .Palette(new[] { "#89ccf7", "#015c93" })
                                         .PaletteExtensionMode(VizPaletteExtensionMode.Blend)
                                         .Title(t => t
                                             .Text("เปรียบเทียบผลจัดเก็บสะสม " + (new DateTime(DateTime.Now.Month > 10 ? DateTime.Now.Year : DateTime.Now.AddYears(-1).Year, 10, 1)).ToString("MMMM yyyy") + " - " + DateTime.Now.AddMonths(-1).ToString("MMMM yyyy") + " กับประมาณการสะสม " + (new DateTime(DateTime.Now.Month > 10 ? DateTime.Now.Year : DateTime.Now.AddYears(-1).Year, 10, 1)).ToString("MMMM yyyy") + " - " + DateTime.Now.AddMonths(-1).ToString("MMMM yyyy"))
                                             .Font(f => f.Size(13))
                                         )
-                                        .Legend(l => l
+                                        @*.Legend(l => l
                                             .Orientation(Orientation.Horizontal)
                                             .ItemTextPosition(Position.Right)
                                             .HorizontalAlignment(HorizontalAlignment.Center)
@@ -271,9 +314,9 @@
                                                     }
                                                 </text>)
                                             )
-                                        )
+                                        )*@
                                         .DataSource(new[] {
-                                            new { office = "เป้าหมาย", value = (ViewBag.ExpectLastMonth[0] + ViewBag.ExpectLastMonth[1] - (ViewBag.ResultLastMonth[0] + ViewBag.ResultLastMonth[1])) },
+                                            new { office = "เป้าหมาย", value = (ViewBag.ExpectLastMonth[0] + ViewBag.ExpectLastMonth[1]) },
                                             new { office = "ผล", value = (ViewBag.ResultLastMonth[0] + ViewBag.ResultLastMonth[1]) }
                                         })
                                     )
@@ -290,15 +333,36 @@
                                 <div class="card-body">
                                     <div class="row">
                                         <div class="col-xl-6 mb-3">
-                                            @(Html.DevExtreme().PieChart()
+                                            @(Html.DevExtreme().Chart()
                                         .ID("pie21")
+                                        .CommonSeriesSettings(s => s
+                                            .ArgumentField("office")
+                                            .ValueField("value")
+                                            .Type(SeriesType.Bar)
+                                            .IgnoreEmptyPoints(true)
+                                        //.Label(l => l
+                                        //    .Visible(true)
+                                        //    .Format(f => f
+                                        //        .Type(Format.FixedPoint)
+                                        //        .Precision(4)
+                                        //    )
+                                        //)
+                                        )
+                                        .SeriesTemplate(t => t.NameField("office"))
+                                        .Tooltip(t => t.Enabled(true).CustomizeTooltip(@<text>
+                                            function(arg) {
+                                                    return {
+                                                       html: args.seriesName + " | <div class='currency'>" + args.valueText + "</div>"
+                                                    };
+                                            }
+                                         </text>).Format(Format.Decimal))
                                         .Palette(new[] { "#ff7b89", "#8a5082" })
                                         .PaletteExtensionMode(VizPaletteExtensionMode.Blend)
                                         .Title(t => t
                                             .Text("เปรียบเทียบผลจัดเก็บสะสม " + (new DateTime(DateTime.Now.Month > 10 ? DateTime.Now.Year : DateTime.Now.AddYears(-1).Year, 10, 1)).ToString("MMMM yyyy") + " - " + DateTime.Now.AddMonths(-1).ToString("MMMM yyyy") + " กับประมาณการ ทั้งปีงบประมาณ " + (DateTime.Now.Month > 9 ? DateTime.Now.AddYears(1).ToString("yyyy") : DateTime.Now.ToString("yyyy")))
                                             .Font(f => f.Size(13))
                                         )
-                                        .Legend(l => l
+                                        @*.Legend(l => l
                                             .Orientation(Orientation.Horizontal)
                                             .ItemTextPosition(Position.Right)
                                             .HorizontalAlignment(HorizontalAlignment.Center)
@@ -323,23 +387,44 @@
                                                     }
                                                 </text>)
                                             )
-                                        )
+                                        )*@
                                         .DataSource(new[] {
-                                            new { office = "เป้าหมาย", value = (ViewBag.Expect[0] - ViewBag.ResultLastMonth[0]) },
+                                            new { office = "เป้าหมาย", value = ViewBag.Expect[0]},
                                             new { office = "ผล", value = ViewBag.ResultLastMonth[0] }
                                         })
                                     )
                                         </div>
                                         <div class="col-xl-6 mb-3">
-                                            @(Html.DevExtreme().PieChart()
+                                            @(Html.DevExtreme().Chart()
                                         .ID("pie22")
+                                        .CommonSeriesSettings(s => s
+                                            .ArgumentField("office")
+                                            .ValueField("value")
+                                            .Type(SeriesType.Bar)
+                                            .IgnoreEmptyPoints(true)
+                                        //.Label(l => l
+                                        //    .Visible(true)
+                                        //    .Format(f => f
+                                        //        .Type(Format.FixedPoint)
+                                        //        .Precision(4)
+                                        //    )
+                                        //)
+                                        )
+                                        .SeriesTemplate(t => t.NameField("office"))
+                                        .Tooltip(t => t.Enabled(true).CustomizeTooltip(@<text>
+                                            function(arg) {
+                                                    return {
+                                                       html: args.seriesName + " | <div class='currency'>" + args.valueText + "</div>"
+                                                    };
+                                            }
+                                         </text>).Format(Format.Decimal))
                                         .Palette(new[] { "#ff7b89", "#8a5082" })
                                         .PaletteExtensionMode(VizPaletteExtensionMode.Blend)
                                         .Title(t => t
                                             .Text("เปรียบเทียบผลจัดเก็บสะสม " + (new DateTime(DateTime.Now.Month > 10 ? DateTime.Now.Year : DateTime.Now.AddYears(-1).Year, 10, 1)).ToString("MMMM yyyy") + " - " + DateTime.Now.AddMonths(-1).ToString("MMMM yyyy") + " กับประมาณการสะสม " + (new DateTime(DateTime.Now.Month > 10 ? DateTime.Now.Year : DateTime.Now.AddYears(-1).Year, 10, 1)).ToString("MMMM yyyy") + " - " + DateTime.Now.AddMonths(-1).ToString("MMMM yyyy"))
                                             .Font(f => f.Size(13))
                                         )
-                                        .Legend(l => l
+                                        @*.Legend(l => l
                                             .Orientation(Orientation.Horizontal)
                                             .ItemTextPosition(Position.Right)
                                             .HorizontalAlignment(HorizontalAlignment.Center)
@@ -364,9 +449,9 @@
                                                     }
                                                 </text>)
                                             )
-                                        )
+                                        )*@
                                         .DataSource(new[] {
-                                            new { office = "เป้าหมาย", value = (ViewBag.ExpectLastMonth[0] - ViewBag.ResultLastMonth[0]) },
+                                            new { office = "เป้าหมาย", value = ViewBag.ExpectLastMonth[0]},
                                             new { office = "ผล", value = ViewBag.ResultLastMonth[0] }
                                         })
                                     )
@@ -383,15 +468,36 @@
                                 <div class="card-body">
                                     <div class="row">
                                         <div class="col-xl-6 mb-3">
-                                            @(Html.DevExtreme().PieChart()
+                                            @(Html.DevExtreme().Chart()
                                         .ID("pie31")
+                                        .CommonSeriesSettings(s => s
+                                            .ArgumentField("office")
+                                            .ValueField("value")
+                                            .Type(SeriesType.Bar)
+                                            .IgnoreEmptyPoints(true)
+                                        //.Label(l => l
+                                        //    .Visible(true)
+                                        //    .Format(f => f
+                                        //        .Type(Format.FixedPoint)
+                                        //        .Precision(4)
+                                        //    )
+                                        //)
+                                        )
+                                        .SeriesTemplate(t => t.NameField("office"))
+                                        .Tooltip(t => t.Enabled(true).CustomizeTooltip(@<text>
+                                            function(arg) {
+                                                    return {
+                                                       html: args.seriesName + " | <div class='currency'>" + args.valueText + "</div>"
+                                                    };
+                                            }
+                                         </text>).Format(Format.Decimal))
                                         .Palette(new[] { "#cce64f", "#94b447" })
                                         .PaletteExtensionMode(VizPaletteExtensionMode.Blend)
                                         .Title(t => t
                                             .Text("เปรียบเทียบผลจัดเก็บสะสม " + (new DateTime(DateTime.Now.Month > 10 ? DateTime.Now.Year : DateTime.Now.AddYears(-1).Year, 10, 1)).ToString("MMMM yyyy") + " - " + DateTime.Now.AddMonths(-1).ToString("MMMM yyyy") + " กับประมาณการ ทั้งปีงบประมาณ " + (DateTime.Now.Month > 9 ? DateTime.Now.AddYears(1).ToString("yyyy") : DateTime.Now.ToString("yyyy")))
                                             .Font(f => f.Size(13))
                                         )
-                                        .Legend(l => l
+                                        @*.Legend(l => l
                                             .Orientation(Orientation.Horizontal)
                                             .ItemTextPosition(Position.Right)
                                             .HorizontalAlignment(HorizontalAlignment.Center)
@@ -416,23 +522,44 @@
                                                     }
                                                 </text>)
                                             )
-                                        )
+                                        )*@
                                         .DataSource(new[] {
-                                            new { office = "เป้าหมาย", value = (ViewBag.Expect[1] - ViewBag.ResultLastMonth[1]) },
+                                            new { office = "เป้าหมาย", value = ViewBag.Expect[1]},
                                             new { office = "ผล", value = ViewBag.ResultLastMonth[1] }
                                         })
                                     )
                                         </div>
                                         <div class="col-xl-6 mb-3">
-                                            @(Html.DevExtreme().PieChart()
+                                            @(Html.DevExtreme().Chart()
                                         .ID("pie32")
+                                        .CommonSeriesSettings(s => s
+                                            .ArgumentField("office")
+                                            .ValueField("value")
+                                            .Type(SeriesType.Bar)
+                                            .IgnoreEmptyPoints(true)
+                                        //.Label(l => l
+                                        //    .Visible(true)
+                                        //    .Format(f => f
+                                        //        .Type(Format.FixedPoint)
+                                        //        .Precision(4)
+                                        //    )
+                                        //)
+                                        )
+                                        .SeriesTemplate(t => t.NameField("office"))
+                                        .Tooltip(t => t.Enabled(true).CustomizeTooltip(@<text>
+                                            function(arg) {
+                                                    return {
+                                                       html: args.seriesName + " | <div class='currency'>" + args.valueText + "</div>"
+                                                    };
+                                            }
+                                         </text>).Format(Format.Decimal))
                                         .Palette(new[] { "#cce64f", "#94b447" })
                                         .PaletteExtensionMode(VizPaletteExtensionMode.Blend)
                                         .Title(t => t
                                             .Text("เปรียบเทียบผลจัดเก็บสะสม " + (new DateTime(DateTime.Now.Month > 10 ? DateTime.Now.Year : DateTime.Now.AddYears(-1).Year, 10, 1)).ToString("MMMM yyyy") + " - " + DateTime.Now.AddMonths(-1).ToString("MMMM yyyy") + " กับประมาณการสะสม " + (new DateTime(DateTime.Now.Month > 10 ? DateTime.Now.Year : DateTime.Now.AddYears(-1).Year, 10, 1)).ToString("MMMM yyyy") + " - " + DateTime.Now.AddMonths(-1).ToString("MMMM yyyy"))
                                             .Font(f => f.Size(13))
                                         )
-                                        .Legend(l => l
+                                        @*.Legend(l => l
                                             .Orientation(Orientation.Horizontal)
                                             .ItemTextPosition(Position.Right)
                                             .HorizontalAlignment(HorizontalAlignment.Center)
@@ -457,9 +584,9 @@
                                                     }
                                                 </text>)
                                             )
-                                        )
+                                        )*@
                                         .DataSource(new[] {
-                                            new { office = "เป้าหมาย", value = (ViewBag.ExpectLastMonth[1] - ViewBag.ResultLastMonth[1]) },
+                                            new { office = "เป้าหมาย", value = ViewBag.ExpectLastMonth[1] },
                                             new { office = "ผล", value = ViewBag.ResultLastMonth[1] }
                                         })
                                     )
@@ -539,14 +666,35 @@
                                 <div class="card-body">
                                     <div class="row">
                                         <div class="col-xl-6 mb-3">
-                                            @(Html.DevExtreme().PieChart()
+                                            @(Html.DevExtreme().Chart()
                                         .ID("pie211")
+                                        .CommonSeriesSettings(s => s
+                                            .ArgumentField("office")
+                                            .ValueField("value")
+                                            .Type(SeriesType.Bar)
+                                            .IgnoreEmptyPoints(true)
+                                        //.Label(l => l
+                                        //    .Visible(true)
+                                        //    .Format(f => f
+                                        //        .Type(Format.FixedPoint)
+                                        //        .Precision(4)
+                                        //    )
+                                        //)
+                                        )
+                                        .SeriesTemplate(t => t.NameField("office"))
+                                        .Tooltip(t => t.Enabled(true).CustomizeTooltip(@<text>
+                                            function(arg) {
+                                                    return {
+                                                       html: args.seriesName + " | <div class='currency'>" + args.valueText + "</div>"
+                                                    };
+                                            }
+                                         </text>).Format(Format.Decimal))
                                         .Palette(new[] { "#89ccf7", "#015c93" })
                                         .Title(t => t
                                             .Text("ผลสะสม ณ เดือน" + DateTime.Now.AddMonths(-1).ToString("MMMM") + "เทียบกับเป้าหมายรวมปี งปม. " + (DateTime.Now.Month > 9 ? DateTime.Now.AddYears(1).ToString("yyyy") : DateTime.Now.ToString("yyyy")))
                                             .Font(f => f.Size(13))
                                         )
-                                        .Legend(l => l
+                                        @*.Legend(l => l
                                             .Orientation(Orientation.Horizontal)
                                             .ItemTextPosition(Position.Right)
                                             .HorizontalAlignment(HorizontalAlignment.Center)
@@ -571,22 +719,43 @@
                                                     }
                                                 </text>)
                                             )
-                                        )
+                                        )*@
                                         .DataSource(new[] {
-                                            new { office = "เป้าหมาย", value = (ViewBag.ExpectM2[0] + ViewBag.ExpectM2[1] - (ViewBag.ResultLastMonthM2[0] + ViewBag.ResultLastMonthM2[1])) },
+                                            new { office = "เป้าหมาย", value = (ViewBag.ExpectM2[0] + ViewBag.ExpectM2[1]) },
                                             new { office = "ผล", value = (ViewBag.ResultLastMonthM2[0] + ViewBag.ResultLastMonthM2[1]) }
                                         })
                                     )
                                         </div>
                                         <div class="col-xl-6 mb-3">
-                                            @(Html.DevExtreme().PieChart()
+                                            @(Html.DevExtreme().Chart()
                                         .ID("pie212")
+                                        .CommonSeriesSettings(s => s
+                                            .ArgumentField("office")
+                                            .ValueField("value")
+                                            .Type(SeriesType.Bar)
+                                            .IgnoreEmptyPoints(true)
+                                        //.Label(l => l
+                                        //    .Visible(true)
+                                        //    .Format(f => f
+                                        //        .Type(Format.FixedPoint)
+                                        //        .Precision(4)
+                                        //    )
+                                        //)
+                                        )
+                                        .SeriesTemplate(t => t.NameField("office"))
+                                        .Tooltip(t => t.Enabled(true).CustomizeTooltip(@<text>
+                                            function(arg) {
+                                                    return {
+                                                       html: args.seriesName + " | <div class='currency'>" + args.valueText + "</div>"
+                                                    };
+                                            }
+                                         </text>).Format(Format.Decimal))
                                         .Palette(new[] { "#89ccf7", "#015c93" })
                                         .Title(t => t
                                             .Text("ผลสะสม ณ เดือน" + DateTime.Now.AddMonths(-1).ToString("MMMM") + "เทียบกับเป้าหมาย ณ เดือน " + DateTime.Now.AddMonths(-1).ToString("MMMM"))
                                             .Font(f => f.Size(13))
                                         )
-                                        .Legend(l => l
+                                        @*.Legend(l => l
                                             .Orientation(Orientation.Horizontal)
                                             .ItemTextPosition(Position.Right)
                                             .HorizontalAlignment(HorizontalAlignment.Center)
@@ -611,9 +780,9 @@
                                                     }
                                                 </text>)
                                             )
-                                        )
+                                        )*@
                                         .DataSource(new[] {
-                                            new { office = "เป้าหมาย", value = (ViewBag.ExpectLastMonthM2[0] + ViewBag.ExpectLastMonthM2[1] - (ViewBag.ResultLastMonthM2[0] + ViewBag.ResultLastMonthM2[1])) },
+                                            new { office = "เป้าหมาย", value = (ViewBag.ExpectLastMonthM2[0] + ViewBag.ExpectLastMonthM2[1]) },
                                             new { office = "ผล", value = (ViewBag.ResultLastMonthM2[0] + ViewBag.ResultLastMonthM2[1]) }
                                         })
                                     )
@@ -630,14 +799,35 @@
                                 <div class="card-body">
                                     <div class="row">
                                         <div class="col-xl-6 mb-3">
-                                            @(Html.DevExtreme().PieChart()
+                                            @(Html.DevExtreme().Chart()
                                         .ID("pie221")
+                                        .CommonSeriesSettings(s => s
+                                            .ArgumentField("office")
+                                            .ValueField("value")
+                                            .Type(SeriesType.Bar)
+                                            .IgnoreEmptyPoints(true)
+                                        //.Label(l => l
+                                        //    .Visible(true)
+                                        //    .Format(f => f
+                                        //        .Type(Format.FixedPoint)
+                                        //        .Precision(4)
+                                        //    )
+                                        //)
+                                        )
+                                        .SeriesTemplate(t => t.NameField("office"))
+                                        .Tooltip(t => t.Enabled(true).CustomizeTooltip(@<text>
+                                            function(arg) {
+                                                    return {
+                                                       html: args.seriesName + " | <div class='currency'>" + args.valueText + "</div>"
+                                                    };
+                                            }
+                                         </text>).Format(Format.Decimal))
                                         .Palette(new[] { "#ff7b89", "#8a5082" })
                                         .Title(t => t
                                             .Text("ผลสะสม ณ เดือน" + DateTime.Now.AddMonths(-1).ToString("MMMM") + "เทียบกับเป้าหมายรวมปี งปม. " + (DateTime.Now.Month > 9 ? DateTime.Now.AddYears(1).ToString("yyyy") : DateTime.Now.ToString("yyyy")))
                                             .Font(f => f.Size(13))
                                         )
-                                        .Legend(l => l
+                                        @*.Legend(l => l
                                             .Orientation(Orientation.Horizontal)
                                             .ItemTextPosition(Position.Right)
                                             .HorizontalAlignment(HorizontalAlignment.Center)
@@ -662,22 +852,43 @@
                                                     }
                                                 </text>)
                                             )
-                                        )
+                                        )*@
                                         .DataSource(new[] {
-                                            new { office = "เป้าหมาย", value = (ViewBag.ExpectM2[0] - ViewBag.ResultLastMonthM2[0]) },
+                                            new { office = "เป้าหมาย", value = (ViewBag.ExpectM2[0]) },
                                             new { office = "ผล", value = ViewBag.ResultLastMonthM2[0] }
                                         })
                                     )
                                         </div>
                                         <div class="col-xl-6 mb-3">
-                                            @(Html.DevExtreme().PieChart()
+                                            @(Html.DevExtreme().Chart()
                                         .ID("pie222")
+                                        .CommonSeriesSettings(s => s
+                                            .ArgumentField("office")
+                                            .ValueField("value")
+                                            .Type(SeriesType.Bar)
+                                            .IgnoreEmptyPoints(true)
+                                        //.Label(l => l
+                                        //    .Visible(true)
+                                        //    .Format(f => f
+                                        //        .Type(Format.FixedPoint)
+                                        //        .Precision(4)
+                                        //    )
+                                        //)
+                                        )
+                                        .SeriesTemplate(t => t.NameField("office"))
+                                        .Tooltip(t => t.Enabled(true).CustomizeTooltip(@<text>
+                                            function(arg) {
+                                                    return {
+                                                       html: args.seriesName + " | <div class='currency'>" + args.valueText + "</div>"
+                                                    };
+                                            }
+                                         </text>).Format(Format.Decimal))
                                         .Palette(new[] { "#ff7b89", "#8a5082" })
                                         .Title(t => t
                                             .Text("ผลสะสม ณ เดือน" + DateTime.Now.AddMonths(-1).ToString("MMMM") + "เทียบกับเป้าหมาย ณ เดือน " + DateTime.Now.AddMonths(-1).ToString("MMMM"))
                                             .Font(f => f.Size(13))
                                         )
-                                        .Legend(l => l
+                                        @*.Legend(l => l
                                             .Orientation(Orientation.Horizontal)
                                             .ItemTextPosition(Position.Right)
                                             .HorizontalAlignment(HorizontalAlignment.Center)
@@ -702,9 +913,9 @@
                                                     }
                                                 </text>)
                                             )
-                                        )
+                                        )*@
                                         .DataSource(new[] {
-                                            new { office = "เป้าหมาย", value = (ViewBag.ExpectLastMonthM2[0] - ViewBag.ResultLastMonthM2[0]) },
+                                            new { office = "เป้าหมาย", value = (ViewBag.ExpectLastMonthM2[0] ) },
                                             new { office = "ผล", value = ViewBag.ResultLastMonthM2[0] }
                                         })
                                     )
@@ -721,14 +932,35 @@
                                 <div class="card-body">
                                     <div class="row">
                                         <div class="col-xl-6 mb-3">
-                                            @(Html.DevExtreme().PieChart()
+                                            @(Html.DevExtreme().Chart()
                                         .ID("pie231")
+                                        .CommonSeriesSettings(s => s
+                                            .ArgumentField("office")
+                                            .ValueField("value")
+                                            .Type(SeriesType.Bar)
+                                            .IgnoreEmptyPoints(true)
+                                        //.Label(l => l
+                                        //    .Visible(true)
+                                        //    .Format(f => f
+                                        //        .Type(Format.FixedPoint)
+                                        //        .Precision(4)
+                                        //    )
+                                        //)
+                                        )
+                                        .SeriesTemplate(t => t.NameField("office"))
+                                        .Tooltip(t => t.Enabled(true).CustomizeTooltip(@<text>
+                                            function(arg) {
+                                                    return {
+                                                       html: args.seriesName + " | <div class='currency'>" + args.valueText + "</div>"
+                                                    };
+                                            }
+                                         </text>).Format(Format.Decimal))
                                         .Palette(new[] { "#cce64f", "#94b447" })
                                         .Title(t => t
                                             .Text("ผลสะสม ณ เดือน" + DateTime.Now.AddMonths(-1).ToString("MMMM") + "เทียบกับเป้าหมายรวมปี งปม. " + (DateTime.Now.Month > 9 ? DateTime.Now.AddYears(1).ToString("yyyy") : DateTime.Now.ToString("yyyy")))
                                             .Font(f => f.Size(13))
                                         )
-                                        .Legend(l => l
+                                        @*.Legend(l => l
                                             .Orientation(Orientation.Horizontal)
                                             .ItemTextPosition(Position.Right)
                                             .HorizontalAlignment(HorizontalAlignment.Center)
@@ -753,7 +985,7 @@
                                                     }
                                                 </text>)
                                             )
-                                        )
+                                        )*@
                                         .DataSource(new[] {
                                             new { office = "เป้าหมาย", value = (ViewBag.ExpectM2[1] - ViewBag.ResultLastMonthM2[1]) },
                                             new { office = "ผล", value = ViewBag.ResultLastMonthM2[1] }
@@ -761,14 +993,35 @@
                                     )
                                         </div>
                                         <div class="col-xl-6 mb-3">
-                                            @(Html.DevExtreme().PieChart()
+                                            @(Html.DevExtreme().Chart()
                                         .ID("pie232")
+                                        .CommonSeriesSettings(s => s
+                                            .ArgumentField("office")
+                                            .ValueField("value")
+                                            .Type(SeriesType.Bar)
+                                            .IgnoreEmptyPoints(true)
+                                        //.Label(l => l
+                                        //    .Visible(true)
+                                        //    .Format(f => f
+                                        //        .Type(Format.FixedPoint)
+                                        //        .Precision(4)
+                                        //    )
+                                        //)
+                                        )
+                                        .SeriesTemplate(t => t.NameField("office"))
+                                        .Tooltip(t => t.Enabled(true).CustomizeTooltip(@<text>
+                                            function(arg) {
+                                                    return {
+                                                       html: args.seriesName + " | <div class='currency'>" + args.valueText + "</div>"
+                                                    };
+                                            }
+                                         </text>).Format(Format.Decimal))
                                         .Palette(new[] { "#cce64f", "#94b447" })
                                         .Title(t => t
                                             .Text("ผลสะสม ณ เดือน" + DateTime.Now.AddMonths(-1).ToString("MMMM") + "เทียบกับเป้าหมาย ณ เดือน " + DateTime.Now.AddMonths(-1).ToString("MMMM"))
                                             .Font(f => f.Size(13))
                                         )
-                                        .Legend(l => l
+                                        @*.Legend(l => l
                                             .Orientation(Orientation.Horizontal)
                                             .ItemTextPosition(Position.Right)
                                             .HorizontalAlignment(HorizontalAlignment.Center)
@@ -793,9 +1046,9 @@
                                                     }
                                                 </text>)
                                             )
-                                        )
+                                        )*@
                                         .DataSource(new[] {
-                                            new { office = "เป้าหมาย", value = (ViewBag.ExpectLastMonthM2[1] - ViewBag.ResultLastMonthM2[1]) },
+                                            new { office = "เป้าหมาย", value = (ViewBag.ExpectLastMonthM2[1]) },
                                             new { office = "ผล", value = ViewBag.ResultLastMonthM2[1] }
                                         })
                                     )
@@ -875,14 +1128,35 @@
                                 <div class="card-body">
                                     <div class="row">
                                         <div class="col-xl-6 mb-3">
-                                            @(Html.DevExtreme().PieChart()
+                                            @(Html.DevExtreme().Chart()
                                         .ID("pie311")
+                                        .CommonSeriesSettings(s => s
+                                            .ArgumentField("office")
+                                            .ValueField("value")
+                                            .Type(SeriesType.Bar)
+                                            .IgnoreEmptyPoints(true)
+                                        //.Label(l => l
+                                        //    .Visible(true)
+                                        //    .Format(f => f
+                                        //        .Type(Format.FixedPoint)
+                                        //        .Precision(4)
+                                        //    )
+                                        //)
+                                        )
+                                        .SeriesTemplate(t => t.NameField("office"))
+                                        .Tooltip(t => t.Enabled(true).CustomizeTooltip(@<text>
+                                            function(arg) {
+                                                    return {
+                                                       html: args.seriesName + " | <div class='currency'>" + args.valueText + "</div>"
+                                                    };
+                                            }
+                                         </text>).Format(Format.Decimal))
                                         .Palette(new[] { "#89ccf7", "#015c93" })
                                         .Title(t => t
                                             .Text("ผลสะสม ณ เดือน" + DateTime.Now.AddMonths(-1).ToString("MMMM") + "เทียบกับเป้าหมายรวมปี งปม. " + (DateTime.Now.Month > 9 ? DateTime.Now.AddYears(1).ToString("yyyy") : DateTime.Now.ToString("yyyy")))
                                             .Font(f => f.Size(13))
                                         )
-                                        .Legend(l => l
+                                        @*.Legend(l => l
                                             .Orientation(Orientation.Horizontal)
                                             .ItemTextPosition(Position.Right)
                                             .HorizontalAlignment(HorizontalAlignment.Center)
@@ -907,22 +1181,43 @@
                                                     }
                                                 </text>)
                                             )
-                                        )
+                                        )*@
                                         .DataSource(new[] {
-                                            new { office = "เป้าหมาย", value = (ViewBag.ExpectM3[0] + ViewBag.ExpectM3[1] - (ViewBag.ResultLastMonthM3[0] + ViewBag.ResultLastMonthM3[1])) },
+                                            new { office = "เป้าหมาย", value = (ViewBag.ExpectM3[0] + ViewBag.ExpectM3[1] ) },
                                             new { office = "ผล", value = (ViewBag.ResultLastMonthM3[0] + ViewBag.ResultLastMonthM3[1]) }
                                         })
                                     )
                                         </div>
                                         <div class="col-xl-6 mb-3">
-                                            @(Html.DevExtreme().PieChart()
+                                            @(Html.DevExtreme().Chart()
                                         .ID("pie312")
+                                        .CommonSeriesSettings(s => s
+                                            .ArgumentField("office")
+                                            .ValueField("value")
+                                            .Type(SeriesType.Bar)
+                                            .IgnoreEmptyPoints(true)
+                                        //.Label(l => l
+                                        //    .Visible(true)
+                                        //    .Format(f => f
+                                        //        .Type(Format.FixedPoint)
+                                        //        .Precision(4)
+                                        //    )
+                                        //)
+                                        )
+                                        .SeriesTemplate(t => t.NameField("office"))
+                                        .Tooltip(t => t.Enabled(true).CustomizeTooltip(@<text>
+                                            function(arg) {
+                                                    return {
+                                                       html: args.seriesName + " | <div class='currency'>" + args.valueText + "</div>"
+                                                    };
+                                            }
+                                         </text>).Format(Format.Decimal))
                                         .Palette(new[] { "#89ccf7", "#015c93" })
                                         .Title(t => t
                                             .Text("ผลสะสม ณ เดือน" + DateTime.Now.AddMonths(-1).ToString("MMMM") + "เทียบกับเป้าหมาย ณ เดือน " + DateTime.Now.AddMonths(-1).ToString("MMMM"))
                                             .Font(f => f.Size(13))
                                         )
-                                        .Legend(l => l
+                                        @*.Legend(l => l
                                             .Orientation(Orientation.Horizontal)
                                             .ItemTextPosition(Position.Right)
                                             .HorizontalAlignment(HorizontalAlignment.Center)
@@ -947,9 +1242,9 @@
                                                     }
                                                 </text>)
                                             )
-                                        )
+                                        )*@
                                         .DataSource(new[] {
-                                            new { office = "เป้าหมาย", value = (ViewBag.ExpectLastMonthM3[0] + ViewBag.ExpectLastMonthM3[1] - (ViewBag.ResultLastMonthM3[0] + ViewBag.ResultLastMonthM3[1])) },
+                                            new { office = "เป้าหมาย", value = (ViewBag.ExpectLastMonthM3[0] + ViewBag.ExpectLastMonthM3[1] ) },
                                             new { office = "ผล", value = (ViewBag.ResultLastMonthM3[0] + ViewBag.ResultLastMonthM3[1]) }
                                         })
                                     )
@@ -966,14 +1261,35 @@
                                 <div class="card-body">
                                     <div class="row">
                                         <div class="col-xl-6 mb-3">
-                                            @(Html.DevExtreme().PieChart()
+                                            @(Html.DevExtreme().Chart()
                                         .ID("pie321")
+                                        .CommonSeriesSettings(s => s
+                                            .ArgumentField("office")
+                                            .ValueField("value")
+                                            .Type(SeriesType.Bar)
+                                            .IgnoreEmptyPoints(true)
+                                        //.Label(l => l
+                                        //    .Visible(true)
+                                        //    .Format(f => f
+                                        //        .Type(Format.FixedPoint)
+                                        //        .Precision(4)
+                                        //    )
+                                        //)
+                                        )
+                                        .SeriesTemplate(t => t.NameField("office"))
+                                        .Tooltip(t => t.Enabled(true).CustomizeTooltip(@<text>
+                                            function(arg) {
+                                                    return {
+                                                       html: args.seriesName + " | <div class='currency'>" + args.valueText + "</div>"
+                                                    };
+                                            }
+                                         </text>).Format(Format.Decimal))
                                         .Palette(new[] { "#ff7b89", "#8a5082" })
                                         .Title(t => t
                                             .Text("ผลสะสม ณ เดือน" + DateTime.Now.AddMonths(-1).ToString("MMMM") + "เทียบกับเป้าหมายรวมปี งปม. " + (DateTime.Now.Month > 9 ? DateTime.Now.AddYears(1).ToString("yyyy") : DateTime.Now.ToString("yyyy")))
                                             .Font(f => f.Size(13))
                                         )
-                                        .Legend(l => l
+                                        @*.Legend(l => l
                                             .Orientation(Orientation.Horizontal)
                                             .ItemTextPosition(Position.Right)
                                             .HorizontalAlignment(HorizontalAlignment.Center)
@@ -998,22 +1314,43 @@
                                                     }
                                                 </text>)
                                             )
-                                        )
+                                        )*@
                                         .DataSource(new[] {
-                                            new { office = "เป้าหมาย", value = (ViewBag.ExpectM3[0] - ViewBag.ResultLastMonthM3[0]) },
+                                            new { office = "เป้าหมาย", value = (ViewBag.ExpectM3[0] ) },
                                             new { office = "ผล", value = ViewBag.ResultLastMonthM3[0] }
                                         })
                                     )
                                         </div>
                                         <div class="col-xl-6 mb-3">
-                                            @(Html.DevExtreme().PieChart()
+                                            @(Html.DevExtreme().Chart()
                                         .ID("pie322")
+                                        .CommonSeriesSettings(s => s
+                                            .ArgumentField("office")
+                                            .ValueField("value")
+                                            .Type(SeriesType.Bar)
+                                            .IgnoreEmptyPoints(true)
+                                        //.Label(l => l
+                                        //    .Visible(true)
+                                        //    .Format(f => f
+                                        //        .Type(Format.FixedPoint)
+                                        //        .Precision(4)
+                                        //    )
+                                        //)
+                                        )
+                                        .SeriesTemplate(t => t.NameField("office"))
+                                        .Tooltip(t => t.Enabled(true).CustomizeTooltip(@<text>
+                                            function(arg) {
+                                                    return {
+                                                       html: args.seriesName + " | <div class='currency'>" + args.valueText + "</div>"
+                                                    };
+                                            }
+                                         </text>).Format(Format.Decimal))
                                         .Palette(new[] { "#ff7b89", "#8a5082" })
                                         .Title(t => t
                                             .Text("ผลสะสม ณ เดือน" + DateTime.Now.AddMonths(-1).ToString("MMMM") + "เทียบกับเป้าหมาย ณ เดือน " + DateTime.Now.AddMonths(-1).ToString("MMMM"))
                                             .Font(f => f.Size(13))
                                         )
-                                        .Legend(l => l
+                                        @*.Legend(l => l
                                             .Orientation(Orientation.Horizontal)
                                             .ItemTextPosition(Position.Right)
                                             .HorizontalAlignment(HorizontalAlignment.Center)
@@ -1038,9 +1375,9 @@
                                                     }
                                                 </text>)
                                             )
-                                        )
+                                        )*@
                                         .DataSource(new[] {
-                                            new { office = "เป้าหมาย", value = (ViewBag.ExpectLastMonthM3[0] - ViewBag.ResultLastMonthM3[0]) },
+                                            new { office = "เป้าหมาย", value = (ViewBag.ExpectLastMonthM3[0]) },
                                             new { office = "ผล", value = ViewBag.ResultLastMonthM3[0] }
                                         })
                                     )
@@ -1057,14 +1394,35 @@
                                 <div class="card-body">
                                     <div class="row">
                                         <div class="col-xl-6 mb-3">
-                                            @(Html.DevExtreme().PieChart()
+                                            @(Html.DevExtreme().Chart()
                                         .ID("pie331")
+                                        .CommonSeriesSettings(s => s
+                                            .ArgumentField("office")
+                                            .ValueField("value")
+                                            .Type(SeriesType.Bar)
+                                            .IgnoreEmptyPoints(true)
+                                        //.Label(l => l
+                                        //    .Visible(true)
+                                        //    .Format(f => f
+                                        //        .Type(Format.FixedPoint)
+                                        //        .Precision(4)
+                                        //    )
+                                        //)
+                                        )
+                                        .SeriesTemplate(t => t.NameField("office"))
+                                        .Tooltip(t => t.Enabled(true).CustomizeTooltip(@<text>
+                                            function(arg) {
+                                                    return {
+                                                       html: args.seriesName + " | <div class='currency'>" + args.valueText + "</div>"
+                                                    };
+                                            }
+                                         </text>).Format(Format.Decimal))
                                         .Palette(new[] { "#cce64f", "#94b447" })
                                         .Title(t => t
                                             .Text("ผลสะสม ณ เดือน" + DateTime.Now.AddMonths(-1).ToString("MMMM") + "เทียบกับเป้าหมายรวมปี งปม. " + (DateTime.Now.Month > 9 ? DateTime.Now.AddYears(1).ToString("yyyy") : DateTime.Now.ToString("yyyy")))
                                             .Font(f => f.Size(13))
                                         )
-                                        .Legend(l => l
+                                        @*.Legend(l => l
                                             .Orientation(Orientation.Horizontal)
                                             .ItemTextPosition(Position.Right)
                                             .HorizontalAlignment(HorizontalAlignment.Center)
@@ -1089,22 +1447,43 @@
                                                     }
                                                 </text>)
                                             )
-                                        )
+                                        )*@
                                         .DataSource(new[] {
-                                            new { office = "เป้าหมาย", value = (ViewBag.ExpectM3[1] - ViewBag.ResultLastMonthM3[1]) },
+                                            new { office = "เป้าหมาย", value = (ViewBag.ExpectM3[1]) },
                                             new { office = "ผล", value = ViewBag.ResultLastMonthM3[1] }
                                         })
                                     )
                                         </div>
                                         <div class="col-xl-6 mb-3">
-                                            @(Html.DevExtreme().PieChart()
+                                            @(Html.DevExtreme().Chart()
                                         .ID("pie332")
+                                        .CommonSeriesSettings(s => s
+                                            .ArgumentField("office")
+                                            .ValueField("value")
+                                            .Type(SeriesType.Bar)
+                                            .IgnoreEmptyPoints(true)
+                                        //.Label(l => l
+                                        //    .Visible(true)
+                                        //    .Format(f => f
+                                        //        .Type(Format.FixedPoint)
+                                        //        .Precision(4)
+                                        //    )
+                                        //)
+                                        )
+                                        .SeriesTemplate(t => t.NameField("office"))
+                                        .Tooltip(t => t.Enabled(true).CustomizeTooltip(@<text>
+                                            function(arg) {
+                                                    return {
+                                                       html: args.seriesName + " | <div class='currency'>" + args.valueText + "</div>"
+                                                    };
+                                            }
+                                         </text>).Format(Format.Decimal))
                                         .Palette(new[] { "#cce64f", "#94b447" })
                                         .Title(t => t
                                             .Text("ผลสะสม ณ เดือน" + DateTime.Now.AddMonths(-1).ToString("MMMM") + "เทียบกับเป้าหมาย ณ เดือน " + DateTime.Now.AddMonths(-1).ToString("MMMM"))
                                             .Font(f => f.Size(13))
                                         )
-                                        .Legend(l => l
+                                        @*.Legend(l => l
                                             .Orientation(Orientation.Horizontal)
                                             .ItemTextPosition(Position.Right)
                                             .HorizontalAlignment(HorizontalAlignment.Center)
@@ -1129,7 +1508,7 @@
                                                     }
                                                 </text>)
                                             )
-                                        )
+                                        )*@
                                         .DataSource(new[] {
                                             new { office = "เป้าหมาย", value = (ViewBag.ExpectLastMonthM3[1] - ViewBag.ResultLastMonthM3[1]) },
                                             new { office = "ผล", value = ViewBag.ResultLastMonthM3[1] }

@@ -42,10 +42,10 @@
                         <div class="col mr-2">
                             <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">การจัดเก็บ (ภญ. และ สภ./สท.) เดือน @DateTime.Now.AddMonths(-1).ToString("MMMMM yyyy")</div>
                             <div class="h5 mb-0 font-weight-bold text-gray-800">ประมาณการสะสม @(((ViewBag.ExpectLastMonth[0] + ViewBag.ExpectLastMonth[1])/1000000).ToString("N4")) ล้าน</div>
-                            <div class="h5 mb-0 font-weight-bold text-gray-800">ผลสะสม @((ViewBag.ResultLastMonth[0] + ViewBag.ResultLastMonth[1]).ToString("N0")) ล้าน</div>
+                            <div class="h5 mb-0 font-weight-bold text-gray-800">ผลสะสม @(((ViewBag.ResultLastMonth[0] + ViewBag.ResultLastMonth[1])/1000000).ToString("N4")) ล้าน</div>
                         </div>
                         <div class="col-auto">
-                            <i class="fas fa-calendar fa-2x text-gray-300"></i>
+                            <i class="fas fa-dollar-sign fa-2x text-gray-300"></i>
                         </div>
                     </div>
                 </div>
@@ -58,11 +58,11 @@
                     <div class="row no-gutters align-items-center">
                         <div class="col mr-2">
                             <div class="text-xs font-weight-bold text-success text-uppercase mb-1">จำนวนผู้เสียภาษีรายใหม่ เดือน @DateTime.Now.AddMonths(-1).ToString("MMMMM yyyy")</div>
-                            <div class="h5 mb-0 font-weight-bold text-gray-800">ประมาณการสะสม xxx ราย</div>
-                            <div class="h5 mb-0 font-weight-bold text-gray-800">ผลสะสม xxx ราย</div>
+                            <div class="h5 mb-0 font-weight-bold text-gray-800">ประมาณการสะสม @((ViewBag.ExpectLastMonthM2[0] + ViewBag.ExpectLastMonthM2[1]).ToString("N0")) ราย</div>
+                            <div class="h5 mb-0 font-weight-bold text-gray-800">ผลสะสม @((ViewBag.ResultLastMonthM2[0] + ViewBag.ResultLastMonthM2[1]).ToString("N0")) ราย</div>
                         </div>
                         <div class="col-auto">
-                            <i class="fas fa-dollar-sign fa-2x text-gray-300"></i>
+                            <i class="fas fa-calendar fa-2x text-gray-300"></i>
                         </div>
                     </div>
                 </div>

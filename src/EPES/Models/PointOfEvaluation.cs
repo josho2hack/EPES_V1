@@ -87,10 +87,10 @@ namespace EPES.Models
         public AutoApps AutoApp { get; set; } = AutoApps.ไม่มี;
 
         [Display(Name = "คงค่าประมาณการเมื่อหมดรอบประเมิน")]
-        public bool? FixExpect { get; set; }
+        public bool FixExpect { get; set; }
 
         [Display(Name = "คำนวณคะแนน ผล/ประมาณการ รายเดือน")]
-        public bool? CalPerMonth { get; set; }
+        public bool CalPerMonth { get; set; }
 
         [NotMapped]
         [Display(Name = "คงค่าประมาณการเมื่อหมดรอบประเมิน")]
@@ -98,11 +98,11 @@ namespace EPES.Models
         {
             get
             {
-                return FixExpect == true;
+                return this.FixExpect == true;
             }
             set
             {
-                FixExpect = value;
+                this.FixExpect = value;
             }
         }
 
@@ -112,11 +112,11 @@ namespace EPES.Models
         {
             get
             {
-                return CalPerMonth == true;
+                return this.CalPerMonth == true;
             }
             set
             {
-                CalPerMonth = value;
+                this.CalPerMonth = value;
             }
         }
 

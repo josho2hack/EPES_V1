@@ -204,7 +204,7 @@
             //    .Visible(false);
 
             fields.Add()
-                .Caption("ผล")
+                .Caption("ค่าคะแนน")
                 .DataField("scoreValue")
                 .SummaryType(SummaryType.Avg)
                 
@@ -220,7 +220,7 @@
                 .Area(PivotGridArea.Data);
 
             fields.Add()
-                .Caption("ถ่วงน้ำหนัก")
+                .Caption("ค่าคะแนนถ่วงน้ำหนัก")
                 .DataField("cal")
                 .SummaryType(SummaryType.Sum)
                 .Format(f => f.Type(Format.FixedPoint).Precision(4))

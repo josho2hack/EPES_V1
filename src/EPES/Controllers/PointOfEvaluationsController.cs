@@ -996,6 +996,8 @@ namespace EPES.Controllers
             pointOfEvaluationToUpdate.OwnerOfficeId = dataView.point.OwnerOfficeId;
             pointOfEvaluationToUpdate.AuditOfficeId = dataView.point.AuditOfficeId;
             pointOfEvaluationToUpdate.AutoApp = dataView.point.AutoApp;
+            pointOfEvaluationToUpdate.FixExpect = dataView.point.FixExpect;
+            pointOfEvaluationToUpdate.CalPerMonth = dataView.point.CalPerMonth;
 
             //if (await TryUpdateModelAsync<PointOfEvaluationViewModel>(
             //    dataView.point, "",

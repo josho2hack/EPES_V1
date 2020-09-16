@@ -474,7 +474,18 @@ namespace EPES.Controllers
                                     de.TimeUpdate = DateTime.Now;
                                     de.Approve = Approve.รอพิจารณา;
 
-                                    await _context.SaveChangesAsync();
+                                    try
+                                    {
+                                        _context.Update(de);
+                                        await _context.SaveChangesAsync();
+                                    }
+                                    catch (DbUpdateException)
+                                    {
+                                        //Log the error (uncomment ex variable name and write a log.
+                                        ModelState.AddModelError("", "ไม่สามารถบันทึกข้อมูล. " +
+                                            "ลองพยายามบันทึกอีกครั้ง " +
+                                            "โปรดแจ้งผู้ดูแลระบบ");
+                                    }
                                 }
                             }
                             else
@@ -490,8 +501,18 @@ namespace EPES.Controllers
                                 de.TimeUpdate = DateTime.Now;
                                 de.Approve = Approve.รอพิจารณา;
 
-                                _context.Add(de);
-                                await _context.SaveChangesAsync();
+                                try
+                                {
+                                    _context.Add(de);
+                                    await _context.SaveChangesAsync();
+                                }
+                                catch (DbUpdateException)
+                                {
+                                    //Log the error (uncomment ex variable name and write a log.
+                                    ModelState.AddModelError("", "ไม่สามารถบันทึกข้อมูล. " +
+                                        "ลองพยายามบันทึกอีกครั้ง " +
+                                        "โปรดแจ้งผู้ดูแลระบบ");
+                                }
                             }
                         }
                     }

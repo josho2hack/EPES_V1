@@ -41,6 +41,8 @@
     <Compile Remove="Migrations\25630203021315_InitailDB.Designer.cs" />
     <Compile Remove="Migrations\25630225043742_UpdatePoint.cs" />
     <Compile Remove="Migrations\25630225043742_UpdatePoint.Designer.cs" />
+    <Compile Remove="Migrations\25630814065622_addFixAndCalpermonthPOEwithNotNull.cs" />
+    <Compile Remove="Migrations\25630814065622_addFixAndCalpermonthPOEwithNotNull.Designer.cs" />
     <Compile Remove="PakReport.cs" />
     <Compile Remove="PakReport.Designer.cs" />
     <Compile Remove="Report.cs" />

@@ -49,6 +49,14 @@ namespace EPES.Data
             .Property(p => p.HasSub)
             .HasDefaultValue(false);
 
+            builder.Entity<PointOfEvaluation>()
+            .Property(p => p.FixExpect)
+            .HasDefaultValue(false);
+
+            builder.Entity<PointOfEvaluation>()
+            .Property(p => p.CalPerMonth)
+            .HasDefaultValue(false);
+
             builder.Entity<Office>()
             .HasMany(o => o.OwnerPointOfEvaluations)
             .WithOne(p => p.OwnerOffice)
