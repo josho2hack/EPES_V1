@@ -476,7 +476,6 @@ namespace EPES.Controllers
 
                                     try
                                     {
-                                        _context.Update(de);
                                         await _context.SaveChangesAsync();
                                     }
                                     catch (DbUpdateException)
