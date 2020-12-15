@@ -83,11 +83,20 @@ namespace EPES.Controllers
                     var userLocal = await _userManager.FindByNameAsync(Username);
 
                     //var userLocal = await _userManager.FindByNameAsync(userCls.UserID);
+                    var off = userCls.UserOfficeCode;
+                    if (userCls.UserOfficeCode != userCls.UserWorkCode)
+                    {
+                        off = userCls.UserWorkCode;
+                    }
+
+                    if (userCls.UserWorkCode == "00021000" || userCls.UserWorkCode == "00022000" || userCls.UserWorkCode == "00023000" || userCls.UserWorkCode == "00024000" || userCls.UserWorkCode == "00025000")
+                    {
+                        off = "00020000";
+                    }
 
                     if (userLocal == null)
                     {
                         SSOProductionService.LocCls locCls = await serviceSoapClient.Get_Location_NameAsync("EPES", "123456789", userCls.UserWorkCode);
-
                         var user = new ApplicationUser
                         {
                             UserName = userCls.UserID,
@@ -99,7 +108,8 @@ namespace EPES.Controllers
                             PosName = userCls.UserRank,
                             Class = userCls.UserLevelNew,
                             OfficeName = locCls.LocName,
-                            OfficeId = userCls.UserWorkCode
+                            OfficeId = off,
+                            
                         };
 
                         //string url = "http://10.20.29.26:8002/webservices/GetHeadOffice.php";
@@ -151,13 +161,13 @@ namespace EPES.Controllers
                             {
                                 user.approver = true;
                             }
-                            else
-                            {
-                                user.approver = false;
-                            }
+                            //else
+                            //{
+                            //    user.approver = false;
+                            //}
                         }
 
-                        if (userCls.UserOfficeCode == "00021000" || userCls.UserOfficeCode == "00022000" || userCls.UserOfficeCode == "00023000" || userCls.UserOfficeCode == "00024000" || userCls.UserOfficeCode == "00025000")
+                        if (off == "00021000" || off == "00022000" || off == "00023000" || off == "00024000" || off == "00025000")
                         {
                             user.OfficeId = "00020000";
                         }
@@ -218,14 +228,15 @@ namespace EPES.Controllers
                         SSOProductionService.LocCls locCls = await serviceSoapClient.Get_Location_NameAsync("EPES", "123456789", userCls.UserWorkCode);
 
                         userLocal.OfficeName = locCls.LocName;
+                        userLocal.OfficeId = locCls.LocID;
 
-                        if (userCls.UserWorkCode == "00021000" || userCls.UserWorkCode == "00022000" || userCls.UserWorkCode == "00023000" || 
-                            userCls.UserWorkCode == "00024000" || userCls.UserWorkCode == "00025000")
+                        if (userLocal.OfficeId == "00021000" || userLocal.OfficeId == "00022000" || userLocal.OfficeId == "00023000" ||
+                            userLocal.OfficeId == "00024000" || userLocal.OfficeId == "00025000")
                         {
                             userLocal.OfficeId = "00020000";
                         }
 
-                        userLocal.OfficeId = userCls.UserWorkCode;
+                       // userLocal.OfficeId = userCls.UserWorkCode;
 
                         SSOProductionService.TransCls transCls = await serviceSoapClient.Get_SSO_TransactionAsync(Username, "EPES", "123456789");
 
@@ -274,10 +285,10 @@ namespace EPES.Controllers
                             {
                                 userLocal.approver = true;
                             }
-                            else
-                            {
-                                userLocal.approver = false;
-                            }
+                            //else
+                            //{
+                            //    userLocal.approver = false;
+                            //}
                         }
 
                         await _userManager.UpdateAsync(userLocal);

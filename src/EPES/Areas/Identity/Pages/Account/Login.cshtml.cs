@@ -79,7 +79,7 @@ namespace EPES.Areas.Identity.Pages.Account
 
             if (ModelState.IsValid)
             {
-                if (((Input.Username == "admin") || (Input.Username == "pak") || (Input.Username == "pak1") || (Input.Username == "pak2") || (Input.Username == "pak3") || (Input.Username == "pak4") || (Input.Username == "pak5") || (Input.Username == "pak6") || (Input.Username == "pak7") || (Input.Username == "pak8") || (Input.Username == "pak9") || (Input.Username == "pak10") || (Input.Username == "pak11") || (Input.Username == "pak12") || (Input.Username == "sortor") || (Input.Username == "bortor")) && (Input.Password == "P@ssw0rd" || Input.Password == "P@ssw0rd1" || Input.Password == "P@ssw0rd2" || Input.Password == "P@ssw0rd3" || Input.Password == "P@ssw0rd4" || Input.Password == "P@ssw0rd5" || Input.Password == "P@ssw0rd6" || Input.Password == "P@ssw0rd7" || Input.Password == "P@ssw0rd8" || Input.Password == "P@ssw0rd9" || Input.Password == "P@ssw0rd10" || Input.Password == "P@ssw0rd11" || Input.Password == "P@ssw0rd12"))
+                if (((Input.Username == "admin") || (Input.Username == "erevenue") || (Input.Username == "pak") || (Input.Username == "pak1") || (Input.Username == "pak2") || (Input.Username == "pak3") || (Input.Username == "pak4") || (Input.Username == "pak5") || (Input.Username == "pak6") || (Input.Username == "pak7") || (Input.Username == "pak8") || (Input.Username == "pak9") || (Input.Username == "pak10") || (Input.Username == "pak11") || (Input.Username == "pak12") || (Input.Username == "sortor") || (Input.Username == "bortor")) && (Input.Password == "P@ssw0rd" || Input.Password == "P@ssw0rd1" || Input.Password == "P@ssw0rd2" || Input.Password == "P@ssw0rd3" || Input.Password == "P@ssw0rd4" || Input.Password == "P@ssw0rd5" || Input.Password == "P@ssw0rd6" || Input.Password == "P@ssw0rd7" || Input.Password == "P@ssw0rd8" || Input.Password == "P@ssw0rd9" || Input.Password == "P@ssw0rd10" || Input.Password == "P@ssw0rd11" || Input.Password == "P@ssw0rd12" || Input.Password == "Epes@2021"))
                 {
                     if (Input.Username == "admin")
                     {
@@ -102,6 +102,10 @@ namespace EPES.Areas.Identity.Pages.Account
                             {
                                 await _roleManager.CreateAsync(new IdentityRole { Name = "User" });
                             }
+                            if ((await _roleManager.FindByNameAsync("Special")) == null)
+                            {
+                                await _roleManager.CreateAsync(new IdentityRole { Name = "Special" });
+                            }
                             await _userManager.AddToRoleAsync(admin, "Admin");
                         }
                         
@@ -118,6 +122,29 @@ namespace EPES.Areas.Identity.Pages.Account
                             return Page();
                         }
                     }
+
+                    if (Input.Username == "erevenue")
+                    {
+                        if ((await _userManager.FindByNameAsync("erevenue")) == null)
+                        {
+                            var erevenue = new ApplicationUser { UserName = "erevenue", Email = "erevenue@epes.rd.go.th", FName = "eRevenue", LName = "EPES", OfficeId = "00000000" };
+                            await _userManager.CreateAsync(erevenue, "Epes@2021");
+                            await _userManager.AddToRoleAsync(erevenue, "Special");
+                        }
+
+                        var result = await _signInManager.PasswordSignInAsync(Input.Username, Input.Password, Input.RememberMe, lockoutOnFailure: false);
+                        if (result.Succeeded)
+                        {
+                            _logger.LogInformation("User logged in.");
+                            return LocalRedirect(returnUrl);
+                        }
+                        else
+                        {
+                            ModelState.AddModelError(string.Empty, "Invalid login attempt.");
+                            return Page();
+                        }
+                    }
+
                     if (Input.Username == "pak")
                     {
                         if ((await _userManager.FindByNameAsync("pak")) == null)

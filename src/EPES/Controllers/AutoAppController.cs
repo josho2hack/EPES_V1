@@ -33,7 +33,7 @@ namespace EPES.Controllers
         {
             //var office = await _context.Offices.Where(d => d.Code != "00000000" && d.Code.Substring(5, 3) == "000").ToListAsync();
             DateTime yearForRequest;
-            if (DateTime.Now.Month == 10 || DateTime.Now.Month == 11 || DateTime.Now.Month == 12)
+            if (DateTime.Now.Month == 11 || DateTime.Now.Month == 12)
             {
                 yearForRequest = new DateTime(DateTime.Now.AddYears(1).Year, 1, 1);
             }
@@ -48,6 +48,7 @@ namespace EPES.Controllers
                 for (int pak = 0; pak <= 12; pak++)
                 {
                     url = "http://10.20.37.11:7072/serviceTier/webapi/All/officeId/" + pak.ToString("D2") + "000000" + "/year/" + (yearForRequest.Year + 543).ToString("D4") + "/month/" + i.ToString("D2") + "/";
+                    //url = "http://10.20.37.11:7072/serviceTier/webapi/All/officeId/" + pak.ToString("D2") + "000000" + "/year/2563" + "/month/" + i.ToString("D2") + "/";
                     GetTCL(url, yearForRequest, i);
                 }
             }
@@ -81,8 +82,8 @@ namespace EPES.Controllers
 
                             if (dataForEvaluation != null)
                             {
-                                dataForEvaluation.Expect = t.CMCYforcast;
-                                dataForEvaluation.Result = t.CMcurrentYear;
+                                //dataForEvaluation.Expect = t.CMCYforcast/1000000;
+                                dataForEvaluation.Result = t.CMcurrentYear/1000000;
                                 _context.SaveChanges();
                             }
                             //else
@@ -106,8 +107,8 @@ namespace EPES.Controllers
 
                             if (dataForEvaluation != null)
                             {
-                                dataForEvaluation.Expect = t.CMCYforcast;
-                                dataForEvaluation.Result = t.CMcurrentYear;
+                                //dataForEvaluation.Expect = t.CMCYforcast/1000000;
+                                dataForEvaluation.Result = t.CMcurrentYear/1000000;
                                 _context.SaveChanges();
                             }
                             //else

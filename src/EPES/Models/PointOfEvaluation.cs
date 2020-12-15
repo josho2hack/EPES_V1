@@ -49,6 +49,7 @@ namespace EPES.Models
         public UnitOfPoint? Unit { get; set; }
 
         [Display(Name = "น้ำหนักร้อยละ")]
+        [DisplayFormat(DataFormatString = "{0:N2}", ApplyFormatInEditMode = true)]
         [Column(TypeName = "decimal(7, 4)")]
         public decimal Weight { get; set; }
 

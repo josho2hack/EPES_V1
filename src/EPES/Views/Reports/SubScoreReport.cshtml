@@ -37,49 +37,73 @@
         <div class="col-md-6">
             <div class="row">
                 <label class="col-form-label col-md-3 text-md-right">หน่วยงาน: </label>
-                @if (User.IsInRole("Admin") || User.IsInRole("Special") || User.IsInRole("Manager"))
-                {
+                
                     <select asp-for="selectoffice" class="form-control col-md-9" asp-items="ViewBag.OfficeCode" onchange="this.form.submit()">
                         <option value="">เลือกหน่วยงาน</option>
                     </select>
-                }
-                else
-                {
-                    <select asp-for="selectoffice" class="form-control col-md-7" asp-items="ViewBag.OfficeCode" onchange="this.form.submit()" disabled>
-                        <option value="">เลือกหน่วยงาน</option>
-                    </select>
-                }
             </div>
         </div>
         <div class="col-md-6">
             <div class="row">
                 <label class="col-form-label col-md-6 text-md-right">ปีงบประมาณ: </label>
-                <select asp-for="yearPoint" class="form-control col-md-6" onchange="this.form.submit()">
-                    <option value="-1">
-                        @{
-                            if (DateTime.Now.Month == 10 || DateTime.Now.Month == 11 || DateTime.Now.Month == 12)
-                            {
-                                @DateTime.Now.ToString("yyyy");
+                @if (DateTime.Now.Month == 10)
+                {
+                    <select asp-for="yearPoint" class="form-control col-md-6" onchange="this.form.submit()" disabled>
+                        <option value="-1">
+                            @{
+                                if (DateTime.Now.Month == 10 || DateTime.Now.Month == 11 || DateTime.Now.Month == 12)
+                                {
+                                    @DateTime.Now.ToString("yyyy");
+                                }
+                                else
+                                {
+                                    @DateTime.Now.AddYears(-1).ToString("yyyy");
+                                }
                             }
-                            else
-                            {
-                                @DateTime.Now.AddYears(-1).ToString("yyyy");
+                        </option>
+                        <option value="0">
+                            @{
+                                if (DateTime.Now.Month == 10 || DateTime.Now.Month == 11 || DateTime.Now.Month == 12)
+                                {
+                                    @DateTime.Now.AddYears(1).ToString("yyyy");
+                                }
+                                else
+                                {
+                                    @DateTime.Now.ToString("yyyy");
+                                }
                             }
-                        }
-                    </option>
-                    <option value="0">
-                        @{
-                            if (DateTime.Now.Month == 10 || DateTime.Now.Month == 11 || DateTime.Now.Month == 12)
-                            {
-                                @DateTime.Now.AddYears(1).ToString("yyyy");
+                        </option>
+                    </select>
+                }
+                else
+                {
+                    <select asp-for="yearPoint" class="form-control col-md-6" onchange="this.form.submit()">
+                        <option value="-1">
+                            @{
+                                if (DateTime.Now.Month == 10 || DateTime.Now.Month == 11 || DateTime.Now.Month == 12)
+                                {
+                                    @DateTime.Now.ToString("yyyy");
+                                }
+                                else
+                                {
+                                    @DateTime.Now.AddYears(-1).ToString("yyyy");
+                                }
                             }
-                            else
-                            {
-                                @DateTime.Now.ToString("yyyy");
+                        </option>
+                        <option value="0">
+                            @{
+                                if (DateTime.Now.Month == 10 || DateTime.Now.Month == 11 || DateTime.Now.Month == 12)
+                                {
+                                    @DateTime.Now.AddYears(1).ToString("yyyy");
+                                }
+                                else
+                                {
+                                    @DateTime.Now.ToString("yyyy");
+                                }
                             }
-                        }
-                    </option>
-                </select>
+                        </option>
+                    </select>
+                }
             </div>
         </div>
     </div>

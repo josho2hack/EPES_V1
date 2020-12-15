@@ -37,49 +37,74 @@
         <div class="col-md-6">
             <div class="row">
                 <label class="col-form-label col-md-3 text-md-right">หน่วยงาน: </label>
-                @if (User.IsInRole("Admin") || User.IsInRole("Special") || User.IsInRole("Manager"))
-                {
-                    <select name="selectoffice" class="form-control col-md-9" asp-items="ViewBag.OfficeCode" onchange="this.form.submit()">
-                        <option value="">เลือกหน่วยงาน</option>
-                    </select>
-                }
-                else
-                {
-                    <select name="selectoffice" class="form-control col-md-7" asp-items="ViewBag.OfficeCode" onchange="this.form.submit()" disabled>
-                        <option value="">เลือกหน่วยงาน</option>
-                    </select>
-                }
+
+                <select name="selectoffice" class="form-control col-md-9" asp-items="ViewBag.OfficeCode" onchange="this.form.submit()">
+                    <option value="">เลือกหน่วยงาน</option>
+                </select>
+
             </div>
         </div>
         <div class="col-md-6">
             <div class="row">
                 <label class="col-form-label col-md-6 text-md-right">ปีงบประมาณ: </label>
-                <select asp-for="yearPoint" class="form-control col-md-6" onchange="this.form.submit()">
-                    <option value="-1">
-                        @{
-                            if (DateTime.Now.Month == 10 || DateTime.Now.Month == 11 || DateTime.Now.Month == 12)
-                            {
-                                @DateTime.Now.ToString("yyyy");
+                @if (DateTime.Now.Month == 10)
+                {
+                    <select asp-for="yearPoint" class="form-control col-md-6" onchange="this.form.submit()" disabled>
+                        <option value="-1">
+                            @{
+                                if (DateTime.Now.Month == 10 || DateTime.Now.Month == 11 || DateTime.Now.Month == 12)
+                                {
+                                    @DateTime.Now.ToString("yyyy");
+                                }
+                                else
+                                {
+                                    @DateTime.Now.AddYears(-1).ToString("yyyy");
+                                }
                             }
-                            else
-                            {
-                                @DateTime.Now.AddYears(-1).ToString("yyyy");
+                        </option>
+                        <option value="0">
+                            @{
+                                if (DateTime.Now.Month == 10 || DateTime.Now.Month == 11 || DateTime.Now.Month == 12)
+                                {
+                                    @DateTime.Now.AddYears(1).ToString("yyyy");
+                                }
+                                else
+                                {
+                                    @DateTime.Now.ToString("yyyy");
+                                }
                             }
-                        }
-                    </option>
-                    <option value="0">
-                        @{
-                            if (DateTime.Now.Month == 10 || DateTime.Now.Month == 11 || DateTime.Now.Month == 12)
-                            {
-                                @DateTime.Now.AddYears(1).ToString("yyyy");
+                        </option>
+                    </select>
+                }
+                else
+                {
+                    <select asp-for="yearPoint" class="form-control col-md-6" onchange="this.form.submit()">
+                        <option value="-1">
+                            @{
+                                if (DateTime.Now.Month == 10 || DateTime.Now.Month == 11 || DateTime.Now.Month == 12)
+                                {
+                                    @DateTime.Now.ToString("yyyy");
+                                }
+                                else
+                                {
+                                    @DateTime.Now.AddYears(-1).ToString("yyyy");
+                                }
                             }
-                            else
-                            {
-                                @DateTime.Now.ToString("yyyy");
+                        </option>
+                        <option value="0">
+                            @{
+                                if (DateTime.Now.Month == 10 || DateTime.Now.Month == 11 || DateTime.Now.Month == 12)
+                                {
+                                    @DateTime.Now.AddYears(1).ToString("yyyy");
+                                }
+                                else
+                                {
+                                    @DateTime.Now.ToString("yyyy");
+                                }
                             }
-                        }
-                    </option>
-                </select>
+                        </option>
+                    </select>
+                }
             </div>
         </div>
     </div>
@@ -93,7 +118,7 @@
             .Size(s => s.Height(500))
             .AdaptiveLayout(l => l.Width(450))
         )
-    
+
     <br />
 
     @(Html.DevExtreme().PivotGrid<ScoreDraft>()
@@ -109,7 +134,7 @@
     .RowHeaderLayout(PivotGridRowHeadersLayout.Tree)
     //.AllowExpandAll(true)
     .DataSource(d => d
-        .Store(s => s.Mvc().Controller("OwnerScore").Key("Id").LoadAction("Get"))
+        .Store(s => s.Mvc().Controller("OwnerScore").Key("Id").LoadAction("Get").LoadParams(new { selectoffice = Model.selectoffice, yearPoint = Model.yearPoint }))
 
         .Fields(fields => {
         fields.Add()
@@ -207,7 +232,7 @@
                 .Caption("ค่าคะแนน")
                 .DataField("scoreValue")
                 .SummaryType(SummaryType.Avg)
-                
+
                 .Format(f => f.Type(Format.FixedPoint).Precision(4))
                 .Area(PivotGridArea.Data);
                 //.CustomizeText("customizeText");

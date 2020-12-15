@@ -93,6 +93,7 @@
                 <div class="bg-white py-2 collapse-inner rounded">
                     <h6 class="collapse-header">คู่มือการใช้งานระบบ:</h6>
                     <a class="collapse-item" href="/EPES/docs/EPES-Document.pdf">คู่มือผู้ใช้งาน</a>
+                    <a class="collapse-item" href="/EPES/docs/EPES-Point2564.pdf">คำอธิบายตัวชี้วัด 2564</a>
                 </div>
             </div>
         </li>
@@ -130,12 +131,13 @@
                         <div class="collapse-divider"></div>
                         <h6 class="collapse-header">พิเศษ: </h6>
                         <h6 class="collapse-header">เชื่อมโยงข้อมูลอัตโนมัติ: </h6>
-                        <a class="collapse-item" asp-area="" asp-controller="AutoApp" asp-action="Index">เชื่อมโยงข้อมูลผลจัดเก็บภาษี (ภญ/สภ./สท.)</a>
+                        <a class="collapse-item" asp-area="" asp-controller="AutoApp" asp-action="Index" onclick="showLoader(this);">เชื่อมโยงข้อมูลผลจัดเก็บภาษี (ภญ/สภ./สท.)</a>
                         <div class="collapse-divider"></div>
                         <h6 class="collapse-header">คัดลอกตัวชี้วัด: </h6>
-                        <a class="collapse-item text-danger" asp-area="" asp-controller="PointOfEvaluations" asp-action="#">คัดลอก สภ.1 -> ส่วนกลาง/สภ.</a>
-                        <a class="collapse-item text-danger" asp-area="" asp-controller="PointOfEvaluations" asp-action="#">คัดลอก สภ.1 -> สท.1</a>
-                        <a class="collapse-item text-danger" asp-area="" asp-controller="PointOfEvaluations" asp-action="#">คัดลอก สท.1 -> สท.ทั่วประเทศ</a>
+                        <a class="collapse-item text-danger" asp-area="" asp-controller="PointOfEvaluations" asp-action="CopyAllPak1toPak" onclick="showLoader(this);">คัดลอกตัวชี้วัดทั้งหมด สภ.1 -> สภ.</a>
+                        <a class="collapse-item text-danger" asp-area="" asp-controller="PointOfEvaluations" asp-action="CopyDPak1toHQ" onclick="showLoader(this);">คัดลอก D สภ.1 -> ส่วนกลาง</a>
+                        <a class="collapse-item text-danger" asp-area="" asp-controller="PointOfEvaluations" asp-action="CopyBDPak1toST1" onclick="showLoader(this);">คัดลอก B D สภ.1 -> สท.1</a>
+                        <a class="collapse-item text-danger" asp-area="" asp-controller="PointOfEvaluations" asp-action="CopyST1toST" onclick="showLoader(this);">คัดลอก สท.1 -> สท.ทั่วประเทศ</a>
                     </div>
                 </div>
             </li>

@@ -12,15 +12,15 @@
     var yearStop = 0;
     if (DateTime.Now.Month == 10 || DateTime.Now.Month == 11 || DateTime.Now.Month == 12)
     {
-        yearStart = DateTime.Now.Year;
-        yearMid = DateTime.Now.Year + 1;
-        yearStop = DateTime.Now.Year + 1;
+        yearStart = DateTime.Now.AddYears(ViewBag.yearPoint).Year;
+        yearMid = DateTime.Now.AddYears(ViewBag.yearPoint).Year + 1;
+        yearStop = DateTime.Now.AddYears(ViewBag.yearPoint).Year + 1;
     }
     else
     {
-        yearStart = DateTime.Now.Year -1;
-        yearMid = DateTime.Now.Year;
-        yearStop = DateTime.Now.Year;
+        yearStart = DateTime.Now.AddYears(ViewBag.yearPoint).Year -1;
+        yearMid = DateTime.Now.AddYears(ViewBag.yearPoint).Year;
+        yearStop = DateTime.Now.AddYears(ViewBag.yearPoint).Year;
     }
 }
 

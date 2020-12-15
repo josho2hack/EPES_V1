@@ -117,7 +117,7 @@
 .RowHeaderLayout(PivotGridRowHeadersLayout.Tree)
 .AllowExpandAll(true)
 .DataSource(d => d
-    .Store(s => s.Mvc().Controller("ReportsApi").Key("Id").LoadAction("GetBKKScore"))
+    .Store(s => s.Mvc().Controller("ReportsApi").Key("Id").LoadAction("GetBKKScore").LoadParams(new { yearPoint = Model.yearPoint, lastMonth = Model.Month }))
 
     .Fields(fields => {
 
@@ -208,7 +208,7 @@
 .RowHeaderLayout(PivotGridRowHeadersLayout.Tree)
 .AllowExpandAll(true)
 .DataSource(d => d
-.Store(s => s.Mvc().Controller("ReportsApi").Key("Id").LoadAction("GetBKKScore"))
+.Store(s => s.Mvc().Controller("ReportsApi").Key("Id").LoadAction("GetBKKScore").LoadParams(new { yearPoint = Model.yearPoint, lastMonth = Model.Month }))
 
 .Fields(fields => {
 fields.Add()

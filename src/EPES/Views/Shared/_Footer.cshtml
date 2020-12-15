@@ -40,7 +40,6 @@
     <!--[if gte IE 9]><!-->
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.js"></script>
     <!--<![endif]-->
-
     <!--[if IE 9]>
         <script src="https://cdn.jsdelivr.net/gh/coliff/bootstrap-ie8/js/bootstrap-ie9.min.js"></script>
     <![endif]-->
@@ -72,7 +71,6 @@
             integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM">
     </script>
     <!--<![endif]-->
-
     <!--[if IE 9]>
         <script src="https://cdn.jsdelivr.net/gh/coliff/bootstrap-ie8/js/bootstrap-ie9.min.js"></script>
     <![endif]-->
@@ -90,3 +88,20 @@
 <script src="~/js/sb-admin-2.js"></script>
 
 <script src="~/js/site.js" asp-append-version="true"></script>
+<script>
+    var showLoader = function (form) {
+        $("<div />").css({
+            'position': 'fixed',
+            'left': 0,
+            'right': 0,
+            'bottom': 0,
+            'top': 0,
+            'background': '#0020ff36',
+            'z-index': '99',
+            'text-align': 'center'
+        }).appendTo($("body"))
+            .append(
+                $("<img />").attr("src", "https://mir-s3-cdn-cf.behance.net/project_modules/disp/35771931234507.564a1d2403b3a.gif")
+            );
+    }
+</script>

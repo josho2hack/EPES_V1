@@ -17,18 +17,23 @@ namespace EPES.Models
         public int Id { get; set; }
 
         [Display(Name = "เป้าหมาย/ประมาณการ")]
+        //[DisplayFormat(DataFormatString = "{0:[format]}", ApplyFormatInEditMode = true)]
+        [DisplayFormat(DataFormatString = "{0:N4}", ApplyFormatInEditMode = true)]
         [Column(TypeName = "decimal(38, 10)")]
         public decimal Expect { get; set; }
 
         [Display(Name = "ผลการดำเนินการ")]
+        [DisplayFormat(DataFormatString = "{0:N4}", ApplyFormatInEditMode = true)]
         [Column(TypeName = "decimal(38, 10)")]
         public decimal Result { get; set; }
 
         [Display(Name = "ผลการดำเนินการ (สำหรับหน่วยวัด ระดับ_ร้อนละ)")]
+        [DisplayFormat(DataFormatString = "{0:N4}", ApplyFormatInEditMode = true)]
         [Column(TypeName = "decimal(38, 10)")]
         public decimal ResultLevelRate { get; set; }
 
         [Display(Name = "ผลการดำเนินการก่อนผู้ตรวจสอบแก้ไข")]
+        [DisplayFormat(DataFormatString = "{0:N4}", ApplyFormatInEditMode = true)]
         [Column(TypeName = "decimal(38, 10)")]
         public decimal? OldResult { get; set; }
 
