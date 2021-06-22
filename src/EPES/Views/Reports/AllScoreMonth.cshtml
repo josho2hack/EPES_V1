@@ -131,6 +131,11 @@
         .Expanded(false)
         //.SortBy(PivotGridSortBy.DisplayText)
         //.SortOrder(SortOrder.Asc)
+        .CalculateSummaryValue(@<text>
+                    function() {
+                        return "1";
+                    }
+                    </text>)
         .Width(200)
         .Area(PivotGridArea.Row);
 
@@ -175,9 +180,9 @@
                     </text>);
 
             fields.Add()
-                .Caption("บันทึก")
-                .DataField("scoreValue")
-                .SummaryType(SummaryType.Avg)
+                .Caption("คะแนนถ่วงน้ำหนัก")
+                .DataField("cal")
+                .SummaryType(SummaryType.Sum)
                 .Format(f => f.Type(Format.FixedPoint).Precision(4))
                 .Area(PivotGridArea.Data)
                 .CustomizeText("customizeText");
@@ -269,9 +274,9 @@ fields.Add()
                     </text>);
 
             fields.Add()
-                .Caption("บันทึก")
-                .DataField("scoreApprove")
-                .SummaryType(SummaryType.Avg)
+                .Caption("คะแนนถ่วงน้ำหนัก")
+                .DataField("calApprove")
+                .SummaryType(SummaryType.Sum)
                 .Format(f => f.Type(Format.FixedPoint).Precision(4))
                 .Area(PivotGridArea.Data)
                 .CustomizeText("customizeText");

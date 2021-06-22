@@ -15,11 +15,13 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
+using FileHelpers;
 
 namespace EPES.Controllers
 {
     public class AutoAppController : Controller
     {
+        public DateTime year;
         private readonly ApplicationDbContext _context;
         private readonly UserManager<ApplicationUser> _userManager;
 
@@ -77,55 +79,883 @@ namespace EPES.Controllers
                         {
                             var dataForEvaluation = _context.DataForEvaluations
                                                     //.Include(d => d.PointOfEvaluation)
-                                                    .Where(d => d.Office.Code == "00009000" && d.PointOfEvaluation.AutoApp == AutoApps.ข้อมูลการจัดเก็บภาษีอากร && d.PointOfEvaluation.Year == yearForRequest && d.Month == i)
+                                                    .Where(d => d.Office.Code == "00009000" && d.PointOfEvaluation.AutoApp == AutoApps.การจัดเก็บภาษีอากร && d.PointOfEvaluation.Year == yearForRequest && d.Month == i)
                                                     .FirstOrDefault();
 
                             if (dataForEvaluation != null)
                             {
                                 //dataForEvaluation.Expect = t.CMCYforcast/1000000;
-                                dataForEvaluation.Result = t.CMcurrentYear/1000000;
+                                dataForEvaluation.Result = t.CMcurrentYear / 1000000;
+                                dataForEvaluation.CompletedDate = new DateTime(yearForRequest.Year, dataForEvaluation.Month, DateTime.DaysInMonth(yearForRequest.Year, dataForEvaluation.Month));
+                                dataForEvaluation.Approve = Approve.ผษ_อนุมัติ;
                                 _context.SaveChanges();
                             }
-                            //else
-                            //{
-                            //    dataForEvaluation = new DataForEvaluation();
-                            //    dataForEvaluation.Expect = t.CMCYforcast;
-                            //    dataForEvaluation.Result = t.CMcurrentYear;
-                            //    dataForEvaluation.OfficeId = _context.Offices.Where(o => o.Code == "00009000").FirstOrDefault().Id;
-                            //    dataForEvaluation.PointOfEvaluationId = _context.PointOfEvaluations.Where(poe => poe.OwnerOfficeId == dataForEvaluation.OfficeId && poe.Year == yearForRequest && poe.AutoApp == AutoApps.ข้อมูลการจัดเก็บภาษีอากร).FirstOrDefault().Id;
-                            //    dataForEvaluation.Month = i;
-                            //    _context.DataForEvaluations.Add(dataForEvaluation);
-                            //    _context.SaveChanges();
-                            //}
                         } // ภญ.
                         else
                         {
                             var dataForEvaluation = _context.DataForEvaluations
-                                                    //.Include(d => d.PointOfEvaluation)
-                                                    .Where(d => d.Office.Code == t.officeCode && d.PointOfEvaluation.AutoApp == AutoApps.ข้อมูลการจัดเก็บภาษีอากร && d.PointOfEvaluation.Year == yearForRequest && d.Month == i)
+                                                    .Where(d => d.Office.Code == t.officeCode && d.PointOfEvaluation.AutoApp == AutoApps.การจัดเก็บภาษีอากร && d.PointOfEvaluation.Year == yearForRequest && d.Month == i)
                                                     .FirstOrDefault();
 
                             if (dataForEvaluation != null)
                             {
                                 //dataForEvaluation.Expect = t.CMCYforcast/1000000;
-                                dataForEvaluation.Result = t.CMcurrentYear/1000000;
+                                dataForEvaluation.Result = t.CMcurrentYear / 1000000;
+                                dataForEvaluation.CompletedDate = new DateTime(yearForRequest.Year, dataForEvaluation.Month, DateTime.DaysInMonth(yearForRequest.Year, dataForEvaluation.Month));
+                                dataForEvaluation.Approve = Approve.ผษ_อนุมัติ;
                                 _context.SaveChanges();
                             }
-                            //else
-                            //{
-                            //    dataForEvaluation = new DataForEvaluation();
-                            //    dataForEvaluation.Expect = t.CMCYforcast;
-                            //    dataForEvaluation.Result = t.CMcurrentYear;
-                            //    dataForEvaluation.OfficeId = _context.Offices.Where(o => o.Code == t.officeCode).FirstOrDefault().Id;
-                            //    dataForEvaluation.PointOfEvaluationId = _context.PointOfEvaluations.Where(poe => poe.OwnerOfficeId == dataForEvaluation.OfficeId && poe.Year == yearForRequest && poe.Name.Contains("ผลการจัดเก็บภาษี") && poe.Unit == 0).FirstOrDefault().Id;
-                            //    dataForEvaluation.Month = i;
-                            //    _context.DataForEvaluations.Add(dataForEvaluation);
-                            //    _context.SaveChanges();
-                            //}
                         } // สภ.
                     }
                 }
             }
         } //End getTCL
+
+        public IActionResult GetTax100()
+        {
+            string url = "";
+            var m = DateTime.Now.Month;
+            //var office = await _context.Offices.Where(d => d.Code != "00000000" && d.Code.Substring(5, 3) == "000").ToListAsync();
+            DateTime yearForRequest;
+            if (m == 11 || m == 12)
+            {
+                yearForRequest = new DateTime(DateTime.Now.AddYears(1).Year, 1, 1);
+                if (m == 11)
+                {
+                        for (int pak = 0; pak <= 12; pak++)
+                        {
+                            url = "http://10.20.17.178:8080/serviceTier/webapi/All200/officeId/" + pak.ToString("D2") + "000000" + "/year/" + (yearForRequest.Year + 543).ToString("D4") + "/month/" + "10" + "/";
+                            Get100(url, yearForRequest, 10);
+                        }
+                }
+                if (m == 12)
+                {
+                    for (int i = 10; i <= 11; i++)
+                    {
+                        for (int pak = 0; pak <= 12; pak++)
+                        {
+                            url = "http://10.20.17.178:8080/serviceTier/webapi/All200/officeId/" + pak.ToString("D2") + "000000" + "/year/" + (yearForRequest.Year + 543).ToString("D4") + "/month/" + i.ToString("D2") + "/";
+                            Get100(url, yearForRequest, i);
+                        }
+                    }
+                }
+            }
+            else
+            {
+                yearForRequest = new DateTime(DateTime.Now.Year, 1, 1);
+                if (m == 10)
+                {
+                    for (int i = 1; i <= 12; i++)
+                    {
+                        for (int pak = 0; pak <= 12; pak++)
+                        {
+                            url = "http://10.20.17.178:8080/serviceTier/webapi/All200/officeId/" + pak.ToString("D2") + "000000" + "/year/" + (yearForRequest.Year + 543).ToString("D4") + "/month/" + i.ToString("D2") + "/";
+                            Get100(url, yearForRequest, i);
+                        }
+                    }
+                }
+                else
+                {
+                    for (int i = 10; i <= 12; i++)
+                    {
+                        for (int pak = 0; pak <= 12; pak++)
+                        {
+                            url = "http://10.20.17.178:8080/serviceTier/webapi/All200/officeId/" + pak.ToString("D2") + "000000" + "/year/" + (yearForRequest.Year + 543).ToString("D4") + "/month/" + i.ToString("D2") + "/";
+                            Get100(url, yearForRequest, i);
+                        }
+                    }
+
+                    for (int i = 1; i < m; i++)
+                    {
+                        for (int pak = 0; pak <= 12; pak++)
+                        {
+                            url = "http://10.20.17.178:8080/serviceTier/webapi/All200/officeId/" + pak.ToString("D2") + "000000" + "/year/" + (yearForRequest.Year + 543).ToString("D4") + "/month/" + i.ToString("D2") + "/";
+                            Get100(url, yearForRequest, i);
+                        }
+                    }
+                }
+            }
+
+            return LocalRedirect("/");
+        }
+
+        private void Get100(string url, DateTime yearForRequest, int i)
+        {
+            HttpWebRequest webRequest = WebRequest.Create(url) as HttpWebRequest;
+            if (webRequest == null)
+            {
+                return;
+            }
+            webRequest.ContentType = "application/json";
+            webRequest.UserAgent = "Nothing";
+
+            using (var s = webRequest.GetResponse().GetResponseStream())
+            {
+                using (var sr = new StreamReader(s))
+                {
+                    var taxCollectionsAsJson = sr.ReadToEnd();
+                    var taxCollections = JsonConvert.DeserializeObject<Rootobject>(taxCollectionsAsJson);
+                    foreach (var t in taxCollections.taxCollection)
+                    {
+                        var dataForEvaluation = _context.DataForEvaluations
+                                                .Where(d => d.Office.Code == t.officeCode && d.PointOfEvaluation.AutoApp == AutoApps.ผู้ประกอบการรายใหญ่ในท้องที่ && d.PointOfEvaluation.Year == yearForRequest && d.Month == i)
+                                                .FirstOrDefault();
+
+                        if (dataForEvaluation != null)
+                        {
+                            dataForEvaluation.Expect = t.CMlastYear / 1000000;
+                            dataForEvaluation.ResultLevelRate = t.CMcurrentYear / 1000000;
+                            dataForEvaluation.CompletedDate = new DateTime(yearForRequest.Year, dataForEvaluation.Month, DateTime.DaysInMonth(yearForRequest.Year, dataForEvaluation.Month));
+                            _context.SaveChanges();
+                        }
+                    }
+                }
+            }
+        } //End get100
+
+        public IActionResult GetCanvass56_1() //สน. ตัวชี้วัด 64 12
+        {
+            string url = "http://10.2.1.167/data/epes/canvass56-1.csv";
+            HttpWebRequest webRequest = WebRequest.Create(url) as HttpWebRequest;
+            if (webRequest == null)
+            {
+                return LocalRedirect("/");
+            }
+
+            DateTime yearForRequest;
+
+            using (var s = webRequest.GetResponse().GetResponseStream())
+            {
+                using (var sr = new StreamReader(s))
+                {
+                    //var canvass56_1 = sr.ReadToEnd();
+                    DataForEvaluation dataForEvaluation;
+                    var engine = new FileHelperEngine<Canvass56>();
+                    var records = engine.ReadStream(sr);
+
+                    decimal[][] sumExpect = new decimal[12][];
+                    decimal[][] sumResult = new decimal[12][];
+
+                    for (int i = 0; i < 12; i++)
+                    {
+                        sumExpect[i] = new decimal[13];
+                        sumResult[i] = new decimal[13];
+                    }
+
+                    //return Ok(records);
+                    foreach (var record in records)
+                    {
+                        if (record.month == 10 || record.month == 11 || record.month == 12)
+                        {
+                            yearForRequest = new DateTime(record.year - 542, 1, 1);
+                        }
+                        else
+                        {
+                            yearForRequest = new DateTime(record.year - 543, 1, 1);
+                        }
+
+                        dataForEvaluation = _context.DataForEvaluations
+                                                .Where(d => d.Office.Code == record.officeID && d.PointOfEvaluation.AutoApp == AutoApps.ผู้เสียภาษีรายใหม่ && d.PointOfEvaluation.Year == yearForRequest && d.Month == record.month)
+                                                .FirstOrDefault();
+
+                        if (dataForEvaluation != null)
+                        {
+                            dataForEvaluation.Expect = record.expect;
+                            dataForEvaluation.Result = record.result;
+                            dataForEvaluation.CompletedDate = new DateTime(yearForRequest.Year, dataForEvaluation.Month, DateTime.DaysInMonth(yearForRequest.Year, dataForEvaluation.Month));
+                            dataForEvaluation.Approve = Approve.ผษ_อนุมัติ;
+                            _context.SaveChanges();
+                        }
+
+                        year = yearForRequest;
+
+                        switch (record.officeID.Substring(0, 2))
+                        {
+                            case "01":
+                                sumExpect[0][record.month] += record.expect;
+                                sumResult[0][record.month] += record.result;
+                                break;
+                            case "02":
+                                sumExpect[1][record.month] += record.expect;
+                                sumResult[1][record.month] += record.result;
+                                break;
+                            case "03":
+                                sumExpect[2][record.month] += record.expect;
+                                sumResult[2][record.month] += record.result;
+                                break;
+                            case "04":
+                                sumExpect[3][record.month] += record.expect;
+                                sumResult[3][record.month] += record.result;
+                                break;
+                            case "05":
+                                sumExpect[4][record.month] += record.expect;
+                                sumResult[4][record.month] += record.result;
+                                break;
+                            case "06":
+                                sumExpect[5][record.month] += record.expect;
+                                sumResult[5][record.month] += record.result;
+                                break;
+                            case "07":
+                                sumExpect[6][record.month] += record.expect;
+                                sumResult[6][record.month] += record.result;
+                                break;
+                            case "08":
+                                sumExpect[7][record.month] += record.expect;
+                                sumResult[7][record.month] += record.result;
+                                break;
+                            case "09":
+                                sumExpect[8][record.month] += record.expect;
+                                sumResult[8][record.month] += record.result;
+                                break;
+                            case "10":
+                                sumExpect[9][record.month] += record.expect;
+                                sumResult[9][record.month] += record.result;
+                                break;
+                            case "11":
+                                sumExpect[10][record.month] += record.expect;
+                                sumResult[10][record.month] += record.result;
+                                break;
+                            case "12":
+                                sumExpect[11][record.month] += record.expect;
+                                sumResult[11][record.month] += record.result;
+                                break;
+                        }
+                    }// end foreach stream
+
+                    for (int i = 1; i <= 12; i++)
+                    {
+                        for (int j = 1; j < 13; j++)
+                        {
+                            if (sumResult[i - 1][j] != 0)
+                            {
+                                dataForEvaluation = _context.DataForEvaluations
+                                                .Where(d => d.Office.Code == i.ToString("D2") + "000000" && d.PointOfEvaluation.AutoApp == AutoApps.ผู้เสียภาษีรายใหม่ && d.PointOfEvaluation.Year == year && d.Month == j)
+                                                .FirstOrDefault();
+
+                                if (dataForEvaluation != null)
+                                {
+                                    dataForEvaluation.Expect = sumExpect[i - 1][j];
+                                    dataForEvaluation.Result = sumResult[i - 1][j];
+                                    dataForEvaluation.CompletedDate = new DateTime(year.Year, dataForEvaluation.Month, DateTime.DaysInMonth(year.Year, dataForEvaluation.Month));
+                                    dataForEvaluation.Approve = Approve.ผษ_อนุมัติ;
+                                    _context.SaveChanges();
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            return LocalRedirect("/");
+
+        } //End สน. ตัวชี้วัด 64 12
+
+        public IActionResult GetCanvass56_2() //สน. ตัวชี้วัด 64 13
+        {
+            string url = "http://10.2.1.167/data/epes/canvass56-2.csv";
+            HttpWebRequest webRequest = WebRequest.Create(url) as HttpWebRequest;
+            if (webRequest == null)
+            {
+                return LocalRedirect("/");
+            }
+
+            DateTime yearForRequest;
+
+            using (var s = webRequest.GetResponse().GetResponseStream())
+            {
+                using (var sr = new StreamReader(s))
+                {
+                    //var canvass56_1 = sr.ReadToEnd();
+                    DataForEvaluation dataForEvaluation;
+                    var engine = new FileHelperEngine<Canvass56>();
+                    var records = engine.ReadStream(sr);
+                    //return Ok(records);
+
+                    decimal[][] sumExpect = new decimal[12][];
+                    decimal[][] sumResult = new decimal[12][];
+
+                    for (int i = 0; i < 12; i++)
+                    {
+                        sumExpect[i] = new decimal[13];
+                        sumResult[i] = new decimal[13];
+                    }
+
+                    foreach (var record in records)
+                    {
+                        if (record.month == 10 || record.month == 11 || record.month == 12)
+                        {
+                            yearForRequest = new DateTime(record.year - 542, 1, 1);
+                        }
+                        else
+                        {
+                            yearForRequest = new DateTime(record.year - 543, 1, 1);
+                        }
+
+                        dataForEvaluation = _context.DataForEvaluations
+                                                .Where(d => d.Office.Code == record.officeID && d.PointOfEvaluation.AutoApp == AutoApps.ผู้เสียภาษีรายใหม่ที่ชำระภาษี && d.PointOfEvaluation.Year == yearForRequest && d.Month == record.month)
+                                                .FirstOrDefault();
+
+                        if (dataForEvaluation != null)
+                        {
+                            dataForEvaluation.Expect = record.expect;
+                            dataForEvaluation.CompletedDate = new DateTime(yearForRequest.Year, dataForEvaluation.Month, DateTime.DaysInMonth(yearForRequest.Year, dataForEvaluation.Month));
+                            dataForEvaluation.Result = record.result;
+                            dataForEvaluation.Approve = Approve.ผษ_อนุมัติ;
+                            _context.SaveChanges();
+                        }
+
+                        year = yearForRequest;
+
+                        switch (record.officeID.Substring(0, 2))
+                        {
+                            case "01":
+                                sumExpect[0][record.month] += record.expect;
+                                sumResult[0][record.month] += record.result;
+                                break;
+                            case "02":
+                                sumExpect[1][record.month] += record.expect;
+                                sumResult[1][record.month] += record.result;
+                                break;
+                            case "03":
+                                sumExpect[2][record.month] += record.expect;
+                                sumResult[2][record.month] += record.result;
+                                break;
+                            case "04":
+                                sumExpect[3][record.month] += record.expect;
+                                sumResult[3][record.month] += record.result;
+                                break;
+                            case "05":
+                                sumExpect[4][record.month] += record.expect;
+                                sumResult[4][record.month] += record.result;
+                                break;
+                            case "06":
+                                sumExpect[5][record.month] += record.expect;
+                                sumResult[5][record.month] += record.result;
+                                break;
+                            case "07":
+                                sumExpect[6][record.month] += record.expect;
+                                sumResult[6][record.month] += record.result;
+                                break;
+                            case "08":
+                                sumExpect[7][record.month] += record.expect;
+                                sumResult[7][record.month] += record.result;
+                                break;
+                            case "09":
+                                sumExpect[8][record.month] += record.expect;
+                                sumResult[8][record.month] += record.result;
+                                break;
+                            case "10":
+                                sumExpect[9][record.month] += record.expect;
+                                sumResult[9][record.month] += record.result;
+                                break;
+                            case "11":
+                                sumExpect[10][record.month] += record.expect;
+                                sumResult[10][record.month] += record.result;
+                                break;
+                            case "12":
+                                sumExpect[11][record.month] += record.expect;
+                                sumResult[11][record.month] += record.result;
+                                break;
+                        }
+                    }
+                    for (int i = 1; i <= 12; i++)
+                    {
+                        for (int j = 1; j < 13; j++)
+                        {
+                            if (sumResult[i - 1][j] != 0)
+                            {
+                                dataForEvaluation = _context.DataForEvaluations
+                                                .Where(d => d.Office.Code == i.ToString("D2") + "000000" && d.PointOfEvaluation.AutoApp == AutoApps.ผู้เสียภาษีรายใหม่ที่ชำระภาษี && d.PointOfEvaluation.Year == year && d.Month == j)
+                                                .FirstOrDefault();
+
+                                if (dataForEvaluation != null)
+                                {
+                                    dataForEvaluation.Expect = sumExpect[i - 1][j];
+                                    dataForEvaluation.Result = sumResult[i - 1][j];
+                                    dataForEvaluation.CompletedDate = new DateTime(year.Year, dataForEvaluation.Month, DateTime.DaysInMonth(year.Year, dataForEvaluation.Month));
+                                    dataForEvaluation.Approve = Approve.ผษ_อนุมัติ;
+                                    _context.SaveChanges();
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            return LocalRedirect("/");
+
+        } //End สน. ตัวชี้วัด 64 13
+
+        public IActionResult GetCanvass56_3() //สน. ตัวชี้วัด 64 14
+        {
+            string url = "http://10.2.1.167/data/epes/canvass56-3.csv";
+            HttpWebRequest webRequest = WebRequest.Create(url) as HttpWebRequest;
+            if (webRequest == null)
+            {
+                return LocalRedirect("/");
+            }
+
+            DateTime yearForRequest;
+
+            using (var s = webRequest.GetResponse().GetResponseStream())
+            {
+                using (var sr = new StreamReader(s))
+                {
+                    //var canvass56_1 = sr.ReadToEnd();
+                    DataForEvaluation dataForEvaluation;
+                    var engine = new FileHelperEngine<Canvass56>();
+                    var records = engine.ReadStream(sr);
+
+                    decimal[][] sumExpect = new decimal[12][];
+                    decimal[][] sumResult = new decimal[12][];
+
+                    for (int i = 0; i < 12; i++)
+                    {
+                        sumExpect[i] = new decimal[13];
+                        sumResult[i] = new decimal[13];
+                    }
+                    //return Ok(records);
+                    foreach (var record in records)
+                    {
+                        if (record.month == 10 || record.month == 11 || record.month == 12)
+                        {
+                            yearForRequest = new DateTime(record.year - 542, 1, 1);
+                        }
+                        else
+                        {
+                            yearForRequest = new DateTime(record.year - 543, 1, 1);
+                        }
+
+                        dataForEvaluation = _context.DataForEvaluations
+                                                .Where(d => d.Office.Code == record.officeID && d.PointOfEvaluation.AutoApp == AutoApps.การนำข้อมูลสำรวจไปใช้งาน && d.PointOfEvaluation.Year == yearForRequest && d.Month == record.month)
+                                                .FirstOrDefault();
+
+                        if (dataForEvaluation != null)
+                        {
+                            dataForEvaluation.Expect = record.expect;
+                            dataForEvaluation.Result = record.result;
+                            dataForEvaluation.CompletedDate = new DateTime(yearForRequest.Year, dataForEvaluation.Month, DateTime.DaysInMonth(yearForRequest.Year, dataForEvaluation.Month));
+                            dataForEvaluation.Approve = Approve.ผษ_อนุมัติ;
+                            _context.SaveChanges();
+                        }
+
+                        year = yearForRequest;
+
+                        switch (record.officeID.Substring(0, 2))
+                        {
+                            case "01":
+                                sumExpect[0][record.month] += record.expect;
+                                sumResult[0][record.month] += record.result;
+                                break;
+                            case "02":
+                                sumExpect[1][record.month] += record.expect;
+                                sumResult[1][record.month] += record.result;
+                                break;
+                            case "03":
+                                sumExpect[2][record.month] += record.expect;
+                                sumResult[2][record.month] += record.result;
+                                break;
+                            case "04":
+                                sumExpect[3][record.month] += record.expect;
+                                sumResult[3][record.month] += record.result;
+                                break;
+                            case "05":
+                                sumExpect[4][record.month] += record.expect;
+                                sumResult[4][record.month] += record.result;
+                                break;
+                            case "06":
+                                sumExpect[5][record.month] += record.expect;
+                                sumResult[5][record.month] += record.result;
+                                break;
+                            case "07":
+                                sumExpect[6][record.month] += record.expect;
+                                sumResult[6][record.month] += record.result;
+                                break;
+                            case "08":
+                                sumExpect[7][record.month] += record.expect;
+                                sumResult[7][record.month] += record.result;
+                                break;
+                            case "09":
+                                sumExpect[8][record.month] += record.expect;
+                                sumResult[8][record.month] += record.result;
+                                break;
+                            case "10":
+                                sumExpect[9][record.month] += record.expect;
+                                sumResult[9][record.month] += record.result;
+                                break;
+                            case "11":
+                                sumExpect[10][record.month] += record.expect;
+                                sumResult[10][record.month] += record.result;
+                                break;
+                            case "12":
+                                sumExpect[11][record.month] += record.expect;
+                                sumResult[11][record.month] += record.result;
+                                break;
+                        }
+                    }
+                    for (int i = 1; i <= 12; i++)
+                    {
+                        for (int j = 1; j < 13; j++)
+                        {
+                            if (sumResult[i - 1][j] != 0)
+                            {
+                                dataForEvaluation = _context.DataForEvaluations
+                                                .Where(d => d.Office.Code == i.ToString("D2") + "000000" && d.PointOfEvaluation.AutoApp == AutoApps.การนำข้อมูลสำรวจไปใช้งาน && d.PointOfEvaluation.Year == year && d.Month == j)
+                                                .FirstOrDefault();
+
+                                if (dataForEvaluation != null)
+                                {
+                                    dataForEvaluation.Expect = sumExpect[i - 1][j];
+                                    dataForEvaluation.Result = sumResult[i - 1][j];
+                                    dataForEvaluation.CompletedDate = new DateTime(year.Year, dataForEvaluation.Month, DateTime.DaysInMonth(year.Year, dataForEvaluation.Month));
+                                    dataForEvaluation.Approve = Approve.ผษ_อนุมัติ;
+                                    _context.SaveChanges();
+                                }
+                            }
+                        }
+                    }//end pak
+                    var offices = _context.Offices.Where(o => o.Code.Substring(0, 2) != "00" && o.Code.Substring(5, 3) == "000");
+                    foreach (var item in offices)
+                    {
+                        if (DateTime.Now.Month < 10)
+                        {
+                            for (int j = 10; j <= 12; j++)
+                            {
+                                dataForEvaluation = _context.DataForEvaluations
+                                                .Where(d => d.OfficeId == item.Id && d.PointOfEvaluation.AutoApp == AutoApps.การนำข้อมูลสำรวจไปใช้งาน && d.PointOfEvaluation.Year == year && d.Month == j && d.Approve != Approve.ผษ_อนุมัติ)
+                                                .FirstOrDefault();
+
+                                if (dataForEvaluation != null)
+                                {
+                                    dataForEvaluation.Expect = 0;
+                                    dataForEvaluation.Result = 0;
+                                    dataForEvaluation.CompletedDate = new DateTime(year.Year, dataForEvaluation.Month, DateTime.DaysInMonth(year.Year, dataForEvaluation.Month));
+                                    dataForEvaluation.Approve = Approve.ผษ_อนุมัติ;
+                                    _context.SaveChanges();
+                                }
+                            }
+                            for (int j = 1; j <= DateTime.Now.Month; j++)
+                            {
+                                dataForEvaluation = _context.DataForEvaluations
+                                                .Where(d => d.OfficeId == item.Id && d.PointOfEvaluation.AutoApp == AutoApps.การนำข้อมูลสำรวจไปใช้งาน && d.PointOfEvaluation.Year == year && d.Month == j && d.Approve != Approve.ผษ_อนุมัติ)
+                                                .FirstOrDefault();
+
+                                if (dataForEvaluation != null)
+                                {
+                                    dataForEvaluation.Expect = 0;
+                                    dataForEvaluation.Result = 0;
+                                    dataForEvaluation.CompletedDate = new DateTime(year.Year, dataForEvaluation.Month, DateTime.DaysInMonth(year.Year, dataForEvaluation.Month));
+                                    dataForEvaluation.Approve = Approve.ผษ_อนุมัติ;
+                                    _context.SaveChanges();
+                                }
+                            }
+                        }
+                        else
+                        {
+                            for (int j = 10; j <= DateTime.Now.Month; j++)
+                            {
+                                dataForEvaluation = _context.DataForEvaluations
+                                                .Where(d => d.OfficeId == item.Id && d.PointOfEvaluation.AutoApp == AutoApps.การนำข้อมูลสำรวจไปใช้งาน && d.PointOfEvaluation.Year == year && d.Month == j && d.Approve != Approve.ผษ_อนุมัติ)
+                                                .FirstOrDefault();
+
+                                if (dataForEvaluation != null)
+                                {
+                                    dataForEvaluation.Expect = 0;
+                                    dataForEvaluation.Result = 0;
+                                    dataForEvaluation.CompletedDate = new DateTime(year.Year, dataForEvaluation.Month, DateTime.DaysInMonth(year.Year, dataForEvaluation.Month));
+                                    dataForEvaluation.Approve = Approve.ผษ_อนุมัติ;
+                                    _context.SaveChanges();
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
+            //UpdateApprove();
+            return LocalRedirect("/");
+
+        } //End สน. ตัวชี้วัด 64 14
+
+        public IActionResult GetP11() //มจ. ตัวชี้วัด 64 11
+        {
+            string url = "http://localhost:8082/morjor/p11.csv";
+            HttpWebRequest webRequest = WebRequest.Create(url) as HttpWebRequest;
+            if (webRequest == null)
+            {
+                return LocalRedirect("/");
+            }
+
+            DateTime yearForRequest;
+
+            using (var s = webRequest.GetResponse().GetResponseStream())
+            {
+                using (var sr = new StreamReader(s))
+                {
+                    //var canvass56_1 = sr.ReadToEnd();
+                    var engine = new FileHelperEngine<P11>();
+                    var records = engine.ReadStream(sr);
+                    //return Ok(records);
+                    foreach (var record in records)
+                    {
+                        yearForRequest = new DateTime(record.year - 543, 1, 1);
+
+                        if (record.month == 1)
+                        {
+                            var dataForEvaluation = _context.DataForEvaluations
+                                                .Where(d => d.Office.Code == record.officeID && d.PointOfEvaluation.AutoApp == AutoApps.ร้อยละของการบริหารการคืนภาษี && d.PointOfEvaluation.Year == yearForRequest && d.Month == record.month)
+                                                .FirstOrDefault();
+                            if (dataForEvaluation != null)
+                            {
+                                dataForEvaluation.Expect = record.expect;
+                                dataForEvaluation.Result = record.result;
+                                dataForEvaluation.CompletedDate = new DateTime(yearForRequest.Year, dataForEvaluation.Month, DateTime.DaysInMonth(yearForRequest.Year, dataForEvaluation.Month));
+                                dataForEvaluation.Approve = Approve.ผษ_อนุมัติ;
+                                _context.SaveChanges();
+                            }
+                            for (int i = 10; i <= 12; i++)
+                            {
+                                dataForEvaluation = _context.DataForEvaluations
+                                                .Where(d => d.Office.Code == record.officeID && d.PointOfEvaluation.AutoApp == AutoApps.ร้อยละของการบริหารการคืนภาษี && d.PointOfEvaluation.Year == yearForRequest && d.Month == i)
+                                                .FirstOrDefault();
+                                if (dataForEvaluation != null)
+                                {
+                                    dataForEvaluation.Expect = 0;
+                                    dataForEvaluation.Result = 0;
+                                    dataForEvaluation.CompletedDate = new DateTime(yearForRequest.Year, dataForEvaluation.Month, DateTime.DaysInMonth(yearForRequest.Year, dataForEvaluation.Month));
+                                    dataForEvaluation.Approve = Approve.ผษ_อนุมัติ;
+                                    _context.SaveChanges();
+                                }
+                            }
+                        }
+                        else
+                        {
+                            decimal sumExpect = 0;
+                            decimal sumResult = 0;
+                            for (int i = 1; i < record.month; i++)
+                            {
+                                var data = _context.DataForEvaluations
+                                                .Where(d => d.Office.Code == record.officeID && d.PointOfEvaluation.AutoApp == AutoApps.ร้อยละของการบริหารการคืนภาษี && d.PointOfEvaluation.Year == yearForRequest && d.Month == i)
+                                                .FirstOrDefault();
+                                if (data != null)
+                                {
+                                    sumExpect += data.Expect;
+                                    sumResult += data.Result;
+                                }
+                            }
+                            var dataForEvaluation = _context.DataForEvaluations
+                                                .Where(d => d.Office.Code == record.officeID && d.PointOfEvaluation.AutoApp == AutoApps.ร้อยละของการบริหารการคืนภาษี && d.PointOfEvaluation.Year == yearForRequest && d.Month == record.month)
+                                                .FirstOrDefault();
+                            if (dataForEvaluation != null)
+                            {
+                                dataForEvaluation.Expect = record.expect - sumExpect;
+                                dataForEvaluation.Result = record.result - sumResult;
+                                dataForEvaluation.CompletedDate = new DateTime(yearForRequest.Year, dataForEvaluation.Month, DateTime.DaysInMonth(yearForRequest.Year, dataForEvaluation.Month));
+                                dataForEvaluation.Approve = Approve.ผษ_อนุมัติ;
+                                _context.SaveChanges();
+                            }
+                        }
+                    }
+                }
+            }
+
+            //UpdateApprove();
+            return LocalRedirect("/");
+
+        } //End มจ. ตัวชี้วัด 64 11
+
+        public IActionResult GetP15() //บอ. ตัวชี้วัด 64 15
+        {
+            string url = "http://localhost:8082/boror/p15.csv";
+            HttpWebRequest webRequest = WebRequest.Create(url) as HttpWebRequest;
+            if (webRequest == null)
+            {
+                return LocalRedirect("/");
+            }
+
+            DateTime yearForRequest;
+
+            using (var s = webRequest.GetResponse().GetResponseStream())
+            {
+                using (var sr = new StreamReader(s))
+                {
+                    var engine = new FileHelperEngine<P11>();
+                    var records = engine.ReadStream(sr);
+
+                    foreach (var record in records)
+                    {
+                        yearForRequest = new DateTime(record.year - 543, 1, 1);
+
+                        var dataForEvaluation = _context.DataForEvaluations
+                                            .Where(d => d.Office.Code == record.officeID && d.PointOfEvaluation.AutoApp == AutoApps.จำนวนแบบที่ยื่นผ่านอินเทอร์เน็ต_ยกเว้น_90_91_94 && d.PointOfEvaluation.Year == yearForRequest && d.Month == record.month)
+                                            .FirstOrDefault();
+                        if (dataForEvaluation != null)
+                        {
+                            dataForEvaluation.Expect = record.expect;
+                            dataForEvaluation.Result = record.result;
+                            dataForEvaluation.CompletedDate = new DateTime(yearForRequest.Year, dataForEvaluation.Month, DateTime.DaysInMonth(yearForRequest.Year, dataForEvaluation.Month));
+                            dataForEvaluation.Approve = Approve.ผษ_อนุมัติ;
+                            _context.SaveChanges();
+                        }
+                    }
+                }
+            }
+
+            //UpdateApprove();
+            return LocalRedirect("/");
+
+        } //End มจ. ตัวชี้วัด 64 15
+
+        public IActionResult GetP16() //บอ. ตัวชี้วัด 64 16
+        {
+            string url = "http://localhost:8082/boror/p16.csv";
+            HttpWebRequest webRequest = WebRequest.Create(url) as HttpWebRequest;
+            if (webRequest == null)
+            {
+                return LocalRedirect("/");
+            }
+
+            DateTime yearForRequest;
+
+            using (var s = webRequest.GetResponse().GetResponseStream())
+            {
+                using (var sr = new StreamReader(s))
+                {
+                    var engine = new FileHelperEngine<P11>();
+                    var records = engine.ReadStream(sr);
+
+                    foreach (var record in records)
+                    {
+                        yearForRequest = new DateTime(record.year - 543, 1, 1);
+
+                        var dataForEvaluation = _context.DataForEvaluations
+                                            .Where(d => d.Office.Code == record.officeID && d.PointOfEvaluation.AutoApp == AutoApps.จำนวนแบบ_1_30_50_ที่ยื่นผ่านอินเทอร์เน็ต && d.PointOfEvaluation.Year == yearForRequest && d.Month == record.month)
+                                            .FirstOrDefault();
+                        if (dataForEvaluation != null)
+                        {
+                            dataForEvaluation.Expect = record.expect;
+                            dataForEvaluation.Result = record.result;
+                            dataForEvaluation.CompletedDate = new DateTime(yearForRequest.Year, dataForEvaluation.Month, DateTime.DaysInMonth(yearForRequest.Year, dataForEvaluation.Month));
+                            dataForEvaluation.Approve = Approve.ผษ_อนุมัติ;
+                            _context.SaveChanges();
+                        }
+                    }
+                }
+            }
+
+            //UpdateApprove();
+            return LocalRedirect("/");
+
+        } //End มจ. ตัวชี้วัด 64 16
+
+        public IActionResult GetP8_10() //มจ. ตัวชี้วัด 64 8-10
+        {
+            string url = "http://localhost:8082/morjor/p8.csv";
+            HttpWebRequest webRequest = WebRequest.Create(url) as HttpWebRequest;
+            if (webRequest == null)
+            {
+                return LocalRedirect("/");
+            }
+
+            DateTime yearForRequest;
+
+            using (var s = webRequest.GetResponse().GetResponseStream())
+            {
+                using (var sr = new StreamReader(s))
+                {
+                    var engine = new FileHelperEngine<P11>();
+                    var records = engine.ReadStream(sr);
+
+                    foreach (var record in records)
+                    {
+                        yearForRequest = new DateTime(record.year - 543, 1, 1);
+                        var office = _context.Offices.Where(o => o.Code == record.officeID).FirstOrDefault();
+                        var poe = _context.PointOfEvaluations.Where(p => p.AutoApp == AutoApps.เร่งรัดหนี้ && p.Year == yearForRequest && p.OwnerOfficeId == office.Id)
+                                .FirstOrDefault();
+
+                        var dataForEvaluation = _context.DataForEvaluations
+                                            .Where(d => d.OfficeId == office.Id && d.PointOfEvaluationId == poe.Id && d.Month == record.month)
+                                            .FirstOrDefault();
+
+                        if (dataForEvaluation != null)
+                        {
+                            dataForEvaluation.Expect = record.expect;
+                            dataForEvaluation.Result = record.result;
+                            dataForEvaluation.CompletedDate = new DateTime(yearForRequest.Year, dataForEvaluation.Month, DateTime.DaysInMonth(yearForRequest.Year, dataForEvaluation.Month));
+                            dataForEvaluation.Approve = Approve.ผษ_อนุมัติ;
+                            _context.SaveChanges();
+                        }
+                    }
+                }
+            }
+
+            url = "http://localhost:8082/morjor/p9.csv";
+            webRequest = WebRequest.Create(url) as HttpWebRequest;
+            if (webRequest == null)
+            {
+                return LocalRedirect("/");
+            }
+
+            using (var s = webRequest.GetResponse().GetResponseStream())
+            {
+                using (var sr = new StreamReader(s))
+                {
+                    var engine = new FileHelperEngine<P11>();
+                    var records = engine.ReadStream(sr);
+
+                    foreach (var record in records)
+                    {
+                        yearForRequest = new DateTime(record.year - 543, 1, 1);
+
+                        var dataForEvaluation = _context.DataForEvaluations
+                                            .Where(d => d.Office.Code == record.officeID && d.PointOfEvaluation.AutoApp == AutoApps.จำหน่ายหนี้ && d.PointOfEvaluation.Year == yearForRequest && d.Month == record.month)
+                                            .FirstOrDefault();
+                        if (dataForEvaluation != null)
+                        {
+                            dataForEvaluation.Expect = record.expect;
+                            dataForEvaluation.Result = record.result;
+                            dataForEvaluation.CompletedDate = new DateTime(yearForRequest.Year, dataForEvaluation.Month, DateTime.DaysInMonth(yearForRequest.Year, dataForEvaluation.Month));
+                            dataForEvaluation.Approve = Approve.ผษ_อนุมัติ;
+                            _context.SaveChanges();
+                        }
+                    }
+                }
+            }
+
+            url = "http://localhost:8082/morjor/p10.csv";
+            webRequest = WebRequest.Create(url) as HttpWebRequest;
+            if (webRequest == null)
+            {
+                return LocalRedirect("/");
+            }
+
+            using (var s = webRequest.GetResponse().GetResponseStream())
+            {
+                using (var sr = new StreamReader(s))
+                {
+                    var engine = new FileHelperEngine<P11>();
+                    var records = engine.ReadStream(sr);
+
+                    foreach (var record in records)
+                    {
+                        yearForRequest = new DateTime(record.year - 543, 1, 1);
+
+                        var dataForEvaluation = _context.DataForEvaluations
+                                            .Where(d => d.Office.Code == record.officeID && d.PointOfEvaluation.AutoApp == AutoApps.ใบแจ้งภาษีอากรบนระบบ_DMS && d.PointOfEvaluation.Year == yearForRequest && d.Month == record.month)
+                                            .FirstOrDefault();
+                        if (dataForEvaluation != null)
+                        {
+                            dataForEvaluation.Expect = record.expect;
+                            dataForEvaluation.Result = record.result;
+                            dataForEvaluation.CompletedDate = new DateTime(yearForRequest.Year, dataForEvaluation.Month, DateTime.DaysInMonth(yearForRequest.Year, dataForEvaluation.Month));
+                            dataForEvaluation.Approve = Approve.ผษ_อนุมัติ;
+                            _context.SaveChanges();
+                        }
+                    }
+                }
+            }
+
+            //UpdateApprove();
+            return LocalRedirect("/");
+
+        } //End มจ. ตัวชี้วัด 64 8-10
     }
 }

@@ -41,7 +41,7 @@
                 <div class="row">
                     <label class="col-form-label col-md-3 text-md-right">หน่วยงาน: </label>
                     @if (User.IsInRole("Admin") || User.IsInRole("Special") || User.IsInRole("Manager")
-                       || (User.IsInRole("User") && user.OfficeId.Substring(2, 6) == "000000") || (user.approver == true && user.OfficeId.Substring(5, 3) == "000"))
+                      || (User.IsInRole("User") && user.OfficeId.Substring(2, 6) == "000000") || (user.approver == true && user.OfficeId.Substring(5, 3) == "000"))
                     {
                         <select name="selectoffice" class="form-control col-md-9" asp-items="ViewBag.OfficeCode" onchange="this.form.submit()">
                             <option value="">เลือกหน่วยงาน</option>
@@ -177,9 +177,9 @@
                                             {
                                                 de = item;
                                             }
-                                            if (Model.pointA[i].Unit != UnitOfPoint.ระดับ && Model.pointA[i].Rounds.Count == 1)
+                                            if (Model.pointA[i].Unit != UnitOfPoint.ระดับ)
                                             {
-                                                if (Model.month >= 10)
+                                                if (Model.month >= 10 && item.OfficeId == Model.pointA[i].OwnerOfficeId)
                                                 {
                                                     if (item.Month <= Model.month && item.Month >= 10)
                                                     {
@@ -196,7 +196,7 @@
                                                 }
                                                 else
                                                 {
-                                                    if (item.Month == 10 || item.Month == 11 || item.Month == 12)
+                                                    if ((item.Month == 10 || item.Month == 11 || item.Month == 12) && item.OfficeId == Model.pointA[i].OwnerOfficeId)
                                                     {
                                                         if (Model.pointA[i].Unit == UnitOfPoint.ร้อยละ)
                                                         {
@@ -208,7 +208,7 @@
                                                         }
                                                         sumOfExpect += item.Expect;
                                                     }
-                                                    if (item.Month <= Model.month)
+                                                    if (item.Month <= Model.month && item.OfficeId == Model.pointA[i].OwnerOfficeId)
                                                     {
                                                         if (Model.pointA[i].Unit == UnitOfPoint.ร้อยละ)
                                                         {
@@ -221,11 +221,6 @@
                                                         sumOfExpect += item.Expect;
                                                     }
                                                 }
-
-                                            }
-                                            else
-                                            {
-
                                             }
                                         }
                                         <input type="hidden" name="UpdateData[@i].Id" value=@de?.Id />
@@ -242,7 +237,14 @@
                                     <td>
                                         @if (!Model.pointA[i].HasSub)
                                         {
-                                            @Model.pointA[i].Weight.ToString("N2")
+                                            @if (@Model.pointA[i].WeightAll)
+                                            {
+                                                @Model.pointA[i].Weight.ToString("N2")
+                                            }
+                                            else
+                                            {
+                                                @de.Weight.ToString("N2")
+                                            }
                                         }
                                     </td>
                                     <td>
@@ -262,16 +264,7 @@
                                     {
                                         if (de?.Approve == Approve.รอพิจารณา)
                                         {
-
-                                            @if (User.IsInRole("Admin"))
-                                            {
-                                                <td>
-                                                    <label class="form-check-label text-secondary">บันทึกข้อมูลแล้ว รอพิจารณา</label>
-                                                </td>
-                                                <td>
-                                                </td>
-                                            }
-                                            else if (user.OfficeId.Substring(0, 3) == "000" && (user.approver ?? false))
+                                            @if ((user.OfficeId.Substring(2, 6) == "000000" || user.OfficeId.Substring(0, 3) == "000") && de?.PointOfEvaluation.AuditOffice.Code == user.OfficeId && (user.approver ?? false))
                                             {
                                                 <td>
                                                     <div class="form-check-inline">
@@ -279,9 +272,10 @@
                                                         <label class="form-check-label" for="UpdateData[@i].Approve">เห็นชอบ</label>
                                                     </div>
                                                 </td>
-                                                <td><input type="text" class="form-control" name="UpdateData[@i].Commenent3" value=@de?.CommentApproveLevel3 /></td>
+                                                <td>
+                                                </td>
                                             }
-                                            else if (user.OfficeId.Substring(2, 6) == "000000" && (user.approver ?? false))
+                                            else if ((user.OfficeId.Substring(2, 6) == "000000" || user.OfficeId.Substring(0, 3) == "000") && de?.PointOfEvaluation.AuditOffice.Code != user.OfficeId && de?.Office.Code == user.OfficeId && (user.approver ?? false))
                                             {
                                                 <td>
                                                     <div class="form-check-inline">
@@ -289,9 +283,10 @@
                                                         <label class="form-check-label" for="UpdateData[@i].Approve">เห็นชอบ</label>
                                                     </div>
                                                 </td>
-                                                <td><input type="text" class="form-control" name="UpdateData[@i].Commenent2" value=@de?.CommentApproveLevel2 /></td>
+                                                <td>
+                                                </td>
                                             }
-                                            else if (user.OfficeId.Substring(0, 3) != "000" && user.OfficeId.Substring(2, 6) != "000000" && (user.approver ?? false))
+                                            else if (user.OfficeId.Substring(2, 6) != "000000" && user.OfficeId.Substring(0, 3) != "000" && de?.Office.Code == user.OfficeId && (user.approver ?? false))
                                             {
                                                 <td>
                                                     <div class="form-check-inline">
@@ -299,37 +294,28 @@
                                                         <label class="form-check-label" for="UpdateData[@i].Approve">เห็นชอบ</label>
                                                     </div>
                                                 </td>
-                                                <td><input type="text" class="form-control" name="UpdateData[@i].Commenent1" value=@de?.CommentApproveLevel1 /></td>
+                                                <td>
+                                                </td>
                                             }
                                             else
                                             {
                                                 <td>
                                                     <div class="form-check-inline">
-                                                        <label class="form-check-label text-danger">รอพิจารณา</label>
+                                                        <label class="form-check-label text-danger">รอหัวหน้าหน่วยงานพิจารณา</label>
                                                     </div>
                                                 </td>
                                                 <td></td>
                                             }
-
                                         }
                                         else if (de?.Approve == Approve.หัวหน้าหน่วยงานอนุมัติ)
                                         {
-                                            if (user.OfficeId.Substring(0, 3) == "000")
+                                            if (user.OfficeId.Substring(2, 6) != "000000" && user.OfficeId.Substring(0, 3) != "000" && de?.Office.Code == user.OfficeId && (user.approver ?? false))
                                             {
-                                                <td>
-                                                    <label class="form-check-label text-secondary">สท. เห็นชอบแล้ว</label>
-                                                </td>
-                                                <td><input type="text" class="form-control" name="UpdateData[@i].Commenent1" value=@de?.CommentApproveLevel1 readonly /></td>
-                                            }
-                                            else if (User.IsInRole("Admin"))
-                                            {
-                                                <td>
-                                                    <label class="form-check-label text-secondary">สท. เห็นชอบแล้ว</label>
-                                                </td>
+                                                <td style="color:green">เห็นชอบแล้ว</td>
                                                 <td>
                                                     <div class="form-check-inline">
                                                         <input type="checkbox" class="form-check-input" name="UpdateData[@i].Approve" id="UpdateData[@i].Approve" value="@Approve.รอพิจารณา" />
-                                                        <label class="form-check-label" for="UpdateData[@i].Approve">บันทึกใหม่</label>
+                                                        <label class="form-check-label" for="UpdateData[@i].Approve" style="color:red">บันทึกใหม่</label>
                                                     </div>
                                                 </td>
                                             }
@@ -341,29 +327,30 @@
                                                         <label class="form-check-label" for="UpdateData[@i].Approve">เห็นชอบ</label>
                                                     </div>
                                                 </td>
-                                                <td><input type="text" class="form-control" name="UpdateData[@i].Commenent2" value=@de?.CommentApproveLevel2 /></td>
-                                            }
-                                            else if (user.OfficeId.Substring(0, 3) != "000" && user.OfficeId.Substring(2, 6) != "000000" && (user.approver ?? false))
-                                            {
                                                 <td>
-                                                    <div class="form-check-inline">
-                                                        <input type="checkbox" class="form-check-input" name="UpdateData[@i].Approve" id="UpdateData[@i].Approve" value="@Approve.หัวหน้าหน่วยงานอนุมัติ" checked readonly />
-                                                        <label class="form-check-label" for="UpdateData[@i].Approve">เห็นชอบ</label>
-                                                    </div>
                                                 </td>
-                                                <td><input type="text" class="form-control" name="UpdateData[@i].Commenent1" value=@de?.CommentApproveLevel1 readonly /></td>
                                             }
                                             else
                                             {
                                                 <td>
-                                                    <label class="form-check-label text-secondary">สท. เห็นชอบแล้ว</label>
+                                                    <label class="form-check-label text-info">รอ สภ. พิจารณา</label>
                                                 </td>
-                                                <td><input type="text" class="form-control" name="UpdateData[@i].Commenent1" value=@de?.CommentApproveLevel1 readonly /></td>
+                                                <td></td>
                                             }
                                         }
                                         else if (de?.Approve == Approve.สภ_ผู้กำกับตัวชี้วัดอนุมัติ)
                                         {
-                                            if (User.IsInRole("Manager") && user.OfficeId.Substring(0, 3) == "000" && Model.pointA[i].AuditOffice.Code == user.OfficeId)
+                                            if ((user.OfficeId.Substring(2, 6) == "000000" || user.OfficeId.Substring(0, 3) == "000") && de?.PointOfEvaluation.AuditOffice.Code != user.OfficeId && (user.approver ?? false))
+                                            {
+                                                <td style="color:green">เห็นชอบแล้ว</td>
+                                                <td>
+                                                    <div class="form-check-inline">
+                                                        <input type="checkbox" class="form-check-input" name="UpdateData[@i].Approve" id="UpdateData[@i].Approve" value="@Approve.รอพิจารณา" />
+                                                        <label class="form-check-label" for="UpdateData[@i].Approve" style="color:red">บันทึกใหม่</label>
+                                                    </div>
+                                                </td>
+                                            }
+                                            else if (user.OfficeId.Substring(0, 3) == "000" && de?.PointOfEvaluation.AuditOffice.Code == user.OfficeId && User.IsInRole("Manager"))
                                             {
                                                 <td>
                                                     <div class="form-check-inline">
@@ -371,51 +358,30 @@
                                                         <label class="form-check-label" for="UpdateData[@i].Approve">เห็นชอบ</label>
                                                     </div>
                                                 </td>
-                                                <td><input type="text" class="form-control" name="UpdateData[@i].Commenent3" value=@de?.CommentApproveLevel3 /></td>
-                                            }
-                                            else if (User.IsInRole("Admin"))
-                                            {
                                                 <td>
-                                                    <label class="form-check-label text-secondary">สภ. เห็นชอบแล้ว</label>
                                                 </td>
-                                                <td>
-                                                    <div class="form-check-inline">
-                                                        <input type="checkbox" class="form-check-input" name="UpdateData[@i].Approve" id="UpdateData[@i].Approve" value="@Approve.รอพิจารณา" />
-                                                        <label class="form-check-label" for="UpdateData[@i].Approve">บันทึกใหม่</label>
-                                                    </div>
-                                                </td>
-                                            }
-                                            else if (user.OfficeId.Substring(2, 6) == "000000" && (user.approver ?? false))
-                                            {
-                                                <td>
-                                                    <div class="form-check-inline">
-                                                        <input type="checkbox" class="form-check-input" name="UpdateData[@i].Approve" id="UpdateData[@i].Approve" value="@Approve.สภ_ผู้กำกับตัวชี้วัดอนุมัติ" checked readonly />
-                                                        <label class="form-check-label" for="UpdateData[@i].Approve">เห็นชอบ</label>
-                                                    </div>
-                                                </td>
-                                                <td><input type="text" class="form-control" name="UpdateData[@i].Commenent2" value=@de?.CommentApproveLevel2 readonly /></td>
                                             }
                                             else
                                             {
                                                 <td>
                                                     <div class="form-check-inline">
-                                                        <label class="form-check-label text-info">สภ. เห็นชอบแล้ว</label>
+                                                        <label class="form-check-label text-info">รอกองกำกับตัวชี้วัดพิจารณา</label>
                                                     </div>
                                                 </td>
-                                                <td><input type="text" class="form-control" name="UpdateData[@i].Commenent2" value=@de?.CommentApproveLevel2 readonly /></td>
+                                                <td></td>
                                             }
                                         }
                                         else if (de?.Approve == Approve.กองผู้กำกับตัวชี้วัดอนุมัติ)
                                         {
-                                            if (user.OfficeId.Substring(0, 3) == "000" && user.OfficeId != "00013000")
+                                            if (user.OfficeId.Substring(0, 3) == "000" && de?.PointOfEvaluation.AuditOffice.Code == user.OfficeId && User.IsInRole("Manager"))
                                             {
+                                                <td style="color:green">เห็นชอบแล้ว</td>
                                                 <td>
                                                     <div class="form-check-inline">
-                                                        <input type="checkbox" class="form-check-input" name="UpdateData[@i].Approve" id="UpdateData[@i].Approve" value="@Approve.กองผู้กำกับตัวชี้วัดอนุมัติ" checked readonly />
-                                                        <label class="form-check-label" for="UpdateData[@i].Approve">เห็นชอบ</label>
+                                                        <input type="checkbox" class="form-check-input" name="UpdateData[@i].Approve" id="UpdateData[@i].Approve" value="@Approve.รอพิจารณา" />
+                                                        <label class="form-check-label" for="UpdateData[@i].Approve" style="color:red">บันทึกใหม่</label>
                                                     </div>
                                                 </td>
-                                                <td><input type="text" class="form-control" name="UpdateData[@i].Commenent3" value=@de?.CommentApproveLevel3 readonly /></td>
                                             }
                                             else if (User.IsInRole("Admin") || (User.IsInRole("Manager") && user.OfficeId == "00013000"))
                                             {
@@ -425,10 +391,27 @@
                                                         <label class="form-check-label" for="UpdateData[@i].Approve">เห็นชอบ</label>
                                                     </div>
                                                 </td>
+                                                <td></td>
+                                            }
+                                            else
+                                            {
+                                                <td>
+                                                    <div class="form-check-inline">
+                                                        <label class="form-check-label text-info">รอกรมพิจารณา</label>
+                                                    </div>
+                                                </td>
+                                                <td></td>
+                                            }
+                                        }
+                                        else if (de?.Approve == Approve.ผษ_อนุมัติ)
+                                        {
+                                            if (User.IsInRole("Admin") || (User.IsInRole("Manager") && user.OfficeId == "00013000"))
+                                            {
+                                                <td style="color:green">เห็นชอบแล้ว</td>
                                                 <td>
                                                     <div class="form-check-inline">
                                                         <input type="checkbox" class="form-check-input" name="UpdateData[@i].Approve" id="UpdateData[@i].Approve" value="@Approve.รอพิจารณา" />
-                                                        <label class="form-check-label" for="UpdateData[@i].Approve">บันทึกใหม่</label>
+                                                        <label class="form-check-label" for="UpdateData[@i].Approve" style="color:red">บันทึกใหม่</label>
                                                     </div>
                                                 </td>
                                             }
@@ -436,20 +419,11 @@
                                             {
                                                 <td>
                                                     <div class="form-check-inline">
-                                                        <label class="form-check-label text-primary">กองกำกับเห็นชอบแล้ว</label>
+                                                        <label class="form-check-label text-success">กรมเห็นชอบแล้ว</label>
                                                     </div>
                                                 </td>
-                                                <td><input type="text" class="form-control" name="UpdateData[@i].Commenent3" value=@de?.CommentApproveLevel3 readonly /></td>
+                                                <td></td>
                                             }
-                                        }
-                                        else if (de?.Approve == Approve.ผษ_อนุมัติ)
-                                        {
-                                            <td>
-                                                <div class="form-check-inline">
-                                                    <label class="form-check-label text-success">กรมเห็นชอบแล้ว</label>
-                                                </div>
-                                            </td>
-                                            <td><input type="text" class="form-control" name="UpdateData[@i].Commenent4" value=@de?.CommentApproveLevel4 readonly /></td>
                                         }
                                         else
                                         {
@@ -924,7 +898,7 @@
                                                     {
                                                         @(Html.DevExtreme().Button()
                                                                 .ID("button")
-                                                                .Text("บันทึก")
+                                                                .Text("บันทึกปรับปรุง")
                                                                 .Type(ButtonType.Success)
                                                                 .UseSubmitBehavior(true)
                                                             )
@@ -933,7 +907,7 @@
                                                     {
                                                         @(Html.DevExtreme().Button()
                                                                .ID("button")
-                                                               .Text("บันทึก")
+                                                               .Text("บันทึกปรับปรุง")
                                                                .Type(ButtonType.Normal)
                                                                .UseSubmitBehavior(false)
                                                             )
@@ -949,15 +923,15 @@
                                 </tr>
                                 }
                             </tbody>
-                            <tfoot>
-                                <tr><th colspan="2" style="text-align:right">รวม</th><th></th><th></th><th></th><th></th><th></th></tr>
-                            </tfoot>
+                            @*<tfoot>
+                                    <tr><th colspan="2" style="text-align:right">รวม</th><th></th><th></th><th></th><th></th><th></th></tr>
+                                </tfoot>*@
                         </table>
                         <input asp-for="yearPoint" class="form-control" hidden />
                         <input asp-for="month" class="form-control" hidden />
                         <input type="hidden" name="selectoffice" value="@ViewBag.selectoffice" />
                         @if (User.IsInRole("Admin") || User.IsInRole("Special") || (User.IsInRole("Manager") && user.OfficeId.Substring(0, 3) == "000")
-                            || (user.approver == true && user.OfficeId.Substring(5, 3) == "000"))
+                           || (user.approver == true && user.OfficeId.Substring(5, 3) == "000"))
                         {
                             <input type="submit" name="Update" value="บันทึก" class="btn btn-primary" />
                         }
@@ -1029,7 +1003,7 @@
                                             }
                                             if (Model.pointB[i].Unit != UnitOfPoint.ระดับ)
                                             {
-                                                if (Model.month >= 10)
+                                                if (Model.month >= 10 && item.OfficeId == Model.pointB[i].OwnerOfficeId)
                                                 {
                                                     if (item.Month <= Model.month && item.Month >= 10)
                                                     {
@@ -1046,7 +1020,7 @@
                                                 }
                                                 else
                                                 {
-                                                    if (item.Month == 10 || item.Month == 11 || item.Month == 12)
+                                                    if ((item.Month == 10 || item.Month == 11 || item.Month == 12) && item.OfficeId == Model.pointB[i].OwnerOfficeId)
                                                     {
                                                         if (Model.pointB[i].Unit == UnitOfPoint.ร้อยละ)
                                                         {
@@ -1058,7 +1032,7 @@
                                                         }
                                                         sumOfExpect += item.Expect;
                                                     }
-                                                    if (item.Month <= Model.month)
+                                                    if (item.Month <= Model.month && item.OfficeId == Model.pointB[i].OwnerOfficeId)
                                                     {
                                                         if (Model.pointB[i].Unit == UnitOfPoint.ร้อยละ)
                                                         {
@@ -1087,7 +1061,14 @@
                                     <td>
                                         @if (!Model.pointB[i].HasSub)
                                         {
-                                            @Model.pointB[i].Weight.ToString("N2")
+                                            @if (@Model.pointB[i].WeightAll)
+                                            {
+                                                @Model.pointB[i].Weight.ToString("N2")
+                                            }
+                                            else
+                                            {
+                                                @de.Weight.ToString("N2")
+                                            }
                                         }
                                     </td>
                                     <td>
@@ -1107,16 +1088,7 @@
                                     {
                                         if (de?.Approve == Approve.รอพิจารณา)
                                         {
-
-                                            @if (User.IsInRole("Admin"))
-                                            {
-                                                <td>
-                                                    <label class="form-check-label text-secondary">บันทึกข้อมูลแล้ว รอพิจารณา</label>
-                                                </td>
-                                                <td>
-                                                </td>
-                                            }
-                                            else if (user.OfficeId.Substring(0, 3) == "000" && (user.approver ?? false))
+                                            @if ((user.OfficeId.Substring(2, 6) == "000000" || user.OfficeId.Substring(0, 3) == "000") && de?.PointOfEvaluation.AuditOffice.Code == user.OfficeId && (user.approver ?? false))
                                             {
                                                 <td>
                                                     <div class="form-check-inline">
@@ -1124,9 +1096,10 @@
                                                         <label class="form-check-label" for="UpdateData[@i].Approve">เห็นชอบ</label>
                                                     </div>
                                                 </td>
-                                                <td><input type="text" class="form-control" name="UpdateData[@i].Commenent3" value=@de?.CommentApproveLevel3 /></td>
+                                                <td>
+                                                </td>
                                             }
-                                            else if (user.OfficeId.Substring(2, 6) == "000000" && (user.approver ?? false))
+                                            else if ((user.OfficeId.Substring(2, 6) == "000000" || user.OfficeId.Substring(0, 3) == "000") && de?.PointOfEvaluation.AuditOffice.Code != user.OfficeId && de?.Office.Code == user.OfficeId && (user.approver ?? false))
                                             {
                                                 <td>
                                                     <div class="form-check-inline">
@@ -1134,9 +1107,10 @@
                                                         <label class="form-check-label" for="UpdateData[@i].Approve">เห็นชอบ</label>
                                                     </div>
                                                 </td>
-                                                <td><input type="text" class="form-control" name="UpdateData[@i].Commenent2" value=@de?.CommentApproveLevel2 /></td>
+                                                <td>
+                                                </td>
                                             }
-                                            else if (user.OfficeId.Substring(0, 3) != "000" && user.OfficeId.Substring(2, 6) != "000000" && (user.approver ?? false))
+                                            else if (user.OfficeId.Substring(2, 6) != "000000" && user.OfficeId.Substring(0, 3) != "000" && de?.Office.Code == user.OfficeId && (user.approver ?? false))
                                             {
                                                 <td>
                                                     <div class="form-check-inline">
@@ -1144,37 +1118,28 @@
                                                         <label class="form-check-label" for="UpdateData[@i].Approve">เห็นชอบ</label>
                                                     </div>
                                                 </td>
-                                                <td><input type="text" class="form-control" name="UpdateData[@i].Commenent1" value=@de?.CommentApproveLevel1 /></td>
+                                                <td>
+                                                </td>
                                             }
                                             else
                                             {
                                                 <td>
                                                     <div class="form-check-inline">
-                                                        <label class="form-check-label text-danger">รอพิจารณา</label>
+                                                        <label class="form-check-label text-danger">รอหัวหน้าหน่วยงานพิจารณา</label>
                                                     </div>
                                                 </td>
                                                 <td></td>
                                             }
-
                                         }
                                         else if (de?.Approve == Approve.หัวหน้าหน่วยงานอนุมัติ)
                                         {
-                                            if (user.OfficeId.Substring(0, 3) == "000")
+                                            if (user.OfficeId.Substring(2, 6) != "000000" && user.OfficeId.Substring(0, 3) != "000" && de?.Office.Code == user.OfficeId && (user.approver ?? false))
                                             {
-                                                <td>
-                                                    <label class="form-check-label text-secondary">สท. เห็นชอบแล้ว</label>
-                                                </td>
-                                                <td><input type="text" class="form-control" name="UpdateData[@i].Commenent1" value=@de?.CommentApproveLevel1 readonly /></td>
-                                            }
-                                            else if (User.IsInRole("Admin"))
-                                            {
-                                                <td>
-                                                    <label class="form-check-label text-secondary">สท. เห็นชอบแล้ว</label>
-                                                </td>
+                                                <td style="color:green">เห็นชอบแล้ว</td>
                                                 <td>
                                                     <div class="form-check-inline">
                                                         <input type="checkbox" class="form-check-input" name="UpdateData[@i].Approve" id="UpdateData[@i].Approve" value="@Approve.รอพิจารณา" />
-                                                        <label class="form-check-label" for="UpdateData[@i].Approve">บันทึกใหม่</label>
+                                                        <label class="form-check-label" for="UpdateData[@i].Approve" style="color:red">บันทึกใหม่</label>
                                                     </div>
                                                 </td>
                                             }
@@ -1186,29 +1151,30 @@
                                                         <label class="form-check-label" for="UpdateData[@i].Approve">เห็นชอบ</label>
                                                     </div>
                                                 </td>
-                                                <td><input type="text" class="form-control" name="UpdateData[@i].Commenent2" value=@de?.CommentApproveLevel2 /></td>
-                                            }
-                                            else if (user.OfficeId.Substring(0, 3) != "000" && user.OfficeId.Substring(2, 6) != "000000" && (user.approver ?? false))
-                                            {
                                                 <td>
-                                                    <div class="form-check-inline">
-                                                        <input type="checkbox" class="form-check-input" name="UpdateData[@i].Approve" id="UpdateData[@i].Approve" value="@Approve.หัวหน้าหน่วยงานอนุมัติ" checked readonly />
-                                                        <label class="form-check-label" for="UpdateData[@i].Approve">เห็นชอบ</label>
-                                                    </div>
                                                 </td>
-                                                <td><input type="text" class="form-control" name="UpdateData[@i].Commenent1" value=@de?.CommentApproveLevel1 readonly /></td>
                                             }
                                             else
                                             {
                                                 <td>
-                                                    <label class="form-check-label text-secondary">สท. เห็นชอบแล้ว</label>
+                                                    <label class="form-check-label text-info">รอ สภ. พิจารณา</label>
                                                 </td>
-                                                <td><input type="text" class="form-control" name="UpdateData[@i].Commenent1" value=@de?.CommentApproveLevel1 readonly /></td>
+                                                <td></td>
                                             }
                                         }
                                         else if (de?.Approve == Approve.สภ_ผู้กำกับตัวชี้วัดอนุมัติ)
                                         {
-                                            if (User.IsInRole("Admin") || (User.IsInRole("Manager") && user.OfficeId.Substring(0, 3) == "000" && Model.pointB[i].AuditOffice.Code == user.OfficeId))
+                                            if ((user.OfficeId.Substring(2, 6) == "000000" || user.OfficeId.Substring(0, 3) == "000") && de?.PointOfEvaluation.AuditOffice.Code != user.OfficeId && (user.approver ?? false))
+                                            {
+                                                <td style="color:green">เห็นชอบแล้ว</td>
+                                                <td>
+                                                    <div class="form-check-inline">
+                                                        <input type="checkbox" class="form-check-input" name="UpdateData[@i].Approve" id="UpdateData[@i].Approve" value="@Approve.รอพิจารณา" />
+                                                        <label class="form-check-label" for="UpdateData[@i].Approve" style="color:red">บันทึกใหม่</label>
+                                                    </div>
+                                                </td>
+                                            }
+                                            else if (user.OfficeId.Substring(0, 3) == "000" && de?.PointOfEvaluation.AuditOffice.Code == user.OfficeId && User.IsInRole("Manager"))
                                             {
                                                 <td>
                                                     <div class="form-check-inline">
@@ -1216,51 +1182,30 @@
                                                         <label class="form-check-label" for="UpdateData[@i].Approve">เห็นชอบ</label>
                                                     </div>
                                                 </td>
-                                                <td><input type="text" class="form-control" name="UpdateData[@i].Commenent3" value=@de?.CommentApproveLevel3 /></td>
-                                            }
-                                            else if (User.IsInRole("Admin"))
-                                            {
                                                 <td>
-                                                    <label class="form-check-label text-secondary">สภ. เห็นชอบแล้ว</label>
                                                 </td>
-                                                <td>
-                                                    <div class="form-check-inline">
-                                                        <input type="checkbox" class="form-check-input" name="UpdateData[@i].Approve" id="UpdateData[@i].Approve" value="@Approve.รอพิจารณา" />
-                                                        <label class="form-check-label" for="UpdateData[@i].Approve">บันทึกใหม่</label>
-                                                    </div>
-                                                </td>
-                                            }
-                                            else if (user.OfficeId.Substring(2, 6) == "000000" && (user.approver ?? false))
-                                            {
-                                                <td>
-                                                    <div class="form-check-inline">
-                                                        <input type="checkbox" class="form-check-input" name="UpdateData[@i].Approve" id="UpdateData[@i].Approve" value="@Approve.สภ_ผู้กำกับตัวชี้วัดอนุมัติ" checked readonly />
-                                                        <label class="form-check-label" for="UpdateData[@i].Approve">เห็นชอบ</label>
-                                                    </div>
-                                                </td>
-                                                <td><input type="text" class="form-control" name="UpdateData[@i].Commenent2" value=@de?.CommentApproveLevel2 readonly /></td>
                                             }
                                             else
                                             {
                                                 <td>
                                                     <div class="form-check-inline">
-                                                        <label class="form-check-label text-info">สภ. เห็นชอบแล้ว</label>
+                                                        <label class="form-check-label text-info">รอกองกำกับตัวชี้วัดพิจารณา</label>
                                                     </div>
                                                 </td>
-                                                <td><input type="text" class="form-control" name="UpdateData[@i].Commenent2" value=@de?.CommentApproveLevel2 readonly /></td>
+                                                <td></td>
                                             }
                                         }
                                         else if (de?.Approve == Approve.กองผู้กำกับตัวชี้วัดอนุมัติ)
                                         {
-                                            if (user.OfficeId.Substring(0, 3) == "000" && user.OfficeId != "00013000")
+                                            if (user.OfficeId.Substring(0, 3) == "000" && de?.PointOfEvaluation.AuditOffice.Code == user.OfficeId && User.IsInRole("Manager"))
                                             {
+                                                <td style="color:green">เห็นชอบแล้ว</td>
                                                 <td>
                                                     <div class="form-check-inline">
-                                                        <input type="checkbox" class="form-check-input" name="UpdateData[@i].Approve" id="UpdateData[@i].Approve" value="@Approve.กองผู้กำกับตัวชี้วัดอนุมัติ" checked readonly />
-                                                        <label class="form-check-label" for="UpdateData[@i].Approve">เห็นชอบ</label>
+                                                        <input type="checkbox" class="form-check-input" name="UpdateData[@i].Approve" id="UpdateData[@i].Approve" value="@Approve.รอพิจารณา" />
+                                                        <label class="form-check-label" for="UpdateData[@i].Approve" style="color:red">บันทึกใหม่</label>
                                                     </div>
                                                 </td>
-                                                <td><input type="text" class="form-control" name="UpdateData[@i].Commenent3" value=@de?.CommentApproveLevel3 readonly /></td>
                                             }
                                             else if (User.IsInRole("Admin") || (User.IsInRole("Manager") && user.OfficeId == "00013000"))
                                             {
@@ -1270,10 +1215,27 @@
                                                         <label class="form-check-label" for="UpdateData[@i].Approve">เห็นชอบ</label>
                                                     </div>
                                                 </td>
+                                                <td></td>
+                                            }
+                                            else
+                                            {
+                                                <td>
+                                                    <div class="form-check-inline">
+                                                        <label class="form-check-label text-info">รอกรมพิจารณา</label>
+                                                    </div>
+                                                </td>
+                                                <td></td>
+                                            }
+                                        }
+                                        else if (de?.Approve == Approve.ผษ_อนุมัติ)
+                                        {
+                                            if (User.IsInRole("Admin") || (User.IsInRole("Manager") && user.OfficeId == "00013000"))
+                                            {
+                                                <td style="color:green">เห็นชอบแล้ว</td>
                                                 <td>
                                                     <div class="form-check-inline">
                                                         <input type="checkbox" class="form-check-input" name="UpdateData[@i].Approve" id="UpdateData[@i].Approve" value="@Approve.รอพิจารณา" />
-                                                        <label class="form-check-label" for="UpdateData[@i].Approve">บันทึกใหม่</label>
+                                                        <label class="form-check-label" for="UpdateData[@i].Approve" style="color:red">บันทึกใหม่</label>
                                                     </div>
                                                 </td>
                                             }
@@ -1281,20 +1243,11 @@
                                             {
                                                 <td>
                                                     <div class="form-check-inline">
-                                                        <label class="form-check-label text-primary">กองกำกับเห็นชอบแล้ว</label>
+                                                        <label class="form-check-label text-success">กรมเห็นชอบแล้ว</label>
                                                     </div>
                                                 </td>
-                                                <td><input type="text" class="form-control" name="UpdateData[@i].Commenent3" value=@de?.CommentApproveLevel3 readonly /></td>
+                                                <td></td>
                                             }
-                                        }
-                                        else if (de?.Approve == Approve.ผษ_อนุมัติ)
-                                        {
-                                            <td>
-                                                <div class="form-check-inline">
-                                                    <label class="form-check-label text-success">กรมเห็นชอบแล้ว</label>
-                                                </div>
-                                            </td>
-                                            <td><input type="text" class="form-control" name="UpdateData[@i].Commenent4" value=@de?.CommentApproveLevel4 readonly /></td>
                                         }
                                         else
                                         {
@@ -1769,7 +1722,7 @@
                                                     {
                                                         @(Html.DevExtreme().Button()
                                                                 .ID("button")
-                                                                .Text("บันทึก")
+                                                                .Text("บันทึกปรับปรุง")
                                                                 .Type(ButtonType.Success)
                                                                 .UseSubmitBehavior(true)
                                                             )
@@ -1778,7 +1731,7 @@
                                                     {
                                                         @(Html.DevExtreme().Button()
                                                                .ID("button")
-                                                               .Text("บันทึก")
+                                                               .Text("บันทึกปรับปรุง")
                                                                .Type(ButtonType.Normal)
                                                                .UseSubmitBehavior(false)
                                                             )
@@ -1794,15 +1747,15 @@
                                 </tr>
                                 }
                             </tbody>
-                            <tfoot>
-                                <tr><th colspan="2" style="text-align:right">รวม</th><th></th><th></th><th></th><th></th><th></th></tr>
-                            </tfoot>
+                            @*<tfoot>
+                                    <tr><th colspan="2" style="text-align:right">รวม</th><th></th><th></th><th></th><th></th><th></th></tr>
+                                </tfoot>*@
                         </table>
                         <input asp-for="yearPoint" class="form-control" hidden />
                         <input asp-for="month" class="form-control" hidden />
                         <input type="hidden" name="selectoffice" value="@ViewBag.selectoffice" />
                         @if (User.IsInRole("Admin") || User.IsInRole("Special") || (User.IsInRole("Manager") && user.OfficeId.Substring(0, 3) == "000")
-                            || (user.approver == true && user.OfficeId.Substring(5, 3) == "000"))
+                           || (user.approver == true && user.OfficeId.Substring(5, 3) == "000"))
                         {
                             <input type="submit" name="Update" value="บันทึก" class="btn btn-primary" />
                         }
@@ -1874,7 +1827,7 @@
                                             }
                                             if (Model.pointC[i].Unit != UnitOfPoint.ระดับ)
                                             {
-                                                if (Model.month >= 10)
+                                                if (Model.month >= 10 && item.OfficeId == Model.pointC[i].OwnerOfficeId)
                                                 {
                                                     if (item.Month <= Model.month && item.Month >= 10)
                                                     {
@@ -1891,7 +1844,7 @@
                                                 }
                                                 else
                                                 {
-                                                    if (item.Month == 10 || item.Month == 11 || item.Month == 12)
+                                                    if ((item.Month == 10 || item.Month == 11 || item.Month == 12) && item.OfficeId == Model.pointC[i].OwnerOfficeId)
                                                     {
                                                         if (Model.pointC[i].Unit == UnitOfPoint.ร้อยละ)
                                                         {
@@ -1903,7 +1856,7 @@
                                                         }
                                                         sumOfExpect += item.Expect;
                                                     }
-                                                    if (item.Month <= Model.month)
+                                                    if (item.Month <= Model.month && item.OfficeId == Model.pointC[i].OwnerOfficeId)
                                                     {
                                                         if (Model.pointC[i].Unit == UnitOfPoint.ร้อยละ)
                                                         {
@@ -1932,7 +1885,14 @@
                                     <td>
                                         @if (!Model.pointC[i].HasSub)
                                         {
-                                            @Model.pointC[i].Weight.ToString("N2")
+                                            @if (@Model.pointC[i].WeightAll)
+                                            {
+                                                @Model.pointC[i].Weight.ToString("N2")
+                                            }
+                                            else
+                                            {
+                                                @de.Weight.ToString("N2")
+                                            }
                                         }
                                     </td>
                                     <td>
@@ -1952,16 +1912,7 @@
                                     {
                                         if (de?.Approve == Approve.รอพิจารณา)
                                         {
-
-                                            @if (User.IsInRole("Admin"))
-                                            {
-                                                <td>
-                                                    <label class="form-check-label text-secondary">บันทึกข้อมูลแล้ว รอพิจารณา</label>
-                                                </td>
-                                                <td>
-                                                </td>
-                                            }
-                                            else if (user.OfficeId.Substring(0, 3) == "000" && (user.approver ?? false))
+                                            @if ((user.OfficeId.Substring(2, 6) == "000000" || user.OfficeId.Substring(0, 3) == "000") && de?.PointOfEvaluation.AuditOffice.Code == user.OfficeId && (user.approver ?? false))
                                             {
                                                 <td>
                                                     <div class="form-check-inline">
@@ -1969,9 +1920,10 @@
                                                         <label class="form-check-label" for="UpdateData[@i].Approve">เห็นชอบ</label>
                                                     </div>
                                                 </td>
-                                                <td><input type="text" class="form-control" name="UpdateData[@i].Commenent3" value=@de?.CommentApproveLevel3 /></td>
+                                                <td>
+                                                </td>
                                             }
-                                            else if (user.OfficeId.Substring(2, 6) == "000000" && (user.approver ?? false))
+                                            else if ((user.OfficeId.Substring(2, 6) == "000000" || user.OfficeId.Substring(0, 3) == "000") && de?.PointOfEvaluation.AuditOffice.Code != user.OfficeId && de?.Office.Code == user.OfficeId && (user.approver ?? false))
                                             {
                                                 <td>
                                                     <div class="form-check-inline">
@@ -1979,9 +1931,10 @@
                                                         <label class="form-check-label" for="UpdateData[@i].Approve">เห็นชอบ</label>
                                                     </div>
                                                 </td>
-                                                <td><input type="text" class="form-control" name="UpdateData[@i].Commenent2" value=@de?.CommentApproveLevel2 /></td>
+                                                <td>
+                                                </td>
                                             }
-                                            else if (user.OfficeId.Substring(0, 3) != "000" && user.OfficeId.Substring(2, 6) != "000000" && (user.approver ?? false))
+                                            else if (user.OfficeId.Substring(2, 6) != "000000" && user.OfficeId.Substring(0, 3) != "000" && de?.Office.Code == user.OfficeId && (user.approver ?? false))
                                             {
                                                 <td>
                                                     <div class="form-check-inline">
@@ -1989,37 +1942,28 @@
                                                         <label class="form-check-label" for="UpdateData[@i].Approve">เห็นชอบ</label>
                                                     </div>
                                                 </td>
-                                                <td><input type="text" class="form-control" name="UpdateData[@i].Commenent1" value=@de?.CommentApproveLevel1 /></td>
+                                                <td>
+                                                </td>
                                             }
                                             else
                                             {
                                                 <td>
                                                     <div class="form-check-inline">
-                                                        <label class="form-check-label text-danger">รอพิจารณา</label>
+                                                        <label class="form-check-label text-danger">รอหัวหน้าหน่วยงานพิจารณา</label>
                                                     </div>
                                                 </td>
                                                 <td></td>
                                             }
-
                                         }
                                         else if (de?.Approve == Approve.หัวหน้าหน่วยงานอนุมัติ)
                                         {
-                                            if (user.OfficeId.Substring(0, 3) == "000")
+                                            if (user.OfficeId.Substring(2, 6) != "000000" && user.OfficeId.Substring(0, 3) != "000" && de?.Office.Code == user.OfficeId && (user.approver ?? false))
                                             {
-                                                <td>
-                                                    <label class="form-check-label text-secondary">สท. เห็นชอบแล้ว</label>
-                                                </td>
-                                                <td><input type="text" class="form-control" name="UpdateData[@i].Commenent1" value=@de?.CommentApproveLevel1 readonly /></td>
-                                            }
-                                            else if (User.IsInRole("Admin"))
-                                            {
-                                                <td>
-                                                    <label class="form-check-label text-secondary">สท. เห็นชอบแล้ว</label>
-                                                </td>
+                                                <td style="color:green">เห็นชอบแล้ว</td>
                                                 <td>
                                                     <div class="form-check-inline">
                                                         <input type="checkbox" class="form-check-input" name="UpdateData[@i].Approve" id="UpdateData[@i].Approve" value="@Approve.รอพิจารณา" />
-                                                        <label class="form-check-label" for="UpdateData[@i].Approve">บันทึกใหม่</label>
+                                                        <label class="form-check-label" for="UpdateData[@i].Approve" style="color:red">บันทึกใหม่</label>
                                                     </div>
                                                 </td>
                                             }
@@ -2031,29 +1975,30 @@
                                                         <label class="form-check-label" for="UpdateData[@i].Approve">เห็นชอบ</label>
                                                     </div>
                                                 </td>
-                                                <td><input type="text" class="form-control" name="UpdateData[@i].Commenent2" value=@de?.CommentApproveLevel2 /></td>
-                                            }
-                                            else if (user.OfficeId.Substring(0, 3) != "000" && user.OfficeId.Substring(2, 6) != "000000" && (user.approver ?? false))
-                                            {
                                                 <td>
-                                                    <div class="form-check-inline">
-                                                        <input type="checkbox" class="form-check-input" name="UpdateData[@i].Approve" id="UpdateData[@i].Approve" value="@Approve.หัวหน้าหน่วยงานอนุมัติ" checked readonly />
-                                                        <label class="form-check-label" for="UpdateData[@i].Approve">เห็นชอบ</label>
-                                                    </div>
                                                 </td>
-                                                <td><input type="text" class="form-control" name="UpdateData[@i].Commenent1" value=@de?.CommentApproveLevel1 readonly /></td>
                                             }
                                             else
                                             {
                                                 <td>
-                                                    <label class="form-check-label text-secondary">สท. เห็นชอบแล้ว</label>
+                                                    <label class="form-check-label text-info">รอ สภ. พิจารณา</label>
                                                 </td>
-                                                <td><input type="text" class="form-control" name="UpdateData[@i].Commenent1" value=@de?.CommentApproveLevel1 readonly /></td>
+                                                <td></td>
                                             }
                                         }
                                         else if (de?.Approve == Approve.สภ_ผู้กำกับตัวชี้วัดอนุมัติ)
                                         {
-                                            if (User.IsInRole("Admin") || (User.IsInRole("Manager") && user.OfficeId.Substring(0, 3) == "000" && Model.pointC[i].AuditOffice.Code == user.OfficeId))
+                                            if ((user.OfficeId.Substring(2, 6) == "000000" || user.OfficeId.Substring(0, 3) == "000") && de?.PointOfEvaluation.AuditOffice.Code != user.OfficeId && (user.approver ?? false))
+                                            {
+                                                <td style="color:green">เห็นชอบแล้ว</td>
+                                                <td>
+                                                    <div class="form-check-inline">
+                                                        <input type="checkbox" class="form-check-input" name="UpdateData[@i].Approve" id="UpdateData[@i].Approve" value="@Approve.รอพิจารณา" />
+                                                        <label class="form-check-label" for="UpdateData[@i].Approve" style="color:red">บันทึกใหม่</label>
+                                                    </div>
+                                                </td>
+                                            }
+                                            else if (user.OfficeId.Substring(0, 3) == "000" && de?.PointOfEvaluation.AuditOffice.Code == user.OfficeId && User.IsInRole("Manager"))
                                             {
                                                 <td>
                                                     <div class="form-check-inline">
@@ -2061,51 +2006,8 @@
                                                         <label class="form-check-label" for="UpdateData[@i].Approve">เห็นชอบ</label>
                                                     </div>
                                                 </td>
-                                                <td><input type="text" class="form-control" name="UpdateData[@i].Commenent3" value=@de?.CommentApproveLevel3 /></td>
-                                            }
-                                            else if (User.IsInRole("Admin"))
-                                            {
                                                 <td>
-                                                    <label class="form-check-label text-secondary">สภ. เห็นชอบแล้ว</label>
                                                 </td>
-                                                <td>
-                                                    <div class="form-check-inline">
-                                                        <input type="checkbox" class="form-check-input" name="UpdateData[@i].Approve" id="UpdateData[@i].Approve" value="@Approve.รอพิจารณา" />
-                                                        <label class="form-check-label" for="UpdateData[@i].Approve">บันทึกใหม่</label>
-                                                    </div>
-                                                </td>
-                                            }
-                                            else if (user.OfficeId.Substring(2, 6) == "000000" && (user.approver ?? false))
-                                            {
-                                                <td>
-                                                    <div class="form-check-inline">
-                                                        <input type="checkbox" class="form-check-input" name="UpdateData[@i].Approve" id="UpdateData[@i].Approve" value="@Approve.สภ_ผู้กำกับตัวชี้วัดอนุมัติ" checked readonly />
-                                                        <label class="form-check-label" for="UpdateData[@i].Approve">เห็นชอบ</label>
-                                                    </div>
-                                                </td>
-                                                <td><input type="text" class="form-control" name="UpdateData[@i].Commenent2" value=@de?.CommentApproveLevel2 readonly /></td>
-                                            }
-                                            else
-                                            {
-                                                <td>
-                                                    <div class="form-check-inline">
-                                                        <label class="form-check-label text-info">สภ. เห็นชอบแล้ว</label>
-                                                    </div>
-                                                </td>
-                                                <td><input type="text" class="form-control" name="UpdateData[@i].Commenent2" value=@de?.CommentApproveLevel2 readonly /></td>
-                                            }
-                                        }
-                                        else if (de?.Approve == Approve.กองผู้กำกับตัวชี้วัดอนุมัติ)
-                                        {
-                                            if (user.OfficeId.Substring(0, 3) == "000" && user.OfficeId != "00013000")
-                                            {
-                                                <td>
-                                                    <div class="form-check-inline">
-                                                        <input type="checkbox" class="form-check-input" name="UpdateData[@i].Approve" id="UpdateData[@i].Approve" value="@Approve.กองผู้กำกับตัวชี้วัดอนุมัติ" checked readonly />
-                                                        <label class="form-check-label" for="UpdateData[@i].Approve">เห็นชอบ</label>
-                                                    </div>
-                                                </td>
-                                                <td><input type="text" class="form-control" name="UpdateData[@i].Commenent3" value=@de?.CommentApproveLevel3 readonly /></td>
                                             }
                                             else if (User.IsInRole("Admin") || (User.IsInRole("Manager") && user.OfficeId == "00013000"))
                                             {
@@ -2115,10 +2017,59 @@
                                                         <label class="form-check-label" for="UpdateData[@i].Approve">เห็นชอบ</label>
                                                     </div>
                                                 </td>
+                                                <td></td>
+                                            }
+                                            else
+                                            {
+                                                <td>
+                                                    <div class="form-check-inline">
+                                                        <label class="form-check-label text-info">รอกรมพิจารณา</label>
+                                                    </div>
+                                                </td>
+                                                <td></td>
+                                            }
+                                        }
+                                        else if (de?.Approve == Approve.กองผู้กำกับตัวชี้วัดอนุมัติ)
+                                        {
+                                            if (user.OfficeId.Substring(0, 3) == "000" && de?.PointOfEvaluation.AuditOffice.Code == user.OfficeId && User.IsInRole("Manager"))
+                                            {
+                                                <td style="color:green">เห็นชอบแล้ว</td>
                                                 <td>
                                                     <div class="form-check-inline">
                                                         <input type="checkbox" class="form-check-input" name="UpdateData[@i].Approve" id="UpdateData[@i].Approve" value="@Approve.รอพิจารณา" />
-                                                        <label class="form-check-label" for="UpdateData[@i].Approve">บันทึกใหม่</label>
+                                                        <label class="form-check-label" for="UpdateData[@i].Approve" style="color:red">บันทึกใหม่</label>
+                                                    </div>
+                                                </td>
+                                            }
+                                            else if (User.IsInRole("Admin") || (User.IsInRole("Manager") && user.OfficeId == "00013000"))
+                                            {
+                                                <td>
+                                                    <div class="form-check-inline">
+                                                        <input type="checkbox" class="form-check-input" name="UpdateData[@i].Approve" id="UpdateData[@i].Approve" value="@Approve.ผษ_อนุมัติ" />
+                                                        <label class="form-check-label" for="UpdateData[@i].Approve">เห็นชอบ</label>
+                                                    </div>
+                                                </td>
+                                                <td></td>
+                                            }
+                                            else
+                                            {
+                                                <td>
+                                                    <div class="form-check-inline">
+                                                        <label class="form-check-label text-info">รอกรมพิจารณา</label>
+                                                    </div>
+                                                </td>
+                                                <td></td>
+                                            }
+                                        }
+                                        else if (de?.Approve == Approve.ผษ_อนุมัติ)
+                                        {
+                                            if (User.IsInRole("Admin") || (User.IsInRole("Manager") && user.OfficeId == "00013000"))
+                                            {
+                                                <td style="color:green">เห็นชอบแล้ว</td>
+                                                <td>
+                                                    <div class="form-check-inline">
+                                                        <input type="checkbox" class="form-check-input" name="UpdateData[@i].Approve" id="UpdateData[@i].Approve" value="@Approve.รอพิจารณา" />
+                                                        <label class="form-check-label" for="UpdateData[@i].Approve" style="color:red">บันทึกใหม่</label>
                                                     </div>
                                                 </td>
                                             }
@@ -2126,20 +2077,11 @@
                                             {
                                                 <td>
                                                     <div class="form-check-inline">
-                                                        <label class="form-check-label text-primary">กองกำกับเห็นชอบแล้ว</label>
+                                                        <label class="form-check-label text-success">กรมเห็นชอบแล้ว</label>
                                                     </div>
                                                 </td>
-                                                <td><input type="text" class="form-control" name="UpdateData[@i].Commenent3" value=@de?.CommentApproveLevel3 readonly /></td>
+                                                <td></td>
                                             }
-                                        }
-                                        else if (de?.Approve == Approve.ผษ_อนุมัติ)
-                                        {
-                                            <td>
-                                                <div class="form-check-inline">
-                                                    <label class="form-check-label text-success">กรมเห็นชอบแล้ว</label>
-                                                </div>
-                                            </td>
-                                            <td><input type="text" class="form-control" name="UpdateData[@i].Commenent4" value=@de?.CommentApproveLevel4 readonly /></td>
                                         }
                                         else
                                         {
@@ -2614,7 +2556,7 @@
                                                     {
                                                         @(Html.DevExtreme().Button()
                                                                 .ID("button")
-                                                                .Text("บันทึก")
+                                                                .Text("บันทึกปรับปรุง")
                                                                 .Type(ButtonType.Success)
                                                                 .UseSubmitBehavior(true)
                                                             )
@@ -2623,7 +2565,7 @@
                                                     {
                                                         @(Html.DevExtreme().Button()
                                                                .ID("button")
-                                                               .Text("บันทึก")
+                                                               .Text("บันทึกปรับปรุง")
                                                                .Type(ButtonType.Normal)
                                                                .UseSubmitBehavior(false)
                                                             )
@@ -2639,15 +2581,15 @@
                                 </tr>
                                 }
                             </tbody>
-                            <tfoot>
-                                <tr><th colspan="2" style="text-align:right">รวม</th><th></th><th></th><th></th><th></th><th></th></tr>
-                            </tfoot>
+                            @*<tfoot>
+                                    <tr><th colspan="2" style="text-align:right">รวม</th><th></th><th></th><th></th><th></th><th></th></tr>
+                                </tfoot>*@
                         </table>
                         <input asp-for="yearPoint" class="form-control" hidden />
                         <input asp-for="month" class="form-control" hidden />
                         <input type="hidden" name="selectoffice" value="@ViewBag.selectoffice" />
                         @if (User.IsInRole("Admin") || User.IsInRole("Special") || (User.IsInRole("Manager") && user.OfficeId.Substring(0, 3) == "000")
-                           || (user.approver == true && user.OfficeId.Substring(5, 3) == "000"))
+                          || (user.approver == true && user.OfficeId.Substring(5, 3) == "000"))
                         {
                             <input type="submit" name="Update" value="บันทึก" class="btn btn-primary" />
                         }
@@ -2719,7 +2661,7 @@
                                             }
                                             if (Model.pointD[i].Unit != UnitOfPoint.ระดับ)
                                             {
-                                                if (Model.month >= 10)
+                                                if (Model.month >= 10 && item.OfficeId == Model.pointD[i].OwnerOfficeId)
                                                 {
                                                     if (item.Month <= Model.month && item.Month >= 10)
                                                     {
@@ -2736,7 +2678,7 @@
                                                 }
                                                 else
                                                 {
-                                                    if (item.Month == 10 || item.Month == 11 || item.Month == 12)
+                                                    if ((item.Month == 10 || item.Month == 11 || item.Month == 12) && item.OfficeId == Model.pointD[i].OwnerOfficeId)
                                                     {
                                                         if (Model.pointD[i].Unit == UnitOfPoint.ร้อยละ)
                                                         {
@@ -2748,7 +2690,7 @@
                                                         }
                                                         sumOfExpect += item.Expect;
                                                     }
-                                                    if (item.Month <= Model.month)
+                                                    if (item.Month <= Model.month && item.OfficeId == Model.pointD[i].OwnerOfficeId)
                                                     {
                                                         if (Model.pointD[i].Unit == UnitOfPoint.ร้อยละ)
                                                         {
@@ -2777,7 +2719,14 @@
                                     <td>
                                         @if (!Model.pointD[i].HasSub)
                                         {
-                                            @Model.pointD[i].Weight.ToString("N2")
+                                            @if (@Model.pointD[i].WeightAll)
+                                            {
+                                                @Model.pointD[i].Weight.ToString("N2")
+                                            }
+                                            else
+                                            {
+                                                @de.Weight.ToString("N2")
+                                            }
                                         }
                                     </td>
                                     <td>
@@ -2797,16 +2746,7 @@
                                     {
                                         if (de?.Approve == Approve.รอพิจารณา)
                                         {
-
-                                            @if (User.IsInRole("Admin"))
-                                            {
-                                                <td>
-                                                    <label class="form-check-label text-secondary">บันทึกข้อมูลแล้ว รอพิจารณา</label>
-                                                </td>
-                                                <td>
-                                                </td>
-                                            }
-                                            else if (user.OfficeId.Substring(0, 3) == "000" && (user.approver ?? false))
+                                            @if ((user.OfficeId.Substring(2, 6) == "000000" || user.OfficeId.Substring(0, 3) == "000") && de?.PointOfEvaluation.AuditOffice.Code == user.OfficeId && (user.approver ?? false))
                                             {
                                                 <td>
                                                     <div class="form-check-inline">
@@ -2814,9 +2754,10 @@
                                                         <label class="form-check-label" for="UpdateData[@i].Approve">เห็นชอบ</label>
                                                     </div>
                                                 </td>
-                                                <td><input type="text" class="form-control" name="UpdateData[@i].Commenent3" value=@de?.CommentApproveLevel3 /></td>
+                                                <td>
+                                                </td>
                                             }
-                                            else if (user.OfficeId.Substring(2, 6) == "000000" && (user.approver ?? false))
+                                            else if ((user.OfficeId.Substring(2, 6) == "000000" || user.OfficeId.Substring(0, 3) == "000") && de?.PointOfEvaluation.AuditOffice.Code != user.OfficeId && de?.Office.Code == user.OfficeId && (user.approver ?? false))
                                             {
                                                 <td>
                                                     <div class="form-check-inline">
@@ -2824,9 +2765,10 @@
                                                         <label class="form-check-label" for="UpdateData[@i].Approve">เห็นชอบ</label>
                                                     </div>
                                                 </td>
-                                                <td><input type="text" class="form-control" name="UpdateData[@i].Commenent2" value=@de?.CommentApproveLevel2 /></td>
+                                                <td>
+                                                </td>
                                             }
-                                            else if (user.OfficeId.Substring(0, 3) != "000" && user.OfficeId.Substring(2, 6) != "000000" && (user.approver ?? false))
+                                            else if (user.OfficeId.Substring(2, 6) != "000000" && user.OfficeId.Substring(0, 3) != "000" && de?.Office.Code == user.OfficeId && (user.approver ?? false))
                                             {
                                                 <td>
                                                     <div class="form-check-inline">
@@ -2834,37 +2776,28 @@
                                                         <label class="form-check-label" for="UpdateData[@i].Approve">เห็นชอบ</label>
                                                     </div>
                                                 </td>
-                                                <td><input type="text" class="form-control" name="UpdateData[@i].Commenent1" value=@de?.CommentApproveLevel1 /></td>
+                                                <td>
+                                                </td>
                                             }
                                             else
                                             {
                                                 <td>
                                                     <div class="form-check-inline">
-                                                        <label class="form-check-label text-danger">รอพิจารณา</label>
+                                                        <label class="form-check-label text-danger">รอหัวหน้าหน่วยงานพิจารณา</label>
                                                     </div>
                                                 </td>
                                                 <td></td>
                                             }
-
                                         }
                                         else if (de?.Approve == Approve.หัวหน้าหน่วยงานอนุมัติ)
                                         {
-                                            if (user.OfficeId.Substring(0, 3) == "000")
+                                            if (user.OfficeId.Substring(2, 6) != "000000" && user.OfficeId.Substring(0, 3) != "000" && de?.Office.Code == user.OfficeId && (user.approver ?? false))
                                             {
-                                                <td>
-                                                    <label class="form-check-label text-secondary">สท. เห็นชอบแล้ว</label>
-                                                </td>
-                                                <td><input type="text" class="form-control" name="UpdateData[@i].Commenent1" value=@de?.CommentApproveLevel1 readonly /></td>
-                                            }
-                                            else if (User.IsInRole("Admin"))
-                                            {
-                                                <td>
-                                                    <label class="form-check-label text-secondary">สท. เห็นชอบแล้ว</label>
-                                                </td>
+                                                <td style="color:green">เห็นชอบแล้ว</td>
                                                 <td>
                                                     <div class="form-check-inline">
                                                         <input type="checkbox" class="form-check-input" name="UpdateData[@i].Approve" id="UpdateData[@i].Approve" value="@Approve.รอพิจารณา" />
-                                                        <label class="form-check-label" for="UpdateData[@i].Approve">บันทึกใหม่</label>
+                                                        <label class="form-check-label" for="UpdateData[@i].Approve" style="color:red">บันทึกใหม่</label>
                                                     </div>
                                                 </td>
                                             }
@@ -2876,29 +2809,30 @@
                                                         <label class="form-check-label" for="UpdateData[@i].Approve">เห็นชอบ</label>
                                                     </div>
                                                 </td>
-                                                <td><input type="text" class="form-control" name="UpdateData[@i].Commenent2" value=@de?.CommentApproveLevel2 /></td>
-                                            }
-                                            else if (user.OfficeId.Substring(0, 3) != "000" && user.OfficeId.Substring(2, 6) != "000000" && (user.approver ?? false))
-                                            {
                                                 <td>
-                                                    <div class="form-check-inline">
-                                                        <input type="checkbox" class="form-check-input" name="UpdateData[@i].Approve" id="UpdateData[@i].Approve" value="@Approve.หัวหน้าหน่วยงานอนุมัติ" checked readonly />
-                                                        <label class="form-check-label" for="UpdateData[@i].Approve">เห็นชอบ</label>
-                                                    </div>
                                                 </td>
-                                                <td><input type="text" class="form-control" name="UpdateData[@i].Commenent1" value=@de?.CommentApproveLevel1 readonly /></td>
                                             }
                                             else
                                             {
                                                 <td>
-                                                    <label class="form-check-label text-secondary">สท. เห็นชอบแล้ว</label>
+                                                    <label class="form-check-label text-info">รอ สภ. พิจารณา</label>
                                                 </td>
-                                                <td><input type="text" class="form-control" name="UpdateData[@i].Commenent1" value=@de?.CommentApproveLevel1 readonly /></td>
+                                                <td></td>
                                             }
                                         }
                                         else if (de?.Approve == Approve.สภ_ผู้กำกับตัวชี้วัดอนุมัติ)
                                         {
-                                            if (User.IsInRole("Admin") || (User.IsInRole("Manager") && user.OfficeId.Substring(0, 3) == "000" && Model.pointD[i].AuditOffice.Code == user.OfficeId))
+                                            if ((user.OfficeId.Substring(2, 6) == "000000" || user.OfficeId.Substring(0, 3) == "000") && de?.PointOfEvaluation.AuditOffice.Code != user.OfficeId && (user.approver ?? false))
+                                            {
+                                                <td style="color:green">เห็นชอบแล้ว</td>
+                                                <td>
+                                                    <div class="form-check-inline">
+                                                        <input type="checkbox" class="form-check-input" name="UpdateData[@i].Approve" id="UpdateData[@i].Approve" value="@Approve.รอพิจารณา" />
+                                                        <label class="form-check-label" for="UpdateData[@i].Approve" style="color:red">บันทึกใหม่</label>
+                                                    </div>
+                                                </td>
+                                            }
+                                            else if (user.OfficeId.Substring(0, 3) == "000" && de?.PointOfEvaluation.AuditOffice.Code == user.OfficeId && User.IsInRole("Manager"))
                                             {
                                                 <td>
                                                     <div class="form-check-inline">
@@ -2906,51 +2840,30 @@
                                                         <label class="form-check-label" for="UpdateData[@i].Approve">เห็นชอบ</label>
                                                     </div>
                                                 </td>
-                                                <td><input type="text" class="form-control" name="UpdateData[@i].Commenent3" value=@de?.CommentApproveLevel3 /></td>
-                                            }
-                                            else if (User.IsInRole("Admin"))
-                                            {
                                                 <td>
-                                                    <label class="form-check-label text-secondary">สภ. เห็นชอบแล้ว</label>
                                                 </td>
-                                                <td>
-                                                    <div class="form-check-inline">
-                                                        <input type="checkbox" class="form-check-input" name="UpdateData[@i].Approve" id="UpdateData[@i].Approve" value="@Approve.รอพิจารณา" />
-                                                        <label class="form-check-label" for="UpdateData[@i].Approve">บันทึกใหม่</label>
-                                                    </div>
-                                                </td>
-                                            }
-                                            else if (user.OfficeId.Substring(2, 6) == "000000" && (user.approver ?? false))
-                                            {
-                                                <td>
-                                                    <div class="form-check-inline">
-                                                        <input type="checkbox" class="form-check-input" name="UpdateData[@i].Approve" id="UpdateData[@i].Approve" value="@Approve.สภ_ผู้กำกับตัวชี้วัดอนุมัติ" checked readonly />
-                                                        <label class="form-check-label" for="UpdateData[@i].Approve">เห็นชอบ</label>
-                                                    </div>
-                                                </td>
-                                                <td><input type="text" class="form-control" name="UpdateData[@i].Commenent2" value=@de?.CommentApproveLevel2 readonly /></td>
                                             }
                                             else
                                             {
                                                 <td>
                                                     <div class="form-check-inline">
-                                                        <label class="form-check-label text-info">สภ. เห็นชอบแล้ว</label>
+                                                        <label class="form-check-label text-info">รอกองกำกับตัวชี้วัดพิจารณา</label>
                                                     </div>
                                                 </td>
-                                                <td><input type="text" class="form-control" name="UpdateData[@i].Commenent2" value=@de?.CommentApproveLevel2 readonly /></td>
+                                                <td></td>
                                             }
                                         }
                                         else if (de?.Approve == Approve.กองผู้กำกับตัวชี้วัดอนุมัติ)
                                         {
-                                            if (user.OfficeId.Substring(0, 3) == "000" && user.OfficeId != "00013000")
+                                            if (user.OfficeId.Substring(0, 3) == "000" && de?.PointOfEvaluation.AuditOffice.Code == user.OfficeId && User.IsInRole("Manager"))
                                             {
+                                                <td style="color:green">เห็นชอบแล้ว</td>
                                                 <td>
                                                     <div class="form-check-inline">
-                                                        <input type="checkbox" class="form-check-input" name="UpdateData[@i].Approve" id="UpdateData[@i].Approve" value="@Approve.กองผู้กำกับตัวชี้วัดอนุมัติ" checked readonly />
-                                                        <label class="form-check-label" for="UpdateData[@i].Approve">เห็นชอบ</label>
+                                                        <input type="checkbox" class="form-check-input" name="UpdateData[@i].Approve" id="UpdateData[@i].Approve" value="@Approve.รอพิจารณา" />
+                                                        <label class="form-check-label" for="UpdateData[@i].Approve" style="color:red">บันทึกใหม่</label>
                                                     </div>
                                                 </td>
-                                                <td><input type="text" class="form-control" name="UpdateData[@i].Commenent3" value=@de?.CommentApproveLevel3 readonly /></td>
                                             }
                                             else if (User.IsInRole("Admin") || (User.IsInRole("Manager") && user.OfficeId == "00013000"))
                                             {
@@ -2960,10 +2873,27 @@
                                                         <label class="form-check-label" for="UpdateData[@i].Approve">เห็นชอบ</label>
                                                     </div>
                                                 </td>
+                                                <td></td>
+                                            }
+                                            else
+                                            {
+                                                <td>
+                                                    <div class="form-check-inline">
+                                                        <label class="form-check-label text-info">รอกรมพิจารณา</label>
+                                                    </div>
+                                                </td>
+                                                <td></td>
+                                            }
+                                        }
+                                        else if (de?.Approve == Approve.ผษ_อนุมัติ)
+                                        {
+                                            if (User.IsInRole("Admin") || (User.IsInRole("Manager") && user.OfficeId == "00013000"))
+                                            {
+                                                <td style="color:green">เห็นชอบแล้ว</td>
                                                 <td>
                                                     <div class="form-check-inline">
                                                         <input type="checkbox" class="form-check-input" name="UpdateData[@i].Approve" id="UpdateData[@i].Approve" value="@Approve.รอพิจารณา" />
-                                                        <label class="form-check-label" for="UpdateData[@i].Approve">บันทึกใหม่</label>
+                                                        <label class="form-check-label" for="UpdateData[@i].Approve" style="color:red">บันทึกใหม่</label>
                                                     </div>
                                                 </td>
                                             }
@@ -2971,20 +2901,11 @@
                                             {
                                                 <td>
                                                     <div class="form-check-inline">
-                                                        <label class="form-check-label text-primary">กองกำกับเห็นชอบแล้ว</label>
+                                                        <label class="form-check-label text-success">กรมเห็นชอบแล้ว</label>
                                                     </div>
                                                 </td>
-                                                <td><input type="text" class="form-control" name="UpdateData[@i].Commenent3" value=@de?.CommentApproveLevel3 readonly /></td>
+                                                <td></td>
                                             }
-                                        }
-                                        else if (de?.Approve == Approve.ผษ_อนุมัติ)
-                                        {
-                                            <td>
-                                                <div class="form-check-inline">
-                                                    <label class="form-check-label text-success">กรมเห็นชอบแล้ว</label>
-                                                </div>
-                                            </td>
-                                            <td><input type="text" class="form-control" name="UpdateData[@i].Commenent4" value=@de?.CommentApproveLevel4 readonly /></td>
                                         }
                                         else
                                         {
@@ -3459,7 +3380,7 @@
                                                     {
                                                         @(Html.DevExtreme().Button()
                                                                 .ID("button")
-                                                                .Text("บันทึก")
+                                                                .Text("บันทึกปรับปรุง")
                                                                 .Type(ButtonType.Success)
                                                                 .UseSubmitBehavior(true)
                                                             )
@@ -3468,7 +3389,7 @@
                                                     {
                                                         @(Html.DevExtreme().Button()
                                                                .ID("button")
-                                                               .Text("บันทึก")
+                                                               .Text("บันทึกปรับปรุง")
                                                                .Type(ButtonType.Normal)
                                                                .UseSubmitBehavior(false)
                                                             )
@@ -3484,15 +3405,15 @@
                                 </tr>
                                 }
                             </tbody>
-                            <tfoot>
-                                <tr><th colspan="2" style="text-align:right">รวม</th><th></th><th></th><th></th><th></th><th></th></tr>
-                            </tfoot>
+                            @*<tfoot>
+                                    <tr><th colspan="2" style="text-align:right">รวม</th><th></th><th></th><th></th><th></th><th></th></tr>
+                                </tfoot>*@
                         </table>
                         <input asp-for="yearPoint" class="form-control" hidden />
                         <input asp-for="month" class="form-control" hidden />
                         <input type="hidden" name="selectoffice" value="@ViewBag.selectoffice" />
                         @if (User.IsInRole("Admin") || User.IsInRole("Special") || (User.IsInRole("Manager") && user.OfficeId.Substring(0, 3) == "000")
-                           || (user.approver == true && user.OfficeId.Substring(5, 3) == "000"))
+                          || (user.approver == true && user.OfficeId.Substring(5, 3) == "000"))
                         {
                             <input type="submit" name="Update" value="บันทึก" class="btn btn-primary" />
                         }

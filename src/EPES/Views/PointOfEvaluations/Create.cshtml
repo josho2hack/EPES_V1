@@ -18,7 +18,7 @@
     }
     else
     {
-        yearStart = DateTime.Now.AddYears(ViewBag.yearPoint).Year -1;
+        yearStart = DateTime.Now.AddYears(ViewBag.yearPoint).Year - 1;
         yearMid = DateTime.Now.AddYears(ViewBag.yearPoint).Year;
         yearStop = DateTime.Now.AddYears(ViewBag.yearPoint).Year;
     }
@@ -87,6 +87,16 @@
                             <label asp-for="point.Weight" class="control-label"></label>
                             <input asp-for="point.Weight" class="form-control" />
                             <span asp-validation-for="point.Weight" class="text-danger"></span>
+                        </div>
+                        <div class="form-check">
+                            <input type="checkbox" asp-for="point.WeightAll" class="form-check-input" checked />
+                            <label asp-for="point.WeightAll" class="form-check-label"></label>
+                            <span asp-validation-for="point.WeightAll" class="text-danger"></span>
+                        </div>
+                        <div class="form-check">
+                            <input type="checkbox" asp-for="point.StartZero" class="form-check-input" />
+                            <label asp-for="point.StartZero" class="form-check-label"></label>
+                            <span asp-validation-for="point.StartZero" class="text-danger"></span>
                         </div>
                         <div class="form-check">
                             <input type="checkbox" asp-for="point.FixExpect" class="form-check-input" />
@@ -745,6 +755,9 @@
                                     <th>
                                         เป้าหมาย/ประมาณการ
                                     </th>
+                                    <th>
+                                        น้ำหนักรายเดือน
+                                    </th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -755,6 +768,9 @@
                                     <td>
                                         <input type="number" name="expect10" class="form-control" value="0" />
                                     </td>
+                                    <td>
+                                        <input type="number" name="weight10" id="weight10" class="form-control" value="0" disabled />
+                                    </td>
                                 </tr>
                                 <tr>
                                     <td>
@@ -762,6 +778,9 @@
                                     </td>
                                     <td>
                                         <input type="number" name="expect11" class="form-control" value="0" />
+                                    </td>
+                                    <td>
+                                        <input type="number" name="weight11" id="weight11" class="form-control" value="0" disabled />
                                     </td>
                                 </tr>
                                 <tr>
@@ -771,6 +790,9 @@
                                     <td>
                                         <input type="number" name="expect12" class="form-control" value="0" />
                                     </td>
+                                    <td>
+                                        <input type="number" name="weight12" id="weight12" class="form-control" value="0" disabled />
+                                    </td>
                                 </tr>
                                 <tr>
                                     <td>
@@ -778,6 +800,9 @@
                                     </td>
                                     <td>
                                         <input type="number" name="expect1" class="form-control" value="0" />
+                                    </td>
+                                    <td>
+                                        <input type="number" name="weight1" id="weight1" class="form-control" value="0" disabled />
                                     </td>
                                 </tr>
                                 <tr>
@@ -787,6 +812,9 @@
                                     <td>
                                         <input type="number" name="expect2" class="form-control" value="0" />
                                     </td>
+                                    <td>
+                                        <input type="number" name="weight2" id="weight2" class="form-control" value="0" disabled />
+                                    </td>
                                 </tr>
                                 <tr>
                                     <td>
@@ -794,6 +822,9 @@
                                     </td>
                                     <td>
                                         <input type="number" name="expect3" class="form-control" value="0" />
+                                    </td>
+                                    <td>
+                                        <input type="number" name="weight3" id="weight3" class="form-control" value="0" disabled />
                                     </td>
                                 </tr>
                                 <tr>
@@ -803,6 +834,9 @@
                                     <td>
                                         <input type="number" name="expect4" class="form-control" value="0" />
                                     </td>
+                                    <td>
+                                        <input type="number" name="weight4" id="weight4" class="form-control" value="0" disabled />
+                                    </td>
                                 </tr>
                                 <tr>
                                     <td>
@@ -810,6 +844,9 @@
                                     </td>
                                     <td>
                                         <input type="number" name="expect5" class="form-control" value="0" />
+                                    </td>
+                                    <td>
+                                        <input type="number" name="weight5" id="weight5" class="form-control" value="0" disabled />
                                     </td>
                                 </tr>
                                 <tr>
@@ -819,6 +856,9 @@
                                     <td>
                                         <input type="number" name="expect6" class="form-control" value="0" />
                                     </td>
+                                    <td>
+                                        <input type="number" name="weight6" id="weight6" class="form-control" value="0" disabled />
+                                    </td>
                                 </tr>
                                 <tr>
                                     <td>
@@ -826,6 +866,9 @@
                                     </td>
                                     <td>
                                         <input type="number" name="expect7" class="form-control" value="0" />
+                                    </td>
+                                    <td>
+                                        <input type="number" name="weight7" id="weight7" class="form-control" value="0" disabled />
                                     </td>
                                 </tr>
                                 <tr>
@@ -835,6 +878,9 @@
                                     <td>
                                         <input type="number" name="expect8" class="form-control" value="0" />
                                     </td>
+                                    <td>
+                                        <input type="number" name="weight8" id="weight8" class="form-control" value="0" disabled />
+                                    </td>
                                 </tr>
                                 <tr>
                                     <td>
@@ -842,6 +888,9 @@
                                     </td>
                                     <td>
                                         <input type="number" name="expect9" class="form-control" value="0" />
+                                    </td>
+                                    <td>
+                                        <input type="number" name="weight9" id="weight9" class="form-control" value="0" disabled />
                                     </td>
                                 </tr>
                             </tbody>
@@ -885,12 +934,12 @@
                         $("#LRRound_R2MStop").val("@yearStop-03-31");
                         $("#LRRound_R3MStop").val("@yearStop-03-31");
                         $("#LRRound_R4MStop").val("@yearStop-03-31");
-                    } 
+                    }
                 } else {
                     $("#RateRound2").hide();
                     $("#LevelRound2").hide();
                     $("#LevelRateRound2").hide();
-                    
+
                     $("#Round_R5MStop").val("@yearStop-09-30");
 
                     $("#LRound_R1MStop").val("@yearStop-09-30");
@@ -915,7 +964,7 @@
                     $("#LevelRound1").hide();
                     $("#LevelRound2").hide();
                     $("#LevelRateRound1").hide();
-                    $("#LevelRateRound2").hide();    
+                    $("#LevelRateRound2").hide();
                 } else if ($(this).children("option:selected").val() == 1) {
                     $("#DataForEvalutionTable").hide();
                     $("#roundNumber").val(1);
@@ -1040,7 +1089,7 @@
                         //alert($(this).val());
                         break;
                     default:
-                        
+
                     // code block
                 }
             });
@@ -1158,6 +1207,80 @@
                     $("#DataForEvalutionTable").hide();
                 } else {
                     $("#DataForEvalutionTable").show();
+                }
+            });
+
+            $("#point_Weight").change(function () {
+
+                var w = $(this).val();
+                if ($("#point_WeightAll").is(":checked")) {
+                    $("#weight10").val(w);
+                    $("#weight11").val(w);
+                    $("#weight12").val(w);
+                    $("#weight1").val(w);
+                    $("#weight2").val(w);
+                    $("#weight3").val(w);
+                    $("#weight4").val(w);
+                    $("#weight5").val(w);
+                    $("#weight6").val(w);
+                    $("#weight7").val(w);
+                    $("#weight8").val(w);
+                    $("#weight9").val(w);
+                }
+            });
+
+            $("#point_WeightAll").change(function () {
+                var w = $("#point_Weight").val();
+                if ($(this).is(":checked")) {                    
+                    $("#weight10").val(w);
+                    $("#weight10").prop("disabled", true);
+                    $("#weight11").val(w);
+                    $("#weight11").prop("disabled", true);
+                    $("#weight12").val(w);
+                    $("#weight12").prop("disabled", true);
+                    $("#weight1").val(w);
+                    $("#weight1").prop("disabled", true);
+                    $("#weight2").val(w);
+                    $("#weight2").prop("disabled", true);
+                    $("#weight3").val(w);
+                    $("#weight3").prop("disabled", true);
+                    $("#weight4").val(w);
+                    $("#weight4").prop("disabled", true);
+                    $("#weight5").val(w);
+                    $("#weight5").prop("disabled", true);
+                    $("#weight6").val(w);
+                    $("#weight6").prop("disabled", true);
+                    $("#weight7").val(w);
+                    $("#weight7").prop("disabled", true);
+                    $("#weight8").val(w);
+                    $("#weight8").prop("disabled", true);
+                    $("#weight9").val(w);
+                    $("#weight9").prop("disabled", true);
+                } else {
+                    $("#weight10").val(w);
+                    $("#weight10").prop("disabled", false);
+                    $("#weight11").val(w);
+                    $("#weight11").prop("disabled", false);
+                    $("#weight12").val(w);
+                    $("#weight12").prop("disabled", false);
+                    $("#weight1").val(w);
+                    $("#weight1").prop("disabled", false);
+                    $("#weight2").val(w);
+                    $("#weight2").prop("disabled", false);
+                    $("#weight3").val(w);
+                    $("#weight3").prop("disabled", false);
+                    $("#weight4").val(w);
+                    $("#weight4").prop("disabled", false);
+                    $("#weight5").val(w);
+                    $("#weight5").prop("disabled", false);
+                    $("#weight6").val(w);
+                    $("#weight6").prop("disabled", false);
+                    $("#weight7").val(w);
+                    $("#weight7").prop("disabled", false);
+                    $("#weight8").val(w);
+                    $("#weight8").prop("disabled", false);
+                    $("#weight9").val(w);
+                    $("#weight9").prop("disabled", false);
                 }
             });
         });

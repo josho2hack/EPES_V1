@@ -360,12 +360,11 @@
                     </text>);
 
             fields.Add()
-                .Caption("อนุมัติ")
-                .DataField("scoreApprove")
-                .SummaryType(SummaryType.Avg)
-                .Format(f => f.Type(Format.FixedPoint).Precision(4))
-                .Area(PivotGridArea.Data);
-                //.CustomizeText("customizeText");
+                    .Caption("ค่าคะแนนถ่วงน้ำหนัก")
+                    .DataField("calApprove")
+                    .SummaryType(SummaryType.Sum)
+                    .Format(f => f.Type(Format.FixedPoint).Precision(4))
+                    .Area(PivotGridArea.Data);
         })
         )
         .OnInitialized("bind_chart_approved")

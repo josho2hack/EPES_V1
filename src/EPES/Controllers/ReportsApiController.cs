@@ -68,10 +68,13 @@ namespace EPES.Controllers
             var user = await _userManager.GetUserAsync(User);
 
             var scoreDrafts = _context.ScoreDrafts.Include(s => s.Office)
+
                                                   .Where(sd => sd.PointOfEvaluation.Year == yearForQuery &&
                                                     sd.LastMonth == month &&
                                                     sd.Office.Code != "00000000" &&
                                                     sd.PointOfEvaluation.SubPoint == 0)
+                                                    //.AsEnumerable()
+                                                    //.GroupBy(x => new { x.OfficeId,x.PointOfEvaluation.Plan})
                                                     .Select(i => new
                                                     {
                                                         i.Id,
@@ -81,8 +84,25 @@ namespace EPES.Controllers
                                                         i.ScoreValue,
                                                         i.ScoreApprove,
                                                         i.LastMonth,
-                                                        i.PointOfEvaluation.Year.Year
+                                                        i.PointOfEvaluation.Year.Year,
+                                                        cal = (i.PointOfEvaluation.Weight * i.ScoreValue / 100),
+                                                        calApprove = (i.PointOfEvaluation.Weight * i.ScoreApprove / 100)
                                                     });
+            var scoreSum = from s in scoreDrafts
+                           group s by new { s.Name,s.Plan } into g
+                           select new
+                           {
+                               Id = g.First().Id,
+                               Plan = g.Key.Plan,
+                               Name = g.Key.Name,
+                               NameGroup = g.First().NameGroup,
+                               ScoreValue = g.Sum(d => d.ScoreValue),
+                               ScoreApprove = g.Sum(d => d.ScoreApprove),
+                               LastMonth = g.First().LastMonth,
+                               Year = g.First().Year,
+                               cal = g.Sum(d => d.cal),
+                               calApprove = g.Sum(d => d.calApprove)
+                           };
 
             return Json(await DataSourceLoader.LoadAsync(scoreDrafts, loadOptions));
         }

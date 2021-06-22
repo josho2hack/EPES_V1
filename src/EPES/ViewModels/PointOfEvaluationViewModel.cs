@@ -43,5 +43,18 @@ namespace EPES.ViewModels
         public decimal expect10 { get; set; } = 0;
         public decimal expect11 { get; set; } = 0;
         public decimal expect12 { get; set; } = 0;
+
+        public decimal weight1 { get; set; } = 0;
+        public decimal weight2 { get; set; } = 0;
+        public decimal weight3 { get; set; } = 0;
+        public decimal weight4 { get; set; } = 0;
+        public decimal weight5 { get; set; } = 0;
+        public decimal weight6 { get; set; } = 0;
+        public decimal weight7 { get; set; } = 0;
+        public decimal weight8 { get; set; } = 0;
+        public decimal weight9 { get; set; } = 0;
+        public decimal weight10 { get; set; } = 0;
+        public decimal weight11 { get; set; } = 0;
+        public decimal weight12 { get; set; } = 0;
     }
 }

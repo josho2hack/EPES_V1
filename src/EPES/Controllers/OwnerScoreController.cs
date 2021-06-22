@@ -78,7 +78,8 @@ namespace EPES.Controllers
                                                         i.ScoreApprove,
                                                         i.LastMonth,
                                                         i.PointOfEvaluation.Year.Year,
-                                                        cal = (i.PointOfEvaluation.Weight * i.ScoreValue /100 )
+                                                        cal = (i.PointOfEvaluation.Weight * i.ScoreValue /100 ),
+                                                        calApprove = (i.PointOfEvaluation.Weight * i.ScoreApprove / 100)
                                                     });
 
             return Json(await DataSourceLoader.LoadAsync(scoreDrafts, loadOptions));

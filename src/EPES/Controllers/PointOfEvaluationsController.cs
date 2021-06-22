@@ -86,7 +86,11 @@ namespace EPES.Controllers
                     {
                         viewModel.pointA = await _context.PointOfEvaluations.Where(p => p.Plan == TypeOfPlan.A && p.OwnerOffice.Code == user.OfficeId && p.Year == yearForQuery).Include(p => p.OwnerOffice).Include(p => p.AuditOffice).ToListAsync();
 
-                        var officeList = await _context.PointOfEvaluations.Where(p => (p.OwnerOffice.Code == user.OfficeId) || (p.Plan == TypeOfPlan.B && (p.OwnerOffice.Code == user.OfficeId || p.AuditOffice.Code == user.OfficeId) && p.Year == yearForQuery)).Include(p => p.OwnerOffice).Include(p => p.AuditOffice).Select(b => new { Code = b.OwnerOffice.Code, Name = b.OwnerOffice.Name }).Distinct().ToListAsync();
+                        var officeList = await _context.PointOfEvaluations.Where(p => p.OwnerOffice.Code == user.OfficeId ||
+                            (p.Plan == TypeOfPlan.B && (p.OwnerOffice.Code == user.OfficeId || p.AuditOffice.Code == user.OfficeId) && p.Year == yearForQuery) ||
+                            (p.Plan == TypeOfPlan.C && (p.OwnerOffice.Code == user.OfficeId || p.AuditOffice.Code == user.OfficeId) && p.Year == yearForQuery) ||
+                            (p.Plan == TypeOfPlan.D && (p.OwnerOffice.Code == user.OfficeId || p.AuditOffice.Code == user.OfficeId) && p.Year == yearForQuery)
+                            ).Include(p => p.OwnerOffice).Include(p => p.AuditOffice).Select(b => new { Code = b.OwnerOffice.Code, Name = b.OwnerOffice.Name }).Distinct().ToListAsync();
                         if (officeList.Count < 1)
                         {
                             officeList.Add(new { Code = user.OfficeId, Name = user.OfficeName });
@@ -108,7 +112,11 @@ namespace EPES.Controllers
                     {
                         viewModel.pointA = await _context.PointOfEvaluations.Where(p => p.Plan == TypeOfPlan.A && p.OwnerOffice.Code == selectoffice && p.Year == yearForQuery).Include(p => p.OwnerOffice).Include(p => p.AuditOffice).ToListAsync();
 
-                        var officeList = await _context.PointOfEvaluations.Where(p => (p.OwnerOffice.Code == user.OfficeId) || (p.Plan == TypeOfPlan.B && (p.OwnerOffice.Code == user.OfficeId || p.AuditOffice.Code == user.OfficeId) && p.Year == yearForQuery)).Include(p => p.OwnerOffice).Include(p => p.AuditOffice).Select(b => new { Code = b.OwnerOffice.Code, Name = b.OwnerOffice.Name }).Distinct().ToListAsync();
+                        var officeList = await _context.PointOfEvaluations.Where(p => p.OwnerOffice.Code == user.OfficeId ||
+                            (p.Plan == TypeOfPlan.B && (p.OwnerOffice.Code == user.OfficeId || p.AuditOffice.Code == user.OfficeId) && p.Year == yearForQuery) ||
+                            (p.Plan == TypeOfPlan.C && (p.OwnerOffice.Code == user.OfficeId || p.AuditOffice.Code == user.OfficeId) && p.Year == yearForQuery) ||
+                            (p.Plan == TypeOfPlan.D && (p.OwnerOffice.Code == user.OfficeId || p.AuditOffice.Code == user.OfficeId) && p.Year == yearForQuery)
+                            ).Include(p => p.OwnerOffice).Include(p => p.AuditOffice).Select(b => new { Code = b.OwnerOffice.Code, Name = b.OwnerOffice.Name }).Distinct().ToListAsync();
                         if (officeList.Count < 1)
                         {
                             officeList.Add(new { Code = user.OfficeId, Name = user.OfficeName });
@@ -193,7 +201,11 @@ namespace EPES.Controllers
                     {
                         viewModel.pointA = await _context.PointOfEvaluations.Where(p => p.Plan == TypeOfPlan.A && p.OwnerOffice.Code == user.OfficeId && p.Year == yearForQuery).Include(p => p.OwnerOffice).Include(p => p.AuditOffice).ToListAsync();
 
-                        var officeList = await _context.PointOfEvaluations.Where(p => (p.OwnerOffice.Code == user.OfficeId) || (p.Plan == TypeOfPlan.B && (p.OwnerOffice.Code == user.OfficeId || p.AuditOffice.Code == user.OfficeId) && p.Year == yearForQuery)).Include(p => p.OwnerOffice).Include(p => p.AuditOffice).Select(b => new { Code = b.OwnerOffice.Code, Name = b.OwnerOffice.Name }).Distinct().ToListAsync();
+                        var officeList = await _context.PointOfEvaluations.Where(p => (p.OwnerOffice.Code == user.OfficeId) ||
+                            (p.Plan == TypeOfPlan.B && (p.OwnerOffice.Code == user.OfficeId || p.AuditOffice.Code == user.OfficeId) && p.Year == yearForQuery) ||
+                            (p.Plan == TypeOfPlan.C && (p.OwnerOffice.Code == user.OfficeId || p.AuditOffice.Code == user.OfficeId) && p.Year == yearForQuery) ||
+                            (p.Plan == TypeOfPlan.D && (p.OwnerOffice.Code == user.OfficeId || p.AuditOffice.Code == user.OfficeId) && p.Year == yearForQuery)
+                            ).Include(p => p.OwnerOffice).Include(p => p.AuditOffice).Select(b => new { Code = b.OwnerOffice.Code, Name = b.OwnerOffice.Name }).Distinct().ToListAsync();
                         if (officeList.Count < 1)
                         {
                             officeList.Add(new { Code = user.OfficeId, Name = user.OfficeName });
@@ -215,7 +227,11 @@ namespace EPES.Controllers
                     {
                         viewModel.pointA = await _context.PointOfEvaluations.Where(p => p.Plan == TypeOfPlan.A && p.OwnerOffice.Code == selectoffice && p.Year == yearForQuery).Include(p => p.OwnerOffice).Include(p => p.AuditOffice).ToListAsync();
 
-                        var officeList = await _context.PointOfEvaluations.Where(p => (p.OwnerOffice.Code == user.OfficeId) || (p.Plan == TypeOfPlan.B && (p.OwnerOffice.Code == user.OfficeId || p.AuditOffice.Code == user.OfficeId) && p.Year == yearForQuery)).Include(p => p.OwnerOffice).Include(p => p.AuditOffice).Select(b => new { Code = b.OwnerOffice.Code, Name = b.OwnerOffice.Name }).Distinct().ToListAsync();
+                        var officeList = await _context.PointOfEvaluations.Where(p => (p.OwnerOffice.Code == user.OfficeId) ||
+                            (p.Plan == TypeOfPlan.B && (p.OwnerOffice.Code == user.OfficeId || p.AuditOffice.Code == user.OfficeId) && p.Year == yearForQuery) ||
+                            (p.Plan == TypeOfPlan.C && (p.OwnerOffice.Code == user.OfficeId || p.AuditOffice.Code == user.OfficeId) && p.Year == yearForQuery) ||
+                            (p.Plan == TypeOfPlan.D && (p.OwnerOffice.Code == user.OfficeId || p.AuditOffice.Code == user.OfficeId) && p.Year == yearForQuery)
+                            ).Include(p => p.OwnerOffice).Include(p => p.AuditOffice).Select(b => new { Code = b.OwnerOffice.Code, Name = b.OwnerOffice.Name }).Distinct().ToListAsync();
                         if (officeList.Count < 1)
                         {
                             officeList.Add(new { Code = user.OfficeId, Name = user.OfficeName });
@@ -551,7 +567,7 @@ namespace EPES.Controllers
 
                     if (dataView.point.SubPoint == 1)
                     {
-                        var pointMain = await _context.PointOfEvaluations.Where(p => p.Point == dataView.point.Point && p.SubPoint == 0 && p.Year == dataView.point.Year).FirstOrDefaultAsync();
+                        var pointMain = await _context.PointOfEvaluations.Where(p => p.Point == dataView.point.Point && p.SubPoint == 0 && p.Year == dataView.point.Year && p.OwnerOfficeId == dataView.point.OwnerOfficeId).FirstOrDefaultAsync();
                         if (pointMain != null)
                         {
                             pointMain.HasSub = true;
@@ -561,18 +577,18 @@ namespace EPES.Controllers
 
                     await _context.SaveChangesAsync();
 
-                    await SaveExpect(dataView.point.Id, dataView.point.OwnerOfficeId, 10, dataView.expect10, user.Id);
-                    await SaveExpect(dataView.point.Id, dataView.point.OwnerOfficeId, 11, dataView.expect11, user.Id);
-                    await SaveExpect(dataView.point.Id, dataView.point.OwnerOfficeId, 12, dataView.expect12, user.Id);
-                    await SaveExpect(dataView.point.Id, dataView.point.OwnerOfficeId, 1, dataView.expect1, user.Id);
-                    await SaveExpect(dataView.point.Id, dataView.point.OwnerOfficeId, 2, dataView.expect2, user.Id);
-                    await SaveExpect(dataView.point.Id, dataView.point.OwnerOfficeId, 3, dataView.expect3, user.Id);
-                    await SaveExpect(dataView.point.Id, dataView.point.OwnerOfficeId, 4, dataView.expect4, user.Id);
-                    await SaveExpect(dataView.point.Id, dataView.point.OwnerOfficeId, 5, dataView.expect5, user.Id);
-                    await SaveExpect(dataView.point.Id, dataView.point.OwnerOfficeId, 6, dataView.expect6, user.Id);
-                    await SaveExpect(dataView.point.Id, dataView.point.OwnerOfficeId, 7, dataView.expect7, user.Id);
-                    await SaveExpect(dataView.point.Id, dataView.point.OwnerOfficeId, 8, dataView.expect8, user.Id);
-                    await SaveExpect(dataView.point.Id, dataView.point.OwnerOfficeId, 9, dataView.expect9, user.Id);
+                    await SaveExpect(dataView.point.Id, dataView.point.OwnerOfficeId, 10, dataView.expect10, user.Id, dataView.weight10);
+                    await SaveExpect(dataView.point.Id, dataView.point.OwnerOfficeId, 11, dataView.expect11, user.Id, dataView.weight11);
+                    await SaveExpect(dataView.point.Id, dataView.point.OwnerOfficeId, 12, dataView.expect12, user.Id, dataView.weight12);
+                    await SaveExpect(dataView.point.Id, dataView.point.OwnerOfficeId, 1, dataView.expect1, user.Id, dataView.weight1);
+                    await SaveExpect(dataView.point.Id, dataView.point.OwnerOfficeId, 2, dataView.expect2, user.Id, dataView.weight2);
+                    await SaveExpect(dataView.point.Id, dataView.point.OwnerOfficeId, 3, dataView.expect3, user.Id, dataView.weight3);
+                    await SaveExpect(dataView.point.Id, dataView.point.OwnerOfficeId, 4, dataView.expect4, user.Id, dataView.weight4);
+                    await SaveExpect(dataView.point.Id, dataView.point.OwnerOfficeId, 5, dataView.expect5, user.Id, dataView.weight5);
+                    await SaveExpect(dataView.point.Id, dataView.point.OwnerOfficeId, 6, dataView.expect6, user.Id, dataView.weight6);
+                    await SaveExpect(dataView.point.Id, dataView.point.OwnerOfficeId, 7, dataView.expect7, user.Id, dataView.weight7);
+                    await SaveExpect(dataView.point.Id, dataView.point.OwnerOfficeId, 8, dataView.expect8, user.Id, dataView.weight8);
+                    await SaveExpect(dataView.point.Id, dataView.point.OwnerOfficeId, 9, dataView.expect9, user.Id, dataView.weight9);
 
                     return RedirectToAction(nameof(Index), new { yearPoint = dataView.yearPoint, selectoffice = dataView.selectoffice });
                 }
@@ -847,6 +863,19 @@ namespace EPES.Controllers
             dataView.expect8 = await _context.DataForEvaluations.Where(d => d.PointOfEvaluationId == id && d.Month == 8).Select(d => d.Expect).FirstOrDefaultAsync();
             dataView.expect9 = await _context.DataForEvaluations.Where(d => d.PointOfEvaluationId == id && d.Month == 9).Select(d => d.Expect).FirstOrDefaultAsync();
 
+            dataView.weight10 = await _context.DataForEvaluations.Where(d => d.PointOfEvaluationId == id && d.Month == 10).Select(d => d.Weight).FirstOrDefaultAsync();
+            dataView.weight11 = await _context.DataForEvaluations.Where(d => d.PointOfEvaluationId == id && d.Month == 11).Select(d => d.Weight).FirstOrDefaultAsync();
+            dataView.weight12 = await _context.DataForEvaluations.Where(d => d.PointOfEvaluationId == id && d.Month == 12).Select(d => d.Weight).FirstOrDefaultAsync();
+            dataView.weight1 = await _context.DataForEvaluations.Where(d => d.PointOfEvaluationId == id && d.Month == 1).Select(d => d.Weight).FirstOrDefaultAsync();
+            dataView.weight2 = await _context.DataForEvaluations.Where(d => d.PointOfEvaluationId == id && d.Month == 2).Select(d => d.Weight).FirstOrDefaultAsync();
+            dataView.weight3 = await _context.DataForEvaluations.Where(d => d.PointOfEvaluationId == id && d.Month == 3).Select(d => d.Weight).FirstOrDefaultAsync();
+            dataView.weight4 = await _context.DataForEvaluations.Where(d => d.PointOfEvaluationId == id && d.Month == 4).Select(d => d.Weight).FirstOrDefaultAsync();
+            dataView.weight5 = await _context.DataForEvaluations.Where(d => d.PointOfEvaluationId == id && d.Month == 5).Select(d => d.Weight).FirstOrDefaultAsync();
+            dataView.weight6 = await _context.DataForEvaluations.Where(d => d.PointOfEvaluationId == id && d.Month == 6).Select(d => d.Weight).FirstOrDefaultAsync();
+            dataView.weight7 = await _context.DataForEvaluations.Where(d => d.PointOfEvaluationId == id && d.Month == 7).Select(d => d.Weight).FirstOrDefaultAsync();
+            dataView.weight8 = await _context.DataForEvaluations.Where(d => d.PointOfEvaluationId == id && d.Month == 8).Select(d => d.Weight).FirstOrDefaultAsync();
+            dataView.weight9 = await _context.DataForEvaluations.Where(d => d.PointOfEvaluationId == id && d.Month == 9).Select(d => d.Weight).FirstOrDefaultAsync();
+
             var user = await _userManager.GetUserAsync(User);
             var office = await _context.Offices.Where(o => o.Code == user.OfficeId).FirstOrDefaultAsync();
             //var officeselect = await _context.Offices.Where(o => o.Code == selectoffice).FirstOrDefaultAsync();
@@ -999,6 +1028,7 @@ namespace EPES.Controllers
             pointOfEvaluationToUpdate.AutoApp = dataView.point.AutoApp;
             pointOfEvaluationToUpdate.FixExpect = dataView.point.FixExpect;
             pointOfEvaluationToUpdate.CalPerMonth = dataView.point.CalPerMonth;
+            pointOfEvaluationToUpdate.WeightAll = dataView.point.WeightAll;
 
             //if (await TryUpdateModelAsync<PointOfEvaluationViewModel>(
             //    dataView.point, "",
@@ -1096,21 +1126,31 @@ namespace EPES.Controllers
                     }
                 }
 
+                if (dataView.point.SubPoint == 1)
+                {
+                    var pointMain = await _context.PointOfEvaluations.Where(p => p.Point == dataView.point.Point && p.SubPoint == 0 && p.Year == dataView.point.Year && p.OwnerOfficeId == dataView.point.OwnerOfficeId).FirstOrDefaultAsync();
+                    if (pointMain != null)
+                    {
+                        pointMain.HasSub = true;
+                        _context.Update(pointMain);
+                    }
+                }
+
                 _context.Update(pointOfEvaluationToUpdate);
                 await _context.SaveChangesAsync();
 
-                await SaveExpect(dataView.point.Id, dataView.point.OwnerOfficeId, 10, dataView.expect10, user.Id);
-                await SaveExpect(dataView.point.Id, dataView.point.OwnerOfficeId, 11, dataView.expect11, user.Id);
-                await SaveExpect(dataView.point.Id, dataView.point.OwnerOfficeId, 12, dataView.expect12, user.Id);
-                await SaveExpect(dataView.point.Id, dataView.point.OwnerOfficeId, 1, dataView.expect1, user.Id);
-                await SaveExpect(dataView.point.Id, dataView.point.OwnerOfficeId, 2, dataView.expect2, user.Id);
-                await SaveExpect(dataView.point.Id, dataView.point.OwnerOfficeId, 3, dataView.expect3, user.Id);
-                await SaveExpect(dataView.point.Id, dataView.point.OwnerOfficeId, 4, dataView.expect4, user.Id);
-                await SaveExpect(dataView.point.Id, dataView.point.OwnerOfficeId, 5, dataView.expect5, user.Id);
-                await SaveExpect(dataView.point.Id, dataView.point.OwnerOfficeId, 6, dataView.expect6, user.Id);
-                await SaveExpect(dataView.point.Id, dataView.point.OwnerOfficeId, 7, dataView.expect7, user.Id);
-                await SaveExpect(dataView.point.Id, dataView.point.OwnerOfficeId, 8, dataView.expect8, user.Id);
-                await SaveExpect(dataView.point.Id, dataView.point.OwnerOfficeId, 9, dataView.expect9, user.Id);
+                await SaveExpect(dataView.point.Id, dataView.point.OwnerOfficeId, 10, dataView.expect10, user.Id, dataView.weight10);
+                await SaveExpect(dataView.point.Id, dataView.point.OwnerOfficeId, 11, dataView.expect11, user.Id, dataView.weight11);
+                await SaveExpect(dataView.point.Id, dataView.point.OwnerOfficeId, 12, dataView.expect12, user.Id, dataView.weight12);
+                await SaveExpect(dataView.point.Id, dataView.point.OwnerOfficeId, 1, dataView.expect1, user.Id, dataView.weight1);
+                await SaveExpect(dataView.point.Id, dataView.point.OwnerOfficeId, 2, dataView.expect2, user.Id, dataView.weight2);
+                await SaveExpect(dataView.point.Id, dataView.point.OwnerOfficeId, 3, dataView.expect3, user.Id, dataView.weight3);
+                await SaveExpect(dataView.point.Id, dataView.point.OwnerOfficeId, 4, dataView.expect4, user.Id, dataView.weight4);
+                await SaveExpect(dataView.point.Id, dataView.point.OwnerOfficeId, 5, dataView.expect5, user.Id, dataView.weight5);
+                await SaveExpect(dataView.point.Id, dataView.point.OwnerOfficeId, 6, dataView.expect6, user.Id, dataView.weight6);
+                await SaveExpect(dataView.point.Id, dataView.point.OwnerOfficeId, 7, dataView.expect7, user.Id, dataView.weight7);
+                await SaveExpect(dataView.point.Id, dataView.point.OwnerOfficeId, 8, dataView.expect8, user.Id, dataView.weight8);
+                await SaveExpect(dataView.point.Id, dataView.point.OwnerOfficeId, 9, dataView.expect9, user.Id, dataView.weight9);
 
                 return RedirectToAction(nameof(Index), new { yearPoint = dataView.yearPoint, selectoffice = dataView.selectoffice });
             }
@@ -1414,7 +1454,7 @@ namespace EPES.Controllers
             }
         }
 
-        public async Task SaveExpect(int poeid, int ownerofficeid, int month, decimal expect, string userid)
+        public async Task SaveExpect(int poeid, int ownerofficeid, int month, decimal expect, string userid,decimal weight)
         {
             DataForEvaluation dataForEvaluation;
             dataForEvaluation = await _context.DataForEvaluations.Where(d => d.PointOfEvaluationId == poeid && d.OfficeId == ownerofficeid && d.Month == month).FirstOrDefaultAsync();
@@ -1422,6 +1462,7 @@ namespace EPES.Controllers
             {
                 dataForEvaluation.UpdateUserId = userid;
                 dataForEvaluation.Expect = expect;
+                dataForEvaluation.Weight = weight;
                 try
                 {
                     //_context.Update(dataForEvaluation);
@@ -1443,6 +1484,7 @@ namespace EPES.Controllers
                 dataForEvaluation.OfficeId = ownerofficeid;
                 dataForEvaluation.Month = month;
                 dataForEvaluation.Expect = expect;
+                dataForEvaluation.Weight = weight;
                 //dataForEvaluation.Approve = Approve.รอพิจารณา;
                 try
                 {

@@ -87,19 +87,23 @@
                 <dd class="col-sm-8">
                     @Html.DisplayFor(model => model.Weight)
                 </dd>
-
+                <dt class="col-sm-4">
+                    @Html.DisplayNameFor(model => model.WeightAll)
+                </dt>
+                <dd class="col-sm-8">
+                    @Html.DisplayFor(model => model.WeightAll)
+                </dd>
+                <dt class="col-sm-4">
+                    @Html.DisplayNameFor(model => model.StartZero)
+                </dt>
+                <dd class="col-sm-8">
+                    @Html.DisplayFor(model => model.StartZero)
+                </dd>
                 <dt class="col-sm-4">
                     @Html.DisplayNameFor(model => model.Unit)
                 </dt>
                 <dd class="col-sm-8">
                     @Html.DisplayFor(model => model.Unit)
-                </dd>
-
-                <dt class="col-sm-4">
-                    @Html.DisplayNameFor(model => model.AutoApp)
-                </dt>
-                <dd class="col-sm-8">
-                    @Html.DisplayFor(model => model.AutoApp)
                 </dd>
 
                 <dt class="col-sm-4">
@@ -114,6 +118,13 @@
                 </dt>
                 <dd class="col-sm-8">
                     @Html.DisplayFor(model => model.CalPerMonth)
+                </dd>
+
+                <dt class="col-sm-4">
+                    @Html.DisplayNameFor(model => model.AutoApp)
+                </dt>
+                <dd class="col-sm-8">
+                    @Html.DisplayFor(model => model.AutoApp)
                 </dd>
 
                 <dt class="col-sm-4">

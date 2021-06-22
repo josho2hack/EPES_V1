@@ -53,9 +53,11 @@ namespace EPES.Models
         [Column(TypeName = "decimal(7, 4)")]
         public decimal Weight { get; set; }
 
-        //[Display(Name = "จำนวนรอบการประเมิน")]
-        //[NotMapped]
-        //public int CountRound { get { return Rounds.Count; } }
+        [Display(Name = "ใช้น้ำหนักร้อยละนี้ทุกเดือน")]
+        public bool WeightAll { get; set; }
+
+        [Display(Name = "คะแนนเริ่มต้นที่ 0")]
+        public bool StartZero { get; set; }
 
         [Display(Name = "รอบการประเมิน")]
         public List<Round> Rounds { get; set; }
@@ -126,7 +128,17 @@ namespace EPES.Models
     public enum AutoApps
     {
        ไม่มี,
-       ข้อมูลการจัดเก็บภาษีอากร,
+       การจัดเก็บภาษีอากร,
+       ผู้เสียภาษีรายใหม่,
+       ผู้เสียภาษีรายใหม่ที่ชำระภาษี,
+       การนำข้อมูลสำรวจไปใช้งาน,
+       ร้อยละของการบริหารการคืนภาษี,
+       ผู้ประกอบการรายใหญ่ในท้องที่,
+       จำนวนแบบที่ยื่นผ่านอินเทอร์เน็ต_ยกเว้น_90_91_94,
+       จำนวนแบบ_1_30_50_ที่ยื่นผ่านอินเทอร์เน็ต,
+       เร่งรัดหนี้,
+       จำหน่ายหนี้,
+       ใบแจ้งภาษีอากรบนระบบ_DMS
     }
 
     public enum TypeOfPlan

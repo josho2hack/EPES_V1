@@ -46,6 +46,14 @@ namespace EPES.Data
             .HasDefaultValue(0);
 
             builder.Entity<PointOfEvaluation>()
+            .Property(p => p.WeightAll)
+            .HasDefaultValue(true);
+
+            builder.Entity<PointOfEvaluation>()
+            .Property(p => p.StartZero)
+            .HasDefaultValue(false);
+
+            builder.Entity<PointOfEvaluation>()
             .Property(p => p.HasSub)
             .HasDefaultValue(false);
 

@@ -165,7 +165,6 @@
                                             @Model.pointA[i].Name
                                         </td>
                                         <td>
-                                            @Model.pointA[i].Weight.ToString("N2")
                                             @{
                                                 DataForEvaluation de = null;
                                             }
@@ -175,6 +174,15 @@
                                                 {
                                                     de = item;
                                                 }
+                                            }
+
+                                            @if (@Model.pointA[i].WeightAll)
+                                            {
+                                                @Model.pointA[i].Weight.ToString("N2")
+                                            }
+                                            else
+                                            {
+                                                @de.Weight.ToString("N2")
                                             }
                                             <input type="hidden" name="UpdateData[@i].Id" value=@de?.Id />
                                             <input type="hidden" name="UpdateData[@i].poeid" value=@Model.pointA[i].Id />
@@ -207,7 +215,7 @@
                                                     <td>
                                                         <input type="text" class="form-control" name="UpdateData[@i].Result" value="@String.Format("{0:N4}", de?.Result)" readonly />
                                                     </td>
-                                                    <td><input type="date" class="form-control" name="UpdateData[@i].Completed" value=@(de?.Completed ?? new DateTime(DateTime.Now.AddYears(yearOfGov).Year, Model.month, 28).ToString("yyyy-MM-dd", CultureInfo.CreateSpecificCulture("en-US"))) readonly /></td>
+                                                    <td><input type="date" class="form-control" name="UpdateData[@i].Completed" value=@(de?.Completed ?? new DateTime(DateTime.Now.AddYears(yearOfGov).Year, Model.month, DateTime.DaysInMonth(DateTime.Now.AddYears(yearOfGov).Year, Model.month)).ToString("yyyy-MM-dd", CultureInfo.CreateSpecificCulture("en-US"))) readonly /></td>
                                                     <td></td>
                                                 }
                                                 else
@@ -215,7 +223,7 @@
                                                     <td>
                                                         <input type="text" class="form-control" name="UpdateData[@i].Result" value="@String.Format("{0:N4}", de?.Result)" />
                                                     </td>
-                                                    <td><input type="date" class="form-control" name="UpdateData[@i].Completed" value=@(de?.Completed ?? new DateTime(DateTime.Now.AddYears(yearOfGov).Year, Model.month, 28).ToString("yyyy-MM-dd", CultureInfo.CreateSpecificCulture("en-US"))) /></td>
+                                                    <td><input type="date" class="form-control" name="UpdateData[@i].Completed" value=@(de?.Completed ?? new DateTime(DateTime.Now.AddYears(yearOfGov).Year, Model.month, DateTime.DaysInMonth(DateTime.Now.AddYears(yearOfGov).Year, Model.month)).ToString("yyyy-MM-dd", CultureInfo.CreateSpecificCulture("en-US"))) /></td>
                                                     <td></td>
                                                 }
                                             }
@@ -234,19 +242,19 @@
                                                     {
                                                         j = 1;
                                                     }
-                                                    if (new DateTime(DateTime.Now.AddYears(yearOfGov).Year, Model.month, 28) >= Model.pointA[i].Rounds[j].Rate5MonthStart)
+                                                    if (new DateTime(DateTime.Now.AddYears(yearOfGov).Year, Model.month, DateTime.DaysInMonth(DateTime.Now.AddYears(yearOfGov).Year, Model.month)) >= Model.pointA[i].Rounds[j].Rate5MonthStart)
                                                     {
                                                         <td>5.@Model.pointA[i].Rounds[j].DetailRate5</td>
                                                     }
-                                                    else if (new DateTime(DateTime.Now.AddYears(yearOfGov).Year, Model.month, 28) >= Model.pointA[i].Rounds[j].Rate4MonthStart)
+                                                    else if (new DateTime(DateTime.Now.AddYears(yearOfGov).Year, Model.month, DateTime.DaysInMonth(DateTime.Now.AddYears(yearOfGov).Year, Model.month)) >= Model.pointA[i].Rounds[j].Rate4MonthStart)
                                                     {
                                                         <td>4.@Model.pointA[i].Rounds[j].DetailRate4</td>
                                                     }
-                                                    else if (new DateTime(DateTime.Now.AddYears(yearOfGov).Year, Model.month, 28) >= Model.pointA[i].Rounds[j].Rate3MonthStart)
+                                                    else if (new DateTime(DateTime.Now.AddYears(yearOfGov).Year, Model.month, DateTime.DaysInMonth(DateTime.Now.AddYears(yearOfGov).Year, Model.month)) >= Model.pointA[i].Rounds[j].Rate3MonthStart)
                                                     {
                                                         <td>3.@Model.pointA[i].Rounds[j].DetailRate3</td>
                                                     }
-                                                    else if (new DateTime(DateTime.Now.AddYears(yearOfGov).Year, Model.month, 28) <= Model.pointA[i].Rounds[j].Rate2MonthStart)
+                                                    else if (new DateTime(DateTime.Now.AddYears(yearOfGov).Year, Model.month, DateTime.DaysInMonth(DateTime.Now.AddYears(yearOfGov).Year, Model.month)) <= Model.pointA[i].Rounds[j].Rate2MonthStart)
                                                     {
                                                         <td>2.@Model.pointA[i].Rounds[j].DetailRate2</td>
                                                     }
@@ -266,19 +274,19 @@
                                                         j = 1;
                                                     }
 
-                                                    if (new DateTime(DateTime.Now.AddYears(yearOfGov).Year, Model.month, 28) >= Model.pointA[i].Rounds[j].Rate5MonthStart)
+                                                    if (new DateTime(DateTime.Now.AddYears(yearOfGov).Year, Model.month, DateTime.DaysInMonth(DateTime.Now.AddYears(yearOfGov).Year, Model.month)) >= Model.pointA[i].Rounds[j].Rate5MonthStart)
                                                     {
                                                         <td>5.@Model.pointA[i].Rounds[j].DetailRate5</td>
                                                     }
-                                                    else if (new DateTime(DateTime.Now.AddYears(yearOfGov).Year, Model.month, 28) >= Model.pointA[i].Rounds[j].Rate4MonthStart)
+                                                    else if (new DateTime(DateTime.Now.AddYears(yearOfGov).Year, Model.month, DateTime.DaysInMonth(DateTime.Now.AddYears(yearOfGov).Year, Model.month)) >= Model.pointA[i].Rounds[j].Rate4MonthStart)
                                                     {
                                                         <td>4.@Model.pointA[i].Rounds[j].DetailRate4</td>
                                                     }
-                                                    else if (new DateTime(DateTime.Now.AddYears(yearOfGov).Year, Model.month, 28) >= Model.pointA[i].Rounds[j].Rate3MonthStart)
+                                                    else if (new DateTime(DateTime.Now.AddYears(yearOfGov).Year, Model.month, DateTime.DaysInMonth(DateTime.Now.AddYears(yearOfGov).Year, Model.month)) >= Model.pointA[i].Rounds[j].Rate3MonthStart)
                                                     {
                                                         <td>3.@Model.pointA[i].Rounds[j].DetailRate3</td>
                                                     }
-                                                    else if (new DateTime(DateTime.Now.AddYears(yearOfGov).Year, Model.month, 28) >= Model.pointA[i].Rounds[j].Rate2MonthStart)
+                                                    else if (new DateTime(DateTime.Now.AddYears(yearOfGov).Year, Model.month, DateTime.DaysInMonth(DateTime.Now.AddYears(yearOfGov).Year, Model.month)) >= Model.pointA[i].Rounds[j].Rate2MonthStart)
                                                     {
                                                         <td>2.@Model.pointA[i].Rounds[j].DetailRate2</td>
                                                     }
@@ -363,7 +371,7 @@
                                                     }
                                                     if (Model.pointA[i].Rounds[j].LevelNumber == 2)
                                                     {
-                                                        if (new DateTime(DateTime.Now.AddYears(yearOfGov).Year, Model.month, 28) >= Model.pointA[i].Rounds[j].Rate2MonthStart)
+                                                        if (new DateTime(DateTime.Now.AddYears(yearOfGov).Year, Model.month, DateTime.DaysInMonth(DateTime.Now.AddYears(yearOfGov).Year, Model.month)) >= Model.pointA[i].Rounds[j].Rate2MonthStart)
                                                         {
                                                             <td>
                                                                 2.@Model.pointA[i].Rounds[j].DetailRate2<br />
@@ -381,14 +389,14 @@
                                                     }
                                                     if (Model.pointA[i].Rounds[j].LevelNumber == 3)
                                                     {
-                                                        if (new DateTime(DateTime.Now.AddYears(yearOfGov).Year, Model.month, 28) >= Model.pointA[i].Rounds[j].Rate3MonthStart)
+                                                        if (new DateTime(DateTime.Now.AddYears(yearOfGov).Year, Model.month, DateTime.DaysInMonth(DateTime.Now.AddYears(yearOfGov).Year, Model.month)) >= Model.pointA[i].Rounds[j].Rate3MonthStart)
                                                         {
                                                             <td>
                                                                 3.@Model.pointA[i].Rounds[j].DetailRate3 <br />
                                                                 @string.Format("{0:N4}", de?.Expect)
                                                             </td>
                                                         }
-                                                        else if (new DateTime(DateTime.Now.AddYears(yearOfGov).Year, Model.month, 28) >= Model.pointA[i].Rounds[j].Rate2MonthStart)
+                                                        else if (new DateTime(DateTime.Now.AddYears(yearOfGov).Year, Model.month, DateTime.DaysInMonth(DateTime.Now.AddYears(yearOfGov).Year, Model.month)) >= Model.pointA[i].Rounds[j].Rate2MonthStart)
                                                         {
                                                             <td>
                                                                 2.@Model.pointA[i].Rounds[j].DetailRate2  <br />
@@ -405,21 +413,21 @@
                                                     }
                                                     if (Model.pointA[i].Rounds[j].LevelNumber == 4)
                                                     {
-                                                        if (new DateTime(DateTime.Now.AddYears(yearOfGov).Year, Model.month, 28) >= Model.pointA[i].Rounds[j].Rate4MonthStart)
+                                                        if (new DateTime(DateTime.Now.AddYears(yearOfGov).Year, Model.month, DateTime.DaysInMonth(DateTime.Now.AddYears(yearOfGov).Year, Model.month)) >= Model.pointA[i].Rounds[j].Rate4MonthStart)
                                                         {
                                                             <td>
                                                                 4.@Model.pointA[i].Rounds[j].DetailRate4<br />
                                                                 @string.Format("{0:N4}", de?.Expect)
                                                             </td>
                                                         }
-                                                        else if (new DateTime(DateTime.Now.AddYears(yearOfGov).Year, Model.month, 28) >= Model.pointA[i].Rounds[j].Rate3MonthStart)
+                                                        else if (new DateTime(DateTime.Now.AddYears(yearOfGov).Year, Model.month, DateTime.DaysInMonth(DateTime.Now.AddYears(yearOfGov).Year, Model.month)) >= Model.pointA[i].Rounds[j].Rate3MonthStart)
                                                         {
                                                             <td>
                                                                 3.@Model.pointA[i].Rounds[j].DetailRate3 <br />
                                                                 @string.Format("{0:N4}", de?.Expect)
                                                             </td>
                                                         }
-                                                        else if (new DateTime(DateTime.Now.AddYears(yearOfGov).Year, Model.month, 28) >= Model.pointA[i].Rounds[j].Rate2MonthStart)
+                                                        else if (new DateTime(DateTime.Now.AddYears(yearOfGov).Year, Model.month, DateTime.DaysInMonth(DateTime.Now.AddYears(yearOfGov).Year, Model.month)) >= Model.pointA[i].Rounds[j].Rate2MonthStart)
                                                         {
                                                             <td>
                                                                 2.@Model.pointA[i].Rounds[j].DetailRate2 <br />
@@ -455,7 +463,7 @@
                                                     }
                                                     if (Model.pointA[i].Rounds[j].LevelNumber == 2)
                                                     {
-                                                        if (new DateTime(DateTime.Now.AddYears(yearOfGov).Year, Model.month, 28) >= Model.pointA[i].Rounds[j].Rate2MonthStart)
+                                                        if (new DateTime(DateTime.Now.AddYears(yearOfGov).Year, Model.month, DateTime.DaysInMonth(DateTime.Now.AddYears(yearOfGov).Year, Model.month)) >= Model.pointA[i].Rounds[j].Rate2MonthStart)
                                                         {
                                                             <td>
                                                                 2.@Model.pointA[i].Rounds[j].DetailRate2<br />
@@ -473,14 +481,14 @@
                                                     }
                                                     if (Model.pointA[i].Rounds[j].LevelNumber == 3)
                                                     {
-                                                        if (new DateTime(DateTime.Now.AddYears(yearOfGov).Year, Model.month, 28) >= Model.pointA[i].Rounds[j].Rate3MonthStart)
+                                                        if (new DateTime(DateTime.Now.AddYears(yearOfGov).Year, Model.month, DateTime.DaysInMonth(DateTime.Now.AddYears(yearOfGov).Year, Model.month)) >= Model.pointA[i].Rounds[j].Rate3MonthStart)
                                                         {
                                                             <td>
                                                                 3.@Model.pointA[i].Rounds[j].DetailRate3 <br />
                                                                 @string.Format("{0:N4}", de?.Expect)
                                                             </td>
                                                         }
-                                                        else if (new DateTime(DateTime.Now.AddYears(yearOfGov).Year, Model.month, 28) >= Model.pointA[i].Rounds[j].Rate2MonthStart)
+                                                        else if (new DateTime(DateTime.Now.AddYears(yearOfGov).Year, Model.month, DateTime.DaysInMonth(DateTime.Now.AddYears(yearOfGov).Year, Model.month)) >= Model.pointA[i].Rounds[j].Rate2MonthStart)
                                                         {
                                                             <td>
                                                                 2.@Model.pointA[i].Rounds[j].DetailRate2  <br />
@@ -497,21 +505,21 @@
                                                     }
                                                     if (Model.pointA[i].Rounds[j].LevelNumber == 4)
                                                     {
-                                                        if (new DateTime(DateTime.Now.AddYears(yearOfGov).Year, Model.month, 28) >= Model.pointA[i].Rounds[j].Rate4MonthStart)
+                                                        if (new DateTime(DateTime.Now.AddYears(yearOfGov).Year, Model.month, DateTime.DaysInMonth(DateTime.Now.AddYears(yearOfGov).Year, Model.month)) >= Model.pointA[i].Rounds[j].Rate4MonthStart)
                                                         {
                                                             <td>
                                                                 4.@Model.pointA[i].Rounds[j].DetailRate4<br />
                                                                 @string.Format("{0:N4}", de?.Expect)
                                                             </td>
                                                         }
-                                                        else if (new DateTime(DateTime.Now.AddYears(yearOfGov).Year, Model.month, 28) >= Model.pointA[i].Rounds[j].Rate3MonthStart)
+                                                        else if (new DateTime(DateTime.Now.AddYears(yearOfGov).Year, Model.month, DateTime.DaysInMonth(DateTime.Now.AddYears(yearOfGov).Year, Model.month)) >= Model.pointA[i].Rounds[j].Rate3MonthStart)
                                                         {
                                                             <td>
                                                                 3.@Model.pointA[i].Rounds[j].DetailRate3 <br />
                                                                 @string.Format("{0:N4}", de?.Expect)
                                                             </td>
                                                         }
-                                                        else if (new DateTime(DateTime.Now.AddYears(yearOfGov).Year, Model.month, 28) >= Model.pointA[i].Rounds[j].Rate2MonthStart)
+                                                        else if (new DateTime(DateTime.Now.AddYears(yearOfGov).Year, Model.month, DateTime.DaysInMonth(DateTime.Now.AddYears(yearOfGov).Year, Model.month)) >= Model.pointA[i].Rounds[j].Rate2MonthStart)
                                                         {
                                                             <td>
                                                                 2.@Model.pointA[i].Rounds[j].DetailRate2 <br />
@@ -619,11 +627,11 @@
                                                 <td>
                                                     @if (de?.Approve > Approve.รอพิจารณา)
                                                     {
-                                                        <input type="date" class="form-control" name="UpdateData[@i].Completed" value=@(de?.Completed ??  new DateTime(DateTime.Now.AddYears(yearOfGov).Year, Model.month, 28).ToString("yyyy-MM-dd", CultureInfo.CreateSpecificCulture("en-US"))) readonly />
+                                                        <input type="date" class="form-control" name="UpdateData[@i].Completed" value=@(de?.Completed ??  new DateTime(DateTime.Now.AddYears(yearOfGov).Year, Model.month, DateTime.DaysInMonth(DateTime.Now.AddYears(yearOfGov).Year, Model.month)).ToString("yyyy-MM-dd", CultureInfo.CreateSpecificCulture("en-US"))) readonly />
                                                     }
                                                     else
                                                     {
-                                                        <input type="date" class="form-control" name="UpdateData[@i].Completed" value=@(de?.Completed ??  new DateTime(DateTime.Now.AddYears(yearOfGov).Year, Model.month, 28).ToString("yyyy-MM-dd", CultureInfo.CreateSpecificCulture("en-US"))) />
+                                                        <input type="date" class="form-control" name="UpdateData[@i].Completed" value=@(de?.Completed ??  new DateTime(DateTime.Now.AddYears(yearOfGov).Year, Model.month, DateTime.DaysInMonth(DateTime.Now.AddYears(yearOfGov).Year, Model.month)).ToString("yyyy-MM-dd", CultureInfo.CreateSpecificCulture("en-US"))) />
                                                     }
                                                 </td>
                                                 <td>
@@ -779,153 +787,180 @@
                                     bool HasSub = false;
                                     int j = 0;
 
-                                    <tr>
-                                        <td>
-                                            @if (Model.pointB[i].SubPoint != 0)
-                                            {
-                                                @Model.pointB[i].Point@:.@Model.pointB[i].SubPoint
-                                            }
-                                            else
-                                            {
-                                                @Model.pointB[i].Point
-                                            }
-                                        </td>
-                                        <td>
-                                            @Model.pointB[i].Name
-                                        </td>
-                                        <td>
-                                            @Model.pointB[i].Weight.ToString("N2")
-                                            @{
-                                                DataForEvaluation de = null;
-                                            }
-                                            @foreach (var item in @Model.pointB[i].DataForEvaluations)
-                                            {
-                                                if (item.Month == Model.month && item.OfficeId == Model.pointB[i].OwnerOfficeId)
-                                                {
-                                                    de = item;
-                                                }
-                                            }
-                                            <input type="hidden" name="UpdateData[@i].Id" value=@de?.Id />
-                                            <input type="hidden" name="UpdateData[@i].poeid" value=@Model.pointB[i].Id />
-                                            <input type="hidden" name="UpdateData[@i].officeid" value=@Model.pointB[i].OwnerOfficeId />
-                                        </td>
-                                        @if (Model.pointB[i].SubPoint == 0)
+                                <tr>
+                                    <td>
+                                        @if (Model.pointB[i].SubPoint != 0)
                                         {
-                                            foreach (var item in pointHasSub)
-                                            {
-                                                if (item == Model.pointB[i].Point)
-                                                {
-                                                    HasSub = true;
-                                                }
-                                            }
-                                        }
-
-                                        @if (Model.pointB[i].Unit == UnitOfPoint.ร้อยละ)
-                                        {
-                                            <td>@string.Format("{0:N4}", de?.Expect)</td>
-                                            @if (HasSub)
-                                            {
-                                                <td><input type="hidden" name="UpdateData[@i].hasSub" value="true" /></td>
-                                                <td></td>
-                                                <td></td>
-                                            }
-                                            else
-                                            {
-                                                if (de?.Approve > Approve.รอพิจารณา)
-                                                {
-                                                    <td>
-                                                        <input type="text" class="form-control" name="UpdateData[@i].Result" value="@String.Format("{0:N4}", de?.Result)" readonly />
-                                                    </td>
-                                                    <td><input type="date" class="form-control" name="UpdateData[@i].Completed" value=@(de?.Completed ?? new DateTime(DateTime.Now.AddYears(yearOfGov).Year, Model.month, 28).ToString("yyyy-MM-dd", CultureInfo.CreateSpecificCulture("en-US"))) readonly /></td>
-                                                    <td></td>
-                                                }
-                                                else
-                                                {
-                                                    <td>
-                                                        <input type="text" class="form-control" name="UpdateData[@i].Result" value="@String.Format("{0:N4}", de?.Result)" />
-                                                    </td>
-                                                    <td><input type="date" class="form-control" name="UpdateData[@i].Completed" value=@(de?.Completed ?? new DateTime(DateTime.Now.AddYears(yearOfGov).Year, Model.month, 28).ToString("yyyy-MM-dd", CultureInfo.CreateSpecificCulture("en-US"))) /></td>
-                                                    <td></td>
-                                                }
-                                            }
+                                            @Model.pointB[i].Point@:.@Model.pointB[i].SubPoint
                                         }
                                         else
                                         {
-                                            @if (Model.pointB[i].Unit == UnitOfPoint.ระดับ)
+                                            @Model.pointB[i].Point
+                                        }
+                                    </td>
+                                    <td>
+                                        @Model.pointB[i].Name
+                                    </td>
+                                    <td>
+                                        @{
+                                            DataForEvaluation de = null;
+                                        }
+                                        @foreach (var item in @Model.pointB[i].DataForEvaluations)
+                                        {
+                                            if (item.Month == Model.month && item.OfficeId == Model.pointB[i].OwnerOfficeId)
                                             {
+                                                de = item;
+                                            }
+                                        }
+                                        @if (@Model.pointB[i].WeightAll)
+                                        {
+                                            @Model.pointB[i].Weight.ToString("N2")
+                                        }
+                                        else
+                                        {
+                                            @de.Weight.ToString("N2")
+                                        }
+                                        <input type="hidden" name="UpdateData[@i].Id" value=@de?.Id />
+                                        <input type="hidden" name="UpdateData[@i].poeid" value=@Model.pointB[i].Id />
+                                        <input type="hidden" name="UpdateData[@i].officeid" value=@Model.pointB[i].OwnerOfficeId />
+                                    </td>
+                                    @if (Model.pointB[i].SubPoint == 0)
+                                    {
+                                        foreach (var item in pointHasSub)
+                                        {
+                                            if (item == Model.pointB[i].Point)
+                                            {
+                                                HasSub = true;
+                                            }
+                                        }
+                                    }
 
-                                                if ((3 < Model.month) && (Model.month < 10) && (Model.pointB[i].Rounds.Count == 2))
+                                    @if (Model.pointB[i].Unit == UnitOfPoint.ร้อยละ)
+                                    {
+                                        <td>@string.Format("{0:N4}", de?.Expect)</td>
+                                        @if (HasSub)
+                                        {
+                                            <td>
+                                                <input type="hidden" name="UpdateData[@i].hasSub" value="true" />
+                                                <input type="hidden" class="form-control" name="UpdateData[@i].Result" value="@String.Format("{0:N4}", de?.Result)" />
+                                            </td>
+                                            <td><input type="hidden" class="form-control" name="UpdateData[@i].Completed" value=@(de?.Completed ?? new DateTime(DateTime.Now.AddYears(yearOfGov).Year, Model.month, DateTime.DaysInMonth(DateTime.Now.AddYears(yearOfGov).Year, Model.month)).ToString("yyyy-MM-dd", CultureInfo.CreateSpecificCulture("en-US"))) /></td>
+                                            <td></td>
+                                        }
+                                        else
+                                        {
+                                            if (de?.Approve > Approve.รอพิจารณา)
+                                            {
+                                                <td>
+                                                    <input type="text" class="form-control" name="UpdateData[@i].Result" value="@String.Format("{0:N4}", de?.Result)" readonly />
+                                                </td>
+                                                <td><input type="date" class="form-control" name="UpdateData[@i].Completed" value=@(de?.Completed ?? new DateTime(DateTime.Now.AddYears(yearOfGov).Year, Model.month, DateTime.DaysInMonth(DateTime.Now.AddYears(yearOfGov).Year, Model.month)).ToString("yyyy-MM-dd", CultureInfo.CreateSpecificCulture("en-US"))) readonly /></td>
+                                                <td></td>
+                                            }
+                                            else
+                                            {
+                                                <td>
+                                                    <input type="text" class="form-control" name="UpdateData[@i].Result" value="@String.Format("{0:N4}", de?.Result)" />
+                                                </td>
+                                                <td><input type="date" class="form-control" name="UpdateData[@i].Completed" value=@(de?.Completed ?? new DateTime(DateTime.Now.AddYears(yearOfGov).Year, Model.month, DateTime.DaysInMonth(DateTime.Now.AddYears(yearOfGov).Year, Model.month)).ToString("yyyy-MM-dd", CultureInfo.CreateSpecificCulture("en-US"))) /></td>
+                                                <td></td>
+                                            }
+                                        }
+                                    }
+                                    else
+                                    {
+                                        @if (Model.pointB[i].Unit == UnitOfPoint.ระดับ)
+                                        {
+
+                                            if ((3 < Model.month) && (Model.month < 10) && (Model.pointB[i].Rounds.Count == 2))
+                                            {
+                                                if (Model.pointB[i].Rounds[0].RoundNumber == 2)
                                                 {
-                                                    if (Model.pointB[i].Rounds[0].RoundNumber == 2)
-                                                    {
-                                                        j = 0;
-                                                    }
-                                                    else
-                                                    {
-                                                        j = 1;
-                                                    }
-                                                    if (new DateTime(DateTime.Now.AddYears(yearOfGov).Year, Model.month, 28) >= Model.pointB[i].Rounds[j].Rate5MonthStart)
-                                                    {
-                                                        <td>5.@Model.pointB[i].Rounds[j].DetailRate5</td>
-                                                    }
-                                                    else if (new DateTime(DateTime.Now.AddYears(yearOfGov).Year, Model.month, 28) >= Model.pointB[i].Rounds[j].Rate4MonthStart)
-                                                    {
-                                                        <td>4.@Model.pointB[i].Rounds[j].DetailRate4</td>
-                                                    }
-                                                    else if (new DateTime(DateTime.Now.AddYears(yearOfGov).Year, Model.month, 28) >= Model.pointB[i].Rounds[j].Rate3MonthStart)
-                                                    {
-                                                        <td>3.@Model.pointB[i].Rounds[j].DetailRate3</td>
-                                                    }
-                                                    else if (new DateTime(DateTime.Now.AddYears(yearOfGov).Year, Model.month, 28) <= Model.pointB[i].Rounds[j].Rate2MonthStart)
-                                                    {
-                                                        <td>2.@Model.pointB[i].Rounds[j].DetailRate2</td>
-                                                    }
-                                                    else
-                                                    {
-                                                        <td>1.@Model.pointB[i].Rounds[j].DetailRate1</td>
-                                                    }
+                                                    j = 0;
                                                 }
                                                 else
                                                 {
-                                                    if (Model.pointB[i].Rounds[0].RoundNumber == 1)
-                                                    {
-                                                        j = 0;
-                                                    }
-                                                    else
-                                                    {
-                                                        j = 1;
-                                                    }
-
-                                                    if (new DateTime(DateTime.Now.AddYears(yearOfGov).Year, Model.month, 28) >= Model.pointB[i].Rounds[j].Rate5MonthStart)
-                                                    {
-                                                        <td>5.@Model.pointB[i].Rounds[j].DetailRate5</td>
-                                                    }
-                                                    else if (new DateTime(DateTime.Now.AddYears(yearOfGov).Year, Model.month, 28) >= Model.pointB[i].Rounds[j].Rate4MonthStart)
-                                                    {
-                                                        <td>4.@Model.pointB[i].Rounds[j].DetailRate4</td>
-                                                    }
-                                                    else if (new DateTime(DateTime.Now.AddYears(yearOfGov).Year, Model.month, 28) >= Model.pointB[i].Rounds[j].Rate3MonthStart)
-                                                    {
-                                                        <td>3.@Model.pointB[i].Rounds[j].DetailRate3</td>
-                                                    }
-                                                    else if (new DateTime(DateTime.Now.AddYears(yearOfGov).Year, Model.month, 28) >= Model.pointB[i].Rounds[j].Rate2MonthStart)
-                                                    {
-                                                        <td>2.@Model.pointB[i].Rounds[j].DetailRate2</td>
-                                                    }
-                                                    else
-                                                    {
-                                                        <td>1.@Model.pointB[i].Rounds[j].DetailRate1</td>
-                                                    }
+                                                    j = 1;
                                                 }
-                                                @if (HasSub)
+                                                if (new DateTime(DateTime.Now.AddYears(yearOfGov).Year, Model.month, DateTime.DaysInMonth(DateTime.Now.AddYears(yearOfGov).Year, Model.month)) >= Model.pointB[i].Rounds[j].Rate5MonthStart)
                                                 {
-                                                    <td><input type="hidden" name="UpdateData[@i].hasSub" value="true" /></td>
+                                                    <td>5.@Model.pointB[i].Rounds[j].DetailRate5</td>
+                                                }
+                                                else if (new DateTime(DateTime.Now.AddYears(yearOfGov).Year, Model.month, DateTime.DaysInMonth(DateTime.Now.AddYears(yearOfGov).Year, Model.month)) >= Model.pointB[i].Rounds[j].Rate4MonthStart)
+                                                {
+                                                    <td>4.@Model.pointB[i].Rounds[j].DetailRate4</td>
+                                                }
+                                                else if (new DateTime(DateTime.Now.AddYears(yearOfGov).Year, Model.month, DateTime.DaysInMonth(DateTime.Now.AddYears(yearOfGov).Year, Model.month)) >= Model.pointB[i].Rounds[j].Rate3MonthStart)
+                                                {
+                                                    <td>3.@Model.pointB[i].Rounds[j].DetailRate3</td>
+                                                }
+                                                else if (new DateTime(DateTime.Now.AddYears(yearOfGov).Year, Model.month, DateTime.DaysInMonth(DateTime.Now.AddYears(yearOfGov).Year, Model.month)) <= Model.pointB[i].Rounds[j].Rate2MonthStart)
+                                                {
+                                                    <td>2.@Model.pointB[i].Rounds[j].DetailRate2</td>
                                                 }
                                                 else
                                                 {
-                                                    <td>
-                                                        @{
-                                                            if (Model.pointB[i].Rounds[0].RoundNumber == 1)
+                                                    <td>1.@Model.pointB[i].Rounds[j].DetailRate1</td>
+                                                }
+                                            }
+                                            else
+                                            {
+                                                if (Model.pointB[i].Rounds[0].RoundNumber == 1)
+                                                {
+                                                    j = 0;
+                                                }
+                                                else
+                                                {
+                                                    j = 1;
+                                                }
+
+                                                if (new DateTime(DateTime.Now.AddYears(yearOfGov).Year, Model.month, DateTime.DaysInMonth(DateTime.Now.AddYears(yearOfGov).Year, Model.month)) >= Model.pointB[i].Rounds[j].Rate5MonthStart)
+                                                {
+                                                    <td>5.@Model.pointB[i].Rounds[j].DetailRate5</td>
+                                                }
+                                                else if (new DateTime(DateTime.Now.AddYears(yearOfGov).Year, Model.month, DateTime.DaysInMonth(DateTime.Now.AddYears(yearOfGov).Year, Model.month)) >= Model.pointB[i].Rounds[j].Rate4MonthStart)
+                                                {
+                                                    <td>4.@Model.pointB[i].Rounds[j].DetailRate4</td>
+                                                }
+                                                else if (new DateTime(DateTime.Now.AddYears(yearOfGov).Year, Model.month, DateTime.DaysInMonth(DateTime.Now.AddYears(yearOfGov).Year, Model.month)) >= Model.pointB[i].Rounds[j].Rate3MonthStart)
+                                                {
+                                                    <td>3.@Model.pointB[i].Rounds[j].DetailRate3</td>
+                                                }
+                                                else if (new DateTime(DateTime.Now.AddYears(yearOfGov).Year, Model.month, DateTime.DaysInMonth(DateTime.Now.AddYears(yearOfGov).Year, Model.month)) >= Model.pointB[i].Rounds[j].Rate2MonthStart)
+                                                {
+                                                    <td>2.@Model.pointB[i].Rounds[j].DetailRate2</td>
+                                                }
+                                                else
+                                                {
+                                                    <td>1.@Model.pointB[i].Rounds[j].DetailRate1</td>
+                                                }
+                                            }
+                                            @if (HasSub)
+                                            {
+                                                <td><input type="hidden" name="UpdateData[@i].hasSub" value="true" /></td>
+                                            }
+                                            else
+                                            {
+                                                <td>
+                                                    @{
+                                                        if (Model.pointB[i].Rounds[0].RoundNumber == 1)
+                                                        {
+                                                            j = 0;
+                                                        }
+                                                        else
+                                                        {
+                                                            j = 1;
+                                                        }
+                                                        List<Object> list = new List<object>();
+                                                        list.Add(new { Value = 1, Detail = "1." + Model.pointB[i].Rounds[j].DetailRate1 });
+                                                        list.Add(new { Value = 2, Detail = "2." + Model.pointB[i].Rounds[j].DetailRate2 });
+                                                        list.Add(new { Value = 3, Detail = "3." + Model.pointB[i].Rounds[j].DetailRate3 });
+                                                        list.Add(new { Value = 4, Detail = "4." + Model.pointB[i].Rounds[j].DetailRate4 });
+                                                        list.Add(new { Value = 5, Detail = "5." + Model.pointB[i].Rounds[j].DetailRate5 });
+
+                                                        if ((3 < Model.month) && (Model.month < 10) && (Model.pointB[i].Rounds.Count == 2))
+                                                        {
+                                                            if (Model.pointB[i].Rounds[0].RoundNumber == 2)
                                                             {
                                                                 j = 0;
                                                             }
@@ -933,239 +968,251 @@
                                                             {
                                                                 j = 1;
                                                             }
-                                                            List<Object> list = new List<object>();
+                                                            list.Clear();
                                                             list.Add(new { Value = 1, Detail = "1." + Model.pointB[i].Rounds[j].DetailRate1 });
                                                             list.Add(new { Value = 2, Detail = "2." + Model.pointB[i].Rounds[j].DetailRate2 });
                                                             list.Add(new { Value = 3, Detail = "3." + Model.pointB[i].Rounds[j].DetailRate3 });
                                                             list.Add(new { Value = 4, Detail = "4." + Model.pointB[i].Rounds[j].DetailRate4 });
                                                             list.Add(new { Value = 5, Detail = "5." + Model.pointB[i].Rounds[j].DetailRate5 });
+                                                        }
 
-                                                            if ((3 < Model.month) && (Model.month < 10) && (Model.pointB[i].Rounds.Count == 2))
-                                                            {
-                                                                if (Model.pointB[i].Rounds[0].RoundNumber == 2)
-                                                                {
-                                                                    j = 0;
-                                                                }
-                                                                else
-                                                                {
-                                                                    j = 1;
-                                                                }
-                                                                list.Clear();
-                                                                list.Add(new { Value = 1, Detail = "1." + Model.pointB[i].Rounds[j].DetailRate1 });
-                                                                list.Add(new { Value = 2, Detail = "2." + Model.pointB[i].Rounds[j].DetailRate2 });
-                                                                list.Add(new { Value = 3, Detail = "3." + Model.pointB[i].Rounds[j].DetailRate3 });
-                                                                list.Add(new { Value = 4, Detail = "4." + Model.pointB[i].Rounds[j].DetailRate4 });
-                                                                list.Add(new { Value = 5, Detail = "5." + Model.pointB[i].Rounds[j].DetailRate5 });
-                                                            }
-
-                                                            ViewBag.SelectLevel = new SelectList(list, "Value", "Detail", de == null ? 1 : (int)de.Result);
-                                                        }
-                                                        @if (de?.Approve > Approve.รอพิจารณา)
-                                                        {
-                                                            <select name="UpdateData[@i].Result" class="form-control" asp-items="ViewBag.SelectLevel" disabled></select>
-                                                        }
-                                                        else
-                                                        {
-                                                            <select name="UpdateData[@i].Result" class="form-control" asp-items="ViewBag.SelectLevel"></select>
-                                                        }
-                                                    </td>
-                                                }
+                                                        ViewBag.SelectLevel = new SelectList(list, "Value", "Detail", de == null ? 1 : (int)de.Result);
+                                                    }
+                                                    @if (de?.Approve > Approve.รอพิจารณา)
+                                                    {
+                                                        <select name="UpdateData[@i].Result" class="form-control" asp-items="ViewBag.SelectLevel" disabled></select>
+                                                    }
+                                                    else
+                                                    {
+                                                        <select name="UpdateData[@i].Result" class="form-control" asp-items="ViewBag.SelectLevel"></select>
+                                                    }
+                                                </td>
                                             }
-                                            @if (Model.pointB[i].Unit == UnitOfPoint.ระดับ_ร้อยละ)
+                                        }
+                                        @if (Model.pointB[i].Unit == UnitOfPoint.ระดับ_ร้อยละ)
+                                        {
+                                            if ((3 < Model.month) && (Model.month < 10) && (Model.pointB[i].Rounds.Count == 2))
                                             {
-                                                if ((3 < Model.month) && (Model.month < 10) && (Model.pointB[i].Rounds.Count == 2))
+                                                if (Model.pointB[i].Rounds[0].RoundNumber == 2)
                                                 {
-                                                    if (Model.pointB[i].Rounds[0].RoundNumber == 2)
-                                                    {
-                                                        j = 0;
-                                                    }
-                                                    else
-                                                    {
-                                                        j = 1;
-                                                    }
-                                                    if (Model.pointB[i].Rounds[j].LevelNumber == 1)
-                                                    {
-                                                        <td>
-                                                            1.@Model.pointB[i].Rounds[j].DetailRate1<br />
-                                                            @string.Format("{0:N4}", de?.Expect)
-                                                        </td>
-                                                    }
-                                                    if (Model.pointB[i].Rounds[j].LevelNumber == 2)
-                                                    {
-                                                        if (new DateTime(DateTime.Now.AddYears(yearOfGov).Year, Model.month, 28) >= Model.pointB[i].Rounds[j].Rate2MonthStart)
-                                                        {
-                                                            <td>
-                                                                2.@Model.pointB[i].Rounds[j].DetailRate2<br />
-                                                                @string.Format("{0:N4}", de?.Expect)
-                                                            </td>
-                                                        }
-                                                        else
-                                                        {
-                                                            <td>
-                                                                1.@Model.pointB[i].Rounds[j].DetailRate1 <br />
-                                                                @string.Format("{0:N4}", de?.Expect)
-                                                            </td>
-                                                        }
-
-                                                    }
-                                                    if (Model.pointB[i].Rounds[j].LevelNumber == 3)
-                                                    {
-                                                        if (new DateTime(DateTime.Now.AddYears(yearOfGov).Year, Model.month, 28) >= Model.pointB[i].Rounds[j].Rate3MonthStart)
-                                                        {
-                                                            <td>
-                                                                3.@Model.pointB[i].Rounds[j].DetailRate3 <br />
-                                                                @string.Format("{0:N4}", de?.Expect)
-                                                            </td>
-                                                        }
-                                                        else if (new DateTime(DateTime.Now.AddYears(yearOfGov).Year, Model.month, 28) >= Model.pointB[i].Rounds[j].Rate2MonthStart)
-                                                        {
-                                                            <td>
-                                                                2.@Model.pointB[i].Rounds[j].DetailRate2  <br />
-                                                                @string.Format("{0:N4}", de?.Expect)
-                                                            </td>
-                                                        }
-                                                        else
-                                                        {
-                                                            <td>
-                                                                1.@Model.pointB[i].Rounds[j].DetailRate1 <br />
-                                                                @string.Format("{0:N4}", de?.Expect)
-                                                            </td>
-                                                        }
-                                                    }
-                                                    if (Model.pointB[i].Rounds[j].LevelNumber == 4)
-                                                    {
-                                                        if (new DateTime(DateTime.Now.AddYears(yearOfGov).Year, Model.month, 28) >= Model.pointB[i].Rounds[j].Rate4MonthStart)
-                                                        {
-                                                            <td>
-                                                                4.@Model.pointB[i].Rounds[j].DetailRate4<br />
-                                                                @string.Format("{0:N4}", de?.Expect)
-                                                            </td>
-                                                        }
-                                                        else if (new DateTime(DateTime.Now.AddYears(yearOfGov).Year, Model.month, 28) >= Model.pointB[i].Rounds[j].Rate3MonthStart)
-                                                        {
-                                                            <td>
-                                                                3.@Model.pointB[i].Rounds[j].DetailRate3 <br />
-                                                                @string.Format("{0:N4}", de?.Expect)
-                                                            </td>
-                                                        }
-                                                        else if (new DateTime(DateTime.Now.AddYears(yearOfGov).Year, Model.month, 28) >= Model.pointB[i].Rounds[j].Rate2MonthStart)
-                                                        {
-                                                            <td>
-                                                                2.@Model.pointB[i].Rounds[j].DetailRate2 <br />
-                                                                @string.Format("{0:N4}", de?.Expect)
-                                                            </td>
-                                                        }
-                                                        else
-                                                        {
-                                                            <td>
-                                                                1.@Model.pointB[i].Rounds[j].DetailRate1<br />
-                                                                @string.Format("{0:N4}", de?.Expect)
-                                                            </td>
-                                                        }
-
-                                                    }
+                                                    j = 0;
                                                 }
                                                 else
                                                 {
-                                                    if (Model.pointB[i].Rounds[0].RoundNumber == 1)
-                                                    {
-                                                        j = 0;
-                                                    }
-                                                    else
-                                                    {
-                                                        j = 1;
-                                                    }
-                                                    if (Model.pointB[i].Rounds[j].LevelNumber == 1)
-                                                    {
-                                                        <td>
-                                                            1.@Model.pointB[i].Rounds[j].DetailRate1<br />
-                                                            @string.Format("{0:N4}", de?.Expect)
-                                                        </td>
-                                                    }
-                                                    if (Model.pointB[i].Rounds[j].LevelNumber == 2)
-                                                    {
-                                                        if (new DateTime(DateTime.Now.AddYears(yearOfGov).Year, Model.month, 28) >= Model.pointB[i].Rounds[j].Rate2MonthStart)
-                                                        {
-                                                            <td>
-                                                                2.@Model.pointB[i].Rounds[j].DetailRate2<br />
-                                                                @string.Format("{0:N4}", de?.Expect)
-                                                            </td>
-                                                        }
-                                                        else
-                                                        {
-                                                            <td>
-                                                                1.@Model.pointB[i].Rounds[j].DetailRate1 <br />
-                                                                @string.Format("{0:N4}", de?.Expect)
-                                                            </td>
-                                                        }
-
-                                                    }
-                                                    if (Model.pointB[i].Rounds[j].LevelNumber == 3)
-                                                    {
-                                                        if (new DateTime(DateTime.Now.AddYears(yearOfGov).Year, Model.month, 28) >= Model.pointB[i].Rounds[j].Rate3MonthStart)
-                                                        {
-                                                            <td>
-                                                                3.@Model.pointB[i].Rounds[j].DetailRate3 <br />
-                                                                @string.Format("{0:N4}", de?.Expect)
-                                                            </td>
-                                                        }
-                                                        else if (new DateTime(DateTime.Now.AddYears(yearOfGov).Year, Model.month, 28) >= Model.pointB[i].Rounds[j].Rate2MonthStart)
-                                                        {
-                                                            <td>
-                                                                2.@Model.pointB[i].Rounds[j].DetailRate2  <br />
-                                                                @string.Format("{0:N4}", de?.Expect)
-                                                            </td>
-                                                        }
-                                                        else
-                                                        {
-                                                            <td>
-                                                                1.@Model.pointB[i].Rounds[j].DetailRate1 <br />
-                                                                @string.Format("{0:N4}", de?.Expect)
-                                                            </td>
-                                                        }
-                                                    }
-                                                    if (Model.pointB[i].Rounds[j].LevelNumber == 4)
-                                                    {
-                                                        if (new DateTime(DateTime.Now.AddYears(yearOfGov).Year, Model.month, 28) >= Model.pointB[i].Rounds[j].Rate4MonthStart)
-                                                        {
-                                                            <td>
-                                                                4.@Model.pointB[i].Rounds[j].DetailRate4<br />
-                                                                @string.Format("{0:N4}", de?.Expect)
-                                                            </td>
-                                                        }
-                                                        else if (new DateTime(DateTime.Now.AddYears(yearOfGov).Year, Model.month, 28) >= Model.pointB[i].Rounds[j].Rate3MonthStart)
-                                                        {
-                                                            <td>
-                                                                3.@Model.pointB[i].Rounds[j].DetailRate3 <br />
-                                                                @string.Format("{0:N4}", de?.Expect)
-                                                            </td>
-                                                        }
-                                                        else if (new DateTime(DateTime.Now.AddYears(yearOfGov).Year, Model.month, 28) >= Model.pointB[i].Rounds[j].Rate2MonthStart)
-                                                        {
-                                                            <td>
-                                                                2.@Model.pointB[i].Rounds[j].DetailRate2 <br />
-                                                                @string.Format("{0:N4}", de?.Expect)
-                                                            </td>
-                                                        }
-                                                        else
-                                                        {
-                                                            <td>
-                                                                1.@Model.pointB[i].Rounds[j].DetailRate1<br />
-                                                                @string.Format("{0:N4}", de?.Expect)
-                                                            </td>
-                                                        }
-
-                                                    }
+                                                    j = 1;
                                                 }
-                                                @if (HasSub)
-                                                {
-                                                    <td><input type="hidden" name="UpdateData[@i].hasSub" value="true" /></td>
-                                                }
-                                                else
+                                                if (Model.pointB[i].Rounds[j].LevelNumber == 1)
                                                 {
                                                     <td>
-                                                        @{
-                                                            if (Model.pointB[i].Rounds[0].RoundNumber == 1)
+                                                        1.@Model.pointB[i].Rounds[j].DetailRate1<br />
+                                                        @string.Format("{0:N4}", de?.Expect)
+                                                    </td>
+                                                }
+                                                if (Model.pointB[i].Rounds[j].LevelNumber == 2)
+                                                {
+                                                    if (new DateTime(DateTime.Now.AddYears(yearOfGov).Year, Model.month, DateTime.DaysInMonth(DateTime.Now.AddYears(yearOfGov).Year, Model.month)) >= Model.pointB[i].Rounds[j].Rate2MonthStart)
+                                                    {
+                                                        <td>
+                                                            2.@Model.pointB[i].Rounds[j].DetailRate2<br />
+                                                            @string.Format("{0:N4}", de?.Expect)
+                                                        </td>
+                                                    }
+                                                    else
+                                                    {
+                                                        <td>
+                                                            1.@Model.pointB[i].Rounds[j].DetailRate1 <br />
+                                                            @string.Format("{0:N4}", de?.Expect)
+                                                        </td>
+                                                    }
+
+                                                }
+                                                if (Model.pointB[i].Rounds[j].LevelNumber == 3)
+                                                {
+                                                    if (new DateTime(DateTime.Now.AddYears(yearOfGov).Year, Model.month, DateTime.DaysInMonth(DateTime.Now.AddYears(yearOfGov).Year, Model.month)) >= Model.pointB[i].Rounds[j].Rate3MonthStart)
+                                                    {
+                                                        <td>
+                                                            3.@Model.pointB[i].Rounds[j].DetailRate3 <br />
+                                                            @string.Format("{0:N4}", de?.Expect)
+                                                        </td>
+                                                    }
+                                                    else if (new DateTime(DateTime.Now.AddYears(yearOfGov).Year, Model.month, DateTime.DaysInMonth(DateTime.Now.AddYears(yearOfGov).Year, Model.month)) >= Model.pointB[i].Rounds[j].Rate2MonthStart)
+                                                    {
+                                                        <td>
+                                                            2.@Model.pointB[i].Rounds[j].DetailRate2  <br />
+                                                            @string.Format("{0:N4}", de?.Expect)
+                                                        </td>
+                                                    }
+                                                    else
+                                                    {
+                                                        <td>
+                                                            1.@Model.pointB[i].Rounds[j].DetailRate1 <br />
+                                                            @string.Format("{0:N4}", de?.Expect)
+                                                        </td>
+                                                    }
+                                                }
+                                                if (Model.pointB[i].Rounds[j].LevelNumber == 4)
+                                                {
+                                                    if (new DateTime(DateTime.Now.AddYears(yearOfGov).Year, Model.month, DateTime.DaysInMonth(DateTime.Now.AddYears(yearOfGov).Year, Model.month)) >= Model.pointB[i].Rounds[j].Rate4MonthStart)
+                                                    {
+                                                        <td>
+                                                            4.@Model.pointB[i].Rounds[j].DetailRate4<br />
+                                                            @string.Format("{0:N4}", de?.Expect)
+                                                        </td>
+                                                    }
+                                                    else if (new DateTime(DateTime.Now.AddYears(yearOfGov).Year, Model.month, DateTime.DaysInMonth(DateTime.Now.AddYears(yearOfGov).Year, Model.month)) >= Model.pointB[i].Rounds[j].Rate3MonthStart)
+                                                    {
+                                                        <td>
+                                                            3.@Model.pointB[i].Rounds[j].DetailRate3 <br />
+                                                            @string.Format("{0:N4}", de?.Expect)
+                                                        </td>
+                                                    }
+                                                    else if (new DateTime(DateTime.Now.AddYears(yearOfGov).Year, Model.month, DateTime.DaysInMonth(DateTime.Now.AddYears(yearOfGov).Year, Model.month)) >= Model.pointB[i].Rounds[j].Rate2MonthStart)
+                                                    {
+                                                        <td>
+                                                            2.@Model.pointB[i].Rounds[j].DetailRate2 <br />
+                                                            @string.Format("{0:N4}", de?.Expect)
+                                                        </td>
+                                                    }
+                                                    else
+                                                    {
+                                                        <td>
+                                                            1.@Model.pointB[i].Rounds[j].DetailRate1<br />
+                                                            @string.Format("{0:N4}", de?.Expect)
+                                                        </td>
+                                                    }
+
+                                                }
+                                            }
+                                            else
+                                            {
+                                                if (Model.pointB[i].Rounds[0].RoundNumber == 1)
+                                                {
+                                                    j = 0;
+                                                }
+                                                else
+                                                {
+                                                    j = 1;
+                                                }
+                                                if (Model.pointB[i].Rounds[j].LevelNumber == 1)
+                                                {
+                                                    <td>
+                                                        1.@Model.pointB[i].Rounds[j].DetailRate1<br />
+                                                        @string.Format("{0:N4}", de?.Expect)
+                                                    </td>
+                                                }
+                                                if (Model.pointB[i].Rounds[j].LevelNumber == 2)
+                                                {
+                                                    if (new DateTime(DateTime.Now.AddYears(yearOfGov).Year, Model.month, DateTime.DaysInMonth(DateTime.Now.AddYears(yearOfGov).Year, Model.month)) >= Model.pointB[i].Rounds[j].Rate2MonthStart)
+                                                    {
+                                                        <td>
+                                                            2.@Model.pointB[i].Rounds[j].DetailRate2<br />
+                                                            @string.Format("{0:N4}", de?.Expect)
+                                                        </td>
+                                                    }
+                                                    else
+                                                    {
+                                                        <td>
+                                                            1.@Model.pointB[i].Rounds[j].DetailRate1 <br />
+                                                            @string.Format("{0:N4}", de?.Expect)
+                                                        </td>
+                                                    }
+
+                                                }
+                                                if (Model.pointB[i].Rounds[j].LevelNumber == 3)
+                                                {
+                                                    if (new DateTime(DateTime.Now.AddYears(yearOfGov).Year, Model.month, DateTime.DaysInMonth(DateTime.Now.AddYears(yearOfGov).Year, Model.month)) >= Model.pointB[i].Rounds[j].Rate3MonthStart)
+                                                    {
+                                                        <td>
+                                                            3.@Model.pointB[i].Rounds[j].DetailRate3 <br />
+                                                            @string.Format("{0:N4}", de?.Expect)
+                                                        </td>
+                                                    }
+                                                    else if (new DateTime(DateTime.Now.AddYears(yearOfGov).Year, Model.month, DateTime.DaysInMonth(DateTime.Now.AddYears(yearOfGov).Year, Model.month)) >= Model.pointB[i].Rounds[j].Rate2MonthStart)
+                                                    {
+                                                        <td>
+                                                            2.@Model.pointB[i].Rounds[j].DetailRate2  <br />
+                                                            @string.Format("{0:N4}", de?.Expect)
+                                                        </td>
+                                                    }
+                                                    else
+                                                    {
+                                                        <td>
+                                                            1.@Model.pointB[i].Rounds[j].DetailRate1 <br />
+                                                            @string.Format("{0:N4}", de?.Expect)
+                                                        </td>
+                                                    }
+                                                }
+                                                if (Model.pointB[i].Rounds[j].LevelNumber == 4)
+                                                {
+                                                    if (new DateTime(DateTime.Now.AddYears(yearOfGov).Year, Model.month, DateTime.DaysInMonth(DateTime.Now.AddYears(yearOfGov).Year, Model.month)) >= Model.pointB[i].Rounds[j].Rate4MonthStart)
+                                                    {
+                                                        <td>
+                                                            4.@Model.pointB[i].Rounds[j].DetailRate4<br />
+                                                            @string.Format("{0:N4}", de?.Expect)
+                                                        </td>
+                                                    }
+                                                    else if (new DateTime(DateTime.Now.AddYears(yearOfGov).Year, Model.month, DateTime.DaysInMonth(DateTime.Now.AddYears(yearOfGov).Year, Model.month)) >= Model.pointB[i].Rounds[j].Rate3MonthStart)
+                                                    {
+                                                        <td>
+                                                            3.@Model.pointB[i].Rounds[j].DetailRate3 <br />
+                                                            @string.Format("{0:N4}", de?.Expect)
+                                                        </td>
+                                                    }
+                                                    else if (new DateTime(DateTime.Now.AddYears(yearOfGov).Year, Model.month, DateTime.DaysInMonth(DateTime.Now.AddYears(yearOfGov).Year, Model.month)) >= Model.pointB[i].Rounds[j].Rate2MonthStart)
+                                                    {
+                                                        <td>
+                                                            2.@Model.pointB[i].Rounds[j].DetailRate2 <br />
+                                                            @string.Format("{0:N4}", de?.Expect)
+                                                        </td>
+                                                    }
+                                                    else
+                                                    {
+                                                        <td>
+                                                            1.@Model.pointB[i].Rounds[j].DetailRate1<br />
+                                                            @string.Format("{0:N4}", de?.Expect)
+                                                        </td>
+                                                    }
+
+                                                }
+                                            }
+                                            @if (HasSub)
+                                            {
+                                                <td><input type="hidden" name="UpdateData[@i].hasSub" value="true" /></td>
+                                            }
+                                            else
+                                            {
+                                                <td>
+                                                    @{
+                                                        if (Model.pointB[i].Rounds[0].RoundNumber == 1)
+                                                        {
+                                                            j = 0;
+                                                        }
+                                                        else
+                                                        {
+                                                            j = 1;
+                                                        }
+                                                        List<Object> list = new List<object>();
+                                                        if (Model.pointB[i].Rounds[j].LevelNumber >= 1)
+                                                        {
+                                                            list.Add(new { Value = 1, Detail = "1." + Model.pointB[i].Rounds[j].DetailRate1 });
+
+                                                        }
+                                                        if (Model.pointB[i].Rounds[j].LevelNumber >= 2)
+                                                        {
+                                                            list.Add(new { Value = 2, Detail = "2." + Model.pointB[i].Rounds[j].DetailRate2 });
+                                                        }
+                                                        if (Model.pointB[i].Rounds[j].LevelNumber >= 3)
+                                                        {
+                                                            list.Add(new { Value = 3, Detail = "3." + Model.pointB[i].Rounds[j].DetailRate3 });
+                                                        }
+                                                        if (Model.pointB[i].Rounds[j].LevelNumber >= 4)
+                                                        {
+                                                            list.Add(new { Value = 4, Detail = "4." + Model.pointB[i].Rounds[j].DetailRate4 });
+                                                        }
+
+                                                        if ((3 < Model.month) && (Model.month < 10) && (Model.pointB[i].Rounds.Count == 2))
+                                                        {
+                                                            if (Model.pointB[i].Rounds[0].RoundNumber == 2)
                                                             {
                                                                 j = 0;
                                                             }
@@ -1173,11 +1220,10 @@
                                                             {
                                                                 j = 1;
                                                             }
-                                                            List<Object> list = new List<object>();
+                                                            list.Clear();
                                                             if (Model.pointB[i].Rounds[j].LevelNumber >= 1)
                                                             {
                                                                 list.Add(new { Value = 1, Detail = "1." + Model.pointB[i].Rounds[j].DetailRate1 });
-
                                                             }
                                                             if (Model.pointB[i].Rounds[j].LevelNumber >= 2)
                                                             {
@@ -1191,76 +1237,48 @@
                                                             {
                                                                 list.Add(new { Value = 4, Detail = "4." + Model.pointB[i].Rounds[j].DetailRate4 });
                                                             }
+                                                        }
 
-                                                            if ((3 < Model.month) && (Model.month < 10) && (Model.pointB[i].Rounds.Count == 2))
-                                                            {
-                                                                if (Model.pointB[i].Rounds[0].RoundNumber == 2)
-                                                                {
-                                                                    j = 0;
-                                                                }
-                                                                else
-                                                                {
-                                                                    j = 1;
-                                                                }
-                                                                list.Clear();
-                                                                if (Model.pointB[i].Rounds[j].LevelNumber >= 1)
-                                                                {
-                                                                    list.Add(new { Value = 1, Detail = "1." + Model.pointB[i].Rounds[j].DetailRate1 });
-                                                                }
-                                                                if (Model.pointB[i].Rounds[j].LevelNumber >= 2)
-                                                                {
-                                                                    list.Add(new { Value = 2, Detail = "2." + Model.pointB[i].Rounds[j].DetailRate2 });
-                                                                }
-                                                                if (Model.pointB[i].Rounds[j].LevelNumber >= 3)
-                                                                {
-                                                                    list.Add(new { Value = 3, Detail = "3." + Model.pointB[i].Rounds[j].DetailRate3 });
-                                                                }
-                                                                if (Model.pointB[i].Rounds[j].LevelNumber >= 4)
-                                                                {
-                                                                    list.Add(new { Value = 4, Detail = "4." + Model.pointB[i].Rounds[j].DetailRate4 });
-                                                                }
-                                                            }
-
-                                                            ViewBag.SelectLevel = new SelectList(list, "Value", "Detail", de == null ? 1 : (int)de.Result);
-                                                        }
-                                                        @if (de?.Approve > Approve.รอพิจารณา)
-                                                        {
-                                                            <select name="UpdateData[@i].Result" class="form-control" asp-items="ViewBag.SelectLevel" disabled></select>
-                                                            <br />
-                                                            <input type="text" class="form-control" name="UpdateData[@i].ResultLevelRate" value="@String.Format("{0:N4}", de?.ResultLevelRate)" readonly />
-                                                        }
-                                                        else
-                                                        {
-                                                            <select name="UpdateData[@i].Result" class="form-control" asp-items="ViewBag.SelectLevel"></select>
-                                                            <br />
-                                                            <input type="text" class="form-control" name="UpdateData[@i].ResultLevelRate" value="@String.Format("{0:N4}", de?.ResultLevelRate)" />
-                                                        }
-                                                    </td>
-                                                }
-                                            }
-                                            @if (HasSub)
-                                            {
-                                                <td></td>
-                                                <td></td>
-                                            }
-                                            else
-                                            {
-                                                <td>
+                                                        ViewBag.SelectLevel = new SelectList(list, "Value", "Detail", de == null ? 1 : (int)de.Result);
+                                                    }
                                                     @if (de?.Approve > Approve.รอพิจารณา)
                                                     {
-                                                        <input type="date" class="form-control" name="UpdateData[@i].Completed" value=@(de?.Completed ??  new DateTime(DateTime.Now.AddYears(yearOfGov).Year, Model.month, 28).ToString("yyyy-MM-dd", CultureInfo.CreateSpecificCulture("en-US"))) readonly />
+                                                        <select name="UpdateData[@i].Result" class="form-control" asp-items="ViewBag.SelectLevel" disabled></select>
+                                                        <br />
+                                                        <input type="text" class="form-control" name="UpdateData[@i].ResultLevelRate" value="@String.Format("{0:N4}", de?.ResultLevelRate)" readonly />
                                                     }
                                                     else
                                                     {
-                                                        <input type="date" class="form-control" name="UpdateData[@i].Completed" value=@(de?.Completed ??  new DateTime(DateTime.Now.AddYears(yearOfGov).Year, Model.month, 28).ToString("yyyy-MM-dd", CultureInfo.CreateSpecificCulture("en-US"))) />
+                                                        <select name="UpdateData[@i].Result" class="form-control" asp-items="ViewBag.SelectLevel"></select>
+                                                        <br />
+                                                        <input type="text" class="form-control" name="UpdateData[@i].ResultLevelRate" value="@String.Format("{0:N4}", de?.ResultLevelRate)" />
                                                     }
                                                 </td>
-                                                <td>
-                                                    @if (de != null)
+                                            }
+                                        }
+                                        @if (HasSub)
+                                        {
+                                            <td><input type="hidden" class="form-control" name="UpdateData[@i].Completed" value=@(de?.Completed ??  new DateTime(DateTime.Now.AddYears(yearOfGov).Year, Model.month, DateTime.DaysInMonth(DateTime.Now.AddYears(yearOfGov).Year, Model.month)).ToString("yyyy-MM-dd", CultureInfo.CreateSpecificCulture("en-US"))) readonly /></td>
+                                            <td></td>
+                                        }
+                                        else
+                                        {
+                                            <td>
+                                                @if (de?.Approve > Approve.รอพิจารณา)
+                                                {
+                                                    <input type="date" class="form-control" name="UpdateData[@i].Completed" value=@(de?.Completed ??  new DateTime(DateTime.Now.AddYears(yearOfGov).Year, Model.month, DateTime.DaysInMonth(DateTime.Now.AddYears(yearOfGov).Year, Model.month)).ToString("yyyy-MM-dd", CultureInfo.CreateSpecificCulture("en-US"))) readonly />
+                                                }
+                                                else
+                                                {
+                                                    <input type="date" class="form-control" name="UpdateData[@i].Completed" value=@(de?.Completed ??  new DateTime(DateTime.Now.AddYears(yearOfGov).Year, Model.month, DateTime.DaysInMonth(DateTime.Now.AddYears(yearOfGov).Year, Model.month)).ToString("yyyy-MM-dd", CultureInfo.CreateSpecificCulture("en-US"))) />
+                                                }
+                                            </td>
+                                            <td>
+                                                @if (de != null)
+                                                {
+                                                    @if (de?.Approve == Approve.รอพิจารณา)
                                                     {
-                                                        @if (de?.Approve == Approve.รอพิจารณา)
-                                                        {
-                                                            @(Html.DevExtreme().Button()
+                                                        @(Html.DevExtreme().Button()
                                                                         //.ElementAttr("class", "button-info")
                                                                         .Text("แนบ")
                                                                         .OnClick(@<text>
@@ -1271,13 +1289,13 @@
                                                                                     }
                                                                         </text>)
                                                             )
-                                                        }
-                                                        @if (de?.AttachFile != null)
+                                                    }
+                                                    @if (de?.AttachFile != null)
+                                                    {
+                                                        <a href="~/attach_files/@de?.AttachFile" target="_blank"><i class="fas fa-file-pdf fa-2x"></i></a><br />
+                                                        @if (de?.Approve == Approve.รอพิจารณา)
                                                         {
-                                                            <a href="~/attach_files/@de?.AttachFile" target="_blank"><i class="fas fa-file-pdf fa-2x"></i></a><br />
-                                                            @if (de?.Approve == Approve.รอพิจารณา)
-                                                            {
-                                                                @(Html.DevExtreme().Button()
+                                                            @(Html.DevExtreme().Button()
                                                                 .ElementAttr("class", "button-danger")
                                                                 .Text("ลบ")
                                                                 .Type(ButtonType.Danger)
@@ -1289,14 +1307,14 @@
                                                                             }
                                                                 </text>)
                                                                 )
-                                                            }
                                                         }
-                                                        @using (Html.DevExtreme().NamedTemplate("popup-template-" + de?.Id))
-                                                        {
-                                                            <form id="form" method="post" enctype="multipart/form-data" action="FileSelection">
-                                                                <h3>แนบไฟล์ประกอบผลการปฏิบัติ</h3>
-                                                                <div id="fileuploader-container">
-                                                                    @(Html.DevExtreme().FileUploader()
+                                                    }
+                                                    @using (Html.DevExtreme().NamedTemplate("popup-template-" + de?.Id))
+                                                    {
+                                                        <form id="form" method="post" enctype="multipart/form-data" action="FileSelection">
+                                                            <h3>แนบไฟล์ประกอบผลการปฏิบัติ</h3>
+                                                            <div id="fileuploader-container">
+                                                                @(Html.DevExtreme().FileUploader()
                                                                         .Name("AttachFile")
                                                                         .SelectButtonText("เลือกไฟล์แนบ")
                                                                         .LabelText("ลากไฟล์แนบมาวางที่นี่")
@@ -1311,41 +1329,41 @@
                                                                         .UploadMethod(UploadHttpMethod.POST)
                                                                         .UploadMode(FileUploadMode.Instantly)
                                                                     )
-                                                                </div>
-                                                                @(Html.DevExtreme().Button()
+                                                            </div>
+                                                            @(Html.DevExtreme().Button()
                                                                     .ID("button")
                                                                     .Text("ส่งไฟล์แนบ")
                                                                     .Type(ButtonType.Success)
                                                                     .UseSubmitBehavior(true)
                                                                 )
-                                                                <input type="hidden" name="deid" value=@de?.Id />
-                                                                <input asp-for="yearPoint" class="form-control" hidden />
-                                                                <input asp-for="month" class="form-control" hidden />
-                                                                <input type="hidden" name="selectoffice" value="@ViewBag.selectoffice" />
-                                                            </form>
-                                                        }
-                                                        @using (Html.DevExtreme().NamedTemplate("popup-template-del-" + de?.Id))
-                                                        {
-                                                            <form id="form" method="post" action="FileDelete">
-                                                                <h3>ลบไฟล์ประกอบผลการปฏิบัติ</h3>
-                                                                <h5>@de.AttachFile</h5>
-                                                                @(Html.DevExtreme().Button()
+                                                            <input type="hidden" name="deid" value=@de?.Id />
+                                                            <input asp-for="yearPoint" class="form-control" hidden />
+                                                            <input asp-for="month" class="form-control" hidden />
+                                                            <input type="hidden" name="selectoffice" value="@ViewBag.selectoffice" />
+                                                        </form>
+                                                    }
+                                                    @using (Html.DevExtreme().NamedTemplate("popup-template-del-" + de?.Id))
+                                                    {
+                                                        <form id="form" method="post" action="FileDelete">
+                                                            <h3>ลบไฟล์ประกอบผลการปฏิบัติ</h3>
+                                                            <h5>@de.AttachFile</h5>
+                                                            @(Html.DevExtreme().Button()
                                                                     .ID("button")
                                                                     .Text("ลบไฟล์แนบ")
                                                                     .Type(ButtonType.Danger)
                                                                     .UseSubmitBehavior(true)
                                                                 )
-                                                                <input type="hidden" name="deid" value=@de?.Id />
-                                                                <input asp-for="yearPoint" class="form-control" hidden />
-                                                                <input asp-for="month" class="form-control" hidden />
-                                                                <input type="hidden" name="selectoffice" value="@ViewBag.selectoffice" />
-                                                            </form>
-                                                        }
+                                                            <input type="hidden" name="deid" value=@de?.Id />
+                                                            <input asp-for="yearPoint" class="form-control" hidden />
+                                                            <input asp-for="month" class="form-control" hidden />
+                                                            <input type="hidden" name="selectoffice" value="@ViewBag.selectoffice" />
+                                                        </form>
                                                     }
-                                                </td>
-                                            }
+                                                }
+                                            </td>
                                         }
-                                    </tr>
+                                    }
+                                </tr>
                                 }
                             </tbody>
                         </table>
@@ -1422,7 +1440,6 @@
                                             @Model.pointC[i].Name
                                         </td>
                                         <td>
-                                            @Model.pointC[i].Weight.ToString("N2")
                                             @{
                                                 DataForEvaluation de = null;
                                             }
@@ -1432,6 +1449,14 @@
                                                 {
                                                     de = item;
                                                 }
+                                            }
+                                            @if (@Model.pointC[i].WeightAll)
+                                            {
+                                                @Model.pointC[i].Weight.ToString("N2")
+                                            }
+                                            else
+                                            {
+                                                @de.Weight.ToString("N2")
                                             }
                                             <input type="hidden" name="UpdateData[@i].Id" value=@de?.Id />
                                             <input type="hidden" name="UpdateData[@i].poeid" value=@Model.pointC[i].Id />
@@ -1464,7 +1489,7 @@
                                                     <td>
                                                         <input type="text" class="form-control" name="UpdateData[@i].Result" value="@String.Format("{0:N4}", de?.Result)" readonly />
                                                     </td>
-                                                    <td><input type="date" class="form-control" name="UpdateData[@i].Completed" value=@(de?.Completed ?? new DateTime(DateTime.Now.AddYears(yearOfGov).Year, Model.month, 28).ToString("yyyy-MM-dd", CultureInfo.CreateSpecificCulture("en-US"))) readonly /></td>
+                                                    <td><input type="date" class="form-control" name="UpdateData[@i].Completed" value=@(de?.Completed ?? new DateTime(DateTime.Now.AddYears(yearOfGov).Year, Model.month, DateTime.DaysInMonth(DateTime.Now.AddYears(yearOfGov).Year, Model.month)).ToString("yyyy-MM-dd", CultureInfo.CreateSpecificCulture("en-US"))) readonly /></td>
                                                     <td></td>
                                                 }
                                                 else
@@ -1472,7 +1497,7 @@
                                                     <td>
                                                         <input type="text" class="form-control" name="UpdateData[@i].Result" value="@String.Format("{0:N4}", de?.Result)" />
                                                     </td>
-                                                    <td><input type="date" class="form-control" name="UpdateData[@i].Completed" value=@(de?.Completed ?? new DateTime(DateTime.Now.AddYears(yearOfGov).Year, Model.month, 28).ToString("yyyy-MM-dd", CultureInfo.CreateSpecificCulture("en-US"))) /></td>
+                                                    <td><input type="date" class="form-control" name="UpdateData[@i].Completed" value=@(de?.Completed ?? new DateTime(DateTime.Now.AddYears(yearOfGov).Year, Model.month, DateTime.DaysInMonth(DateTime.Now.AddYears(yearOfGov).Year, Model.month)).ToString("yyyy-MM-dd", CultureInfo.CreateSpecificCulture("en-US"))) /></td>
                                                     <td></td>
                                                 }
                                             }
@@ -1492,19 +1517,19 @@
                                                     {
                                                         j = 1;
                                                     }
-                                                    if (new DateTime(DateTime.Now.AddYears(yearOfGov).Year, Model.month, 28) >= Model.pointC[i].Rounds[j].Rate5MonthStart)
+                                                    if (new DateTime(DateTime.Now.AddYears(yearOfGov).Year, Model.month, DateTime.DaysInMonth(DateTime.Now.AddYears(yearOfGov).Year, Model.month)) >= Model.pointC[i].Rounds[j].Rate5MonthStart)
                                                     {
                                                         <td>5.@Model.pointC[i].Rounds[j].DetailRate5</td>
                                                     }
-                                                    else if (new DateTime(DateTime.Now.AddYears(yearOfGov).Year, Model.month, 28) >= Model.pointC[i].Rounds[j].Rate4MonthStart)
+                                                    else if (new DateTime(DateTime.Now.AddYears(yearOfGov).Year, Model.month, DateTime.DaysInMonth(DateTime.Now.AddYears(yearOfGov).Year, Model.month)) >= Model.pointC[i].Rounds[j].Rate4MonthStart)
                                                     {
                                                         <td>4.@Model.pointC[i].Rounds[j].DetailRate4</td>
                                                     }
-                                                    else if (new DateTime(DateTime.Now.AddYears(yearOfGov).Year, Model.month, 28) >= Model.pointC[i].Rounds[j].Rate3MonthStart)
+                                                    else if (new DateTime(DateTime.Now.AddYears(yearOfGov).Year, Model.month, DateTime.DaysInMonth(DateTime.Now.AddYears(yearOfGov).Year, Model.month)) >= Model.pointC[i].Rounds[j].Rate3MonthStart)
                                                     {
                                                         <td>3.@Model.pointC[i].Rounds[j].DetailRate3</td>
                                                     }
-                                                    else if (new DateTime(DateTime.Now.AddYears(yearOfGov).Year, Model.month, 28) <= Model.pointC[i].Rounds[j].Rate2MonthStart)
+                                                    else if (new DateTime(DateTime.Now.AddYears(yearOfGov).Year, Model.month, DateTime.DaysInMonth(DateTime.Now.AddYears(yearOfGov).Year, Model.month)) <= Model.pointC[i].Rounds[j].Rate2MonthStart)
                                                     {
                                                         <td>2.@Model.pointC[i].Rounds[j].DetailRate2</td>
                                                     }
@@ -1524,19 +1549,19 @@
                                                         j = 1;
                                                     }
 
-                                                    if (new DateTime(DateTime.Now.AddYears(yearOfGov).Year, Model.month, 28) >= Model.pointC[i].Rounds[j].Rate5MonthStart)
+                                                    if (new DateTime(DateTime.Now.AddYears(yearOfGov).Year, Model.month, DateTime.DaysInMonth(DateTime.Now.AddYears(yearOfGov).Year, Model.month)) >= Model.pointC[i].Rounds[j].Rate5MonthStart)
                                                     {
                                                         <td>5.@Model.pointC[i].Rounds[j].DetailRate5</td>
                                                     }
-                                                    else if (new DateTime(DateTime.Now.AddYears(yearOfGov).Year, Model.month, 28) >= Model.pointC[i].Rounds[j].Rate4MonthStart)
+                                                    else if (new DateTime(DateTime.Now.AddYears(yearOfGov).Year, Model.month, DateTime.DaysInMonth(DateTime.Now.AddYears(yearOfGov).Year, Model.month)) >= Model.pointC[i].Rounds[j].Rate4MonthStart)
                                                     {
                                                         <td>4.@Model.pointC[i].Rounds[j].DetailRate4</td>
                                                     }
-                                                    else if (new DateTime(DateTime.Now.AddYears(yearOfGov).Year, Model.month, 28) >= Model.pointC[i].Rounds[j].Rate3MonthStart)
+                                                    else if (new DateTime(DateTime.Now.AddYears(yearOfGov).Year, Model.month, DateTime.DaysInMonth(DateTime.Now.AddYears(yearOfGov).Year, Model.month)) >= Model.pointC[i].Rounds[j].Rate3MonthStart)
                                                     {
                                                         <td>3.@Model.pointC[i].Rounds[j].DetailRate3</td>
                                                     }
-                                                    else if (new DateTime(DateTime.Now.AddYears(yearOfGov).Year, Model.month, 28) >= Model.pointC[i].Rounds[j].Rate2MonthStart)
+                                                    else if (new DateTime(DateTime.Now.AddYears(yearOfGov).Year, Model.month, DateTime.DaysInMonth(DateTime.Now.AddYears(yearOfGov).Year, Model.month)) >= Model.pointC[i].Rounds[j].Rate2MonthStart)
                                                     {
                                                         <td>2.@Model.pointC[i].Rounds[j].DetailRate2</td>
                                                     }
@@ -1620,7 +1645,7 @@
                                                     }
                                                     if (Model.pointC[i].Rounds[j].LevelNumber == 2)
                                                     {
-                                                        if (new DateTime(DateTime.Now.AddYears(yearOfGov).Year, Model.month, 28) >= Model.pointC[i].Rounds[j].Rate2MonthStart)
+                                                        if (new DateTime(DateTime.Now.AddYears(yearOfGov).Year, Model.month, DateTime.DaysInMonth(DateTime.Now.AddYears(yearOfGov).Year, Model.month)) >= Model.pointC[i].Rounds[j].Rate2MonthStart)
                                                         {
                                                             <td>
                                                                 2.@Model.pointC[i].Rounds[j].DetailRate2<br />
@@ -1638,14 +1663,14 @@
                                                     }
                                                     if (Model.pointC[i].Rounds[j].LevelNumber == 3)
                                                     {
-                                                        if (new DateTime(DateTime.Now.AddYears(yearOfGov).Year, Model.month, 28) >= Model.pointC[i].Rounds[j].Rate3MonthStart)
+                                                        if (new DateTime(DateTime.Now.AddYears(yearOfGov).Year, Model.month, DateTime.DaysInMonth(DateTime.Now.AddYears(yearOfGov).Year, Model.month)) >= Model.pointC[i].Rounds[j].Rate3MonthStart)
                                                         {
                                                             <td>
                                                                 3.@Model.pointC[i].Rounds[j].DetailRate3 <br />
                                                                 @string.Format("{0:N4}", de?.Expect)
                                                             </td>
                                                         }
-                                                        else if (new DateTime(DateTime.Now.AddYears(yearOfGov).Year, Model.month, 28) >= Model.pointC[i].Rounds[j].Rate2MonthStart)
+                                                        else if (new DateTime(DateTime.Now.AddYears(yearOfGov).Year, Model.month, DateTime.DaysInMonth(DateTime.Now.AddYears(yearOfGov).Year, Model.month)) >= Model.pointC[i].Rounds[j].Rate2MonthStart)
                                                         {
                                                             <td>
                                                                 2.@Model.pointC[i].Rounds[j].DetailRate2  <br />
@@ -1662,21 +1687,21 @@
                                                     }
                                                     if (Model.pointC[i].Rounds[j].LevelNumber == 4)
                                                     {
-                                                        if (new DateTime(DateTime.Now.AddYears(yearOfGov).Year, Model.month, 28) >= Model.pointC[i].Rounds[j].Rate4MonthStart)
+                                                        if (new DateTime(DateTime.Now.AddYears(yearOfGov).Year, Model.month, DateTime.DaysInMonth(DateTime.Now.AddYears(yearOfGov).Year, Model.month)) >= Model.pointC[i].Rounds[j].Rate4MonthStart)
                                                         {
                                                             <td>
                                                                 4.@Model.pointC[i].Rounds[j].DetailRate4<br />
                                                                 @string.Format("{0:N4}", de?.Expect)
                                                             </td>
                                                         }
-                                                        else if (new DateTime(DateTime.Now.AddYears(yearOfGov).Year, Model.month, 28) >= Model.pointC[i].Rounds[j].Rate3MonthStart)
+                                                        else if (new DateTime(DateTime.Now.AddYears(yearOfGov).Year, Model.month, DateTime.DaysInMonth(DateTime.Now.AddYears(yearOfGov).Year, Model.month)) >= Model.pointC[i].Rounds[j].Rate3MonthStart)
                                                         {
                                                             <td>
                                                                 3.@Model.pointC[i].Rounds[j].DetailRate3 <br />
                                                                 @string.Format("{0:N4}", de?.Expect)
                                                             </td>
                                                         }
-                                                        else if (new DateTime(DateTime.Now.AddYears(yearOfGov).Year, Model.month, 28) >= Model.pointC[i].Rounds[j].Rate2MonthStart)
+                                                        else if (new DateTime(DateTime.Now.AddYears(yearOfGov).Year, Model.month, DateTime.DaysInMonth(DateTime.Now.AddYears(yearOfGov).Year, Model.month)) >= Model.pointC[i].Rounds[j].Rate2MonthStart)
                                                         {
                                                             <td>
                                                                 2.@Model.pointC[i].Rounds[j].DetailRate2 <br />
@@ -1712,7 +1737,7 @@
                                                     }
                                                     if (Model.pointC[i].Rounds[j].LevelNumber == 2)
                                                     {
-                                                        if (new DateTime(DateTime.Now.AddYears(yearOfGov).Year, Model.month, 28) >= Model.pointC[i].Rounds[j].Rate2MonthStart)
+                                                        if (new DateTime(DateTime.Now.AddYears(yearOfGov).Year, Model.month, DateTime.DaysInMonth(DateTime.Now.AddYears(yearOfGov).Year, Model.month)) >= Model.pointC[i].Rounds[j].Rate2MonthStart)
                                                         {
                                                             <td>
                                                                 2.@Model.pointC[i].Rounds[j].DetailRate2<br />
@@ -1730,14 +1755,14 @@
                                                     }
                                                     if (Model.pointC[i].Rounds[j].LevelNumber == 3)
                                                     {
-                                                        if (new DateTime(DateTime.Now.AddYears(yearOfGov).Year, Model.month, 28) >= Model.pointC[i].Rounds[j].Rate3MonthStart)
+                                                        if (new DateTime(DateTime.Now.AddYears(yearOfGov).Year, Model.month, DateTime.DaysInMonth(DateTime.Now.AddYears(yearOfGov).Year, Model.month)) >= Model.pointC[i].Rounds[j].Rate3MonthStart)
                                                         {
                                                             <td>
                                                                 3.@Model.pointC[i].Rounds[j].DetailRate3 <br />
                                                                 @string.Format("{0:N4}", de?.Expect)
                                                             </td>
                                                         }
-                                                        else if (new DateTime(DateTime.Now.AddYears(yearOfGov).Year, Model.month, 28) >= Model.pointC[i].Rounds[j].Rate2MonthStart)
+                                                        else if (new DateTime(DateTime.Now.AddYears(yearOfGov).Year, Model.month, DateTime.DaysInMonth(DateTime.Now.AddYears(yearOfGov).Year, Model.month)) >= Model.pointC[i].Rounds[j].Rate2MonthStart)
                                                         {
                                                             <td>
                                                                 2.@Model.pointC[i].Rounds[j].DetailRate2  <br />
@@ -1754,21 +1779,21 @@
                                                     }
                                                     if (Model.pointC[i].Rounds[j].LevelNumber == 4)
                                                     {
-                                                        if (new DateTime(DateTime.Now.AddYears(yearOfGov).Year, Model.month, 28) >= Model.pointC[i].Rounds[j].Rate4MonthStart)
+                                                        if (new DateTime(DateTime.Now.AddYears(yearOfGov).Year, Model.month, DateTime.DaysInMonth(DateTime.Now.AddYears(yearOfGov).Year, Model.month)) >= Model.pointC[i].Rounds[j].Rate4MonthStart)
                                                         {
                                                             <td>
                                                                 4.@Model.pointC[i].Rounds[j].DetailRate4<br />
                                                                 @string.Format("{0:N4}", de?.Expect)
                                                             </td>
                                                         }
-                                                        else if (new DateTime(DateTime.Now.AddYears(yearOfGov).Year, Model.month, 28) >= Model.pointC[i].Rounds[j].Rate3MonthStart)
+                                                        else if (new DateTime(DateTime.Now.AddYears(yearOfGov).Year, Model.month, DateTime.DaysInMonth(DateTime.Now.AddYears(yearOfGov).Year, Model.month)) >= Model.pointC[i].Rounds[j].Rate3MonthStart)
                                                         {
                                                             <td>
                                                                 3.@Model.pointC[i].Rounds[j].DetailRate3 <br />
                                                                 @string.Format("{0:N4}", de?.Expect)
                                                             </td>
                                                         }
-                                                        else if (new DateTime(DateTime.Now.AddYears(yearOfGov).Year, Model.month, 28) >= Model.pointC[i].Rounds[j].Rate2MonthStart)
+                                                        else if (new DateTime(DateTime.Now.AddYears(yearOfGov).Year, Model.month, DateTime.DaysInMonth(DateTime.Now.AddYears(yearOfGov).Year, Model.month)) >= Model.pointC[i].Rounds[j].Rate2MonthStart)
                                                         {
                                                             <td>
                                                                 2.@Model.pointC[i].Rounds[j].DetailRate2 <br />
@@ -1876,11 +1901,11 @@
                                                 <td>
                                                     @if (de?.Approve > Approve.รอพิจารณา)
                                                     {
-                                                        <input type="date" class="form-control" name="UpdateData[@i].Completed" value=@(de?.Completed ??  new DateTime(DateTime.Now.AddYears(yearOfGov).Year, Model.month, 28).ToString("yyyy-MM-dd", CultureInfo.CreateSpecificCulture("en-US"))) readonly />
+                                                        <input type="date" class="form-control" name="UpdateData[@i].Completed" value=@(de?.Completed ??  new DateTime(DateTime.Now.AddYears(yearOfGov).Year, Model.month, DateTime.DaysInMonth(DateTime.Now.AddYears(yearOfGov).Year, Model.month)).ToString("yyyy-MM-dd", CultureInfo.CreateSpecificCulture("en-US"))) readonly />
                                                     }
                                                     else
                                                     {
-                                                        <input type="date" class="form-control" name="UpdateData[@i].Completed" value=@(de?.Completed ??  new DateTime(DateTime.Now.AddYears(yearOfGov).Year, Model.month, 28).ToString("yyyy-MM-dd", CultureInfo.CreateSpecificCulture("en-US"))) />
+                                                        <input type="date" class="form-control" name="UpdateData[@i].Completed" value=@(de?.Completed ??  new DateTime(DateTime.Now.AddYears(yearOfGov).Year, Model.month, DateTime.DaysInMonth(DateTime.Now.AddYears(yearOfGov).Year, Model.month)).ToString("yyyy-MM-dd", CultureInfo.CreateSpecificCulture("en-US"))) />
                                                     }
                                                 </td>
                                                 <td>
@@ -2050,7 +2075,6 @@
                                             @Model.pointD[i].Name
                                         </td>
                                         <td>
-                                            @Model.pointD[i].Weight.ToString("N2")
                                             @{
                                                 DataForEvaluation de = null;
                                             }
@@ -2060,6 +2084,14 @@
                                                 {
                                                     de = item;
                                                 }
+                                            }
+                                            @if (@Model.pointD[i].WeightAll)
+                                            {
+                                                @Model.pointD[i].Weight.ToString("N2")
+                                            }
+                                            else
+                                            {
+                                                @de.Weight.ToString("N2")
                                             }
                                             <input type="hidden" name="UpdateData[@i].Id" value=@de?.Id />
                                             <input type="hidden" name="UpdateData[@i].poeid" value=@Model.pointD[i].Id />
@@ -2092,7 +2124,7 @@
                                                     <td>
                                                         <input type="text" class="form-control" name="UpdateData[@i].Result" value="@String.Format("{0:N4}", de?.Result)" readonly />
                                                     </td>
-                                                    <td><input type="date" class="form-control" name="UpdateData[@i].Completed" value=@(de?.Completed ?? new DateTime(DateTime.Now.AddYears(yearOfGov).Year, Model.month, 28).ToString("yyyy-MM-dd", CultureInfo.CreateSpecificCulture("en-US"))) readonly /></td>
+                                                    <td><input type="date" class="form-control" name="UpdateData[@i].Completed" value=@(de?.Completed ?? new DateTime(DateTime.Now.AddYears(yearOfGov).Year, Model.month, DateTime.DaysInMonth(DateTime.Now.AddYears(yearOfGov).Year, Model.month)).ToString("yyyy-MM-dd", CultureInfo.CreateSpecificCulture("en-US"))) readonly /></td>
                                                     <td></td>
                                                 }
                                                 else
@@ -2100,7 +2132,7 @@
                                                     <td>
                                                         <input type="text" class="form-control" name="UpdateData[@i].Result" value="@String.Format("{0:N4}", de?.Result)" />
                                                     </td>
-                                                    <td><input type="date" class="form-control" name="UpdateData[@i].Completed" value=@(de?.Completed ?? new DateTime(DateTime.Now.AddYears(yearOfGov).Year, Model.month, 28).ToString("yyyy-MM-dd", CultureInfo.CreateSpecificCulture("en-US"))) /></td>
+                                                    <td><input type="date" class="form-control" name="UpdateData[@i].Completed" value=@(de?.Completed ?? new DateTime(DateTime.Now.AddYears(yearOfGov).Year, Model.month, DateTime.DaysInMonth(DateTime.Now.AddYears(yearOfGov).Year, Model.month)).ToString("yyyy-MM-dd", CultureInfo.CreateSpecificCulture("en-US"))) /></td>
                                                     <td></td>
                                                 }
                                             }
@@ -2120,19 +2152,19 @@
                                                     {
                                                         j = 1;
                                                     }
-                                                    if (new DateTime(DateTime.Now.AddYears(yearOfGov).Year, Model.month, 28) >= Model.pointD[i].Rounds[j].Rate5MonthStart)
+                                                    if (new DateTime(DateTime.Now.AddYears(yearOfGov).Year, Model.month, DateTime.DaysInMonth(DateTime.Now.AddYears(yearOfGov).Year, Model.month)) >= Model.pointD[i].Rounds[j].Rate5MonthStart)
                                                     {
                                                         <td>5.@Model.pointD[i].Rounds[j].DetailRate5</td>
                                                     }
-                                                    else if (new DateTime(DateTime.Now.AddYears(yearOfGov).Year, Model.month, 28) >= Model.pointD[i].Rounds[j].Rate4MonthStart)
+                                                    else if (new DateTime(DateTime.Now.AddYears(yearOfGov).Year, Model.month, DateTime.DaysInMonth(DateTime.Now.AddYears(yearOfGov).Year, Model.month)) >= Model.pointD[i].Rounds[j].Rate4MonthStart)
                                                     {
                                                         <td>4.@Model.pointD[i].Rounds[j].DetailRate4</td>
                                                     }
-                                                    else if (new DateTime(DateTime.Now.AddYears(yearOfGov).Year, Model.month, 28) >= Model.pointD[i].Rounds[j].Rate3MonthStart)
+                                                    else if (new DateTime(DateTime.Now.AddYears(yearOfGov).Year, Model.month, DateTime.DaysInMonth(DateTime.Now.AddYears(yearOfGov).Year, Model.month)) >= Model.pointD[i].Rounds[j].Rate3MonthStart)
                                                     {
                                                         <td>3.@Model.pointD[i].Rounds[j].DetailRate3</td>
                                                     }
-                                                    else if (new DateTime(DateTime.Now.AddYears(yearOfGov).Year, Model.month, 28) <= Model.pointD[i].Rounds[j].Rate2MonthStart)
+                                                    else if (new DateTime(DateTime.Now.AddYears(yearOfGov).Year, Model.month, DateTime.DaysInMonth(DateTime.Now.AddYears(yearOfGov).Year, Model.month)) <= Model.pointD[i].Rounds[j].Rate2MonthStart)
                                                     {
                                                         <td>2.@Model.pointD[i].Rounds[j].DetailRate2</td>
                                                     }
@@ -2152,19 +2184,19 @@
                                                         j = 1;
                                                     }
 
-                                                    if (new DateTime(DateTime.Now.AddYears(yearOfGov).Year, Model.month, 28) >= Model.pointD[i].Rounds[j].Rate5MonthStart)
+                                                    if (new DateTime(DateTime.Now.AddYears(yearOfGov).Year, Model.month, DateTime.DaysInMonth(DateTime.Now.AddYears(yearOfGov).Year, Model.month)) >= Model.pointD[i].Rounds[j].Rate5MonthStart)
                                                     {
                                                         <td>5.@Model.pointD[i].Rounds[j].DetailRate5</td>
                                                     }
-                                                    else if (new DateTime(DateTime.Now.AddYears(yearOfGov).Year, Model.month, 28) >= Model.pointD[i].Rounds[j].Rate4MonthStart)
+                                                    else if (new DateTime(DateTime.Now.AddYears(yearOfGov).Year, Model.month, DateTime.DaysInMonth(DateTime.Now.AddYears(yearOfGov).Year, Model.month)) >= Model.pointD[i].Rounds[j].Rate4MonthStart)
                                                     {
                                                         <td>4.@Model.pointD[i].Rounds[j].DetailRate4</td>
                                                     }
-                                                    else if (new DateTime(DateTime.Now.AddYears(yearOfGov).Year, Model.month, 28) >= Model.pointD[i].Rounds[j].Rate3MonthStart)
+                                                    else if (new DateTime(DateTime.Now.AddYears(yearOfGov).Year, Model.month, DateTime.DaysInMonth(DateTime.Now.AddYears(yearOfGov).Year, Model.month)) >= Model.pointD[i].Rounds[j].Rate3MonthStart)
                                                     {
                                                         <td>3.@Model.pointD[i].Rounds[j].DetailRate3</td>
                                                     }
-                                                    else if (new DateTime(DateTime.Now.AddYears(yearOfGov).Year, Model.month, 28) >= Model.pointD[i].Rounds[j].Rate2MonthStart)
+                                                    else if (new DateTime(DateTime.Now.AddYears(yearOfGov).Year, Model.month, DateTime.DaysInMonth(DateTime.Now.AddYears(yearOfGov).Year, Model.month)) >= Model.pointD[i].Rounds[j].Rate2MonthStart)
                                                     {
                                                         <td>2.@Model.pointD[i].Rounds[j].DetailRate2</td>
                                                     }
@@ -2248,7 +2280,7 @@
                                                     }
                                                     if (Model.pointD[i].Rounds[j].LevelNumber == 2)
                                                     {
-                                                        if (new DateTime(DateTime.Now.AddYears(yearOfGov).Year, Model.month, 28) >= Model.pointD[i].Rounds[j].Rate2MonthStart)
+                                                        if (new DateTime(DateTime.Now.AddYears(yearOfGov).Year, Model.month, DateTime.DaysInMonth(DateTime.Now.AddYears(yearOfGov).Year, Model.month)) >= Model.pointD[i].Rounds[j].Rate2MonthStart)
                                                         {
                                                             <td>
                                                                 2.@Model.pointD[i].Rounds[j].DetailRate2<br />
@@ -2266,14 +2298,14 @@
                                                     }
                                                     if (Model.pointD[i].Rounds[j].LevelNumber == 3)
                                                     {
-                                                        if (new DateTime(DateTime.Now.AddYears(yearOfGov).Year, Model.month, 28) >= Model.pointD[i].Rounds[j].Rate3MonthStart)
+                                                        if (new DateTime(DateTime.Now.AddYears(yearOfGov).Year, Model.month, DateTime.DaysInMonth(DateTime.Now.AddYears(yearOfGov).Year, Model.month)) >= Model.pointD[i].Rounds[j].Rate3MonthStart)
                                                         {
                                                             <td>
                                                                 3.@Model.pointD[i].Rounds[j].DetailRate3 <br />
                                                                 @string.Format("{0:N4}", de?.Expect)
                                                             </td>
                                                         }
-                                                        else if (new DateTime(DateTime.Now.AddYears(yearOfGov).Year, Model.month, 28) >= Model.pointD[i].Rounds[j].Rate2MonthStart)
+                                                        else if (new DateTime(DateTime.Now.AddYears(yearOfGov).Year, Model.month, DateTime.DaysInMonth(DateTime.Now.AddYears(yearOfGov).Year, Model.month)) >= Model.pointD[i].Rounds[j].Rate2MonthStart)
                                                         {
                                                             <td>
                                                                 2.@Model.pointD[i].Rounds[j].DetailRate2  <br />
@@ -2290,21 +2322,21 @@
                                                     }
                                                     if (Model.pointD[i].Rounds[j].LevelNumber == 4)
                                                     {
-                                                        if (new DateTime(DateTime.Now.AddYears(yearOfGov).Year, Model.month, 28) >= Model.pointD[i].Rounds[j].Rate4MonthStart)
+                                                        if (new DateTime(DateTime.Now.AddYears(yearOfGov).Year, Model.month, DateTime.DaysInMonth(DateTime.Now.AddYears(yearOfGov).Year, Model.month)) >= Model.pointD[i].Rounds[j].Rate4MonthStart)
                                                         {
                                                             <td>
                                                                 4.@Model.pointD[i].Rounds[j].DetailRate4<br />
                                                                 @string.Format("{0:N4}", de?.Expect)
                                                             </td>
                                                         }
-                                                        else if (new DateTime(DateTime.Now.AddYears(yearOfGov).Year, Model.month, 28) >= Model.pointD[i].Rounds[j].Rate3MonthStart)
+                                                        else if (new DateTime(DateTime.Now.AddYears(yearOfGov).Year, Model.month, DateTime.DaysInMonth(DateTime.Now.AddYears(yearOfGov).Year, Model.month)) >= Model.pointD[i].Rounds[j].Rate3MonthStart)
                                                         {
                                                             <td>
                                                                 3.@Model.pointD[i].Rounds[j].DetailRate3 <br />
                                                                 @string.Format("{0:N4}", de?.Expect)
                                                             </td>
                                                         }
-                                                        else if (new DateTime(DateTime.Now.AddYears(yearOfGov).Year, Model.month, 28) >= Model.pointD[i].Rounds[j].Rate2MonthStart)
+                                                        else if (new DateTime(DateTime.Now.AddYears(yearOfGov).Year, Model.month, DateTime.DaysInMonth(DateTime.Now.AddYears(yearOfGov).Year, Model.month)) >= Model.pointD[i].Rounds[j].Rate2MonthStart)
                                                         {
                                                             <td>
                                                                 2.@Model.pointD[i].Rounds[j].DetailRate2 <br />
@@ -2340,7 +2372,7 @@
                                                     }
                                                     if (Model.pointD[i].Rounds[j].LevelNumber == 2)
                                                     {
-                                                        if (new DateTime(DateTime.Now.AddYears(yearOfGov).Year, Model.month, 28) >= Model.pointD[i].Rounds[j].Rate2MonthStart)
+                                                        if (new DateTime(DateTime.Now.AddYears(yearOfGov).Year, Model.month, DateTime.DaysInMonth(DateTime.Now.AddYears(yearOfGov).Year, Model.month)) >= Model.pointD[i].Rounds[j].Rate2MonthStart)
                                                         {
                                                             <td>
                                                                 2.@Model.pointD[i].Rounds[j].DetailRate2<br />
@@ -2358,14 +2390,14 @@
                                                     }
                                                     if (Model.pointD[i].Rounds[j].LevelNumber == 3)
                                                     {
-                                                        if (new DateTime(DateTime.Now.AddYears(yearOfGov).Year, Model.month, 28) >= Model.pointD[i].Rounds[j].Rate3MonthStart)
+                                                        if (new DateTime(DateTime.Now.AddYears(yearOfGov).Year, Model.month, DateTime.DaysInMonth(DateTime.Now.AddYears(yearOfGov).Year, Model.month)) >= Model.pointD[i].Rounds[j].Rate3MonthStart)
                                                         {
                                                             <td>
                                                                 3.@Model.pointD[i].Rounds[j].DetailRate3 <br />
                                                                 @string.Format("{0:N4}", de?.Expect)
                                                             </td>
                                                         }
-                                                        else if (new DateTime(DateTime.Now.AddYears(yearOfGov).Year, Model.month, 28) >= Model.pointD[i].Rounds[j].Rate2MonthStart)
+                                                        else if (new DateTime(DateTime.Now.AddYears(yearOfGov).Year, Model.month, DateTime.DaysInMonth(DateTime.Now.AddYears(yearOfGov).Year, Model.month)) >= Model.pointD[i].Rounds[j].Rate2MonthStart)
                                                         {
                                                             <td>
                                                                 2.@Model.pointD[i].Rounds[j].DetailRate2  <br />
@@ -2382,21 +2414,21 @@
                                                     }
                                                     if (Model.pointD[i].Rounds[j].LevelNumber == 4)
                                                     {
-                                                        if (new DateTime(DateTime.Now.AddYears(yearOfGov).Year, Model.month, 28) >= Model.pointD[i].Rounds[j].Rate4MonthStart)
+                                                        if (new DateTime(DateTime.Now.AddYears(yearOfGov).Year, Model.month, DateTime.DaysInMonth(DateTime.Now.AddYears(yearOfGov).Year, Model.month)) >= Model.pointD[i].Rounds[j].Rate4MonthStart)
                                                         {
                                                             <td>
                                                                 4.@Model.pointD[i].Rounds[j].DetailRate4<br />
                                                                 @string.Format("{0:N4}", de?.Expect)
                                                             </td>
                                                         }
-                                                        else if (new DateTime(DateTime.Now.AddYears(yearOfGov).Year, Model.month, 28) >= Model.pointD[i].Rounds[j].Rate3MonthStart)
+                                                        else if (new DateTime(DateTime.Now.AddYears(yearOfGov).Year, Model.month, DateTime.DaysInMonth(DateTime.Now.AddYears(yearOfGov).Year, Model.month)) >= Model.pointD[i].Rounds[j].Rate3MonthStart)
                                                         {
                                                             <td>
                                                                 3.@Model.pointD[i].Rounds[j].DetailRate3 <br />
                                                                 @string.Format("{0:N4}", de?.Expect)
                                                             </td>
                                                         }
-                                                        else if (new DateTime(DateTime.Now.AddYears(yearOfGov).Year, Model.month, 28) >= Model.pointD[i].Rounds[j].Rate2MonthStart)
+                                                        else if (new DateTime(DateTime.Now.AddYears(yearOfGov).Year, Model.month, DateTime.DaysInMonth(DateTime.Now.AddYears(yearOfGov).Year, Model.month)) >= Model.pointD[i].Rounds[j].Rate2MonthStart)
                                                         {
                                                             <td>
                                                                 2.@Model.pointD[i].Rounds[j].DetailRate2 <br />
@@ -2504,11 +2536,11 @@
                                                 <td>
                                                     @if (de?.Approve > Approve.รอพิจารณา)
                                                     {
-                                                        <input type="date" class="form-control" name="UpdateData[@i].Completed" value=@(de?.Completed ??  new DateTime(DateTime.Now.AddYears(yearOfGov).Year, Model.month, 28).ToString("yyyy-MM-dd", CultureInfo.CreateSpecificCulture("en-US"))) readonly />
+                                                        <input type="date" class="form-control" name="UpdateData[@i].Completed" value=@(de?.Completed ??  new DateTime(DateTime.Now.AddYears(yearOfGov).Year, Model.month, DateTime.DaysInMonth(DateTime.Now.AddYears(yearOfGov).Year, Model.month)).ToString("yyyy-MM-dd", CultureInfo.CreateSpecificCulture("en-US"))) readonly />
                                                     }
                                                     else
                                                     {
-                                                        <input type="date" class="form-control" name="UpdateData[@i].Completed" value=@(de?.Completed ??  new DateTime(DateTime.Now.AddYears(yearOfGov).Year, Model.month, 28).ToString("yyyy-MM-dd", CultureInfo.CreateSpecificCulture("en-US"))) />
+                                                        <input type="date" class="form-control" name="UpdateData[@i].Completed" value=@(de?.Completed ??  new DateTime(DateTime.Now.AddYears(yearOfGov).Year, Model.month, DateTime.DaysInMonth(DateTime.Now.AddYears(yearOfGov).Year, Model.month)).ToString("yyyy-MM-dd", CultureInfo.CreateSpecificCulture("en-US"))) />
                                                     }
                                                 </td>
                                                 <td>

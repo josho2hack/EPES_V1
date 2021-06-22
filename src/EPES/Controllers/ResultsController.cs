@@ -456,12 +456,13 @@ namespace EPES.Controllers
                 {
                     foreach (var item in UpdateData)
                     {
+
                         if (!item.hasSub)
                         {
                             if (item.Id != null)
                             {
-                                var de = await _context.DataForEvaluations.FirstOrDefaultAsync(d => d.Id == item.Id);
-                                if (de.Approve == null || de.Approve == Approve.รอพิจารณา)
+                                var de = await _context.DataForEvaluations.Where(d => d.Id == item.Id).Include(d => d.PointOfEvaluation).FirstOrDefaultAsync();
+                                if ((de.Approve == null || de.Approve == Approve.รอพิจารณา) && de.PointOfEvaluation.Weight != 0)
                                 {
                                     de.Result = item.Result;
                                     de.ResultLevelRate = item.ResultLevelRate;
@@ -472,7 +473,7 @@ namespace EPES.Controllers
 
                                     try
                                     {
-                                        await _context.SaveChangesAsync();
+                                        var err = await _context.SaveChangesAsync();
                                     }
                                     catch (DbUpdateException)
                                     {
@@ -510,6 +511,7 @@ namespace EPES.Controllers
                                 }
                             }
                         }
+
                     }
                 }
             }

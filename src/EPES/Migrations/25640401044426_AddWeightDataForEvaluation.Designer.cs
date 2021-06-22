@@ -4,14 +4,16 @@ using EPES.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace EPES.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("25640401044426_AddWeightDataForEvaluation")]
+    partial class AddWeightDataForEvaluation
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -220,10 +222,6 @@ namespace EPES.Migrations
 
                     b.Property<int>("Point");
 
-                    b.Property<bool>("StartZero")
-                        .ValueGeneratedOnAdd()
-                        .HasDefaultValue(false);
-
                     b.Property<int>("SubPoint")
                         .ValueGeneratedOnAdd()
                         .HasDefaultValue(0);
@@ -234,10 +232,6 @@ namespace EPES.Migrations
 
                     b.Property<decimal>("Weight")
                         .HasColumnType("decimal(7, 4)");
-
-                    b.Property<bool>("WeightAll")
-                        .ValueGeneratedOnAdd()
-                        .HasDefaultValue(true);
 
                     b.Property<DateTime>("Year");
 

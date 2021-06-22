@@ -37,6 +37,11 @@ namespace EPES.Models
         [Column(TypeName = "decimal(38, 10)")]
         public decimal? OldResult { get; set; }
 
+        [Display(Name = "น้ำหนักร้อยละ")]
+        [DisplayFormat(DataFormatString = "{0:N2}", ApplyFormatInEditMode = true)]
+        [Column(TypeName = "decimal(7, 4)")]
+        public decimal Weight { get; set; }
+
         [Display(Name = "เดือน")]
         [Range(1, 12)]
         public int Month { get; set; }

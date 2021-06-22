@@ -4,6 +4,9 @@
 <html lang="th">
 <partial name="_Head" />
 <body id="page-top">
+    <div id='loading' style="position:fixed;left: 0;right: 0;bottom: 0;top: 0;background:#0020ff36;z-index:99;text-align:center;">
+        <img src="https://mir-s3-cdn-cf.behance.net/project_modules/disp/35771931234507.564a1d2403b3a.gif" alt="Loading..." />
+    </div>
     @*<partial name="_CookieConsentPartial" />*@
 
     <!-- Page Wrapper -->
@@ -12,22 +15,28 @@
         {
             <partial name="_Sidebar" />
         }
-            <!-- Content Wrapper -->
-            <div id="content-wrapper" class="d-flex flex-column">
-                <!-- Main Content -->
-                <div id="content">
-                    <partial name="_Topbar" />
-                    <main role="main" class="pb-3">
-                        @RenderBody()
-                    </main>
-                </div>
+        <!-- Content Wrapper -->
+        <div id="content-wrapper" class="d-flex flex-column">
+            <!-- Main Content -->
+            <div id="content">
+                <partial name="_Topbar" />
+                <main role="main" class="pb-3">
+                    @RenderBody()
+                </main>
             </div>
-            <!-- End of Content Wrapper -->
         </div>
+        <!-- End of Content Wrapper -->
+    </div>
     <!-- End of Page Wrapper -->
 
     <partial name="_Footer" />
 
     @RenderSection("Scripts", required: false)
+
+    <script>
+        $(document).ready(function () {
+            $("#loading").hide();
+        });
+    </script>
 </body>
 </html>

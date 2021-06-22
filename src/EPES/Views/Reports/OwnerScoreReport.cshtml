@@ -229,7 +229,7 @@
             //    .Visible(false);
 
             fields.Add()
-                .Caption("ค่าคะแนน")
+                .Caption("คะแนน")
                 .DataField("scoreValue")
                 .SummaryType(SummaryType.Avg)
 
@@ -245,7 +245,7 @@
                 .Area(PivotGridArea.Data);
 
             fields.Add()
-                .Caption("ค่าคะแนนถ่วงน้ำหนัก")
+                .Caption("คะแนนถ่วงน้ำหนัก")
                 .DataField("cal")
                 .SummaryType(SummaryType.Sum)
                 .Format(f => f.Type(Format.FixedPoint).Precision(4))
@@ -388,12 +388,11 @@
                     </text>);
 
             fields.Add()
-                .Caption("อนุมัติ")
-                .DataField("scoreApprove")
-                .SummaryType(SummaryType.Avg)
-                .Format(f => f.Type(Format.FixedPoint).Precision(4))
-                .Area(PivotGridArea.Data);
-                //.CustomizeText("customizeText");
+                    .Caption("คะแนนถ่วงน้ำหนัก")
+                    .DataField("calApprove")
+                    .SummaryType(SummaryType.Sum)
+                    .Format(f => f.Type(Format.FixedPoint).Precision(4))
+                    .Area(PivotGridArea.Data);
         })
         )
         .OnInitialized("bind_chart_approved")

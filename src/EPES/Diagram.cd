@@ -1,0 +1,66 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1" MembersFormat="NameAndType">
+  <Class Name="EPES.Models.Office">
+    <Position X="0.5" Y="0.75" Width="3.5" />
+    <TypeIdentifier>
+      <HashCode>AAACACAAAAAAAAgQBAAgAAQAAAAAABAAAAACAABAAQA=</HashCode>
+      <FileName>Models\Office.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="EPES.Models.PointOfEvaluation">
+    <Position X="4.75" Y="0.75" Width="3.25" />
+    <TypeIdentifier>
+      <HashCode>AAACAAAAjAAAgAgCIICAoAwEISAAAiEBAACAAAJACAg=</HashCode>
+      <FileName>Models\PointOfEvaluation.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Property Name="OwnerOffice" />
+    </ShowAsAssociation>
+  </Class>
+  <Class Name="EPES.Models.Round">
+    <Position X="8.75" Y="0.75" Width="2.75" />
+    <TypeIdentifier>
+      <HashCode>AAECAIQAAEQGDBAoAAGEBBCQAABgMgACAQQoGAQAAgA=</HashCode>
+      <FileName>Models\Round.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Property Name="PointOfEvaluation" />
+    </ShowAsAssociation>
+  </Class>
+  <Class Name="EPES.Models.ScoreDraft">
+    <Position X="0.5" Y="4" Width="2.75" />
+    <TypeIdentifier>
+      <HashCode>AAACABAIEAAAAAAAAACAIAAAAAAAIgAAAAAAAAQAAAA=</HashCode>
+      <FileName>Models\ScoreDraft.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Property Name="Office" />
+      <Property Name="PointOfEvaluation" />
+    </ShowAsAssociation>
+  </Class>
+  <Class Name="EPES.Models.Score">
+    <Position X="5" Y="7.5" Width="2.75" />
+    <TypeIdentifier>
+      <HashCode>AAACABAAAAAAAAAAAACAIAAAAAAAIAAAAAAgAAQAAAA=</HashCode>
+      <FileName>Models\Score.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="EPES.Models.DataForEvaluation">
+    <Position X="12.25" Y="0.75" Width="2.75" />
+    <TypeIdentifier>
+      <HashCode>AAgCAAIACAAQAIoIAACApEQAARAAIgAEAAAAAAQgAAA=</HashCode>
+      <FileName>Models\DataForEvaluation.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Property Name="PointOfEvaluation" />
+    </ShowAsAssociation>
+  </Class>
+  <Class Name="EPES.Models.ApplicationUser">
+    <Position X="0.5" Y="6.75" Width="3.75" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAACAAAAFAIAAoAAAAEAAAAAAAAAAAAAATgAAE=</HashCode>
+      <FileName>Models\ApplicationUser.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>

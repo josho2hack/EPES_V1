@@ -65,4 +65,8 @@ namespace EPES.Models
         [Display(Name = "เจ้าหน้าที่")]
         public ApplicationUser ApplicationUser { get; set; }
     }
+
+    public class Class1
+    {
+    }
 }
