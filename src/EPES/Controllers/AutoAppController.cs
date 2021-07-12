@@ -957,5 +957,277 @@ namespace EPES.Controllers
             return LocalRedirect("/");
 
         } //End มจ. ตัวชี้วัด 64 8-10
+
+        public IActionResult GetP2_7() //มก. ตัวชี้วัด 64 2-7
+        {
+            string url = "http://localhost:8082/morgor/p2.csv";
+            HttpWebRequest webRequest = WebRequest.Create(url) as HttpWebRequest;
+            if (webRequest == null)
+            {
+                return LocalRedirect("/");
+            }
+
+            DateTime yearForRequest;
+
+            using (var s = webRequest.GetResponse().GetResponseStream())
+            {
+                using (var sr = new StreamReader(s))
+                {
+                    var engine = new FileHelperEngine<P11>();
+                    var records = engine.ReadStream(sr);
+
+                    foreach (var record in records)
+                    {
+                        yearForRequest = new DateTime(record.year - 543, 1, 1);
+
+                        var dataForEvaluation = _context.DataForEvaluations
+                                            .Where(d => d.Office.Code == record.officeID && d.PointOfEvaluation.AutoApp == AutoApps.ร้อยละของการตรวจคืนภาษี && d.PointOfEvaluation.Year == yearForRequest && d.Month == record.month)
+                                            .FirstOrDefault();
+                        if (dataForEvaluation != null)
+                        {
+                            dataForEvaluation.Expect = record.expect;
+                            dataForEvaluation.Result = record.result;
+                            dataForEvaluation.CompletedDate = new DateTime(yearForRequest.Year, dataForEvaluation.Month, DateTime.DaysInMonth(yearForRequest.Year, dataForEvaluation.Month));
+                            dataForEvaluation.Approve = Approve.ผษ_อนุมัติ;
+                            _context.SaveChanges();
+                        }
+                    }
+                }
+            }
+
+            url = "http://localhost:8082/morgor/p3.csv";
+            webRequest = WebRequest.Create(url) as HttpWebRequest;
+            if (webRequest == null)
+            {
+                return LocalRedirect("/");
+            }
+
+            using (var s = webRequest.GetResponse().GetResponseStream())
+            {
+                using (var sr = new StreamReader(s))
+                {
+                    var engine = new FileHelperEngine<P11>();
+                    var records = engine.ReadStream(sr);
+
+                    foreach (var record in records)
+                    {
+                        yearForRequest = new DateTime(record.year - 543, 1, 1);
+
+                        var dataForEvaluation = _context.DataForEvaluations
+                                            .Where(d => d.Office.Code == record.officeID && d.PointOfEvaluation.AutoApp == AutoApps.ร้อยละของการแนะนำและตรวจสอบภาษี && d.PointOfEvaluation.Year == yearForRequest && d.Month == record.month)
+                                            .FirstOrDefault();
+                        if (dataForEvaluation != null)
+                        {
+                            dataForEvaluation.Expect = record.expect;
+                            dataForEvaluation.Result = record.result;
+                            dataForEvaluation.CompletedDate = new DateTime(yearForRequest.Year, dataForEvaluation.Month, DateTime.DaysInMonth(yearForRequest.Year, dataForEvaluation.Month));
+                            dataForEvaluation.Approve = Approve.ผษ_อนุมัติ;
+                            _context.SaveChanges();
+                        }
+                    }
+                }
+            }
+
+            url = "http://localhost:8082/morgor/p4.csv";
+            webRequest = WebRequest.Create(url) as HttpWebRequest;
+            if (webRequest == null)
+            {
+                return LocalRedirect("/");
+            }
+
+            using (var s = webRequest.GetResponse().GetResponseStream())
+            {
+                using (var sr = new StreamReader(s))
+                {
+                    var engine = new FileHelperEngine<P11>();
+                    var records = engine.ReadStream(sr);
+
+                    foreach (var record in records)
+                    {
+                        yearForRequest = new DateTime(record.year - 543, 1, 1);
+
+                        var dataForEvaluation = _context.DataForEvaluations
+                                            .Where(d => d.Office.Code == record.officeID && d.PointOfEvaluation.AutoApp == AutoApps.ร้อยละของผู้ประกอบการที่ดำเนินการแนะนำ && d.PointOfEvaluation.Year == yearForRequest && d.Month == record.month)
+                                            .FirstOrDefault();
+                        if (dataForEvaluation != null)
+                        {
+                            dataForEvaluation.Expect = record.expect;
+                            dataForEvaluation.Result = record.result;
+                            dataForEvaluation.CompletedDate = new DateTime(yearForRequest.Year, dataForEvaluation.Month, DateTime.DaysInMonth(yearForRequest.Year, dataForEvaluation.Month));
+                            dataForEvaluation.Approve = Approve.ผษ_อนุมัติ;
+                            _context.SaveChanges();
+                        }
+                    }
+                }
+            }
+
+            url = "http://localhost:8082/morgor/p5.1.csv";
+            webRequest = WebRequest.Create(url) as HttpWebRequest;
+            if (webRequest == null)
+            {
+                return LocalRedirect("/");
+            }
+
+            using (var s = webRequest.GetResponse().GetResponseStream())
+            {
+                using (var sr = new StreamReader(s))
+                {
+                    var engine = new FileHelperEngine<P11>();
+                    var records = engine.ReadStream(sr);
+
+                    foreach (var record in records)
+                    {
+                        yearForRequest = new DateTime(record.year - 543, 1, 1);
+
+                        var dataForEvaluation = _context.DataForEvaluations
+                                            .Where(d => d.Office.Code == record.officeID && d.PointOfEvaluation.AutoApp == AutoApps.ร้อยละของการดำเนินการงานค้างสอบยันใบกำกับภาษี && d.PointOfEvaluation.Year == yearForRequest && d.Month == record.month)
+                                            .FirstOrDefault();
+                        if (dataForEvaluation != null)
+                        {
+                            dataForEvaluation.Expect = record.expect;
+                            dataForEvaluation.Result = record.result;
+                            dataForEvaluation.CompletedDate = new DateTime(yearForRequest.Year, dataForEvaluation.Month, DateTime.DaysInMonth(yearForRequest.Year, dataForEvaluation.Month));
+                            dataForEvaluation.Approve = Approve.ผษ_อนุมัติ;
+                            _context.SaveChanges();
+                        }
+                    }
+                }
+            }
+
+            url = "http://localhost:8082/morgor/p5.2.csv";
+            webRequest = WebRequest.Create(url) as HttpWebRequest;
+            if (webRequest == null)
+            {
+                return LocalRedirect("/");
+            }
+
+            using (var s = webRequest.GetResponse().GetResponseStream())
+            {
+                using (var sr = new StreamReader(s))
+                {
+                    var engine = new FileHelperEngine<P11>();
+                    var records = engine.ReadStream(sr);
+
+                    foreach (var record in records)
+                    {
+                        yearForRequest = new DateTime(record.year - 543, 1, 1);
+
+                        var dataForEvaluation = _context.DataForEvaluations
+                                            .Where(d => d.Office.Code == record.officeID && d.PointOfEvaluation.AutoApp == AutoApps.ร้อยละของการสอบยันใบกำกับภาษีที่ได้รับ && d.PointOfEvaluation.Year == yearForRequest && d.Month == record.month)
+                                            .FirstOrDefault();
+                        if (dataForEvaluation != null)
+                        {
+                            dataForEvaluation.Expect = record.expect;
+                            dataForEvaluation.Result = record.result;
+                            dataForEvaluation.CompletedDate = new DateTime(yearForRequest.Year, dataForEvaluation.Month, DateTime.DaysInMonth(yearForRequest.Year, dataForEvaluation.Month));
+                            dataForEvaluation.Approve = Approve.ผษ_อนุมัติ;
+                            _context.SaveChanges();
+                        }
+                    }
+                }
+            }
+
+            url = "http://localhost:8082/morgor/p5.3.csv";
+            webRequest = WebRequest.Create(url) as HttpWebRequest;
+            if (webRequest == null)
+            {
+                return LocalRedirect("/");
+            }
+
+            using (var s = webRequest.GetResponse().GetResponseStream())
+            {
+                using (var sr = new StreamReader(s))
+                {
+                    var engine = new FileHelperEngine<P11>();
+                    var records = engine.ReadStream(sr);
+
+                    foreach (var record in records)
+                    {
+                        yearForRequest = new DateTime(record.year - 543, 1, 1);
+
+                        var dataForEvaluation = _context.DataForEvaluations
+                                            .Where(d => d.Office.Code == record.officeID && d.PointOfEvaluation.AutoApp == AutoApps.ร้อยละของจำนวนรายที่มีผลการสอบยันใบกำกับภาษีพบประเด็นความผิด && d.PointOfEvaluation.Year == yearForRequest && d.Month == record.month)
+                                            .FirstOrDefault();
+                        if (dataForEvaluation != null)
+                        {
+                            dataForEvaluation.Expect = record.expect;
+                            dataForEvaluation.Result = record.result;
+                            dataForEvaluation.CompletedDate = new DateTime(yearForRequest.Year, dataForEvaluation.Month, DateTime.DaysInMonth(yearForRequest.Year, dataForEvaluation.Month));
+                            dataForEvaluation.Approve = Approve.ผษ_อนุมัติ;
+                            _context.SaveChanges();
+                        }
+                    }
+                }
+            }
+
+            url = "http://localhost:8082/morgor/p6.csv";
+            webRequest = WebRequest.Create(url) as HttpWebRequest;
+            if (webRequest == null)
+            {
+                return LocalRedirect("/");
+            }
+
+            using (var s = webRequest.GetResponse().GetResponseStream())
+            {
+                using (var sr = new StreamReader(s))
+                {
+                    var engine = new FileHelperEngine<P11>();
+                    var records = engine.ReadStream(sr);
+
+                    foreach (var record in records)
+                    {
+                        yearForRequest = new DateTime(record.year - 543, 1, 1);
+
+                        var dataForEvaluation = _context.DataForEvaluations
+                                            .Where(d => d.Office.Code == record.officeID && d.PointOfEvaluation.AutoApp == AutoApps.ร้อยละของการแนะนำและตรวจสอบภาษีอากรผู้เสียภาษีอากรรายกลางและรายย่อม && d.PointOfEvaluation.Year == yearForRequest && d.Month == record.month)
+                                            .FirstOrDefault();
+                        if (dataForEvaluation != null)
+                        {
+                            dataForEvaluation.Expect = record.expect;
+                            dataForEvaluation.Result = record.result;
+                            dataForEvaluation.CompletedDate = new DateTime(yearForRequest.Year, dataForEvaluation.Month, DateTime.DaysInMonth(yearForRequest.Year, dataForEvaluation.Month));
+                            dataForEvaluation.Approve = Approve.ผษ_อนุมัติ;
+                            _context.SaveChanges();
+                        }
+                    }
+                }
+            }
+
+            url = "http://localhost:8082/morgor/p7.csv";
+            webRequest = WebRequest.Create(url) as HttpWebRequest;
+            if (webRequest == null)
+            {
+                return LocalRedirect("/");
+            }
+
+            using (var s = webRequest.GetResponse().GetResponseStream())
+            {
+                using (var sr = new StreamReader(s))
+                {
+                    var engine = new FileHelperEngine<P11>();
+                    var records = engine.ReadStream(sr);
+
+                    foreach (var record in records)
+                    {
+                        yearForRequest = new DateTime(record.year - 543, 1, 1);
+
+                        var dataForEvaluation = _context.DataForEvaluations
+                                            .Where(d => d.Office.Code == record.officeID && d.PointOfEvaluation.AutoApp == AutoApps.ร้อยละของผู้เสียภาษีอากรที่ดำเนินการแนะนำและตรวจสอบภาษีอากรแล้วเสร็จ && d.PointOfEvaluation.Year == yearForRequest && d.Month == record.month)
+                                            .FirstOrDefault();
+                        if (dataForEvaluation != null)
+                        {
+                            dataForEvaluation.Expect = record.expect;
+                            dataForEvaluation.Result = record.result;
+                            dataForEvaluation.CompletedDate = new DateTime(yearForRequest.Year, dataForEvaluation.Month, DateTime.DaysInMonth(yearForRequest.Year, dataForEvaluation.Month));
+                            dataForEvaluation.Approve = Approve.ผษ_อนุมัติ;
+                            _context.SaveChanges();
+                        }
+                    }
+                }
+            }
+
+            return LocalRedirect("/");
+
+        } //End มก. ตัวชี้วัด 64 2-7
     }
 }

@@ -1029,6 +1029,7 @@ namespace EPES.Controllers
             pointOfEvaluationToUpdate.FixExpect = dataView.point.FixExpect;
             pointOfEvaluationToUpdate.CalPerMonth = dataView.point.CalPerMonth;
             pointOfEvaluationToUpdate.WeightAll = dataView.point.WeightAll;
+            pointOfEvaluationToUpdate.StartZero = dataView.point.StartZero;
 
             //if (await TryUpdateModelAsync<PointOfEvaluationViewModel>(
             //    dataView.point, "",
