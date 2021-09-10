@@ -231,7 +231,7 @@
 
             fields.Add()
                 .Caption("น้ำหนัก (%)")
-                .DataField("weight")
+                .DataField("weightOfMonth")
                 .SummaryType(SummaryType.Sum)
                 .Format(f => f.Type(Format.FixedPoint).Precision(4))
                 .Area(PivotGridArea.Data);

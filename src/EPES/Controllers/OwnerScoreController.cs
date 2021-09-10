@@ -65,24 +65,48 @@ namespace EPES.Controllers
                 }
             }
 
-            var scoreDrafts = _context.ScoreDrafts.Include(p=>p.PointOfEvaluation).Where(sd => sd.Office.Code == office && sd.PointOfEvaluation.SubPoint == 0 && sd.PointOfEvaluation.Year == yearForQuery)
-                                                    .Select(i => new
-                                                    {
-                                                        i.Id,
-                                                        i.PointOfEvaluation.Plan,
-                                                        i.PointOfEvaluation.Point,
-                                                        i.PointOfEvaluation.SubPoint,
-                                                        i.PointOfEvaluation.Name,
-                                                        i.PointOfEvaluation.Weight,
-                                                        i.ScoreValue,
-                                                        i.ScoreApprove,
-                                                        i.LastMonth,
-                                                        i.PointOfEvaluation.Year.Year,
-                                                        cal = (i.PointOfEvaluation.Weight * i.ScoreValue /100 ),
-                                                        calApprove = (i.PointOfEvaluation.Weight * i.ScoreApprove / 100)
-                                                    });
+            var scoreDrafts = _context.ScoreDrafts.Include(p => p.PointOfEvaluation).Include(d => d.PointOfEvaluation.DataForEvaluations).Where(sd => sd.Office.Code == office && sd.PointOfEvaluation.SubPoint == 0 && sd.PointOfEvaluation.Year == yearForQuery);
 
-            return Json(await DataSourceLoader.LoadAsync(scoreDrafts, loadOptions));
+            //List<ScoreDraft> scoreTemp = new List<ScoreDraft>();
+
+            foreach (var item in scoreDrafts)
+            {
+                if (!item.PointOfEvaluation.WeightAll)
+                {
+                    foreach (var data in item.PointOfEvaluation.DataForEvaluations)
+                    {
+                        if (data.Month == item.LastMonth)
+                        {
+                            item.weightOfMonth = data.Weight;
+                        }
+                    }
+                }
+                else
+                {
+                    item.weightOfMonth = item.PointOfEvaluation.Weight;
+                }
+
+                //scoreTemp.Add(item);
+            }
+
+            var score = scoreDrafts.Select(i => new
+            {
+                i.Id,
+                i.PointOfEvaluation.Plan,
+                i.PointOfEvaluation.Point,
+                i.PointOfEvaluation.SubPoint,
+                i.PointOfEvaluation.Name,
+                i.ScoreValue,
+                i.ScoreApprove,
+                i.LastMonth,
+                i.PointOfEvaluation.Year.Year,
+                cal = !i.PointOfEvaluation.WeightAll ? (i.weightOfMonth * i.ScoreValue / 100) : (i.PointOfEvaluation.Weight * i.ScoreValue / 100),
+                calApprove = !i.PointOfEvaluation.WeightAll ?  (i.weightOfMonth * i.ScoreApprove / 100) : (i.PointOfEvaluation.Weight * i.ScoreValue / 100),
+                i.weightOfMonth
+            });
+
+
+            return Json(await DataSourceLoader.LoadAsync(score, loadOptions));
         }
     }
 }

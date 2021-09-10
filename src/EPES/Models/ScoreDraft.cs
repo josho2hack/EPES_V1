@@ -35,22 +35,11 @@ namespace EPES.Models
         [Column(TypeName = "decimal(5, 4)")]
         public decimal ScoreApprove { get; set; } = 0;
 
-        //[NotMapped]
-        //[Display(Name = "คะแนน")]
-        //[Column(TypeName = "decimal(5, 4)")]
-        //public decimal? ScoreValueToReport {
-        //    get
-        //    {
-        //        if (this.ScoreValue == 0)
-        //        {
-        //            return null;
-        //        }
-        //        else
-        //        {
-        //            return this.ScoreValue;
-        //        }
-        //    } 
-        //}
+        [NotMapped]
+        [Display(Name = "น้ำหนักร้อยละ")]
+        [DisplayFormat(DataFormatString = "{0:N2}", ApplyFormatInEditMode = true)]
+        [Column(TypeName = "decimal(7, 4)")]
+        public decimal? weightOfMonth { get; set; } = 0;
 
         //[NotMapped]
         //[Display(Name = "คะแนนที่อนุมัติ")]
