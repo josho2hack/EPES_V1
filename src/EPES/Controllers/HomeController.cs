@@ -408,7 +408,7 @@ namespace EPES.Controllers
 
             var expectHQ = await _context.DataForEvaluations.Where(s => s.PointOfEvaluation.Point == 2 && s.PointOfEvaluation.Year == yearForRequest && s.Office.Code == "00009000").Select(o => new { o.Expect }).SumAsync(s => s.Expect);
 
-            var expectNHQ = await _context.DataForEvaluations.Where(s => s.PointOfEvaluation.Point == 1 && s.PointOfEvaluation.Year == yearForRequest && s.Office.Code != "00009000" && s.Office.Code.Substring(2, 6) != "000000" && s.Office.Code.Substring(5, 3) == "000").Select(o => new { o.Expect }).SumAsync(s => s.Expect);
+            var expectNHQ = await _context.DataForEvaluations.Where(s => s.PointOfEvaluation.Point == 1 && s.PointOfEvaluation.Year == yearForRequest && s.Office.Code.substring(1, 2) != "00" && s.Office.Code.Substring(3, 6) != "000000" && s.Office.Code.Substring(6, 3) == "000").Select(o => new { o.Expect }).SumAsync(s => s.Expect);
 
             decimal expectHQLastMonth = 0;
             if (DateTime.Now.AddMonths(-1).Month >= 10)
