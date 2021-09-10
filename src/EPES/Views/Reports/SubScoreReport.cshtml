@@ -133,7 +133,7 @@
     .RowHeaderLayout(PivotGridRowHeadersLayout.Tree)
     //.AllowExpandAll(true)
     .DataSource(d => d
-        .Store(s => s.Mvc().Controller("OwnerScore").Key("Id").LoadAction("Get").LoadParams(new { selectoffice = Model.selectoffice ,yearPoint = Model.yearPoint}))
+        .Store(s => s.Mvc().Controller("OwnerScore").Key("Id").LoadAction("GetSub").LoadParams(new { selectoffice = Model.selectoffice ,yearPoint = Model.yearPoint}))
 
         .Fields(fields => {
         fields.Add()
@@ -231,7 +231,7 @@
 
             fields.Add()
                 .Caption("น้ำหนัก (%)")
-                .DataField("weight")
+                .DataField("weightOfMonth")
                 .SummaryType(SummaryType.Sum)
                 .Format(f => f.Type(Format.FixedPoint).Precision(4))
                 .Area(PivotGridArea.Data);
