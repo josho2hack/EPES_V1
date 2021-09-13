@@ -57,8 +57,8 @@
                     <div class="row no-gutters align-items-center">
                         <div class="col mr-2">
                             <div class="text-xs font-weight-bold text-success text-uppercase mb-1">จำนวนผู้เสียภาษีรายใหม่ เดือน @DateTime.Now.AddMonths(-1).ToString("MMMMM yyyy")</div>
-                            <div class="h5 mb-0 font-weight-bold text-gray-800">ประมาณการสะสม @((ViewBag.ExpectLastMonthM2[0] + ViewBag.ExpectLastMonthM2[1]).ToString("N0")) ราย</div>
-                            <div class="h5 mb-0 font-weight-bold text-gray-800">ผลสะสม @((ViewBag.ResultLastMonthM2[0] + ViewBag.ResultLastMonthM2[1]).ToString("N0")) ราย</div>
+                            <div class="h5 mb-0 font-weight-bold text-gray-800">ประมาณการสะสม @((ViewBag.ExpectLastMonthM2[1]).ToString("N0")) ราย</div>
+                            <div class="h5 mb-0 font-weight-bold text-gray-800">ผลสะสม @((ViewBag.ResultLastMonthM2[1]).ToString("N0")) ราย</div>
                         </div>
                         <div class="col-auto">
                             <i class="fas fa-calendar fa-2x text-gray-300"></i>
@@ -987,7 +987,7 @@
                                             )
                                         )*@
                                         .DataSource(new[] {
-                                            new { office = "เป้าหมาย", value = (ViewBag.ExpectM2[1] - ViewBag.ResultLastMonthM2[1]) },
+                                            new { office = "เป้าหมาย", value = (ViewBag.ExpectM2[1]) },
                                             new { office = "ผล", value = ViewBag.ResultLastMonthM2[1] }
                                         })
                                     )
@@ -1069,7 +1069,7 @@
                                         <thead>
                                             <tr>
                                                 <th scope="col"></th>
-                                                <th scope="col">รวม</th>
+                                                <!-- <th scope="col">รวม</th>-->
                                                 <th scope="col">สภ.</th>
                                                 <th scope="col">สท.</th>
                                             </tr>
@@ -1077,19 +1077,19 @@
                                         <tbody>
                                             <tr>
                                                 <th scope="row">เป้าหมายรวมปีงบประมาณ </th>
-                                                <td>@((ViewBag.ExpectM2[0] + ViewBag.ExpectM2[1]).ToString("N0"))</td>
+                                                <!-- <td>@((ViewBag.ExpectM2[0] + ViewBag.ExpectM2[1]).ToString("N0"))</td> -->
                                                 <td>@(ViewBag.ExpectM2[0].ToString("N0"))</td>
                                                 <td>@(ViewBag.ExpectM2[1].ToString("N0"))</td>
                                             </tr>
                                             <tr>
                                                 <th scope="row">เป้าหมาย ณ เดือน @DateTime.Now.AddMonths(-1).ToString("MMMM")   ปีงบประมาณ @(DateTime.Now.Month > 9 ? DateTime.Now.AddYears(1).ToString("yyyy") : DateTime.Now.ToString("yyyy"))</th>
-                                                <td>@((ViewBag.ExpectLastMonthM2[0] + ViewBag.ExpectLastMonthM2[1]).ToString("N0"))</td>
+                                                <!-- <td>@((ViewBag.ExpectLastMonthM2[0] + ViewBag.ExpectLastMonthM2[1]).ToString("N0"))</td> -->
                                                 <td>@(ViewBag.ExpectLastMonthM2[0].ToString("N0"))</td>
                                                 <td>@(ViewBag.ExpectLastMonthM2[1].ToString("N0"))</td>
                                             </tr>
                                             <tr>
                                                 <th scope="row">ผลสะสม ณ เดือน @DateTime.Now.AddMonths(-1).ToString("MMMM")   ปีงบประมาณ @(DateTime.Now.Month > 9 ? DateTime.Now.AddYears(1).ToString("yyyy") : DateTime.Now.ToString("yyyy"))</th>
-                                                <td>@((ViewBag.ResultLastMonthM2[0] + ViewBag.ResultLastMonthM2[1]).ToString("N0"))</td>
+                                                <!-- <td>@((ViewBag.ResultLastMonthM2[0] + ViewBag.ResultLastMonthM2[1]).ToString("N0"))</td> -->
                                                 <td>@(ViewBag.ResultLastMonthM2[0].ToString("N0"))</td>
                                                 <td>@(ViewBag.ResultLastMonthM2[1].ToString("N0")) </td>
                                             </tr>
@@ -1510,7 +1510,7 @@
                                             )
                                         )*@
                                         .DataSource(new[] {
-                                            new { office = "เป้าหมาย", value = (ViewBag.ExpectLastMonthM3[1] - ViewBag.ResultLastMonthM3[1]) },
+                                            new { office = "เป้าหมาย", value = (ViewBag.ExpectLastMonthM3[1]) },
                                             new { office = "ผล", value = ViewBag.ResultLastMonthM3[1] }
                                         })
                                     )
@@ -1539,21 +1539,21 @@
                                         <tbody>
                                             <tr>
                                                 <th scope="row">เป้าหมายรวมปีงบประมาณ </th>
-                                                <td>@(((ViewBag.ExpectM3[0] + ViewBag.ExpectM3[1])/1000000).ToString("N4"))</td>
-                                                <td>@((ViewBag.ExpectM3[0]/1000000).ToString("N4"))</td>
-                                                <td>@((ViewBag.ExpectM3[1]/1000000).ToString("N4"))</td>
+                                                <td>@(((ViewBag.ExpectM3[0] + ViewBag.ExpectM3[1])).ToString("N4"))</td>
+                                                <td>@((ViewBag.ExpectM3[0]).ToString("N4"))</td>
+                                                <td>@((ViewBag.ExpectM3[1]).ToString("N4"))</td>
                                             </tr>
                                             <tr>
                                                 <th scope="row">เป้าหมาย ณ เดือน @DateTime.Now.AddMonths(-1).ToString("MMMM")   ปีงบประมาณ @(DateTime.Now.Month > 9 ? DateTime.Now.AddYears(1).ToString("yyyy") : DateTime.Now.ToString("yyyy"))</th>
-                                                <td>@(((ViewBag.ExpectLastMonthM3[0] + ViewBag.ExpectLastMonthM3[1])/1000000).ToString("N4"))</td>
-                                                <td>@((ViewBag.ExpectLastMonthM3[0]/1000000).ToString("N4"))</td>
-                                                <td>@((ViewBag.ExpectLastMonthM3[1]/1000000).ToString("N4"))</td>
+                                                <td>@(((ViewBag.ExpectLastMonthM3[0] + ViewBag.ExpectLastMonthM3[1])).ToString("N4"))</td>
+                                                <td>@((ViewBag.ExpectLastMonthM3[0]).ToString("N4"))</td>
+                                                <td>@((ViewBag.ExpectLastMonthM3[1]).ToString("N4"))</td>
                                             </tr>
                                             <tr>
                                                 <th scope="row">ผลสะสม ณ เดือน @DateTime.Now.AddMonths(-1).ToString("MMMM")   ปีงบประมาณ @(DateTime.Now.Month > 9 ? DateTime.Now.AddYears(1).ToString("yyyy") : DateTime.Now.ToString("yyyy"))</th>
-                                                <td>@(((ViewBag.ResultLastMonthM3[0] + ViewBag.ResultLastMonthM3[1])/1000000).ToString("N4"))</td>
-                                                <td>@((ViewBag.ResultLastMonthM3[0]/1000000).ToString("N4"))</td>
-                                                <td>@((ViewBag.ResultLastMonthM3[1]/1000000).ToString("N4")) </td>
+                                                <td>@(((ViewBag.ResultLastMonthM3[0] + ViewBag.ResultLastMonthM3[1])).ToString("N4"))</td>
+                                                <td>@((ViewBag.ResultLastMonthM3[0]).ToString("N4"))</td>
+                                                <td>@((ViewBag.ResultLastMonthM3[1]).ToString("N4")) </td>
                                             </tr>
                                         </tbody>
                                     </table>
@@ -1867,7 +1867,7 @@
                                         <thead>
                                             <tr>
                                                 <th scope="col"></th>
-                                                <th scope="col">รวม</th>
+                                                <!-- <th scope="col">รวม</th> -->
                                                 <th scope="col">สภ.</th>
                                                 <th scope="col">สท.</th>
                                             </tr>
@@ -1875,19 +1875,19 @@
                                         <tbody>
                                             <tr>
                                                 <th scope="row">เป้าหมายรวมปีงบประมาณ </th>
-                                                <td>@((ViewBag.ExpectM4[0] + ViewBag.ExpectM4[1]).ToString("N4")) %</td>
+                                                <!-- <td>@((ViewBag.ExpectM4[0] + ViewBag.ExpectM4[1]).ToString("N4")) %</td> -->
                                                 <td>@(ViewBag.ExpectM4[0].ToString("N4")) %</td>
                                                 <td>@(ViewBag.ExpectM4[1].ToString("N4")) %</td>
                                             </tr>
                                             <tr>
                                                 <th scope="row">เป้าหมาย ณ เดือน @DateTime.Now.AddMonths(-1).ToString("MMMM")   ปีงบประมาณ @(DateTime.Now.Month > 9 ? DateTime.Now.AddYears(1).ToString("yyyy") : DateTime.Now.ToString("yyyy"))</th>
-                                                <td>@((ViewBag.ExpectLastMonthM4[0] + ViewBag.ExpectLastMonthM4[1]).ToString("N4")) %</td>
+                                                <!-- <td>@((ViewBag.ExpectLastMonthM4[0] + ViewBag.ExpectLastMonthM4[1]).ToString("N4")) %</td> -->
                                                 <td>@(ViewBag.ExpectLastMonthM4[0].ToString("N4")) %</td>
                                                 <td>@(ViewBag.ExpectLastMonthM4[1].ToString("N4")) %</td>
                                             </tr>
                                             <tr>
                                                 <th scope="row">ผลสะสม ณ เดือน @DateTime.Now.AddMonths(-1).ToString("MMMM")   ปีงบประมาณ @(DateTime.Now.Month > 9 ? DateTime.Now.AddYears(1).ToString("yyyy") : DateTime.Now.ToString("yyyy"))</th>
-                                                <td>@((ViewBag.ResultLastMonthM4[0] + ViewBag.ResultLastMonthM4[1]).ToString("N4")) %</td>
+                                                <!-- <td>@((ViewBag.ResultLastMonthM4[0] + ViewBag.ResultLastMonthM4[1]).ToString("N4")) %</td> -->
                                                 <td>@(ViewBag.ResultLastMonthM4[0].ToString("N4")) %</td>
                                                 <td>@(ViewBag.ResultLastMonthM4[1].ToString("N4")) %</td>
                                             </tr>
@@ -2348,7 +2348,7 @@
                         <div id="hq" class="col-xl-4 mb-3">
                             <div class="card">
                                 <div class="card-header bg-light">
-                                    สภ.
+                                    สภ. 1 - 3
                                 </div>
                                 <div class="card-body">
                                     <div class="row">
@@ -2439,7 +2439,7 @@
                         <div id="nhq" runat="server" class="col-xl-4 mb-3">
                             <div class="card">
                                 <div class="card-header bg-light">
-                                    สท.
+                                    สภ. 4 - 12 (รวม สท.)
                                 </div>
                                 <div class="card-body">
                                     <div class="row">
@@ -2540,8 +2540,8 @@
                                             <tr>
                                                 <th scope="col"></th>
                                                 <th scope="col">รวม</th>
-                                                <th scope="col">สภ.</th>
-                                                <th scope="col">สท.</th>
+                                                <th scope="col">สภ. 1 - 3</th>
+                                                <th scope="col">สภ. 4 - 12(รวม สท.)</th>
                                             </tr>
                                         </thead>
                                         <tbody>
