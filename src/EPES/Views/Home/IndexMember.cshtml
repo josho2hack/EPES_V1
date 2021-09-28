@@ -183,7 +183,7 @@
                         หมวด 1 : ด้านจัดเก็บ
                     </h6>
                     <h6 class="m-0 font-weight-bold text-primary">
-                        ตัวชี้วัดที่ 1 : ร้อยละของผลการจัดเก็บเทียบกับประมาณการ
+                        ตัวชี้วัดที่ @(ViewBag.PointM1) : ร้อยละของผลการจัดเก็บเทียบกับประมาณการ
                     </h6>
                 </div>
                 <!-- Card Body -->
@@ -652,7 +652,7 @@
                         หมวด 2 : ด้านสำรวจ
                     </h6>
                     <h6 class="m-0 font-weight-bold text-primary">
-                        ตัวชี้วัดที่ 10 : จำนวนผู้เสียภาษีรายใหม่ที่เพิ่มขึ้นจากการปฏิบัติงานสำรวจเปรียบเทียบกับประมาณการที่กรมสรรพากรกำหนด
+                        ตัวชี้วัดที่ @(ViewBag.PointM2) : จำนวนผู้เสียภาษีรายใหม่ที่เพิ่มขึ้นจากการปฏิบัติงานสำรวจเปรียบเทียบกับประมาณการที่กรมสรรพากรกำหนด
                     </h6>
                 </div>
                 <!-- Card Body -->
@@ -1114,7 +1114,7 @@
                         หมวด 3 : ด้านเร่งรัด
                     </h6>
                     <h6 class="m-0 font-weight-bold text-primary">
-                        ตัวชี้วัดที่ 6 : ร้อยละของผลการเร่งรัดได้เม็ดเงินเปรียบเทียบกับประมาณการ
+                        ตัวชี้วัดที่ @(ViewBag.PointM3) : ร้อยละของผลการเร่งรัดได้เม็ดเงินเปรียบเทียบกับประมาณการ
                     </h6>
                 </div>
                 <!-- Card Body -->
@@ -1576,7 +1576,7 @@
                         หมวด 4 : ด้านคืนภาษี
                     </h6>
                     <h6 class="m-0 font-weight-bold text-primary">
-                        ตัวชี้วัดที่ 9 : ร้อยละของการบริหารการคืนภาษีเงินได้บุคคลธรรมดาประจำปีภาษี @(DateTime.Now.Month > 9 ? DateTime.Now.ToString("yyyy") : DateTime.Now.AddYears(-1).ToString("yyyy"))
+                        ตัวชี้วัดที่ @(ViewBag.PointM4) : ร้อยละของการบริหารการคืนภาษีเงินได้บุคคลธรรมดาประจำปีภาษี @(DateTime.Now.Month > 9 ? DateTime.Now.ToString("yyyy") : DateTime.Now.AddYears(-1).ToString("yyyy"))
                     </h6>
                 </div>
                 <!-- Card Body -->
@@ -1912,7 +1912,7 @@
                         หมวด 5 : ด้านบริการ
                     </h6>
                     <h6 class="m-0 font-weight-bold text-primary">
-                        ตัวชี้วัดที่ 13 : ร้อยละของจำนวนแบบฯ ที่ยื่นผ่านอินเทอรืเนตเทียบกับเป้าหมายที่กำหนด
+                        ตัวชี้วัดที่ @(ViewBag.PointM5) : ร้อยละของจำนวนแบบฯ ที่ยื่นผ่านอินเทอรืเนตเทียบกับเป้าหมายที่กำหนด
                     </h6>
                 </div>
                 <!-- Card Body -->
@@ -2248,7 +2248,7 @@
                         หมวด 6 : ด้านเบิกจ่าย
                     </h6>
                     <h6 class="m-0 font-weight-bold text-primary">
-                        ตัวชี้วัดที่ 15 : ร้อยละของความสำเร็จของการเบิกจ่ายงบประมาณ ประจำปีงบประมาณ @(DateTime.Now.Month > 9 ? DateTime.Now.AddYears(1).ToString("yyyy") : DateTime.Now.ToString("yyyy"))
+                        ตัวชี้วัดที่ @(ViewBag.PointM6) : ร้อยละของความสำเร็จของการเบิกจ่ายงบประมาณ ประจำปีงบประมาณ @(DateTime.Now.Month > 9 ? DateTime.Now.AddYears(1).ToString("yyyy") : DateTime.Now.ToString("yyyy"))
                     </h6>
                 </div>
                 <!-- Card Body -->
