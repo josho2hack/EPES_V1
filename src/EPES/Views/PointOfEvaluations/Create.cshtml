@@ -89,7 +89,7 @@
                             <span asp-validation-for="point.Weight" class="text-danger"></span>
                         </div>
                         <div class="form-check">
-                            <input type="checkbox" asp-for="point.WeightAll" class="form-check-input" checked />
+                            <input type="checkbox" asp-for="point.WeightAll" class="form-check-input" />
                             <label asp-for="point.WeightAll" class="form-check-label"></label>
                             <span asp-validation-for="point.WeightAll" class="text-danger"></span>
                         </div>
@@ -752,7 +752,7 @@
                                     <th>
                                         เดือน
                                     </th>
-                                    <th>
+                                    <th id="expect_Title">
                                         เป้าหมาย/ประมาณการ
                                     </th>
                                     <th>
@@ -765,7 +765,7 @@
                                     <td>
                                         @(new DateTime(1, 10, 1).ToString("MMMM"))
                                     </td>
-                                    <td>
+                                    <td id="expect10">
                                         <input type="number" name="expect10" class="form-control" value="0" />
                                     </td>
                                     <td>
@@ -776,7 +776,7 @@
                                     <td>
                                         @(new DateTime(1, 11, 1).ToString("MMMM"))
                                     </td>
-                                    <td>
+                                    <td id="expect11">
                                         <input type="number" name="expect11" class="form-control" value="0" />
                                     </td>
                                     <td>
@@ -787,7 +787,7 @@
                                     <td>
                                         @(new DateTime(1, 12, 1).ToString("MMMM"))
                                     </td>
-                                    <td>
+                                    <td id="expect12">
                                         <input type="number" name="expect12" class="form-control" value="0" />
                                     </td>
                                     <td>
@@ -798,7 +798,7 @@
                                     <td>
                                         @(new DateTime(1, 1, 1).ToString("MMMM"))
                                     </td>
-                                    <td>
+                                    <td id="expect1">
                                         <input type="number" name="expect1" class="form-control" value="0" />
                                     </td>
                                     <td>
@@ -809,7 +809,7 @@
                                     <td>
                                         @(new DateTime(1, 2, 1).ToString("MMMM"))
                                     </td>
-                                    <td>
+                                    <td id="expect2">
                                         <input type="number" name="expect2" class="form-control" value="0" />
                                     </td>
                                     <td>
@@ -820,7 +820,7 @@
                                     <td>
                                         @(new DateTime(1, 3, 1).ToString("MMMM"))
                                     </td>
-                                    <td>
+                                    <td id="expect3">
                                         <input type="number" name="expect3" class="form-control" value="0" />
                                     </td>
                                     <td>
@@ -831,7 +831,7 @@
                                     <td>
                                         @(new DateTime(1, 4, 1).ToString("MMMM"))
                                     </td>
-                                    <td>
+                                    <td id="expect4">
                                         <input type="number" name="expect4" class="form-control" value="0" />
                                     </td>
                                     <td>
@@ -842,7 +842,7 @@
                                     <td>
                                         @(new DateTime(1, 5, 1).ToString("MMMM"))
                                     </td>
-                                    <td>
+                                    <td id="expect5">
                                         <input type="number" name="expect5" class="form-control" value="0" />
                                     </td>
                                     <td>
@@ -853,7 +853,7 @@
                                     <td>
                                         @(new DateTime(1, 6, 1).ToString("MMMM"))
                                     </td>
-                                    <td>
+                                    <td id="expect6">
                                         <input type="number" name="expect6" class="form-control" value="0" />
                                     </td>
                                     <td>
@@ -864,7 +864,7 @@
                                     <td>
                                         @(new DateTime(1, 7, 1).ToString("MMMM"))
                                     </td>
-                                    <td>
+                                    <td id="expect7">
                                         <input type="number" name="expect7" class="form-control" value="0" />
                                     </td>
                                     <td>
@@ -875,7 +875,7 @@
                                     <td>
                                         @(new DateTime(1, 8, 1).ToString("MMMM"))
                                     </td>
-                                    <td>
+                                    <td id="expect8">
                                         <input type="number" name="expect8" class="form-control" value="0" />
                                     </td>
                                     <td>
@@ -886,7 +886,7 @@
                                     <td>
                                         @(new DateTime(1, 9, 1).ToString("MMMM"))
                                     </td>
-                                    <td>
+                                    <td id="expect9">
                                         <input type="number" name="expect9" class="form-control" value="0" />
                                     </td>
                                     <td>
@@ -913,6 +913,7 @@
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
     <script>
         $(function () {
+            $("#point_WeightAll").prop("checked", true);
             $("#roundNumber").change(function () {
                 if ($(this).val() == 2) {
                     if ($("#point_Unit").children("option:selected").val() == 0) {
@@ -958,6 +959,19 @@
             $("#point_Unit").change(function () {
                 if ($(this).children("option:selected").val() == 0) {
                     $("#DataForEvalutionTable").show();
+                    $("#expect_Title").show();
+                    $("#expect10").show();
+                    $("#expect11").show();
+                    $("#expect12").show();
+                    $("#expect1").show();
+                    $("#expect2").show();
+                    $("#expect3").show();
+                    $("#expect4").show();
+                    $("#expect5").show();
+                    $("#expect6").show();
+                    $("#expect7").show();
+                    $("#expect8").show();
+                    $("#expect9").show();
                     $("#roundNumber").val(1);
                     $("#RateRound1").show();
                     $("#RateRound2").hide();
@@ -966,7 +980,20 @@
                     $("#LevelRateRound1").hide();
                     $("#LevelRateRound2").hide();
                 } else if ($(this).children("option:selected").val() == 1) {
-                    $("#DataForEvalutionTable").hide();
+                    $("#DataForEvalutionTable").show();
+                    $("#expect_Title").hide();
+                    $("#expect10").hide();
+                    $("#expect11").hide();
+                    $("#expect12").hide();
+                    $("#expect1").hide();
+                    $("#expect2").hide();
+                    $("#expect3").hide();
+                    $("#expect4").hide();
+                    $("#expect5").hide();
+                    $("#expect6").hide();
+                    $("#expect7").hide();
+                    $("#expect8").hide();
+                    $("#expect9").hide();
                     $("#roundNumber").val(1);
                     $("#RateRound1").hide();
                     $("#RateRound2").hide();
@@ -976,6 +1003,19 @@
                     $("#LevelRateRound2").hide();
                 } else if ($(this).children("option:selected").val() == 2) {
                     $("#DataForEvalutionTable").show();
+                    $("#expect_Title").show();
+                    $("#expect10").show();
+                    $("#expect11").show();
+                    $("#expect12").show();
+                    $("#expect1").show();
+                    $("#expect2").show();
+                    $("#expect3").show();
+                    $("#expect4").show();
+                    $("#expect5").show();
+                    $("#expect6").show();
+                    $("#expect7").show();
+                    $("#expect8").show();
+                    $("#expect9").show();
                     $("#roundNumber").val(1);
                     $("#RateRound1").hide();
                     $("#RateRound2").hide();
@@ -1230,6 +1270,7 @@
             });
 
             $("#point_WeightAll").change(function () {
+                //$(this).removeAttr("checked");
                 var w = $("#point_Weight").val();
                 if ($(this).is(":checked")) {                    
                     $("#weight10").val(w);

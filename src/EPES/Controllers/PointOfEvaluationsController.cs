@@ -574,8 +574,14 @@ namespace EPES.Controllers
                             _context.Update(pointMain);
                         }
                     }
-
+                    var w = dataView.point.WeightAll;
                     await _context.SaveChangesAsync();
+
+                    if (!w)
+                    {
+                        dataView.point.WeightAll = w;
+                        _context.Update(dataView.point);
+                    }
 
                     await SaveExpect(dataView.point.Id, dataView.point.OwnerOfficeId, 10, dataView.expect10, user.Id, dataView.weight10);
                     await SaveExpect(dataView.point.Id, dataView.point.OwnerOfficeId, 11, dataView.expect11, user.Id, dataView.weight11);
