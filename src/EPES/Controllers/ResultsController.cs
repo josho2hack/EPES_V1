@@ -52,7 +52,7 @@ namespace EPES.Controllers
             //ดึงข้อมูล เฉพาะในปีงบประมาณ ต.ค. (10) ปีก่อน - ก.ย. (09) ปีปัจจุบัน
             if (yearPoint == 0)
             {
-                if (DateTime.Now.Month == 10 || DateTime.Now.Month == 11 || DateTime.Now.Month == 12)
+                if (DateTime.Now.Month == 11 || DateTime.Now.Month == 12)
                 {
                     yearForQuery = new DateTime(DateTime.Now.AddYears(1).Year, 1, 1);
                     for (int i = 10; i <= 12; i++)
@@ -79,7 +79,7 @@ namespace EPES.Controllers
             }
             else
             {
-                if (DateTime.Now.Month == 10 || DateTime.Now.Month == 11 || DateTime.Now.Month == 12)
+                if (DateTime.Now.Month == 11 || DateTime.Now.Month == 12)
                 {
                     yearForQuery = new DateTime(DateTime.Now.AddYears(1 + yearPoint).Year, 1, 1);
                     for (int i = 10; i <= 12; i++)
@@ -89,6 +89,18 @@ namespace EPES.Controllers
                     for (int i = 1; i <= 9; i++)
                     {
                         list.Add(new { Value = i, Month = new DateTime(DateTime.Now.Year, i, 1).ToString("MMMM") + " " + new DateTime(DateTime.Now.AddYears(1 + yearPoint).Year, i, 1).ToString("yyyy") });
+                    }
+                }
+                else if (DateTime.Now.Month == 10)
+                {
+                    yearForQuery = new DateTime(DateTime.Now.AddYears(1).Year, 1, 1);
+                    for (int i = 10; i <= 12; i++)
+                    {
+                        list.Add(new { Value = i, Month = new DateTime(DateTime.Now.Year, i, 1).ToString("MMMM") + " " + new DateTime(DateTime.Now.Year, i, 1).ToString("yyyy") });
+                    }
+                    for (int i = 1; i <= 9; i++)
+                    {
+                        list.Add(new { Value = i, Month = new DateTime(DateTime.Now.Year, i, 1).ToString("MMMM") + " " + new DateTime(DateTime.Now.AddYears(1).Year, i, 1).ToString("yyyy") });
                     }
                 }
                 else
@@ -264,7 +276,7 @@ namespace EPES.Controllers
             //ดึงข้อมูล เฉพาะในปีงบประมาณ ต.ค. (10) ปีก่อน - ก.ย. (09) ปีปัจจุบัน
             if (yearPoint == 0)
             {
-                if (DateTime.Now.Month == 10 || DateTime.Now.Month == 11 || DateTime.Now.Month == 12)
+                if (DateTime.Now.Month == 11 || DateTime.Now.Month == 12)
                 {
                     yearForQuery = new DateTime(DateTime.Now.AddYears(1).Year, 1, 1);
                     for (int i = 10; i <= 12; i++)
@@ -291,7 +303,7 @@ namespace EPES.Controllers
             }
             else
             {
-                if (DateTime.Now.Month == 10 || DateTime.Now.Month == 11 || DateTime.Now.Month == 12)
+                if (DateTime.Now.Month == 11 || DateTime.Now.Month == 12)
                 {
                     yearForQuery = new DateTime(DateTime.Now.AddYears(1 + yearPoint).Year, 1, 1);
                     for (int i = 10; i <= 12; i++)
@@ -301,6 +313,18 @@ namespace EPES.Controllers
                     for (int i = 1; i <= 9; i++)
                     {
                         list.Add(new { Value = i, Month = new DateTime(DateTime.Now.Year, i, 1).ToString("MMMM") + " " + new DateTime(DateTime.Now.AddYears(1 + yearPoint).Year, i, 1).ToString("yyyy") });
+                    }
+                }
+                else if (DateTime.Now.Month == 10)
+                {
+                    yearForQuery = new DateTime(DateTime.Now.AddYears(1).Year, 1, 1);
+                    for (int i = 10; i <= 12; i++)
+                    {
+                        list.Add(new { Value = i, Month = new DateTime(DateTime.Now.Year, i, 1).ToString("MMMM") + " " + new DateTime(DateTime.Now.Year, i, 1).ToString("yyyy") });
+                    }
+                    for (int i = 1; i <= 9; i++)
+                    {
+                        list.Add(new { Value = i, Month = new DateTime(DateTime.Now.Year, i, 1).ToString("MMMM") + " " + new DateTime(DateTime.Now.AddYears(1).Year, i, 1).ToString("yyyy") });
                     }
                 }
                 else

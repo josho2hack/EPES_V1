@@ -64,9 +64,13 @@
                     <select asp-for="yearPoint" class="form-control col-md-6" onchange="this.form.submit()">
                         <option value="-1">
                             @{
-                                if (DateTime.Now.Month == 10 || DateTime.Now.Month == 11 || DateTime.Now.Month == 12)
+                                if (DateTime.Now.Month == 11 || DateTime.Now.Month == 12)
                                 {
                                     @DateTime.Now.ToString("yyyy");
+                                }
+                                else if (DateTime.Now.Month == 10)
+                                {
+                                    @DateTime.Now.AddYears(1).ToString("yyyy")
                                 }
                                 else
                                 {
@@ -76,7 +80,7 @@
                         </option>
                         <option value="0">
                             @{
-                                if (DateTime.Now.Month == 10 || DateTime.Now.Month == 11 || DateTime.Now.Month == 12)
+                                if (DateTime.Now.Month == 11 || DateTime.Now.Month == 12)
                                 {
                                     @DateTime.Now.AddYears(1).ToString("yyyy");
                                 }
