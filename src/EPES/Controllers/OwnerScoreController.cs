@@ -65,7 +65,7 @@ namespace EPES.Controllers
                 }
             }
 
-            var scoreDrafts = _context.ScoreDrafts.Include(p => p.PointOfEvaluation).Include(d => d.PointOfEvaluation.DataForEvaluations).Where(sd => sd.Office.Code == office && sd.PointOfEvaluation.SubPoint == 0 && sd.PointOfEvaluation.Year == yearForQuery);
+            var scoreDrafts = _context.ScoreDrafts.Include(p => p.PointOfEvaluation).Include(d => d.PointOfEvaluation.DataForEvaluations).Include(p => p.Office).Where(sd => sd.Office.Code == office && sd.PointOfEvaluation.SubPoint == 0 && sd.PointOfEvaluation.Year == yearForQuery && sd.ScoreValue > 0);
 
             //List<ScoreDraft> scoreTemp = new List<ScoreDraft>();
 
@@ -86,6 +86,7 @@ namespace EPES.Controllers
                     item.weightOfMonth = item.PointOfEvaluation.Weight;
                 }
 
+
                 //scoreTemp.Add(item);
             }
 
@@ -102,7 +103,8 @@ namespace EPES.Controllers
                 i.PointOfEvaluation.Year.Year,
                 cal = !i.PointOfEvaluation.WeightAll ? (i.weightOfMonth * i.ScoreValue / 100) : (i.PointOfEvaluation.Weight * i.ScoreValue / 100),
                 calApprove = !i.PointOfEvaluation.WeightAll ?  (i.weightOfMonth * i.ScoreApprove / 100) : (i.PointOfEvaluation.Weight * i.ScoreValue / 100),
-                i.weightOfMonth
+                i.weightOfMonth,
+                officeName = i.Office.Name
             });
 
 

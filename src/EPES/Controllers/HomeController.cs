@@ -540,7 +540,8 @@ namespace EPES.Controllers
 
 
             //---------------หมวด 2 ----------------------
-            decimal pointM2 = 12;
+            
+            decimal pointM2 = 10;
             var expectHQM2 = await _context.DataForEvaluations.Where(s => s.PointOfEvaluation.Point == pointM2 && s.PointOfEvaluation.Year == yearForRequest && s.Office.Code.Substring(0, 2) != "00" && s.Office.Code.Substring(2, 6) == "000000").Select(o => new { o.Expect }).SumAsync(s => s.Expect);
 
             var expectNHQM2 = await _context.DataForEvaluations.Where(s => s.PointOfEvaluation.Point == pointM2 && s.PointOfEvaluation.Year == yearForRequest && s.Office.Code.Substring(0, 2) != "00" && s.Office.Code.Substring(2, 6) != "000000" && s.Office.Code.Substring(5, 3) == "000").Select(o => new { o.Expect }).SumAsync(s => s.Expect);
@@ -668,8 +669,8 @@ namespace EPES.Controllers
 
 
             //---------------หมวด 3 ----------------------
-            decimal pointHQM3 = 9;
-            decimal pointNHQM3 = 8;
+            decimal pointHQM3 = 7;
+            decimal pointNHQM3 = 7;
             var expectHQM3 = await _context.DataForEvaluations.Where(s => s.PointOfEvaluation.Point == pointHQM3 && s.PointOfEvaluation.Year == yearForRequest && s.Office.Code == "00009000").Select(o => new { o.Expect }).SumAsync(s => s.Expect);
 
             var expectNHQM3 = await _context.DataForEvaluations.Where(s => s.PointOfEvaluation.Point == pointNHQM3 && s.PointOfEvaluation.Year == yearForRequest && s.Office.Code.Substring(0, 2) != "00" && s.Office.Code.Substring(5, 3) == "000" && s.Office.Code.Substring(2, 6) != "000000").Select(o => new { o.Expect }).SumAsync(s => s.Expect);
@@ -802,7 +803,7 @@ namespace EPES.Controllers
 
 
             //---------------หมวด 4 ----------------------
-            decimal pointM4 = 11;
+            decimal pointM4 = 9;
             var expectHQM4 = await _context.DataForEvaluations.Where(s => s.PointOfEvaluation.Point == pointM4 && s.PointOfEvaluation.Year == yearForRequest && s.Office.Code.Substring(0, 3) != "000" && s.Office.Code.Substring(2, 6) == "000000").Select(o => new { o.Expect }).SumAsync(s => s.Expect);
 
             var expectNHQM4 = await _context.DataForEvaluations.Where(s => s.PointOfEvaluation.Point == pointM4 && s.PointOfEvaluation.Year == yearForRequest && s.Office.Code.Substring(0, 3) != "000" && s.Office.Code.Substring(2, 6) != "000000" && s.Office.Code.Substring(5, 3) == "000").Select(o => new { o.Expect }).SumAsync(s => s.Expect);
@@ -927,8 +928,8 @@ namespace EPES.Controllers
 
 
             //---------------หมวด 5----------------------
-            decimal pointHQM5 = 12;
-            decimal pointNHQM5 = 15;
+            decimal pointHQM5 = 9;
+            decimal pointNHQM5 = 13;
             var expectHQM5 = await _context.DataForEvaluations.Where(s => s.PointOfEvaluation.Point == pointHQM5 && s.PointOfEvaluation.Year == yearForRequest && s.Office.Code == "00009000").Select(o => new { o.Expect }).SumAsync(s => s.Expect);
 
             var expectNHQM5 = await _context.DataForEvaluations.Where(s => s.PointOfEvaluation.Point == pointNHQM5 && s.PointOfEvaluation.Year == yearForRequest && s.Office.Code.Substring(0, 2) != "00" && s.Office.Code.Substring(5, 3) == "000" && s.Office.Code.Substring(2, 6) != "000000").Select(o => new { o.Expect }).SumAsync(s => s.Expect);
@@ -1062,7 +1063,7 @@ namespace EPES.Controllers
             //---------------หมวด 6----------------------
             // var expectHQM6 = await _context.DataForEvaluations.Where(s => s.PointOfEvaluation.Point == 15 && s.PointOfEvaluation.Year == yearForRequest && s.Office.Code.Substring(0, 3) != "000" && s.Office.Code.Substring(2, 6) == "000000").Select(o => new { o.Expect }).SumAsync(s => s.Expect);
             // only pak 1- 3
-            decimal pointM6 = 18;
+            decimal pointM6 = 16;
             var expectHQM6 = await _context.DataForEvaluations.Where(s => s.PointOfEvaluation.Point == pointM6 && s.PointOfEvaluation.Year == yearForRequest && (s.Office.Code.Substring(0, 2) == "01" || s.Office.Code.Substring(0, 2) == "02" || s.Office.Code.Substring(0, 2) == "03") && s.Office.Code.Substring(2, 6) == "000000").Select(o => new { o.Expect }).SumAsync(s => s.Expect);
 
             // var expectNHQM6 = await _context.DataForEvaluations.Where(s => s.PointOfEvaluation.Point == 15 && s.PointOfEvaluation.Year == yearForRequest && s.Office.Code.Substring(0, 3) != "000" && s.Office.Code.Substring(2, 6) != "000000" && s.Office.Code.Substring(5, 3) == "000").Select(o => new { o.Expect }).SumAsync(s => s.Expect);

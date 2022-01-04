@@ -483,6 +483,19 @@ namespace EPES.Controllers
 
                         if (!item.hasSub)
                         {
+                            int previousMonth = month - 1;
+                            if(month == 1)
+                            {
+                                previousMonth = 12;
+                            }
+                            else if(month == 10)
+                            {
+                                previousMonth = 10;
+                            }
+
+                            //var dde = await _context.DataForEvaluations.Where(d => d.Id == item.Id).Include(d => d.PointOfEvaluation).FirstOrDefaultAsync();
+                            var previousFile = _context.DataForEvaluations.Where(de => de.PointOfEvaluationId == item.poeid && (de.PointOfEvaluation.Unit == UnitOfPoint.ระดับ || de.PointOfEvaluation.Unit == UnitOfPoint.ระดับ_ร้อยละ) && de.Month == previousMonth && de.Result == item.Result && de.ResultLevelRate == item.ResultLevelRate && de.Completed == item.Completed).Select(ii => ii.AttachFile).FirstOrDefault();
+
                             if (item.Id != null)
                             {
                                 var de = await _context.DataForEvaluations.Where(d => d.Id == item.Id).Include(d => d.PointOfEvaluation).FirstOrDefaultAsync();
@@ -494,6 +507,11 @@ namespace EPES.Controllers
                                     de.Completed = item.Completed;
                                     de.TimeUpdate = DateTime.Now;
                                     de.Approve = Approve.รอพิจารณา;
+
+                                    if(previousFile != null && de.AttachFile == null)
+                                    {
+                                        de.AttachFile = previousFile;
+                                    }
 
                                     try
                                     {
@@ -520,6 +538,11 @@ namespace EPES.Controllers
                                 de.Completed = item.Completed;
                                 de.TimeUpdate = DateTime.Now;
                                 de.Approve = Approve.รอพิจารณา;
+
+                                if(previousFile != null)
+                                {
+                                    de.AttachFile = previousFile;
+                                }
 
                                 try
                                 {

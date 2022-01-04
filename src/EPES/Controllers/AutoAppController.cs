@@ -30,6 +30,7 @@ namespace EPES.Controllers
             _context = context;
             _userManager = userManager;
         }
+        
 
         public IActionResult Index()
         {
@@ -67,6 +68,12 @@ namespace EPES.Controllers
             webRequest.ContentType = "application/json";
             webRequest.UserAgent = "Nothing";
 
+            var yearForCompletedDate = yearForRequest.Year;
+            if(i >= 10)
+            {
+                yearForCompletedDate = yearForCompletedDate - 1;
+            }
+
             using (var s = webRequest.GetResponse().GetResponseStream())
             {
                 using (var sr = new StreamReader(s))
@@ -86,7 +93,8 @@ namespace EPES.Controllers
                             {
                                 //dataForEvaluation.Expect = t.CMCYforcast/1000000;
                                 dataForEvaluation.Result = t.CMcurrentYear / 1000000;
-                                dataForEvaluation.CompletedDate = new DateTime(yearForRequest.Year, dataForEvaluation.Month, DateTime.DaysInMonth(yearForRequest.Year, dataForEvaluation.Month));
+                                //dataForEvaluation.CompletedDate = new DateTime(yearForRequest.Year, dataForEvaluation.Month, DateTime.DaysInMonth(yearForRequest.Year, dataForEvaluation.Month));
+                                dataForEvaluation.CompletedDate = new DateTime(yearForCompletedDate, dataForEvaluation.Month, DateTime.DaysInMonth(yearForCompletedDate, dataForEvaluation.Month));
                                 dataForEvaluation.Approve = Approve.ผษ_อนุมัติ;
                                 _context.SaveChanges();
                             }
@@ -101,7 +109,8 @@ namespace EPES.Controllers
                             {
                                 //dataForEvaluation.Expect = t.CMCYforcast/1000000;
                                 dataForEvaluation.Result = t.CMcurrentYear / 1000000;
-                                dataForEvaluation.CompletedDate = new DateTime(yearForRequest.Year, dataForEvaluation.Month, DateTime.DaysInMonth(yearForRequest.Year, dataForEvaluation.Month));
+                                //dataForEvaluation.CompletedDate = new DateTime(yearForRequest.Year, dataForEvaluation.Month, DateTime.DaysInMonth(yearForRequest.Year, dataForEvaluation.Month));
+                                dataForEvaluation.CompletedDate = new DateTime(yearForCompletedDate, dataForEvaluation.Month, DateTime.DaysInMonth(yearForCompletedDate, dataForEvaluation.Month));
                                 dataForEvaluation.Approve = Approve.ผษ_อนุมัติ;
                                 _context.SaveChanges();
                             }
@@ -189,6 +198,13 @@ namespace EPES.Controllers
             webRequest.ContentType = "application/json";
             webRequest.UserAgent = "Nothing";
 
+
+            var yearForCompletedDate = yearForRequest.Year;
+            if (i >= 10)
+            {
+                yearForCompletedDate = yearForCompletedDate - 1;
+            }
+
             using (var s = webRequest.GetResponse().GetResponseStream())
             {
                 using (var sr = new StreamReader(s))
@@ -205,7 +221,8 @@ namespace EPES.Controllers
                         {
                             dataForEvaluation.Expect = t.CMlastYear / 1000000;
                             dataForEvaluation.ResultLevelRate = t.CMcurrentYear / 1000000;
-                            dataForEvaluation.CompletedDate = new DateTime(yearForRequest.Year, dataForEvaluation.Month, DateTime.DaysInMonth(yearForRequest.Year, dataForEvaluation.Month));
+                            //dataForEvaluation.CompletedDate = new DateTime(yearForRequest.Year, dataForEvaluation.Month, DateTime.DaysInMonth(yearForRequest.Year, dataForEvaluation.Month));
+                            dataForEvaluation.CompletedDate = new DateTime(yearForCompletedDate, dataForEvaluation.Month, DateTime.DaysInMonth(yearForCompletedDate, dataForEvaluation.Month));
                             _context.SaveChanges();
                         }
                     }
@@ -254,6 +271,14 @@ namespace EPES.Controllers
                             yearForRequest = new DateTime(record.year - 543, 1, 1);
                         }
 
+
+                        var yearForCompletedDate = yearForRequest.Year;
+                        if (record.month >= 10)
+                        {
+                            yearForCompletedDate = yearForCompletedDate - 1;
+                        }
+
+
                         dataForEvaluation = _context.DataForEvaluations
                                                 .Where(d => d.Office.Code == record.officeID && d.PointOfEvaluation.AutoApp == AutoApps.ผู้เสียภาษีรายใหม่ && d.PointOfEvaluation.Year == yearForRequest && d.Month == record.month)
                                                 .FirstOrDefault();
@@ -262,7 +287,8 @@ namespace EPES.Controllers
                         {
                             dataForEvaluation.Expect = record.expect;
                             dataForEvaluation.Result = record.result;
-                            dataForEvaluation.CompletedDate = new DateTime(yearForRequest.Year, dataForEvaluation.Month, DateTime.DaysInMonth(yearForRequest.Year, dataForEvaluation.Month));
+                            // dataForEvaluation.CompletedDate = new DateTime(yearForRequest.Year, dataForEvaluation.Month, DateTime.DaysInMonth(yearForRequest.Year, dataForEvaluation.Month));
+                            dataForEvaluation.CompletedDate = new DateTime(yearForCompletedDate, dataForEvaluation.Month, DateTime.DaysInMonth(yearForCompletedDate, dataForEvaluation.Month));
                             dataForEvaluation.Approve = Approve.ผษ_อนุมัติ;
                             _context.SaveChanges();
                         }
@@ -336,7 +362,13 @@ namespace EPES.Controllers
                                 {
                                     dataForEvaluation.Expect = sumExpect[i - 1][j];
                                     dataForEvaluation.Result = sumResult[i - 1][j];
-                                    dataForEvaluation.CompletedDate = new DateTime(year.Year, dataForEvaluation.Month, DateTime.DaysInMonth(year.Year, dataForEvaluation.Month));
+                                    if(j >= 10)
+                                    {
+                                        dataForEvaluation.CompletedDate = new DateTime(year.Year - 1, dataForEvaluation.Month, DateTime.DaysInMonth(year.Year -1, dataForEvaluation.Month));
+                                    } else
+                                    {
+                                        dataForEvaluation.CompletedDate = new DateTime(year.Year, dataForEvaluation.Month, DateTime.DaysInMonth(year.Year, dataForEvaluation.Month));
+                                    }
                                     dataForEvaluation.Approve = Approve.ผษ_อนุมัติ;
                                     _context.SaveChanges();
                                 }
@@ -390,6 +422,12 @@ namespace EPES.Controllers
                             yearForRequest = new DateTime(record.year - 543, 1, 1);
                         }
 
+                        var yearForCompletedDate = yearForRequest.Year;
+                        if (record.month >= 10)
+                        {
+                            yearForCompletedDate = yearForCompletedDate - 1;
+                        }
+
                         dataForEvaluation = _context.DataForEvaluations
                                                 .Where(d => d.Office.Code == record.officeID && d.PointOfEvaluation.AutoApp == AutoApps.ผู้เสียภาษีรายใหม่ที่ชำระภาษี && d.PointOfEvaluation.Year == yearForRequest && d.Month == record.month)
                                                 .FirstOrDefault();
@@ -397,7 +435,8 @@ namespace EPES.Controllers
                         if (dataForEvaluation != null)
                         {
                             dataForEvaluation.Expect = record.expect;
-                            dataForEvaluation.CompletedDate = new DateTime(yearForRequest.Year, dataForEvaluation.Month, DateTime.DaysInMonth(yearForRequest.Year, dataForEvaluation.Month));
+                            //dataForEvaluation.CompletedDate = new DateTime(yearForRequest.Year, dataForEvaluation.Month, DateTime.DaysInMonth(yearForRequest.Year, dataForEvaluation.Month));
+                            dataForEvaluation.CompletedDate = new DateTime(yearForCompletedDate, dataForEvaluation.Month, DateTime.DaysInMonth(yearForCompletedDate, dataForEvaluation.Month));
                             dataForEvaluation.Result = record.result;
                             dataForEvaluation.Approve = Approve.ผษ_อนุมัติ;
                             _context.SaveChanges();
@@ -471,7 +510,14 @@ namespace EPES.Controllers
                                 {
                                     dataForEvaluation.Expect = sumExpect[i - 1][j];
                                     dataForEvaluation.Result = sumResult[i - 1][j];
-                                    dataForEvaluation.CompletedDate = new DateTime(year.Year, dataForEvaluation.Month, DateTime.DaysInMonth(year.Year, dataForEvaluation.Month));
+                                    if(j >= 10)
+                                    {
+                                        dataForEvaluation.CompletedDate = new DateTime(year.Year - 1, dataForEvaluation.Month, DateTime.DaysInMonth(year.Year - 1, dataForEvaluation.Month));
+                                    } else
+                                    {
+                                        dataForEvaluation.CompletedDate = new DateTime(year.Year, dataForEvaluation.Month, DateTime.DaysInMonth(year.Year, dataForEvaluation.Month));
+                                    }
+                                    
                                     dataForEvaluation.Approve = Approve.ผษ_อนุมัติ;
                                     _context.SaveChanges();
                                 }
@@ -524,6 +570,12 @@ namespace EPES.Controllers
                             yearForRequest = new DateTime(record.year - 543, 1, 1);
                         }
 
+                        var yearForCompletedDate = yearForRequest.Year;
+                        if (record.month >= 10)
+                        {
+                            yearForCompletedDate = yearForCompletedDate - 1;
+                        }
+
                         dataForEvaluation = _context.DataForEvaluations
                                                 .Where(d => d.Office.Code == record.officeID && d.PointOfEvaluation.AutoApp == AutoApps.การนำข้อมูลสำรวจไปใช้งาน && d.PointOfEvaluation.Year == yearForRequest && d.Month == record.month)
                                                 .FirstOrDefault();
@@ -532,7 +584,8 @@ namespace EPES.Controllers
                         {
                             dataForEvaluation.Expect = record.expect;
                             dataForEvaluation.Result = record.result;
-                            dataForEvaluation.CompletedDate = new DateTime(yearForRequest.Year, dataForEvaluation.Month, DateTime.DaysInMonth(yearForRequest.Year, dataForEvaluation.Month));
+                            //dataForEvaluation.CompletedDate = new DateTime(yearForRequest.Year, dataForEvaluation.Month, DateTime.DaysInMonth(yearForRequest.Year, dataForEvaluation.Month));
+                            dataForEvaluation.CompletedDate = new DateTime(yearForCompletedDate, dataForEvaluation.Month, DateTime.DaysInMonth(yearForCompletedDate, dataForEvaluation.Month));
                             dataForEvaluation.Approve = Approve.ผษ_อนุมัติ;
                             _context.SaveChanges();
                         }
@@ -605,7 +658,14 @@ namespace EPES.Controllers
                                 {
                                     dataForEvaluation.Expect = sumExpect[i - 1][j];
                                     dataForEvaluation.Result = sumResult[i - 1][j];
-                                    dataForEvaluation.CompletedDate = new DateTime(year.Year, dataForEvaluation.Month, DateTime.DaysInMonth(year.Year, dataForEvaluation.Month));
+                                    if(j >= 10)
+                                    {
+                                        dataForEvaluation.CompletedDate = new DateTime(year.Year - 1, dataForEvaluation.Month, DateTime.DaysInMonth(year.Year - 1, dataForEvaluation.Month));
+                                    } else
+                                    {
+                                        dataForEvaluation.CompletedDate = new DateTime(year.Year, dataForEvaluation.Month, DateTime.DaysInMonth(year.Year, dataForEvaluation.Month));
+                                    }
+                                    
                                     dataForEvaluation.Approve = Approve.ผษ_อนุมัติ;
                                     _context.SaveChanges();
                                 }
@@ -627,7 +687,14 @@ namespace EPES.Controllers
                                 {
                                     dataForEvaluation.Expect = 0;
                                     dataForEvaluation.Result = 0;
-                                    dataForEvaluation.CompletedDate = new DateTime(year.Year, dataForEvaluation.Month, DateTime.DaysInMonth(year.Year, dataForEvaluation.Month));
+                                    if (j >= 10)
+                                    {
+                                        dataForEvaluation.CompletedDate = new DateTime(year.Year - 1, dataForEvaluation.Month, DateTime.DaysInMonth(year.Year - 1, dataForEvaluation.Month));
+                                    }
+                                    else
+                                    {
+                                        dataForEvaluation.CompletedDate = new DateTime(year.Year, dataForEvaluation.Month, DateTime.DaysInMonth(year.Year, dataForEvaluation.Month));
+                                    }
                                     dataForEvaluation.Approve = Approve.ผษ_อนุมัติ;
                                     _context.SaveChanges();
                                 }
@@ -642,7 +709,14 @@ namespace EPES.Controllers
                                 {
                                     dataForEvaluation.Expect = 0;
                                     dataForEvaluation.Result = 0;
-                                    dataForEvaluation.CompletedDate = new DateTime(year.Year, dataForEvaluation.Month, DateTime.DaysInMonth(year.Year, dataForEvaluation.Month));
+                                    if (j >= 10)
+                                    {
+                                        dataForEvaluation.CompletedDate = new DateTime(year.Year - 1, dataForEvaluation.Month, DateTime.DaysInMonth(year.Year - 1, dataForEvaluation.Month));
+                                    }
+                                    else
+                                    {
+                                        dataForEvaluation.CompletedDate = new DateTime(year.Year, dataForEvaluation.Month, DateTime.DaysInMonth(year.Year, dataForEvaluation.Month));
+                                    }
                                     dataForEvaluation.Approve = Approve.ผษ_อนุมัติ;
                                     _context.SaveChanges();
                                 }
@@ -660,7 +734,14 @@ namespace EPES.Controllers
                                 {
                                     dataForEvaluation.Expect = 0;
                                     dataForEvaluation.Result = 0;
-                                    dataForEvaluation.CompletedDate = new DateTime(year.Year, dataForEvaluation.Month, DateTime.DaysInMonth(year.Year, dataForEvaluation.Month));
+                                    if (j >= 10)
+                                    {
+                                        dataForEvaluation.CompletedDate = new DateTime(year.Year - 1, dataForEvaluation.Month, DateTime.DaysInMonth(year.Year - 1, dataForEvaluation.Month));
+                                    }
+                                    else
+                                    {
+                                        dataForEvaluation.CompletedDate = new DateTime(year.Year, dataForEvaluation.Month, DateTime.DaysInMonth(year.Year, dataForEvaluation.Month));
+                                    }
                                     dataForEvaluation.Approve = Approve.ผษ_อนุมัติ;
                                     _context.SaveChanges();
                                 }
@@ -675,9 +756,9 @@ namespace EPES.Controllers
 
         } //End สน. ตัวชี้วัด 64 14
 
-        public IActionResult GetP11() //มจ. ตัวชี้วัด 64 11
+        public IActionResult GetP5() // [มจ.] ร้อยละของการบริหารการคืนภาษี ตัวชี้วัด 64/11, 65/9
         {
-            string url = "http://localhost:8082/morjor/p11.csv";
+            string url = "http://localhost:8082/morjor/p5.csv";
             HttpWebRequest webRequest = WebRequest.Create(url) as HttpWebRequest;
             if (webRequest == null)
             {
@@ -698,6 +779,12 @@ namespace EPES.Controllers
                     {
                         yearForRequest = new DateTime(record.year - 543, 1, 1);
 
+                        var yearForCompletedDate = yearForRequest.Year;
+                        if (record.month >= 10)
+                        {
+                            yearForCompletedDate = yearForCompletedDate - 1;
+                        }
+
                         if (record.month == 1)
                         {
                             var dataForEvaluation = _context.DataForEvaluations
@@ -707,7 +794,8 @@ namespace EPES.Controllers
                             {
                                 dataForEvaluation.Expect = record.expect;
                                 dataForEvaluation.Result = record.result;
-                                dataForEvaluation.CompletedDate = new DateTime(yearForRequest.Year, dataForEvaluation.Month, DateTime.DaysInMonth(yearForRequest.Year, dataForEvaluation.Month));
+                                //dataForEvaluation.CompletedDate = new DateTime(yearForRequest.Year, dataForEvaluation.Month, DateTime.DaysInMonth(yearForRequest.Year, dataForEvaluation.Month));
+                                dataForEvaluation.CompletedDate = new DateTime(yearForCompletedDate, dataForEvaluation.Month, DateTime.DaysInMonth(yearForCompletedDate, dataForEvaluation.Month));
                                 dataForEvaluation.Approve = Approve.ผษ_อนุมัติ;
                                 _context.SaveChanges();
                             }
@@ -720,7 +808,8 @@ namespace EPES.Controllers
                                 {
                                     dataForEvaluation.Expect = 0;
                                     dataForEvaluation.Result = 0;
-                                    dataForEvaluation.CompletedDate = new DateTime(yearForRequest.Year, dataForEvaluation.Month, DateTime.DaysInMonth(yearForRequest.Year, dataForEvaluation.Month));
+                                    //dataForEvaluation.CompletedDate = new DateTime(yearForRequest.Year, dataForEvaluation.Month, DateTime.DaysInMonth(yearForRequest.Year, dataForEvaluation.Month));
+                                    dataForEvaluation.CompletedDate = new DateTime(yearForCompletedDate, dataForEvaluation.Month, DateTime.DaysInMonth(yearForCompletedDate, dataForEvaluation.Month));
                                     dataForEvaluation.Approve = Approve.ผษ_อนุมัติ;
                                     _context.SaveChanges();
                                 }
@@ -748,7 +837,8 @@ namespace EPES.Controllers
                             {
                                 dataForEvaluation.Expect = record.expect - sumExpect;
                                 dataForEvaluation.Result = record.result - sumResult;
-                                dataForEvaluation.CompletedDate = new DateTime(yearForRequest.Year, dataForEvaluation.Month, DateTime.DaysInMonth(yearForRequest.Year, dataForEvaluation.Month));
+                                //dataForEvaluation.CompletedDate = new DateTime(yearForRequest.Year, dataForEvaluation.Month, DateTime.DaysInMonth(yearForRequest.Year, dataForEvaluation.Month));
+                                dataForEvaluation.CompletedDate = new DateTime(yearForCompletedDate, dataForEvaluation.Month, DateTime.DaysInMonth(yearForCompletedDate, dataForEvaluation.Month));
                                 dataForEvaluation.Approve = Approve.ผษ_อนุมัติ;
                                 _context.SaveChanges();
                             }
@@ -762,9 +852,9 @@ namespace EPES.Controllers
 
         } //End มจ. ตัวชี้วัด 64 11
 
-        public IActionResult GetP15() //บอ. ตัวชี้วัด 64 15
+        public IActionResult GetP7() // [บอ.] จำนวนแบบที่ยื่นผ่านอินเทอร์เน็ต_ยกเว้น_90_91_94 ตัวชี้วัด 64/15, 65/13
         {
-            string url = "http://localhost:8082/boror/p15.csv";
+            string url = "http://localhost:8082/boror/p7.csv";
             HttpWebRequest webRequest = WebRequest.Create(url) as HttpWebRequest;
             if (webRequest == null)
             {
@@ -784,6 +874,12 @@ namespace EPES.Controllers
                     {
                         yearForRequest = new DateTime(record.year - 543, 1, 1);
 
+                        var yearForCompletedDate = yearForRequest.Year;
+                        if (record.month >= 10)
+                        {
+                            yearForCompletedDate = yearForCompletedDate - 1;
+                        }
+
                         var dataForEvaluation = _context.DataForEvaluations
                                             .Where(d => d.Office.Code == record.officeID && d.PointOfEvaluation.AutoApp == AutoApps.จำนวนแบบที่ยื่นผ่านอินเทอร์เน็ต_ยกเว้น_90_91_94 && d.PointOfEvaluation.Year == yearForRequest && d.Month == record.month)
                                             .FirstOrDefault();
@@ -791,7 +887,8 @@ namespace EPES.Controllers
                         {
                             dataForEvaluation.Expect = record.expect;
                             dataForEvaluation.Result = record.result;
-                            dataForEvaluation.CompletedDate = new DateTime(yearForRequest.Year, dataForEvaluation.Month, DateTime.DaysInMonth(yearForRequest.Year, dataForEvaluation.Month));
+                            //dataForEvaluation.CompletedDate = new DateTime(yearForRequest.Year, dataForEvaluation.Month, DateTime.DaysInMonth(yearForRequest.Year, dataForEvaluation.Month));
+                            dataForEvaluation.CompletedDate = new DateTime(yearForCompletedDate, dataForEvaluation.Month, DateTime.DaysInMonth(yearForCompletedDate, dataForEvaluation.Month));
                             dataForEvaluation.Approve = Approve.ผษ_อนุมัติ;
                             _context.SaveChanges();
                         }
@@ -804,9 +901,9 @@ namespace EPES.Controllers
 
         } //End มจ. ตัวชี้วัด 64 15
 
-        public IActionResult GetP16() //บอ. ตัวชี้วัด 64 16
+        public IActionResult GetP8() // [บอ.] จำนวนแบบ_1_30_50_ที่ยื่นผ่านอินเทอร์เน็ต  ตัวชี้วัด 64/16, 65/14
         {
-            string url = "http://localhost:8082/boror/p16.csv";
+            string url = "http://localhost:8082/boror/p8.csv";
             HttpWebRequest webRequest = WebRequest.Create(url) as HttpWebRequest;
             if (webRequest == null)
             {
@@ -826,6 +923,12 @@ namespace EPES.Controllers
                     {
                         yearForRequest = new DateTime(record.year - 543, 1, 1);
 
+                        var yearForCompletedDate = yearForRequest.Year;
+                        if (record.month >= 10)
+                        {
+                            yearForCompletedDate = yearForCompletedDate - 1;
+                        }
+
                         var dataForEvaluation = _context.DataForEvaluations
                                             .Where(d => d.Office.Code == record.officeID && d.PointOfEvaluation.AutoApp == AutoApps.จำนวนแบบ_1_30_50_ที่ยื่นผ่านอินเทอร์เน็ต && d.PointOfEvaluation.Year == yearForRequest && d.Month == record.month)
                                             .FirstOrDefault();
@@ -833,7 +936,8 @@ namespace EPES.Controllers
                         {
                             dataForEvaluation.Expect = record.expect;
                             dataForEvaluation.Result = record.result;
-                            dataForEvaluation.CompletedDate = new DateTime(yearForRequest.Year, dataForEvaluation.Month, DateTime.DaysInMonth(yearForRequest.Year, dataForEvaluation.Month));
+                            //dataForEvaluation.CompletedDate = new DateTime(yearForRequest.Year, dataForEvaluation.Month, DateTime.DaysInMonth(yearForRequest.Year, dataForEvaluation.Month));
+                            dataForEvaluation.CompletedDate = new DateTime(yearForCompletedDate, dataForEvaluation.Month, DateTime.DaysInMonth(yearForCompletedDate, dataForEvaluation.Month));
                             dataForEvaluation.Approve = Approve.ผษ_อนุมัติ;
                             _context.SaveChanges();
                         }
@@ -867,6 +971,12 @@ namespace EPES.Controllers
                     foreach (var record in records)
                     {
                         yearForRequest = new DateTime(record.year - 543, 1, 1);
+                        var yearForCompletedDate = yearForRequest.Year;
+                        if (record.month >= 10)
+                        {
+                            yearForCompletedDate = yearForCompletedDate - 1;
+                        }
+
                         var office = _context.Offices.Where(o => o.Code == record.officeID).FirstOrDefault();
                         var poe = _context.PointOfEvaluations.Where(p => p.AutoApp == AutoApps.เร่งรัดหนี้ && p.Year == yearForRequest && p.OwnerOfficeId == office.Id)
                                 .FirstOrDefault();
@@ -879,7 +989,8 @@ namespace EPES.Controllers
                         {
                             dataForEvaluation.Expect = record.expect;
                             dataForEvaluation.Result = record.result;
-                            dataForEvaluation.CompletedDate = new DateTime(yearForRequest.Year, dataForEvaluation.Month, DateTime.DaysInMonth(yearForRequest.Year, dataForEvaluation.Month));
+                            //dataForEvaluation.CompletedDate = new DateTime(yearForRequest.Year, dataForEvaluation.Month, DateTime.DaysInMonth(yearForRequest.Year, dataForEvaluation.Month));
+                            dataForEvaluation.CompletedDate = new DateTime(yearForCompletedDate, dataForEvaluation.Month, DateTime.DaysInMonth(yearForCompletedDate, dataForEvaluation.Month));
                             dataForEvaluation.Approve = Approve.ผษ_อนุมัติ;
                             _context.SaveChanges();
                         }
@@ -905,6 +1016,12 @@ namespace EPES.Controllers
                     {
                         yearForRequest = new DateTime(record.year - 543, 1, 1);
 
+                        var yearForCompletedDate = yearForRequest.Year;
+                        if (record.month >= 10)
+                        {
+                            yearForCompletedDate = yearForCompletedDate - 1;
+                        }
+
                         var dataForEvaluation = _context.DataForEvaluations
                                             .Where(d => d.Office.Code == record.officeID && d.PointOfEvaluation.AutoApp == AutoApps.จำหน่ายหนี้ && d.PointOfEvaluation.Year == yearForRequest && d.Month == record.month)
                                             .FirstOrDefault();
@@ -912,7 +1029,8 @@ namespace EPES.Controllers
                         {
                             dataForEvaluation.Expect = record.expect;
                             dataForEvaluation.Result = record.result;
-                            dataForEvaluation.CompletedDate = new DateTime(yearForRequest.Year, dataForEvaluation.Month, DateTime.DaysInMonth(yearForRequest.Year, dataForEvaluation.Month));
+                            // dataForEvaluation.CompletedDate = new DateTime(yearForRequest.Year, dataForEvaluation.Month, DateTime.DaysInMonth(yearForRequest.Year, dataForEvaluation.Month));
+                            dataForEvaluation.CompletedDate = new DateTime(yearForCompletedDate, dataForEvaluation.Month, DateTime.DaysInMonth(yearForCompletedDate, dataForEvaluation.Month));
                             dataForEvaluation.Approve = Approve.ผษ_อนุมัติ;
                             _context.SaveChanges();
                         }
@@ -938,6 +1056,12 @@ namespace EPES.Controllers
                     {
                         yearForRequest = new DateTime(record.year - 543, 1, 1);
 
+                        var yearForCompletedDate = yearForRequest.Year;
+                        if (record.month >= 10)
+                        {
+                            yearForCompletedDate = yearForCompletedDate - 1;
+                        }
+
                         var dataForEvaluation = _context.DataForEvaluations
                                             .Where(d => d.Office.Code == record.officeID && d.PointOfEvaluation.AutoApp == AutoApps.ใบแจ้งภาษีอากรบนระบบ_DMS && d.PointOfEvaluation.Year == yearForRequest && d.Month == record.month)
                                             .FirstOrDefault();
@@ -945,7 +1069,8 @@ namespace EPES.Controllers
                         {
                             dataForEvaluation.Expect = record.expect;
                             dataForEvaluation.Result = record.result;
-                            dataForEvaluation.CompletedDate = new DateTime(yearForRequest.Year, dataForEvaluation.Month, DateTime.DaysInMonth(yearForRequest.Year, dataForEvaluation.Month));
+                            //dataForEvaluation.CompletedDate = new DateTime(yearForRequest.Year, dataForEvaluation.Month, DateTime.DaysInMonth(yearForRequest.Year, dataForEvaluation.Month));
+                            dataForEvaluation.CompletedDate = new DateTime(yearForCompletedDate, dataForEvaluation.Month, DateTime.DaysInMonth(yearForCompletedDate, dataForEvaluation.Month));
                             dataForEvaluation.Approve = Approve.ผษ_อนุมัติ;
                             _context.SaveChanges();
                         }
@@ -957,6 +1082,100 @@ namespace EPES.Controllers
             return LocalRedirect("/");
 
         } //End มจ. ตัวชี้วัด 64 8-10
+
+        public IActionResult GetP10() // 
+        {
+            string url = "http://localhost:8082/morjor/p10.csv";
+            HttpWebRequest webRequest = WebRequest.Create(url) as HttpWebRequest;
+            if (webRequest == null)
+            {
+                return LocalRedirect("/");
+            }
+
+            DateTime yearForRequest;
+
+            using (var s = webRequest.GetResponse().GetResponseStream())
+            {
+                using (var sr = new StreamReader(s))
+                {
+                    var engine = new FileHelperEngine<P11>();
+                    var records = engine.ReadStream(sr);
+
+                    foreach (var record in records)
+                    {
+                        yearForRequest = new DateTime(record.year - 543, 1, 1);
+
+                        var yearForCompletedDate = yearForRequest.Year;
+                        if (record.month >= 10)
+                        {
+                            yearForCompletedDate = yearForCompletedDate - 1;
+                        }
+
+                        var dataForEvaluation = _context.DataForEvaluations
+                                            .Where(d => d.Office.Code == record.officeID && d.PointOfEvaluation.AutoApp == AutoApps.จำหน่ายหนี้ && d.PointOfEvaluation.Year == yearForRequest && d.Month == record.month)
+                                            .FirstOrDefault();
+                        if (dataForEvaluation != null)
+                        {
+                            dataForEvaluation.Expect = record.expect;
+                            dataForEvaluation.Result = record.result;
+                            //dataForEvaluation.CompletedDate = new DateTime(yearForRequest.Year, dataForEvaluation.Month, DateTime.DaysInMonth(yearForRequest.Year, dataForEvaluation.Month));
+                            dataForEvaluation.CompletedDate = new DateTime(yearForCompletedDate, dataForEvaluation.Month, DateTime.DaysInMonth(yearForCompletedDate, dataForEvaluation.Month));
+                            dataForEvaluation.Approve = Approve.ผษ_อนุมัติ;
+                            _context.SaveChanges();
+                        }
+                    }
+                }
+            }
+            //UpdateApprove();
+            return LocalRedirect("/");
+        }
+
+        public IActionResult GetP9()
+        {
+            string url = "http://localhost:8082/morjor/p9.csv";
+            HttpWebRequest webRequest = WebRequest.Create(url) as HttpWebRequest;
+            if (webRequest == null)
+            {
+                return LocalRedirect("/");
+            }
+
+            DateTime yearForRequest;
+
+            using (var s = webRequest.GetResponse().GetResponseStream())
+            {
+                using (var sr = new StreamReader(s))
+                {
+                    var engine = new FileHelperEngine<P11>();
+                    var records = engine.ReadStream(sr);
+
+                    foreach (var record in records)
+                    {
+                        yearForRequest = new DateTime(record.year - 543, 1, 1);
+
+                        var yearForCompletedDate = yearForRequest.Year;
+                        if (record.month >= 10)
+                        {
+                            yearForCompletedDate = yearForCompletedDate - 1;
+                        }
+
+                        var dataForEvaluation = _context.DataForEvaluations
+                                            .Where(d => d.Office.Code == record.officeID && d.PointOfEvaluation.AutoApp == AutoApps.เร่งรัดหนี้ && d.PointOfEvaluation.Year == yearForRequest && d.Month == record.month)
+                                            .FirstOrDefault();
+                        if (dataForEvaluation != null)
+                        {
+                            dataForEvaluation.Expect = record.expect;
+                            dataForEvaluation.Result = record.result;
+                            //dataForEvaluation.CompletedDate = new DateTime(yearForRequest.Year, dataForEvaluation.Month, DateTime.DaysInMonth(yearForRequest.Year, dataForEvaluation.Month));
+                            dataForEvaluation.CompletedDate = new DateTime(yearForCompletedDate, dataForEvaluation.Month, DateTime.DaysInMonth(yearForCompletedDate, dataForEvaluation.Month));
+                            dataForEvaluation.Approve = Approve.ผษ_อนุมัติ;
+                            _context.SaveChanges();
+                        }
+                    }
+                }
+            }
+            //UpdateApprove();
+            return LocalRedirect("/");
+        }
 
         public IActionResult GetP2_7() //มก. ตัวชี้วัด 64 2-7
         {
@@ -980,6 +1199,12 @@ namespace EPES.Controllers
                     {
                         yearForRequest = new DateTime(record.year - 543, 1, 1);
 
+                        var yearForCompletedDate = yearForRequest.Year;
+                        if (record.month >= 10)
+                        {
+                            yearForCompletedDate = yearForCompletedDate - 1;
+                        }
+
                         var dataForEvaluation = _context.DataForEvaluations
                                             .Where(d => d.Office.Code == record.officeID && d.PointOfEvaluation.AutoApp == AutoApps.ร้อยละของการตรวจคืนภาษี && d.PointOfEvaluation.Year == yearForRequest && d.Month == record.month)
                                             .FirstOrDefault();
@@ -987,7 +1212,8 @@ namespace EPES.Controllers
                         {
                             dataForEvaluation.Expect = record.expect;
                             dataForEvaluation.Result = record.result;
-                            dataForEvaluation.CompletedDate = new DateTime(yearForRequest.Year, dataForEvaluation.Month, DateTime.DaysInMonth(yearForRequest.Year, dataForEvaluation.Month));
+                            //dataForEvaluation.CompletedDate = new DateTime(yearForRequest.Year, dataForEvaluation.Month, DateTime.DaysInMonth(yearForRequest.Year, dataForEvaluation.Month));
+                            dataForEvaluation.CompletedDate = new DateTime(yearForCompletedDate, dataForEvaluation.Month, DateTime.DaysInMonth(yearForCompletedDate, dataForEvaluation.Month));
                             dataForEvaluation.Approve = Approve.ผษ_อนุมัติ;
                             _context.SaveChanges();
                         }
@@ -1013,6 +1239,12 @@ namespace EPES.Controllers
                     {
                         yearForRequest = new DateTime(record.year - 543, 1, 1);
 
+                        var yearForCompletedDate = yearForRequest.Year;
+                        if (record.month >= 10)
+                        {
+                            yearForCompletedDate = yearForCompletedDate - 1;
+                        }
+
                         var dataForEvaluation = _context.DataForEvaluations
                                             .Where(d => d.Office.Code == record.officeID && d.PointOfEvaluation.AutoApp == AutoApps.ร้อยละของการแนะนำและตรวจสอบภาษี && d.PointOfEvaluation.Year == yearForRequest && d.Month == record.month)
                                             .FirstOrDefault();
@@ -1020,7 +1252,8 @@ namespace EPES.Controllers
                         {
                             dataForEvaluation.Expect = record.expect;
                             dataForEvaluation.Result = record.result;
-                            dataForEvaluation.CompletedDate = new DateTime(yearForRequest.Year, dataForEvaluation.Month, DateTime.DaysInMonth(yearForRequest.Year, dataForEvaluation.Month));
+                            //dataForEvaluation.CompletedDate = new DateTime(yearForRequest.Year, dataForEvaluation.Month, DateTime.DaysInMonth(yearForRequest.Year, dataForEvaluation.Month));
+                            dataForEvaluation.CompletedDate = new DateTime(yearForCompletedDate, dataForEvaluation.Month, DateTime.DaysInMonth(yearForCompletedDate, dataForEvaluation.Month));
                             dataForEvaluation.Approve = Approve.ผษ_อนุมัติ;
                             _context.SaveChanges();
                         }
@@ -1046,6 +1279,12 @@ namespace EPES.Controllers
                     {
                         yearForRequest = new DateTime(record.year - 543, 1, 1);
 
+                        var yearForCompletedDate = yearForRequest.Year;
+                        if (record.month >= 10)
+                        {
+                            yearForCompletedDate = yearForCompletedDate - 1;
+                        }
+
                         var dataForEvaluation = _context.DataForEvaluations
                                             .Where(d => d.Office.Code == record.officeID && d.PointOfEvaluation.AutoApp == AutoApps.ร้อยละของผู้ประกอบการที่ดำเนินการแนะนำ && d.PointOfEvaluation.Year == yearForRequest && d.Month == record.month)
                                             .FirstOrDefault();
@@ -1053,7 +1292,8 @@ namespace EPES.Controllers
                         {
                             dataForEvaluation.Expect = record.expect;
                             dataForEvaluation.Result = record.result;
-                            dataForEvaluation.CompletedDate = new DateTime(yearForRequest.Year, dataForEvaluation.Month, DateTime.DaysInMonth(yearForRequest.Year, dataForEvaluation.Month));
+                            //dataForEvaluation.CompletedDate = new DateTime(yearForRequest.Year, dataForEvaluation.Month, DateTime.DaysInMonth(yearForRequest.Year, dataForEvaluation.Month));
+                            dataForEvaluation.CompletedDate = new DateTime(yearForCompletedDate, dataForEvaluation.Month, DateTime.DaysInMonth(yearForCompletedDate, dataForEvaluation.Month));
                             dataForEvaluation.Approve = Approve.ผษ_อนุมัติ;
                             _context.SaveChanges();
                         }
@@ -1079,6 +1319,12 @@ namespace EPES.Controllers
                     {
                         yearForRequest = new DateTime(record.year - 543, 1, 1);
 
+                        var yearForCompletedDate = yearForRequest.Year;
+                        if (record.month >= 10)
+                        {
+                            yearForCompletedDate = yearForCompletedDate - 1;
+                        }
+
                         var dataForEvaluation = _context.DataForEvaluations
                                             .Where(d => d.Office.Code == record.officeID && d.PointOfEvaluation.AutoApp == AutoApps.ร้อยละของการดำเนินการงานค้างสอบยันใบกำกับภาษี && d.PointOfEvaluation.Year == yearForRequest && d.Month == record.month)
                                             .FirstOrDefault();
@@ -1086,7 +1332,8 @@ namespace EPES.Controllers
                         {
                             dataForEvaluation.Expect = record.expect;
                             dataForEvaluation.Result = record.result;
-                            dataForEvaluation.CompletedDate = new DateTime(yearForRequest.Year, dataForEvaluation.Month, DateTime.DaysInMonth(yearForRequest.Year, dataForEvaluation.Month));
+                            //dataForEvaluation.CompletedDate = new DateTime(yearForRequest.Year, dataForEvaluation.Month, DateTime.DaysInMonth(yearForRequest.Year, dataForEvaluation.Month));
+                            dataForEvaluation.CompletedDate = new DateTime(yearForCompletedDate, dataForEvaluation.Month, DateTime.DaysInMonth(yearForCompletedDate, dataForEvaluation.Month));
                             dataForEvaluation.Approve = Approve.ผษ_อนุมัติ;
                             _context.SaveChanges();
                         }
@@ -1112,6 +1359,12 @@ namespace EPES.Controllers
                     {
                         yearForRequest = new DateTime(record.year - 543, 1, 1);
 
+                        var yearForCompletedDate = yearForRequest.Year;
+                        if (record.month >= 10)
+                        {
+                            yearForCompletedDate = yearForCompletedDate - 1;
+                        }
+
                         var dataForEvaluation = _context.DataForEvaluations
                                             .Where(d => d.Office.Code == record.officeID && d.PointOfEvaluation.AutoApp == AutoApps.ร้อยละของการสอบยันใบกำกับภาษีที่ได้รับ && d.PointOfEvaluation.Year == yearForRequest && d.Month == record.month)
                                             .FirstOrDefault();
@@ -1119,7 +1372,8 @@ namespace EPES.Controllers
                         {
                             dataForEvaluation.Expect = record.expect;
                             dataForEvaluation.Result = record.result;
-                            dataForEvaluation.CompletedDate = new DateTime(yearForRequest.Year, dataForEvaluation.Month, DateTime.DaysInMonth(yearForRequest.Year, dataForEvaluation.Month));
+                            //dataForEvaluation.CompletedDate = new DateTime(yearForRequest.Year, dataForEvaluation.Month, DateTime.DaysInMonth(yearForRequest.Year, dataForEvaluation.Month));
+                            dataForEvaluation.CompletedDate = new DateTime(yearForCompletedDate, dataForEvaluation.Month, DateTime.DaysInMonth(yearForCompletedDate, dataForEvaluation.Month));
                             dataForEvaluation.Approve = Approve.ผษ_อนุมัติ;
                             _context.SaveChanges();
                         }
@@ -1145,6 +1399,12 @@ namespace EPES.Controllers
                     {
                         yearForRequest = new DateTime(record.year - 543, 1, 1);
 
+                        var yearForCompletedDate = yearForRequest.Year;
+                        if (record.month >= 10)
+                        {
+                            yearForCompletedDate = yearForCompletedDate - 1;
+                        }
+
                         var dataForEvaluation = _context.DataForEvaluations
                                             .Where(d => d.Office.Code == record.officeID && d.PointOfEvaluation.AutoApp == AutoApps.ร้อยละของจำนวนรายที่มีผลการสอบยันใบกำกับภาษีพบประเด็นความผิด && d.PointOfEvaluation.Year == yearForRequest && d.Month == record.month)
                                             .FirstOrDefault();
@@ -1152,7 +1412,8 @@ namespace EPES.Controllers
                         {
                             dataForEvaluation.Expect = record.expect;
                             dataForEvaluation.Result = record.result;
-                            dataForEvaluation.CompletedDate = new DateTime(yearForRequest.Year, dataForEvaluation.Month, DateTime.DaysInMonth(yearForRequest.Year, dataForEvaluation.Month));
+                            //dataForEvaluation.CompletedDate = new DateTime(yearForRequest.Year, dataForEvaluation.Month, DateTime.DaysInMonth(yearForRequest.Year, dataForEvaluation.Month));
+                            dataForEvaluation.CompletedDate = new DateTime(yearForCompletedDate, dataForEvaluation.Month, DateTime.DaysInMonth(yearForCompletedDate, dataForEvaluation.Month));
                             dataForEvaluation.Approve = Approve.ผษ_อนุมัติ;
                             _context.SaveChanges();
                         }
@@ -1178,6 +1439,12 @@ namespace EPES.Controllers
                     {
                         yearForRequest = new DateTime(record.year - 543, 1, 1);
 
+                        var yearForCompletedDate = yearForRequest.Year;
+                        if (record.month >= 10)
+                        {
+                            yearForCompletedDate = yearForCompletedDate - 1;
+                        }
+
                         var dataForEvaluation = _context.DataForEvaluations
                                             .Where(d => d.Office.Code == record.officeID && d.PointOfEvaluation.AutoApp == AutoApps.ร้อยละของการแนะนำและตรวจสอบภาษีอากรผู้เสียภาษีอากรรายกลางและรายย่อม && d.PointOfEvaluation.Year == yearForRequest && d.Month == record.month)
                                             .FirstOrDefault();
@@ -1185,7 +1452,8 @@ namespace EPES.Controllers
                         {
                             dataForEvaluation.Expect = record.expect;
                             dataForEvaluation.Result = record.result;
-                            dataForEvaluation.CompletedDate = new DateTime(yearForRequest.Year, dataForEvaluation.Month, DateTime.DaysInMonth(yearForRequest.Year, dataForEvaluation.Month));
+                            //dataForEvaluation.CompletedDate = new DateTime(yearForRequest.Year, dataForEvaluation.Month, DateTime.DaysInMonth(yearForRequest.Year, dataForEvaluation.Month));
+                            dataForEvaluation.CompletedDate = new DateTime(yearForCompletedDate, dataForEvaluation.Month, DateTime.DaysInMonth(yearForCompletedDate, dataForEvaluation.Month));
                             dataForEvaluation.Approve = Approve.ผษ_อนุมัติ;
                             _context.SaveChanges();
                         }
@@ -1211,6 +1479,12 @@ namespace EPES.Controllers
                     {
                         yearForRequest = new DateTime(record.year - 543, 1, 1);
 
+                        var yearForCompletedDate = yearForRequest.Year;
+                        if (record.month >= 10)
+                        {
+                            yearForCompletedDate = yearForCompletedDate - 1;
+                        }
+
                         var dataForEvaluation = _context.DataForEvaluations
                                             .Where(d => d.Office.Code == record.officeID && d.PointOfEvaluation.AutoApp == AutoApps.ร้อยละของผู้เสียภาษีอากรที่ดำเนินการแนะนำและตรวจสอบภาษีอากรแล้วเสร็จ && d.PointOfEvaluation.Year == yearForRequest && d.Month == record.month)
                                             .FirstOrDefault();
@@ -1218,7 +1492,8 @@ namespace EPES.Controllers
                         {
                             dataForEvaluation.Expect = record.expect;
                             dataForEvaluation.Result = record.result;
-                            dataForEvaluation.CompletedDate = new DateTime(yearForRequest.Year, dataForEvaluation.Month, DateTime.DaysInMonth(yearForRequest.Year, dataForEvaluation.Month));
+                            //dataForEvaluation.CompletedDate = new DateTime(yearForRequest.Year, dataForEvaluation.Month, DateTime.DaysInMonth(yearForRequest.Year, dataForEvaluation.Month));
+                            dataForEvaluation.CompletedDate = new DateTime(yearForCompletedDate, dataForEvaluation.Month, DateTime.DaysInMonth(yearForCompletedDate, dataForEvaluation.Month));
                             dataForEvaluation.Approve = Approve.ผษ_อนุมัติ;
                             _context.SaveChanges();
                         }
@@ -1229,5 +1504,155 @@ namespace EPES.Controllers
             return LocalRedirect("/");
 
         } //End มก. ตัวชี้วัด 64 2-7
+
+        public IActionResult GetMorgor()
+        {
+            AutoApps[] appArr = { AutoApps.ร้อยละของการแนะนำและตรวจสอบภาษี, AutoApps.ร้อยละของผู้ประกอบการที่ดำเนินการแนะนำ, AutoApps.ร้อยละของการดำเนินการงานค้างสอบยันใบกำกับภาษี, AutoApps.ร้อยละของการสอบยันใบกำกับภาษีที่ได้รับ, AutoApps.ร้อยละของจำนวนรายที่มีผลการสอบยันใบกำกับภาษีพบประเด็นความผิด, AutoApps.ร้อยละของการแนะนำและตรวจสอบภาษีอากรผู้เสียภาษีอากรรายกลางและรายย่อม, AutoApps.ร้อยละของผู้เสียภาษีอากรที่ดำเนินการแนะนำและตรวจสอบภาษีอากรแล้วเสร็จ };
+
+            foreach(AutoApps app in appArr)
+            {
+                string url = "http://localhost:8082/morgor/p" + app + ".csv";
+                HttpWebRequest webRequest = WebRequest.Create(url) as HttpWebRequest;
+                if (webRequest == null)
+                {
+                    return LocalRedirect("/");
+                }
+
+                DateTime yearForRequest;
+
+                using (var s = webRequest.GetResponse().GetResponseStream())
+                {
+                    using (var sr = new StreamReader(s))
+                    {
+                        var engine = new FileHelperEngine<P11>();
+                        var records = engine.ReadStream(sr);
+
+                        foreach (var record in records)
+                        {
+                            yearForRequest = new DateTime(record.year - 543, 1, 1);
+
+                            var yearForCompletedDate = yearForRequest.Year;
+                            if (record.month >= 10)
+                            {
+                                yearForCompletedDate = yearForCompletedDate - 1;
+                            }
+
+                            var dataForEvaluation = _context.DataForEvaluations
+                                                .Where(d => d.Office.Code == record.officeID && d.PointOfEvaluation.AutoApp == app && d.PointOfEvaluation.Year == yearForRequest && d.Month == record.month)
+                                                .FirstOrDefault();
+                            if (dataForEvaluation != null)
+                            {
+                                dataForEvaluation.Expect = record.expect;
+                                dataForEvaluation.Result = record.result;
+                                //dataForEvaluation.CompletedDate = new DateTime(yearForRequest.Year, dataForEvaluation.Month, DateTime.DaysInMonth(yearForRequest.Year, dataForEvaluation.Month));
+                                dataForEvaluation.CompletedDate = new DateTime(yearForCompletedDate, dataForEvaluation.Month, DateTime.DaysInMonth(yearForCompletedDate, dataForEvaluation.Month));
+                                dataForEvaluation.Approve = Approve.ผษ_อนุมัติ;
+                                _context.SaveChanges();
+                            }
+                        }
+                    }
+                }
+
+
+            }
+
+
+            return LocalRedirect("/");
+        }
+
+        public IActionResult GetP20()
+        {
+
+            string url = "http://localhost:8082/borror/p20.csv";
+            HttpWebRequest webRequest = WebRequest.Create(url) as HttpWebRequest;
+            if (webRequest == null)
+            {
+                return LocalRedirect("/");
+            }
+
+            DateTime yearForRequest;
+
+            using (var s = webRequest.GetResponse().GetResponseStream())
+            {
+                using (var sr = new StreamReader(s))
+                {
+                    var engine = new FileHelperEngine<P11>();
+                    var records = engine.ReadStream(sr);
+
+                    foreach (var record in records)
+                    {
+                        yearForRequest = new DateTime(record.year - 543, 1, 1);
+
+                        var yearForCompletedDate = yearForRequest.Year;
+                        if (record.month >= 10)
+                        {
+                            yearForCompletedDate = yearForCompletedDate - 1;
+                        }
+
+                        var dataForEvaluation = _context.DataForEvaluations
+                                            .Where(d => d.Office.Code == record.officeID && d.PointOfEvaluation.AutoApp == AutoApps.การเบิกจ่ายงบประมาณ && d.PointOfEvaluation.Year == yearForRequest && d.Month == record.month)
+                                            .FirstOrDefault();
+                        if (dataForEvaluation != null)
+                        {
+                            dataForEvaluation.Expect = record.expect;
+                            dataForEvaluation.Result = record.result;
+                            //dataForEvaluation.CompletedDate = new DateTime(yearForRequest.Year, dataForEvaluation.Month, DateTime.DaysInMonth(yearForRequest.Year, dataForEvaluation.Month));
+                            dataForEvaluation.CompletedDate = new DateTime(yearForCompletedDate, dataForEvaluation.Month, DateTime.DaysInMonth(yearForCompletedDate, dataForEvaluation.Month));
+                            dataForEvaluation.Approve = Approve.ผษ_อนุมัติ;
+                            _context.SaveChanges();
+                        }
+                    }
+                }
+            }
+            return LocalRedirect("/");
+        }
+
+        public IActionResult GetP21()
+        {
+            string url = "http://localhost:8082/sornor/p21.csv";
+            HttpWebRequest webRequest = WebRequest.Create(url) as HttpWebRequest;
+            if (webRequest == null)
+            {
+                return LocalRedirect("/");
+            }
+
+            DateTime yearForRequest;
+
+            using (var s = webRequest.GetResponse().GetResponseStream())
+            {
+                using (var sr = new StreamReader(s))
+                {
+                    var engine = new FileHelperEngine<P11>();
+                    var records = engine.ReadStream(sr);
+
+                    foreach (var record in records)
+                    {
+                        yearForRequest = new DateTime(record.year - 543, 1, 1);
+
+                        var yearForCompletedDate = yearForRequest.Year;
+                        if (record.month >= 10)
+                        {
+                            yearForCompletedDate = yearForCompletedDate - 1;
+                        }
+
+                        var dataForEvaluation = _context.DataForEvaluations
+                                            .Where(d => d.Office.Code == record.officeID && d.PointOfEvaluation.AutoApp == AutoApps.งานค้างหนังสือร้องเรียนแหล่งภาษี && d.PointOfEvaluation.Year == yearForRequest && d.Month == record.month)
+                                            .FirstOrDefault();
+                        if (dataForEvaluation != null)
+                        {
+                            dataForEvaluation.Expect = record.expect;
+                            dataForEvaluation.Result = record.result;
+                            //dataForEvaluation.CompletedDate = new DateTime(yearForRequest.Year, dataForEvaluation.Month, DateTime.DaysInMonth(yearForRequest.Year, dataForEvaluation.Month));
+                            dataForEvaluation.CompletedDate = new DateTime(yearForCompletedDate, dataForEvaluation.Month, DateTime.DaysInMonth(yearForCompletedDate, dataForEvaluation.Month));
+                            dataForEvaluation.Approve = Approve.ผษ_อนุมัติ;
+                            _context.SaveChanges();
+                        }
+                    }
+                }
+            }
+
+            return LocalRedirect("/");
+
+        }
     }
 }

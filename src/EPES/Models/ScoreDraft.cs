@@ -41,6 +41,10 @@ namespace EPES.Models
         [Column(TypeName = "decimal(7, 4)")]
         public decimal? weightOfMonth { get; set; } = 0;
 
+        //[Display(Name = "เป้าหมาย")]
+        //[Column(TypeName = "decimal(5, 4)")]
+        //public decimal? Target { get; set; } = 0;
+
         //[NotMapped]
         //[Display(Name = "คะแนนที่อนุมัติ")]
         //[Column(TypeName = "decimal(5, 4)")]

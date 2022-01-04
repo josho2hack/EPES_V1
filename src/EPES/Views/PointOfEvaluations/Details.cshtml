@@ -82,6 +82,12 @@
                     @Html.DisplayFor(model => model.Name)
                 </dd>
                 <dt class="col-sm-4">
+                    @Html.DisplayNameFor(model => model.AttachFile)
+                </dt>
+                <dd class="col-sm-8">
+                    <a href="~/attach_files/@Html.DisplayFor(model => model.Name)" target="_blank"><i class="fas fa-file-pdf"></i></a>
+                </dd>
+                <dt class="col-sm-4">
                     @Html.DisplayNameFor(model => model.Weight)
                 </dt>
                 <dd class="col-sm-8">

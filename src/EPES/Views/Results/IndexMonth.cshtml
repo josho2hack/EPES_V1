@@ -10,10 +10,19 @@
     var pointHasSub = ViewData["pointHasSub"] as int[];
 
     int yearOfGov = 0;
+    if(DateTime.Now.Month >= 10 && Model.month <= 9)
+            {
+        yearOfGov = 1;
+            } else if (DateTime.Now.Month <= 9 && Model.month >= 10)
+            {
+        yearOfGov = -1;
+            }
+    /*
     if (Model.month > 9)
     {
         yearOfGov = -1;
     }
+    */
 }
 
 <link href="~/css/devextreme/dx.common.css" rel="stylesheet" />
@@ -121,7 +130,7 @@
             </div>
             <div class="card-body">
                 <div class="table-responsive">
-                    <form asp-action="UpdateMonth" method="post">
+                    <form asp-action="UpdateMonth" method="post" onsubmit="return confirm('วันที่แล้วเสร็จถูกต้องตามเอกสารแนบแล้วใข่หรือไม่');">
                         <table class="table table-bordered" id="EPEStableA" style="width:100%;" cellspacing="0">
                             <thead>
                                 <tr>
@@ -167,6 +176,10 @@
                                         </td>
                                         <td>
                                             @Model.pointA[i].Name
+                                            @if (Model.pointA[i].AttachFile != null)
+                                            {
+                                                <a href="~/attach_files/@Model.pointA[i].AttachFile" target="_blank"><i class="fas fa-file-pdf"></i></a><br />
+                                            }
                                         </td>
                                         <td>
                                             @{
@@ -758,7 +771,7 @@
             </div>
             <div class="card-body">
                 <div class="table-responsive">
-                    <form asp-action="UpdateMonth" method="post">
+                    <form asp-action="UpdateMonth" method="post" onsubmit="return confirm('วันที่แล้วเสร็จถูกต้องตามเอกสารแนบแล้วใข่หรือไม่');">
                         <table class="table table-bordered" id="EPEStableB" style="width:100%;" cellspacing="0">
                             <thead>
                                 <tr>
@@ -804,6 +817,10 @@
                                     </td>
                                     <td>
                                         @Model.pointB[i].Name
+                                        @if (Model.pointB[i].AttachFile != null)
+                                        {
+                                            <a href="~/attach_files/@Model.pointB[i].AttachFile" target="_blank"><i class="fas fa-file-pdf"></i></a><br />
+                                        }
                                     </td>
                                     <td>
                                         @{
@@ -1397,7 +1414,7 @@
             </div>
             <div class="card-body">
                 <div class="table-responsive">
-                    <form asp-action="UpdateMonth" method="post">
+                    <form asp-action="UpdateMonth" method="post" onsubmit="return confirm('วันที่แล้วเสร็จถูกต้องตามเอกสารแนบแล้วใข่หรือไม่');">
                         <table class="table table-bordered" id="EPEStableC" style="width:100%;" cellspacing="0">
                             <thead>
                                 <tr>
@@ -1442,6 +1459,10 @@
                                         </td>
                                         <td>
                                             @Model.pointC[i].Name
+                                            @if (Model.pointC[i].AttachFile != null)
+                                            {
+                                                <a href="~/attach_files/@Model.pointC[i].AttachFile" target="_blank"><i class="fas fa-file-pdf"></i></a><br />
+                                            }
                                         </td>
                                         <td>
                                             @{
@@ -2032,7 +2053,7 @@
             </div>
             <div class="card-body">
                 <div class="table-responsive">
-                    <form asp-action="UpdateMonth" method="post">
+                    <form asp-action="UpdateMonth" method="post" onsubmit="return confirm('วันที่แล้วเสร็จถูกต้องตามเอกสารแนบแล้วใข่หรือไม่');">
                         <table class="table table-bordered" id="EPEStableD" style="width:100%;" cellspacing="0">
                             <thead>
                                 <tr>
@@ -2077,6 +2098,10 @@
                                         </td>
                                         <td>
                                             @Model.pointD[i].Name
+                                            @if (Model.pointD[i].AttachFile != null)
+                                            {
+                                                <a href="~/attach_files/@Model.pointD[i].AttachFile" target="_blank"><i class="fas fa-file-pdf"></i></a><br />
+                                            }
                                         </td>
                                         <td>
                                             @{

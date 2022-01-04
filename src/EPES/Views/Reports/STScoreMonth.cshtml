@@ -25,9 +25,17 @@
 <!-- script src="~/js/devextreme/jszip.js"></script -->
 <!-- Uncomment to provide geo-data for the VectorMap control -->
 <!-- script src="~/js/devextreme/vectormap-data/world.js"></script -->
-<script src="~/js/devextreme/dx.all.js"></script>
+<script src="~/js/devextreme/dx21.all.js"></script>
 <script src="~/js/devextreme/aspnet/dx.aspnet.mvc.js"></script>
 <script src="~/js/devextreme/aspnet/dx.aspnet.data.js"></script>
+
+
+
+<script src="~/js/polyfill.min.js"></script>
+<script src="~/js/exceljs.min.js"></script>
+<script src="~/js/FileSaver.min.js"></script>
+<script src="~/js/exporting.js"></script>
+
 
 <div class="container-fluid">
     <h1 class="h3 mb-2 text-gray-800">รายงานผลการปฏิบัติราชการ กลุ่ม สท.ทั่วประเทศ (119 สท.) เพื่อหาค่าเฉลี่ย</h1>
@@ -103,18 +111,21 @@
 
     <br />
 
+
+    คลิกขวาที่ตารางเพื่อ Export
     @(Html.DevExtreme().PivotGrid<ScoreDraft>()
 .ID("pivotgrid")
 //.AllowSortingBySummary(true)
 .AllowFiltering(true)
 .ShowBorders(true)
-.ShowColumnGrandTotals(false)
-.ShowRowGrandTotals(true)
+.ShowColumnGrandTotals(true)
+.ShowRowGrandTotals(false)
 .ShowRowTotals(false)
 .ShowColumnTotals(false)
 .FieldChooser(c => c.Enabled(false).Height(400))
 .RowHeaderLayout(PivotGridRowHeadersLayout.Tree)
 //.AllowExpandAll(true)
+.Texts(tt => tt.GrandTotal("รวม"))
 .DataSource(d => d
     .Store(s => s.Mvc().Controller("ReportsApi").Key("Id").LoadAction("GetSTScore").LoadParams(new { yearPoint = Model.yearPoint, lastMonth = Model.Month }))
 
@@ -137,7 +148,7 @@
         //.SortOrder(SortOrder.Asc)
         .Width(300)
         .Area(PivotGridArea.Row);
-
+        /*
     fields.Add()
         .Caption("ปีงบประมาณ")
         .DataField("year")
@@ -149,7 +160,7 @@
                         return "ปีงบประมาณ " + y;
                     }
                     </text>);
-
+    */
         fields.Add()
             .Caption("แผน")
             .DataField("plan")
@@ -179,6 +190,8 @@
         })
         )
     .OnInitialized("bind_chart")
+    .Export(xx => xx.Enabled(true))
+    .OnExporting("onExporting")
     )
 
     <br />
@@ -194,18 +207,21 @@
 
     <br />
 
+    คลิกขวาที่ตารางเพื่อ Export
+
     @(Html.DevExtreme().PivotGrid<ScoreDraft>()
 .ID("pivotgrid-app")
 //.AllowSortingBySummary(true)
 .AllowFiltering(true)
 .ShowBorders(true)
-.ShowColumnGrandTotals(false)
-.ShowRowGrandTotals(true)
+.ShowColumnGrandTotals(true)
+.ShowRowGrandTotals(false)
 .ShowRowTotals(false)
 .ShowColumnTotals(false)
 .FieldChooser(c => c.Enabled(false).Height(400))
 .RowHeaderLayout(PivotGridRowHeadersLayout.Tree)
 //.AllowExpandAll(true)
+.Texts(tt => tt.GrandTotal("รวม"))
 .DataSource(d => d
 .Store(s => s.Mvc().Controller("ReportsApi").Key("Id").LoadAction("GetSTScore").LoadParams(new { yearPoint = Model.yearPoint, lastMonth = Model.Month }))
 
@@ -227,7 +243,7 @@ fields.Add()
         //.SortOrder(SortOrder.Asc)
         .Width(300)
         .Area(PivotGridArea.Row);
-
+    /*
 fields.Add()
         .Caption("ปีงบประมาณ")
         .DataField("year")
@@ -239,7 +255,7 @@ fields.Add()
                         return "ปีงบประมาณ " + y;
                     }
                     </text>);
-
+    */
         fields.Add()
             .Caption("แผน")
             .DataField("plan")
@@ -269,6 +285,8 @@ fields.Add()
         })
         )
         .OnInitialized("bind_chart_app")
+        .Export(xx => xx.Enabled(true))
+        .OnExporting("onExporting")
     )
 </div>
 <br />

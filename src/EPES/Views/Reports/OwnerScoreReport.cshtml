@@ -9,8 +9,11 @@
     var user = await UserManager.GetUserAsync(User);
 }
 
+
 <link href="~/css/devextreme/dx.common.css" rel="stylesheet" />
 <link href="~/css/devextreme/dx.light.css" rel="stylesheet" />
+<!--<link href="~/css/devextreme/dx21.1.6.light.css" rel="stylesheet" />
+<link href="~/css/devextreme/dx21.1.6.common.css" rel="stylesheet" />-->
 <script src="~/js/devextreme/jquery.js"></script>
 <script src="~/js/devextreme/cldr.js"></script>
 <script src="~/js/devextreme/cldr/event.js"></script>
@@ -25,9 +28,16 @@
 <!-- script src="~/js/devextreme/jszip.js"></script -->
 <!-- Uncomment to provide geo-data for the VectorMap control -->
 <!-- script src="~/js/devextreme/vectormap-data/world.js"></script -->
-<script src="~/js/devextreme/dx.all.js"></script>
+<!--<script src="~/js/devextreme/dx.all.js"></script>-->
+<script src="~/js/devextreme/dx21.all.js"></script>
 <script src="~/js/devextreme/aspnet/dx.aspnet.mvc.js"></script>
 <script src="~/js/devextreme/aspnet/dx.aspnet.data.js"></script>
+
+<script src="~/js/polyfill.min.js"></script>
+<script src="~/js/exceljs.min.js"></script>
+<script src="~/js/FileSaver.min.js"></script>
+<script src="~/js/exporting.js"></script>
+
 
 <div class="container-fluid">
     <h1 class="h3 mb-2 text-gray-800">รายงานผลการปฏิบัติราชการ @user.OfficeName</h1>
@@ -120,7 +130,7 @@
         )
 
     <br />
-
+    คลิกขวาที่ตารางเพื่อ Export
     @(Html.DevExtreme().PivotGrid<ScoreDraft>()
     .ID("pivotgrid-draft")
     //.AllowSortingBySummary(true)
@@ -137,90 +147,89 @@
         .Store(s => s.Mvc().Controller("OwnerScore").Key("Id").LoadAction("Get").LoadParams(new { selectoffice = Model.selectoffice, yearPoint = Model.yearPoint }))
 
         .Fields(fields => {
-        fields.Add()
-            .Caption("แผน")
-            .DataField("plan")
-            .Expanded(true)
-            .Width(200)
-            //.SortBySummaryField("ScoreValue")
-            .Area(PivotGridArea.Row)
-            .Selector(@<text>
-                    function(data) {
-                        if(data.plan == 0){
-                            return  "แผน A";
-                        }else if(data.plan == 1){
-                            return  "แผน B";
-                        }else if(data.plan == 2){
-                            return  "แผน C";
-                        }else if(data.plan == 3){
-                            return  "แผน D";
-                        }
-                    }
-                    </text>);
-
-        //.SortBySummaryField("Total");
-
-        fields.Add()
-            .Caption("ตัวชี้วัด")
-            .DataField("point")
-            .Expanded(true)
-            //.SortBy(PivotGridSortBy.DisplayText)
-            //.SortOrder(SortOrder.Asc)
-            .Width(400)
-            .Area(PivotGridArea.Row)
-            .Selector(@<text>
-                    function(data) {
-                        var p;
-                        if(10 > data.point){
-                            p = " " + data.point;
-                        }else{
-                            p = data.point;
-                        }
-                        if(data.subPoint == 0){
-                            return  p + "." + data.name;
-                        }else{
-                            return  p + "." + data.subPoint + "." + data.name;
-                        }
-                    }
-                    </text>);
-
-        fields.Add()
-            .Caption("ปีงบประมาณ")
-            .DataField("year")
-            //.GroupName("YearThai")
-            //.GroupIndex(0)
-            .Expanded(true)
-            .Area(PivotGridArea.Column)
-
-            //.DataType(PivotGridDataType.Date)
-            //.Format(Format.Year)
-
+            fields.Add()
+                .Caption("แผน")
+                .DataField("plan")
+                .Expanded(true)
+                .Width(200)
+                //.SortBySummaryField("ScoreValue")
+                .Area(PivotGridArea.Row)
                 .Selector(@<text>
-                    function(data) {
-                        var y = data.year + 543;
-                        return "ปีงบประมาณ " + y;
-                    }
-                    </text>);
-
-    fields.Add()
-            .Caption("เดือน")
-            .DataField("lastMonth")
-            //.GroupName("YearThai")
-            //.GroupIndex(1)
-            .Area(PivotGridArea.Column)
-            //.DataType(PivotGridDataType.String)
-            .SortBy(PivotGridSortBy.Value)
-            .Selector(@<text>
-                    function(data) {
-                        var y = data.year + 543;
-                        var yp = y - 1;
-                        if(data.lastMonth == 10 || data.lastMonth == 11 || data.lastMonth == 12){
-                            return yp + "/" + data.lastMonth ;
-                        }else{
-                             return y + "/" + data.lastMonth;
+                        function(data) {
+                            if(data.plan == 0){
+                                return  "แผน A";
+                            }else if(data.plan == 1){
+                                return  "แผน B";
+                            }else if(data.plan == 2){
+                                return  "แผน C";
+                            }else if(data.plan == 3){
+                                return  "แผน D";
+                            }
                         }
-                    }
-                    </text>);
+                        </text>);
+                //.SortBySummaryField("Total");
+
+            fields.Add()
+                .Caption("ตัวชี้วัด")
+                .DataField("point")
+                .Expanded(true)
+                //.SortBy(PivotGridSortBy.DisplayText)
+                //.SortOrder(SortOrder.Asc)
+                .Width(400)
+                .Area(PivotGridArea.Row)
+                .Selector(@<text>
+                        function(data) {
+                            var p;
+                            if(10 > data.point){
+                                p = " " + data.point;
+                            }else{
+                                p = data.point;
+                            }
+                            if(data.subPoint == 0){
+                                return  p + "." + data.name;
+                            }else{
+                                return  p + "." + data.subPoint + "." + data.name;
+                            }
+                        }
+                        </text>);
+
+            fields.Add()
+                .Caption("ปีงบประมาณ")
+                .DataField("year")
+                //.GroupName("YearThai")
+                //.GroupIndex(0)
+                .Expanded(true)
+                .Area(PivotGridArea.Column)
+
+                //.DataType(PivotGridDataType.Date)
+                //.Format(Format.Year)
+
+                    .Selector(@<text>
+                        function(data) {
+                            var y = data.year + 543;
+                            return data.officeName + " ปีงบประมาณ " + y;
+                        }
+                        </text>);
+
+            fields.Add()
+                    .Caption("เดือน")
+                    .DataField("lastMonth")
+                    //.GroupName("YearThai")
+                    //.GroupIndex(1)
+                    .Area(PivotGridArea.Column)
+                    //.DataType(PivotGridDataType.String)
+                    .SortBy(PivotGridSortBy.Value)
+                    .Selector(@<text>
+                            function(data) {
+                                var y = data.year + 543;
+                                var yp = y - 1;
+                                if(data.lastMonth == 10 || data.lastMonth == 11 || data.lastMonth == 12){
+                                    return yp + "/" + data.lastMonth ;
+                                }else{
+                                     return y + "/" + data.lastMonth;
+                                }
+                            }
+                            </text>);
 
             //fields.Add()
             //    .GroupName("YearThai")
@@ -232,7 +241,6 @@
                 .Caption("คะแนน")
                 .DataField("scoreValue")
                 .SummaryType(SummaryType.Avg)
-
                 .Format(f => f.Type(Format.FixedPoint).Precision(4))
                 .Area(PivotGridArea.Data);
                 //.CustomizeText("customizeText");
@@ -251,8 +259,10 @@
                 .Format(f => f.Type(Format.FixedPoint).Precision(4))
                 .Area(PivotGridArea.Data);
         })
-        )
-        .OnInitialized("bind_chart")
+    )
+    .OnInitialized("bind_chart")
+    .Export(e => e.Enabled(true))
+    .OnExporting("onExporting")
     )
 
     <br />
@@ -268,6 +278,7 @@
 
     <br />
 
+    คลิกขวาที่ตารางเพื่อ Export
     @(Html.DevExtreme().PivotGrid<ScoreDraft>()
     .ID("pivotgrid-approved")
     //.AllowSortingBySummary(true)
@@ -284,118 +295,120 @@
         .Store(s => s.Mvc().Controller("OwnerScore").Key("Id").LoadAction("Get"))
 
         .Fields(fields => {
-        fields.Add()
-            .Caption("แผน")
-            .DataField("plan")
-            .Expanded(true)
-            .Width(200)
-            //.SortBySummaryField("ScoreValue")
-            .Area(PivotGridArea.Row)
-            .Selector(@<text>
-                    function(data) {
-                        if(data.plan == 0){
-                            return  "แผน A";
-                        }else if(data.plan == 1){
-                            return  "แผน B";
-                        }else if(data.plan == 2){
-                            return  "แผน C";
-                        }else if(data.plan == 3){
-                            return  "แผน D";
+            fields.Add()
+                .Caption("แผน")
+                .DataField("plan")
+                .Expanded(true)
+                .Width(200)
+                //.SortBySummaryField("ScoreValue")
+                .Area(PivotGridArea.Row)
+                .Selector(@<text>
+                        function(data) {
+                            if(data.plan == 0){
+                                return  "แผน A";
+                            }else if(data.plan == 1){
+                                return  "แผน B";
+                            }else if(data.plan == 2){
+                                return  "แผน C";
+                            }else if(data.plan == 3){
+                                return  "แผน D";
+                            }
                         }
-                    }
-                    </text>);
-
-        //.SortBySummaryField("Total");
-
-        fields.Add()
-            .Caption("ตัวชี้วัด")
-            .DataField("point")
-            .Expanded(true)
-            //.SortBy(PivotGridSortBy.DisplayText)
-            //.SortOrder(SortOrder.Asc)
-            .Width(400)
-            .Area(PivotGridArea.Row)
-            .Selector(@<text>
-                    function(data) {
-                        var p;
-                        if(10 > data.point){
-                            p = " " + data.point;
-                        }else{
-                            p = data.point;
-                        }
-                        if(data.subPoint == 0){
-                            return  p + "." + data.name;
-                        }else{
-                            return  p + "." + data.subPoint + "." + data.name;
-                        }
-                    }
-                    </text>);
-
-        //fields.Add()
-        //            .Caption("ตัวชี้วัดย่อย")
-        //            .DataField("subPoint")
-        //            .Expanded(true)
-        //            //.SortBy(PivotGridSortBy.DisplayText)
-        //            //.SortOrder(SortOrder.Asc)
-        //            //.Width(400)
-        //            .Area(PivotGridArea.Row);
-
-        //fields.Add()
-        //            .Caption("รายละเอียดตัวชี้วัด")
-        //            .DataField("name")
-        //            //.Expanded(true)
-        //            //.SortBy(PivotGridSortBy.DisplayText)
-        //            //.SortOrder(SortOrder.Asc)
-        //            //.Width(400)
-        //            .Area(PivotGridArea.Row);
-
-        fields.Add()
-        .Caption("ปีงบประมาณ")
-        .DataField("year")
-        //.GroupName("YearThai")
-        //.GroupIndex(0)
-        .Expanded(true)
-        .Area(PivotGridArea.Column)
-
-            //.DataType(PivotGridDataType.Date)
-            //.Format(Format.Year)
-
-            .Selector(@<text>
-                    function(data) {
-                        var y = data.year + 543;
-                        return "ปีงบประมาณ " + y;
-                    }
-                    </text>);
-
-    fields.Add()
-            .Caption("เดือน")
-            .DataField("lastMonth")
-            //.GroupName("YearThai")
-            //.GroupIndex(1)
-            .Area(PivotGridArea.Column)
-            //.DataType(PivotGridDataType.String)
-            .SortBy(PivotGridSortBy.Value)
-            .Selector(@<text>
-                    function(data) {
-                        var y = data.year + 543;
-                        var yp = y - 1;
-                        if(data.lastMonth == 10 || data.lastMonth == 11 || data.lastMonth == 12){
-                            return yp + "/" + data.lastMonth ;
-                        }else{
-                             return y + "/" + data.lastMonth;
-                        }
-                    }
-                    </text>);
+                        </text>);
+            //.SortBySummaryField("Total");
 
             fields.Add()
-                    .Caption("คะแนนถ่วงน้ำหนัก")
-                    .DataField("calApprove")
-                    .SummaryType(SummaryType.Sum)
-                    .Format(f => f.Type(Format.FixedPoint).Precision(4))
-                    .Area(PivotGridArea.Data);
-        })
+                .Caption("ตัวชี้วัด")
+                .DataField("point")
+                .Expanded(true)
+                //.SortBy(PivotGridSortBy.DisplayText)
+                //.SortOrder(SortOrder.Asc)
+                .Width(400)
+                .Area(PivotGridArea.Row)
+                .Selector(@<text>
+                        function(data) {
+                            var p;
+                            if(10 > data.point){
+                                p = " " + data.point;
+                            }else{
+                                p = data.point;
+                            }
+                            if(data.subPoint == 0){
+                                return  p + "." + data.name;
+                            }else{
+                                return  p + "." + data.subPoint + "." + data.name;
+                            }
+                        }
+                        </text>);
+
+            //fields.Add()
+            //            .Caption("ตัวชี้วัดย่อย")
+            //            .DataField("subPoint")
+            //            .Expanded(true)
+            //            //.SortBy(PivotGridSortBy.DisplayText)
+            //            //.SortOrder(SortOrder.Asc)
+            //            //.Width(400)
+            //            .Area(PivotGridArea.Row);
+
+            //fields.Add()
+            //            .Caption("รายละเอียดตัวชี้วัด")
+            //            .DataField("name")
+            //            //.Expanded(true)
+            //            //.SortBy(PivotGridSortBy.DisplayText)
+            //            //.SortOrder(SortOrder.Asc)
+            //            //.Width(400)
+            //            .Area(PivotGridArea.Row);
+
+            fields.Add()
+                .Caption("ปีงบประมาณ")
+                .DataField("year")
+                //.GroupName("YearThai")
+                //.GroupIndex(0)
+                .Expanded(true)
+                .Area(PivotGridArea.Column)
+
+                //.DataType(PivotGridDataType.Date)
+                //.Format(Format.Year)
+
+                .Selector(@<text>
+                        function(data) {
+                            var y = data.year + 543;
+                            return "ปีงบประมาณ " + y;
+                        }
+                        </text>);
+
+            fields.Add()
+                .Caption("เดือน")
+                .DataField("lastMonth")
+                //.GroupName("YearThai")
+                //.GroupIndex(1)
+                .Area(PivotGridArea.Column)
+                //.DataType(PivotGridDataType.String)
+                .SortBy(PivotGridSortBy.Value)
+                .Selector(@<text>
+                        function(data) {
+                            var y = data.year + 543;
+                            var yp = y - 1;
+                            if(data.lastMonth == 10 || data.lastMonth == 11 || data.lastMonth == 12){
+                                return yp + "/" + data.lastMonth ;
+                            }else{
+                                    return y + "/" + data.lastMonth;
+                            }
+                        }
+                        </text>);
+
+            fields.Add()
+                .Caption("คะแนนถ่วงน้ำหนัก")
+                .DataField("calApprove")
+                .SummaryType(SummaryType.Avg)
+                .Format(f => f.Type(Format.FixedPoint).Precision(4))
+                .Area(PivotGridArea.Data);
+            }
         )
-        .OnInitialized("bind_chart_approved")
+    )
+    .OnInitialized("bind_chart_approved")
+    .Export(e => e.Enabled(true))
+    .OnExporting("onExporting")
     )
 </div>
 <br />
@@ -446,5 +459,6 @@
             dataSource.expandHeaderItem("row", ["B แผนงานตามนโยบายที่ถ่ายทอดไปยังหน่วยปฏิบัติ (Top - Down:)"]);
             dataSource.expandHeaderItem("column", [n]);
         }
+
     </script>
 }

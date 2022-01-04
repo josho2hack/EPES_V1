@@ -66,6 +66,26 @@
                     {
                         <a class="collapse-item" asp-area="" asp-controller="Reports" asp-action="OwnerScoreReport">@user.OfficeName</a>
                     }
+                    @if (User.IsInRole("Admin") ||
+                    (User.IsInRole("Special") && user.OfficeId.Substring(0, 2) == "00") ||
+                    (User.IsInRole("Manager") && (
+                        (user.OfficeId.Substring(0, 2) != "00" && user.OfficeId.Substring(2, 6) == "000000") ||
+                        user.OfficeId == "00013000" || user.OfficeId == "00010000" || user.OfficeId == "00011000" || user.OfficeId == "00014000" || user.OfficeId == "00006000" || user.OfficeId == "00005000"
+                    )))
+                    {
+                        <h6 class="collapse-header">รายงานใหม่ปี 2565: </h6>
+                        <a class="collapse-item" asp-area="" asp-controller="Reports" asp-action="GetPakPlanB">ค่าคะแนนตัวชี้วัด Topdown B</a>
+                    }
+
+                    @if (User.IsInRole("Admin") ||
+                    (User.IsInRole("Special") && user.OfficeId.Substring(0, 2) == "00") ||
+                    (User.IsInRole("Manager") && (
+                        (user.OfficeId.Substring(0, 2) == "00")
+                    )))
+                    {
+                        <h6 class="collapse-header">รายงานใหม่ปี 2565: </h6>
+                        <a class="collapse-item" asp-area="" asp-controller="Reports" asp-action="CentralTarget">ผลการดำเนินงานตามแผนของส่วนกลาง</a>
+                    }
                 </div>
             </div>
         </li>
@@ -131,17 +151,34 @@
                         <div class="collapse-divider"></div>
                         <h6 class="collapse-header">พิเศษ: </h6>
                         <h6 class="collapse-header">เชื่อมโยงข้อมูลอัตโนมัติ: </h6>
-                        <a class="collapse-item" asp-area="" asp-controller="AutoApp" asp-action="Index" onclick="showLoader(this);">เชื่อมโยงข้อมูลผลจัดเก็บภาษี (ภญ/สภ./สท.)</a>
-                        <a class="collapse-item" asp-area="" asp-controller="AutoApp" asp-action="GetCanvass56_1" onclick="showLoader(this);">เชื่อมโยงข้อมูลผู้เสียภาษีรายใหม่</a>
-                        <a class="collapse-item" asp-area="" asp-controller="AutoApp" asp-action="GetCanvass56_2" onclick="showLoader(this);">เชื่อมโยงข้อมูลผู้เสียภาษีรายใหม่ที่ชำระภาษี</a>
-                        <a class="collapse-item" asp-area="" asp-controller="AutoApp" asp-action="GetCanvass56_3" onclick="showLoader(this);">เชื่อมโยงข้อมูลการนำข้อมูลสำรวจไปใช้งาน</a>
-                        <a class="collapse-item" asp-area="" asp-controller="AutoApp" asp-action="GetP11" onclick="showLoader(this);">เชื่อมโยงข้อมูลร้อยละของการบริหารการคืนภาษี</a>
-                        <a class="collapse-item" asp-area="" asp-controller="AutoApp" asp-action="GetTax100" onclick="showLoader(this);">เชื่อมโยงข้อมูลผู้ประกอบการรายใหญ่ในท้องที่</a>
-                        <a class="collapse-item" asp-area="" asp-controller="AutoApp" asp-action="GetP15" onclick="showLoader(this);">เชื่อมโยงข้อมูลจำนวนแบบฯ ที่ยื่นผ่านอินเทอร์เน็ต ยกเว้น ภ.ง.ด.90,91,94</a>
-                        <a class="collapse-item" asp-area="" asp-controller="AutoApp" asp-action="GetP16" onclick="showLoader(this);">เชื่อมโยงข้อมูลจำนวนแบบฯ ภ.ง.ด.1 ภ.พ.30 และ ภ.ง.ด.50 ที่ยื่นผ่านอินเทอร์เน็ต</a>
-                        <a class="collapse-item" asp-area="" asp-controller="AutoApp" asp-action="GetP8_10" onclick="showLoader(this);">เชื่อมโยงข้อมูลเร่งรัดหนี้ จำหน่ายหนี้ และใบแจ้งภาษีอากรบนระบบ DMS</a>
-                        <a class="collapse-item" asp-area="" asp-controller="AutoApp" asp-action="GetP2_7" onclick="showLoader(this);">เชื่อมโยงข้อมูล มก.</a>
+
+                        <h6 class="collapse-header text-primary"><small>[API]</small></h6>
+                        <a class="collapse-item" asp-area="" asp-controller="AutoApp" asp-action="Index" onclick="showLoader(this);">#1 เชื่อมโยงข้อมูลผลจัดเก็บภาษี (ภญ/สภ./สท.)</a>
+                        <a class="collapse-item" asp-area="" asp-controller="AutoApp" asp-action="GetCanvass56_1" onclick="showLoader(this);">#2 เชื่อมโยงข้อมูลผู้เสียภาษีรายใหม่</a>
+                        <a class="collapse-item" asp-area="" asp-controller="AutoApp" asp-action="GetCanvass56_2" onclick="showLoader(this);">#3 เชื่อมโยงข้อมูลผู้เสียภาษีรายใหม่ที่ชำระภาษี</a>
+                        <a class="collapse-item" asp-area="" asp-controller="AutoApp" asp-action="GetTax100" onclick="showLoader(this);">#6 เชื่อมโยงข้อมูลผู้ประกอบการรายใหญ่ในท้องที่</a>
+
+                        <h6 class="collapse-item text-primary"><small>[มจ.]</small></h6>
+                        <a class="collapse-item" asp-area="" asp-controller="AutoApp" asp-action="GetP5" onclick="showLoader(this);">#5 เชื่อมโยงข้อมูลร้อยละของการบริหารการคืนภาษี</a>
+                        <a class="collapse-item" asp-area="" asp-controller="AutoApp" asp-action="GetP9" onclick="showLoader(this);">#9 เชื่อมโยงข้อมูลเร่งรัดหนี้บนระบบ DMS</a>
+                        <a class="collapse-item" asp-area="" asp-controller="AutoApp" asp-action="GetP10" onclick="showLoader(this);">#10 เชื่อมโยงข้อมูลจำหน่ายหนี้บนระบบ DMS</a>
+
+                        <h6 class="collapse-item text-primary"><small>[บอ.]</small></h6>
+                        <a class="collapse-item" asp-area="" asp-controller="AutoApp" asp-action="GetP7" onclick="showLoader(this);">#7 เชื่อมโยงข้อมูลจำนวนแบบฯ ที่ยื่นผ่านอินเทอร์เน็ต ยกเว้น ภ.ง.ด.90,91,94</a>
+                        <a class="collapse-item" asp-area="" asp-controller="AutoApp" asp-action="GetP8" onclick="showLoader(this);">#8 เชื่อมโยงข้อมูลจำนวนแบบฯ ภ.ง.ด.1 ภ.พ.30 และ ภ.ง.ด.50 ที่ยื่นผ่านอินเทอร์เน็ต</a>
+                        <!--<a class="collapse-item" asp-area="" asp-controller="AutoApp" asp-action="GetP8_10" onclick="showLoader(this);">เชื่อมโยงข้อมูลเร่งรัดหนี้ จำหน่ายหนี้ และใบแจ้งภาษีอากรบนระบบ DMS</a>-->
+
+                        <h6 class="collapse-item text-primary"><small>[มก.]</small></h6>
+                        <a class="collapse-item" asp-area="" asp-controller="AutoApp" asp-action="GetMorgor" onclick="showLoader(this);">#13 - #19 เชื่อมโยงข้อมูล มก.</a>
+
+                        <h6 class="collapse-item text-primary"><small>[บร.]</small></h6>
+                        <a class="collapse-item" asp-area="" asp-controller="AutoApp" asp-action="GetP20" onclick="showLoader(this);">#20 เชื่อมโยงข้อมูลข้อมูลการเบิกจ่ายงบประมาณ</a>
                         <div class="collapse-divider"></div>
+
+                        <h6 class="collapse-item text-primary"><small>[สน.]</small></h6>
+                        <a class="collapse-item" asp-area="" asp-controller="AutoApp" asp-action="GetP21" onclick="showLoader(this);">#21 เชื่อมโยงข้อมูลงานค้างหนังสือร้องเรียนแหล่งภาษี</a>
+                        <div class="collapse-divider"></div>
+
                         <h6 class="collapse-header">คัดลอกตัวชี้วัด: </h6>
                         <a class="collapse-item text-danger" asp-area="" asp-controller="PointOfEvaluations" asp-action="CopyAllPak1toPak" onclick="showLoader(this);">คัดลอกตัวชี้วัดทั้งหมด สภ.1 -> สภ.</a>
                         <a class="collapse-item text-danger" asp-area="" asp-controller="PointOfEvaluations" asp-action="CopyDPak1toHQ" onclick="showLoader(this);">คัดลอก D สภ.1 -> ส่วนกลาง</a>

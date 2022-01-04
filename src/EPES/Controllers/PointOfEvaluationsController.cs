@@ -11,6 +11,9 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
+using System.IO;
+using Microsoft.AspNetCore.Hosting;
 
 namespace EPES.Controllers
 {
@@ -19,11 +22,13 @@ namespace EPES.Controllers
     {
         private readonly ApplicationDbContext _context;
         private readonly UserManager<ApplicationUser> _userManager;
+        private readonly IHostingEnvironment _hostingEnvironment;
 
-        public PointOfEvaluationsController(ApplicationDbContext context, UserManager<ApplicationUser> userManager)
+        public PointOfEvaluationsController(ApplicationDbContext context, UserManager<ApplicationUser> userManager, IHostingEnvironment hostingEnvironment)
         {
             _context = context;
             _userManager = userManager;
+            _hostingEnvironment = hostingEnvironment;
         }
 
         // GET: PointOfEvaluations
@@ -1554,6 +1559,7 @@ namespace EPES.Controllers
                             pointToCopy.UpdateUserId = user.Id;
                             pointToCopy.Weight = dataPoint.Weight;
                             pointToCopy.Year = dataPoint.Year;
+                            pointToCopy.AttachFile = dataPoint.AttachFile;
 
                             _context.PointOfEvaluations.Add(pointToCopy);
                             await _context.SaveChangesAsync();
@@ -1662,6 +1668,7 @@ namespace EPES.Controllers
                             pointToCopy.UpdateUserId = user.Id;
                             pointToCopy.Weight = dataPoint.Weight;
                             pointToCopy.Year = dataPoint.Year;
+                            pointToCopy.AttachFile = dataPoint.AttachFile;
 
                             _context.PointOfEvaluations.Add(pointToCopy);
                             await _context.SaveChangesAsync();
@@ -1772,6 +1779,7 @@ namespace EPES.Controllers
                                 pointToCopy.UpdateUserId = user.Id;
                                 pointToCopy.Weight = dataPoint.Weight;
                                 pointToCopy.Year = dataPoint.Year;
+                                pointToCopy.AttachFile = dataPoint.AttachFile;
 
                                 _context.PointOfEvaluations.Add(pointToCopy);
                                 await _context.SaveChangesAsync();
@@ -1883,6 +1891,7 @@ namespace EPES.Controllers
                             pointToCopy.UpdateUserId = user.Id;
                             pointToCopy.Weight = dataPoint.Weight;
                             pointToCopy.Year = dataPoint.Year;
+                            pointToCopy.AttachFile = dataPoint.AttachFile;
 
                             _context.PointOfEvaluations.Add(pointToCopy);
                             await _context.SaveChangesAsync();
@@ -1943,6 +1952,64 @@ namespace EPES.Controllers
                     "ลองพยายามบันทึกอีกครั้ง " +
                     "โปรดแจ้งผู้ดูแลระบบ");
                 return NotFound();
+            }
+        }
+
+
+        [HttpPost]
+        public async Task<IActionResult> FileSelection(IFormFile attachFile, int pid, string selectoffice, int yearPoint)
+        {
+            // Learn to use the entire functionality of the dxFileUploader widget.
+            // http://js.devexpress.com/Documentation/Guide/UI_Widgets/UI_Widgets_-_Deep_Dive/dxFileUploader/
+
+            if (attachFile != null)
+            {
+                await SaveFile(attachFile, pid);
+            }
+
+            return RedirectToAction(nameof(Index), new { selectoffice = selectoffice, yearPoint = yearPoint});
+        }
+        public async Task<IActionResult> FileDelete(int pid, string selectoffice, int yearPoint)
+        {
+            var de = await _context.PointOfEvaluations.FirstAsync(d => d.Id == pid);
+            if (de != null)
+            {
+                var user = await _userManager.GetUserAsync(User);
+                //de.UpdateUserId = user.Id;
+                de.AttachFile = null;
+                await _context.SaveChangesAsync();
+            }
+
+            return RedirectToAction(nameof(Index), new { selectoffice = selectoffice, yearPoint = yearPoint});
+        }
+        public async Task SaveFile(IFormFile file, int pid)
+        {
+            //var result = Path.GetFileName(file.FileName);
+            //var uniqueFile = Guid.NewGuid().ToString() + "_" + result;
+            var uniqueFile = Guid.NewGuid().ToString() + ".pdf";
+            try
+            {
+                var path = Path.Combine(_hostingEnvironment.WebRootPath, "attach_files");
+                if (!Directory.Exists(path))
+                    Directory.CreateDirectory(path);
+
+                using (var fileStream = System.IO.File.Create(Path.Combine(path, uniqueFile)))
+                {
+                    await file.CopyToAsync(fileStream);
+                }
+
+                var user = await _userManager.GetUserAsync(User);
+                var de = await _context.PointOfEvaluations.FirstAsync(d => d.Id == pid);
+                if (de != null)
+                {
+                    //de.UpdateUserId = user.Id;
+                    de.AttachFile = uniqueFile;
+                    await _context.SaveChangesAsync();
+                }
+            }
+            catch
+            {
+                Response.StatusCode = 400;
             }
         }
     }

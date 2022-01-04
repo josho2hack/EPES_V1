@@ -32,6 +32,7 @@ namespace EPES.ViewModels
         public string Comment2 { get; set; }
         public string Comment3 { get; set; }
         public string Comment4 { get; set; }
+        public string Issue { get; set; }
 
         //public IFormFile FileUpload { get; set; }
     }

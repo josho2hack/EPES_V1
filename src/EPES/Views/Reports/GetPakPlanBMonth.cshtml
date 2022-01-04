@@ -1,0 +1,279 @@
+﻿@using Microsoft.AspNetCore.Identity
+@using EPES.Models
+@using System.Globalization
+@model EPES.ViewModels.ReportViewModel
+@inject UserManager<ApplicationUser> UserManager
+
+@{
+    ViewData["Title"] = "รายงานค่าคะแนนตัวชี้วัด Topdown B";
+    var user = await UserManager.GetUserAsync(User);
+}
+
+<link href="~/css/devextreme/dx.common.css" rel="stylesheet" />
+<link href="~/css/devextreme/dx.light.css" rel="stylesheet" />
+<script src="~/js/devextreme/jquery.js"></script>
+<script src="~/js/devextreme/cldr.js"></script>
+<script src="~/js/devextreme/cldr/event.js"></script>
+<script src="~/js/devextreme/cldr/supplemental.js"></script>
+<script src="~/js/devextreme/cldr/unresolved.js"></script>
+<script src="~/js/devextreme/globalize.js"></script>
+<script src="~/js/devextreme/globalize/message.js"></script>
+<script src="~/js/devextreme/globalize/number.js"></script>
+<script src="~/js/devextreme/globalize/currency.js"></script>
+<script src="~/js/devextreme/globalize/date.js"></script>
+<!-- Uncomment to enable the client-side export feature -->
+<!-- script src="~/js/devextreme/jszip.js"></script -->
+<!-- Uncomment to provide geo-data for the VectorMap control -->
+<!-- script src="~/js/devextreme/vectormap-data/world.js"></script -->
+<script src="~/js/devextreme/dx21.all.js"></script>
+<script src="~/js/devextreme/aspnet/dx.aspnet.mvc.js"></script>
+<script src="~/js/devextreme/aspnet/dx.aspnet.data.js"></script>
+<script src="~/js/polyfill.min.js"></script>
+<script src="~/js/exceljs.min.js"></script>
+<script src="~/js/FileSaver.min.js"></script>
+<script src="~/js/exporting.js"></script>
+
+
+<div class="container-fluid">
+    <h1 class="h3 mb-2 text-gray-800">รายงานค่าคะแนนตัวชี้วัด Topdown B</h1>
+</div>
+
+<form asp-action="GetPakPlanBMonth">
+    <div class="row justify-content-between">
+        <div class="col-md-5">
+            @*<div class="row">
+                    <label class="col-form-label col-md-3 text-md-right">หน่วยงาน: </label>
+                    @if (User.IsInRole("Admin") || User.IsInRole("Manager"))
+                    {
+                        <select name="selectoffice" class="form-control col-md-9" asp-items="ViewBag.OfficeCode" onchange="this.form.submit()">
+                            <option value="">เลือกหน่วยงาน</option>
+                        </select>
+                    }
+                    else
+                    {
+                        <select name="selectoffice" class="form-control col-md-7" asp-items="ViewBag.OfficeCode" onchange="this.form.submit()" disabled>
+                            <option value="">เลือกหน่วยงาน</option>
+                        </select>
+                    }
+                </div>*@
+        </div>
+        <div class="col-md-3">
+            <div class="row">
+                <label class="col-form-label col-md-6 text-md-right">ปีงบประมาณ: </label>
+                <select asp-for="yearPoint" class="form-control col-md-6" onchange="this.form.submit()">
+                    <option value="-1">
+                        @{
+                            if (DateTime.Now.Month == 10 || DateTime.Now.Month == 11 || DateTime.Now.Month == 12)
+                            {
+                                @DateTime.Now.ToString("yyyy");
+                            }
+                            else
+                            {
+                                @DateTime.Now.AddYears(-1).ToString("yyyy");
+                            }
+                        }
+                    </option>
+                    <option value="0">
+                        @{
+                            if (DateTime.Now.Month == 10 || DateTime.Now.Month == 11 || DateTime.Now.Month == 12)
+                            {
+                                @DateTime.Now.AddYears(1).ToString("yyyy");
+                            }
+                            else
+                            {
+                                @DateTime.Now.ToString("yyyy");
+                            }
+                        }
+                    </option>
+                </select>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="row">
+                <label class="col-form-label col-md-5 text-md-right">รายงานประจำเดือน: </label>
+                <select asp-for="Month" class="form-control col-md-7" asp-items="ViewBag.Month" onchange="this.form.submit()"></select>
+            </div>
+        </div>
+    </div>
+</form>
+
+<div id="pivotgrid-demo">
+    @(Html.DevExtreme().Chart()
+        .ID("pivotgrid-chart")
+        .CommonSeriesSettings(s => s.Type(SeriesType.Bar))
+        .Title("คะแนนเบื้องต้นจากการประเมินตนเอง")
+        .Tooltip(t => t.Enabled(true).CustomizeTooltip("customize_tooltip").Format(Format.Decimal))
+        .Size(s => s.Height(350))
+        .AdaptiveLayout(l => l.Width(450))
+    )
+
+    <br />
+
+    คลิกขวาที่ตารางเพื่อ Export
+    @(Html.DevExtreme().PivotGrid<ScoreDraft>()
+        .ID("pivotgrid")
+        //.AllowSortingBySummary(true)
+        .AllowFiltering(true)
+        .ShowBorders(true)
+        .ShowColumnGrandTotals(true)
+        .ShowRowGrandTotals(true)
+        .ShowRowTotals(false)
+        .ShowColumnTotals(true)
+        .FieldChooser(c => c.Enabled(false).Height(400))
+        .Texts(t => t
+                .GrandTotal("รวมเฉลี่ย")
+                .Total("ค่าเฉลี่ยของ {0}")
+        )
+        .RowHeaderLayout(PivotGridRowHeadersLayout.Tree)
+        //.AllowExpandAll(true)
+        .DataSource(d => d
+            .Store(s => s.Mvc().Controller("ReportsApi").Key("Id").LoadAction("GetPAKPlanB").LoadParams(new { yearPoint = Model.yearPoint, lastMonth = Model.Month }))
+            .Fields(fields => {
+
+            fields.Add()
+                .Caption("หน่วยงาน")
+                .DataField("officeGroup")
+                .Expanded(true)
+                //.SortBy(PivotGridSortBy.DisplayText)
+                //.SortOrder(SortOrder.Asc)
+                .Area(PivotGridArea.Column);
+
+            fields.Add()
+                .Caption("หน่วยงาน")
+                .DataField("officeName")
+                .Expanded(false)
+                //.SortBy(PivotGridSortBy.DisplayText)
+                //.SortOrder(SortOrder.Asc)
+                .Area(PivotGridArea.Column);
+        /*
+        fields.Add()
+            .Caption("ปีงบประมาณ")
+            .DataField("year")
+            .Expanded(true)
+            .Area(PivotGridArea.Column)
+            .Selector(@<text>
+                        function(data) {
+                            var y = data.year + 543;
+                            return "ปีงบประมาณ " + y;
+                        }
+                        </text>);
+        */
+
+
+            fields.Add()
+                .Caption("แผน")
+                .DataField("pointName")
+                .Expanded(false)
+                .Width(400)
+                .Area(PivotGridArea.Row)
+                        .Selector(@<text>function(data) {
+                            if (data.point >= 10) {
+                                return data.point + ". " + data.pointName;
+                            } else {
+                                return " " + data.point + ". " + data.pointName;
+                            }
+                        }</text>);
+
+
+            fields.Add()
+                    .Caption("คะแนนถ่วงน้ำหนัก")
+                    .DataField("scoreValue")
+                    .SummaryType(SummaryType.Avg)
+                    .Format(f => f.Type(Format.FixedPoint).Precision(4))
+                    .Area(PivotGridArea.Data)
+                    .CustomizeText("customizeText");
+        })
+        )
+        .OnInitialized("bind_chart")
+        .Export(e => e.Enabled(true))
+        .OnExporting("onExporting")
+    )
+
+    <br />
+</div>
+<br />
+<br />
+
+@section Scripts {
+    <script>
+        function customize_tooltip(args) {
+            return {
+                html: args.seriesName + " | <div class='currency'>" + args.valueText + " คะแนน</div>"
+            };
+        }
+
+        function customizeText(args) {
+            if (args.valueText === "0.0000") {
+                return "";
+            }
+            return args.valueText;
+        }
+
+        function bind_chart(e) {
+            e.component.bindChart($("#pivotgrid-chart"), {
+                dataFieldsDisplayMode: "splitPanes",
+                alternateDataFields: false
+            });
+            //e.component.on("contentReady", contentReady);
+        }
+
+        function bind_chart_app(e) {
+            e.component.bindChart($("#pivotgrid-chart-app"), {
+                dataFieldsDisplayMode: "splitPanes",
+                alternateDataFields: false
+            });
+            //e.component.on("contentReady", contentReady);
+        }
+
+        function contentReady(e) {
+
+            var d = Date.now();
+            var n = d.getFullYear() + 543;
+
+            e.component.off("contentReady", contentReady);
+            var dataSource = e.component.getDataSource()
+            dataSource.expandHeaderItem("row", ["B แผนงานตามนโยบายที่ถ่ายทอดไปยังหน่วยปฏิบัติ (Top - Down:)"]);
+            dataSource.expandHeaderItem("column", [n]);
+        }
+
+        function calculateCustomSummary(args) {
+            switch (args.summaryProcess) {
+                case "start":
+                    // Initializing "totalValue" here
+                    args.totalValue = {
+                        sum: 0,
+                        count: 0,
+                        avg: 0
+                    };
+                    break;
+                case "calculate":
+                    args.totalValue.sum += args.value;
+                    args.totalValue.count++;
+                    // Modifying "totalValue" here
+                    break;
+                case "finalize":
+                    // Assigning the final value to "totalValue" here
+                    args.totalValue.avg = args.totalValue.sum / args.totalValue.count;
+                    break;
+            }
+        }
+
+        function calculateSummaryValue(summaryCell) {
+            var value = summaryCell.value();
+            if (value) {
+                //var chd = summaryCell.children("row");
+                //The grandTotol row
+                if (summaryCell.grandTotal("column").value() === value) {
+                    if (value.count > 4) {
+                        return value.sum / (value.count / 3);
+                    } else {
+                        return value.sum;
+                    }
+                } else {
+                    return value.avg;
+                }
+            }
+        }
+
+    </script>
+}

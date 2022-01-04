@@ -1,0 +1,201 @@
+﻿@using Microsoft.AspNetCore.Identity
+@using System.Globalization
+@inject UserManager<ApplicationUser> UserManager
+
+
+@{
+    ViewData["Title"] = "รายงานผลการดำเนินงานตามแผนปฏิบัติราชการของหน่วยงานส่วนกลาง";
+    var user = await UserManager.GetUserAsync(User);
+
+}
+<link href="~/css/datatables/buttons.dataTables.min.css" rel="stylesheet" />
+
+
+<link href="~/css/devextreme/dx.common.css" rel="stylesheet" />
+<link href="~/css/devextreme/dx.light.css" rel="stylesheet" />
+<script src="~/js/devextreme/jquery.js"></script>
+<script src="~/js/devextreme/cldr.js"></script>
+<script src="~/js/devextreme/cldr/event.js"></script>
+<script src="~/js/devextreme/cldr/supplemental.js"></script>
+<script src="~/js/devextreme/cldr/unresolved.js"></script>
+<script src="~/js/devextreme/globalize.js"></script>
+<script src="~/js/devextreme/globalize/message.js"></script>
+<script src="~/js/devextreme/globalize/number.js"></script>
+<script src="~/js/devextreme/globalize/currency.js"></script>
+<script src="~/js/devextreme/globalize/date.js"></script>
+<!-- Uncomment to enable the client-side export feature -->
+<!-- script src="~/js/devextreme/jszip.js"></script -->
+<!-- Uncomment to provide geo-data for the VectorMap control -->
+<!-- script src="~/js/devextreme/vectormap-data/world.js"></script -->
+<script src="~/js/devextreme/dx21.all.js"></script>
+<script src="~/js/devextreme/aspnet/dx.aspnet.mvc.js"></script>
+<script src="~/js/devextreme/aspnet/dx.aspnet.data.js"></script>
+<script src="~/js/polyfill.min.js"></script>
+<script src="~/js/exceljs.min.js"></script>
+<script src="~/js/FileSaver.min.js"></script>
+
+
+<div class="container-fluid">
+    <h1 class="h3 mb-2 text-gray-800">รายงานผลการดำเนินงานตามแผนปฏิบัติราชการของหน่วยงานส่วนกลาง</h1>
+    <p class="mb-4">รายงานตามแผนปฏิบัติราชการกรมสรรพากร</p>
+    <form asp-action="CentralTarGet">
+        <div class="row justify-content-between">
+            <div class="col-md-5">
+                <div class="row">
+                    <label class="col-form-label col-md-3 text-md-right">หน่วยงาน: </label>
+                    @if (User.IsInRole("Admin") || User.IsInRole("Special") || User.IsInRole("Manager")
+|| (User.IsInRole("User") && user.OfficeId.Substring(2, 6) == "000000") || (user.approver == true && user.OfficeId.Substring(5, 3) == "000"))
+                    {
+                        <select name="officeCode" class="form-control col-md-9" asp-items="ViewBag.OfficeCode" onchange="this.form.submit()">
+                            <option value="">เลือกหน่วยงาน</option>
+                        </select>
+                    }
+                    else
+                    {
+                        <select name="officeCode" class="form-control col-md-7" asp-items="ViewBag.OfficeCode" onchange="this.form.submit()" disabled>
+                            <option value="">เลือกหน่วยงาน</option>
+                        </select>
+                    }
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="row">
+                    <label class="col-form-label col-md-6 text-md-right">ปีงบประมาณ: </label>
+                    <select name="yearPoint" class="form-control col-md-6" asp-items="ViewBag.Year" onchange="this.form.submit()">
+                    </select>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="row">
+                    <label class="col-form-label col-md-5 text-md-right">รายงานประจำเดือน: </label>
+                    <select name="month" class="form-control col-md-7" asp-items="ViewBag.Month" onchange="this.form.submit()"></select>
+                </div>
+            </div>
+        </div>
+    </form>
+    <div class="row" id="datagrid-demo">
+
+        @(Html.DevExtreme().DataGrid()
+        .ID("datagrid")
+        .ShowBorders(true)
+        .DataSource(d => d
+            .Mvc().Controller("ReportsApi").LoadAction("CentralTarget").LoadParams(new { yearPoint = ViewBag.selectYear, lastMonth = ViewBag.selectMonth, officeCode = ViewBag.selectOffice })
+        )
+        .Columns(cln =>
+        {
+            cln.Add().DataField("point").Caption("ตัวชี้วัด").Alignment(HorizontalAlignment.Center).Width(80).AllowSorting(false);
+            cln.Add().DataField("expectPlan").Caption("เป้าประสงค์").Alignment(HorizontalAlignment.Center).Width(100).AllowSorting(false);
+            cln.Add().DataField("ddrive").Caption("กลยุทธ์ D2rive").Alignment(HorizontalAlignment.Center).Width(120).AllowSorting(false);
+            cln.Add().DataField("detailPlan").Caption("แผนงาน / โครงการ").MinWidth(300).AllowSorting(false);
+            cln.Add().DataField("target").Caption("ผลการดำเนินการ").Alignment(HorizontalAlignment.Center).Format(ff => { ff.Type(Format.FixedPoint); ff.Precision(2); }).Width(120).AllowSorting(false);
+            cln.Add().Caption("สถานะการดำเนินการ").Columns(c2 =>
+            {
+                c2.Add().DataField("isTarget").Caption("เป็นไปตามแผน").Alignment(HorizontalAlignment.Center).Width(120).AllowSorting(false);
+                c2.Add().DataField("isNotTarget").Caption("ไม่เป็นไปตามแผน").Alignment(HorizontalAlignment.Center).Width(120).AllowSorting(false);
+            }).Alignment(HorizontalAlignment.Center).AllowSorting(false);
+            cln.Add().DataField("issue").Caption("ปัญหาและอุปสรรค / แนวทางแก้ไข").AllowSorting(false);
+            cln.Add().DataField("officeName").Caption("ผู้รับผิดชอบ").Alignment(HorizontalAlignment.Center).MinWidth(100).AllowSorting(false);
+        })
+        .Export(e => e.Enabled(true))
+        .OnExporting("onExporting")
+        .WordWrapEnabled(true)
+        .ShowColumnLines(true)
+        .ShowRowLines(true)
+    )
+
+    </div>
+    <div class="row" style="font-size: small">
+        <div class="col-12"><b><u>หมายเหตุ: </u></b></div>
+        <div class="col-xs-12 col-md-6">
+            <b>เป้าประสงค์</b>
+            <ul>
+                <li>O1 กำหนดนโยบายภาษีให้มีความเหมาะสม เพื่อพัฒนาประเทศที่ยั่งยืน </li>
+                <li>O2 เพิ่มประสิทธิภาพการจัดเก็บภาษี </li>
+                <li>O3 บูรณาการข้อมูลรายได้ รายจ่าย </li>
+                <li>O4 พัฒนาการแนะนำ กำกับดูแล ตรวจสอบภาษีอากรที่มีประสิทธิภาพ </li>
+                <li>O5 การเสริมสร้างการปฏิบัติหน้าที่ทางภาษีอากรให้ถูกต้อง </li>
+                <li>O6 ปรับปรุงระเบียบ/กฎหมาย/แนวปฏิบัติครบคลุมและเข้าใจง่าย </li>
+                <li>O7 พัฒนาบริการที่ดี มุ่งสู่ประชาชน </li>
+                <li>O8 พัฒนาบุคลากร: เก่ง ดี มีความสุข </li>
+                <li>O9 พัฒนาองค์กรให้เป็น Smart Office </li>
+                <li>O10 ส่งเสริม Innovation Culture </li>
+                <li>O11 สื่อสารองค์กรเชิงรุก</li>
+            </ul>
+            <!--
+    <table border="1" class="table table-striped" style="width: 100%;">
+        <thead>
+            <tr>
+                <td>เป้าประสงค์</td>
+            </tr>
+        </thead>
+        <tbody>
+            <tr><td>O1 กำหนดนโยบายภาษีให้มีความเหมาะสม เพื่อพัฒนาประเทศที่ยั่งยืน </td></tr>
+            <tr><td>O2 เพิ่มประสิทธิภาพการจัดเก็บภาษี </td></tr>
+            <tr><td>O3 บูรณาการข้อมูลรายได้ รายจ่าย </td></tr>
+            <tr><td>O4 พัฒนาการแนะนำ กำกับดูแล ตรวจสอบภาษีอากรที่มีประสิทธิภาพ </td></tr>
+            <tr><td>O5 การเสริมสร้างการปฏิบัติหน้าที่ทางภาษีอากรให้ถูกต้อง </td></tr>
+            <tr><td>O6 ปรับปรุงระเบียบ/กฎหมาย/แนวปฏิบัติครบคลุมและเข้าใจง่าย </td></tr>
+            <tr><td>O7 พัฒนาบริการที่ดี มุ่งสู่ประชาชน </td></tr>
+            <tr><td>O8 พัฒนาบุคลากร: เก่ง ดี มีความสุข </td></tr>
+            <tr><td>O9 พัฒนาองค์กรให้เป็น Smart Office </td></tr>
+            <tr><td>O10 ส่งเสริม Innovation Culture </td></tr>
+            <tr><td>O11 สื่อสารองค์กรเชิงรุก</td></tr>
+        </tbody>
+    </table>
+    -->
+        </div>
+        <div class="col-xs-12 col-md-6">
+            <b>กลยุทธ์</b>
+            <ul>
+                <li>D1 - Digital Transformation </li>
+                <li>D2 - Data Analytics </li>
+                <li>R - Revenue Collection </li>
+                <li>I – Innovation </li>
+                <li>V – Values </li>
+                <li>E – Efficiency</li>
+            </ul>
+            <!--
+    <table border="1" class="table table-striped" style="width: 100%;">
+        <thead>
+            <tr>
+                <td>
+                    กลยุทธ์
+                </td>
+            </tr>
+        </thead>
+        <tbody>
+            <tr><td>D - Digital Transformation </td></tr>
+            <tr><td>D - Data Analytics </td></tr>
+            <tr><td>R - Revenue Collection </td></tr>
+            <tr><td>I – Innovation </td></tr>
+            <tr><td>V – Values </td></tr>
+            <tr><td>E – Efficiency</td></tr>
+        </tbody>
+    </table>
+
+    -->
+        </div>
+    </div>
+    <br />
+    <br />
+    <br />
+</div>
+
+
+<script type="text/javascript">
+    function onExporting(e) {
+        var workbook = new ExcelJS.Workbook();
+        var worksheet = workbook.addWorksheet('Report');
+
+        DevExpress.excelExporter.exportDataGrid({
+            component: e.component,
+            worksheet: worksheet,
+            autoFilterEnabled: true
+        }).then(function () {
+            workbook.xlsx.writeBuffer().then(function (buffer) {
+                saveAs(new Blob([buffer], { type: 'application/octet-stream' }), 'Report.xlsx');
+            });
+        });
+        e.cancel = true;
+    }
+</script>

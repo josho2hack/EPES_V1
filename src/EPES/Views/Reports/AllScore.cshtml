@@ -25,9 +25,14 @@
 <!-- script src="~/js/devextreme/jszip.js"></script -->
 <!-- Uncomment to provide geo-data for the VectorMap control -->
 <!-- script src="~/js/devextreme/vectormap-data/world.js"></script -->
-<script src="~/js/devextreme/dx.all.js"></script>
+<script src="~/js/devextreme/dx21.all.js"></script>
 <script src="~/js/devextreme/aspnet/dx.aspnet.mvc.js"></script>
 <script src="~/js/devextreme/aspnet/dx.aspnet.data.js"></script>
+<script src="~/js/polyfill.min.js"></script>
+<script src="~/js/exceljs.min.js"></script>
+<script src="~/js/FileSaver.min.js"></script>
+<script src="~/js/exporting.js"></script>
+
 
 <div class="container-fluid">
     <h1 class="h3 mb-2 text-gray-800">รายงานผลการปฏิบัติราชการ กลุ่มกรมสรรพากร เพื่อหาค่าเฉลี่ย</h1>
@@ -54,34 +59,34 @@
         </div>
         <div class="col-md-3">
             <div class="row">
-                    <label class="col-form-label col-md-6 text-md-right">ปีงบประมาณ: </label>
-                    <select asp-for="yearPoint" class="form-control col-md-6" onchange="this.form.submit()">
-                        <option value="-1">
-                            @{
-                                if (DateTime.Now.Month == 10 || DateTime.Now.Month == 11 || DateTime.Now.Month == 12)
-                                {
-                                    @DateTime.Now.ToString("yyyy");
-                                }
-                                else
-                                {
-                                    @DateTime.Now.AddYears(-1).ToString("yyyy");
-                                }
+                <label class="col-form-label col-md-6 text-md-right">ปีงบประมาณ: </label>
+                <select asp-for="yearPoint" class="form-control col-md-6" onchange="this.form.submit()">
+                    <option value="-1">
+                        @{
+                            if (DateTime.Now.Month == 10 || DateTime.Now.Month == 11 || DateTime.Now.Month == 12)
+                            {
+                                @DateTime.Now.ToString("yyyy");
                             }
-                        </option>
-                        <option value="0">
-                            @{
-                                if (DateTime.Now.Month == 10 || DateTime.Now.Month == 11 || DateTime.Now.Month == 12)
-                                {
-                                    @DateTime.Now.AddYears(1).ToString("yyyy");
-                                }
-                                else
-                                {
-                                    @DateTime.Now.ToString("yyyy");
-                                }
+                            else
+                            {
+                                @DateTime.Now.AddYears(-1).ToString("yyyy");
                             }
-                        </option>
-                    </select>
-                </div>
+                        }
+                    </option>
+                    <option value="0">
+                        @{
+                            if (DateTime.Now.Month == 10 || DateTime.Now.Month == 11 || DateTime.Now.Month == 12)
+                            {
+                                @DateTime.Now.AddYears(1).ToString("yyyy");
+                            }
+                            else
+                            {
+                                @DateTime.Now.ToString("yyyy");
+                            }
+                        }
+                    </option>
+                </select>
+            </div>
         </div>
         <div class="col-md-4">
             <div class="row">
@@ -104,86 +109,89 @@
 
     <br />
 
+    คลิกขวาที่ตารางเพื่อ Export
     @(Html.DevExtreme().PivotGrid<ScoreDraft>()
-.ID("pivotgrid")
-//.AllowSortingBySummary(true)
-.AllowFiltering(true)
-.ShowBorders(true)
-.ShowColumnGrandTotals(true)
-.ShowRowGrandTotals(false)
-.ShowRowTotals(false)
-.ShowColumnTotals(false)
-.FieldChooser(c => c.Enabled(false).Height(400))
-.Texts(t => t
-        .GrandTotal("รวม")
-        .Total("ค่าเฉลี่ย {0}")
-)
-.RowHeaderLayout(PivotGridRowHeadersLayout.Tree)
-//.AllowExpandAll(true)
-.DataSource(d => d
-    .Store(s => s.Mvc().Controller("ReportsApi").Key("Id").LoadAction("GetAllScore").LoadParams(new { yearPoint = Model.yearPoint, lastMonth = Model.Month }))
-
-    .Fields(fields => {
-
-    fields.Add()
-        .Caption("หน่วยงาน")
-        .DataField("nameGroup")
-        .Expanded(false)
-        //.SortBy(PivotGridSortBy.DisplayText)
-        //.SortOrder(SortOrder.Asc)
-        .Width(200)
-        .Area(PivotGridArea.Row);
-
-    fields.Add()
-        .Caption("หน่วยงาน")
-        .DataField("name")
-        .Expanded(false)
-        //.SortBy(PivotGridSortBy.DisplayText)
-        //.SortOrder(SortOrder.Asc)
-        .Width(300)
-        .Area(PivotGridArea.Row);
-
-    fields.Add()
-        .Caption("ปีงบประมาณ")
-        .DataField("year")
-        .Expanded(true)
-        .Area(PivotGridArea.Column)
-        .Selector(@<text>
-                    function(data) {
-                        var y = data.year + 543;
-                        return "ปีงบประมาณ " + y;
-                    }
-                    </text>);
-
-        fields.Add()
-            .Caption("แผน")
-            .DataField("plan")
-            .Expanded(false)
-            .Area(PivotGridArea.Column)
-            .Selector(@<text>
-                    function(data) {
-                        if(data.plan == 0){
-                            return  "แผน A";
-                        }else if(data.plan == 1){
-                            return  "แผน B";
-                        }else if(data.plan == 2){
-                            return  "แผน C";
-                        }else if(data.plan == 3){
-                            return  "แผน D";
-                        }
-                    }
-                    </text>);
-
-            fields.Add()
-                .Caption("คะแนนถ่วงน้ำหนัก")
-                .DataField("cal")
-                .SummaryType(SummaryType.Sum)
-                .Format(f => f.Type(Format.FixedPoint).Precision(4))
-                .Area(PivotGridArea.Data)
-                .CustomizeText("customizeText");
-        })
+        .ID("pivotgrid")
+        //.AllowSortingBySummary(true)
+        .AllowFiltering(true)
+        .ShowBorders(true)
+        .ShowColumnGrandTotals(true)
+        .ShowRowGrandTotals(false)
+        .ShowRowTotals(false)
+        .ShowColumnTotals(false)
+        .FieldChooser(c => c.Enabled(false).Height(400))
+        .Texts(t => t
+                .GrandTotal("รวม")
+                .Total("ค่าเฉลี่ย {0}")
         )
-    .OnInitialized("bind_chart")
+        .RowHeaderLayout(PivotGridRowHeadersLayout.Tree)
+        //.AllowExpandAll(true)
+        .DataSource(d => d
+            .Store(s => s.Mvc().Controller("ReportsApi").Key("Id").LoadAction("GetAllScore").LoadParams(new { yearPoint = Model.yearPoint, lastMonth = Model.Month }))
+            .Fields(fields => {
+                fields.Add()
+                    .Caption("หน่วยงาน")
+                    .DataField("nameGroup")
+                    .Expanded(false)
+                    //.SortBy(PivotGridSortBy.DisplayText)
+                    //.SortOrder(SortOrder.Asc)
+                    .Width(200)
+                    .Area(PivotGridArea.Row);
+
+                fields.Add()
+                    .Caption("หน่วยงาน")
+                    .DataField("name")
+                    .Expanded(false)
+                    //.SortBy(PivotGridSortBy.DisplayText)
+                    //.SortOrder(SortOrder.Asc)
+                    .Width(300)
+                    .Area(PivotGridArea.Row);
+                /*
+                fields.Add()
+                    .Caption("ปีงบประมาณ")
+                    .DataField("year")
+                    .Expanded(true)
+                    .Area(PivotGridArea.Column)
+                    .Selector(@<text>
+                                function(data) {
+                                    var y = data.year + 543;
+                                    return "ปีงบประมาณ " + y;
+                                }
+                                </text>);
+                */
+                fields.Add()
+                    .Caption("แผน")
+                    .DataField("plan")
+                    .Expanded(false)
+                    .Area(PivotGridArea.Column)
+                    .Selector(@<text>
+                            function(data) {
+                                if(data.plan == 0){
+                                    return  "แผน A";
+                                }else if(data.plan == 1){
+                                    return  "แผน B";
+                                }else if(data.plan == 2){
+                                    return  "แผน C";
+                                }else if(data.plan == 3){
+                                    return  "แผน D";
+                                }
+                            }
+                            </text>);
+
+                fields.Add()
+                    .Caption("คะแนนถ่วงน้ำหนัก")
+                    .DataField("cal")
+                    .SummaryType(SummaryType.Custom)
+                    .CalculateCustomSummary("calculateCustomSummary")
+                    .CalculateSummaryValue("calculateSummaryValue")
+                    .Format(f => f.Type(Format.FixedPoint).Precision(4))
+                    .Area(PivotGridArea.Data)
+                    .CustomizeText("customizeText");
+                })
+        )
+        .OnInitialized("bind_chart")
+        .Export(e => e.Enabled(true))
+        .OnExporting("onExporting")
     )
 
     <br />
@@ -199,85 +207,91 @@
 
     <br />
 
+    คลิกขวาที่ตารางเพื่อ Export
     @(Html.DevExtreme().PivotGrid<ScoreDraft>()
-.ID("pivotgrid-app")
-//.AllowSortingBySummary(true)
-.AllowFiltering(true)
-.ShowBorders(true)
-.ShowColumnGrandTotals(true)
-.ShowRowGrandTotals(false)
-.ShowRowTotals(false)
-.ShowColumnTotals(false)
-.FieldChooser(c => c.Enabled(false).Height(400))
-.Texts(t => t
-        .GrandTotal("รวม")
-        .Total("ค่าเฉลี่ย {0}")
-)
-.RowHeaderLayout(PivotGridRowHeadersLayout.Tree)
-//.AllowExpandAll(true)
-.DataSource(d => d
-.Store(s => s.Mvc().Controller("ReportsApi").Key("Id").LoadAction("GetAllScore").LoadParams(new { yearPoint = Model.yearPoint, lastMonth = Model.Month }))
+        .ID("pivotgrid-app")
+        //.AllowSortingBySummary(true)
+        .AllowFiltering(true)
+        .ShowBorders(true)
+        .ShowColumnGrandTotals(true)
+        .ShowRowGrandTotals(false)
+        .ShowRowTotals(false)
+        .ShowColumnTotals(false)
+        .FieldChooser(c => c.Enabled(false).Height(400))
+        .Texts(t => t
+                .GrandTotal("รวม")
+                .Total("ค่าเฉลี่ย {0}")
+        )
+        .RowHeaderLayout(PivotGridRowHeadersLayout.Tree)
+        //.AllowExpandAll(true)
+        .DataSource(d => d
+            .Store(s => s.Mvc().Controller("ReportsApi").Key("Id").LoadAction("GetAllScore").LoadParams(new { yearPoint = Model.yearPoint, lastMonth = Model.Month }))
+            .Fields(fields => {
+                fields.Add()
+                    .Caption("สังกัดหน่วยงาน")
+                    .DataField("nameGroup")
+                    .Expanded(false)
+                    //.SortBy(PivotGridSortBy.DisplayText)
+                    //.SortOrder(SortOrder.Asc)
+                    .Width(300)
+                    .Area(PivotGridArea.Row);
 
-.Fields(fields => {
-fields.Add()
-        .Caption("สังกัดหน่วยงาน")
-        .DataField("nameGroup")
-        .Expanded(false)
-        //.SortBy(PivotGridSortBy.DisplayText)
-        //.SortOrder(SortOrder.Asc)
-        .Width(300)
-        .Area(PivotGridArea.Row);
+                fields.Add()
+                    .Caption("หน่วยงาน")
+                    .DataField("name")
+                    .Expanded(false)
+                    //.SortBy(PivotGridSortBy.DisplayText)
+                    //.SortOrder(SortOrder.Asc)
+                    .Width(300)
+                    .Area(PivotGridArea.Row);
 
-fields.Add()
-        .Caption("หน่วยงาน")
-        .DataField("name")
-        .Expanded(false)
-        //.SortBy(PivotGridSortBy.DisplayText)
-        //.SortOrder(SortOrder.Asc)
-        .Width(300)
-        .Area(PivotGridArea.Row);
-
-fields.Add()
-        .Caption("ปีงบประมาณ")
-        .DataField("year")
-        .Expanded(true)
-        .Area(PivotGridArea.Column)
-        .Selector(@<text>
-                    function(data) {
-                        var y = data.year + 543;
-                        return "ปีงบประมาณ " + y;
-                    }
-                    </text>);
-
-        fields.Add()
-            .Caption("แผน")
-            .DataField("plan")
-            .Expanded(false)
-            .Area(PivotGridArea.Column)
-            .Selector(@<text>
-                    function(data) {
-                        if(data.plan == 0){
-                            return  "แผน A";
-                        }else if(data.plan == 1){
-                            return  "แผน B";
-                        }else if(data.plan == 2){
-                            return  "แผน C";
-                        }else if(data.plan == 3){
-                            return  "แผน D";
+                /*
+                fields.Add()
+                    .Caption("ปีงบประมาณ")
+                    .DataField("year")
+                    .Expanded(true)
+                    .Area(PivotGridArea.Column)
+                    .Selector(@<text>
+                                function(data) {
+                                    var y = data.year + 543;
+                                    return "ปีงบประมาณ " + y;
+                                }
+                                </text>);
+                */
+                fields.Add()
+                    .Caption("แผน")
+                    .DataField("plan")
+                    .Expanded(false)
+                    .Area(PivotGridArea.Column)
+                    .Selector(@<text>
+                        function(data) {
+                            if(data.plan == 0){
+                                return  "แผน A";
+                            }else if(data.plan == 1){
+                                return  "แผน B";
+                            }else if(data.plan == 2){
+                                return  "แผน C";
+                            }else if(data.plan == 3){
+                                return  "แผน D";
+                            }
                         }
-                    }
                     </text>);
 
-            fields.Add()
-                .Caption("คะแนนถ่วงน้ำหนัก")
-                .DataField("calApprove")
-                .SummaryType(SummaryType.Sum)
-                .Format(f => f.Type(Format.FixedPoint).Precision(4))
-                .Area(PivotGridArea.Data)
-                .CustomizeText("customizeText");
-        })
+                fields.Add()
+                    .Caption("คะแนนถ่วงน้ำหนัก")
+                    .DataField("calApprove")
+                    .SummaryType(SummaryType.Custom)
+                    .CalculateCustomSummary("calculateCustomSummary")
+                    .CalculateSummaryValue("calculateSummaryValue")
+                    .Format(f => f.Type(Format.FixedPoint).Precision(4))
+                    .Area(PivotGridArea.Data)
+                    .CustomizeText("customizeText");
+                }
+            )
         )
         .OnInitialized("bind_chart_app")
+        .Export(e => e.Enabled(true))
+        .OnExporting("onExporting")
     )
 </div>
 <br />
@@ -324,5 +338,45 @@ fields.Add()
             dataSource.expandHeaderItem("row", ["B แผนงานตามนโยบายที่ถ่ายทอดไปยังหน่วยปฏิบัติ (Top - Down:)"]);
             dataSource.expandHeaderItem("column", [n]);
         }
+
+        function calculateCustomSummary(args) {
+            switch (args.summaryProcess) {
+                case "start":
+                    // Initializing "totalValue" here
+                    args.totalValue = {
+                        sum: 0,
+                        count: 0,
+                        avg: 0
+                    };
+                    break;
+                case "calculate":
+                    args.totalValue.sum += args.value;
+                    args.totalValue.count++;
+                    // Modifying "totalValue" here
+                    break;
+                case "finalize":
+                    // Assigning the final value to "totalValue" here
+                    args.totalValue.avg = args.totalValue.sum / args.totalValue.count;
+                    break;
+            }
+        }
+
+        function calculateSummaryValue(summaryCell) {
+            var value = summaryCell.value();
+            if (value) {
+                //var chd = summaryCell.children("row");
+                //The grandTotol row
+                if (summaryCell.grandTotal("column").value() === value) {
+                    if (value.count > 4) {
+                        return value.sum / (value.count / 3);
+                    } else {
+                        return value.sum;
+                    }
+                } else {
+                    return value.avg;
+                }
+            }
+        }
+
     </script>
 }
