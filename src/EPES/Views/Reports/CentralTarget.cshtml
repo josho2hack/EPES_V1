@@ -83,24 +83,25 @@
         )
         .Columns(cln =>
         {
-            cln.Add().DataField("point").Caption("ตัวชี้วัด").Alignment(HorizontalAlignment.Center).Width(80).AllowSorting(false);
-            cln.Add().DataField("expectPlan").Caption("เป้าประสงค์").Alignment(HorizontalAlignment.Center).Width(100).AllowSorting(false);
-            cln.Add().DataField("ddrive").Caption("กลยุทธ์ D2rive").Alignment(HorizontalAlignment.Center).Width(120).AllowSorting(false);
-            cln.Add().DataField("detailPlan").Caption("แผนงาน / โครงการ").MinWidth(300).AllowSorting(false);
-            cln.Add().DataField("target").Caption("ผลการดำเนินการ").Alignment(HorizontalAlignment.Center).Format(ff => { ff.Type(Format.FixedPoint); ff.Precision(2); }).Width(120).AllowSorting(false);
+            cln.Add().DataField("point").Caption("ตัวชี้วัด").Alignment(HorizontalAlignment.Center).Width(80).AllowSorting(false).Fixed(true);
+            cln.Add().DataField("expectPlan").Caption("เป้าประสงค์").Alignment(HorizontalAlignment.Center).Width(100).AllowSorting(false).Fixed(false);
+            cln.Add().DataField("ddrive").Caption("กลยุทธ์ D2rive").Alignment(HorizontalAlignment.Center).Width(120).AllowSorting(false).Fixed(false);
+            cln.Add().DataField("detailPlan").Caption("แผนงาน / โครงการ").MinWidth(300).AllowSorting(false).Fixed(false);
+            cln.Add().DataField("target").Caption("ผลการดำเนินการ").Alignment(HorizontalAlignment.Center).Format(ff => { ff.Type(Format.FixedPoint); ff.Precision(2); }).Width(120).AllowSorting(false).Fixed(false);
             cln.Add().Caption("สถานะการดำเนินการ").Columns(c2 =>
             {
                 c2.Add().DataField("isTarget").Caption("เป็นไปตามแผน").Alignment(HorizontalAlignment.Center).Width(120).AllowSorting(false);
                 c2.Add().DataField("isNotTarget").Caption("ไม่เป็นไปตามแผน").Alignment(HorizontalAlignment.Center).Width(120).AllowSorting(false);
-            }).Alignment(HorizontalAlignment.Center).AllowSorting(false);
-            cln.Add().DataField("issue").Caption("ปัญหาและอุปสรรค / แนวทางแก้ไข").AllowSorting(false);
-            cln.Add().DataField("officeName").Caption("ผู้รับผิดชอบ").Alignment(HorizontalAlignment.Center).MinWidth(100).AllowSorting(false);
+            }).Alignment(HorizontalAlignment.Center).AllowSorting(false).Fixed(false);
+            cln.Add().DataField("issue").Caption("ปัญหาและอุปสรรค / แนวทางแก้ไข").AllowSorting(false).Fixed(false);
+            cln.Add().DataField("officeName").Caption("ผู้รับผิดชอบ").Alignment(HorizontalAlignment.Center).MinWidth(100).AllowSorting(false).Fixed(false);
         })
         .Export(e => e.Enabled(true))
         .OnExporting("onExporting")
-        .WordWrapEnabled(true)
         .ShowColumnLines(true)
         .ShowRowLines(true)
+        .WordWrapEnabled(true)
+        .Width("100%")
     )
 
     </div>

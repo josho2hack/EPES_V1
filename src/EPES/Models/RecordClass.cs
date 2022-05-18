@@ -59,4 +59,28 @@ namespace EPES.Models
         [FieldQuoted]
         public int year;
     }
+
+    [DelimitedRecord(",")]
+    [IgnoreEmptyLines()]
+    public class Expect
+    {
+        [FieldQuoted]
+        public int point;
+
+        [FieldQuoted]
+        public int year;
+
+        [FieldQuoted]
+        public int month;
+
+        [FieldQuoted]
+        public string officeID;
+
+        [FieldQuoted]
+        public string officeName;
+
+        [FieldQuoted]
+        public decimal expect;
+
+    }
 }

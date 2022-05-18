@@ -91,7 +91,7 @@ namespace EPES.Controllers
 
                             if (dataForEvaluation != null)
                             {
-                                //dataForEvaluation.Expect = t.CMCYforcast/1000000;
+                                dataForEvaluation.Expect = t.CMCYforcast/1000000;
                                 dataForEvaluation.Result = t.CMcurrentYear / 1000000;
                                 //dataForEvaluation.CompletedDate = new DateTime(yearForRequest.Year, dataForEvaluation.Month, DateTime.DaysInMonth(yearForRequest.Year, dataForEvaluation.Month));
                                 dataForEvaluation.CompletedDate = new DateTime(yearForCompletedDate, dataForEvaluation.Month, DateTime.DaysInMonth(yearForCompletedDate, dataForEvaluation.Month));
@@ -107,7 +107,7 @@ namespace EPES.Controllers
 
                             if (dataForEvaluation != null)
                             {
-                                //dataForEvaluation.Expect = t.CMCYforcast/1000000;
+                                dataForEvaluation.Expect = t.CMCYforcast/1000000;
                                 dataForEvaluation.Result = t.CMcurrentYear / 1000000;
                                 //dataForEvaluation.CompletedDate = new DateTime(yearForRequest.Year, dataForEvaluation.Month, DateTime.DaysInMonth(yearForRequest.Year, dataForEvaluation.Month));
                                 dataForEvaluation.CompletedDate = new DateTime(yearForCompletedDate, dataForEvaluation.Month, DateTime.DaysInMonth(yearForCompletedDate, dataForEvaluation.Month));
@@ -1511,7 +1511,7 @@ namespace EPES.Controllers
 
             foreach(AutoApps app in appArr)
             {
-                string url = "http://localhost:8082/morgor/p" + app + ".csv";
+                string url = "http://localhost:8082/morgor/p" + ((int)app) + ".csv";
                 HttpWebRequest webRequest = WebRequest.Create(url) as HttpWebRequest;
                 if (webRequest == null)
                 {
@@ -1609,7 +1609,8 @@ namespace EPES.Controllers
 
         public IActionResult GetP21()
         {
-            string url = "http://localhost:8082/sornor/p21.csv";
+            //string url = "http://localhost:8082/sornor/p21.csv";
+            string url = "http://10.2.1.167/data/epes/brq/brqepes.csv";
             HttpWebRequest webRequest = WebRequest.Create(url) as HttpWebRequest;
             if (webRequest == null)
             {
@@ -1617,6 +1618,7 @@ namespace EPES.Controllers
             }
 
             DateTime yearForRequest;
+            int yearForCompletedDate;
 
             using (var s = webRequest.GetResponse().GetResponseStream())
             {
@@ -1627,12 +1629,14 @@ namespace EPES.Controllers
 
                     foreach (var record in records)
                     {
-                        yearForRequest = new DateTime(record.year - 543, 1, 1);
-
-                        var yearForCompletedDate = yearForRequest.Year;
                         if (record.month >= 10)
                         {
-                            yearForCompletedDate = yearForCompletedDate - 1;
+                            yearForRequest = new DateTime(record.year - 542, 1, 1);
+                            yearForCompletedDate = yearForRequest.Year - 1;
+                        } else
+                        {
+                            yearForRequest = new DateTime(record.year - 543, 1, 1);
+                            yearForCompletedDate = yearForRequest.Year;
                         }
 
                         var dataForEvaluation = _context.DataForEvaluations
@@ -1647,12 +1651,58 @@ namespace EPES.Controllers
                             dataForEvaluation.Approve = Approve.ผษ_อนุมัติ;
                             _context.SaveChanges();
                         }
+
                     }
                 }
             }
 
             return LocalRedirect("/");
 
+        }
+
+        public IActionResult GetExpectByProgramID()
+        {
+            string url = "http://localhost:8082/expect/expect.csv";
+            HttpWebRequest webRequest = WebRequest.Create(url) as HttpWebRequest;
+            if (webRequest == null)
+            {
+                return LocalRedirect("/");
+            }
+
+            DateTime yearForRequest;
+
+            using (var s = webRequest.GetResponse().GetResponseStream())
+            {
+                using (var sr = new StreamReader(s))
+                {
+                    var engine = new FileHelperEngine<Expect>();
+                    var records = engine.ReadStream(sr);
+
+                    foreach (var record in records)
+                    {
+                        yearForRequest = new DateTime(record.year - 543, 1, 1);
+
+                        string officeID;
+                        if(record.officeID == "00000722")
+                        {
+                            officeID = "00009000";
+                        } else
+                        {
+                            officeID = record.officeID;
+                        }
+
+                        var dataForEvaluation = _context.DataForEvaluations
+                                            .Where(d => d.Office.Code == officeID && d.PointOfEvaluation.Point == record.point && d.PointOfEvaluation.Year == yearForRequest && d.Month == record.month)
+                                            .FirstOrDefault();
+                        if (dataForEvaluation != null)
+                        {
+                            dataForEvaluation.Expect = record.expect;
+                            _context.SaveChanges();
+                        }
+                    }
+                }
+            }
+            return LocalRedirect("/");
         }
     }
 }

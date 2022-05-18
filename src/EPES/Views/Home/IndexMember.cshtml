@@ -658,140 +658,143 @@
                 <!-- Card Body -->
                 <div class="card-body">
                     <div class="row">
-                        <div id="all" class="col-xl-4 mb-3">
-                            <div class="card">
-                                <div class="card-header bg-light">
-                                    ภาพรวม
-                                </div>
-                                <div class="card-body">
-                                    <div class="row">
-                                        <div class="col-xl-6 mb-3">
-                                            @(Html.DevExtreme().Chart()
-                                        .ID("pie211")
-                                        .CommonSeriesSettings(s => s
-                                            .ArgumentField("office")
-                                            .ValueField("value")
-                                            .Type(SeriesType.Bar)
-                                            .IgnoreEmptyPoints(true)
-                                        //.Label(l => l
-                                        //    .Visible(true)
-                                        //    .Format(f => f
-                                        //        .Type(Format.FixedPoint)
-                                        //        .Precision(4)
-                                        //    )
-                                        //)
-                                        )
-                                        .SeriesTemplate(t => t.NameField("office"))
-                                        .Tooltip(t => t.Enabled(true).CustomizeTooltip(@<text>
-                                            function(arg) {
-                                                    return {
-                                                       html: args.seriesName + " | <div class='currency'>" + args.valueText + "</div>"
-                                                    };
-                                            }
-                                         </text>).Format(Format.Decimal))
-                                        .Palette(new[] { "#89ccf7", "#015c93" })
-                                        .Title(t => t
-                                            .Text("ผลสะสม ณ เดือน" + DateTime.Now.AddMonths(-1).ToString("MMMM") + "เทียบกับเป้าหมายรวมปี งปม. " + (DateTime.Now.Month > 9 ? DateTime.Now.AddYears(1).ToString("yyyy") : DateTime.Now.ToString("yyyy")))
-                                            .Font(f => f.Size(13))
-                                        )
-                                        @*.Legend(l => l
-                                            .Orientation(Orientation.Horizontal)
-                                            .ItemTextPosition(Position.Right)
-                                            .HorizontalAlignment(HorizontalAlignment.Center)
-                                            .VerticalAlignment(VerticalEdge.Bottom)
-                                        )
-                                        .Export(e => e.Enabled(false))
-                                        .Series(s => s
-                                            .Add()
-                                            .ArgumentField("office")
-                                            .ValueField("value")
-                                            .Label(l => l
-                                                .Visible(true)
-                                                .Font(f => f.Size(16))
-                                                .Connector(c => c
-                                                    .Visible(false)
-                                                    .Width(0.5)
-                                                )
-                                                .Position(PieChartLabelPosition.Inside)
-                                                .CustomizeText(@<text>
-                                                    function(arg) {
-                                                        return arg.percentText;
-                                                    }
-                                                </text>)
-                                            )
-                                        )*@
-                                        .DataSource(new[] {
-                                            new { office = "เป้าหมาย", value = (ViewBag.ExpectM2[0] + ViewBag.ExpectM2[1]) },
-                                            new { office = "ผล", value = (ViewBag.ResultLastMonthM2[0] + ViewBag.ResultLastMonthM2[1]) }
-                                        })
-                                    )
-                                        </div>
-                                        <div class="col-xl-6 mb-3">
-                                            @(Html.DevExtreme().Chart()
-                                        .ID("pie212")
-                                        .CommonSeriesSettings(s => s
-                                            .ArgumentField("office")
-                                            .ValueField("value")
-                                            .Type(SeriesType.Bar)
-                                            .IgnoreEmptyPoints(true)
-                                        //.Label(l => l
-                                        //    .Visible(true)
-                                        //    .Format(f => f
-                                        //        .Type(Format.FixedPoint)
-                                        //        .Precision(4)
-                                        //    )
-                                        //)
-                                        )
-                                        .SeriesTemplate(t => t.NameField("office"))
-                                        .Tooltip(t => t.Enabled(true).CustomizeTooltip(@<text>
-                                            function(arg) {
-                                                    return {
-                                                       html: args.seriesName + " | <div class='currency'>" + args.valueText + "</div>"
-                                                    };
-                                            }
-                                         </text>).Format(Format.Decimal))
-                                        .Palette(new[] { "#89ccf7", "#015c93" })
-                                        .Title(t => t
-                                            .Text("ผลสะสม ณ เดือน" + DateTime.Now.AddMonths(-1).ToString("MMMM") + "เทียบกับเป้าหมาย ณ เดือน " + DateTime.Now.AddMonths(-1).ToString("MMMM"))
-                                            .Font(f => f.Size(13))
-                                        )
-                                        @*.Legend(l => l
-                                            .Orientation(Orientation.Horizontal)
-                                            .ItemTextPosition(Position.Right)
-                                            .HorizontalAlignment(HorizontalAlignment.Center)
-                                            .VerticalAlignment(VerticalEdge.Bottom)
-                                        )
-                                        .Export(e => e.Enabled(false))
-                                        .Series(s => s
-                                            .Add()
-                                            .ArgumentField("office")
-                                            .ValueField("value")
-                                            .Label(l => l
-                                                .Visible(true)
-                                                .Font(f => f.Size(16))
-                                                .Connector(c => c
-                                                    .Visible(false)
-                                                    .Width(0.5)
-                                                )
-                                                .Position(PieChartLabelPosition.Inside)
-                                                .CustomizeText(@<text>
-                                                    function(arg) {
-                                                        return arg.percentText;
-                                                    }
-                                                </text>)
-                                            )
-                                        )*@
-                                        .DataSource(new[] {
-                                            new { office = "เป้าหมาย", value = (ViewBag.ExpectLastMonthM2[0] + ViewBag.ExpectLastMonthM2[1]) },
-                                            new { office = "ผล", value = (ViewBag.ResultLastMonthM2[0] + ViewBag.ResultLastMonthM2[1]) }
-                                        })
-                                    )
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div id="hq" class="col-xl-4 mb-3">
+                        <!--
+
+    <div id="all" class="col-xl-4 mb-3">
+        <div class="card">
+            <div class="card-header bg-light">
+                ภาพรวม
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-xl-6 mb-3">
+                        @(Html.DevExtreme().Chart()
+                    .ID("pie211")
+                    .CommonSeriesSettings(s => s
+                        .ArgumentField("office")
+                        .ValueField("value")
+                        .Type(SeriesType.Bar)
+                        .IgnoreEmptyPoints(true)
+                    //.Label(l => l
+                    //    .Visible(true)
+                    //    .Format(f => f
+                    //        .Type(Format.FixedPoint)
+                    //        .Precision(4)
+                    //    )
+                    //)
+                    )
+                    .SeriesTemplate(t => t.NameField("office"))
+                    .Tooltip(t => t.Enabled(true).CustomizeTooltip(@<text>
+                        function(arg) {
+                                return {
+                                   html: args.seriesName + " | <div class='currency'>" + args.valueText + "</div>"
+                                };
+                        }
+                     </text>).Format(Format.Decimal))
+                    .Palette(new[] { "#89ccf7", "#015c93" })
+                    .Title(t => t
+                        .Text("ผลสะสม ณ เดือน" + DateTime.Now.AddMonths(-1).ToString("MMMM") + "เทียบกับเป้าหมายรวมปี งปม. " + (DateTime.Now.Month > 9 ? DateTime.Now.AddYears(1).ToString("yyyy") : DateTime.Now.ToString("yyyy")))
+                        .Font(f => f.Size(13))
+                    )
+                    @*.Legend(l => l
+                        .Orientation(Orientation.Horizontal)
+                        .ItemTextPosition(Position.Right)
+                        .HorizontalAlignment(HorizontalAlignment.Center)
+                        .VerticalAlignment(VerticalEdge.Bottom)
+                    )
+                    .Export(e => e.Enabled(false))
+                    .Series(s => s
+                        .Add()
+                        .ArgumentField("office")
+                        .ValueField("value")
+                        .Label(l => l
+                            .Visible(true)
+                            .Font(f => f.Size(16))
+                            .Connector(c => c
+                                .Visible(false)
+                                .Width(0.5)
+                            )
+                            .Position(PieChartLabelPosition.Inside)
+                            .CustomizeText(@<text>
+                                function(arg) {
+                                    return arg.percentText;
+                                }
+                            </text>)
+                        )
+                    )*@
+                    .DataSource(new[] {
+                        new { office = "เป้าหมาย", value = (ViewBag.ExpectM2[0] + ViewBag.ExpectM2[1]) },
+                        new { office = "ผล", value = (ViewBag.ResultLastMonthM2[0] + ViewBag.ResultLastMonthM2[1]) }
+                    })
+                )
+                    </div>
+                    <div class="col-xl-6 mb-3">
+                        @(Html.DevExtreme().Chart()
+                    .ID("pie212")
+                    .CommonSeriesSettings(s => s
+                        .ArgumentField("office")
+                        .ValueField("value")
+                        .Type(SeriesType.Bar)
+                        .IgnoreEmptyPoints(true)
+                    //.Label(l => l
+                    //    .Visible(true)
+                    //    .Format(f => f
+                    //        .Type(Format.FixedPoint)
+                    //        .Precision(4)
+                    //    )
+                    //)
+                    )
+                    .SeriesTemplate(t => t.NameField("office"))
+                    .Tooltip(t => t.Enabled(true).CustomizeTooltip(@<text>
+                        function(arg) {
+                                return {
+                                   html: args.seriesName + " | <div class='currency'>" + args.valueText + "</div>"
+                                };
+                        }
+                     </text>).Format(Format.Decimal))
+                    .Palette(new[] { "#89ccf7", "#015c93" })
+                    .Title(t => t
+                        .Text("ผลสะสม ณ เดือน" + DateTime.Now.AddMonths(-1).ToString("MMMM") + "เทียบกับเป้าหมาย ณ เดือน " + DateTime.Now.AddMonths(-1).ToString("MMMM"))
+                        .Font(f => f.Size(13))
+                    )
+                    @*.Legend(l => l
+                        .Orientation(Orientation.Horizontal)
+                        .ItemTextPosition(Position.Right)
+                        .HorizontalAlignment(HorizontalAlignment.Center)
+                        .VerticalAlignment(VerticalEdge.Bottom)
+                    )
+                    .Export(e => e.Enabled(false))
+                    .Series(s => s
+                        .Add()
+                        .ArgumentField("office")
+                        .ValueField("value")
+                        .Label(l => l
+                            .Visible(true)
+                            .Font(f => f.Size(16))
+                            .Connector(c => c
+                                .Visible(false)
+                                .Width(0.5)
+                            )
+                            .Position(PieChartLabelPosition.Inside)
+                            .CustomizeText(@<text>
+                                function(arg) {
+                                    return arg.percentText;
+                                }
+                            </text>)
+                        )
+                    )*@
+                    .DataSource(new[] {
+                        new { office = "เป้าหมาย", value = (ViewBag.ExpectLastMonthM2[0] + ViewBag.ExpectLastMonthM2[1]) },
+                        new { office = "ผล", value = (ViewBag.ResultLastMonthM2[0] + ViewBag.ResultLastMonthM2[1]) }
+                    })
+                )
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    -->
+                        <div id="hq" class="col-xl-6 mb-3">
                             <div class="card">
                                 <div class="card-header bg-light">
                                     สภ.
@@ -924,7 +927,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div id="nhq" runat="server" class="col-xl-4 mb-3">
+                        <div id="nhq" runat="server" class="col-xl-6 mb-3">
                             <div class="card">
                                 <div class="card-header bg-light">
                                     สท.
@@ -1582,98 +1585,101 @@
                 <!-- Card Body -->
                 <div class="card-body">
                     <div class="row">
-                        <div id="all" class="col-xl-4 mb-3">
-                            <div class="card">
-                                <div class="card-header bg-light">
-                                    ภาพรวม
-                                </div>
-                                <div class="card-body">
-                                    <div class="row">
-                                        <div class="col-xl-6 mb-3">
-                                            @(Html.DevExtreme().PieChart()
-                                        .ID("pie411")
-                                        .Palette(new[] { "#89ccf7", "#015c93" })
-                                        .Title(t => t
-                                            .Text("ผลสะสม ณ เดือน" + DateTime.Now.AddMonths(-1).ToString("MMMM") + "เทียบกับเป้าหมายรวมปี งปม. " + (DateTime.Now.Month > 9 ? DateTime.Now.AddYears(1).ToString("yyyy") : DateTime.Now.ToString("yyyy")))
-                                            .Font(f => f.Size(13))
-                                        )
-                                        .Legend(l => l
-                                            .Orientation(Orientation.Horizontal)
-                                            .ItemTextPosition(Position.Right)
-                                            .HorizontalAlignment(HorizontalAlignment.Center)
-                                            .VerticalAlignment(VerticalEdge.Bottom)
-                                        )
-                                        .Export(e => e.Enabled(false))
-                                        .Series(s => s
-                                            .Add()
-                                            .ArgumentField("office")
-                                            .ValueField("value")
-                                            .Label(l => l
-                                                .Visible(true)
-                                                .Font(f => f.Size(16))
-                                                .Connector(c => c
-                                                    .Visible(false)
-                                                    .Width(0.5)
-                                                )
-                                                .Position(PieChartLabelPosition.Inside)
-                                                .CustomizeText(@<text>
-                                                    function(arg) {
-                                                        return arg.percentText;
-                                                    }
-                                                </text>)
-                                            )
-                                        )
-                                        .DataSource(new[] {
-                                            new { office = "เป้าหมาย", value = (ViewBag.ExpectM4[0] + ViewBag.ExpectM4[1] - (ViewBag.ResultLastMonthM4[0] + ViewBag.ResultLastMonthM4[1])) },
-                                            new { office = "ผล", value = (ViewBag.ResultLastMonthM4[0] + ViewBag.ResultLastMonthM4[1]) }
-                                        })
-                                    )
-                                        </div>
-                                        <div class="col-xl-6 mb-3">
-                                            @(Html.DevExtreme().PieChart()
-                                        .ID("pie412")
-                                        .Palette(new[] { "#89ccf7", "#015c93" })
-                                        .Title(t => t
-                                            .Text("ผลสะสม ณ เดือน" + DateTime.Now.AddMonths(-1).ToString("MMMM") + "เทียบกับเป้าหมาย ณ เดือน " + DateTime.Now.AddMonths(-1).ToString("MMMM"))
-                                            .Font(f => f.Size(13))
-                                        )
-                                        .Legend(l => l
-                                            .Orientation(Orientation.Horizontal)
-                                            .ItemTextPosition(Position.Right)
-                                            .HorizontalAlignment(HorizontalAlignment.Center)
-                                            .VerticalAlignment(VerticalEdge.Bottom)
-                                        )
-                                        .Export(e => e.Enabled(false))
-                                        .Series(s => s
-                                            .Add()
-                                            .ArgumentField("office")
-                                            .ValueField("value")
-                                            .Label(l => l
-                                                .Visible(true)
-                                                .Font(f => f.Size(16))
-                                                .Connector(c => c
-                                                    .Visible(false)
-                                                    .Width(0.5)
-                                                )
-                                                .Position(PieChartLabelPosition.Inside)
-                                                .CustomizeText(@<text>
-                                                    function(arg) {
-                                                        return arg.percentText;
-                                                    }
-                                                </text>)
-                                            )
-                                        )
-                                        .DataSource(new[] {
-                                            new { office = "เป้าหมาย", value = (ViewBag.ExpectLastMonthM4[0] + ViewBag.ExpectLastMonthM4[1] - (ViewBag.ResultLastMonthM4[0] + ViewBag.ResultLastMonthM4[1])) },
-                                            new { office = "ผล", value = (ViewBag.ResultLastMonthM4[0] + ViewBag.ResultLastMonthM4[1]) }
-                                        })
-                                    )
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div id="hq" class="col-xl-4 mb-3">
+                        <!--
+
+    <div id="all" class="col-xl-4 mb-3">
+        <div class="card">
+            <div class="card-header bg-light">
+                ภาพรวม
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-xl-6 mb-3">
+                        @(Html.DevExtreme().PieChart()
+                    .ID("pie411")
+                    .Palette(new[] { "#89ccf7", "#015c93" })
+                    .Title(t => t
+                        .Text("ผลสะสม ณ เดือน" + DateTime.Now.AddMonths(-1).ToString("MMMM") + "เทียบกับเป้าหมายรวมปี งปม. " + (DateTime.Now.Month > 9 ? DateTime.Now.AddYears(1).ToString("yyyy") : DateTime.Now.ToString("yyyy")))
+                        .Font(f => f.Size(13))
+                    )
+                    .Legend(l => l
+                        .Orientation(Orientation.Horizontal)
+                        .ItemTextPosition(Position.Right)
+                        .HorizontalAlignment(HorizontalAlignment.Center)
+                        .VerticalAlignment(VerticalEdge.Bottom)
+                    )
+                    .Export(e => e.Enabled(false))
+                    .Series(s => s
+                        .Add()
+                        .ArgumentField("office")
+                        .ValueField("value")
+                        .Label(l => l
+                            .Visible(true)
+                            .Font(f => f.Size(16))
+                            .Connector(c => c
+                                .Visible(false)
+                                .Width(0.5)
+                            )
+                            .Position(PieChartLabelPosition.Inside)
+                            .CustomizeText(@<text>
+                                function(arg) {
+                                    return arg.percentText;
+                                }
+                            </text>)
+                        )
+                    )
+                    .DataSource(new[] {
+                        new { office = "เป้าหมาย", value = (ViewBag.ExpectM4[0] + ViewBag.ExpectM4[1] - (ViewBag.ResultLastMonthM4[0] + ViewBag.ResultLastMonthM4[1])) },
+                        new { office = "ผล", value = (ViewBag.ResultLastMonthM4[0] + ViewBag.ResultLastMonthM4[1]) }
+                    })
+                )
+                    </div>
+                    <div class="col-xl-6 mb-3">
+                        @(Html.DevExtreme().PieChart()
+                    .ID("pie412")
+                    .Palette(new[] { "#89ccf7", "#015c93" })
+                    .Title(t => t
+                        .Text("ผลสะสม ณ เดือน" + DateTime.Now.AddMonths(-1).ToString("MMMM") + "เทียบกับเป้าหมาย ณ เดือน " + DateTime.Now.AddMonths(-1).ToString("MMMM"))
+                        .Font(f => f.Size(13))
+                    )
+                    .Legend(l => l
+                        .Orientation(Orientation.Horizontal)
+                        .ItemTextPosition(Position.Right)
+                        .HorizontalAlignment(HorizontalAlignment.Center)
+                        .VerticalAlignment(VerticalEdge.Bottom)
+                    )
+                    .Export(e => e.Enabled(false))
+                    .Series(s => s
+                        .Add()
+                        .ArgumentField("office")
+                        .ValueField("value")
+                        .Label(l => l
+                            .Visible(true)
+                            .Font(f => f.Size(16))
+                            .Connector(c => c
+                                .Visible(false)
+                                .Width(0.5)
+                            )
+                            .Position(PieChartLabelPosition.Inside)
+                            .CustomizeText(@<text>
+                                function(arg) {
+                                    return arg.percentText;
+                                }
+                            </text>)
+                        )
+                    )
+                    .DataSource(new[] {
+                        new { office = "เป้าหมาย", value = (ViewBag.ExpectLastMonthM4[0] + ViewBag.ExpectLastMonthM4[1] - (ViewBag.ResultLastMonthM4[0] + ViewBag.ResultLastMonthM4[1])) },
+                        new { office = "ผล", value = (ViewBag.ResultLastMonthM4[0] + ViewBag.ResultLastMonthM4[1]) }
+                    })
+                )
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    -->
+                        <div id="hq" class="col-xl-6 mb-3">
                             <div class="card">
                                 <div class="card-header bg-light">
                                     สภ.
@@ -1764,7 +1770,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div id="nhq" runat="server" class="col-xl-4 mb-3">
+                        <div id="nhq" runat="server" class="col-xl-6 mb-3">
                             <div class="card">
                                 <div class="card-header bg-light">
                                     สท.
@@ -2012,7 +2018,7 @@
                         <div id="hq" class="col-xl-4 mb-3">
                             <div class="card">
                                 <div class="card-header bg-light">
-                                    ภญ.
+                                    ภญ. และ สท. ใน สภ. 1 - 3
                                 </div>
                                 <div class="card-body">
                                     <div class="row">
@@ -2103,7 +2109,7 @@
                         <div id="nhq" runat="server" class="col-xl-4 mb-3">
                             <div class="card">
                                 <div class="card-header bg-light">
-                                    สท.
+                                    สท. ใน สภ. 4 - 12
                                 </div>
                                 <div class="card-body">
                                     <div class="row">
@@ -2204,8 +2210,8 @@
                                             <tr>
                                                 <th scope="col"></th>
                                                 <th scope="col">รวม</th>
-                                                <th scope="col">ภญ.</th>
-                                                <th scope="col">สท.</th>
+                                                <th scope="col">ภญ. และ สท. ใน สภ. 1 - 3</th>
+                                                <th scope="col">สท. ใน สภ. 4 - 12</th>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -2541,7 +2547,7 @@
                                                 <th scope="col"></th>
                                                 <th scope="col">รวม</th>
                                                 <th scope="col">สภ. 1 - 3</th>
-                                                <th scope="col">สภ. 4 - 12(รวม สท.)</th>
+                                                <th scope="col">สภ. 4 - 12 (รวม สท.)</th>
                                             </tr>
                                         </thead>
                                         <tbody>

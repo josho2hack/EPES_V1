@@ -166,16 +166,56 @@ namespace EPES.Controllers
                             (p.Plan == TypeOfPlan.B && (p.OwnerOffice.Code == user.OfficeId || p.AuditOffice.Code == user.OfficeId) && p.Year == yearForQuery) ||
                             (p.Plan == TypeOfPlan.C && (p.OwnerOffice.Code == user.OfficeId || p.AuditOffice.Code == user.OfficeId) && p.Year == yearForQuery) ||
                             (p.Plan == TypeOfPlan.D && (p.OwnerOffice.Code == user.OfficeId || p.AuditOffice.Code == user.OfficeId) && p.Year == yearForQuery)
-                            ).Include(p => p.OwnerOffice).Include(p => p.AuditOffice).Select(b => new { Code = b.OwnerOffice.Code, Name = b.OwnerOffice.Name }).Distinct().ToListAsync();
+                            ).Include(p => p.OwnerOffice).Include(p => p.AuditOffice).Select(b => new { Code = b.OwnerOffice.Code, Name = b.OwnerOffice.Name })
+                            .Distinct().ToListAsync();
                         if (officeList.Count < 1)
                         {
                             officeList.Add(new { Code = user.OfficeId, Name = user.OfficeName });
+                        }
+                        var userOffices = await _context.UserOffices.Include(of => of.Office).Where(ou => ou.UserName == user.UserName).Select(slt => new { slt.Office.Code, slt.Office.Name }).ToListAsync();
+                        foreach(var uo in userOffices)
+                        {
+                            if(!officeList.Contains(uo))
+                            {
+                                officeList.Add(uo);
+                                if(uo.Code.Substring(0, 2) != "00" && uo.Code.Substring(2, 6) == "000000")
+                                {
+                                    var subOffices = await _context.Offices.Where(so => so.Code.Substring(0, 2) == uo.Code.Substring(0, 2) && so.Code.Substring(2, 6) != "000000" && so.Code.Substring(5, 3) == "000").Select(slt => new { slt.Code, slt.Name }).ToListAsync();
+                                    foreach(var so in subOffices)
+                                    {
+                                        if(!officeList.Contains(so))
+                                        {
+                                            officeList.Add(so);
+                                        }
+                                    }
+                                }
+                            }
                         }
                         ViewBag.OfficeCode = new SelectList(officeList, "Code", "Name", user.OfficeId);
                     }
                     else // Pak or ST
                     {
-                        ViewBag.OfficeCode = new SelectList(_context.Offices.Where(d => d.Code != "00000000" && d.Code.StartsWith(user.OfficeId.Substring(0, 2)) && d.Code.Substring(5, 3) == "000"), "Code", "Name", user.OfficeId);
+                        var officeList = await _context.Offices.Where(d => (d.Code != "00000000" && d.Code.StartsWith(user.OfficeId.Substring(0, 2)) && d.Code.Substring(5, 3) == "000")).Select(slt => new { slt.Code, slt.Name }).ToListAsync();
+                        var userOffices = await _context.UserOffices.Include(of => of.Office).Where(ou => ou.UserName == user.UserName).Select(slt => new { slt.Office.Code, slt.Office.Name }).ToListAsync();
+                        foreach (var uo in userOffices)
+                        {
+                            if (!officeList.Contains(uo))
+                            {
+                                officeList.Add(uo);
+                                if (uo.Code.Substring(0, 2) != "00" && uo.Code.Substring(2, 6) == "000000")
+                                {
+                                    var subOffices = await _context.Offices.Where(so => so.Code.Substring(0, 2) == uo.Code.Substring(0, 2) && so.Code.Substring(2, 6) != "000000" && so.Code.Substring(5, 3) == "000").Select(slt => new { slt.Code, slt.Name }).ToListAsync();
+                                    foreach (var so in subOffices)
+                                    {
+                                        if (!officeList.Contains(so))
+                                        {
+                                            officeList.Add(so);
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                        ViewBag.OfficeCode = new SelectList(officeList, "Code", "Name", user.OfficeId);
                     }
 
                     viewModel.pointB = await _context.PointOfEvaluations.Where(p => p.Plan == TypeOfPlan.B && p.OwnerOffice.Code == user.OfficeId && p.Year == yearForQuery).Include(p => p.OwnerOffice).Include(p => p.AuditOffice).Include(p => p.DataForEvaluations).Include(p => p.ScoreDrafts).Include(p => p.Rounds).Include(iss => iss.IssueForEvaluations).ToListAsync();
@@ -197,11 +237,50 @@ namespace EPES.Controllers
                         {
                             officeList.Add(new { Code = user.OfficeId, Name = user.OfficeName });
                         }
+                        var userOffices = await _context.UserOffices.Include(of => of.Office).Where(ou => ou.UserName == user.UserName).Select(slt => new { slt.Office.Code, slt.Office.Name }).ToListAsync();
+                        foreach (var uo in userOffices)
+                        {
+                            if (!officeList.Contains(uo))
+                            {
+                                officeList.Add(uo);
+                                if (uo.Code.Substring(0, 2) != "00" && uo.Code.Substring(2, 6) == "000000")
+                                {
+                                    var subOffices = await _context.Offices.Where(so => so.Code.Substring(0, 2) == uo.Code.Substring(0, 2) && so.Code.Substring(2, 6) != "000000" && so.Code.Substring(5, 3) == "000").Select(slt => new { slt.Code, slt.Name }).ToListAsync();
+                                    foreach (var so in subOffices)
+                                    {
+                                        if (!officeList.Contains(so))
+                                        {
+                                            officeList.Add(so);
+                                        }
+                                    }
+                                }
+                            }
+                        }
                         ViewBag.OfficeCode = new SelectList(officeList, "Code", "Name", selectoffice);
                     }
                     else // Pak or ST
                     {
-                        ViewBag.OfficeCode = new SelectList(_context.Offices.Where(d => d.Code != "00000000" && d.Code.StartsWith(user.OfficeId.Substring(0, 2)) && d.Code.Substring(5, 3) == "000"), "Code", "Name", selectoffice);
+                        var officeList = await _context.Offices.Where(d => (d.Code != "00000000" && d.Code.StartsWith(user.OfficeId.Substring(0, 2)) && d.Code.Substring(5, 3) == "000")).Select(slt => new { slt.Code, slt.Name }).ToListAsync();
+                        var userOffices = await _context.UserOffices.Include(of => of.Office).Where(ou => ou.UserName == user.UserName).Select(slt => new { slt.Office.Code, slt.Office.Name }).ToListAsync();
+                        foreach (var uo in userOffices)
+                        {
+                            if (!officeList.Contains(uo))
+                            {
+                                officeList.Add(uo);
+                                if (uo.Code.Substring(0, 2) != "00" && uo.Code.Substring(2, 6) == "000000")
+                                {
+                                    var subOffices = await _context.Offices.Where(so => so.Code.Substring(0, 2) == uo.Code.Substring(0, 2) && so.Code.Substring(2, 6) != "000000" && so.Code.Substring(5, 3) == "000").Select(slt => new { slt.Code, slt.Name }).ToListAsync();
+                                    foreach (var so in subOffices)
+                                    {
+                                        if (!officeList.Contains(so))
+                                        {
+                                            officeList.Add(so);
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                        ViewBag.OfficeCode = new SelectList(officeList, "Code", "Name", selectoffice);
                     }
 
                     viewModel.pointB = await _context.PointOfEvaluations.Where(p => p.Plan == TypeOfPlan.B && p.OwnerOffice.Code == selectoffice && p.Year == yearForQuery).Include(p => p.OwnerOffice).Include(p => p.AuditOffice).Include(p => p.DataForEvaluations).Include(p => p.ScoreDrafts).Include(p => p.Rounds).Include(iss => iss.IssueForEvaluations).ToListAsync();
@@ -222,7 +301,12 @@ namespace EPES.Controllers
                 ViewBag.OfficeCode = new SelectList(oOffice, "Code", "Name", user.OfficeId);
             }
 
+            ViewBag.UserOffices = _context.UserOffices.Where(uo => uo.UserName == user.UserName).Select(slt => slt.Office.Code).ToList();
             ViewBag.Month = new SelectList(list, "Value", "Month", m);
+            if(String.IsNullOrEmpty(selectoffice))
+            {
+                selectoffice = user.OfficeId;
+            }
             ViewBag.selectoffice = selectoffice;
             viewModel.month = m;
 
@@ -361,11 +445,50 @@ namespace EPES.Controllers
                         {
                             officeList.Add(new { Code = user.OfficeId, Name = user.OfficeName });
                         }
+                        var userOffices = await _context.UserOffices.Include(of => of.Office).Where(ou => ou.UserName == user.UserName).Select(slt => new { slt.Office.Code, slt.Office.Name }).ToListAsync();
+                        foreach (var uo in userOffices)
+                        {
+                            if (!officeList.Contains(uo))
+                            {
+                                officeList.Add(uo);
+                                if (uo.Code.Substring(0, 2) != "00" && uo.Code.Substring(2, 6) == "000000")
+                                {
+                                    var subOffices = await _context.Offices.Where(so => so.Code.Substring(0, 2) == uo.Code.Substring(0, 2) && so.Code.Substring(2, 6) != "000000" && so.Code.Substring(5, 3) == "000").Select(slt => new { slt.Code, slt.Name }).ToListAsync();
+                                    foreach (var so in subOffices)
+                                    {
+                                        if (!officeList.Contains(so))
+                                        {
+                                            officeList.Add(so);
+                                        }
+                                    }
+                                }
+                            }
+                        }
                         ViewBag.OfficeCode = new SelectList(officeList, "Code", "Name", user.OfficeId);
                     }
                     else // Pak or ST
                     {
-                        ViewBag.OfficeCode = new SelectList(_context.Offices.Where(d => d.Code != "00000000" && d.Code.StartsWith(user.OfficeId.Substring(0, 2)) && d.Code.Substring(5, 3) == "000"), "Code", "Name", user.OfficeId);
+                        var officeList = await _context.Offices.Where(d => (d.Code != "00000000" && d.Code.StartsWith(user.OfficeId.Substring(0, 2)) && d.Code.Substring(5, 3) == "000")).Select(slt => new { slt.Code, slt.Name }).ToListAsync();
+                        var userOffices = await _context.UserOffices.Include(of => of.Office).Where(ou => ou.UserName == user.UserName).Select(slt => new { slt.Office.Code, slt.Office.Name }).ToListAsync();
+                        foreach (var uo in userOffices)
+                        {
+                            if (!officeList.Contains(uo))
+                            {
+                                officeList.Add(uo);
+                                if (uo.Code.Substring(0, 2) != "00" && uo.Code.Substring(2, 6) == "000000")
+                                {
+                                    var subOffices = await _context.Offices.Where(so => so.Code.Substring(0, 2) == uo.Code.Substring(0, 2) && so.Code.Substring(2, 6) != "000000" && so.Code.Substring(5, 3) == "000").Select(slt => new { slt.Code, slt.Name }).ToListAsync();
+                                    foreach (var so in subOffices)
+                                    {
+                                        if (!officeList.Contains(so))
+                                        {
+                                            officeList.Add(so);
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                        ViewBag.OfficeCode = new SelectList(officeList, "Code", "Name", user.OfficeId);
                     }
 
                     viewModel.pointB = await _context.PointOfEvaluations.Where(p => p.Plan == TypeOfPlan.B && p.OwnerOffice.Code == user.OfficeId && p.Year == yearForQuery).Include(p => p.OwnerOffice).Include(p => p.AuditOffice).Include(p => p.DataForEvaluations).Include(p => p.ScoreDrafts).Include(p => p.Rounds).Include(iss => iss.IssueForEvaluations).ToListAsync();
@@ -387,11 +510,50 @@ namespace EPES.Controllers
                         {
                             officeList.Add(new { Code = user.OfficeId, Name = user.OfficeName });
                         }
+                        var userOffices = await _context.UserOffices.Include(of => of.Office).Where(ou => ou.UserName == user.UserName).Select(slt => new { slt.Office.Code, slt.Office.Name }).ToListAsync();
+                        foreach (var uo in userOffices)
+                        {
+                            if (!officeList.Contains(uo))
+                            {
+                                officeList.Add(uo);
+                                if (uo.Code.Substring(0, 2) != "00" && uo.Code.Substring(2, 6) == "000000")
+                                {
+                                    var subOffices = await _context.Offices.Where(so => so.Code.Substring(0, 2) == uo.Code.Substring(0, 2) && so.Code.Substring(2, 6) != "000000" && so.Code.Substring(5, 3) == "000").Select(slt => new { slt.Code, slt.Name }).ToListAsync();
+                                    foreach (var so in subOffices)
+                                    {
+                                        if (!officeList.Contains(so))
+                                        {
+                                            officeList.Add(so);
+                                        }
+                                    }
+                                }
+                            }
+                        }
                         ViewBag.OfficeCode = new SelectList(officeList, "Code", "Name", selectoffice);
                     }
                     else // Pak or ST
                     {
-                        ViewBag.OfficeCode = new SelectList(_context.Offices.Where(d => d.Code != "00000000" && d.Code.StartsWith(user.OfficeId.Substring(0, 2)) && d.Code.Substring(5, 3) == "000"), "Code", "Name", selectoffice);
+                        var officeList = await _context.Offices.Where(d => (d.Code != "00000000" && d.Code.StartsWith(user.OfficeId.Substring(0, 2)) && d.Code.Substring(5, 3) == "000")).Select(slt => new { slt.Code, slt.Name }).ToListAsync();
+                        var userOffices = await _context.UserOffices.Include(of => of.Office).Where(ou => ou.UserName == user.UserName).Select(slt => new { slt.Office.Code, slt.Office.Name }).ToListAsync();
+                        foreach (var uo in userOffices)
+                        {
+                            if (!officeList.Contains(uo))
+                            {
+                                officeList.Add(uo);
+                                if (uo.Code.Substring(0, 2) != "00" && uo.Code.Substring(2, 6) == "000000")
+                                {
+                                    var subOffices = await _context.Offices.Where(so => so.Code.Substring(0, 2) == uo.Code.Substring(0, 2) && so.Code.Substring(2, 6) != "000000" && so.Code.Substring(5, 3) == "000").Select(slt => new { slt.Code, slt.Name }).ToListAsync();
+                                    foreach (var so in subOffices)
+                                    {
+                                        if (!officeList.Contains(so))
+                                        {
+                                            officeList.Add(so);
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                        ViewBag.OfficeCode = new SelectList(officeList, "Code", "Name", selectoffice);
                     }
 
                     viewModel.pointB = await _context.PointOfEvaluations.Where(p => p.Plan == TypeOfPlan.B && p.OwnerOffice.Code == selectoffice && p.Year == yearForQuery).Include(p => p.OwnerOffice).Include(p => p.AuditOffice).Include(p => p.DataForEvaluations).Include(p => p.ScoreDrafts).Include(p => p.Rounds).Include(iss => iss.IssueForEvaluations).ToListAsync();
@@ -400,6 +562,7 @@ namespace EPES.Controllers
                 }
             }
 
+            ViewBag.UserOffices = _context.UserOffices.Where(uo => uo.UserName == user.UserName).Select(slt => slt.Office.Code).ToList();
             ViewBag.Month = new SelectList(list, "Value", "Month", model.month);
             ViewBag.selectoffice = selectoffice;
             viewModel.yearPoint = model.yearPoint;
@@ -555,7 +718,7 @@ namespace EPES.Controllers
             if ((month == 3 || month == 9))
             {
                 var officeId = await _context.Offices.Where(ofc => ofc.Code == selectoffice).FirstOrDefaultAsync();
-                if(officeId != null)
+                if(officeId != null && officeId.Code.Substring(0, 2) == "00")
                 {
                     var issue = await _context.IssueForEvaluations.Where(iss => iss.OfficeId == officeId.Id && iss.PointOfEvaluationId == UpdateData.poeid && iss.Month == month).FirstOrDefaultAsync();
                     if(issue != null)

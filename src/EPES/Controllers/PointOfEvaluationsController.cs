@@ -85,26 +85,37 @@ namespace EPES.Controllers
             }
             else  // No Admin
             {
+                List<Office> officeList;
+                string defaultOffice;
                 if (String.IsNullOrEmpty(selectoffice))
                 {
+                    defaultOffice = user.OfficeId;
                     if (user.OfficeId.Substring(0, 3) == "000")
                     {
                         viewModel.pointA = await _context.PointOfEvaluations.Where(p => p.Plan == TypeOfPlan.A && p.OwnerOffice.Code == user.OfficeId && p.Year == yearForQuery).Include(p => p.OwnerOffice).Include(p => p.AuditOffice).ToListAsync();
 
-                        var officeList = await _context.PointOfEvaluations.Where(p => p.OwnerOffice.Code == user.OfficeId ||
+                        //var officeList = await _context.PointOfEvaluations.Where(p => p.OwnerOffice.Code == user.OfficeId ||
+                            //(p.Plan == TypeOfPlan.B && (p.OwnerOffice.Code == user.OfficeId || p.AuditOffice.Code == user.OfficeId) && p.Year == yearForQuery) ||
+                            //(p.Plan == TypeOfPlan.C && (p.OwnerOffice.Code == user.OfficeId || p.AuditOffice.Code == user.OfficeId) && p.Year == yearForQuery) ||
+                            //(p.Plan == TypeOfPlan.D && (p.OwnerOffice.Code == user.OfficeId || p.AuditOffice.Code == user.OfficeId) && p.Year == yearForQuery)
+                            //).Include(p => p.OwnerOffice).Include(p => p.AuditOffice).Select(b => new { Code = b.OwnerOffice.Code, Name = b.OwnerOffice.Name }).Distinct().ToListAsync();
+
+                        officeList = await _context.PointOfEvaluations.Where(p => p.OwnerOffice.Code == user.OfficeId ||
                             (p.Plan == TypeOfPlan.B && (p.OwnerOffice.Code == user.OfficeId || p.AuditOffice.Code == user.OfficeId) && p.Year == yearForQuery) ||
                             (p.Plan == TypeOfPlan.C && (p.OwnerOffice.Code == user.OfficeId || p.AuditOffice.Code == user.OfficeId) && p.Year == yearForQuery) ||
                             (p.Plan == TypeOfPlan.D && (p.OwnerOffice.Code == user.OfficeId || p.AuditOffice.Code == user.OfficeId) && p.Year == yearForQuery)
-                            ).Include(p => p.OwnerOffice).Include(p => p.AuditOffice).Select(b => new { Code = b.OwnerOffice.Code, Name = b.OwnerOffice.Name }).Distinct().ToListAsync();
+                            ).Include(p => p.OwnerOffice).Include(p => p.AuditOffice).Select(b => b.OwnerOffice).Distinct().ToListAsync();
                         if (officeList.Count < 1)
                         {
-                            officeList.Add(new { Code = user.OfficeId, Name = user.OfficeName });
+                            //officeList.Add(new { Code = user.OfficeId, Name = user.OfficeName });
+                            officeList.AddRange(_context.Offices.Where(ofc => ofc.Code == user.OfficeId));
                         }
-                        ViewBag.OfficeCode = new SelectList(officeList, "Code", "Name", user.OfficeId);
+                        //ViewBag.OfficeCode = new SelectList(officeList, "Code", "Name", user.OfficeId);
                     }
                     else
                     {
-                        ViewBag.OfficeCode = new SelectList(_context.Offices.Where(d => d.Code != "00000000" && d.Code.StartsWith(user.OfficeId.Substring(0, 2)) && d.Code.Substring(5, 3) == "000"), "Code", "Name", user.OfficeId);
+                        officeList = await _context.Offices.Where(d => d.Code != "00000000" && d.Code.StartsWith(user.OfficeId.Substring(0, 2)) && d.Code.Substring(5, 3) == "000").ToListAsync();
+                        //ViewBag.OfficeCode = new SelectList(_context.Offices.Where(d => d.Code != "00000000" && d.Code.StartsWith(user.OfficeId.Substring(0, 2)) && d.Code.Substring(5, 3) == "000"), "Code", "Name", user.OfficeId);
                     }
 
                     viewModel.pointB = await _context.PointOfEvaluations.Where(p => p.Plan == TypeOfPlan.B && p.OwnerOffice.Code == user.OfficeId && p.Year == yearForQuery).Include(p => p.OwnerOffice).Include(p => p.AuditOffice).ToListAsync();
@@ -113,35 +124,64 @@ namespace EPES.Controllers
                 }
                 else
                 {
+                    defaultOffice = selectoffice;
                     if (user.OfficeId.Substring(0, 3) == "000")
                     {
                         viewModel.pointA = await _context.PointOfEvaluations.Where(p => p.Plan == TypeOfPlan.A && p.OwnerOffice.Code == selectoffice && p.Year == yearForQuery).Include(p => p.OwnerOffice).Include(p => p.AuditOffice).ToListAsync();
 
-                        var officeList = await _context.PointOfEvaluations.Where(p => p.OwnerOffice.Code == user.OfficeId ||
+                        //var officeList = await _context.PointOfEvaluations.Where(p => p.OwnerOffice.Code == user.OfficeId ||
+                        //    (p.Plan == TypeOfPlan.B && (p.OwnerOffice.Code == user.OfficeId || p.AuditOffice.Code == user.OfficeId) && p.Year == yearForQuery) ||
+                        //    (p.Plan == TypeOfPlan.C && (p.OwnerOffice.Code == user.OfficeId || p.AuditOffice.Code == user.OfficeId) && p.Year == yearForQuery) ||
+                        //    (p.Plan == TypeOfPlan.D && (p.OwnerOffice.Code == user.OfficeId || p.AuditOffice.Code == user.OfficeId) && p.Year == yearForQuery)
+                        //    ).Include(p => p.OwnerOffice).Include(p => p.AuditOffice).Select(b => new { Code = b.OwnerOffice.Code, Name = b.OwnerOffice.Name }).Distinct().ToListAsync();
+                        officeList = await _context.PointOfEvaluations.Where(p => p.OwnerOffice.Code == user.OfficeId ||
                             (p.Plan == TypeOfPlan.B && (p.OwnerOffice.Code == user.OfficeId || p.AuditOffice.Code == user.OfficeId) && p.Year == yearForQuery) ||
                             (p.Plan == TypeOfPlan.C && (p.OwnerOffice.Code == user.OfficeId || p.AuditOffice.Code == user.OfficeId) && p.Year == yearForQuery) ||
                             (p.Plan == TypeOfPlan.D && (p.OwnerOffice.Code == user.OfficeId || p.AuditOffice.Code == user.OfficeId) && p.Year == yearForQuery)
-                            ).Include(p => p.OwnerOffice).Include(p => p.AuditOffice).Select(b => new { Code = b.OwnerOffice.Code, Name = b.OwnerOffice.Name }).Distinct().ToListAsync();
+                            ).Include(p => p.OwnerOffice).Include(p => p.AuditOffice).Select(b => b.OwnerOffice).Distinct().ToListAsync();
                         if (officeList.Count < 1)
                         {
-                            officeList.Add(new { Code = user.OfficeId, Name = user.OfficeName });
+                            //officeList.Add(new { Code = user.OfficeId, Name = user.OfficeName });
+                            officeList.AddRange(_context.Offices.Where(ofc => ofc.Code == user.OfficeId));
                         }
-                        ViewBag.OfficeCode = new SelectList(officeList, "Code", "Name", selectoffice);
+                        //ViewBag.OfficeCode = new SelectList(officeList, "Code", "Name", selectoffice);
                     }
                     else
                     {
-                        ViewBag.OfficeCode = new SelectList(_context.Offices.Where(d => d.Code != "00000000" && d.Code.StartsWith(user.OfficeId.Substring(0, 2)) && d.Code.Substring(5, 3) == "000"), "Code", "Name", selectoffice);
+                        officeList = await _context.Offices.Where(d => d.Code != "00000000" && d.Code.StartsWith(user.OfficeId.Substring(0, 2)) && d.Code.Substring(5, 3) == "000").ToListAsync();
+                        //ViewBag.OfficeCode = new SelectList(_context.Offices.Where(d => d.Code != "00000000" && d.Code.StartsWith(user.OfficeId.Substring(0, 2)) && d.Code.Substring(5, 3) == "000"), "Code", "Name", selectoffice);
                     }
 
                     viewModel.pointB = await _context.PointOfEvaluations.Where(p => p.Plan == TypeOfPlan.B && p.OwnerOffice.Code == selectoffice && p.Year == yearForQuery).Include(p => p.OwnerOffice).Include(p => p.AuditOffice).ToListAsync();
                     viewModel.pointC = await _context.PointOfEvaluations.Where(p => p.Plan == TypeOfPlan.C && p.OwnerOffice.Code == selectoffice && p.Year == yearForQuery).Include(p => p.OwnerOffice).Include(p => p.AuditOffice).ToListAsync();
                     viewModel.pointD = await _context.PointOfEvaluations.Where(p => p.Plan == TypeOfPlan.D && p.OwnerOffice.Code == selectoffice && p.Year == yearForQuery).Include(p => p.OwnerOffice).Include(p => p.AuditOffice).ToListAsync();
                 }
+                var userOffices = await _context.UserOffices.Include(of => of.Office).Where(ou => ou.UserName == user.UserName).Select(slt => slt.Office).ToListAsync();
+                foreach (var uo in userOffices)
+                {
+                    if (!officeList.Contains(uo))
+                    {
+                        officeList.Add(uo);
+                        if (uo.Code.Substring(0, 2) != "00" && uo.Code.Substring(2, 6) == "000000")
+                        {
+                            var subOffices = await _context.Offices.Where(so => so.Code.Substring(0, 2) == uo.Code.Substring(0, 2) && so.Code.Substring(2, 6) != "000000" && so.Code.Substring(5, 3) == "000").ToListAsync();
+                            foreach (var so in subOffices)
+                            {
+                                if (!officeList.Contains(so))
+                                {
+                                    officeList.Add(so);
+                                }
+                            }
+                        }
+                    }
+                }
+                ViewBag.OfficeCode = new SelectList(officeList, "Code", "Name", defaultOffice);
             }
 
             viewModel.selectoffice = selectoffice;
             ViewBag.selectoffice = selectoffice;
             viewModel.yearPoint = yearPoint;
+            ViewBag.UserOffices = _context.UserOffices.Where(uo => uo.UserName == user.UserName).Select(slt => slt.Office.Code).ToList();
             return View(viewModel);
         }
 
@@ -200,26 +240,36 @@ namespace EPES.Controllers
             }
             else
             {
+                List<Office> officeList;
+                String defaultOffice;
                 if (String.IsNullOrEmpty(selectoffice))
                 {
+                    defaultOffice = user.OfficeId;
                     if (user.OfficeId.Substring(0, 3) == "000")
                     {
                         viewModel.pointA = await _context.PointOfEvaluations.Where(p => p.Plan == TypeOfPlan.A && p.OwnerOffice.Code == user.OfficeId && p.Year == yearForQuery).Include(p => p.OwnerOffice).Include(p => p.AuditOffice).ToListAsync();
 
-                        var officeList = await _context.PointOfEvaluations.Where(p => (p.OwnerOffice.Code == user.OfficeId) ||
+                        //var officeList = await _context.PointOfEvaluations.Where(p => (p.OwnerOffice.Code == user.OfficeId) ||
+                        //    (p.Plan == TypeOfPlan.B && (p.OwnerOffice.Code == user.OfficeId || p.AuditOffice.Code == user.OfficeId) && p.Year == yearForQuery) ||
+                        //    (p.Plan == TypeOfPlan.C && (p.OwnerOffice.Code == user.OfficeId || p.AuditOffice.Code == user.OfficeId) && p.Year == yearForQuery) ||
+                        //    (p.Plan == TypeOfPlan.D && (p.OwnerOffice.Code == user.OfficeId || p.AuditOffice.Code == user.OfficeId) && p.Year == yearForQuery)
+                        //    ).Include(p => p.OwnerOffice).Include(p => p.AuditOffice).Select(b => new { Code = b.OwnerOffice.Code, Name = b.OwnerOffice.Name }).Distinct().ToListAsync();
+                        officeList = await _context.PointOfEvaluations.Where(p => p.OwnerOffice.Code == user.OfficeId ||
                             (p.Plan == TypeOfPlan.B && (p.OwnerOffice.Code == user.OfficeId || p.AuditOffice.Code == user.OfficeId) && p.Year == yearForQuery) ||
                             (p.Plan == TypeOfPlan.C && (p.OwnerOffice.Code == user.OfficeId || p.AuditOffice.Code == user.OfficeId) && p.Year == yearForQuery) ||
                             (p.Plan == TypeOfPlan.D && (p.OwnerOffice.Code == user.OfficeId || p.AuditOffice.Code == user.OfficeId) && p.Year == yearForQuery)
-                            ).Include(p => p.OwnerOffice).Include(p => p.AuditOffice).Select(b => new { Code = b.OwnerOffice.Code, Name = b.OwnerOffice.Name }).Distinct().ToListAsync();
+                            ).Include(p => p.OwnerOffice).Include(p => p.AuditOffice).Select(b => b.OwnerOffice).Distinct().ToListAsync();
                         if (officeList.Count < 1)
                         {
-                            officeList.Add(new { Code = user.OfficeId, Name = user.OfficeName });
+                            //officeList.Add(new { Code = user.OfficeId, Name = user.OfficeName });
+                            officeList.AddRange(_context.Offices.Where(ofc => ofc.Code == user.OfficeId));
                         }
-                        ViewBag.OfficeCode = new SelectList(officeList, "Code", "Name", user.OfficeId);
+                        //ViewBag.OfficeCode = new SelectList(officeList, "Code", "Name", user.OfficeId);
                     }
                     else
                     {
-                        ViewBag.OfficeCode = new SelectList(_context.Offices.Where(d => d.Code != "00000000" && d.Code.StartsWith(user.OfficeId.Substring(0, 2)) && d.Code.Substring(5, 3) == "000"), "Code", "Name", user.OfficeId);
+                        officeList = await _context.Offices.Where(d => d.Code != "00000000" && d.Code.StartsWith(user.OfficeId.Substring(0, 2)) && d.Code.Substring(5, 3) == "000").ToListAsync();
+                        //ViewBag.OfficeCode = new SelectList(_context.Offices.Where(d => d.Code != "00000000" && d.Code.StartsWith(user.OfficeId.Substring(0, 2)) && d.Code.Substring(5, 3) == "000"), "Code", "Name", user.OfficeId);
                     }
 
                     viewModel.pointB = await _context.PointOfEvaluations.Where(p => p.Plan == TypeOfPlan.B && p.OwnerOffice.Code == user.OfficeId && p.Year == yearForQuery).Include(p => p.OwnerOffice).Include(p => p.AuditOffice).ToListAsync();
@@ -228,40 +278,69 @@ namespace EPES.Controllers
                 }
                 else
                 {
+                    defaultOffice = selectoffice;
                     if (user.OfficeId.Substring(0, 3) == "000")
                     {
                         viewModel.pointA = await _context.PointOfEvaluations.Where(p => p.Plan == TypeOfPlan.A && p.OwnerOffice.Code == selectoffice && p.Year == yearForQuery).Include(p => p.OwnerOffice).Include(p => p.AuditOffice).ToListAsync();
 
-                        var officeList = await _context.PointOfEvaluations.Where(p => (p.OwnerOffice.Code == user.OfficeId) ||
+                        //var officeList = await _context.PointOfEvaluations.Where(p => (p.OwnerOffice.Code == user.OfficeId) ||
+                        //    (p.Plan == TypeOfPlan.B && (p.OwnerOffice.Code == user.OfficeId || p.AuditOffice.Code == user.OfficeId) && p.Year == yearForQuery) ||
+                        //    (p.Plan == TypeOfPlan.C && (p.OwnerOffice.Code == user.OfficeId || p.AuditOffice.Code == user.OfficeId) && p.Year == yearForQuery) ||
+                        //    (p.Plan == TypeOfPlan.D && (p.OwnerOffice.Code == user.OfficeId || p.AuditOffice.Code == user.OfficeId) && p.Year == yearForQuery)
+                        //    ).Include(p => p.OwnerOffice).Include(p => p.AuditOffice).Select(b => new { Code = b.OwnerOffice.Code, Name = b.OwnerOffice.Name }).Distinct().ToListAsync();
+                        officeList = await _context.PointOfEvaluations.Where(p => p.OwnerOffice.Code == user.OfficeId ||
                             (p.Plan == TypeOfPlan.B && (p.OwnerOffice.Code == user.OfficeId || p.AuditOffice.Code == user.OfficeId) && p.Year == yearForQuery) ||
                             (p.Plan == TypeOfPlan.C && (p.OwnerOffice.Code == user.OfficeId || p.AuditOffice.Code == user.OfficeId) && p.Year == yearForQuery) ||
                             (p.Plan == TypeOfPlan.D && (p.OwnerOffice.Code == user.OfficeId || p.AuditOffice.Code == user.OfficeId) && p.Year == yearForQuery)
-                            ).Include(p => p.OwnerOffice).Include(p => p.AuditOffice).Select(b => new { Code = b.OwnerOffice.Code, Name = b.OwnerOffice.Name }).Distinct().ToListAsync();
+                            ).Include(p => p.OwnerOffice).Include(p => p.AuditOffice).Select(b => b.OwnerOffice).Distinct().ToListAsync();
                         if (officeList.Count < 1)
                         {
-                            officeList.Add(new { Code = user.OfficeId, Name = user.OfficeName });
+                            //officeList.Add(new { Code = user.OfficeId, Name = user.OfficeName });
+                            officeList.AddRange(_context.Offices.Where(ofc => ofc.Code == user.OfficeId));
                         }
-                        ViewBag.OfficeCode = new SelectList(officeList, "Code", "Name", selectoffice);
+                        //ViewBag.OfficeCode = new SelectList(officeList, "Code", "Name", selectoffice);
                     }
                     else
                     {
-                        ViewBag.OfficeCode = new SelectList(_context.Offices.Where(d => d.Code != "00000000" && d.Code.StartsWith(user.OfficeId.Substring(0, 2)) && d.Code.Substring(5, 3) == "000"), "Code", "Name", selectoffice);
+                        officeList = await _context.Offices.Where(d => d.Code != "00000000" && d.Code.StartsWith(user.OfficeId.Substring(0, 2)) && d.Code.Substring(5, 3) == "000").ToListAsync();
+                        //ViewBag.OfficeCode = new SelectList(_context.Offices.Where(d => d.Code != "00000000" && d.Code.StartsWith(user.OfficeId.Substring(0, 2)) && d.Code.Substring(5, 3) == "000"), "Code", "Name", selectoffice);
                     }
 
                     viewModel.pointB = await _context.PointOfEvaluations.Where(p => p.Plan == TypeOfPlan.B && p.OwnerOffice.Code == selectoffice && p.Year == yearForQuery).Include(p => p.OwnerOffice).Include(p => p.AuditOffice).ToListAsync();
                     viewModel.pointC = await _context.PointOfEvaluations.Where(p => p.Plan == TypeOfPlan.C && p.OwnerOffice.Code == selectoffice && p.Year == yearForQuery).Include(p => p.OwnerOffice).Include(p => p.AuditOffice).ToListAsync();
                     viewModel.pointD = await _context.PointOfEvaluations.Where(p => p.Plan == TypeOfPlan.D && p.OwnerOffice.Code == selectoffice && p.Year == yearForQuery).Include(p => p.OwnerOffice).Include(p => p.AuditOffice).ToListAsync();
                 }
+                var userOffices = await _context.UserOffices.Include(of => of.Office).Where(ou => ou.UserName == user.UserName).Select(slt => slt.Office).ToListAsync();
+                foreach (var uo in userOffices)
+                {
+                    if (!officeList.Contains(uo))
+                    {
+                        officeList.Add(uo);
+                        if (uo.Code.Substring(0, 2) != "00" && uo.Code.Substring(2, 6) == "000000")
+                        {
+                            var subOffices = await _context.Offices.Where(so => so.Code.Substring(0, 2) == uo.Code.Substring(0, 2) && so.Code.Substring(2, 6) != "000000" && so.Code.Substring(5, 3) == "000").ToListAsync();
+                            foreach (var so in subOffices)
+                            {
+                                if (!officeList.Contains(so))
+                                {
+                                    officeList.Add(so);
+                                }
+                            }
+                        }
+                    }
+                }
+                ViewBag.OfficeCode = new SelectList(officeList, "Code", "Name", defaultOffice);
             }
 
             ViewBag.selectoffice = selectoffice;
             viewModel.yearPoint = yearPoint;
+            ViewBag.UserOffices = _context.UserOffices.Where(uo => uo.UserName == user.UserName).Select(slt => slt.Office.Code).ToList();
 
-            if (!User.IsInRole("Admin") && user.OfficeId != selectoffice && user.OfficeId.Substring(0, 3) == "000" && user.OfficeId != "00013000")
-            {
-                //return RedirectToAction(nameof(IndexAudit), new { yearPoint = yearPoint, selectoffice = selectoffice });
-                return View("IndexAudit", viewModel);
-            }
+            //if (!User.IsInRole("Admin") && user.OfficeId != selectoffice && user.OfficeId.Substring(0, 3) == "000" && user.OfficeId != "00013000")
+            //{
+            //    //return RedirectToAction(nameof(IndexAudit), new { yearPoint = yearPoint, selectoffice = selectoffice });
+            //    return View("IndexAudit", viewModel);
+            //}
 
             return View(viewModel);
         }
@@ -297,6 +376,22 @@ namespace EPES.Controllers
             var office = await _context.Offices.Where(o => o.Code == user.OfficeId).FirstOrDefaultAsync();
             var officeselect = await _context.Offices.Where(o => o.Code == selectoffice).FirstOrDefaultAsync();
 
+            var userOffices = await _context.UserOffices.Where(uo => uo.UserName == user.UserName).Select(slt => slt.Office).ToListAsync();
+
+            List<Office> ownerList = new List<Office>();
+            List<Office> auditList = new List<Office>();
+            int defaultOffice;
+
+
+            if (String.IsNullOrEmpty(selectoffice))
+            {
+                defaultOffice = office.Id;
+            }
+            else
+            {
+                defaultOffice = officeselect.Id;
+            }
+
             switch (plan)
             {
                 case 0:
@@ -319,6 +414,14 @@ namespace EPES.Controllers
                         List<Object> list = new List<object>();
                         list.Add(new { Id = office.Id, Name = office.Name });
 
+                        foreach(var uo in userOffices)
+                        {
+                            if(uo.Code.Substring(0, 2) == "00")
+                            {
+                                list.Add(new { Id = uo.Id, Name = uo.Name });
+                            }
+                        }
+
                         ViewBag.OfficeId = new SelectList(list, "Id", "Name", office.Id);
                     }
 
@@ -328,63 +431,82 @@ namespace EPES.Controllers
                     ViewBag.Plan = "B";
                     ViewBag.PlanValue = 1;
 
-                    if (User.IsInRole("Admin") || (User.IsInRole("Manager") && user.OfficeId.StartsWith("000")))
+
+                    if (User.IsInRole("Admin") || (User.IsInRole("Manager") && (user.OfficeId.StartsWith("000") || userOffices.Any(uo => uo.Code.Substring(0, 2) == "00"))))
                     {
-                        if (String.IsNullOrEmpty(selectoffice))
-                        {
-                            ViewBag.OfficeId = new SelectList(_context.Offices.Where(d => d.Code != "00000000" && d.Code.Substring(5, 3) == "000"), "Id", "Name", office.Id);
-                        }
-                        else
-                        {
-                            ViewBag.OfficeId = new SelectList(_context.Offices.Where(d => d.Code != "00000000" && d.Code.Substring(5, 3) == "000"), "Id", "Name", officeselect.Id);
-                        }
+                        ownerList.AddRange(await _context.Offices.Where(d => d.Code != "00000000" && d.Code.Substring(5, 3) == "000").ToListAsync());
+                        //if (String.IsNullOrEmpty(selectoffice))
+                        //{
+                        //    ViewBag.OfficeId = new SelectList(_context.Offices.Where(d => d.Code != "00000000" && d.Code.Substring(5, 3) == "000"), "Id", "Name", office.Id);
+                        //}
+                        //else
+                        //{
+                        //    ViewBag.OfficeId = new SelectList(_context.Offices.Where(d => d.Code != "00000000" && d.Code.Substring(5, 3) == "000"), "Id", "Name", officeselect.Id);
+                        //}
                     }
 
-                    if (User.IsInRole("Manager") && user.OfficeId.Substring(2, 6) == "000000")
+                    if (User.IsInRole("Manager") && (user.OfficeId.Substring(2, 6) == "000000"))
                     {
-                        if (String.IsNullOrEmpty(selectoffice))
+                        ownerList.AddRange(await _context.Offices.Where(d => d.Code != "00000000" && d.Code.StartsWith(user.OfficeId.Substring(0, 2)) && d.Code.Substring(5, 3) == "000").ToListAsync());
+                        //if (String.IsNullOrEmpty(selectoffice))
+                        //{
+                        //    ViewBag.OfficeId = new SelectList(_context.Offices.Where(d => d.Code != "00000000" && d.Code.StartsWith(user.OfficeId.Substring(0, 2)) && d.Code.Substring(5, 3) == "000"), "Id", "Name", office.Id);
+                        //}
+                        //else
+                        //{
+                        //    ViewBag.OfficeId = new SelectList(_context.Offices.Where(d => d.Code != "00000000" && d.Code.StartsWith(user.OfficeId.Substring(0, 2)) && d.Code.Substring(5, 3) == "000"), "Id", "Name", officeselect.Id);
+                        //}
+                    }
+
+                    if (User.IsInRole("Manager") && (userOffices.Any(uo => uo.Code.Substring(2, 6) == "000000")))
+                    {
+                        foreach (var uo in userOffices)
                         {
-                            ViewBag.OfficeId = new SelectList(_context.Offices.Where(d => d.Code != "00000000" && d.Code.StartsWith(user.OfficeId.Substring(0, 2)) && d.Code.Substring(5, 3) == "000"), "Id", "Name", office.Id);
-                        }
-                        else
-                        {
-                            ViewBag.OfficeId = new SelectList(_context.Offices.Where(d => d.Code != "00000000" && d.Code.StartsWith(user.OfficeId.Substring(0, 2)) && d.Code.Substring(5, 3) == "000"), "Id", "Name", officeselect.Id);
+                            if (uo.Code.Substring(2, 6) == "000000")
+                            {
+                                ownerList.AddRange(await _context.Offices.Where(d => d.Code != "00000000" && d.Code.StartsWith(uo.Code.Substring(0, 2)) && d.Code.Substring(5, 3) == "000").ToListAsync());
+                            }
                         }
                     }
 
                     if (User.IsInRole("User"))
                     {
-                        List<Object> list = new List<object>();
-                        list.Add(new { Id = office.Id, Name = office.Name });
+                        ownerList.Add(office);
+                        //List<Object> list = new List<object>();
+                        //list.Add(new { Id = office.Id, Name = office.Name });
 
-                        ViewBag.OfficeId = new SelectList(list, "Id", "Name", office.Id);
+                        //ViewBag.OfficeId = new SelectList(list, "Id", "Name", office.Id);
                     }
 
-                    if (User.IsInRole("Admin") || User.IsInRole("User") || (User.IsInRole("Manager") && user.OfficeId.Substring(2, 6) == "000000"))
+                    if (User.IsInRole("Admin") || User.IsInRole("User") || (User.IsInRole("Manager") && (user.OfficeId.Substring(2, 6) == "000000" || userOffices.Any(uo => uo.Code.Substring(2, 6) == "000000"))))
                     {
-                        if (String.IsNullOrEmpty(selectoffice))
-                        {
-                            ViewBag.AuditOfficeId = new SelectList(_context.Offices.Where(d => d.Code != "00000000" && d.Code.Substring(0, 3) == "000"), "Id", "Name", office.Id);
-                        }
-                        else
-                        {
-                            if (selectoffice.Substring(0, 3) == "000")
-                            {
-                                ViewBag.AuditOfficeId = new SelectList(_context.Offices.Where(d => d.Code != "00000000" && d.Code.Substring(0, 3) == "000"), "Id", "Name", officeselect.Id);
-                            }
-                            else
-                            {
-                                ViewBag.AuditOfficeId = new SelectList(_context.Offices.Where(d => d.Code != "00000000" && d.Code.Substring(0, 3) == "000"), "Id", "Name", office.Id);
-                            }
-                        }
+                        auditList.AddRange(await _context.Offices.Where(d => d.Code != "00000000" && d.Code.Substring(0, 3) == "000").ToListAsync());
+                        //if (String.IsNullOrEmpty(selectoffice))
+                        //{
+                        //    ViewBag.AuditOfficeId = new SelectList(_context.Offices.Where(d => d.Code != "00000000" && d.Code.Substring(0, 3) == "000"), "Id", "Name", office.Id);
+                        //}
+                        //else
+                        //{
+                        //    if (selectoffice.Substring(0, 3) == "000")
+                        //    {
+                        //        ViewBag.AuditOfficeId = new SelectList(_context.Offices.Where(d => d.Code != "00000000" && d.Code.Substring(0, 3) == "000"), "Id", "Name", officeselect.Id);
+                        //    }
+                        //    else
+                        //    {
+                        //        ViewBag.AuditOfficeId = new SelectList(_context.Offices.Where(d => d.Code != "00000000" && d.Code.Substring(0, 3) == "000"), "Id", "Name", office.Id);
+                        //    }
+                        //}
                     }
                     else
                     {
-                        List<Object> list = new List<object>();
-                        list.Add(new { Id = office.Id, Name = office.Name });
+                        auditList.Add(office);
+                        //List<Object> list = new List<object>();
+                        //list.Add(new { Id = office.Id, Name = office.Name });
 
-                        ViewBag.AuditOfficeId = new SelectList(list, "Id", "Name", office.Id);
+                        //ViewBag.AuditOfficeId = new SelectList(list, "Id", "Name", office.Id);
                     }
+                    ViewBag.AuditOfficeId = new SelectList(auditList, "Id", "Name", defaultOffice);
+                    ViewBag.OfficeId = new SelectList(ownerList, "Id", "Name", defaultOffice);
                     break;
                 case 2:
                     ViewBag.Plan = "C";
@@ -401,108 +523,181 @@ namespace EPES.Controllers
                             ViewBag.OfficeId = new SelectList(_context.Offices.Where(d => d.Code != "00000000" && d.Code.Substring(5, 3) == "000"), "Id", "Name", officeselect.Id);
                         }
                         ViewBag.AuditOfficeId = ViewBag.OfficeId;
-                    }
-
-                    var item = await _context.Offices.Where(d => d.Code != "00000000" && d.Code.Substring(0, 3) == "000").Select(d => new { Id = d.Id, Name = d.Name }).ToListAsync();
-
-                    if (User.IsInRole("Manager") && user.OfficeId.Substring(2, 6) == "000000")
+                    } else
                     {
-                        var selectitem = await _context.Offices.Where(d => d.Code != "00000000" && d.Code.StartsWith(user.OfficeId.Substring(0, 2)) && d.Code.Substring(5, 3) == "000").Select(d => new { Id = d.Id, Name = d.Name }).ToListAsync();
-                        foreach (var itemAdd in selectitem)
+                        //var item = await _context.Offices.Where(d => d.Code != "00000000" && d.Code.Substring(0, 3) == "000").Select(d => new { Id = d.Id, Name = d.Name }).ToListAsync();
+                        var item = await _context.Offices.Where(d => d.Code != "00000000" && d.Code.Substring(0, 3) == "000").ToListAsync();
+
+                        if (User.IsInRole("Manager") && (user.OfficeId.Substring(2, 6) == "000000"))
                         {
-                            item.Add(itemAdd);
+                            //var selectitem = await _context.Offices.Where(d => d.Code != "00000000" && d.Code.StartsWith(user.OfficeId.Substring(0, 2)) && d.Code.Substring(5, 3) == "000").Select(d => new { Id = d.Id, Name = d.Name }).ToListAsync();
+                            var selectitem = await _context.Offices.Where(d => d.Code != "00000000" && d.Code.StartsWith(user.OfficeId.Substring(0, 2)) && d.Code.Substring(5, 3) == "000").ToListAsync();
+                            ownerList.AddRange(selectitem);
+                            foreach (var itemAdd in selectitem)
+                            {
+                                item.Add(itemAdd);
+                            }
+
+                            //if (String.IsNullOrEmpty(selectoffice))
+                            //{
+                            //    ViewBag.OfficeId = new SelectList(selectitem, "Id", "Name", office.Id);
+                            //    ViewBag.AuditOfficeId = new SelectList(item, "Id", "Name", office.Id);
+                            //}
+                            //else
+                            //{
+                            //    ViewBag.OfficeId = new SelectList(selectitem, "Id", "Name", officeselect.Id);
+                            //    ViewBag.AuditOfficeId = new SelectList(item, "Id", "Name", officeselect.Id);
+                            //}
                         }
 
-                        if (String.IsNullOrEmpty(selectoffice))
+                        if (User.IsInRole("Manager") && (userOffices.Any(uo => uo.Code.Substring(2, 6) == "000000")))
                         {
-                            ViewBag.OfficeId = new SelectList(selectitem, "Id", "Name", office.Id);
-                            ViewBag.AuditOfficeId = new SelectList(item, "Id", "Name", office.Id);
+                            foreach (var uo in userOffices)
+                            {
+                                if (uo.Code.Substring(2, 6) == "000000")
+                                {
+                                    var selectitem = await _context.Offices.Where(d => d.Code != "00000000" && d.Code.StartsWith(uo.Code.Substring(0, 2)) && d.Code.Substring(5, 3) == "000").ToListAsync();
+                                    ownerList.AddRange(selectitem);
+                                    foreach (var itemAdd in selectitem)
+                                    {
+                                        item.Add(itemAdd);
+                                    }
+                                }
+                            }
+                            //ViewBag.OfficeId = new SelectList(ownerList, "Id", "Name", office.Id);
+                            //ViewBag.AuditOfficeId = new SelectList(item, "Id", "Name", office.Id);
                         }
-                        else
+
+                        if ((User.IsInRole("Manager") && (user.OfficeId.Substring(0, 3) == "000")) || User.IsInRole("User"))
                         {
-                            ViewBag.OfficeId = new SelectList(selectitem, "Id", "Name", officeselect.Id);
-                            ViewBag.AuditOfficeId = new SelectList(item, "Id", "Name", officeselect.Id);
+                            //List<Object> list = new List<object>();
+                            //list.Add(new { Id = office.Id, Name = office.Name });
+                            //ViewBag.OfficeId = new SelectList(list, "Id", "Name", office.Id);
+                            ownerList.Add(office);
+
+                            if (User.IsInRole("Manager") && (user.OfficeId.Substring(0, 3) == "000"))
+                            {
+                                //ViewBag.AuditOfficeId = ViewBag.OfficeId;
+                                item = ownerList;
+                            }
+                            else
+                            {
+                                //item.Add(new { Id = office.Id, Name = office.Name });
+                                item.Add(office);
+                                //ViewBag.AuditOfficeId = new SelectList(item, "Id", "Name", office.Id);
+                            }
                         }
+
+                        if ((User.IsInRole("Manager") && userOffices.Any(uo => uo.Code.Substring(0, 3) == "000")))
+                        {
+                            foreach(var ou in userOffices)
+                            {
+                                ownerList.Add(ou);
+                            }
+                        }
+                            ViewBag.AuditOfficeId = new SelectList(item, "Id", "Name", defaultOffice);
+                        ViewBag.OfficeId = new SelectList(ownerList, "Id", "Name", defaultOffice);
                     }
 
-                    if ((User.IsInRole("Manager") && user.OfficeId.Substring(0, 3) == "000") || User.IsInRole("User"))
-                    {
-                        List<Object> list = new List<object>();
-                        list.Add(new { Id = office.Id, Name = office.Name });
-                        ViewBag.OfficeId = new SelectList(list, "Id", "Name", office.Id);
-
-                        if (User.IsInRole("Manager") && user.OfficeId.Substring(0, 3) == "000")
-                        {
-                            ViewBag.AuditOfficeId = ViewBag.OfficeId;
-                        }
-                        else
-                        {
-                            item.Add(new { Id = office.Id, Name = office.Name });
-                            ViewBag.AuditOfficeId = new SelectList(item, "Id", "Name", office.Id);
-                        }
-                    }
                     break;
                 case 3:
                     ViewBag.Plan = "D";
                     ViewBag.PlanValue = 3;
 
-                    if (User.IsInRole("Admin") || (User.IsInRole("Manager") && user.OfficeId.StartsWith("000")))
+                    //if (User.IsInRole("Admin") || (User.IsInRole("Manager") && user.OfficeId.StartsWith("000")))
+                    //{
+                    //    if (String.IsNullOrEmpty(selectoffice))
+                    //    {
+                    //        ViewBag.OfficeId = new SelectList(_context.Offices.Where(d => d.Code != "00000000" && d.Code.Substring(5, 3) == "000"), "Id", "Name", office.Id);
+                    //    }
+                    //    else
+                    //    {
+                    //        ViewBag.OfficeId = new SelectList(_context.Offices.Where(d => d.Code != "00000000" && d.Code.Substring(5, 3) == "000"), "Id", "Name", officeselect.Id);
+                    //    }
+                    //}
+
+                    //if (User.IsInRole("Manager") && user.OfficeId.Substring(2, 6) == "000000")
+                    //{
+                    //    if (String.IsNullOrEmpty(selectoffice))
+                    //    {
+                    //        ViewBag.OfficeId = new SelectList(_context.Offices.Where(d => d.Code != "00000000" && d.Code.StartsWith(user.OfficeId.Substring(0, 2)) && d.Code.Substring(5, 3) == "000"), "Id", "Name", office.Id);
+                    //    }
+                    //    else
+                    //    {
+                    //        ViewBag.OfficeId = new SelectList(_context.Offices.Where(d => d.Code != "00000000" && d.Code.StartsWith(user.OfficeId.Substring(0, 2)) && d.Code.Substring(5, 3) == "000"), "Id", "Name", officeselect.Id);
+                    //    }
+                    //}
+
+                    //if (User.IsInRole("User"))
+                    //{
+                    //    List<Object> list = new List<object>();
+                    //    list.Add(new { Id = office.Id, Name = office.Name });
+
+                    //    ViewBag.OfficeId = new SelectList(list, "Id", "Name", office.Id);
+                    //}
+
+                    //if (User.IsInRole("Admin") || User.IsInRole("User") || (User.IsInRole("Manager") && user.OfficeId.Substring(2, 6) == "000000"))
+                    //{
+                    //    if (String.IsNullOrEmpty(selectoffice))
+                    //    {
+                    //        ViewBag.AuditOfficeId = new SelectList(_context.Offices.Where(d => d.Code != "00000000" && d.Code.Substring(0, 3) == "000"), "Id", "Name", office.Id);
+                    //    }
+                    //    else
+                    //    {
+                    //        if (selectoffice.Substring(0, 3) == "000")
+                    //        {
+                    //            ViewBag.AuditOfficeId = new SelectList(_context.Offices.Where(d => d.Code != "00000000" && d.Code.Substring(0, 3) == "000"), "Id", "Name", officeselect.Id);
+                    //        }
+                    //        else
+                    //        {
+                    //            ViewBag.AuditOfficeId = new SelectList(_context.Offices.Where(d => d.Code != "00000000" && d.Code.Substring(0, 3) == "000"), "Id", "Name", office.Id);
+                    //        }
+                    //    }
+                    //}
+                    //else
+                    //{
+                    //    List<Object> list = new List<object>();
+                    //    list.Add(new { Id = office.Id, Name = office.Name });
+
+                    //    ViewBag.AuditOfficeId = new SelectList(list, "Id", "Name", office.Id);
+                    //}
+
+                    if (User.IsInRole("Admin") || (User.IsInRole("Manager") && (user.OfficeId.StartsWith("000") || userOffices.Any(uo => uo.Code.Substring(0, 2) == "00"))))
                     {
-                        if (String.IsNullOrEmpty(selectoffice))
-                        {
-                            ViewBag.OfficeId = new SelectList(_context.Offices.Where(d => d.Code != "00000000" && d.Code.Substring(5, 3) == "000"), "Id", "Name", office.Id);
-                        }
-                        else
-                        {
-                            ViewBag.OfficeId = new SelectList(_context.Offices.Where(d => d.Code != "00000000" && d.Code.Substring(5, 3) == "000"), "Id", "Name", officeselect.Id);
-                        }
+                        ownerList.AddRange(await _context.Offices.Where(d => d.Code != "00000000" && d.Code.Substring(5, 3) == "000").ToListAsync());
                     }
 
-                    if (User.IsInRole("Manager") && user.OfficeId.Substring(2, 6) == "000000")
+                    if (User.IsInRole("Manager") && (user.OfficeId.Substring(2, 6) == "000000"))
                     {
-                        if (String.IsNullOrEmpty(selectoffice))
+                        ownerList.AddRange(await _context.Offices.Where(d => d.Code != "00000000" && d.Code.StartsWith(user.OfficeId.Substring(0, 2)) && d.Code.Substring(5, 3) == "000").ToListAsync());
+                    }
+                    
+                    if (User.IsInRole("Manager") && (userOffices.Any(uo => uo.Code.Substring(2, 6) == "000000")))
+                    {
+                        foreach(var uo in userOffices)
                         {
-                            ViewBag.OfficeId = new SelectList(_context.Offices.Where(d => d.Code != "00000000" && d.Code.StartsWith(user.OfficeId.Substring(0, 2)) && d.Code.Substring(5, 3) == "000"), "Id", "Name", office.Id);
-                        }
-                        else
-                        {
-                            ViewBag.OfficeId = new SelectList(_context.Offices.Where(d => d.Code != "00000000" && d.Code.StartsWith(user.OfficeId.Substring(0, 2)) && d.Code.Substring(5, 3) == "000"), "Id", "Name", officeselect.Id);
+                            if(uo.Code.Substring(2, 6) == "000000")
+                            {
+                                ownerList.AddRange(await _context.Offices.Where(d => d.Code != "00000000" && d.Code.StartsWith(uo.Code.Substring(0, 2)) && d.Code.Substring(5, 3) == "000").ToListAsync());
+                            }
                         }
                     }
 
                     if (User.IsInRole("User"))
                     {
-                        List<Object> list = new List<object>();
-                        list.Add(new { Id = office.Id, Name = office.Name });
-
-                        ViewBag.OfficeId = new SelectList(list, "Id", "Name", office.Id);
+                        ownerList.Add(office);
                     }
 
-                    if (User.IsInRole("Admin") || User.IsInRole("User") || (User.IsInRole("Manager") && user.OfficeId.Substring(2, 6) == "000000"))
+                    if (User.IsInRole("Admin") || User.IsInRole("User") || (User.IsInRole("Manager") && (user.OfficeId.Substring(2, 6) == "000000" || userOffices.Any(uo => uo.Code.Substring(2, 6) == "000000"))))
                     {
-                        if (String.IsNullOrEmpty(selectoffice))
-                        {
-                            ViewBag.AuditOfficeId = new SelectList(_context.Offices.Where(d => d.Code != "00000000" && d.Code.Substring(0, 3) == "000"), "Id", "Name", office.Id);
-                        }
-                        else
-                        {
-                            if (selectoffice.Substring(0, 3) == "000")
-                            {
-                                ViewBag.AuditOfficeId = new SelectList(_context.Offices.Where(d => d.Code != "00000000" && d.Code.Substring(0, 3) == "000"), "Id", "Name", officeselect.Id);
-                            }
-                            else
-                            {
-                                ViewBag.AuditOfficeId = new SelectList(_context.Offices.Where(d => d.Code != "00000000" && d.Code.Substring(0, 3) == "000"), "Id", "Name", office.Id);
-                            }
-                        }
+                        auditList.AddRange(await _context.Offices.Where(d => d.Code != "00000000" && d.Code.Substring(0, 3) == "000").ToListAsync());
                     }
                     else
                     {
-                        List<Object> list = new List<object>();
-                        list.Add(new { Id = office.Id, Name = office.Name });
-
-                        ViewBag.AuditOfficeId = new SelectList(list, "Id", "Name", office.Id);
+                        auditList.Add(office);
                     }
+                    ViewBag.AuditOfficeId = new SelectList(auditList, "Id", "Name", defaultOffice);
+                    ViewBag.OfficeId = new SelectList(ownerList, "Id", "Name", defaultOffice);
                     break;
             }
 
@@ -615,6 +810,22 @@ namespace EPES.Controllers
             var office = await _context.Offices.Where(o => o.Code == user.OfficeId).FirstOrDefaultAsync();
             var officeselect = await _context.Offices.Where(o => o.Code == dataView.selectoffice).FirstOrDefaultAsync();
 
+            var userOffices = await _context.UserOffices.Where(uo => uo.UserName == user.UserName).Select(slt => slt.Office).ToListAsync();
+
+            List<Office> ownerList = new List<Office>();
+            List<Office> auditList = new List<Office>();
+            int defaultOffice;
+
+
+            if (String.IsNullOrEmpty(dataView.selectoffice))
+            {
+                defaultOffice = office.Id;
+            }
+            else
+            {
+                defaultOffice = officeselect.Id;
+            }
+
             switch (dataView.point.Plan)
             {
                 case TypeOfPlan.A:
@@ -646,67 +857,157 @@ namespace EPES.Controllers
                     ViewBag.Plan = "B";
                     ViewBag.PlanValue = 1;
 
-                    if (User.IsInRole("Admin") || (User.IsInRole("Manager") && user.OfficeId.StartsWith("000")))
+                    //if (User.IsInRole("Admin") || (User.IsInRole("Manager") && user.OfficeId.StartsWith("000")))
+                    //{
+                    //    if (String.IsNullOrEmpty(dataView.selectoffice))
+                    //    {
+                    //        ViewBag.OfficeId = new SelectList(_context.Offices.Where(d => d.Code != "00000000" && d.Code.Substring(5, 3) == "000"), "Id", "Name", office.Id);
+                    //    }
+                    //    else
+                    //    {
+                    //        ViewBag.OfficeId = new SelectList(_context.Offices.Where(d => d.Code != "00000000" && d.Code.Substring(5, 3) == "000"), "Id", "Name", officeselect.Id);
+                    //    }
+                    //}
+
+                    //if (User.IsInRole("Manager") && user.OfficeId.Substring(2, 6) == "000000")
+                    //{
+                    //    if (String.IsNullOrEmpty(dataView.selectoffice))
+                    //    {
+                    //        ViewBag.OfficeId = new SelectList(_context.Offices.Where(d => d.Code != "00000000" && d.Code.StartsWith(user.OfficeId.Substring(0, 2)) && d.Code.Substring(5, 3) == "000"), "Id", "Name", office.Id);
+                    //    }
+                    //    else
+                    //    {
+                    //        ViewBag.OfficeId = new SelectList(_context.Offices.Where(d => d.Code != "00000000" && d.Code.StartsWith(user.OfficeId.Substring(0, 2)) && d.Code.Substring(5, 3) == "000"), "Id", "Name", officeselect.Id);
+                    //    }
+                    //}
+
+                    //if (User.IsInRole("User"))
+                    //{
+                    //    List<Object> list = new List<object>();
+                    //    list.Add(new { Id = office.Id, Name = office.Name });
+
+                    //    ViewBag.OfficeId = new SelectList(list, "Id", "Name", office.Id);
+                    //}
+
+                    //if (User.IsInRole("Admin") || User.IsInRole("User") || (User.IsInRole("Manager") && user.OfficeId.Substring(2, 6) == "000000"))
+                    //{
+                    //    if (String.IsNullOrEmpty(dataView.selectoffice))
+                    //    {
+                    //        ViewBag.AuditOfficeId = new SelectList(_context.Offices.Where(d => d.Code != "00000000" && d.Code.Substring(0, 3) == "000"), "Id", "Name", office.Id);
+                    //    }
+                    //    else
+                    //    {
+                    //        if (dataView.selectoffice.Substring(0, 3) == "000")
+                    //        {
+                    //            ViewBag.AuditOfficeId = new SelectList(_context.Offices.Where(d => d.Code != "00000000" && d.Code.Substring(0, 3) == "000"), "Id", "Name", officeselect.Id);
+                    //        }
+                    //        else
+                    //        {
+                    //            ViewBag.AuditOfficeId = new SelectList(_context.Offices.Where(d => d.Code != "00000000" && d.Code.Substring(0, 3) == "000"), "Id", "Name", office.Id);
+                    //        }
+                    //    }
+                    //}
+                    //else
+                    //{
+                    //    List<Object> list = new List<object>();
+                    //    list.Add(new { Id = office.Id, Name = office.Name });
+
+                    //    ViewBag.AuditOfficeId = new SelectList(list, "Id", "Name", office.Id);
+                    //}
+
+
+                    if (User.IsInRole("Admin") || (User.IsInRole("Manager") && (user.OfficeId.StartsWith("000") || userOffices.Any(uo => uo.Code.Substring(0, 2) == "00"))))
                     {
-                        if (String.IsNullOrEmpty(dataView.selectoffice))
-                        {
-                            ViewBag.OfficeId = new SelectList(_context.Offices.Where(d => d.Code != "00000000" && d.Code.Substring(5, 3) == "000"), "Id", "Name", office.Id);
-                        }
-                        else
-                        {
-                            ViewBag.OfficeId = new SelectList(_context.Offices.Where(d => d.Code != "00000000" && d.Code.Substring(5, 3) == "000"), "Id", "Name", officeselect.Id);
-                        }
+                        ownerList.AddRange(await _context.Offices.Where(d => d.Code != "00000000" && d.Code.Substring(5, 3) == "000").ToListAsync());
                     }
 
-                    if (User.IsInRole("Manager") && user.OfficeId.Substring(2, 6) == "000000")
+                    if (User.IsInRole("Manager") && (user.OfficeId.Substring(2, 6) == "000000"))
                     {
-                        if (String.IsNullOrEmpty(dataView.selectoffice))
+                        ownerList.AddRange(await _context.Offices.Where(d => d.Code != "00000000" && d.Code.StartsWith(user.OfficeId.Substring(0, 2)) && d.Code.Substring(5, 3) == "000").ToListAsync());
+                    }
+
+                    if (User.IsInRole("Manager") && (userOffices.Any(uo => uo.Code.Substring(2, 6) == "000000")))
+                    {
+                        foreach (var uo in userOffices)
                         {
-                            ViewBag.OfficeId = new SelectList(_context.Offices.Where(d => d.Code != "00000000" && d.Code.StartsWith(user.OfficeId.Substring(0, 2)) && d.Code.Substring(5, 3) == "000"), "Id", "Name", office.Id);
-                        }
-                        else
-                        {
-                            ViewBag.OfficeId = new SelectList(_context.Offices.Where(d => d.Code != "00000000" && d.Code.StartsWith(user.OfficeId.Substring(0, 2)) && d.Code.Substring(5, 3) == "000"), "Id", "Name", officeselect.Id);
+                            if (uo.Code.Substring(2, 6) == "000000")
+                            {
+                                ownerList.AddRange(await _context.Offices.Where(d => d.Code != "00000000" && d.Code.StartsWith(uo.Code.Substring(0, 2)) && d.Code.Substring(5, 3) == "000").ToListAsync());
+                            }
                         }
                     }
 
                     if (User.IsInRole("User"))
                     {
-                        List<Object> list = new List<object>();
-                        list.Add(new { Id = office.Id, Name = office.Name });
-
-                        ViewBag.OfficeId = new SelectList(list, "Id", "Name", office.Id);
+                        ownerList.Add(office);
                     }
 
-                    if (User.IsInRole("Admin") || User.IsInRole("User") || (User.IsInRole("Manager") && user.OfficeId.Substring(2, 6) == "000000"))
+                    if (User.IsInRole("Admin") || User.IsInRole("User") || (User.IsInRole("Manager") && (user.OfficeId.Substring(2, 6) == "000000" || userOffices.Any(uo => uo.Code.Substring(2, 6) == "000000"))))
                     {
-                        if (String.IsNullOrEmpty(dataView.selectoffice))
-                        {
-                            ViewBag.AuditOfficeId = new SelectList(_context.Offices.Where(d => d.Code != "00000000" && d.Code.Substring(0, 3) == "000"), "Id", "Name", office.Id);
-                        }
-                        else
-                        {
-                            if (dataView.selectoffice.Substring(0, 3) == "000")
-                            {
-                                ViewBag.AuditOfficeId = new SelectList(_context.Offices.Where(d => d.Code != "00000000" && d.Code.Substring(0, 3) == "000"), "Id", "Name", officeselect.Id);
-                            }
-                            else
-                            {
-                                ViewBag.AuditOfficeId = new SelectList(_context.Offices.Where(d => d.Code != "00000000" && d.Code.Substring(0, 3) == "000"), "Id", "Name", office.Id);
-                            }
-                        }
+                        auditList.AddRange(await _context.Offices.Where(d => d.Code != "00000000" && d.Code.Substring(0, 3) == "000").ToListAsync());
                     }
                     else
                     {
-                        List<Object> list = new List<object>();
-                        list.Add(new { Id = office.Id, Name = office.Name });
-
-                        ViewBag.AuditOfficeId = new SelectList(list, "Id", "Name", office.Id);
+                        auditList.Add(office);
                     }
+                    ViewBag.AuditOfficeId = new SelectList(auditList, "Id", "Name", defaultOffice);
+                    ViewBag.OfficeId = new SelectList(ownerList, "Id", "Name", defaultOffice);
                     break;
                 case TypeOfPlan.C:
                     ViewBag.Plan = "C";
                     ViewBag.PlanValue = 2;
+
+                    //if (User.IsInRole("Admin"))
+                    //{
+                    //    if (String.IsNullOrEmpty(dataView.selectoffice))
+                    //    {
+                    //        ViewBag.OfficeId = new SelectList(_context.Offices.Where(d => d.Code != "00000000" && d.Code.Substring(5, 3) == "000"), "Id", "Name", office.Id);
+                    //    }
+                    //    else
+                    //    {
+                    //        ViewBag.OfficeId = new SelectList(_context.Offices.Where(d => d.Code != "00000000" && d.Code.Substring(5, 3) == "000"), "Id", "Name", officeselect.Id);
+                    //    }
+                    //    ViewBag.AuditOfficeId = ViewBag.OfficeId;
+                    //}
+
+                    //var item = await _context.Offices.Where(d => d.Code != "00000000" && d.Code.Substring(0, 3) == "000").Select(d => new { Id = d.Id, Name = d.Name }).ToListAsync();
+
+                    //if (User.IsInRole("Manager") && user.OfficeId.Substring(2, 6) == "000000")
+                    //{
+                    //    var selectitem = await _context.Offices.Where(d => d.Code != "00000000" && d.Code.StartsWith(user.OfficeId.Substring(0, 2)) && d.Code.Substring(5, 3) == "000").Select(d => new { Id = d.Id, Name = d.Name }).ToListAsync();
+                    //    foreach (var itemAdd in selectitem)
+                    //    {
+                    //        item.Add(itemAdd);
+                    //    }
+
+                    //    if (String.IsNullOrEmpty(dataView.selectoffice))
+                    //    {
+                    //        ViewBag.OfficeId = new SelectList(selectitem, "Id", "Name", office.Id);
+                    //        ViewBag.AuditOfficeId = new SelectList(item, "Id", "Name", office.Id);
+                    //    }
+                    //    else
+                    //    {
+                    //        ViewBag.OfficeId = new SelectList(selectitem, "Id", "Name", officeselect.Id);
+                    //        ViewBag.AuditOfficeId = new SelectList(item, "Id", "Name", officeselect.Id);
+                    //    }
+                    //}
+
+                    //if ((User.IsInRole("Manager") && user.OfficeId.Substring(0, 3) == "000") || User.IsInRole("User"))
+                    //{
+                    //    List<Object> list = new List<object>();
+                    //    list.Add(new { Id = office.Id, Name = office.Name });
+                    //    ViewBag.OfficeId = new SelectList(list, "Id", "Name", office.Id);
+
+                    //    if (User.IsInRole("Manager") && user.OfficeId.Substring(0, 3) == "000")
+                    //    {
+                    //        ViewBag.AuditOfficeId = ViewBag.OfficeId;
+                    //    }
+                    //    else
+                    //    {
+                    //        item.Add(new { Id = office.Id, Name = office.Name });
+                    //        ViewBag.AuditOfficeId = new SelectList(item, "Id", "Name", office.Id);
+                    //    }
+                    //}
 
                     if (User.IsInRole("Admin"))
                     {
@@ -720,107 +1021,182 @@ namespace EPES.Controllers
                         }
                         ViewBag.AuditOfficeId = ViewBag.OfficeId;
                     }
-
-                    var item = await _context.Offices.Where(d => d.Code != "00000000" && d.Code.Substring(0, 3) == "000").Select(d => new { Id = d.Id, Name = d.Name }).ToListAsync();
-
-                    if (User.IsInRole("Manager") && user.OfficeId.Substring(2, 6) == "000000")
+                    else
                     {
-                        var selectitem = await _context.Offices.Where(d => d.Code != "00000000" && d.Code.StartsWith(user.OfficeId.Substring(0, 2)) && d.Code.Substring(5, 3) == "000").Select(d => new { Id = d.Id, Name = d.Name }).ToListAsync();
-                        foreach (var itemAdd in selectitem)
+                        //var item = await _context.Offices.Where(d => d.Code != "00000000" && d.Code.Substring(0, 3) == "000").Select(d => new { Id = d.Id, Name = d.Name }).ToListAsync();
+                        var item = await _context.Offices.Where(d => d.Code != "00000000" && d.Code.Substring(0, 3) == "000").ToListAsync();
+
+                        if (User.IsInRole("Manager") && (user.OfficeId.Substring(2, 6) == "000000"))
                         {
-                            item.Add(itemAdd);
+                            //var selectitem = await _context.Offices.Where(d => d.Code != "00000000" && d.Code.StartsWith(user.OfficeId.Substring(0, 2)) && d.Code.Substring(5, 3) == "000").Select(d => new { Id = d.Id, Name = d.Name }).ToListAsync();
+                            var selectitem = await _context.Offices.Where(d => d.Code != "00000000" && d.Code.StartsWith(user.OfficeId.Substring(0, 2)) && d.Code.Substring(5, 3) == "000").ToListAsync();
+                            ownerList.AddRange(selectitem);
+                            foreach (var itemAdd in selectitem)
+                            {
+                                item.Add(itemAdd);
+                            }
+
+                            //if (String.IsNullOrEmpty(selectoffice))
+                            //{
+                            //    ViewBag.OfficeId = new SelectList(selectitem, "Id", "Name", office.Id);
+                            //    ViewBag.AuditOfficeId = new SelectList(item, "Id", "Name", office.Id);
+                            //}
+                            //else
+                            //{
+                            //    ViewBag.OfficeId = new SelectList(selectitem, "Id", "Name", officeselect.Id);
+                            //    ViewBag.AuditOfficeId = new SelectList(item, "Id", "Name", officeselect.Id);
+                            //}
                         }
 
-                        if (String.IsNullOrEmpty(dataView.selectoffice))
+                        if (User.IsInRole("Manager") && (userOffices.Any(uo => uo.Code.Substring(2, 6) == "000000")))
                         {
-                            ViewBag.OfficeId = new SelectList(selectitem, "Id", "Name", office.Id);
-                            ViewBag.AuditOfficeId = new SelectList(item, "Id", "Name", office.Id);
+                            foreach (var uo in userOffices)
+                            {
+                                if (uo.Code.Substring(2, 6) == "000000")
+                                {
+                                    var selectitem = await _context.Offices.Where(d => d.Code != "00000000" && d.Code.StartsWith(uo.Code.Substring(0, 2)) && d.Code.Substring(5, 3) == "000").ToListAsync();
+                                    ownerList.AddRange(selectitem);
+                                    foreach (var itemAdd in selectitem)
+                                    {
+                                        item.Add(itemAdd);
+                                    }
+                                }
+                            }
+                            //ViewBag.OfficeId = new SelectList(ownerList, "Id", "Name", office.Id);
+                            //ViewBag.AuditOfficeId = new SelectList(item, "Id", "Name", office.Id);
                         }
-                        else
+
+                        if ((User.IsInRole("Manager") && (user.OfficeId.Substring(0, 3) == "000")) || User.IsInRole("User"))
                         {
-                            ViewBag.OfficeId = new SelectList(selectitem, "Id", "Name", officeselect.Id);
-                            ViewBag.AuditOfficeId = new SelectList(item, "Id", "Name", officeselect.Id);
+                            //List<Object> list = new List<object>();
+                            //list.Add(new { Id = office.Id, Name = office.Name });
+                            //ViewBag.OfficeId = new SelectList(list, "Id", "Name", office.Id);
+                            ownerList.Add(office);
+
+                            if (User.IsInRole("Manager") && (user.OfficeId.Substring(0, 3) == "000"))
+                            {
+                                //ViewBag.AuditOfficeId = ViewBag.OfficeId;
+                                item = ownerList;
+                            }
+                            else
+                            {
+                                //item.Add(new { Id = office.Id, Name = office.Name });
+                                item.Add(office);
+                                //ViewBag.AuditOfficeId = new SelectList(item, "Id", "Name", office.Id);
+                            }
                         }
+
+                        if ((User.IsInRole("Manager") && userOffices.Any(uo => uo.Code.Substring(0, 3) == "000")))
+                        {
+                            foreach (var ou in userOffices)
+                            {
+                                ownerList.Add(ou);
+                            }
+                        }
+                        ViewBag.AuditOfficeId = new SelectList(item, "Id", "Name", defaultOffice);
+                        ViewBag.OfficeId = new SelectList(ownerList, "Id", "Name", defaultOffice);
                     }
 
-                    if ((User.IsInRole("Manager") && user.OfficeId.Substring(0, 3) == "000") || User.IsInRole("User"))
-                    {
-                        List<Object> list = new List<object>();
-                        list.Add(new { Id = office.Id, Name = office.Name });
-                        ViewBag.OfficeId = new SelectList(list, "Id", "Name", office.Id);
-
-                        if (User.IsInRole("Manager") && user.OfficeId.Substring(0, 3) == "000")
-                        {
-                            ViewBag.AuditOfficeId = ViewBag.OfficeId;
-                        }
-                        else
-                        {
-                            item.Add(new { Id = office.Id, Name = office.Name });
-                            ViewBag.AuditOfficeId = new SelectList(item, "Id", "Name", office.Id);
-                        }
-                    }
                     break;
                 case TypeOfPlan.D:
                     ViewBag.Plan = "D";
                     ViewBag.PlanValue = 3;
 
-                    if (User.IsInRole("Admin") || (User.IsInRole("Manager") && user.OfficeId.StartsWith("000")))
+                    //if (User.IsInRole("Admin") || (User.IsInRole("Manager") && user.OfficeId.StartsWith("000")))
+                    //{
+                    //    if (String.IsNullOrEmpty(dataView.selectoffice))
+                    //    {
+                    //        ViewBag.OfficeId = new SelectList(_context.Offices.Where(d => d.Code != "00000000" && d.Code.Substring(5, 3) == "000"), "Id", "Name", office.Id);
+                    //    }
+                    //    else
+                    //    {
+                    //        ViewBag.OfficeId = new SelectList(_context.Offices.Where(d => d.Code != "00000000" && d.Code.Substring(5, 3) == "000"), "Id", "Name", officeselect.Id);
+                    //    }
+                    //}
+
+                    //if (User.IsInRole("Manager") && user.OfficeId.Substring(2, 6) == "000000")
+                    //{
+                    //    if (String.IsNullOrEmpty(dataView.selectoffice))
+                    //    {
+                    //        ViewBag.OfficeId = new SelectList(_context.Offices.Where(d => d.Code != "00000000" && d.Code.StartsWith(user.OfficeId.Substring(0, 2)) && d.Code.Substring(5, 3) == "000"), "Id", "Name", office.Id);
+                    //    }
+                    //    else
+                    //    {
+                    //        ViewBag.OfficeId = new SelectList(_context.Offices.Where(d => d.Code != "00000000" && d.Code.StartsWith(user.OfficeId.Substring(0, 2)) && d.Code.Substring(5, 3) == "000"), "Id", "Name", officeselect.Id);
+                    //    }
+                    //}
+
+                    //if (User.IsInRole("User"))
+                    //{
+                    //    List<Object> list = new List<object>();
+                    //    list.Add(new { Id = office.Id, Name = office.Name });
+
+                    //    ViewBag.OfficeId = new SelectList(list, "Id", "Name", office.Id);
+                    //}
+
+                    //if (User.IsInRole("Admin") || User.IsInRole("User") || (User.IsInRole("Manager") && user.OfficeId.Substring(2, 6) == "000000"))
+                    //{
+                    //    if (String.IsNullOrEmpty(dataView.selectoffice))
+                    //    {
+                    //        ViewBag.AuditOfficeId = new SelectList(_context.Offices.Where(d => d.Code != "00000000" && d.Code.Substring(0, 3) == "000"), "Id", "Name", office.Id);
+                    //    }
+                    //    else
+                    //    {
+                    //        if (dataView.selectoffice.Substring(0, 3) == "000")
+                    //        {
+                    //            ViewBag.AuditOfficeId = new SelectList(_context.Offices.Where(d => d.Code != "00000000" && d.Code.Substring(0, 3) == "000"), "Id", "Name", officeselect.Id);
+                    //        }
+                    //        else
+                    //        {
+                    //            ViewBag.AuditOfficeId = new SelectList(_context.Offices.Where(d => d.Code != "00000000" && d.Code.Substring(0, 3) == "000"), "Id", "Name", office.Id);
+                    //        }
+                    //    }
+                    //}
+                    //else
+                    //{
+                    //    List<Object> list = new List<object>();
+                    //    list.Add(new { Id = office.Id, Name = office.Name });
+
+                    //    ViewBag.AuditOfficeId = new SelectList(list, "Id", "Name", office.Id);
+                    //}
+
+
+                    if (User.IsInRole("Admin") || (User.IsInRole("Manager") && (user.OfficeId.StartsWith("000") || userOffices.Any(uo => uo.Code.Substring(0, 2) == "00"))))
                     {
-                        if (String.IsNullOrEmpty(dataView.selectoffice))
-                        {
-                            ViewBag.OfficeId = new SelectList(_context.Offices.Where(d => d.Code != "00000000" && d.Code.Substring(5, 3) == "000"), "Id", "Name", office.Id);
-                        }
-                        else
-                        {
-                            ViewBag.OfficeId = new SelectList(_context.Offices.Where(d => d.Code != "00000000" && d.Code.Substring(5, 3) == "000"), "Id", "Name", officeselect.Id);
-                        }
+                        ownerList.AddRange(await _context.Offices.Where(d => d.Code != "00000000" && d.Code.Substring(5, 3) == "000").ToListAsync());
                     }
 
-                    if (User.IsInRole("Manager") && user.OfficeId.Substring(2, 6) == "000000")
+                    if (User.IsInRole("Manager") && (user.OfficeId.Substring(2, 6) == "000000"))
                     {
-                        if (String.IsNullOrEmpty(dataView.selectoffice))
+                        ownerList.AddRange(await _context.Offices.Where(d => d.Code != "00000000" && d.Code.StartsWith(user.OfficeId.Substring(0, 2)) && d.Code.Substring(5, 3) == "000").ToListAsync());
+                    }
+
+                    if (User.IsInRole("Manager") && (userOffices.Any(uo => uo.Code.Substring(2, 6) == "000000")))
+                    {
+                        foreach (var uo in userOffices)
                         {
-                            ViewBag.OfficeId = new SelectList(_context.Offices.Where(d => d.Code != "00000000" && d.Code.StartsWith(user.OfficeId.Substring(0, 2)) && d.Code.Substring(5, 3) == "000"), "Id", "Name", office.Id);
-                        }
-                        else
-                        {
-                            ViewBag.OfficeId = new SelectList(_context.Offices.Where(d => d.Code != "00000000" && d.Code.StartsWith(user.OfficeId.Substring(0, 2)) && d.Code.Substring(5, 3) == "000"), "Id", "Name", officeselect.Id);
+                            if (uo.Code.Substring(2, 6) == "000000")
+                            {
+                                ownerList.AddRange(await _context.Offices.Where(d => d.Code != "00000000" && d.Code.StartsWith(uo.Code.Substring(0, 2)) && d.Code.Substring(5, 3) == "000").ToListAsync());
+                            }
                         }
                     }
 
                     if (User.IsInRole("User"))
                     {
-                        List<Object> list = new List<object>();
-                        list.Add(new { Id = office.Id, Name = office.Name });
-
-                        ViewBag.OfficeId = new SelectList(list, "Id", "Name", office.Id);
+                        ownerList.Add(office);
                     }
 
-                    if (User.IsInRole("Admin") || User.IsInRole("User") || (User.IsInRole("Manager") && user.OfficeId.Substring(2, 6) == "000000"))
+                    if (User.IsInRole("Admin") || User.IsInRole("User") || (User.IsInRole("Manager") && (user.OfficeId.Substring(2, 6) == "000000" || userOffices.Any(uo => uo.Code.Substring(2, 6) == "000000"))))
                     {
-                        if (String.IsNullOrEmpty(dataView.selectoffice))
-                        {
-                            ViewBag.AuditOfficeId = new SelectList(_context.Offices.Where(d => d.Code != "00000000" && d.Code.Substring(0, 3) == "000"), "Id", "Name", office.Id);
-                        }
-                        else
-                        {
-                            if (dataView.selectoffice.Substring(0, 3) == "000")
-                            {
-                                ViewBag.AuditOfficeId = new SelectList(_context.Offices.Where(d => d.Code != "00000000" && d.Code.Substring(0, 3) == "000"), "Id", "Name", officeselect.Id);
-                            }
-                            else
-                            {
-                                ViewBag.AuditOfficeId = new SelectList(_context.Offices.Where(d => d.Code != "00000000" && d.Code.Substring(0, 3) == "000"), "Id", "Name", office.Id);
-                            }
-                        }
+                        auditList.AddRange(await _context.Offices.Where(d => d.Code != "00000000" && d.Code.Substring(0, 3) == "000").ToListAsync());
                     }
                     else
                     {
-                        List<Object> list = new List<object>();
-                        list.Add(new { Id = office.Id, Name = office.Name });
-
-                        ViewBag.AuditOfficeId = new SelectList(list, "Id", "Name", office.Id);
+                        auditList.Add(office);
                     }
+                    ViewBag.AuditOfficeId = new SelectList(auditList, "Id", "Name", defaultOffice);
+                    ViewBag.OfficeId = new SelectList(ownerList, "Id", "Name", defaultOffice);
                     break;
             }
 
@@ -890,6 +1266,7 @@ namespace EPES.Controllers
             var user = await _userManager.GetUserAsync(User);
             var office = await _context.Offices.Where(o => o.Code == user.OfficeId).FirstOrDefaultAsync();
             //var officeselect = await _context.Offices.Where(o => o.Code == selectoffice).FirstOrDefaultAsync();
+            var userOffices = await _context.UserOffices.Where(uo => uo.UserName == user.UserName).Select(slt => slt.Office).ToListAsync();
 
             switch (dataView.point.Plan)
             {
@@ -915,18 +1292,41 @@ namespace EPES.Controllers
                     ViewBag.Plan = "B";
                     ViewBag.PlanValue = 1;
 
-                    if (User.IsInRole("Admin") || (User.IsInRole("Manager") && user.OfficeId.StartsWith("000")))
+                    if (User.IsInRole("Admin") || (User.IsInRole("Manager") && (user.OfficeId.StartsWith("000") || userOffices.Any(uo => uo.Code.StartsWith("00")))))
                     {
                         ViewBag.OfficeId = new SelectList(_context.Offices.Where(d => d.Code != "00000000" && d.Code.Substring(5, 3) == "000"), "Id", "Name");
                     }
-                    else if (User.IsInRole("Manager") && user.OfficeId.Substring(2, 6) == "000000")
+                    else if (User.IsInRole("Manager") && (user.OfficeId.Substring(2, 6) == "000000"))
                     {
-                        ViewBag.OfficeId = new SelectList(_context.Offices.Where(d => d.Code != "00000000" && d.Code.StartsWith(user.OfficeId.Substring(0, 2)) && d.Code.Substring(5, 3) == "000"), "Id", "Name");
+                        // ViewBag.OfficeId = new SelectList(_context.Offices.Where(d => d.Code != "00000000" && d.Code.StartsWith(user.OfficeId.Substring(0, 2)) && d.Code.Substring(5, 3) == "000"), "Id", "Name");
+
+                        List<Office> list = await _context.Offices.Where(d => d.Code != "00000000" && d.Code.StartsWith(user.OfficeId.Substring(0, 2))).ToListAsync();
+                        foreach (var uo in userOffices)
+                        {
+                            list.Add(uo);
+                        }
+                        ViewBag.OfficeId = new SelectList(list, "Id", "Name");
+                    }
+                    else if (User.IsInRole("Manager") && userOffices.Any(uo => uo.Code.Substring(2, 6) == "000000"))
+                    {
+                        List<Office> list = new List<Office>();
+                        list.Add(office);
+                        foreach (var uo in userOffices)
+                        {
+                            list.Add(uo);
+                        }
+                        ViewBag.OfficeId = new SelectList(list, "Id", "Name");
                     }
                     else
                     {
-                        List<Object> list = new List<object>();
-                        list.Add(new { Id = office.Id, Name = office.Name });
+                        //List<Object> list = new List<object>();
+                        //list.Add(new { Id = office.Id, Name = office.Name });
+                        List<Office> list = new List<Office>();
+                        list.Add(office);
+                        foreach(var uo in userOffices)
+                        {
+                            list.Add(uo);
+                        }
 
                         ViewBag.OfficeId = new SelectList(list, "Id", "Name");
                     }
@@ -953,6 +1353,11 @@ namespace EPES.Controllers
                         {
                             item.Add(itemAdd);
                         }
+
+                        foreach (var uo in userOffices)
+                        {
+                            item.Add(new { uo.Id, uo.Name });
+                        }
                         ViewBag.OfficeId = new SelectList(selectitem, "Id", "Name");
                         ViewBag.AuditOfficeId = new SelectList(item, "Id", "Name");
                     }
@@ -969,6 +1374,11 @@ namespace EPES.Controllers
                         else
                         {
                             item.Add(new { Id = office.Id, Name = office.Name });
+
+                            foreach (var uo in userOffices)
+                            {
+                                item.Add(new { uo.Id, uo.Name });
+                            }
                             ViewBag.AuditOfficeId = new SelectList(item, "Id", "Name");
                         }
                     }
@@ -984,13 +1394,27 @@ namespace EPES.Controllers
                     }
                     else if (User.IsInRole("Manager") && user.OfficeId.Substring(2, 6) == "000000")
                     {
-                        ViewBag.OfficeId = new SelectList(_context.Offices.Where(d => d.Code != "00000000" && d.Code.StartsWith(user.OfficeId.Substring(0, 2)) && d.Code.Substring(5, 3) == "000"), "Id", "Name");
+                        //ViewBag.OfficeId = new SelectList(_context.Offices.Where(d => d.Code != "00000000" && d.Code.StartsWith(user.OfficeId.Substring(0, 2)) && d.Code.Substring(5, 3) == "000"), "Id", "Name");
+
+                        List<Office> list = await _context.Offices.Where(d => d.Code != "00000000" && d.Code.StartsWith(user.OfficeId.Substring(0, 2)) && d.Code.Substring(5, 3) == "000").ToListAsync();
+                        foreach (var uo in userOffices)
+                        {
+                            list.Add(uo);
+                        }
+                        ViewBag.OfficeId = new SelectList(list, "Id", "Name");
+                        ViewBag.OfficeId = new SelectList(list, "Id", "Name");
                     }
                     else
                     {
-                        List<Object> list = new List<object>();
-                        list.Add(new { Id = office.Id, Name = office.Name });
+                        //List<Object> list = new List<object>();
+                        //list.Add(new { Id = office.Id, Name = office.Name });
 
+                        List<Office> list = new List<Office>();
+                        list.Add(office);
+                        foreach (var uo in userOffices)
+                        {
+                            list.Add(uo);
+                        }
                         ViewBag.OfficeId = new SelectList(list, "Id", "Name");
                     }
 
@@ -1177,6 +1601,8 @@ namespace EPES.Controllers
 
             var office = await _context.Offices.Where(o => o.Code == user.OfficeId).FirstOrDefaultAsync();
             var officeselect = await _context.Offices.Where(o => o.Code == dataView.selectoffice).FirstOrDefaultAsync();
+
+            var userOffices = await _context.UserOffices.Where(uo => uo.UserName == user.UserName).Select(slt => slt.Office).ToListAsync();
 
             switch (pointOfEvaluationToUpdate.Plan)
             {

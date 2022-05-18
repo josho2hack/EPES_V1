@@ -112,8 +112,9 @@
             <div id="collapseDoc" class="collapse" aria-labelledby="headingReport" data-parent="#accordionSidebar">
                 <div class="bg-white py-2 collapse-inner rounded">
                     <h6 class="collapse-header">คู่มือการใช้งานระบบ:</h6>
-                    <a class="collapse-item" href="/EPES/docs/EPES-Document.pdf">คู่มือผู้ใช้งาน</a>
-                    <a class="collapse-item" href="/EPES/docs/EPES-Point2564.pdf">คำอธิบายตัวชี้วัด 2564</a>
+                    <a class="collapse-item" href="/EPES/docs/EPES-Document.pdf" target="_blank">คู่มือผู้ใช้งาน</a>
+                    <a class="collapse-item" href="/EPES/docs/EPES-Point2564.pdf" target="_blank">คำอธิบายตัวชี้วัด 2564</a>
+                    <a class="collapse-item" href="/EPES/docs/EPES-Q&A.pdf" target="_blank">คำถาม-คำตอบ การจัดทำแผน/ตัวชี้วัด ปี 2565</a>
                 </div>
             </div>
         </li>
@@ -154,9 +155,13 @@
 
                         <h6 class="collapse-header text-primary"><small>[API]</small></h6>
                         <a class="collapse-item" asp-area="" asp-controller="AutoApp" asp-action="Index" onclick="showLoader(this);">#1 เชื่อมโยงข้อมูลผลจัดเก็บภาษี (ภญ/สภ./สท.)</a>
+                        <a class="collapse-item" asp-area="" asp-controller="AutoApp" asp-action="GetTax100" onclick="showLoader(this);">#6 เชื่อมโยงข้อมูลผู้ประกอบการรายใหญ่ในท้องที่</a>
+                        <div class="collapse-divider"></div>
+
+                        <h6 class="collapse-header text-primary"><small>[อ่านไฟล์จากเซิฟ]</small></h6>
                         <a class="collapse-item" asp-area="" asp-controller="AutoApp" asp-action="GetCanvass56_1" onclick="showLoader(this);">#2 เชื่อมโยงข้อมูลผู้เสียภาษีรายใหม่</a>
                         <a class="collapse-item" asp-area="" asp-controller="AutoApp" asp-action="GetCanvass56_2" onclick="showLoader(this);">#3 เชื่อมโยงข้อมูลผู้เสียภาษีรายใหม่ที่ชำระภาษี</a>
-                        <a class="collapse-item" asp-area="" asp-controller="AutoApp" asp-action="GetTax100" onclick="showLoader(this);">#6 เชื่อมโยงข้อมูลผู้ประกอบการรายใหญ่ในท้องที่</a>
+                        <a class="collapse-item" asp-area="" asp-controller="AutoApp" asp-action="GetP21" onclick="showLoader(this);">#21 เชื่อมโยงข้อมูลงานค้างหนังสือร้องเรียนแหล่งภาษี</a>
 
                         <h6 class="collapse-item text-primary"><small>[มจ.]</small></h6>
                         <a class="collapse-item" asp-area="" asp-controller="AutoApp" asp-action="GetP5" onclick="showLoader(this);">#5 เชื่อมโยงข้อมูลร้อยละของการบริหารการคืนภาษี</a>
@@ -175,9 +180,9 @@
                         <a class="collapse-item" asp-area="" asp-controller="AutoApp" asp-action="GetP20" onclick="showLoader(this);">#20 เชื่อมโยงข้อมูลข้อมูลการเบิกจ่ายงบประมาณ</a>
                         <div class="collapse-divider"></div>
 
-                        <h6 class="collapse-item text-primary"><small>[สน.]</small></h6>
-                        <a class="collapse-item" asp-area="" asp-controller="AutoApp" asp-action="GetP21" onclick="showLoader(this);">#21 เชื่อมโยงข้อมูลงานค้างหนังสือร้องเรียนแหล่งภาษี</a>
-                        <div class="collapse-divider"></div>
+
+                        <h6 class="collapse-header">นำเข้าเป้าหมาย/ประมาณการ: </h6>
+                        <a class="collapse-item" asp-area="" asp-controller="AutoApp" asp-action="GetExpectByProgramID" onclick="showLoader(this);">นำเข้าเป้าหมาย/ประมาณการ</a>
 
                         <h6 class="collapse-header">คัดลอกตัวชี้วัด: </h6>
                         <a class="collapse-item text-danger" asp-area="" asp-controller="PointOfEvaluations" asp-action="CopyAllPak1toPak" onclick="showLoader(this);">คัดลอกตัวชี้วัดทั้งหมด สภ.1 -> สภ.</a>

@@ -44,15 +44,20 @@ namespace EPES.Controllers
             var user = await _userManager.GetUserAsync(User);
             if (User.IsInRole("Admin") || User.IsInRole("Special"))
             {
-                ViewBag.OfficeCode = new SelectList(_context.Offices.Where(d => d.Code != "00000000" && d.Code.Substring(5, 3) == "000"), "Code", "Name", user.OfficeId);
+                var officeList = _context.Offices.Where(d => d.Code != "00000000" && d.Code.Substring(5, 3) == "000").ToList();
+                ViewBag.OfficeCode = new SelectList(officeList, "Code", "Name", user.OfficeId);
             }
             else if (user.OfficeId.Substring(2, 6) == "000000")
             {
-                ViewBag.OfficeCode = new SelectList(_context.Offices.Where(d => d.Code != "00000000" && d.Code.StartsWith(user.OfficeId.Substring(0, 2)) && d.Code.Substring(5, 3) == "000"), "Code", "Name", user.OfficeId);
+                var officeList = _context.Offices.Where(d => d.Code != "00000000" && d.Code.StartsWith(user.OfficeId.Substring(0, 2)) && d.Code.Substring(5, 3) == "000").ToList();
+                officeList.AddRange(_context.UserOffices.Where(ou => ou.UserName == user.UserName).Select(slt => slt.Office).ToList());
+                ViewBag.OfficeCode = new SelectList(officeList, "Code", "Name", user.OfficeId);
             }
             else
             {
-                ViewBag.OfficeCode = new SelectList(_context.Offices.Where(d => d.Code == user.OfficeId), "Code", "Name", user.OfficeId);
+                var officeList = _context.Offices.Where(d => d.Code == user.OfficeId).ToList();
+                officeList.AddRange(_context.UserOffices.Where(ou => ou.UserName == user.UserName).Select(slt => slt.Office).ToList());
+                ViewBag.OfficeCode = new SelectList(officeList, "Code", "Name", user.OfficeId);
             }
 
             model.yearPoint = yearPoint;
@@ -76,11 +81,17 @@ namespace EPES.Controllers
             }
             else if (user.OfficeId.Substring(2, 6) == "000000")
             {
-                ViewBag.OfficeCode = new SelectList(_context.Offices.Where(d => d.Code != "00000000" && d.Code.StartsWith(user.OfficeId.Substring(0, 2)) && d.Code.Substring(5, 3) == "000"), "Code", "Name", user.OfficeId);
+                var officeList = _context.Offices.Where(d => d.Code != "00000000" && d.Code.StartsWith(user.OfficeId.Substring(0, 2)) && d.Code.Substring(5, 3) == "000").ToList();
+                officeList.AddRange(_context.UserOffices.Where(ou => ou.UserName == user.UserName).Select(slt => slt.Office).ToList());
+                ViewBag.OfficeCode = new SelectList(officeList, "Code", "Name", user.OfficeId);
+                //ViewBag.OfficeCode = new SelectList(_context.Offices.Where(d => d.Code != "00000000" && d.Code.StartsWith(user.OfficeId.Substring(0, 2)) && d.Code.Substring(5, 3) == "000"), "Code", "Name", user.OfficeId);
             }
             else
             {
-                ViewBag.OfficeCode = new SelectList(_context.Offices.Where(d => d.Code == user.OfficeId), "Code", "Name", user.OfficeId);
+                var officeList = _context.Offices.Where(d => d.Code == user.OfficeId).ToList();
+                officeList.AddRange(_context.UserOffices.Where(ou => ou.UserName == user.UserName).Select(slt => slt.Office).ToList());
+                ViewBag.OfficeCode = new SelectList(officeList, "Code", "Name", user.OfficeId);
+                //ViewBag.OfficeCode = new SelectList(_context.Offices.Where(d => d.Code == user.OfficeId), "Code", "Name", user.OfficeId);
             }
 
             var of = await _context.Offices.Where(d => d.Code == model.selectoffice).FirstOrDefaultAsync();
@@ -1081,7 +1092,9 @@ namespace EPES.Controllers
                 ViewBag.OfficeCode = new SelectList(_context.Offices.Where(d => d.Code != "00000000" && d.Code.Substring(5, 3) == "000" && d.Code.Substring(0, 2) == "00"), "Code", "Name", officeCode);
             } else
             {
-                ViewBag.OfficeCode = new SelectList(_context.Offices.Where(d => d.Code != "00000000" && d.Code.StartsWith(user.OfficeId.Substring(0, 2)) && d.Code.Substring(5, 3) == "000" && d.Code.Substring(0, 2) == "00"), "Code", "Name", officeCode);
+                var officeList = _context.Offices.Where(d => d.Code.Substring(0, 2) == "00" && d.Code == user.OfficeId).ToList();
+                officeList.AddRange(_context.UserOffices.Where(ou => ou.UserName == user.UserName).Select(slt => slt.Office).ToList());
+                ViewBag.OfficeCode = new SelectList(officeList, "Code", "Name", officeCode);
             }
             ViewBag.selectOffice = officeCode;
 

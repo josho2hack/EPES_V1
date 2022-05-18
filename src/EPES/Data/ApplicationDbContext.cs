@@ -89,5 +89,6 @@ namespace EPES.Data
         public DbSet<ScoreDraft> ScoreDrafts { get; set; }
         public DbSet<Round> Rounds { get; set; }
         public DbSet<IssueForEvaluations> IssueForEvaluations { get; set; }
+        public DbSet<UserOffices> UserOffices { get; set; }
     }
 }

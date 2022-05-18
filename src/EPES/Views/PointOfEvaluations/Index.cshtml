@@ -5,6 +5,8 @@
 @{
     ViewData["Title"] = "Point Of Evaluation";
     var user = await UserManager.GetUserAsync(User);
+
+    List<string> userOffices = ViewBag.UserOffices;
 }
 
 
@@ -35,12 +37,12 @@
     <form asp-action="Index">
         <div class="row justify-content-between">
             <div class="form-group form-inline">
+                <label class="form-label text-md-right">หน่วยงาน: </label>
+                <select asp-for="selectoffice" class="form-control" asp-items="ViewBag.OfficeCode" onchange="this.form.submit()">
+                    <option value="">เลือกหน่วยงาน</option>
+                </select>
                 @if (User.IsInRole("Admin") || User.IsInRole("Manager") || User.IsInRole("Special"))
                 {
-                    <label class="form-label text-md-right">หน่วยงาน: </label>
-                    <select asp-for="selectoffice" class="form-control" asp-items="ViewBag.OfficeCode" onchange="this.form.submit()">
-                        <option value="">เลือกหน่วยงาน</option>
-                    </select>
                 }
             </div>
             <div class="form-group form-inline">
@@ -167,12 +169,12 @@
                                         @Html.DisplayFor(modelItem => pointA.AuditOffice.Name)
                                     </td>
                                     <td>
-                                        @if (User.IsInRole("Admin") || (User.IsInRole("Manager") && (pointA.AuditOffice.Code == user.OfficeId || pointA.OwnerOffice.Code == user.OfficeId)) || (User.IsInRole("User") && pointA.OwnerOffice.Code == user.OfficeId))
+                                        @if (User.IsInRole("Admin") || (User.IsInRole("Manager") && (pointA.AuditOffice.Code == user.OfficeId || pointA.OwnerOffice.Code == user.OfficeId || userOffices.Any(uo => uo == pointA.AuditOffice.Code || uo == pointA.OwnerOffice.Code))) || (User.IsInRole("User") && (pointA.OwnerOffice.Code == user.OfficeId || userOffices.Any(uo => uo == pointA.OwnerOffice.Code))))
                                         {
                                             <a title="แก้ไข" asp-action="Edit" asp-route-id="@pointA.Id" asp-route-yearPoint="@Model.yearPoint" asp-route-selectoffice="@ViewBag.selectoffice"><i class="fas fa-edit"></i></a>
                                         }
                                         <a title="รายละเอียด" asp-action="Details" asp-route-id="@pointA.Id" asp-route-yearPoint="@Model.yearPoint" asp-route-selectoffice="@ViewBag.selectoffice"><i class="fas fa-search-plus"></i></a>
-                                        @if (User.IsInRole("Admin") || (User.IsInRole("Manager") && (pointA.AuditOffice.Code == user.OfficeId || pointA.OwnerOffice.Code == user.OfficeId)) || (User.IsInRole("User") && pointA.OwnerOffice.Code == user.OfficeId))
+                                        @if (User.IsInRole("Admin") || (User.IsInRole("Manager") && (pointA.AuditOffice.Code == user.OfficeId || pointA.OwnerOffice.Code == user.OfficeId || userOffices.Any(uo => uo == pointA.AuditOffice.Code || uo == pointA.OwnerOffice.Code))) || (User.IsInRole("User") && (pointA.OwnerOffice.Code == user.OfficeId || userOffices.Any(uo => uo == pointA.OwnerOffice.Code))))
                                         {
                                             <a title="ลบ" asp-action="Delete" asp-route-id="@pointA.Id" asp-route-yearPoint="@Model.yearPoint" asp-route-selectoffice="@ViewBag.selectoffice"><i class="fas fa-trash"></i></a>
 
@@ -209,7 +211,7 @@
                                             @using (Html.DevExtreme().NamedTemplate("popup-attach-" + pointA.Id))
                                             {
                                                 <form id="form" method="post" enctype="multipart/form-data" action="PointOfEvaluations/FileSelection">
-                                                    <h3>แนบไฟล์ประกอบผลการปฏิบัติ</h3>
+                                                    <h3>แนบไฟล์ประกอบแผนปฏิบัติราชการ</h3>
                                                     <div id="fileuploader-container">
                                                         @(Html.DevExtreme().FileUploader()
                                                         .Name("AttachFile")
@@ -261,7 +263,7 @@
                         </tbody>
                     </table>
                     <p class="text-right">
-                        @if (User.IsInRole("Admin") || ((User.IsInRole("Manager") || User.IsInRole("User")) && user.OfficeId.StartsWith("000")))
+                        @if (User.IsInRole("Admin") || ((User.IsInRole("Manager") || User.IsInRole("User")) && (user.OfficeId.StartsWith("000") || userOffices.Any(uo => uo.StartsWith("000")))))
                         {
                             <a asp-action="Create" asp-route-plan="0" asp-route-yearPoint="@Model.yearPoint" asp-route-selectoffice="@ViewBag.selectoffice">เพิ่มแผน</a>
                         }
@@ -337,12 +339,12 @@
                                     @Html.DisplayFor(modelItem => ptB.AuditOffice.Name)
                                 </td>
                                 <td>
-                                    @if (User.IsInRole("Admin") || (User.IsInRole("Manager") && (ptB.AuditOffice.Code == user.OfficeId || ptB.OwnerOffice.Code == user.OfficeId)) || (User.IsInRole("Manager") && user.OfficeId.Substring(2, 6) == "000000" && ptB.OwnerOffice.Code.StartsWith(user.OfficeId.Substring(0, 2))) || (User.IsInRole("User") && ptB.OwnerOffice.Code == user.OfficeId))
+                                    @if (User.IsInRole("Admin") || (User.IsInRole("Manager") && (ptB.AuditOffice.Code == user.OfficeId || ptB.OwnerOffice.Code == user.OfficeId || userOffices.Any(uo => uo == ptB.OwnerOffice.Code || uo == ptB.AuditOffice.Code))) || (User.IsInRole("Manager") && (user.OfficeId.Substring(2, 6) == "000000" && ptB.OwnerOffice.Code.StartsWith(user.OfficeId.Substring(0, 2)) || userOffices.Any(uo => uo.Substring(2, 6) == "000000" && uo.Substring(0, 2) == ptB.OwnerOffice.Code.Substring(0, 2)))) || (User.IsInRole("User") && (ptB.OwnerOffice.Code == user.OfficeId || userOffices.Any(uo => uo == ptB.OwnerOffice.Code))))
                                     {
                                         <a title="แก้ไข" asp-action="Edit" asp-route-id="@ptB.Id" asp-route-yearPoint="@Model.yearPoint" asp-route-selectoffice="@ViewBag.selectoffice"><i class="fas fa-edit"></i></a>
                                     }
                                     <a title="รายละเอียด" asp-action="Details" asp-route-id="@ptB.Id" asp-route-yearPoint="@Model.yearPoint" asp-route-selectoffice="@ViewBag.selectoffice"><i class="fas fa-search-plus"></i></a>
-                                    @if (User.IsInRole("Admin") || (User.IsInRole("Manager") && (ptB.AuditOffice.Code == user.OfficeId || ptB.OwnerOffice.Code == user.OfficeId)) || (User.IsInRole("Manager") && user.OfficeId.Substring(2, 6) == "000000" && ptB.OwnerOffice.Code.StartsWith(user.OfficeId.Substring(0, 2))) || (User.IsInRole("User") && ptB.OwnerOffice.Code == user.OfficeId))
+                                    @if (User.IsInRole("Admin") || (User.IsInRole("Manager") && (ptB.AuditOffice.Code == user.OfficeId || ptB.OwnerOffice.Code == user.OfficeId || userOffices.Any(uo => uo == ptB.OwnerOffice.Code || uo == ptB.AuditOffice.Code))) || (User.IsInRole("Manager") && (user.OfficeId.Substring(2, 6) == "000000" && ptB.OwnerOffice.Code.StartsWith(user.OfficeId.Substring(0, 2)) || userOffices.Any(uo => uo.Substring(2, 6) == "000000" && uo.Substring(0, 2) == ptB.OwnerOffice.Code.Substring(0, 2)))) || (User.IsInRole("User") && (ptB.OwnerOffice.Code == user.OfficeId || userOffices.Any(uo => uo == ptB.OwnerOffice.Code))))
                                     {
                                         <a title="ลบ" asp-action="Delete" asp-route-id="@ptB.Id" asp-route-yearPoint="@Model.yearPoint" asp-route-selectoffice="@ViewBag.selectoffice"><i class="fas fa-trash"></i></a>
 
@@ -379,7 +381,7 @@
                                         @using (Html.DevExtreme().NamedTemplate("popup-attach-" + ptB.Id))
                                         {
                                             <form id="form" method="post" enctype="multipart/form-data" action="PointOfEvaluations/FileSelection">
-                                                <h3>แนบไฟล์ประกอบผลการปฏิบัติ</h3>
+                                                <h3>แนบไฟล์ประกอบแผนปฏิบัติราชการ</h3>
                                                 <div id="fileuploader-container">
                                                     @(Html.DevExtreme().FileUploader()
                                                         .Name("AttachFile")
@@ -507,12 +509,13 @@
                                     @Html.DisplayFor(modelItem => ptC.AuditOffice.Name)
                                 </td>
                                 <td>
-                                    @if (User.IsInRole("Admin") || (User.IsInRole("Manager") && (ptC.AuditOffice.Code == user.OfficeId || ptC.OwnerOffice.Code == user.OfficeId)) || (User.IsInRole("Manager") && user.OfficeId.Substring(2, 6) == "000000" && ptC.OwnerOffice.Code.StartsWith(user.OfficeId.Substring(0, 2))) || (User.IsInRole("User") && ptC.OwnerOffice.Code == user.OfficeId))
+                                    @if (User.IsInRole("Admin") || (User.IsInRole("Manager") && (ptC.AuditOffice.Code == user.OfficeId || ptC.OwnerOffice.Code == user.OfficeId || userOffices.Any(uo => uo == ptC.AuditOffice.Code || uo == ptC.OwnerOffice.Code))) || (User.IsInRole("Manager") && (user.OfficeId.Substring(2, 6) == "000000" && ptC.OwnerOffice.Code.StartsWith(user.OfficeId.Substring(0, 2)) || (userOffices.Any(uo => uo.Substring(2, 6) == "000000" && uo.Substring(0, 2) == ptC.OwnerOffice.Code.Substring(0, 2))))) || (User.IsInRole("User") && (ptC.OwnerOffice.Code == user.OfficeId || userOffices.Any(uo => uo == ptC.OwnerOffice.Code))))
                                     {
                                         <a title="แก้ไข" asp-action="Edit" asp-route-id="@ptC.Id" asp-route-yearPoint="@Model.yearPoint" asp-route-selectoffice="@ViewBag.selectoffice"><i class="fas fa-edit"></i></a>
                                     }
                                     <a title="รายละเอียด" asp-action="Details" asp-route-id="@ptC.Id" asp-route-yearPoint="@Model.yearPoint" asp-route-selectoffice="@ViewBag.selectoffice"><i class="fas fa-search-plus"></i></a>
-                                    @if (User.IsInRole("Admin") || (User.IsInRole("Manager") && (ptC.AuditOffice.Code == user.OfficeId || ptC.OwnerOffice.Code == user.OfficeId)) || (User.IsInRole("Manager") && user.OfficeId.Substring(2, 6) == "000000" && ptC.OwnerOffice.Code.StartsWith(user.OfficeId.Substring(0, 2))) || (User.IsInRole("User") && ptC.OwnerOffice.Code == user.OfficeId))
+
+                                    @if (User.IsInRole("Admin") || (User.IsInRole("Manager") && (ptC.AuditOffice.Code == user.OfficeId || ptC.OwnerOffice.Code == user.OfficeId || userOffices.Any(uo => uo == ptC.AuditOffice.Code || uo == ptC.OwnerOffice.Code))) || (User.IsInRole("Manager") && (user.OfficeId.Substring(2, 6) == "000000" && ptC.OwnerOffice.Code.StartsWith(user.OfficeId.Substring(0, 2)) || (userOffices.Any(uo => uo.Substring(2, 6) == "000000" && uo.Substring(0, 2) == ptC.OwnerOffice.Code.Substring(0, 2))))) || (User.IsInRole("User") && (ptC.OwnerOffice.Code == user.OfficeId || userOffices.Any(uo => uo == ptC.OwnerOffice.Code))))
                                     {
                                         <a title="ลบ" asp-action="Delete" asp-route-id="@ptC.Id" asp-route-yearPoint="@Model.yearPoint" asp-route-selectoffice="@ViewBag.selectoffice"><i class="fas fa-trash"></i></a>
 
@@ -549,7 +552,7 @@
                                         @using (Html.DevExtreme().NamedTemplate("popup-attach-" + ptC.Id))
                                         {
                                             <form id="form" method="post" enctype="multipart/form-data" action="PointOfEvaluations/FileSelection">
-                                                <h3>แนบไฟล์ประกอบผลการปฏิบัติ</h3>
+                                                <h3>แนบไฟล์ประกอบแผนปฏิบัติราชการ</h3>
                                                 <div id="fileuploader-container">
                                                     @(Html.DevExtreme().FileUploader()
                                                         .Name("AttachFile")
@@ -677,12 +680,12 @@
                                     @Html.DisplayFor(modelItem => ptD.AuditOffice.Name)
                                 </td>
                                 <td>
-                                    @if (User.IsInRole("Admin") || (User.IsInRole("Manager") && (ptD.AuditOffice.Code == user.OfficeId || ptD.OwnerOffice.Code == user.OfficeId)) || (User.IsInRole("Manager") && user.OfficeId.Substring(2, 6) == "000000" && ptD.OwnerOffice.Code.StartsWith(user.OfficeId.Substring(0, 2))) || (User.IsInRole("User") && ptD.OwnerOffice.Code == user.OfficeId))
+                                    @if (User.IsInRole("Admin") || (User.IsInRole("Manager") && (ptD.AuditOffice.Code == user.OfficeId || ptD.OwnerOffice.Code == user.OfficeId || userOffices.Any(uo => uo == ptD.AuditOffice.Code || uo == ptD.OwnerOffice.Code))) || (User.IsInRole("Manager") && (user.OfficeId.Substring(2, 6) == "000000" && ptD.OwnerOffice.Code.StartsWith(user.OfficeId.Substring(0, 2)) || (userOffices.Any(uo => uo.Substring(2, 6) == "000000" && uo.Substring(0, 2) == ptD.OwnerOffice.Code.Substring(0, 2))))) || (User.IsInRole("User") && (ptD.OwnerOffice.Code == user.OfficeId || userOffices.Any(uo => uo == ptD.OwnerOffice.Code))))
                                     {
                                         <a title="แก้ไข" asp-action="Edit" asp-route-id="@ptD.Id" asp-route-yearPoint="@Model.yearPoint" asp-route-selectoffice="@ViewBag.selectoffice"><i class="fas fa-edit"></i></a>
                                     }
                                     <a title="รายละเอียด" asp-action="Details" asp-route-id="@ptD.Id" asp-route-yearPoint="@Model.yearPoint" asp-route-selectoffice="@ViewBag.selectoffice"><i class="fas fa-search-plus"></i></a>
-                                    @if (User.IsInRole("Admin") || (User.IsInRole("Manager") && (ptD.AuditOffice.Code == user.OfficeId || ptD.OwnerOffice.Code == user.OfficeId)) || (User.IsInRole("Manager") && user.OfficeId.Substring(2, 6) == "000000" && ptD.OwnerOffice.Code.StartsWith(user.OfficeId.Substring(0, 2))) || (User.IsInRole("User") && ptD.OwnerOffice.Code == user.OfficeId))
+                                    @if (User.IsInRole("Admin") || (User.IsInRole("Manager") && (ptD.AuditOffice.Code == user.OfficeId || ptD.OwnerOffice.Code == user.OfficeId || userOffices.Any(uo => uo == ptD.AuditOffice.Code || uo == ptD.OwnerOffice.Code))) || (User.IsInRole("Manager") && (user.OfficeId.Substring(2, 6) == "000000" && ptD.OwnerOffice.Code.StartsWith(user.OfficeId.Substring(0, 2)) || (userOffices.Any(uo => uo.Substring(2, 6) == "000000" && uo.Substring(0, 2) == ptD.OwnerOffice.Code.Substring(0, 2))))) || (User.IsInRole("User") && (ptD.OwnerOffice.Code == user.OfficeId || userOffices.Any(uo => uo == ptD.OwnerOffice.Code))))
                                     {
                                         <a title="ลบ" asp-action="Delete" asp-route-id="@ptD.Id" asp-route-yearPoint="@Model.yearPoint" asp-route-selectoffice="@ViewBag.selectoffice"><i class="fas fa-trash"></i></a>
 
@@ -719,7 +722,7 @@
                                         @using (Html.DevExtreme().NamedTemplate("popup-attach-" + ptD.Id))
                                         {
                                             <form id="form" method="post" enctype="multipart/form-data" action="PointOfEvaluations/FileSelection">
-                                                <h3>แนบไฟล์ประกอบผลการปฏิบัติ</h3>
+                                                <h3>แนบไฟล์ประกอบแผนปฏิบัติราชการ</h3>
                                                 <div id="fileuploader-container">
                                                     @(Html.DevExtreme().FileUploader()
                                                         .Name("AttachFile")

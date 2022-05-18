@@ -286,7 +286,7 @@
     .RowHeaderLayout(PivotGridRowHeadersLayout.Tree)
     //.AllowExpandAll(true)
     .DataSource(d => d
-        .Store(s => s.Mvc().Controller("OwnerScore").Key("Id").LoadAction("Get"))
+        .Store(s => s.Mvc().Controller("OwnerScore").Key("Id").LoadAction("Get").LoadParams(new { selectoffice = Model.selectoffice, yearPoint = Model.yearPoint }))
 
         .Fields(fields => {
             fields.Add()
@@ -367,7 +367,7 @@
                 .Selector(@<text>
                         function(data) {
                             var y = data.year + 543;
-                            return "ปีงบประมาณ " + y;
+                            return data.officeName + " ปีงบประมาณ " + y;
                         }
                         </text>);
 
@@ -394,7 +394,7 @@
             fields.Add()
                 .Caption("คะแนนถ่วงน้ำหนัก")
                 .DataField("calApprove")
-                .SummaryType(SummaryType.Avg)
+                .SummaryType(SummaryType.Sum)
                 .Format(f => f.Type(Format.FixedPoint).Precision(4))
                 .Area(PivotGridArea.Data);
             }

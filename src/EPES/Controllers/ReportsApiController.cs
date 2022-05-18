@@ -486,7 +486,8 @@ namespace EPES.Controllers
             int month;
             if (lastMonth == 0)
             {
-                month = DateTime.Now.Month - 1;
+                //month = DateTime.Now.Month - 1;
+                month = DateTime.Now.AddMonths(-1).Month;
             }
             else
             {
@@ -571,7 +572,8 @@ namespace EPES.Controllers
             int month;
             if (lastMonth == 0)
             {
-                month = DateTime.Now.Month - 1;
+                //month = DateTime.Now.Month - 1;
+                month = DateTime.Now.AddMonths(-1).Month;
             }
             else
             {
@@ -931,11 +933,13 @@ namespace EPES.Controllers
             DateTime? completedDate;
             List<DateTime?> startDateList = new List<DateTime?>();
             List<DateTime?> endDateList = new List<DateTime?>();
+            decimal? result;
             foreach (var data in report2)
             {
                 completedDate = null;
                 startDateList = new List<DateTime?>();
                 endDateList = new List<DateTime?>();
+                result = null;
                 foreach (var issue in data.IssueForEvaluations)
                 {
                     if(issue.Month == lastMonth)
@@ -964,15 +968,49 @@ namespace EPES.Controllers
                     }
                 } else // ระดับ
                 {
+
                     foreach(var dv in data.DataForEvaluations)
                     {
                         if(dv.Month == lastMonth)
                         {
                             completedDate = dv.CompletedDate;
+                            result = dv.Result;
                             break;
                         }
                     }
 
+                    foreach(var rd in data.Rounds)
+                    {
+                        if(rd.RoundNumber == 1)
+                        {
+                            if(result == 1 && completedDate <= rd.Rate1MonthStop)
+                            {
+                                data.Target = 100;
+                            }
+                            else if(result == 2 && completedDate <= rd.Rate2MonthStop)
+                            {
+                                data.Target = 100;
+                            }
+                            else if(result == 3 && completedDate <= rd.Rate3MonthStop)
+                            {
+                                data.Target = 100;
+                            }
+                            else if(result == 4 && completedDate <= rd.Rate4MonthStop)
+                            {
+                                data.Target = 100;
+                            }
+                            else if(result == 5 && completedDate <= rd.Rate5MonthStop)
+                            {
+                                data.Target = 100;
+                            }
+                            else
+                            {
+                                data.Target = 0;
+                            }
+                        }
+                    }
+
+                    /*
                     foreach(var rd in data.Rounds)
                     {
                         if(rd.RoundNumber == 1)
@@ -1067,6 +1105,7 @@ namespace EPES.Controllers
                     {
                         data.Target = 0;
                     }
+                    */
                 }
 
             }
