@@ -133,7 +133,7 @@ namespace EPES.Controllers
                 {
                         for (int pak = 0; pak <= 12; pak++)
                         {
-                            url = "http://10.20.17.178:8080/serviceTier/webapi/All200/officeId/" + pak.ToString("D2") + "000000" + "/year/" + (yearForRequest.Year + 543).ToString("D4") + "/month/" + "10" + "/";
+                            url = "http://10.20.17.178:8080/serviceTier/webapi/All200/officeId/" + pak.ToString("D2") + "000000" + "/year/" + (yearForRequest.Year + 543).ToString("D4") + "/month/" + "10" + "/part/2";
                             Get100(url, yearForRequest, 10);
                         }
                 }
@@ -143,7 +143,7 @@ namespace EPES.Controllers
                     {
                         for (int pak = 0; pak <= 12; pak++)
                         {
-                            url = "http://10.20.17.178:8080/serviceTier/webapi/All200/officeId/" + pak.ToString("D2") + "000000" + "/year/" + (yearForRequest.Year + 543).ToString("D4") + "/month/" + i.ToString("D2") + "/";
+                            url = "http://10.20.17.178:8080/serviceTier/webapi/All200/officeId/" + pak.ToString("D2") + "000000" + "/year/" + (yearForRequest.Year + 543).ToString("D4") + "/month/" + i.ToString("D2") + "/part/2";
                             Get100(url, yearForRequest, i);
                         }
                     }
@@ -158,7 +158,7 @@ namespace EPES.Controllers
                     {
                         for (int pak = 0; pak <= 12; pak++)
                         {
-                            url = "http://10.20.17.178:8080/serviceTier/webapi/All200/officeId/" + pak.ToString("D2") + "000000" + "/year/" + (yearForRequest.Year + 543).ToString("D4") + "/month/" + i.ToString("D2") + "/";
+                            url = "http://10.20.17.178:8080/serviceTier/webapi/All200/officeId/" + pak.ToString("D2") + "000000" + "/year/" + (yearForRequest.Year + 543).ToString("D4") + "/month/" + i.ToString("D2") + "/part/2";
                             Get100(url, yearForRequest, i);
                         }
                     }
@@ -169,7 +169,7 @@ namespace EPES.Controllers
                     {
                         for (int pak = 0; pak <= 12; pak++)
                         {
-                            url = "http://10.20.17.178:8080/serviceTier/webapi/All200/officeId/" + pak.ToString("D2") + "000000" + "/year/" + (yearForRequest.Year + 543).ToString("D4") + "/month/" + i.ToString("D2") + "/";
+                            url = "http://10.20.17.178:8080/serviceTier/webapi/All200/officeId/" + pak.ToString("D2") + "000000" + "/year/" + (yearForRequest.Year + 543).ToString("D4") + "/month/" + i.ToString("D2") + "/part/2";
                             Get100(url, yearForRequest, i);
                         }
                     }
@@ -178,7 +178,7 @@ namespace EPES.Controllers
                     {
                         for (int pak = 0; pak <= 12; pak++)
                         {
-                            url = "http://10.20.17.178:8080/serviceTier/webapi/All200/officeId/" + pak.ToString("D2") + "000000" + "/year/" + (yearForRequest.Year + 543).ToString("D4") + "/month/" + i.ToString("D2") + "/";
+                            url = "http://10.20.17.178:8080/serviceTier/webapi/All200/officeId/" + pak.ToString("D2") + "000000" + "/year/" + (yearForRequest.Year + 543).ToString("D4") + "/month/" + i.ToString("D2") + "/part/2";
                             Get100(url, yearForRequest, i);
                         }
                     }
@@ -223,6 +223,10 @@ namespace EPES.Controllers
                             dataForEvaluation.ResultLevelRate = t.CMcurrentYear / 1000000;
                             //dataForEvaluation.CompletedDate = new DateTime(yearForRequest.Year, dataForEvaluation.Month, DateTime.DaysInMonth(yearForRequest.Year, dataForEvaluation.Month));
                             dataForEvaluation.CompletedDate = new DateTime(yearForCompletedDate, dataForEvaluation.Month, DateTime.DaysInMonth(yearForCompletedDate, dataForEvaluation.Month));
+                            if(i >= 10 || i <= 3)
+                            {
+                                dataForEvaluation.Approve = Approve.ผษ_อนุมัติ;
+                            }
                             _context.SaveChanges();
                         }
                     }

@@ -2381,6 +2381,126 @@ namespace EPES.Controllers
             }
         }
 
+        [HttpGet, ActionName("CopyPoint17")]
+        public async Task<IActionResult> CopyPoint17()
+        {
+            var user = await _userManager.GetUserAsync(User);
+
+            var yearPoint = new DateTime(DateTime.Now.Year, 1, 1);
+            
+            var offices = await _context.PointOfEvaluations.Where(p => p.AutoApp == AutoApps.ผู้ประกอบการรายใหญ่ในท้องที่ && p.Year == yearPoint).Select(s => s.OwnerOffice).ToListAsync();
+            try
+            {
+                foreach(var ofc in offices)
+                {
+                    var point18Exist = await _context.PointOfEvaluations.Where(p => p.Point == 18 && p.Year == yearPoint && p.OwnerOfficeId == ofc.Id).FirstOrDefaultAsync();
+                    if(point18Exist == null)
+                    {
+                        var point17 = await _context.PointOfEvaluations.Where(p => p.AutoApp == AutoApps.ผู้ประกอบการรายใหญ่ในท้องที่ && p.Year == yearPoint && p.OwnerOffice.Code == ofc.Code).FirstOrDefaultAsync();
+                        var point18 = new PointOfEvaluation();
+                        point18.AuditOfficeId = point17.AuditOfficeId;
+                        point18.AutoApp = point17.AutoApp;
+                        point18.Ddrive = point17.Ddrive;
+                        point18.DetailPlan = point17.DetailPlan;
+                        point18.ExpectPlan = point17.ExpectPlan;
+                        point18.HasSub = point17.HasSub;
+                        point18.Name = point17.Name;
+                        point18.OwnerOfficeId = point17.OwnerOfficeId;
+                        point18.Plan = point17.Plan;
+                        point18.Point = 18;
+                        point18.SubPoint = 0;
+                        point18.Unit = point17.Unit;
+                        point18.UpdateUserId = user.Id;
+                        point18.Weight = point17.Weight;
+                        point18.Year = point17.Year;
+                        point18.WeightAll = false;
+                        point18.AttachFile = point17.AttachFile;
+
+                        point17.AutoApp = AutoApps.ไม่มี;
+                        point17.WeightAll = false;
+
+                        _context.PointOfEvaluations.Add(point18);
+                        await _context.SaveChangesAsync();
+
+                        
+                        var round17 = await _context.Rounds.Where(r => r.PointOfEvaluation == point17).ToListAsync();
+                        foreach(var round in round17)
+                        {
+                            var round18 = new Round();
+                            round18.PointOfEvaluationId = point18.Id;
+                            round18.DetailRate1 = round.DetailRate1;
+                            round18.DetailRate2 = round.DetailRate2;
+                            round18.DetailRate3 = round.DetailRate3;
+                            round18.DetailRate4 = round.DetailRate4;
+                            round18.DetailRate5 = round.DetailRate5;
+                            round18.LevelNumber = round.LevelNumber;
+                            round18.Rate1MonthStart = round.Rate1MonthStart;
+                            round18.Rate1MonthStop = round.Rate1MonthStop;
+                            round18.Rate2MonthStart = round.Rate2MonthStart;
+                            round18.Rate2MonthStop = round.Rate2MonthStop;
+                            round18.Rate3MonthStart = round.Rate3MonthStart;
+                            round18.Rate3MonthStop = round.Rate3MonthStop;
+                            round18.Rate4MonthStart = round.Rate4MonthStart;
+                            round18.Rate4MonthStop = round.Rate4MonthStop;
+                            round18.Rate5MonthStart = round.Rate5MonthStart;
+                            round18.Rate5MonthStop = round.Rate5MonthStop;
+                            round18.Rate1 = round.Rate1;
+                            round18.Rate2 = round.Rate2;
+                            round18.Rate3 = round.Rate3;
+                            round18.Rate4 = round.Rate4;
+                            round18.Rate5 = round.Rate5;
+                            round18.RoundNumber = round.RoundNumber;
+                            _context.Rounds.Add(round18);
+                            await _context.SaveChangesAsync();
+                        }
+
+                        for(var ii = 1; ii <= 12; ii++)
+                        {
+                            var dfe17 = await _context.DataForEvaluations.Where(d => d.PointOfEvaluation == point17 && d.Month == ii).FirstOrDefaultAsync();
+
+                            var dfe18 = new DataForEvaluation();
+                            dfe18.Month = dfe17.Month;
+                            dfe18.UpdateUserId = user.Id;
+                            dfe18.PointOfEvaluationId = point18.Id;
+                            dfe18.OfficeId = ofc.Id;
+                            
+                            if(ii >= 4 && ii <= 9)
+                            {
+                                dfe17.Weight = 0;
+                                dfe18.Weight = point17.Weight;
+                                if(ii == 4)
+                                {
+                                    dfe17.Expect = 0;
+                                    dfe17.Result = 0;
+                                    dfe17.ResultLevelRate = 0;
+                                    dfe17.Approve = null;
+
+                                    dfe18.AttachFile = dfe17.AttachFile;
+                                    dfe17.AttachFile = null;
+                                }
+                            } else
+                            {
+                                dfe18.Weight = 0;
+                                dfe17.Weight = point17.Weight;
+                            }
+                            _context.DataForEvaluations.Add(dfe18);
+                            await _context.SaveChangesAsync();
+                        }
+
+                    }
+                }
+                return RedirectToAction(nameof(Index));
+            }
+            catch (DbUpdateException)
+            {
+                //Log the error (uncomment ex variable name and write a log.
+                ModelState.AddModelError("", "ไม่สามารถบันทึกข้อมูล. " +
+                    "ลองพยายามบันทึกอีกครั้ง " +
+                    "โปรดแจ้งผู้ดูแลระบบ");
+                return NotFound();
+            }
+        }
+
 
         [HttpPost]
         public async Task<IActionResult> FileSelection(IFormFile attachFile, int pid, string selectoffice, int yearPoint)

@@ -34,6 +34,9 @@
 
     List<string> UserOffices = ViewBag.UserOffices;
 
+    SelectList officeList = ViewBag.OfficeCode;
+    string officeName = officeList.Where(whr => whr.Value == ViewBag.selectOffice).Select(s => s.Text).FirstOrDefault();
+
     int j = 0;
     int yearOfGov = 0;
     if (DateTime.Now.Month >= 10 && Model.month <= 9)
@@ -44,6 +47,12 @@
     {
         yearOfGov = -1;
     }
+    if(Model.yearPoint != 0)
+    {
+        yearOfGov -= 1;
+    }
+
+    string monthYear = new DateTime(DateTime.Now.AddYears(yearOfGov).Year, Model.month, 1).ToString("MMMM yyyy");
 }
 
 <link href="~/css/devextreme/dx.common.css" rel="stylesheet" />
@@ -154,7 +163,8 @@
            .ID("detail-popup")
            .ElementAttr("class", "popup")
            .Width(700)
-           .Height(700)
+           .Height("auto")
+           .MinHeight(600)
            .ShowTitle(true)
            .Title("รายละเอียด")
            .Visible(false)
@@ -533,6 +543,10 @@
                                         <div>
                                             <form id="@("form" + Model.pointA[i].Id)" method="post" action="Audit\SaveAudit">
                                                 <dl class="row">
+                                                    <dt class="col-3">หน่วยงาน</dt>
+                                                    <dd class="col-9">@officeName</dd>
+                                                    <dt class="col-3">เดือน</dt>
+                                                    <dd class="col-9">@monthYear</dd>
                                                     <dt class="col-3">หมายเลขตัวชี้วัด</dt>
                                                     <dd class="col-9">
                                                         @if (Model.pointA[i].SubPoint != 0)
@@ -579,25 +593,42 @@
                                                             }
 
                                                         </dd>
-                                                        <dt class="col-3">เป้าหมายสะสม</dt>
-                                                        <dd class="col-9">
-                                                            @string.Format("{0:N4}", sumOfExpect)
-                                                        </dd>
-                                                        <dt class="col-3">ผลการปฏิบัติสะสม</dt>
-                                                        <dd class="col-9">
-                                                            @string.Format("{0:N4}", sumOfData)
-                                                        </dd>
-                                                        <dt class="col-3">ร้อยละ ผลสะสม/เป้าหมายสะสม</dt>
-                                                        <dd class="col-9">
-                                                            @if (sumOfExpect != 0)
-                                                            {
-                                                                @string.Format("{0:N4}", sumOfData / sumOfExpect * 100) @: %
-                                                            }
-                                                            else
-                                                            {
-                                                                <span>เป้าหมายสะสม ไม่ได้บันทึก</span>
-                                                            }
-                                                        </dd>
+                                                        @if (Model.pointA[i].CalPerMonth)
+                                                        {
+                                                            <dt class="col-3">ร้อยละ ผล/เป้า รายเดือน</dt>
+                                                            <dd class="col-9">
+                                                                @if (de.Expect != 0)
+                                                                {
+                                                                    @string.Format("{0:N4}", de.Result / de.Expect * 100) @: %
+                                                                }
+                                                                else
+                                                                {
+                                                                    <span>เป้าหมายรายเดือน ไม่ได้บันทึก</span>
+                                                                }
+                                                            </dd>
+                                                        }
+                                                        else
+                                                        {
+                                                            <dt class="col-3">เป้าหมายสะสม</dt>
+                                                            <dd class="col-9">
+                                                                @string.Format("{0:N4}", sumOfExpect)
+                                                            </dd>
+                                                            <dt class="col-3">ผลการปฏิบัติสะสม</dt>
+                                                            <dd class="col-9">
+                                                                @string.Format("{0:N4}", sumOfData)
+                                                            </dd>
+                                                            <dt class="col-3">ร้อยละ ผลสะสม/เป้าหมายสะสม</dt>
+                                                            <dd class="col-9">
+                                                                @if (sumOfExpect != 0)
+                                                                {
+                                                                    @string.Format("{0:N4}", sumOfData / sumOfExpect * 100) @: %
+                                                                }
+                                                                else
+                                                                {
+                                                                    <span>เป้าหมายสะสม ไม่ได้บันทึก</span>
+                                                                }
+                                                            </dd>
+                                                        }
                                                         <dt class="col-3">วันที่แล้วเสร็จ</dt>
                                                         <dd class="col-9">
                                                             @if ((User.IsInRole("Admin") || (User.IsInRole("Manager") && user.OfficeId.Substring(0, 3) == "000" && Model.pointA[i].AuditOffice.Code == user.OfficeId)) && de?.Approve < Approve.ผษ_อนุมัติ)
@@ -882,86 +913,86 @@
 
                                                                 }
                                                                 @*if (Model.pointA[i].Rounds[0].LevelNumber == 1)
-                    {
-                        <dd class="col-9">
-                            1.@Model.pointA[i].Rounds[1].DetailRate1<br />
-                            @string.Format("{0:N4}", de?.Expect)
-                        </dd>
-                    }
-                    if (Model.pointA[i].Rounds[0].LevelNumber == 2)
-                    {
-                        if (new DateTime(DateTime.Now.Year, Model.month, 28) <= Model.pointA[i].Rounds[1].Rate1MonthStop)
                         {
                             <dd class="col-9">
                                 1.@Model.pointA[i].Rounds[1].DetailRate1<br />
                                 @string.Format("{0:N4}", de?.Expect)
                             </dd>
                         }
-                        else
+                        if (Model.pointA[i].Rounds[0].LevelNumber == 2)
                         {
-                            <dd class="col-9">
-                                2.@Model.pointA[i].Rounds[1].DetailRate2 <br />
-                                @string.Format("{0:N4}", de?.Expect)
-                            </dd>
-                        }
+                            if (new DateTime(DateTime.Now.Year, Model.month, 28) <= Model.pointA[i].Rounds[1].Rate1MonthStop)
+                            {
+                                <dd class="col-9">
+                                    1.@Model.pointA[i].Rounds[1].DetailRate1<br />
+                                    @string.Format("{0:N4}", de?.Expect)
+                                </dd>
+                            }
+                            else
+                            {
+                                <dd class="col-9">
+                                    2.@Model.pointA[i].Rounds[1].DetailRate2 <br />
+                                    @string.Format("{0:N4}", de?.Expect)
+                                </dd>
+                            }
 
-                    }
-                    if (Model.pointA[i].Rounds[0].LevelNumber == 3)
-                    {
-                        if (new DateTime(DateTime.Now.Year, Model.month, 28) <= Model.pointA[i].Rounds[1].Rate1MonthStop)
-                        {
-                            <dd class="col-9">
-                                1.@Model.pointA[i].Rounds[1].DetailRate1 <br />
-                                @string.Format("{0:N4}", de?.Expect)
-                            </dd>
                         }
-                        else if (new DateTime(DateTime.Now.Year, Model.month, 28) <= Model.pointA[i].Rounds[1].Rate2MonthStop)
+                        if (Model.pointA[i].Rounds[0].LevelNumber == 3)
                         {
-                            <dd class="col-9">
-                                2.@Model.pointA[i].Rounds[1].DetailRate2  <br />
-                                @string.Format("{0:N4}", de?.Expect)
-                            </dd>
+                            if (new DateTime(DateTime.Now.Year, Model.month, 28) <= Model.pointA[i].Rounds[1].Rate1MonthStop)
+                            {
+                                <dd class="col-9">
+                                    1.@Model.pointA[i].Rounds[1].DetailRate1 <br />
+                                    @string.Format("{0:N4}", de?.Expect)
+                                </dd>
+                            }
+                            else if (new DateTime(DateTime.Now.Year, Model.month, 28) <= Model.pointA[i].Rounds[1].Rate2MonthStop)
+                            {
+                                <dd class="col-9">
+                                    2.@Model.pointA[i].Rounds[1].DetailRate2  <br />
+                                    @string.Format("{0:N4}", de?.Expect)
+                                </dd>
+                            }
+                            else
+                            {
+                                <dd class="col-9">
+                                    3.@Model.pointA[i].Rounds[1].DetailRate3 <br />
+                                    @string.Format("{0:N4}", de?.Expect)
+                                </dd>
+                            }
                         }
-                        else
+                        if (Model.pointA[i].Rounds[0].LevelNumber == 4)
                         {
-                            <dd class="col-9">
-                                3.@Model.pointA[i].Rounds[1].DetailRate3 <br />
-                                @string.Format("{0:N4}", de?.Expect)
-                            </dd>
-                        }
-                    }
-                    if (Model.pointA[i].Rounds[0].LevelNumber == 4)
-                    {
-                        if (new DateTime(DateTime.Now.Year, Model.month, 28) <= Model.pointA[i].Rounds[1].Rate1MonthStop)
-                        {
-                            <dd class="col-9">
-                                1.@Model.pointA[i].Rounds[1].DetailRate1<br />
-                                @string.Format("{0:N4}", de?.Expect)
-                            </dd>
-                        }
-                        else if (new DateTime(DateTime.Now.Year, Model.month, 28) <= Model.pointA[i].Rounds[1].Rate2MonthStop)
-                        {
-                            <dd class="col-9">
-                                2.@Model.pointA[i].Rounds[1].DetailRate2 <br />
-                                @string.Format("{0:N4}", de?.Expect)
-                            </dd>
-                        }
-                        else if (new DateTime(DateTime.Now.Year, Model.month, 28) <= Model.pointA[i].Rounds[1].Rate3MonthStop)
-                        {
-                            <dd class="col-9">
-                                3.@Model.pointA[i].Rounds[1].DetailRate3 <br />
-                                @string.Format("{0:N4}", de?.Expect)
-                            </dd>
-                        }
-                        else
-                        {
-                            <dd class="col-9">
-                                4.@Model.pointA[i].Rounds[1].DetailRate4<br />
-                                @string.Format("{0:N4}", de?.Expect)
-                            </dd>
-                        }
+                            if (new DateTime(DateTime.Now.Year, Model.month, 28) <= Model.pointA[i].Rounds[1].Rate1MonthStop)
+                            {
+                                <dd class="col-9">
+                                    1.@Model.pointA[i].Rounds[1].DetailRate1<br />
+                                    @string.Format("{0:N4}", de?.Expect)
+                                </dd>
+                            }
+                            else if (new DateTime(DateTime.Now.Year, Model.month, 28) <= Model.pointA[i].Rounds[1].Rate2MonthStop)
+                            {
+                                <dd class="col-9">
+                                    2.@Model.pointA[i].Rounds[1].DetailRate2 <br />
+                                    @string.Format("{0:N4}", de?.Expect)
+                                </dd>
+                            }
+                            else if (new DateTime(DateTime.Now.Year, Model.month, 28) <= Model.pointA[i].Rounds[1].Rate3MonthStop)
+                            {
+                                <dd class="col-9">
+                                    3.@Model.pointA[i].Rounds[1].DetailRate3 <br />
+                                    @string.Format("{0:N4}", de?.Expect)
+                                </dd>
+                            }
+                            else
+                            {
+                                <dd class="col-9">
+                                    4.@Model.pointA[i].Rounds[1].DetailRate4<br />
+                                    @string.Format("{0:N4}", de?.Expect)
+                                </dd>
+                            }
 
-                    }*@
+                        }*@
                                                             }
                                                             else
                                                             {
@@ -1055,87 +1086,87 @@
 
                                                                 }
                                                                 @*if (Model.pointA[i].Rounds[0].LevelNumber == 1)
-                    {
-                        <dd class="col-9">
-                            1.@Model.pointA[i].Rounds[0].DetailRate1<br />
-                            @string.Format("{0:N4}", de?.Expect)
-                        </dd>
-                    }
-                    if (Model.pointA[i].Rounds[0].LevelNumber == 2)
-                    {
-                        if (new DateTime(DateTime.Now.Year, Model.month, 28) <= Model.pointA[i].Rounds[0].Rate1MonthStop)
                         {
                             <dd class="col-9">
                                 1.@Model.pointA[i].Rounds[0].DetailRate1<br />
                                 @string.Format("{0:N4}", de?.Expect)
                             </dd>
                         }
-                        else
+                        if (Model.pointA[i].Rounds[0].LevelNumber == 2)
                         {
-                            <dd class="col-9">
-                                2.@Model.pointA[i].Rounds[0].DetailRate2<br />
-                                @string.Format("{0:N4}", de?.Expect)
-                            </dd>
-                        }
+                            if (new DateTime(DateTime.Now.Year, Model.month, 28) <= Model.pointA[i].Rounds[0].Rate1MonthStop)
+                            {
+                                <dd class="col-9">
+                                    1.@Model.pointA[i].Rounds[0].DetailRate1<br />
+                                    @string.Format("{0:N4}", de?.Expect)
+                                </dd>
+                            }
+                            else
+                            {
+                                <dd class="col-9">
+                                    2.@Model.pointA[i].Rounds[0].DetailRate2<br />
+                                    @string.Format("{0:N4}", de?.Expect)
+                                </dd>
+                            }
 
-                    }
-                    if (Model.pointA[i].Rounds[0].LevelNumber == 3)
-                    {
-                        if (new DateTime(DateTime.Now.Year, Model.month, 28) <= Model.pointA[i].Rounds[0].Rate1MonthStop)
-                        {
-                            <dd class="col-9">
-                                1.@Model.pointA[i].Rounds[0].DetailRate1<br />
-                                @string.Format("{0:N4}", de?.Expect)
-                            </dd>
                         }
-                        else if (new DateTime(DateTime.Now.Year, Model.month, 28) <= Model.pointA[i].Rounds[0].Rate2MonthStop)
+                        if (Model.pointA[i].Rounds[0].LevelNumber == 3)
                         {
-                            <dd class="col-9">
-                                2.@Model.pointA[i].Rounds[0].DetailRate2 <br />
-                                @string.Format("{0:N4}", de?.Expect)
-                            </dd>
-                        }
-                        else
-                        {
-                            <dd class="col-9">
-                                3.@Model.pointA[i].Rounds[0].DetailRate3<br />
-                                @string.Format("{0:N4}", de?.Expect)
-                            </dd>
-                        }
+                            if (new DateTime(DateTime.Now.Year, Model.month, 28) <= Model.pointA[i].Rounds[0].Rate1MonthStop)
+                            {
+                                <dd class="col-9">
+                                    1.@Model.pointA[i].Rounds[0].DetailRate1<br />
+                                    @string.Format("{0:N4}", de?.Expect)
+                                </dd>
+                            }
+                            else if (new DateTime(DateTime.Now.Year, Model.month, 28) <= Model.pointA[i].Rounds[0].Rate2MonthStop)
+                            {
+                                <dd class="col-9">
+                                    2.@Model.pointA[i].Rounds[0].DetailRate2 <br />
+                                    @string.Format("{0:N4}", de?.Expect)
+                                </dd>
+                            }
+                            else
+                            {
+                                <dd class="col-9">
+                                    3.@Model.pointA[i].Rounds[0].DetailRate3<br />
+                                    @string.Format("{0:N4}", de?.Expect)
+                                </dd>
+                            }
 
-                    }
-                    if (Model.pointA[i].Rounds[0].LevelNumber == 4)
-                    {
-                        if (new DateTime(DateTime.Now.Year, Model.month, 28) <= Model.pointA[i].Rounds[0].Rate1MonthStop)
-                        {
-                            <dd class="col-9">
-                                1.@Model.pointA[i].Rounds[0].DetailRate1<br />
-                                @string.Format("{0:N4}", de?.Expect)
-                            </dd>
                         }
-                        else if (new DateTime(DateTime.Now.Year, Model.month, 28) <= Model.pointA[i].Rounds[0].Rate2MonthStop)
+                        if (Model.pointA[i].Rounds[0].LevelNumber == 4)
                         {
-                            <dd class="col-9">
-                                2.@Model.pointA[i].Rounds[0].DetailRate2<br />
-                                @string.Format("{0:N4}", de?.Expect)
-                            </dd>
-                        }
-                        else if (new DateTime(DateTime.Now.Year, Model.month, 28) <= Model.pointA[i].Rounds[0].Rate3MonthStop)
-                        {
-                            <dd class="col-9">
-                                3.@Model.pointA[i].Rounds[0].DetailRate3 <br />
-                                @string.Format("{0:N4}", de?.Expect)
-                            </dd>
-                        }
-                        else
-                        {
-                            <dd class="col-9">
-                                4.@Model.pointA[i].Rounds[0].DetailRate4<br />
-                                @string.Format("{0:N4}", de?.Expect)
-                            </dd>
-                        }
+                            if (new DateTime(DateTime.Now.Year, Model.month, 28) <= Model.pointA[i].Rounds[0].Rate1MonthStop)
+                            {
+                                <dd class="col-9">
+                                    1.@Model.pointA[i].Rounds[0].DetailRate1<br />
+                                    @string.Format("{0:N4}", de?.Expect)
+                                </dd>
+                            }
+                            else if (new DateTime(DateTime.Now.Year, Model.month, 28) <= Model.pointA[i].Rounds[0].Rate2MonthStop)
+                            {
+                                <dd class="col-9">
+                                    2.@Model.pointA[i].Rounds[0].DetailRate2<br />
+                                    @string.Format("{0:N4}", de?.Expect)
+                                </dd>
+                            }
+                            else if (new DateTime(DateTime.Now.Year, Model.month, 28) <= Model.pointA[i].Rounds[0].Rate3MonthStop)
+                            {
+                                <dd class="col-9">
+                                    3.@Model.pointA[i].Rounds[0].DetailRate3 <br />
+                                    @string.Format("{0:N4}", de?.Expect)
+                                </dd>
+                            }
+                            else
+                            {
+                                <dd class="col-9">
+                                    4.@Model.pointA[i].Rounds[0].DetailRate4<br />
+                                    @string.Format("{0:N4}", de?.Expect)
+                                </dd>
+                            }
 
-                    }*@
+                        }*@
                                                             }
                                                             <dt class="col-3">ผลการปฏิบัติราชการ</dt>
                                                             <dd class="col-9">
@@ -1206,25 +1237,43 @@
                                                                 }
 
                                                             </dd>
-                                                            <dt class="col-3">เป้าหมายสะสม</dt>
-                                                            <dd class="col-9">
-                                                                @string.Format("{0:N4}", sumOfExpect)
-                                                            </dd>
-                                                            <dt class="col-3">ผลการปฏิบัติสะสม</dt>
-                                                            <dd class="col-9">
-                                                                @string.Format("{0:N4}", sumOfData)
-                                                            </dd>
-                                                            <dt class="col-3">ร้อยละ ผลสะสม/เป้าหมายสะสม</dt>
-                                                            <dd class="col-9">
-                                                                @if (sumOfExpect != 0)
-                                                                {
-                                                                    @string.Format("{0:N4}", sumOfData / sumOfExpect * 100) @: %
-                                                                }
-                                                                else
-                                                                {
-                                                                    <span>เป้าหมายสะสม ไม่ได้บันทึก</span>
-                                                                }
-                                                            </dd>
+
+                                                            @if (Model.pointA[i].CalPerMonth)
+                                                            {
+                                                                <dt class="col-3">ร้อยละ ผล/เป้า รายเดือน</dt>
+                                                                <dd class="col-9">
+                                                                    @if (de.Expect != 0)
+                                                                    {
+                                                                        @string.Format("{0:N4}", de.ResultLevelRate / de.Expect * 100) @: %
+                                                                    }
+                                                                    else
+                                                                    {
+                                                                        <span>เป้าหมายรายเดือน ไม่ได้บันทึก</span>
+                                                                    }
+                                                                </dd>
+                                                            }
+                                                            else
+                                                            {
+                                                                <dt class="col-3">เป้าหมายสะสม</dt>
+                                                                <dd class="col-9">
+                                                                    @string.Format("{0:N4}", sumOfExpect)
+                                                                </dd>
+                                                                <dt class="col-3">ผลการปฏิบัติสะสม</dt>
+                                                                <dd class="col-9">
+                                                                    @string.Format("{0:N4}", sumOfData)
+                                                                </dd>
+                                                                <dt class="col-3">ร้อยละ ผลสะสม/เป้าหมายสะสม</dt>
+                                                                <dd class="col-9">
+                                                                    @if (sumOfExpect != 0)
+                                                                    {
+                                                                        @string.Format("{0:N4}", sumOfData / sumOfExpect * 100) @: %
+                                                                    }
+                                                                    else
+                                                                    {
+                                                                        <span>เป้าหมายสะสม ไม่ได้บันทึก</span>
+                                                                    }
+                                                                </dd>
+                                                            }
                                                         }
                                                         <dt class="col-3">วันที่แล้วเสร็จ</dt>
                                                         @if ((User.IsInRole("Admin") || (User.IsInRole("Manager") && user.OfficeId.Substring(0, 3) == "000" && Model.pointA[i].AuditOffice.Code == user.OfficeId)) && de?.Approve < Approve.ผษ_อนุมัติ)
@@ -1248,7 +1297,7 @@
                                                         }
                                                     } @* End ระดับ - ระดับ-ร้อยละ*@
 
-                                                    @if ((Model.pointA[i].OwnerOffice.Code.Substring(0, 3) == "000" && Model.pointA[i].OwnerOffice.Code == user.OfficeId) || (UserOffices.Any(uo => uo.Substring(0, 2) == "00" && Model.pointA[i].OwnerOffice.Code == uo) || (User.IsInRole("Admin")  && Model.pointA[i].OwnerOffice.Code.Substring(0, 2) == "00")) && (Model.month == 3 || Model.month == 9))
+                                                    @if (Model.pointA[i].OwnerOffice.Code.Substring(0, 2) == "00" && (Model.month == 3 || Model.month == 9) && (Model.pointA[i].OwnerOffice.Code == user.OfficeId || UserOffices.Any(uo => uo.Substring(0, 2) == "00" && Model.pointA[i].OwnerOffice.Code == uo) || User.IsInRole("Admin")))
                                                     {
                                                         <dt class="col-12"><hr /><h3>รายงานปัญหาและอุปสรรค / แนวทางแก้ไข</h3></dt>
                                                         <dt class="col-3">ผลการดำเนินการ</dt>
@@ -1259,27 +1308,27 @@
                                                         <dd class="col-9">
                                                             @if (Model.pointA[i].Unit == UnitOfPoint.ระดับ && Model.month == 3)
                                                             {
-                                                                foreach(var rd in Model.pointA[i].Rounds)
+                                                                foreach (var rd in Model.pointA[i].Rounds)
                                                                 {
-                                                                    if(rd.RoundNumber == 1)
+                                                                    if (rd.RoundNumber == 1)
                                                                     {
-                                                                        if(result == 1 && completedDate <= rd.Rate1MonthStop)
+                                                                        if (result == 1 && completedDate <= rd.Rate1MonthStop)
                                                                         {
                                                                             scoreTarget = 5;
                                                                         }
-                                                                        else if(result == 2 && completedDate <= rd.Rate2MonthStop)
+                                                                        else if (result == 2 && completedDate <= rd.Rate2MonthStop)
                                                                         {
                                                                             scoreTarget = 5;
                                                                         }
-                                                                        else if(result == 3 && completedDate <= rd.Rate3MonthStop)
+                                                                        else if (result == 3 && completedDate <= rd.Rate3MonthStop)
                                                                         {
                                                                             scoreTarget = 5;
                                                                         }
-                                                                        else if(result == 4 && completedDate <= rd.Rate4MonthStop)
+                                                                        else if (result == 4 && completedDate <= rd.Rate4MonthStop)
                                                                         {
                                                                             scoreTarget = 5;
                                                                         }
-                                                                        else if(result == 5 && completedDate <= rd.Rate5MonthStop)
+                                                                        else if (result == 5 && completedDate <= rd.Rate5MonthStop)
                                                                         {
                                                                             scoreTarget = 5;
                                                                         }
@@ -1443,7 +1492,7 @@
                                                 }
                                                 else
                                                 {
-                                                    if ((Model.pointA[i].OwnerOffice.Code.Substring(0, 3) == "000" && Model.pointA[i].OwnerOffice.Code == user.OfficeId) || (UserOffices.Any(uo => uo.Substring(0, 2) == "00" && Model.pointA[i].OwnerOffice.Code == uo)) && (Model.month == 3 || Model.month == 9))
+                                                    if (Model.pointA[i].OwnerOffice.Code.Substring(0, 2) == "00" && (Model.month == 3 || Model.month == 9) && (Model.pointA[i].OwnerOffice.Code == user.OfficeId || UserOffices.Any(uo => uo.Substring(0, 2) == "00" && Model.pointA[i].OwnerOffice.Code == uo) || User.IsInRole("Admin")))
                                                     {
                                                         @(Html.DevExtreme().Button()
                                                                .ID("button")
@@ -1856,6 +1905,10 @@
                                                 {
                                                 <form id="@("form" + Model.pointB[i].Id)" method="post" action="Audit\SaveAudit">
                                                     <dl class="row">
+                                                        <dt class="col-3">หน่วยงาน</dt>
+                                                        <dd class="col-9">@officeName</dd>
+                                                        <dt class="col-3">เดือน</dt>
+                                                        <dd class="col-9">@monthYear</dd>
                                                         <dt class="col-3">หมายเลขตัวชี้วัด</dt>
                                                         <dd class="col-9">
                                                             @if (Model.pointB[i].SubPoint != 0)
@@ -1902,25 +1955,43 @@
                                                                 }
 
                                                             </dd>
-                                                            <dt class="col-3">เป้าหมายสะสม</dt>
-                                                            <dd class="col-9">
-                                                                @string.Format("{0:N4}", sumOfExpect)
-                                                            </dd>
-                                                            <dt class="col-3">ผลการปฏิบัติสะสม</dt>
-                                                            <dd class="col-9">
-                                                                @string.Format("{0:N4}", sumOfData)
-                                                            </dd>
-                                                            <dt class="col-3">ร้อยละ ผลสะสม/เป้าหมายสะสม</dt>
-                                                            <dd class="col-9">
-                                                                @if (sumOfExpect != 0)
-                                                                {
-                                                                    @string.Format("{0:N4}", sumOfData / sumOfExpect * 100) @: %
-                                                                }
-                                                                else
-                                                                {
-                                                                    <span>เป้าหมายสะสม ไม่ได้บันทึก</span>
-                                                                }
-                                                            </dd>
+
+                                                            @if (Model.pointB[i].CalPerMonth)
+                                                            {
+                                                                <dt class="col-3">ร้อยละ ผล/เป้า รายเดือน</dt>
+                                                                <dd class="col-9">
+                                                                    @if (de.Expect != 0)
+                                                                    {
+                                                                        @string.Format("{0:N4}", de.Result / de.Expect * 100) @: %
+                                                                    }
+                                                                    else
+                                                                    {
+                                                                        <span>เป้าหมายรายเดือน ไม่ได้บันทึก</span>
+                                                                    }
+                                                                </dd>
+                                                            }
+                                                            else
+                                                            {
+                                                                <dt class="col-3">เป้าหมายสะสม</dt>
+                                                                <dd class="col-9">
+                                                                    @string.Format("{0:N4}", sumOfExpect)
+                                                                </dd>
+                                                                <dt class="col-3">ผลการปฏิบัติสะสม</dt>
+                                                                <dd class="col-9">
+                                                                    @string.Format("{0:N4}", sumOfData)
+                                                                </dd>
+                                                                <dt class="col-3">ร้อยละ ผลสะสม/เป้าหมายสะสม</dt>
+                                                                <dd class="col-9">
+                                                                    @if (sumOfExpect != 0)
+                                                                    {
+                                                                        @string.Format("{0:N4}", sumOfData / sumOfExpect * 100) @: %
+                                                                    }
+                                                                    else
+                                                                    {
+                                                                        <span>เป้าหมายสะสม ไม่ได้บันทึก</span>
+                                                                    }
+                                                                </dd>
+                                                            }
                                                             <dt class="col-3">วันที่แล้วเสร็จ</dt>
                                                             <dd class="col-9">
                                                                 @if ((User.IsInRole("Admin") || (User.IsInRole("Manager") && user.OfficeId.Substring(0, 3) == "000" && Model.pointB[i].AuditOffice.Code == user.OfficeId)) && de?.Approve < Approve.ผษ_อนุมัติ)
@@ -2104,86 +2175,86 @@
                                                                 if ((3 < Model.month) && (Model.month < 10) && (Model.pointB[i].Rounds.Count == 2))
                                                                 {
                                                                     @*if (Model.pointB[i].Rounds[0].LevelNumber == 1)
-                    {
-                        <dd class="col-9">
-                            1.@Model.pointB[i].Rounds[1].DetailRate1<br />
-                            @string.Format("{0:N4}", de?.Expect)
-                        </dd>
-                    }
-                    if (Model.pointB[i].Rounds[0].LevelNumber == 2)
-                    {
-                        if (new DateTime(DateTime.Now.Year, Model.month, 28) <= Model.pointB[i].Rounds[1].Rate1MonthStop)
                         {
                             <dd class="col-9">
                                 1.@Model.pointB[i].Rounds[1].DetailRate1<br />
                                 @string.Format("{0:N4}", de?.Expect)
                             </dd>
                         }
-                        else
+                        if (Model.pointB[i].Rounds[0].LevelNumber == 2)
                         {
-                            <dd class="col-9">
-                                2.@Model.pointB[i].Rounds[1].DetailRate2 <br />
-                                @string.Format("{0:N4}", de?.Expect)
-                            </dd>
-                        }
+                            if (new DateTime(DateTime.Now.Year, Model.month, 28) <= Model.pointB[i].Rounds[1].Rate1MonthStop)
+                            {
+                                <dd class="col-9">
+                                    1.@Model.pointB[i].Rounds[1].DetailRate1<br />
+                                    @string.Format("{0:N4}", de?.Expect)
+                                </dd>
+                            }
+                            else
+                            {
+                                <dd class="col-9">
+                                    2.@Model.pointB[i].Rounds[1].DetailRate2 <br />
+                                    @string.Format("{0:N4}", de?.Expect)
+                                </dd>
+                            }
 
-                    }
-                    if (Model.pointB[i].Rounds[0].LevelNumber == 3)
-                    {
-                        if (new DateTime(DateTime.Now.Year, Model.month, 28) <= Model.pointB[i].Rounds[1].Rate1MonthStop)
-                        {
-                            <dd class="col-9">
-                                1.@Model.pointB[i].Rounds[1].DetailRate1 <br />
-                                @string.Format("{0:N4}", de?.Expect)
-                            </dd>
                         }
-                        else if (new DateTime(DateTime.Now.Year, Model.month, 28) <= Model.pointB[i].Rounds[1].Rate2MonthStop)
+                        if (Model.pointB[i].Rounds[0].LevelNumber == 3)
                         {
-                            <dd class="col-9">
-                                2.@Model.pointB[i].Rounds[1].DetailRate2  <br />
-                                @string.Format("{0:N4}", de?.Expect)
-                            </dd>
+                            if (new DateTime(DateTime.Now.Year, Model.month, 28) <= Model.pointB[i].Rounds[1].Rate1MonthStop)
+                            {
+                                <dd class="col-9">
+                                    1.@Model.pointB[i].Rounds[1].DetailRate1 <br />
+                                    @string.Format("{0:N4}", de?.Expect)
+                                </dd>
+                            }
+                            else if (new DateTime(DateTime.Now.Year, Model.month, 28) <= Model.pointB[i].Rounds[1].Rate2MonthStop)
+                            {
+                                <dd class="col-9">
+                                    2.@Model.pointB[i].Rounds[1].DetailRate2  <br />
+                                    @string.Format("{0:N4}", de?.Expect)
+                                </dd>
+                            }
+                            else
+                            {
+                                <dd class="col-9">
+                                    3.@Model.pointB[i].Rounds[1].DetailRate3 <br />
+                                    @string.Format("{0:N4}", de?.Expect)
+                                </dd>
+                            }
                         }
-                        else
+                        if (Model.pointB[i].Rounds[0].LevelNumber == 4)
                         {
-                            <dd class="col-9">
-                                3.@Model.pointB[i].Rounds[1].DetailRate3 <br />
-                                @string.Format("{0:N4}", de?.Expect)
-                            </dd>
-                        }
-                    }
-                    if (Model.pointB[i].Rounds[0].LevelNumber == 4)
-                    {
-                        if (new DateTime(DateTime.Now.Year, Model.month, 28) <= Model.pointB[i].Rounds[1].Rate1MonthStop)
-                        {
-                            <dd class="col-9">
-                                1.@Model.pointB[i].Rounds[1].DetailRate1<br />
-                                @string.Format("{0:N4}", de?.Expect)
-                            </dd>
-                        }
-                        else if (new DateTime(DateTime.Now.Year, Model.month, 28) <= Model.pointB[i].Rounds[1].Rate2MonthStop)
-                        {
-                            <dd class="col-9">
-                                2.@Model.pointB[i].Rounds[1].DetailRate2 <br />
-                                @string.Format("{0:N4}", de?.Expect)
-                            </dd>
-                        }
-                        else if (new DateTime(DateTime.Now.Year, Model.month, 28) <= Model.pointB[i].Rounds[1].Rate3MonthStop)
-                        {
-                            <dd class="col-9">
-                                3.@Model.pointB[i].Rounds[1].DetailRate3 <br />
-                                @string.Format("{0:N4}", de?.Expect)
-                            </dd>
-                        }
-                        else
-                        {
-                            <dd class="col-9">
-                                4.@Model.pointB[i].Rounds[1].DetailRate4<br />
-                                @string.Format("{0:N4}", de?.Expect)
-                            </dd>
-                        }
+                            if (new DateTime(DateTime.Now.Year, Model.month, 28) <= Model.pointB[i].Rounds[1].Rate1MonthStop)
+                            {
+                                <dd class="col-9">
+                                    1.@Model.pointB[i].Rounds[1].DetailRate1<br />
+                                    @string.Format("{0:N4}", de?.Expect)
+                                </dd>
+                            }
+                            else if (new DateTime(DateTime.Now.Year, Model.month, 28) <= Model.pointB[i].Rounds[1].Rate2MonthStop)
+                            {
+                                <dd class="col-9">
+                                    2.@Model.pointB[i].Rounds[1].DetailRate2 <br />
+                                    @string.Format("{0:N4}", de?.Expect)
+                                </dd>
+                            }
+                            else if (new DateTime(DateTime.Now.Year, Model.month, 28) <= Model.pointB[i].Rounds[1].Rate3MonthStop)
+                            {
+                                <dd class="col-9">
+                                    3.@Model.pointB[i].Rounds[1].DetailRate3 <br />
+                                    @string.Format("{0:N4}", de?.Expect)
+                                </dd>
+                            }
+                            else
+                            {
+                                <dd class="col-9">
+                                    4.@Model.pointB[i].Rounds[1].DetailRate4<br />
+                                    @string.Format("{0:N4}", de?.Expect)
+                                </dd>
+                            }
 
-                    }*@
+                        }*@
 
                                                                     if (Model.pointB[i].Rounds[0].RoundNumber == 2)
                                                                     {
@@ -2278,87 +2349,87 @@
                                                                 else
                                                                 {
                                                                     @*if (Model.pointB[i].Rounds[0].LevelNumber == 1)
-                    {
-                        <dd class="col-9">
-                            1.@Model.pointB[i].Rounds[0].DetailRate1<br />
-                            @string.Format("{0:N4}", de?.Expect)
-                        </dd>
-                    }
-                    if (Model.pointB[i].Rounds[0].LevelNumber == 2)
-                    {
-                        if (new DateTime(DateTime.Now.Year, Model.month, 28) <= Model.pointB[i].Rounds[0].Rate1MonthStop)
                         {
                             <dd class="col-9">
                                 1.@Model.pointB[i].Rounds[0].DetailRate1<br />
                                 @string.Format("{0:N4}", de?.Expect)
                             </dd>
                         }
-                        else
+                        if (Model.pointB[i].Rounds[0].LevelNumber == 2)
                         {
-                            <dd class="col-9">
-                                2.@Model.pointB[i].Rounds[0].DetailRate2<br />
-                                @string.Format("{0:N4}", de?.Expect)
-                            </dd>
-                        }
+                            if (new DateTime(DateTime.Now.Year, Model.month, 28) <= Model.pointB[i].Rounds[0].Rate1MonthStop)
+                            {
+                                <dd class="col-9">
+                                    1.@Model.pointB[i].Rounds[0].DetailRate1<br />
+                                    @string.Format("{0:N4}", de?.Expect)
+                                </dd>
+                            }
+                            else
+                            {
+                                <dd class="col-9">
+                                    2.@Model.pointB[i].Rounds[0].DetailRate2<br />
+                                    @string.Format("{0:N4}", de?.Expect)
+                                </dd>
+                            }
 
-                    }
-                    if (Model.pointB[i].Rounds[0].LevelNumber == 3)
-                    {
-                        if (new DateTime(DateTime.Now.Year, Model.month, 28) <= Model.pointB[i].Rounds[0].Rate1MonthStop)
-                        {
-                            <dd class="col-9">
-                                1.@Model.pointB[i].Rounds[0].DetailRate1<br />
-                                @string.Format("{0:N4}", de?.Expect)
-                            </dd>
                         }
-                        else if (new DateTime(DateTime.Now.Year, Model.month, 28) <= Model.pointB[i].Rounds[0].Rate2MonthStop)
+                        if (Model.pointB[i].Rounds[0].LevelNumber == 3)
                         {
-                            <dd class="col-9">
-                                2.@Model.pointB[i].Rounds[0].DetailRate2 <br />
-                                @string.Format("{0:N4}", de?.Expect)
-                            </dd>
-                        }
-                        else
-                        {
-                            <dd class="col-9">
-                                3.@Model.pointB[i].Rounds[0].DetailRate3<br />
-                                @string.Format("{0:N4}", de?.Expect)
-                            </dd>
-                        }
+                            if (new DateTime(DateTime.Now.Year, Model.month, 28) <= Model.pointB[i].Rounds[0].Rate1MonthStop)
+                            {
+                                <dd class="col-9">
+                                    1.@Model.pointB[i].Rounds[0].DetailRate1<br />
+                                    @string.Format("{0:N4}", de?.Expect)
+                                </dd>
+                            }
+                            else if (new DateTime(DateTime.Now.Year, Model.month, 28) <= Model.pointB[i].Rounds[0].Rate2MonthStop)
+                            {
+                                <dd class="col-9">
+                                    2.@Model.pointB[i].Rounds[0].DetailRate2 <br />
+                                    @string.Format("{0:N4}", de?.Expect)
+                                </dd>
+                            }
+                            else
+                            {
+                                <dd class="col-9">
+                                    3.@Model.pointB[i].Rounds[0].DetailRate3<br />
+                                    @string.Format("{0:N4}", de?.Expect)
+                                </dd>
+                            }
 
-                    }
-                    if (Model.pointB[i].Rounds[0].LevelNumber == 4)
-                    {
-                        if (new DateTime(DateTime.Now.Year, Model.month, 28) <= Model.pointB[i].Rounds[0].Rate1MonthStop)
-                        {
-                            <dd class="col-9">
-                                1.@Model.pointB[i].Rounds[0].DetailRate1<br />
-                                @string.Format("{0:N4}", de?.Expect)
-                            </dd>
                         }
-                        else if (new DateTime(DateTime.Now.Year, Model.month, 28) <= Model.pointB[i].Rounds[0].Rate2MonthStop)
+                        if (Model.pointB[i].Rounds[0].LevelNumber == 4)
                         {
-                            <dd class="col-9">
-                                2.@Model.pointB[i].Rounds[0].DetailRate2<br />
-                                @string.Format("{0:N4}", de?.Expect)
-                            </dd>
-                        }
-                        else if (new DateTime(DateTime.Now.Year, Model.month, 28) <= Model.pointB[i].Rounds[0].Rate3MonthStop)
-                        {
-                            <dd class="col-9">
-                                3.@Model.pointB[i].Rounds[0].DetailRate3 <br />
-                                @string.Format("{0:N4}", de?.Expect)
-                            </dd>
-                        }
-                        else
-                        {
-                            <dd class="col-9">
-                                4.@Model.pointB[i].Rounds[0].DetailRate4<br />
-                                @string.Format("{0:N4}", de?.Expect)
-                            </dd>
-                        }
+                            if (new DateTime(DateTime.Now.Year, Model.month, 28) <= Model.pointB[i].Rounds[0].Rate1MonthStop)
+                            {
+                                <dd class="col-9">
+                                    1.@Model.pointB[i].Rounds[0].DetailRate1<br />
+                                    @string.Format("{0:N4}", de?.Expect)
+                                </dd>
+                            }
+                            else if (new DateTime(DateTime.Now.Year, Model.month, 28) <= Model.pointB[i].Rounds[0].Rate2MonthStop)
+                            {
+                                <dd class="col-9">
+                                    2.@Model.pointB[i].Rounds[0].DetailRate2<br />
+                                    @string.Format("{0:N4}", de?.Expect)
+                                </dd>
+                            }
+                            else if (new DateTime(DateTime.Now.Year, Model.month, 28) <= Model.pointB[i].Rounds[0].Rate3MonthStop)
+                            {
+                                <dd class="col-9">
+                                    3.@Model.pointB[i].Rounds[0].DetailRate3 <br />
+                                    @string.Format("{0:N4}", de?.Expect)
+                                </dd>
+                            }
+                            else
+                            {
+                                <dd class="col-9">
+                                    4.@Model.pointB[i].Rounds[0].DetailRate4<br />
+                                    @string.Format("{0:N4}", de?.Expect)
+                                </dd>
+                            }
 
-                    }*@
+                        }*@
 
                                                                     if (Model.pointB[i].Rounds[0].RoundNumber == 1)
                                                                     {
@@ -2509,25 +2580,43 @@
                                                                     }
 
                                                                 </dd>
-                                                                <dt class="col-3">เป้าหมายสะสม</dt>
-                                                                <dd class="col-9">
-                                                                    @string.Format("{0:N4}", sumOfExpect)
-                                                                </dd>
-                                                                <dt class="col-3">ผลการปฏิบัติสะสม</dt>
-                                                                <dd class="col-9">
-                                                                    @string.Format("{0:N4}", sumOfData)
-                                                                </dd>
-                                                                <dt class="col-3">ร้อยละ ผลสะสม/เป้าหมายสะสม</dt>
-                                                                <dd class="col-9">
-                                                                    @if (sumOfExpect != 0)
-                                                                    {
-                                                                        @string.Format("{0:N4}", sumOfData / sumOfExpect * 100) @: %
-                                                                    }
-                                                                    else
-                                                                    {
-                                                                        <span>เป้าหมายสะสม ไม่ได้บันทึก</span>
-                                                                    }
-                                                                </dd>
+
+                                                                @if (Model.pointB[i].CalPerMonth)
+                                                                {
+                                                                    <dt class="col-3">ร้อยละ ผล/เป้า รายเดือน</dt>
+                                                                    <dd class="col-9">
+                                                                        @if (de.Expect != 0)
+                                                                        {
+                                                                            @string.Format("{0:N4}", de.ResultLevelRate / de.Expect * 100) @: %
+                                                                        }
+                                                                        else
+                                                                        {
+                                                                            <span>เป้าหมายรายเดือน ไม่ได้บันทึก</span>
+                                                                        }
+                                                                    </dd>
+                                                                }
+                                                                else
+                                                                {
+                                                                    <dt class="col-3">เป้าหมายสะสม</dt>
+                                                                    <dd class="col-9">
+                                                                        @string.Format("{0:N4}", sumOfExpect)
+                                                                    </dd>
+                                                                    <dt class="col-3">ผลการปฏิบัติสะสม</dt>
+                                                                    <dd class="col-9">
+                                                                        @string.Format("{0:N4}", sumOfData)
+                                                                    </dd>
+                                                                    <dt class="col-3">ร้อยละ ผลสะสม/เป้าหมายสะสม</dt>
+                                                                    <dd class="col-9">
+                                                                        @if (sumOfExpect != 0)
+                                                                        {
+                                                                            @string.Format("{0:N4}", sumOfData / sumOfExpect * 100) @: %
+                                                                        }
+                                                                        else
+                                                                        {
+                                                                            <span>เป้าหมายสะสม ไม่ได้บันทึก</span>
+                                                                        }
+                                                                    </dd>
+                                                                }
                                                             }
                                                             <dt class="col-3">วันที่แล้วเสร็จ</dt>
                                                             @if ((User.IsInRole("Admin") || (User.IsInRole("Manager") && user.OfficeId.Substring(0, 3) == "000" && Model.pointB[i].AuditOffice.Code == user.OfficeId)) && de?.Approve < Approve.ผษ_อนุมัติ)
@@ -2551,7 +2640,8 @@
                                                             }
                                                         } @* End ระดับ - ระดับ-ร้อยละ*@
 
-                                                        @if ((Model.pointB[i].OwnerOffice.Code.Substring(0, 3) == "000" && Model.pointB[i].OwnerOffice.Code == user.OfficeId) || (UserOffices.Any(uo => uo.Substring(0, 2) == "00" && Model.pointB[i].OwnerOffice.Code == uo) || (User.IsInRole("Admin") && Model.pointB[i].OwnerOffice.Code.Substring(0, 2) == "00")) && (Model.month == 3 || Model.month == 9))
+
+                                                        @if (Model.pointB[i].OwnerOffice.Code.Substring(0, 2) == "00" && (Model.month == 3 || Model.month == 9) && (Model.pointB[i].OwnerOffice.Code == user.OfficeId || UserOffices.Any(uo => uo.Substring(0, 2) == "00" && Model.pointB[i].OwnerOffice.Code == uo) || User.IsInRole("Admin")))
                                                         {
                                                             <dt class="col-12"><hr /><h3>รายงานปัญหาและอุปสรรค / แนวทางแก้ไข</h3></dt>
                                                             <dt class="col-3">ผลการดำเนินการ</dt>
@@ -2561,127 +2651,122 @@
                                                             <dt class="col-3"></dt>
                                                             <dd class="col-9">
                                                                 @if (Model.pointB[i].Unit == UnitOfPoint.ระดับ && Model.month == 3)
+                                                                {
+                                                                    foreach (var rd in Model.pointB[i].Rounds)
                                                                     {
-                                                                        foreach (var rd in Model.pointB[i].Rounds)
+                                                                        if (rd.RoundNumber == 1)
                                                                         {
-                                                                            if (rd.RoundNumber == 1)
-                                                                            {
-                                                                                if (result == 1 && completedDate <= rd.Rate1MonthStop)
-                                                                                {
-                                                                                    scoreTarget = 5;
-                                                                                }
-                                                                                else if (result == 2 && completedDate <= rd.Rate2MonthStop)
-                                                                                {
-                                                                                    scoreTarget = 5;
-                                                                                }
-                                                                                else if (result == 3 && completedDate <= rd.Rate3MonthStop)
-                                                                                {
-                                                                                    scoreTarget = 5;
-                                                                                }
-                                                                                else if (result == 4 && completedDate <= rd.Rate4MonthStop)
-                                                                                {
-                                                                                    scoreTarget = 5;
-                                                                                }
-                                                                                else if (result == 5 && completedDate <= rd.Rate5MonthStop)
-                                                                                {
-                                                                                    scoreTarget = 5;
-                                                                                }
-                                                                                else
-                                                                                {
-                                                                                    scoreTarget = 0;
-                                                                                }
-                                                                            }
-                                                                        }
-                                                                        /*
-                                                                        foreach (var rd in Model.pointB[i].Rounds)
-                                                                        {
-                                                                            if (rd.RoundNumber == 1)
-                                                                            {
-                                                                                startDateList.Add(rd.Rate1MonthStart);
-                                                                                startDateList.Add(rd.Rate2MonthStart);
-                                                                                startDateList.Add(rd.Rate3MonthStart);
-                                                                                startDateList.Add(rd.Rate4MonthStart);
-                                                                                startDateList.Add(rd.Rate5MonthStart);
-
-                                                                                endDateList.Add(rd.Rate1MonthStop);
-                                                                                endDateList.Add(rd.Rate2MonthStop);
-                                                                                endDateList.Add(rd.Rate3MonthStop);
-                                                                                endDateList.Add(rd.Rate4MonthStop);
-                                                                                endDateList.Add(rd.Rate5MonthStop);
-
-                                                                                if (rd.Rate1MonthStart <= finishedDate && rd.Rate1MonthStop >= finishedDate)
-                                                                                {
-                                                                                    target = 1;
-                                                                                }
-                                                                                else if (rd.Rate2MonthStart <= finishedDate && rd.Rate2MonthStop >= finishedDate)
-                                                                                {
-                                                                                    target = 2;
-                                                                                }
-                                                                                else if (rd.Rate3MonthStart <= finishedDate && rd.Rate3MonthStop >= finishedDate)
-                                                                                {
-                                                                                    target = 3;
-                                                                                }
-                                                                                else if (rd.Rate4MonthStart <= finishedDate && rd.Rate4MonthStop >= finishedDate)
-                                                                                {
-                                                                                    target = 4;
-                                                                                }
-                                                                                else if (rd.Rate5MonthStart <= finishedDate && rd.Rate5MonthStop >= finishedDate)
-                                                                                {
-                                                                                    target = 5;
-                                                                                }
-                                                                                else
-                                                                                {
-                                                                                    target = 0;
-                                                                                }
-                                                                            }
-                                                                        }
-                                                                        if (scoreTarget > target)
-                                                                        {
-                                                                            scoreTarget = 5;
-                                                                        }
-                                                                        else if (scoreTarget == target)
-                                                                        {
-                                                                            if (target == 0)
-                                                                            {
-                                                                                scoreTarget = 0;
-                                                                            }
-                                                                            else
-                                                                            {
-                                                                                if (startDateList[(int)target - 1] <= completedDate && endDateList[(int)target - 1] >= completedDate)
-                                                                                {
-                                                                                    scoreTarget = 5;
-                                                                                }
-                                                                                else
-                                                                                {
-                                                                                    scoreTarget = 0;
-                                                                                }
-                                                                            }
-                                                                        }
-                                                                        else if (target == 0)
-                                                                        {
-                                                                            for (var ii = 1; ii < endDateList.Count; ii++)
-                                                                            {
-                                                                                if (completedDate <= endDateList[ii] && completedDate >= endDateList[ii - 1])
-                                                                                {
-                                                                                    target = ii - 1;
-                                                                                    break;
-                                                                                }
-                                                                            }
-
-                                                                            if (target < scoreTarget)
+                                                                            if (result == 1 && completedDate <= rd.Rate1MonthStop)
                                                                             {
                                                                                 scoreTarget = 5;
                                                                             }
-                                                                            else if (target == scoreTarget)
+                                                                            else if (result == 2 && completedDate <= rd.Rate2MonthStop)
                                                                             {
-                                                                                if (startDateList[(int)target] <= completedDate && endDateList[(int)target] >= completedDate)
-                                                                                {
-                                                                                    scoreTarget = 5;
-                                                                                }
-                                                                                else
-                                                                                {
-                                                                                    scoreTarget = 0;
-                                                                                }
+                                                                                scoreTarget = 5;
+                                                                            }
+                                                                            else if (result == 3 && completedDate <= rd.Rate3MonthStop)
+                                                                            {
+                                                                                scoreTarget = 5;
+                                                                            }
+                                                                            else if (result == 4 && completedDate <= rd.Rate4MonthStop)
+                                                                            {
+                                                                                scoreTarget = 5;
+                                                                            }
+                                                                            else if (result == 5 && completedDate <= rd.Rate5MonthStop)
+                                                                            {
+                                                                                scoreTarget = 5;
+                                                                            }
+                                                                            else
+                                                                            {
+                                                                                scoreTarget = 0;
+                                                                            }
+                                                                        }
+                                                                    }
+                                                                    /*
+                                                                    foreach (var rd in Model.pointB[i].Rounds)
+                                                                    {
+                                                                        if (rd.RoundNumber == 1)
+                                                                        {
+                                                                            startDateList.Add(rd.Rate1MonthStart);
+                                                                            startDateList.Add(rd.Rate2MonthStart);
+                                                                            startDateList.Add(rd.Rate3MonthStart);
+                                                                            startDateList.Add(rd.Rate4MonthStart);
+                                                                            startDateList.Add(rd.Rate5MonthStart);
+
+                                                                            endDateList.Add(rd.Rate1MonthStop);
+                                                                            endDateList.Add(rd.Rate2MonthStop);
+                                                                            endDateList.Add(rd.Rate3MonthStop);
+                                                                            endDateList.Add(rd.Rate4MonthStop);
+                                                                            endDateList.Add(rd.Rate5MonthStop);
+
+                                                                            if (rd.Rate1MonthStart <= finishedDate && rd.Rate1MonthStop >= finishedDate)
+                                                                            {
+                                                                                target = 1;
+                                                                            }
+                                                                            else if (rd.Rate2MonthStart <= finishedDate && rd.Rate2MonthStop >= finishedDate)
+                                                                            {
+                                                                                target = 2;
+                                                                            }
+                                                                            else if (rd.Rate3MonthStart <= finishedDate && rd.Rate3MonthStop >= finishedDate)
+                                                                            {
+                                                                                target = 3;
+                                                                            }
+                                                                            else if (rd.Rate4MonthStart <= finishedDate && rd.Rate4MonthStop >= finishedDate)
+                                                                            {
+                                                                                target = 4;
+                                                                            }
+                                                                            else if (rd.Rate5MonthStart <= finishedDate && rd.Rate5MonthStop >= finishedDate)
+                                                                            {
+                                                                                target = 5;
+                                                                            }
+                                                                            else
+                                                                            {
+                                                                                target = 0;
+                                                                            }
+                                                                        }
+                                                                    }
+                                                                    if (scoreTarget > target)
+                                                                    {
+                                                                        scoreTarget = 5;
+                                                                    }
+                                                                    else if (scoreTarget == target)
+                                                                    {
+                                                                        if (target == 0)
+                                                                        {
+                                                                            scoreTarget = 0;
+                                                                        }
+                                                                        else
+                                                                        {
+                                                                            if (startDateList[(int)target - 1] <= completedDate && endDateList[(int)target - 1] >= completedDate)
+                                                                            {
+                                                                                scoreTarget = 5;
+                                                                            }
+                                                                            else
+                                                                            {
+                                                                                scoreTarget = 0;
+                                                                            }
+                                                                        }
+                                                                    }
+                                                                    else if (target == 0)
+                                                                    {
+                                                                        for (var ii = 1; ii < endDateList.Count; ii++)
+                                                                        {
+                                                                            if (completedDate <= endDateList[ii] && completedDate >= endDateList[ii - 1])
+                                                                            {
+                                                                                target = ii - 1;
+                                                                                break;
+                                                                            }
+                                                                        }
+
+                                                                        if (target < scoreTarget)
+                                                                        {
+                                                                            scoreTarget = 5;
+                                                                        }
+                                                                        else if (target == scoreTarget)
+                                                                        {
+                                                                            if (startDateList[(int)target] <= completedDate && endDateList[(int)target] >= completedDate)
+                                                                            {
+                                                                                scoreTarget = 5;
                                                                             }
                                                                             else
                                                                             {
@@ -2692,31 +2777,36 @@
                                                                         {
                                                                             scoreTarget = 0;
                                                                         }
-                                                                        */
-                                                                    }
-
-
-                                                                    @if (scoreTarget >= 5)
-                                                                    {
-                                                                        <label class="checkbox-inline">
-                                                                            <input type="checkbox" checked disabled /> <span>เป็นไปตามแผน</span>
-                                                                        </label>
-                                                                        <label class="checkbox-inline">
-                                                                            <input type="checkbox" disabled /> <span>ไม่เป็นไปตามแผน</span>
-                                                                        </label>
-
                                                                     }
                                                                     else
                                                                     {
-                                                                        <label class="checkbox-inline">
-                                                                            <input type="checkbox" disabled /> <span>เป็นไปตามแผน</span>
-                                                                        </label>
-                                                                        <label class="checkbox-inline">
-                                                                            <input type="checkbox" checked disabled /> <span>ไม่เป็นไปตามแผน</span>
-                                                                        </label>
-
+                                                                        scoreTarget = 0;
                                                                     }
-                                                                </dd>
+                                                                    */
+                                                                }
+
+
+                                                                @if (scoreTarget >= 5)
+                                                                {
+                                                                    <label class="checkbox-inline">
+                                                                        <input type="checkbox" checked disabled /> <span>เป็นไปตามแผน</span>
+                                                                    </label>
+                                                                    <label class="checkbox-inline">
+                                                                        <input type="checkbox" disabled /> <span>ไม่เป็นไปตามแผน</span>
+                                                                    </label>
+
+                                                                }
+                                                                else
+                                                                {
+                                                                    <label class="checkbox-inline">
+                                                                        <input type="checkbox" disabled /> <span>เป็นไปตามแผน</span>
+                                                                    </label>
+                                                                    <label class="checkbox-inline">
+                                                                        <input type="checkbox" checked disabled /> <span>ไม่เป็นไปตามแผน</span>
+                                                                    </label>
+
+                                                                }
+                                                            </dd>
                                                             @if (Model.pointB[i].IssueForEvaluations != null)
                                                             {
                                                                 @foreach (var item in Model.pointB[i].IssueForEvaluations)
@@ -2746,7 +2836,7 @@
                                                     }
                                                     else
                                                     {
-                                                        if ((Model.pointB[i].OwnerOffice.Code.Substring(0, 3) == "000" && Model.pointB[i].OwnerOffice.Code == user.OfficeId) || (UserOffices.Any(uo => uo.Substring(0, 2) == "00" && Model.pointB[i].OwnerOffice.Code == uo)) && (Model.month == 3 || Model.month == 9))
+                                                        if (Model.pointB[i].OwnerOffice.Code.Substring(0, 2) == "00" && (Model.month == 3 || Model.month == 9) && (Model.pointB[i].OwnerOffice.Code == user.OfficeId || UserOffices.Any(uo => uo.Substring(0, 2) == "00" && Model.pointB[i].OwnerOffice.Code == uo) || User.IsInRole("Admin")))
                                                         {
                                                             @(Html.DevExtreme().Button()
                                                                .ID("button")
@@ -3165,6 +3255,10 @@
                                                 {
                                                 <form id="@("form" + Model.pointC[i].Id)" method="post" action="Audit\SaveAudit">
                                                     <dl class="row">
+                                                        <dt class="col-3">หน่วยงาน</dt>
+                                                        <dd class="col-9">@officeName</dd>
+                                                        <dt class="col-3">เดือน</dt>
+                                                        <dd class="col-9">@monthYear</dd>
                                                         <dt class="col-3">หมายเลขตัวชี้วัด</dt>
                                                         <dd class="col-9">
                                                             @if (Model.pointC[i].SubPoint != 0)
@@ -3211,25 +3305,42 @@
                                                                 }
 
                                                             </dd>
-                                                            <dt class="col-3">เป้าหมายสะสม</dt>
-                                                            <dd class="col-9">
-                                                                @string.Format("{0:N4}", sumOfExpect)
-                                                            </dd>
-                                                            <dt class="col-3">ผลการปฏิบัติสะสม</dt>
-                                                            <dd class="col-9">
-                                                                @string.Format("{0:N4}", sumOfData)
-                                                            </dd>
-                                                            <dt class="col-3">ร้อยละ ผลสะสม/เป้าหมายสะสม</dt>
-                                                            <dd class="col-9">
-                                                                @if (sumOfExpect != 0)
-                                                                {
-                                                                    @string.Format("{0:N4}", sumOfData / sumOfExpect * 100) @: %
-                                                                }
-                                                                else
-                                                                {
-                                                                    <span>เป้าหมายสะสม ไม่ได้บันทึก</span>
-                                                                }
-                                                            </dd>
+                                                            @if (Model.pointC[i].CalPerMonth)
+                                                            {
+                                                                <dt class="col-3">ร้อยละ ผล/เป้า รายเดือน</dt>
+                                                                <dd class="col-9">
+                                                                    @if (de.Expect != 0)
+                                                                    {
+                                                                        @string.Format("{0:N4}", de.Result / de.Expect * 100) @: %
+                                                                    }
+                                                                    else
+                                                                    {
+                                                                        <span>เป้าหมายรายเดือน ไม่ได้บันทึก</span>
+                                                                    }
+                                                                </dd>
+                                                            }
+                                                            else
+                                                            {
+                                                                <dt class="col-3">เป้าหมายสะสม</dt>
+                                                                <dd class="col-9">
+                                                                    @string.Format("{0:N4}", sumOfExpect)
+                                                                </dd>
+                                                                <dt class="col-3">ผลการปฏิบัติสะสม</dt>
+                                                                <dd class="col-9">
+                                                                    @string.Format("{0:N4}", sumOfData)
+                                                                </dd>
+                                                                <dt class="col-3">ร้อยละ ผลสะสม/เป้าหมายสะสม</dt>
+                                                                <dd class="col-9">
+                                                                    @if (sumOfExpect != 0)
+                                                                    {
+                                                                        @string.Format("{0:N4}", sumOfData / sumOfExpect * 100) @: %
+                                                                    }
+                                                                    else
+                                                                    {
+                                                                        <span>เป้าหมายสะสม ไม่ได้บันทึก</span>
+                                                                    }
+                                                                </dd>
+                                                            }
                                                             <dt class="col-3">วันที่แล้วเสร็จ</dt>
                                                             <dd class="col-9">
                                                                 @if ((User.IsInRole("Admin") || (User.IsInRole("Manager") && user.OfficeId.Substring(0, 3) == "000" && Model.pointC[i].AuditOffice.Code == user.OfficeId)) && de?.Approve < Approve.ผษ_อนุมัติ)
@@ -3412,86 +3523,86 @@
                                                                 if ((3 < Model.month) && (Model.month < 10) && (Model.pointC[i].Rounds.Count == 2))
                                                                 {
                                                                     @*if (Model.pointC[i].Rounds[0].LevelNumber == 1)
-                    {
-                        <dd class="col-9">
-                            1.@Model.pointC[i].Rounds[1].DetailRate1<br />
-                            @string.Format("{0:N4}", de?.Expect)
-                        </dd>
-                    }
-                    if (Model.pointC[i].Rounds[0].LevelNumber == 2)
-                    {
-                        if (new DateTime(DateTime.Now.Year, Model.month, 28) <= Model.pointC[i].Rounds[1].Rate1MonthStop)
                         {
                             <dd class="col-9">
                                 1.@Model.pointC[i].Rounds[1].DetailRate1<br />
                                 @string.Format("{0:N4}", de?.Expect)
                             </dd>
                         }
-                        else
+                        if (Model.pointC[i].Rounds[0].LevelNumber == 2)
                         {
-                            <dd class="col-9">
-                                2.@Model.pointC[i].Rounds[1].DetailRate2 <br />
-                                @string.Format("{0:N4}", de?.Expect)
-                            </dd>
-                        }
+                            if (new DateTime(DateTime.Now.Year, Model.month, 28) <= Model.pointC[i].Rounds[1].Rate1MonthStop)
+                            {
+                                <dd class="col-9">
+                                    1.@Model.pointC[i].Rounds[1].DetailRate1<br />
+                                    @string.Format("{0:N4}", de?.Expect)
+                                </dd>
+                            }
+                            else
+                            {
+                                <dd class="col-9">
+                                    2.@Model.pointC[i].Rounds[1].DetailRate2 <br />
+                                    @string.Format("{0:N4}", de?.Expect)
+                                </dd>
+                            }
 
-                    }
-                    if (Model.pointC[i].Rounds[0].LevelNumber == 3)
-                    {
-                        if (new DateTime(DateTime.Now.Year, Model.month, 28) <= Model.pointC[i].Rounds[1].Rate1MonthStop)
-                        {
-                            <dd class="col-9">
-                                1.@Model.pointC[i].Rounds[1].DetailRate1 <br />
-                                @string.Format("{0:N4}", de?.Expect)
-                            </dd>
                         }
-                        else if (new DateTime(DateTime.Now.Year, Model.month, 28) <= Model.pointC[i].Rounds[1].Rate2MonthStop)
+                        if (Model.pointC[i].Rounds[0].LevelNumber == 3)
                         {
-                            <dd class="col-9">
-                                2.@Model.pointC[i].Rounds[1].DetailRate2  <br />
-                                @string.Format("{0:N4}", de?.Expect)
-                            </dd>
+                            if (new DateTime(DateTime.Now.Year, Model.month, 28) <= Model.pointC[i].Rounds[1].Rate1MonthStop)
+                            {
+                                <dd class="col-9">
+                                    1.@Model.pointC[i].Rounds[1].DetailRate1 <br />
+                                    @string.Format("{0:N4}", de?.Expect)
+                                </dd>
+                            }
+                            else if (new DateTime(DateTime.Now.Year, Model.month, 28) <= Model.pointC[i].Rounds[1].Rate2MonthStop)
+                            {
+                                <dd class="col-9">
+                                    2.@Model.pointC[i].Rounds[1].DetailRate2  <br />
+                                    @string.Format("{0:N4}", de?.Expect)
+                                </dd>
+                            }
+                            else
+                            {
+                                <dd class="col-9">
+                                    3.@Model.pointC[i].Rounds[1].DetailRate3 <br />
+                                    @string.Format("{0:N4}", de?.Expect)
+                                </dd>
+                            }
                         }
-                        else
+                        if (Model.pointC[i].Rounds[0].LevelNumber == 4)
                         {
-                            <dd class="col-9">
-                                3.@Model.pointC[i].Rounds[1].DetailRate3 <br />
-                                @string.Format("{0:N4}", de?.Expect)
-                            </dd>
-                        }
-                    }
-                    if (Model.pointC[i].Rounds[0].LevelNumber == 4)
-                    {
-                        if (new DateTime(DateTime.Now.Year, Model.month, 28) <= Model.pointC[i].Rounds[1].Rate1MonthStop)
-                        {
-                            <dd class="col-9">
-                                1.@Model.pointC[i].Rounds[1].DetailRate1<br />
-                                @string.Format("{0:N4}", de?.Expect)
-                            </dd>
-                        }
-                        else if (new DateTime(DateTime.Now.Year, Model.month, 28) <= Model.pointC[i].Rounds[1].Rate2MonthStop)
-                        {
-                            <dd class="col-9">
-                                2.@Model.pointC[i].Rounds[1].DetailRate2 <br />
-                                @string.Format("{0:N4}", de?.Expect)
-                            </dd>
-                        }
-                        else if (new DateTime(DateTime.Now.Year, Model.month, 28) <= Model.pointC[i].Rounds[1].Rate3MonthStop)
-                        {
-                            <dd class="col-9">
-                                3.@Model.pointC[i].Rounds[1].DetailRate3 <br />
-                                @string.Format("{0:N4}", de?.Expect)
-                            </dd>
-                        }
-                        else
-                        {
-                            <dd class="col-9">
-                                4.@Model.pointC[i].Rounds[1].DetailRate4<br />
-                                @string.Format("{0:N4}", de?.Expect)
-                            </dd>
-                        }
+                            if (new DateTime(DateTime.Now.Year, Model.month, 28) <= Model.pointC[i].Rounds[1].Rate1MonthStop)
+                            {
+                                <dd class="col-9">
+                                    1.@Model.pointC[i].Rounds[1].DetailRate1<br />
+                                    @string.Format("{0:N4}", de?.Expect)
+                                </dd>
+                            }
+                            else if (new DateTime(DateTime.Now.Year, Model.month, 28) <= Model.pointC[i].Rounds[1].Rate2MonthStop)
+                            {
+                                <dd class="col-9">
+                                    2.@Model.pointC[i].Rounds[1].DetailRate2 <br />
+                                    @string.Format("{0:N4}", de?.Expect)
+                                </dd>
+                            }
+                            else if (new DateTime(DateTime.Now.Year, Model.month, 28) <= Model.pointC[i].Rounds[1].Rate3MonthStop)
+                            {
+                                <dd class="col-9">
+                                    3.@Model.pointC[i].Rounds[1].DetailRate3 <br />
+                                    @string.Format("{0:N4}", de?.Expect)
+                                </dd>
+                            }
+                            else
+                            {
+                                <dd class="col-9">
+                                    4.@Model.pointC[i].Rounds[1].DetailRate4<br />
+                                    @string.Format("{0:N4}", de?.Expect)
+                                </dd>
+                            }
 
-                    }*@
+                        }*@
 
                                                                     if (Model.pointC[i].Rounds[0].RoundNumber == 2)
                                                                     {
@@ -3586,87 +3697,87 @@
                                                                 else
                                                                 {
                                                                     @*if (Model.pointC[i].Rounds[0].LevelNumber == 1)
-                    {
-                        <dd class="col-9">
-                            1.@Model.pointC[i].Rounds[0].DetailRate1<br />
-                            @string.Format("{0:N4}", de?.Expect)
-                        </dd>
-                    }
-                    if (Model.pointC[i].Rounds[0].LevelNumber == 2)
-                    {
-                        if (new DateTime(DateTime.Now.Year, Model.month, 28) <= Model.pointC[i].Rounds[0].Rate1MonthStop)
                         {
                             <dd class="col-9">
                                 1.@Model.pointC[i].Rounds[0].DetailRate1<br />
                                 @string.Format("{0:N4}", de?.Expect)
                             </dd>
                         }
-                        else
+                        if (Model.pointC[i].Rounds[0].LevelNumber == 2)
                         {
-                            <dd class="col-9">
-                                2.@Model.pointC[i].Rounds[0].DetailRate2<br />
-                                @string.Format("{0:N4}", de?.Expect)
-                            </dd>
-                        }
+                            if (new DateTime(DateTime.Now.Year, Model.month, 28) <= Model.pointC[i].Rounds[0].Rate1MonthStop)
+                            {
+                                <dd class="col-9">
+                                    1.@Model.pointC[i].Rounds[0].DetailRate1<br />
+                                    @string.Format("{0:N4}", de?.Expect)
+                                </dd>
+                            }
+                            else
+                            {
+                                <dd class="col-9">
+                                    2.@Model.pointC[i].Rounds[0].DetailRate2<br />
+                                    @string.Format("{0:N4}", de?.Expect)
+                                </dd>
+                            }
 
-                    }
-                    if (Model.pointC[i].Rounds[0].LevelNumber == 3)
-                    {
-                        if (new DateTime(DateTime.Now.Year, Model.month, 28) <= Model.pointC[i].Rounds[0].Rate1MonthStop)
-                        {
-                            <dd class="col-9">
-                                1.@Model.pointC[i].Rounds[0].DetailRate1<br />
-                                @string.Format("{0:N4}", de?.Expect)
-                            </dd>
                         }
-                        else if (new DateTime(DateTime.Now.Year, Model.month, 28) <= Model.pointC[i].Rounds[0].Rate2MonthStop)
+                        if (Model.pointC[i].Rounds[0].LevelNumber == 3)
                         {
-                            <dd class="col-9">
-                                2.@Model.pointC[i].Rounds[0].DetailRate2 <br />
-                                @string.Format("{0:N4}", de?.Expect)
-                            </dd>
-                        }
-                        else
-                        {
-                            <dd class="col-9">
-                                3.@Model.pointC[i].Rounds[0].DetailRate3<br />
-                                @string.Format("{0:N4}", de?.Expect)
-                            </dd>
-                        }
+                            if (new DateTime(DateTime.Now.Year, Model.month, 28) <= Model.pointC[i].Rounds[0].Rate1MonthStop)
+                            {
+                                <dd class="col-9">
+                                    1.@Model.pointC[i].Rounds[0].DetailRate1<br />
+                                    @string.Format("{0:N4}", de?.Expect)
+                                </dd>
+                            }
+                            else if (new DateTime(DateTime.Now.Year, Model.month, 28) <= Model.pointC[i].Rounds[0].Rate2MonthStop)
+                            {
+                                <dd class="col-9">
+                                    2.@Model.pointC[i].Rounds[0].DetailRate2 <br />
+                                    @string.Format("{0:N4}", de?.Expect)
+                                </dd>
+                            }
+                            else
+                            {
+                                <dd class="col-9">
+                                    3.@Model.pointC[i].Rounds[0].DetailRate3<br />
+                                    @string.Format("{0:N4}", de?.Expect)
+                                </dd>
+                            }
 
-                    }
-                    if (Model.pointC[i].Rounds[0].LevelNumber == 4)
-                    {
-                        if (new DateTime(DateTime.Now.Year, Model.month, 28) <= Model.pointC[i].Rounds[0].Rate1MonthStop)
-                        {
-                            <dd class="col-9">
-                                1.@Model.pointC[i].Rounds[0].DetailRate1<br />
-                                @string.Format("{0:N4}", de?.Expect)
-                            </dd>
                         }
-                        else if (new DateTime(DateTime.Now.Year, Model.month, 28) <= Model.pointC[i].Rounds[0].Rate2MonthStop)
+                        if (Model.pointC[i].Rounds[0].LevelNumber == 4)
                         {
-                            <dd class="col-9">
-                                2.@Model.pointC[i].Rounds[0].DetailRate2<br />
-                                @string.Format("{0:N4}", de?.Expect)
-                            </dd>
-                        }
-                        else if (new DateTime(DateTime.Now.Year, Model.month, 28) <= Model.pointC[i].Rounds[0].Rate3MonthStop)
-                        {
-                            <dd class="col-9">
-                                3.@Model.pointC[i].Rounds[0].DetailRate3 <br />
-                                @string.Format("{0:N4}", de?.Expect)
-                            </dd>
-                        }
-                        else
-                        {
-                            <dd class="col-9">
-                                4.@Model.pointC[i].Rounds[0].DetailRate4<br />
-                                @string.Format("{0:N4}", de?.Expect)
-                            </dd>
-                        }
+                            if (new DateTime(DateTime.Now.Year, Model.month, 28) <= Model.pointC[i].Rounds[0].Rate1MonthStop)
+                            {
+                                <dd class="col-9">
+                                    1.@Model.pointC[i].Rounds[0].DetailRate1<br />
+                                    @string.Format("{0:N4}", de?.Expect)
+                                </dd>
+                            }
+                            else if (new DateTime(DateTime.Now.Year, Model.month, 28) <= Model.pointC[i].Rounds[0].Rate2MonthStop)
+                            {
+                                <dd class="col-9">
+                                    2.@Model.pointC[i].Rounds[0].DetailRate2<br />
+                                    @string.Format("{0:N4}", de?.Expect)
+                                </dd>
+                            }
+                            else if (new DateTime(DateTime.Now.Year, Model.month, 28) <= Model.pointC[i].Rounds[0].Rate3MonthStop)
+                            {
+                                <dd class="col-9">
+                                    3.@Model.pointC[i].Rounds[0].DetailRate3 <br />
+                                    @string.Format("{0:N4}", de?.Expect)
+                                </dd>
+                            }
+                            else
+                            {
+                                <dd class="col-9">
+                                    4.@Model.pointC[i].Rounds[0].DetailRate4<br />
+                                    @string.Format("{0:N4}", de?.Expect)
+                                </dd>
+                            }
 
-                    }*@
+                        }*@
 
                                                                     if (Model.pointC[i].Rounds[0].RoundNumber == 1)
                                                                     {
@@ -3817,25 +3928,42 @@
                                                                     }
 
                                                                 </dd>
-                                                                <dt class="col-3">เป้าหมายสะสม</dt>
-                                                                <dd class="col-9">
-                                                                    @string.Format("{0:N4}", sumOfExpect)
-                                                                </dd>
-                                                                <dt class="col-3">ผลการปฏิบัติสะสม</dt>
-                                                                <dd class="col-9">
-                                                                    @string.Format("{0:N4}", sumOfData)
-                                                                </dd>
-                                                                <dt class="col-3">ร้อยละ ผลสะสม/เป้าหมายสะสม</dt>
-                                                                <dd class="col-9">
-                                                                    @if (sumOfExpect != 0)
-                                                                    {
-                                                                        @string.Format("{0:N4}", sumOfData / sumOfExpect * 100) @: %
-                                                                    }
-                                                                    else
-                                                                    {
-                                                                        <span>เป้าหมายสะสม ไม่ได้บันทึก</span>
-                                                                    }
-                                                                </dd>
+                                                                @if (Model.pointC[i].CalPerMonth)
+                                                                {
+                                                                    <dt class="col-3">ร้อยละ ผล/เป้า รายเดือน</dt>
+                                                                    <dd class="col-9">
+                                                                        @if (de.Expect != 0)
+                                                                        {
+                                                                            @string.Format("{0:N4}", de.ResultLevelRate / de.Expect * 100) @: %
+                                                                        }
+                                                                        else
+                                                                        {
+                                                                            <span>เป้าหมายรายเดือน ไม่ได้บันทึก</span>
+                                                                        }
+                                                                    </dd>
+                                                                }
+                                                                else
+                                                                {
+                                                                    <dt class="col-3">เป้าหมายสะสม</dt>
+                                                                    <dd class="col-9">
+                                                                        @string.Format("{0:N4}", sumOfExpect)
+                                                                    </dd>
+                                                                    <dt class="col-3">ผลการปฏิบัติสะสม</dt>
+                                                                    <dd class="col-9">
+                                                                        @string.Format("{0:N4}", sumOfData)
+                                                                    </dd>
+                                                                    <dt class="col-3">ร้อยละ ผลสะสม/เป้าหมายสะสม</dt>
+                                                                    <dd class="col-9">
+                                                                        @if (sumOfExpect != 0)
+                                                                        {
+                                                                            @string.Format("{0:N4}", sumOfData / sumOfExpect * 100) @: %
+                                                                        }
+                                                                        else
+                                                                        {
+                                                                            <span>เป้าหมายสะสม ไม่ได้บันทึก</span>
+                                                                        }
+                                                                    </dd>
+                                                                }
                                                             }
                                                             <dt class="col-3">วันที่แล้วเสร็จ</dt>
                                                             @if ((User.IsInRole("Admin") || (User.IsInRole("Manager") && user.OfficeId.Substring(0, 3) == "000" && Model.pointC[i].AuditOffice.Code == user.OfficeId)) && de?.Approve < Approve.ผษ_อนุมัติ)
@@ -3858,7 +3986,8 @@
                                                                 </dd>
                                                             }
                                                         } @* End ระดับ - ระดับ-ร้อยละ*@
-                                                        @if ((Model.pointC[i].OwnerOffice.Code.Substring(0, 3) == "000" && Model.pointC[i].OwnerOffice.Code == user.OfficeId) || (UserOffices.Any(uo => uo.Substring(0, 2) == "00" && Model.pointC[i].OwnerOffice.Code == uo) || (User.IsInRole("Admin") && Model.pointC[i].OwnerOffice.Code.Substring(0, 2) == "00")) && (Model.month == 3 || Model.month == 9))
+
+                                                        @if (Model.pointC[i].OwnerOffice.Code.Substring(0, 2) == "00" && (Model.month == 3 || Model.month == 9) && (Model.pointC[i].OwnerOffice.Code == user.OfficeId || UserOffices.Any(uo => uo.Substring(0, 2) == "00" && Model.pointC[i].OwnerOffice.Code == uo) || User.IsInRole("Admin")))
                                                         {
                                                             <dt class="col-12"><hr /><h3>รายงานปัญหาและอุปสรรค / แนวทางแก้ไข</h3></dt>
                                                             <dt class="col-3">ผลการดำเนินการ</dt>
@@ -4004,27 +4133,27 @@
                                                                 }
 
 
-                                                                    @if (scoreTarget >= 5)
-                                                                    {
-                                                                        <label class="checkbox-inline">
-                                                                            <input type="checkbox" checked disabled /> <span>เป็นไปตามแผน</span>
-                                                                        </label>
-                                                                        <label class="checkbox-inline">
-                                                                            <input type="checkbox" disabled /> <span>ไม่เป็นไปตามแผน</span>
-                                                                        </label>
+                                                                @if (scoreTarget >= 5)
+                                                                {
+                                                                    <label class="checkbox-inline">
+                                                                        <input type="checkbox" checked disabled /> <span>เป็นไปตามแผน</span>
+                                                                    </label>
+                                                                    <label class="checkbox-inline">
+                                                                        <input type="checkbox" disabled /> <span>ไม่เป็นไปตามแผน</span>
+                                                                    </label>
 
-                                                                    }
-                                                                    else
-                                                                    {
-                                                                        <label class="checkbox-inline">
-                                                                            <input type="checkbox" disabled /> <span>เป็นไปตามแผน</span>
-                                                                        </label>
-                                                                        <label class="checkbox-inline">
-                                                                            <input type="checkbox" checked disabled /> <span>ไม่เป็นไปตามแผน</span>
-                                                                        </label>
+                                                                }
+                                                                else
+                                                                {
+                                                                    <label class="checkbox-inline">
+                                                                        <input type="checkbox" disabled /> <span>เป็นไปตามแผน</span>
+                                                                    </label>
+                                                                    <label class="checkbox-inline">
+                                                                        <input type="checkbox" checked disabled /> <span>ไม่เป็นไปตามแผน</span>
+                                                                    </label>
 
-                                                                    }
-                                                                </dd>
+                                                                }
+                                                            </dd>
                                                             @if (Model.pointC[i].IssueForEvaluations != null)
                                                             {
                                                                 @foreach (var item in Model.pointC[i].IssueForEvaluations)
@@ -4054,7 +4183,8 @@
                                                     }
                                                     else
                                                     {
-                                                        if ((Model.pointC[i].OwnerOffice.Code.Substring(0, 3) == "000" && Model.pointC[i].OwnerOffice.Code == user.OfficeId) || (UserOffices.Any(uo => uo.Substring(0, 2) == "00" && Model.pointC[i].OwnerOffice.Code == uo)) && (Model.month == 3 || Model.month == 9))
+
+                                                        if (Model.pointC[i].OwnerOffice.Code.Substring(0, 2) == "00" && (Model.month == 3 || Model.month == 9) && (Model.pointC[i].OwnerOffice.Code == user.OfficeId || UserOffices.Any(uo => uo.Substring(0, 2) == "00" && Model.pointC[i].OwnerOffice.Code == uo) || User.IsInRole("Admin")))
                                                         {
                                                             @(Html.DevExtreme().Button()
                                                                .ID("button")
@@ -4462,6 +4592,10 @@
                                                 {
                                                 <form id="@("form" + Model.pointD[i].Id)" method="post" action="Audit\SaveAudit">
                                                     <dl class="row">
+                                                        <dt class="col-3">หน่วยงาน</dt>
+                                                        <dd class="col-9">@officeName</dd>
+                                                        <dt class="col-3">เดือน</dt>
+                                                        <dd class="col-9">@monthYear</dd>
                                                         <dt class="col-3">หมายเลขตัวชี้วัด</dt>
                                                         <dd class="col-9">
                                                             @if (Model.pointD[i].SubPoint != 0)
@@ -4510,25 +4644,43 @@
                                                                 }
 
                                                             </dd>
-                                                            <dt class="col-3">เป้าหมายสะสม</dt>
-                                                            <dd class="col-9">
-                                                                @string.Format("{0:N4}", sumOfExpect)
-                                                            </dd>
-                                                            <dt class="col-3">ผลการปฏิบัติสะสม</dt>
-                                                            <dd class="col-9">
-                                                                @string.Format("{0:N4}", sumOfData)
-                                                            </dd>
-                                                            <dt class="col-3">ร้อยละ ผลสะสม/เป้าหมายสะสม</dt>
-                                                            <dd class="col-9">
-                                                                @if (sumOfExpect != 0)
-                                                                {
-                                                                    @string.Format("{0:N4}", sumOfData / sumOfExpect * 100) @: %
-                                                                }
-                                                                else
-                                                                {
-                                                                    <span>เป้าหมายสะสม ไม่ได้บันทึก</span>
-                                                                }
-                                                            </dd>
+
+                                                            @if (Model.pointD[i].CalPerMonth)
+                                                            {
+                                                                <dt class="col-3">ร้อยละ ผล/เป้า รายเดือน</dt>
+                                                                <dd class="col-9">
+                                                                    @if (de.Expect != 0)
+                                                                    {
+                                                                        @string.Format("{0:N4}", de.Result / de.Expect * 100) @: %
+                                                                    }
+                                                                    else
+                                                                    {
+                                                                        <span>เป้าหมายรายเดือน ไม่ได้บันทึก</span>
+                                                                    }
+                                                                </dd>
+                                                            }
+                                                            else
+                                                            {
+                                                                <dt class="col-3">เป้าหมายสะสม</dt>
+                                                                <dd class="col-9">
+                                                                    @string.Format("{0:N4}", sumOfExpect)
+                                                                </dd>
+                                                                <dt class="col-3">ผลการปฏิบัติสะสม</dt>
+                                                                <dd class="col-9">
+                                                                    @string.Format("{0:N4}", sumOfData)
+                                                                </dd>
+                                                                <dt class="col-3">ร้อยละ ผลสะสม/เป้าหมายสะสม</dt>
+                                                                <dd class="col-9">
+                                                                    @if (sumOfExpect != 0)
+                                                                    {
+                                                                        @string.Format("{0:N4}", sumOfData / sumOfExpect * 100) @: %
+                                                                    }
+                                                                    else
+                                                                    {
+                                                                        <span>เป้าหมายสะสม ไม่ได้บันทึก</span>
+                                                                    }
+                                                                </dd>
+                                                            }
                                                             <dt class="col-3">วันที่แล้วเสร็จ</dt>
                                                             <dd class="col-9">
                                                                 @if ((User.IsInRole("Admin") || (User.IsInRole("Manager") && user.OfficeId.Substring(0, 3) == "000" && Model.pointD[i].AuditOffice.Code == user.OfficeId)) && de?.Approve < Approve.ผษ_อนุมัติ)
@@ -4711,86 +4863,86 @@
                                                                 if ((3 < Model.month) && (Model.month < 10) && (Model.pointD[i].Rounds.Count == 2))
                                                                 {
                                                                     @*if (Model.pointD[i].Rounds[0].LevelNumber == 1)
-                    {
-                        <dd class="col-9">
-                            1.@Model.pointD[i].Rounds[1].DetailRate1<br />
-                            @string.Format("{0:N4}", de?.Expect)
-                        </dd>
-                    }
-                    if (Model.pointD[i].Rounds[0].LevelNumber == 2)
-                    {
-                        if (new DateTime(DateTime.Now.Year, Model.month, 28) <= Model.pointD[i].Rounds[1].Rate1MonthStop)
                         {
                             <dd class="col-9">
                                 1.@Model.pointD[i].Rounds[1].DetailRate1<br />
                                 @string.Format("{0:N4}", de?.Expect)
                             </dd>
                         }
-                        else
+                        if (Model.pointD[i].Rounds[0].LevelNumber == 2)
                         {
-                            <dd class="col-9">
-                                2.@Model.pointD[i].Rounds[1].DetailRate2 <br />
-                                @string.Format("{0:N4}", de?.Expect)
-                            </dd>
-                        }
+                            if (new DateTime(DateTime.Now.Year, Model.month, 28) <= Model.pointD[i].Rounds[1].Rate1MonthStop)
+                            {
+                                <dd class="col-9">
+                                    1.@Model.pointD[i].Rounds[1].DetailRate1<br />
+                                    @string.Format("{0:N4}", de?.Expect)
+                                </dd>
+                            }
+                            else
+                            {
+                                <dd class="col-9">
+                                    2.@Model.pointD[i].Rounds[1].DetailRate2 <br />
+                                    @string.Format("{0:N4}", de?.Expect)
+                                </dd>
+                            }
 
-                    }
-                    if (Model.pointD[i].Rounds[0].LevelNumber == 3)
-                    {
-                        if (new DateTime(DateTime.Now.Year, Model.month, 28) <= Model.pointD[i].Rounds[1].Rate1MonthStop)
-                        {
-                            <dd class="col-9">
-                                1.@Model.pointD[i].Rounds[1].DetailRate1 <br />
-                                @string.Format("{0:N4}", de?.Expect)
-                            </dd>
                         }
-                        else if (new DateTime(DateTime.Now.Year, Model.month, 28) <= Model.pointD[i].Rounds[1].Rate2MonthStop)
+                        if (Model.pointD[i].Rounds[0].LevelNumber == 3)
                         {
-                            <dd class="col-9">
-                                2.@Model.pointD[i].Rounds[1].DetailRate2  <br />
-                                @string.Format("{0:N4}", de?.Expect)
-                            </dd>
+                            if (new DateTime(DateTime.Now.Year, Model.month, 28) <= Model.pointD[i].Rounds[1].Rate1MonthStop)
+                            {
+                                <dd class="col-9">
+                                    1.@Model.pointD[i].Rounds[1].DetailRate1 <br />
+                                    @string.Format("{0:N4}", de?.Expect)
+                                </dd>
+                            }
+                            else if (new DateTime(DateTime.Now.Year, Model.month, 28) <= Model.pointD[i].Rounds[1].Rate2MonthStop)
+                            {
+                                <dd class="col-9">
+                                    2.@Model.pointD[i].Rounds[1].DetailRate2  <br />
+                                    @string.Format("{0:N4}", de?.Expect)
+                                </dd>
+                            }
+                            else
+                            {
+                                <dd class="col-9">
+                                    3.@Model.pointD[i].Rounds[1].DetailRate3 <br />
+                                    @string.Format("{0:N4}", de?.Expect)
+                                </dd>
+                            }
                         }
-                        else
+                        if (Model.pointD[i].Rounds[0].LevelNumber == 4)
                         {
-                            <dd class="col-9">
-                                3.@Model.pointD[i].Rounds[1].DetailRate3 <br />
-                                @string.Format("{0:N4}", de?.Expect)
-                            </dd>
-                        }
-                    }
-                    if (Model.pointD[i].Rounds[0].LevelNumber == 4)
-                    {
-                        if (new DateTime(DateTime.Now.Year, Model.month, 28) <= Model.pointD[i].Rounds[1].Rate1MonthStop)
-                        {
-                            <dd class="col-9">
-                                1.@Model.pointD[i].Rounds[1].DetailRate1<br />
-                                @string.Format("{0:N4}", de?.Expect)
-                            </dd>
-                        }
-                        else if (new DateTime(DateTime.Now.Year, Model.month, 28) <= Model.pointD[i].Rounds[1].Rate2MonthStop)
-                        {
-                            <dd class="col-9">
-                                2.@Model.pointD[i].Rounds[1].DetailRate2 <br />
-                                @string.Format("{0:N4}", de?.Expect)
-                            </dd>
-                        }
-                        else if (new DateTime(DateTime.Now.Year, Model.month, 28) <= Model.pointD[i].Rounds[1].Rate3MonthStop)
-                        {
-                            <dd class="col-9">
-                                3.@Model.pointD[i].Rounds[1].DetailRate3 <br />
-                                @string.Format("{0:N4}", de?.Expect)
-                            </dd>
-                        }
-                        else
-                        {
-                            <dd class="col-9">
-                                4.@Model.pointD[i].Rounds[1].DetailRate4<br />
-                                @string.Format("{0:N4}", de?.Expect)
-                            </dd>
-                        }
+                            if (new DateTime(DateTime.Now.Year, Model.month, 28) <= Model.pointD[i].Rounds[1].Rate1MonthStop)
+                            {
+                                <dd class="col-9">
+                                    1.@Model.pointD[i].Rounds[1].DetailRate1<br />
+                                    @string.Format("{0:N4}", de?.Expect)
+                                </dd>
+                            }
+                            else if (new DateTime(DateTime.Now.Year, Model.month, 28) <= Model.pointD[i].Rounds[1].Rate2MonthStop)
+                            {
+                                <dd class="col-9">
+                                    2.@Model.pointD[i].Rounds[1].DetailRate2 <br />
+                                    @string.Format("{0:N4}", de?.Expect)
+                                </dd>
+                            }
+                            else if (new DateTime(DateTime.Now.Year, Model.month, 28) <= Model.pointD[i].Rounds[1].Rate3MonthStop)
+                            {
+                                <dd class="col-9">
+                                    3.@Model.pointD[i].Rounds[1].DetailRate3 <br />
+                                    @string.Format("{0:N4}", de?.Expect)
+                                </dd>
+                            }
+                            else
+                            {
+                                <dd class="col-9">
+                                    4.@Model.pointD[i].Rounds[1].DetailRate4<br />
+                                    @string.Format("{0:N4}", de?.Expect)
+                                </dd>
+                            }
 
-                    }*@
+                        }*@
 
                                                                     if (Model.pointD[i].Rounds[0].RoundNumber == 2)
                                                                     {
@@ -4885,87 +5037,87 @@
                                                                 else
                                                                 {
                                                                     @*if (Model.pointD[i].Rounds[0].LevelNumber == 1)
-                    {
-                        <dd class="col-9">
-                            1.@Model.pointD[i].Rounds[0].DetailRate1<br />
-                            @string.Format("{0:N4}", de?.Expect)
-                        </dd>
-                    }
-                    if (Model.pointD[i].Rounds[0].LevelNumber == 2)
-                    {
-                        if (new DateTime(DateTime.Now.Year, Model.month, 28) <= Model.pointD[i].Rounds[0].Rate1MonthStop)
                         {
                             <dd class="col-9">
                                 1.@Model.pointD[i].Rounds[0].DetailRate1<br />
                                 @string.Format("{0:N4}", de?.Expect)
                             </dd>
                         }
-                        else
+                        if (Model.pointD[i].Rounds[0].LevelNumber == 2)
                         {
-                            <dd class="col-9">
-                                2.@Model.pointD[i].Rounds[0].DetailRate2<br />
-                                @string.Format("{0:N4}", de?.Expect)
-                            </dd>
-                        }
+                            if (new DateTime(DateTime.Now.Year, Model.month, 28) <= Model.pointD[i].Rounds[0].Rate1MonthStop)
+                            {
+                                <dd class="col-9">
+                                    1.@Model.pointD[i].Rounds[0].DetailRate1<br />
+                                    @string.Format("{0:N4}", de?.Expect)
+                                </dd>
+                            }
+                            else
+                            {
+                                <dd class="col-9">
+                                    2.@Model.pointD[i].Rounds[0].DetailRate2<br />
+                                    @string.Format("{0:N4}", de?.Expect)
+                                </dd>
+                            }
 
-                    }
-                    if (Model.pointD[i].Rounds[0].LevelNumber == 3)
-                    {
-                        if (new DateTime(DateTime.Now.Year, Model.month, 28) <= Model.pointD[i].Rounds[0].Rate1MonthStop)
-                        {
-                            <dd class="col-9">
-                                1.@Model.pointD[i].Rounds[0].DetailRate1<br />
-                                @string.Format("{0:N4}", de?.Expect)
-                            </dd>
                         }
-                        else if (new DateTime(DateTime.Now.Year, Model.month, 28) <= Model.pointD[i].Rounds[0].Rate2MonthStop)
+                        if (Model.pointD[i].Rounds[0].LevelNumber == 3)
                         {
-                            <dd class="col-9">
-                                2.@Model.pointD[i].Rounds[0].DetailRate2 <br />
-                                @string.Format("{0:N4}", de?.Expect)
-                            </dd>
-                        }
-                        else
-                        {
-                            <dd class="col-9">
-                                3.@Model.pointD[i].Rounds[0].DetailRate3<br />
-                                @string.Format("{0:N4}", de?.Expect)
-                            </dd>
-                        }
+                            if (new DateTime(DateTime.Now.Year, Model.month, 28) <= Model.pointD[i].Rounds[0].Rate1MonthStop)
+                            {
+                                <dd class="col-9">
+                                    1.@Model.pointD[i].Rounds[0].DetailRate1<br />
+                                    @string.Format("{0:N4}", de?.Expect)
+                                </dd>
+                            }
+                            else if (new DateTime(DateTime.Now.Year, Model.month, 28) <= Model.pointD[i].Rounds[0].Rate2MonthStop)
+                            {
+                                <dd class="col-9">
+                                    2.@Model.pointD[i].Rounds[0].DetailRate2 <br />
+                                    @string.Format("{0:N4}", de?.Expect)
+                                </dd>
+                            }
+                            else
+                            {
+                                <dd class="col-9">
+                                    3.@Model.pointD[i].Rounds[0].DetailRate3<br />
+                                    @string.Format("{0:N4}", de?.Expect)
+                                </dd>
+                            }
 
-                    }
-                    if (Model.pointD[i].Rounds[0].LevelNumber == 4)
-                    {
-                        if (new DateTime(DateTime.Now.Year, Model.month, 28) <= Model.pointD[i].Rounds[0].Rate1MonthStop)
-                        {
-                            <dd class="col-9">
-                                1.@Model.pointD[i].Rounds[0].DetailRate1<br />
-                                @string.Format("{0:N4}", de?.Expect)
-                            </dd>
                         }
-                        else if (new DateTime(DateTime.Now.Year, Model.month, 28) <= Model.pointD[i].Rounds[0].Rate2MonthStop)
+                        if (Model.pointD[i].Rounds[0].LevelNumber == 4)
                         {
-                            <dd class="col-9">
-                                2.@Model.pointD[i].Rounds[0].DetailRate2<br />
-                                @string.Format("{0:N4}", de?.Expect)
-                            </dd>
-                        }
-                        else if (new DateTime(DateTime.Now.Year, Model.month, 28) <= Model.pointD[i].Rounds[0].Rate3MonthStop)
-                        {
-                            <dd class="col-9">
-                                3.@Model.pointD[i].Rounds[0].DetailRate3 <br />
-                                @string.Format("{0:N4}", de?.Expect)
-                            </dd>
-                        }
-                        else
-                        {
-                            <dd class="col-9">
-                                4.@Model.pointD[i].Rounds[0].DetailRate4<br />
-                                @string.Format("{0:N4}", de?.Expect)
-                            </dd>
-                        }
+                            if (new DateTime(DateTime.Now.Year, Model.month, 28) <= Model.pointD[i].Rounds[0].Rate1MonthStop)
+                            {
+                                <dd class="col-9">
+                                    1.@Model.pointD[i].Rounds[0].DetailRate1<br />
+                                    @string.Format("{0:N4}", de?.Expect)
+                                </dd>
+                            }
+                            else if (new DateTime(DateTime.Now.Year, Model.month, 28) <= Model.pointD[i].Rounds[0].Rate2MonthStop)
+                            {
+                                <dd class="col-9">
+                                    2.@Model.pointD[i].Rounds[0].DetailRate2<br />
+                                    @string.Format("{0:N4}", de?.Expect)
+                                </dd>
+                            }
+                            else if (new DateTime(DateTime.Now.Year, Model.month, 28) <= Model.pointD[i].Rounds[0].Rate3MonthStop)
+                            {
+                                <dd class="col-9">
+                                    3.@Model.pointD[i].Rounds[0].DetailRate3 <br />
+                                    @string.Format("{0:N4}", de?.Expect)
+                                </dd>
+                            }
+                            else
+                            {
+                                <dd class="col-9">
+                                    4.@Model.pointD[i].Rounds[0].DetailRate4<br />
+                                    @string.Format("{0:N4}", de?.Expect)
+                                </dd>
+                            }
 
-                    }*@
+                        }*@
 
                                                                     if (Model.pointD[i].Rounds[0].RoundNumber == 1)
                                                                     {
@@ -5116,25 +5268,42 @@
                                                                     }
 
                                                                 </dd>
-                                                                <dt class="col-3">เป้าหมายสะสม</dt>
-                                                                <dd class="col-9">
-                                                                    @string.Format("{0:N4}", sumOfExpect)
-                                                                </dd>
-                                                                <dt class="col-3">ผลการปฏิบัติสะสม</dt>
-                                                                <dd class="col-9">
-                                                                    @string.Format("{0:N4}", sumOfData)
-                                                                </dd>
-                                                                <dt class="col-3">ร้อยละ ผลสะสม/เป้าหมายสะสม</dt>
-                                                                <dd class="col-9">
-                                                                    @if (sumOfExpect != 0)
-                                                                    {
-                                                                        @string.Format("{0:N4}", sumOfData / sumOfExpect * 100) @: %
-                                                                    }
-                                                                    else
-                                                                    {
-                                                                        <span>เป้าหมายสะสม ไม่ได้บันทึก</span>
-                                                                    }
-                                                                </dd>
+                                                                @if (Model.pointD[i].CalPerMonth)
+                                                                {
+                                                                    <dt class="col-3">ร้อยละ ผล/เป้า รายเดือน</dt>
+                                                                    <dd class="col-9">
+                                                                        @if (de.Expect != 0)
+                                                                        {
+                                                                            @string.Format("{0:N4}", de.ResultLevelRate / de.Expect * 100) @: %
+                                                                        }
+                                                                        else
+                                                                        {
+                                                                            <span>เป้าหมายรายเดือน ไม่ได้บันทึก</span>
+                                                                        }
+                                                                    </dd>
+                                                                }
+                                                                else
+                                                                {
+                                                                    <dt class="col-3">เป้าหมายสะสม</dt>
+                                                                    <dd class="col-9">
+                                                                        @string.Format("{0:N4}", sumOfExpect)
+                                                                    </dd>
+                                                                    <dt class="col-3">ผลการปฏิบัติสะสม</dt>
+                                                                    <dd class="col-9">
+                                                                        @string.Format("{0:N4}", sumOfData)
+                                                                    </dd>
+                                                                    <dt class="col-3">ร้อยละ ผลสะสม/เป้าหมายสะสม</dt>
+                                                                    <dd class="col-9">
+                                                                        @if (sumOfExpect != 0)
+                                                                        {
+                                                                            @string.Format("{0:N4}", sumOfData / sumOfExpect * 100) @: %
+                                                                        }
+                                                                        else
+                                                                        {
+                                                                            <span>เป้าหมายสะสม ไม่ได้บันทึก</span>
+                                                                        }
+                                                                    </dd>
+                                                                }
                                                             }
                                                             <dt class="col-3">วันที่แล้วเสร็จ</dt>
                                                             @if ((User.IsInRole("Admin") || (User.IsInRole("Manager") && user.OfficeId.Substring(0, 3) == "000" && Model.pointD[i].AuditOffice.Code == user.OfficeId)) && de?.Approve < Approve.ผษ_อนุมัติ)
@@ -5157,7 +5326,8 @@
                                                                 </dd>
                                                             }
                                                         } @* End ระดับ - ระดับ-ร้อยละ*@
-                                                        @if ((Model.pointD[i].OwnerOffice.Code.Substring(0, 3) == "000" && Model.pointD[i].OwnerOffice.Code == user.OfficeId) || (UserOffices.Any(uo => uo.Substring(0, 2) == "00" && Model.pointD[i].OwnerOffice.Code == uo) || (User.IsInRole("Admin") && Model.pointD[i].OwnerOffice.Code.Substring(0, 2) == "00")) && (Model.month == 3 || Model.month == 9))
+
+                                                        @if (Model.pointD[i].OwnerOffice.Code.Substring(0, 2) == "00" && (Model.month == 3 || Model.month == 9) && (Model.pointD[i].OwnerOffice.Code == user.OfficeId || UserOffices.Any(uo => uo.Substring(0, 2) == "00" && Model.pointD[i].OwnerOffice.Code == uo) || User.IsInRole("Admin")))
                                                         {
                                                             <dt class="col-12"><hr /><h3>รายงานปัญหาและอุปสรรค / แนวทางแก้ไข</h3></dt>
                                                             <dt class="col-3">ผลการดำเนินการ</dt>
@@ -5169,125 +5339,120 @@
                                                                 @if (Model.pointD[i].Unit == UnitOfPoint.ระดับ && Model.month == 3)
                                                                 {
                                                                     foreach (var rd in Model.pointD[i].Rounds)
+                                                                    {
+                                                                        if (rd.RoundNumber == 1)
                                                                         {
-                                                                            if (rd.RoundNumber == 1)
-                                                                            {
-                                                                                if (result == 1 && completedDate <= rd.Rate1MonthStop)
-                                                                                {
-                                                                                    scoreTarget = 5;
-                                                                                }
-                                                                                else if (result == 2 && completedDate <= rd.Rate2MonthStop)
-                                                                                {
-                                                                                    scoreTarget = 5;
-                                                                                }
-                                                                                else if (result == 3 && completedDate <= rd.Rate3MonthStop)
-                                                                                {
-                                                                                    scoreTarget = 5;
-                                                                                }
-                                                                                else if (result == 4 && completedDate <= rd.Rate4MonthStop)
-                                                                                {
-                                                                                    scoreTarget = 5;
-                                                                                }
-                                                                                else if (result == 5 && completedDate <= rd.Rate5MonthStop)
-                                                                                {
-                                                                                    scoreTarget = 5;
-                                                                                }
-                                                                                else
-                                                                                {
-                                                                                    scoreTarget = 0;
-                                                                                }
-                                                                            }
-                                                                        }
-                                                                        /*
-                                                                        foreach (var rd in Model.pointD[i].Rounds)
-                                                                        {
-                                                                            if (rd.RoundNumber == 1)
-                                                                            {
-                                                                                startDateList.Add(rd.Rate1MonthStart);
-                                                                                startDateList.Add(rd.Rate2MonthStart);
-                                                                                startDateList.Add(rd.Rate3MonthStart);
-                                                                                startDateList.Add(rd.Rate4MonthStart);
-                                                                                startDateList.Add(rd.Rate5MonthStart);
-
-                                                                                endDateList.Add(rd.Rate1MonthStop);
-                                                                                endDateList.Add(rd.Rate2MonthStop);
-                                                                                endDateList.Add(rd.Rate3MonthStop);
-                                                                                endDateList.Add(rd.Rate4MonthStop);
-                                                                                endDateList.Add(rd.Rate5MonthStop);
-
-                                                                                if (rd.Rate1MonthStart <= finishedDate && rd.Rate1MonthStop >= finishedDate)
-                                                                                {
-                                                                                    target = 1;
-                                                                                }
-                                                                                else if (rd.Rate2MonthStart <= finishedDate && rd.Rate2MonthStop >= finishedDate)
-                                                                                {
-                                                                                    target = 2;
-                                                                                }
-                                                                                else if (rd.Rate3MonthStart <= finishedDate && rd.Rate3MonthStop >= finishedDate)
-                                                                                {
-                                                                                    target = 3;
-                                                                                }
-                                                                                else if (rd.Rate4MonthStart <= finishedDate && rd.Rate4MonthStop >= finishedDate)
-                                                                                {
-                                                                                    target = 4;
-                                                                                }
-                                                                                else if (rd.Rate5MonthStart <= finishedDate && rd.Rate5MonthStop >= finishedDate)
-                                                                                {
-                                                                                    target = 5;
-                                                                                }
-                                                                                else
-                                                                                {
-                                                                                    target = 0;
-                                                                                }
-                                                                            }
-                                                                        }
-                                                                        if (scoreTarget > target)
-                                                                        {
-                                                                            scoreTarget = 5;
-                                                                        }
-                                                                        else if (scoreTarget == target)
-                                                                        {
-                                                                            if (target == 0)
-                                                                            {
-                                                                                scoreTarget = 0;
-                                                                            }
-                                                                            else
-                                                                            {
-                                                                                if (startDateList[(int)target - 1] <= completedDate && endDateList[(int)target - 1] >= completedDate)
-                                                                                {
-                                                                                    scoreTarget = 5;
-                                                                                }
-                                                                                else
-                                                                                {
-                                                                                    scoreTarget = 0;
-                                                                                }
-                                                                            }
-                                                                        }
-                                                                        else if (target == 0)
-                                                                        {
-                                                                            for (var ii = 1; ii < endDateList.Count; ii++)
-                                                                            {
-                                                                                if (completedDate <= endDateList[ii] && completedDate >= endDateList[ii - 1])
-                                                                                {
-                                                                                    target = ii - 1;
-                                                                                    break;
-                                                                                }
-                                                                            }
-
-                                                                            if (target < scoreTarget)
+                                                                            if (result == 1 && completedDate <= rd.Rate1MonthStop)
                                                                             {
                                                                                 scoreTarget = 5;
                                                                             }
-                                                                            else if (target == scoreTarget)
+                                                                            else if (result == 2 && completedDate <= rd.Rate2MonthStop)
                                                                             {
-                                                                                if (startDateList[(int)target] <= completedDate && endDateList[(int)target] >= completedDate)
-                                                                                {
-                                                                                    scoreTarget = 5;
-                                                                                }
-                                                                                else
-                                                                                {
-                                                                                    scoreTarget = 0;
-                                                                                }
+                                                                                scoreTarget = 5;
+                                                                            }
+                                                                            else if (result == 3 && completedDate <= rd.Rate3MonthStop)
+                                                                            {
+                                                                                scoreTarget = 5;
+                                                                            }
+                                                                            else if (result == 4 && completedDate <= rd.Rate4MonthStop)
+                                                                            {
+                                                                                scoreTarget = 5;
+                                                                            }
+                                                                            else if (result == 5 && completedDate <= rd.Rate5MonthStop)
+                                                                            {
+                                                                                scoreTarget = 5;
+                                                                            }
+                                                                            else
+                                                                            {
+                                                                                scoreTarget = 0;
+                                                                            }
+                                                                        }
+                                                                    }
+                                                                    /*
+                                                                    foreach (var rd in Model.pointD[i].Rounds)
+                                                                    {
+                                                                        if (rd.RoundNumber == 1)
+                                                                        {
+                                                                            startDateList.Add(rd.Rate1MonthStart);
+                                                                            startDateList.Add(rd.Rate2MonthStart);
+                                                                            startDateList.Add(rd.Rate3MonthStart);
+                                                                            startDateList.Add(rd.Rate4MonthStart);
+                                                                            startDateList.Add(rd.Rate5MonthStart);
+
+                                                                            endDateList.Add(rd.Rate1MonthStop);
+                                                                            endDateList.Add(rd.Rate2MonthStop);
+                                                                            endDateList.Add(rd.Rate3MonthStop);
+                                                                            endDateList.Add(rd.Rate4MonthStop);
+                                                                            endDateList.Add(rd.Rate5MonthStop);
+
+                                                                            if (rd.Rate1MonthStart <= finishedDate && rd.Rate1MonthStop >= finishedDate)
+                                                                            {
+                                                                                target = 1;
+                                                                            }
+                                                                            else if (rd.Rate2MonthStart <= finishedDate && rd.Rate2MonthStop >= finishedDate)
+                                                                            {
+                                                                                target = 2;
+                                                                            }
+                                                                            else if (rd.Rate3MonthStart <= finishedDate && rd.Rate3MonthStop >= finishedDate)
+                                                                            {
+                                                                                target = 3;
+                                                                            }
+                                                                            else if (rd.Rate4MonthStart <= finishedDate && rd.Rate4MonthStop >= finishedDate)
+                                                                            {
+                                                                                target = 4;
+                                                                            }
+                                                                            else if (rd.Rate5MonthStart <= finishedDate && rd.Rate5MonthStop >= finishedDate)
+                                                                            {
+                                                                                target = 5;
+                                                                            }
+                                                                            else
+                                                                            {
+                                                                                target = 0;
+                                                                            }
+                                                                        }
+                                                                    }
+                                                                    if (scoreTarget > target)
+                                                                    {
+                                                                        scoreTarget = 5;
+                                                                    }
+                                                                    else if (scoreTarget == target)
+                                                                    {
+                                                                        if (target == 0)
+                                                                        {
+                                                                            scoreTarget = 0;
+                                                                        }
+                                                                        else
+                                                                        {
+                                                                            if (startDateList[(int)target - 1] <= completedDate && endDateList[(int)target - 1] >= completedDate)
+                                                                            {
+                                                                                scoreTarget = 5;
+                                                                            }
+                                                                            else
+                                                                            {
+                                                                                scoreTarget = 0;
+                                                                            }
+                                                                        }
+                                                                    }
+                                                                    else if (target == 0)
+                                                                    {
+                                                                        for (var ii = 1; ii < endDateList.Count; ii++)
+                                                                        {
+                                                                            if (completedDate <= endDateList[ii] && completedDate >= endDateList[ii - 1])
+                                                                            {
+                                                                                target = ii - 1;
+                                                                                break;
+                                                                            }
+                                                                        }
+
+                                                                        if (target < scoreTarget)
+                                                                        {
+                                                                            scoreTarget = 5;
+                                                                        }
+                                                                        else if (target == scoreTarget)
+                                                                        {
+                                                                            if (startDateList[(int)target] <= completedDate && endDateList[(int)target] >= completedDate)
+                                                                            {
+                                                                                scoreTarget = 5;
                                                                             }
                                                                             else
                                                                             {
@@ -5298,31 +5463,36 @@
                                                                         {
                                                                             scoreTarget = 0;
                                                                         }
-                                                                        */
-                                                                    }
-
-
-                                                                    @if (scoreTarget >= 5)
-                                                                    {
-                                                                        <label class="checkbox-inline">
-                                                                            <input type="checkbox" checked disabled /> <span>เป็นไปตามแผน</span>
-                                                                        </label>
-                                                                        <label class="checkbox-inline">
-                                                                            <input type="checkbox" disabled /> <span>ไม่เป็นไปตามแผน</span>
-                                                                        </label>
-
                                                                     }
                                                                     else
                                                                     {
-                                                                        <label class="checkbox-inline">
-                                                                            <input type="checkbox" disabled /> <span>เป็นไปตามแผน</span>
-                                                                        </label>
-                                                                        <label class="checkbox-inline">
-                                                                            <input type="checkbox" checked disabled /> <span>ไม่เป็นไปตามแผน</span>
-                                                                        </label>
-
+                                                                        scoreTarget = 0;
                                                                     }
-                                                                </dd>
+                                                                    */
+                                                                }
+
+
+                                                                @if (scoreTarget >= 5)
+                                                                {
+                                                                    <label class="checkbox-inline">
+                                                                        <input type="checkbox" checked disabled /> <span>เป็นไปตามแผน</span>
+                                                                    </label>
+                                                                    <label class="checkbox-inline">
+                                                                        <input type="checkbox" disabled /> <span>ไม่เป็นไปตามแผน</span>
+                                                                    </label>
+
+                                                                }
+                                                                else
+                                                                {
+                                                                    <label class="checkbox-inline">
+                                                                        <input type="checkbox" disabled /> <span>เป็นไปตามแผน</span>
+                                                                    </label>
+                                                                    <label class="checkbox-inline">
+                                                                        <input type="checkbox" checked disabled /> <span>ไม่เป็นไปตามแผน</span>
+                                                                    </label>
+
+                                                                }
+                                                            </dd>
                                                             @if (Model.pointD[i].IssueForEvaluations != null)
                                                             {
                                                                 @foreach (var item in Model.pointD[i].IssueForEvaluations)
@@ -5352,7 +5522,7 @@
                                                     }
                                                     else
                                                     {
-                                                        if ((Model.pointD[i].OwnerOffice.Code.Substring(0, 3) == "000" && Model.pointD[i].OwnerOffice.Code == user.OfficeId) || (UserOffices.Any(uo => uo.Substring(0, 2) == "00" && Model.pointD[i].OwnerOffice.Code == uo)) && (Model.month == 3 || Model.month == 9))
+                                                        if (Model.pointD[i].OwnerOffice.Code.Substring(0, 2) == "00" && (Model.month == 3 || Model.month == 9) && (Model.pointD[i].OwnerOffice.Code == user.OfficeId || UserOffices.Any(uo => uo.Substring(0, 2) == "00" && Model.pointD[i].OwnerOffice.Code == uo) || User.IsInRole("Admin")))
                                                         {
                                                             @(Html.DevExtreme().Button()
                                                                .ID("button")
