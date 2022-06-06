@@ -182,7 +182,9 @@
             fields.Add()
                 .Caption("บันทึก")
                 .DataField("scoreValue")
-                .SummaryType(SummaryType.Avg)
+                .SummaryType(SummaryType.Custom)
+                .CalculateCustomSummary("calculateCustomSummary")
+                .CalculateSummaryValue("calculateSummaryValue")
                 .Format(f => f.Type(Format.FixedPoint).Precision(4))
                 .Area(PivotGridArea.Data)
                 .CustomizeText("customizeText");
@@ -277,7 +279,9 @@ fields.Add()
             fields.Add()
                 .Caption("บันทึก")
                 .DataField("scoreApprove")
-                .SummaryType(SummaryType.Avg)
+                .SummaryType(SummaryType.Custom)
+                .CalculateCustomSummary("calculateCustomSummary")
+                .CalculateSummaryValue("calculateSummaryValue")
                 .Format(f => f.Type(Format.FixedPoint).Precision(4))
                 .Area(PivotGridArea.Data)
                 .CustomizeText("customizeText");
@@ -331,6 +335,39 @@ fields.Add()
             var dataSource = e.component.getDataSource()
             dataSource.expandHeaderItem("row", ["B แผนงานตามนโยบายที่ถ่ายทอดไปยังหน่วยปฏิบัติ (Top - Down:)"]);
             dataSource.expandHeaderItem("column", [n]);
+        }
+
+        function calculateCustomSummary(args) {
+            switch (args.summaryProcess) {
+                case "start":
+                    // Initializing "totalValue" here
+                    args.totalValue = {
+                        sum: 0,
+                        count: 0,
+                        avg: 0
+                    };
+                    break;
+                case "calculate":
+                    if (args.value != 0) {
+                        args.totalValue.sum += args.value;
+                        args.totalValue.count++;
+                    }
+                    // Modifying "totalValue" here
+                    break;
+                case "finalize":
+                    // Assigning the final value to "totalValue" here
+                    args.totalValue.avg = args.totalValue.sum / args.totalValue.count;
+                    break;
+            }
+        }
+
+        function calculateSummaryValue(summaryCell) {
+            var value = summaryCell.value();
+            if (value) {
+                //var chd = summaryCell.children("row");
+                //The grandTotol row
+                return value.avg;
+            }
         }
     </script>
 }
