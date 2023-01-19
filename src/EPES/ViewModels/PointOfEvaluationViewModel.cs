@@ -13,7 +13,9 @@ namespace EPES.ViewModels
         public IEnumerable<PointOfEvaluation> pointB { get; set; }
         public IEnumerable<PointOfEvaluation> pointC { get; set; }
         public IEnumerable<PointOfEvaluation> pointD { get; set; }
-
+        public IEnumerable<PointOfEvaluation> pointFlagship { get; set; }
+        public IEnumerable<PointOfEvaluation> pointCascade { get; set; }
+        public IEnumerable<PointOfEvaluation> PointJointKPI { get; set; }
         public IEnumerable<PointOfEvaluation> PointList { get; set; }
 
         public PointOfEvaluation point{ get; set; }
@@ -23,6 +25,10 @@ namespace EPES.ViewModels
         public Round LRound2 { get; set; }
         public Round LRRound { get; set; }
         public Round LRRound2 { get; set; }
+        public Round Score1Round1 { get; set; }
+        public Round Score2Round1 { get; set; }
+        public Round Score1Round2 { get; set; }
+        public Round Score2Round2 { get; set; }
 
         [Display(Name = "จำนวนรอบ")]
         [Range(1, 2)]

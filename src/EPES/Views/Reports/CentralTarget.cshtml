@@ -84,8 +84,17 @@
         .Columns(cln =>
         {
             cln.Add().DataField("point").Caption("ตัวชี้วัด").Alignment(HorizontalAlignment.Center).Width(80).AllowSorting(false).Fixed(true);
-            cln.Add().DataField("expectPlan").Caption("เป้าประสงค์").Alignment(HorizontalAlignment.Center).Width(100).AllowSorting(false).Fixed(false);
-            cln.Add().DataField("ddrive").Caption("กลยุทธ์ D2rive").Alignment(HorizontalAlignment.Center).Width(120).AllowSorting(false).Fixed(false);
+            if(ViewBag.selectYear >= 2023)
+            {
+                cln.Add().DataField("theme").Caption("ทิศทาง (Theme)").Alignment(HorizontalAlignment.Center).Width(100).AllowSorting(false).Fixed(false);
+                cln.Add().DataField("end").Caption("เป้าหมาย (End)").Alignment(HorizontalAlignment.Center).Width(100).AllowSorting(false).Fixed(false);
+                cln.Add().DataField("way").Caption("กลยุทธ์ (Way)").Alignment(HorizontalAlignment.Center).Width(100).AllowSorting(false).Fixed(false);
+            } else
+            {
+                cln.Add().DataField("expectPlan").Caption("เป้าประสงค์").Alignment(HorizontalAlignment.Center).Width(100).AllowSorting(false).Fixed(false);
+                cln.Add().DataField("ddrive").Caption("กลยุทธ์ D2rive").Alignment(HorizontalAlignment.Center).Width(120).AllowSorting(false).Fixed(false);
+
+            }
             cln.Add().DataField("detailPlan").Caption("แผนงาน / โครงการ").MinWidth(300).AllowSorting(false).Fixed(false);
             cln.Add().DataField("target").Caption("ผลการดำเนินการ").Alignment(HorizontalAlignment.Center).Format(ff => { ff.Type(Format.FixedPoint); ff.Precision(2); }).Width(120).AllowSorting(false).Fixed(false);
             cln.Add().Caption("สถานะการดำเนินการ").Columns(c2 =>
@@ -105,78 +114,40 @@
     )
 
     </div>
-    <div class="row" style="font-size: small">
-        <div class="col-12"><b><u>หมายเหตุ: </u></b></div>
-        <div class="col-xs-12 col-md-6">
-            <b>เป้าประสงค์</b>
-            <ul>
-                <li>O1 กำหนดนโยบายภาษีให้มีความเหมาะสม เพื่อพัฒนาประเทศที่ยั่งยืน </li>
-                <li>O2 เพิ่มประสิทธิภาพการจัดเก็บภาษี </li>
-                <li>O3 บูรณาการข้อมูลรายได้ รายจ่าย </li>
-                <li>O4 พัฒนาการแนะนำ กำกับดูแล ตรวจสอบภาษีอากรที่มีประสิทธิภาพ </li>
-                <li>O5 การเสริมสร้างการปฏิบัติหน้าที่ทางภาษีอากรให้ถูกต้อง </li>
-                <li>O6 ปรับปรุงระเบียบ/กฎหมาย/แนวปฏิบัติครบคลุมและเข้าใจง่าย </li>
-                <li>O7 พัฒนาบริการที่ดี มุ่งสู่ประชาชน </li>
-                <li>O8 พัฒนาบุคลากร: เก่ง ดี มีความสุข </li>
-                <li>O9 พัฒนาองค์กรให้เป็น Smart Office </li>
-                <li>O10 ส่งเสริม Innovation Culture </li>
-                <li>O11 สื่อสารองค์กรเชิงรุก</li>
-            </ul>
-            <!--
-    <table border="1" class="table table-striped" style="width: 100%;">
-        <thead>
-            <tr>
-                <td>เป้าประสงค์</td>
-            </tr>
-        </thead>
-        <tbody>
-            <tr><td>O1 กำหนดนโยบายภาษีให้มีความเหมาะสม เพื่อพัฒนาประเทศที่ยั่งยืน </td></tr>
-            <tr><td>O2 เพิ่มประสิทธิภาพการจัดเก็บภาษี </td></tr>
-            <tr><td>O3 บูรณาการข้อมูลรายได้ รายจ่าย </td></tr>
-            <tr><td>O4 พัฒนาการแนะนำ กำกับดูแล ตรวจสอบภาษีอากรที่มีประสิทธิภาพ </td></tr>
-            <tr><td>O5 การเสริมสร้างการปฏิบัติหน้าที่ทางภาษีอากรให้ถูกต้อง </td></tr>
-            <tr><td>O6 ปรับปรุงระเบียบ/กฎหมาย/แนวปฏิบัติครบคลุมและเข้าใจง่าย </td></tr>
-            <tr><td>O7 พัฒนาบริการที่ดี มุ่งสู่ประชาชน </td></tr>
-            <tr><td>O8 พัฒนาบุคลากร: เก่ง ดี มีความสุข </td></tr>
-            <tr><td>O9 พัฒนาองค์กรให้เป็น Smart Office </td></tr>
-            <tr><td>O10 ส่งเสริม Innovation Culture </td></tr>
-            <tr><td>O11 สื่อสารองค์กรเชิงรุก</td></tr>
-        </tbody>
-    </table>
-    -->
+    @if (ViewBag.selectYear < 2023)
+    {
+        <div class="row" style="font-size: small">
+            <div class="col-12"><b><u>หมายเหตุ: </u></b></div>
+            <div class="col-xs-12 col-md-6">
+                <b>เป้าประสงค์</b>
+                <ul>
+                    <li>O1 กำหนดนโยบายภาษีให้มีความเหมาะสม เพื่อพัฒนาประเทศที่ยั่งยืน </li>
+                    <li>O2 เพิ่มประสิทธิภาพการจัดเก็บภาษี </li>
+                    <li>O3 บูรณาการข้อมูลรายได้ รายจ่าย </li>
+                    <li>O4 พัฒนาการแนะนำ กำกับดูแล ตรวจสอบภาษีอากรที่มีประสิทธิภาพ </li>
+                    <li>O5 การเสริมสร้างการปฏิบัติหน้าที่ทางภาษีอากรให้ถูกต้อง </li>
+                    <li>O6 ปรับปรุงระเบียบ/กฎหมาย/แนวปฏิบัติครบคลุมและเข้าใจง่าย </li>
+                    <li>O7 พัฒนาบริการที่ดี มุ่งสู่ประชาชน </li>
+                    <li>O8 พัฒนาบุคลากร: เก่ง ดี มีความสุข </li>
+                    <li>O9 พัฒนาองค์กรให้เป็น Smart Office </li>
+                    <li>O10 ส่งเสริม Innovation Culture </li>
+                    <li>O11 สื่อสารองค์กรเชิงรุก</li>
+                </ul>
+            </div>
+            <div class="col-xs-12 col-md-6">
+                <b>กลยุทธ์</b>
+                <ul>
+                    <li>D1 - Digital Transformation </li>
+                    <li>D2 - Data Analytics </li>
+                    <li>R - Revenue Collection </li>
+                    <li>I – Innovation </li>
+                    <li>V – Values </li>
+                    <li>E – Efficiency</li>
+                </ul>
+            </div>
         </div>
-        <div class="col-xs-12 col-md-6">
-            <b>กลยุทธ์</b>
-            <ul>
-                <li>D1 - Digital Transformation </li>
-                <li>D2 - Data Analytics </li>
-                <li>R - Revenue Collection </li>
-                <li>I – Innovation </li>
-                <li>V – Values </li>
-                <li>E – Efficiency</li>
-            </ul>
-            <!--
-    <table border="1" class="table table-striped" style="width: 100%;">
-        <thead>
-            <tr>
-                <td>
-                    กลยุทธ์
-                </td>
-            </tr>
-        </thead>
-        <tbody>
-            <tr><td>D - Digital Transformation </td></tr>
-            <tr><td>D - Data Analytics </td></tr>
-            <tr><td>R - Revenue Collection </td></tr>
-            <tr><td>I – Innovation </td></tr>
-            <tr><td>V – Values </td></tr>
-            <tr><td>E – Efficiency</td></tr>
-        </tbody>
-    </table>
 
-    -->
-        </div>
-    </div>
+    }
     <br />
     <br />
     <br />

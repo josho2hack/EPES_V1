@@ -61,51 +61,6 @@ namespace EPES.Controllers
                 yearForRequest = new DateTime(DateTime.Now.Year, 1, 1);
             }
 
-            //string url = "";
-            ////var m = DateTime.Now.Month;
-            //url = "http://10.20.37.11:7072/serviceTier/webapi/All/officeId/" + "00000000" + "/year/" + (yearForRequest.Year + 543).ToString("D4") + "/month/" + DateTime.Now.AddMinutes(-1).Month.ToString("D2");
-
-            //var webRequest = WebRequest.Create(url) as HttpWebRequest;
-
-            //if (webRequest != null)
-            //{
-            //    webRequest.ContentType = "application/json";
-            //    webRequest.UserAgent = "Nothing";
-            //    webRequest.Timeout = 5000;
-            //    try
-            //    {
-            //        using (var s = webRequest.GetResponse().GetResponseStream())
-            //        {
-            //            using (var sr = new StreamReader(s))
-            //            {
-            //                var taxCollectionsAsJson = sr.ReadToEnd();
-            //                var taxCollections = JsonConvert.DeserializeObject<Rootobject>(taxCollectionsAsJson);
-            //                foreach (var t in taxCollections.taxCollection)
-            //                {
-            //                    if (t.officeCode == "00000000")
-            //                    {
-            //                        continue;
-            //                    }
-            //                    CYcurrentYear += t.CYcurrentYear;
-            //                    CYforcast += t.CYforcast;
-            //                }
-            //            }
-            //        }
-            //    }
-            //    catch (WebException ex)
-            //    {
-            //        if (ex.Status == WebExceptionStatus.Timeout)
-            //        {
-            //            CYcurrentYear = 9999999;
-            //            CYforcast = 9999999;
-            //        }
-
-            //    }
-            //}
-
-            //ViewBag.CYcurrentYear = CYcurrentYear / 1000000;
-            //ViewBag.CYforcast = CYforcast / 1000000;
-
             //var approvedOffice = await _context.Scores.Where(s => s.Office.Code != "00000000" && s.Office.Code.Substring(5, 3) == "000" && s.LastMonth == DateTime.Now.AddMonths(-1).Month).Select(o => new { o.OfficeId }).Distinct().CountAsync();
             var entryOffice = await _context.ScoreDrafts.Where(s => s.Office.Code != "00000000" && s.Office.Code.Substring(5, 3) == "000" && s.LastMonth == DateTime.Now.AddMonths(-1).Month).Select(o => new { o.OfficeId }).Distinct().CountAsync();
 
@@ -407,8 +362,8 @@ namespace EPES.Controllers
             ViewBag.Entry = entryOffice;
 
 
-            decimal pointHQM1 = 2;
-            decimal pointNHQM1 = 1;
+            decimal pointHQM1 = 3;
+            decimal pointNHQM1 = 3;
 
             var expectHQ = await _context.DataForEvaluations.Where(s => s.PointOfEvaluation.Point == pointHQM1 && s.PointOfEvaluation.Year == yearForRequest && s.Office.Code == "00009000").Select(o => new { o.Expect }).SumAsync(s => s.Expect);
 
@@ -446,7 +401,6 @@ namespace EPES.Controllers
                 var m = DateTime.Now.AddMonths(-1).Month;
                 while (m >= 10)
                 {
-                    // expectNHQLastMonth += await _context.DataForEvaluations.Where(s => s.PointOfEvaluation.Point == 1 && s.PointOfEvaluation.Year == yearForRequest && s.Office.Code != "00009000" & s.Office.Code.Substring(2, 6) != "000000" && s.Office.Code.Substring(5, 3) == "000" && s.Month == m).Select(o => new { o.Expect }).SumAsync(s => s.Expect);
                     expectNHQLastMonth += await _context.DataForEvaluations.Where(s => s.PointOfEvaluation.Point == pointNHQM1 && s.PointOfEvaluation.Year == yearForRequest && s.Office.Code.Substring(0, 2) != "00" & s.Office.Code.Substring(2, 6) != "000000" && s.Office.Code.Substring(5, 3) == "000" && s.Month == m).Select(o => new { o.Expect }).SumAsync(s => s.Expect);
                     m -= 1;
                 }
@@ -456,14 +410,12 @@ namespace EPES.Controllers
                 var m = 12;
                 while (m >= 10)
                 {
-                    // expectNHQLastMonth += await _context.DataForEvaluations.Where(s => s.PointOfEvaluation.Point == 1 && s.PointOfEvaluation.Year == yearForRequest && s.Office.Code != "00009000" & s.Office.Code.Substring(2, 6) != "000000" && s.Office.Code.Substring(5, 3) == "000" && s.Month == m).Select(o => new { o.Expect }).SumAsync(s => s.Expect);
                     expectNHQLastMonth += await _context.DataForEvaluations.Where(s => s.PointOfEvaluation.Point == pointNHQM1 && s.PointOfEvaluation.Year == yearForRequest && s.Office.Code.Substring(0, 2) != "00" & s.Office.Code.Substring(2, 6) != "000000" && s.Office.Code.Substring(5, 3) == "000" && s.Month == m).Select(o => new { o.Expect }).SumAsync(s => s.Expect);
                     m -= 1;
                 }
                 m = 1;
                 while (m <= DateTime.Now.AddMonths(-1).Month)
                 {
-                    // expectNHQLastMonth += await _context.DataForEvaluations.Where(s => s.PointOfEvaluation.Point == 1 && s.PointOfEvaluation.Year == yearForRequest && s.Office.Code != "00009000" & s.Office.Code.Substring(2, 6) != "000000" && s.Office.Code.Substring(5, 3) == "000" && s.Month == m).Select(o => new { o.Expect }).SumAsync(s => s.Expect);
                     expectNHQLastMonth += await _context.DataForEvaluations.Where(s => s.PointOfEvaluation.Point == pointNHQM1 && s.PointOfEvaluation.Year == yearForRequest && s.Office.Code.Substring(0, 2) != "00" & s.Office.Code.Substring(2, 6) != "000000" && s.Office.Code.Substring(5, 3) == "000" && s.Month == m).Select(o => new { o.Expect }).SumAsync(s => s.Expect);
                     m += 1;
                 }
@@ -502,7 +454,6 @@ namespace EPES.Controllers
                 var m = DateTime.Now.AddMonths(-1).Month;
                 while (m >= 10)
                 {
-                    //resultNHQLastMonth += await _context.DataForEvaluations.Where(s => s.PointOfEvaluation.Point == 1 && s.PointOfEvaluation.Year == yearForRequest && s.Office.Code != "00009000" & s.Office.Code.Substring(2, 6) != "000000" && s.Office.Code.Substring(5, 3) == "000" && s.Month == m).Select(o => new { o.Result }).SumAsync(s => s.Result);
                     resultNHQLastMonth += await _context.DataForEvaluations.Where(s => s.PointOfEvaluation.Point == pointNHQM1 && s.PointOfEvaluation.Year == yearForRequest && s.Office.Code.Substring(0, 2) != "00" & s.Office.Code.Substring(2, 6) != "000000" && s.Office.Code.Substring(5, 3) == "000" && s.Month == m).Select(o => new { o.Result }).SumAsync(s => s.Result);
                     m -= 1;
                 }
@@ -512,14 +463,12 @@ namespace EPES.Controllers
                 var m = 12;
                 while (m >= 10)
                 {
-                    // resultNHQLastMonth += await _context.DataForEvaluations.Where(s => s.PointOfEvaluation.Point == 1 && s.PointOfEvaluation.Year == yearForRequest && s.Office.Code != "00009000" & s.Office.Code.Substring(2, 6) != "000000" && s.Office.Code.Substring(5, 3) == "000" && s.Month == m).Select(o => new { o.Result }).SumAsync(s => s.Result);
                     resultNHQLastMonth += await _context.DataForEvaluations.Where(s => s.PointOfEvaluation.Point == pointNHQM1 && s.PointOfEvaluation.Year == yearForRequest && s.Office.Code.Substring(0, 2) != "00" & s.Office.Code.Substring(2, 6) != "000000" && s.Office.Code.Substring(5, 3) == "000" && s.Month == m).Select(o => new { o.Result }).SumAsync(s => s.Result);
                     m -= 1;
                 }
                 m = 1;
                 while (m <= DateTime.Now.AddMonths(-1).Month)
                 {
-                    // resultNHQLastMonth += await _context.DataForEvaluations.Where(s => s.PointOfEvaluation.Point == 1 && s.PointOfEvaluation.Year == yearForRequest && s.Office.Code != "00009000" & s.Office.Code.Substring(2, 6) != "000000" && s.Office.Code.Substring(5, 3) == "000" && s.Month == m).Select(o => new { o.Result }).SumAsync(s => s.Result);
                     resultNHQLastMonth += await _context.DataForEvaluations.Where(s => s.PointOfEvaluation.Point == pointNHQM1 && s.PointOfEvaluation.Year == yearForRequest && s.Office.Code.Substring(0, 2) != "00" & s.Office.Code.Substring(2, 6) != "000000" && s.Office.Code.Substring(5, 3) == "000" && s.Month == m).Select(o => new { o.Result }).SumAsync(s => s.Result);
                     m += 1;
                 }
@@ -541,7 +490,7 @@ namespace EPES.Controllers
 
             //---------------หมวด 2 ----------------------
             
-            decimal pointM2 = 10;
+            decimal pointM2 = 13;
             var expectHQM2 = await _context.DataForEvaluations.Where(s => s.PointOfEvaluation.Point == pointM2 && s.PointOfEvaluation.Year == yearForRequest && s.Office.Code.Substring(0, 2) != "00" && s.Office.Code.Substring(2, 6) == "000000").Select(o => new { o.Expect }).SumAsync(s => s.Expect);
 
             var expectNHQM2 = await _context.DataForEvaluations.Where(s => s.PointOfEvaluation.Point == pointM2 && s.PointOfEvaluation.Year == yearForRequest && s.Office.Code.Substring(0, 2) != "00" && s.Office.Code.Substring(2, 6) != "000000" && s.Office.Code.Substring(5, 3) == "000").Select(o => new { o.Expect }).SumAsync(s => s.Expect);
@@ -552,7 +501,6 @@ namespace EPES.Controllers
                 var m = DateTime.Now.AddMonths(-1).Month;
                 while (m >= 10)
                 {
-                    //expectHQLastMonthM2 += await _context.DataForEvaluations.Where(s => s.PointOfEvaluation.Point == 10 && s.PointOfEvaluation.Year == yearForRequest && s.Office.Code.Substring(0, 3) != "000" && s.Office.Code.Substring(2, 6) == "000000" && s.Month == m).Select(o => new { o.Expect }).SumAsync(s => s.Expect);
                     expectHQLastMonthM2 += await _context.DataForEvaluations.Where(s => s.PointOfEvaluation.Point == pointM2 && s.PointOfEvaluation.Year == yearForRequest && s.Office.Code.Substring(0, 2) != "00" && s.Office.Code.Substring(2, 6) == "000000" && s.Month == m).Select(o => new { o.Expect }).SumAsync(s => s.Expect);
                     m -= 1;
                 }
@@ -562,14 +510,12 @@ namespace EPES.Controllers
                 var m = 12;
                 while (m >= 10)
                 {
-                    // expectHQLastMonthM2 += await _context.DataForEvaluations.Where(s => s.PointOfEvaluation.Point == 10 && s.PointOfEvaluation.Year == yearForRequest && s.Office.Code.Substring(0, 3) != "000" && s.Office.Code.Substring(2, 6) == "000000" && s.Month == m).Select(o => new { o.Expect }).SumAsync(s => s.Expect);
                     expectHQLastMonthM2 += await _context.DataForEvaluations.Where(s => s.PointOfEvaluation.Point == pointM2 && s.PointOfEvaluation.Year == yearForRequest && s.Office.Code.Substring(0, 2) != "00" && s.Office.Code.Substring(2, 6) == "000000" && s.Month == m).Select(o => new { o.Expect }).SumAsync(s => s.Expect);
                     m -= 1;
                 }
                 m = 1;
                 while (m <= DateTime.Now.AddMonths(-1).Month)
                 {
-                    // expectHQLastMonthM2 += await _context.DataForEvaluations.Where(s => s.PointOfEvaluation.Point == 10 && s.PointOfEvaluation.Year == yearForRequest && s.Office.Code.Substring(0, 3) != "000" && s.Office.Code.Substring(2, 6) == "000000" && s.Month == m).Select(o => new { o.Expect }).SumAsync(s => s.Expect);
                     expectHQLastMonthM2 += await _context.DataForEvaluations.Where(s => s.PointOfEvaluation.Point == pointM2 && s.PointOfEvaluation.Year == yearForRequest && s.Office.Code.Substring(0, 2) != "00" && s.Office.Code.Substring(2, 6) == "000000" && s.Month == m).Select(o => new { o.Expect }).SumAsync(s => s.Expect);
                     m += 1;
                 }
@@ -669,8 +615,8 @@ namespace EPES.Controllers
 
 
             //---------------หมวด 3 ----------------------
-            decimal pointHQM3 = 7;
-            decimal pointNHQM3 = 7;
+            decimal pointHQM3 = 8;
+            decimal pointNHQM3 = 10;
             var expectHQM3 = await _context.DataForEvaluations.Where(s => s.PointOfEvaluation.Point == pointHQM3 && s.PointOfEvaluation.Year == yearForRequest && s.Office.Code == "00009000").Select(o => new { o.Expect }).SumAsync(s => s.Expect);
 
             var expectNHQM3 = await _context.DataForEvaluations.Where(s => s.PointOfEvaluation.Point == pointNHQM3 && s.PointOfEvaluation.Year == yearForRequest && s.Office.Code.Substring(0, 2) != "00" && s.Office.Code.Substring(5, 3) == "000" && s.Office.Code.Substring(2, 6) != "000000").Select(o => new { o.Expect }).SumAsync(s => s.Expect);
@@ -707,7 +653,6 @@ namespace EPES.Controllers
                 var m = DateTime.Now.AddMonths(-1).Month;
                 while (m >= 10)
                 {
-                    //expectNHQLastMonthM3 += await _context.DataForEvaluations.Where(s => s.PointOfEvaluation.Point == 6 && s.PointOfEvaluation.Year == yearForRequest && s.Office.Code.Substring(0, 3) != "000" && s.Office.Code.Substring(5, 3) == "000" && s.Month == m).Select(o => new { o.Expect }).SumAsync(s => s.Expect);
                     expectNHQLastMonthM3 += await _context.DataForEvaluations.Where(s => s.PointOfEvaluation.Point == pointNHQM3 && s.PointOfEvaluation.Year == yearForRequest && s.Office.Code.Substring(0, 2) != "00" && s.Office.Code.Substring(5, 3) == "000" && s.Office.Code.Substring(2, 6) != "000000" && s.Month == m).Select(o => new { o.Expect }).SumAsync(s => s.Expect);
                     m -= 1;
                 }
@@ -717,14 +662,12 @@ namespace EPES.Controllers
                 var m = 12;
                 while (m >= 10)
                 {
-                    // expectNHQLastMonthM3 += await _context.DataForEvaluations.Where(s => s.PointOfEvaluation.Point == 6 && s.PointOfEvaluation.Year == yearForRequest && s.Office.Code.Substring(0, 3) != "000" && s.Office.Code.Substring(5, 3) == "000" && s.Month == m).Select(o => new { o.Expect }).SumAsync(s => s.Expect);
                     expectNHQLastMonthM3 += await _context.DataForEvaluations.Where(s => s.PointOfEvaluation.Point == pointNHQM3 && s.PointOfEvaluation.Year == yearForRequest && s.Office.Code.Substring(0, 3) != "000" && s.Office.Code.Substring(5, 3) == "000" && s.Office.Code.Substring(2, 6) != "000000" && s.Month == m).Select(o => new { o.Expect }).SumAsync(s => s.Expect);
                     m -= 1;
                 }
                 m = 1;
                 while (m <= DateTime.Now.AddMonths(-1).Month)
                 {
-                    // expectNHQLastMonthM3 += await _context.DataForEvaluations.Where(s => s.PointOfEvaluation.Point == 6 && s.PointOfEvaluation.Year == yearForRequest && s.Office.Code.Substring(0, 3) != "000" && s.Office.Code.Substring(5, 3) == "000" && s.Month == m).Select(o => new { o.Expect }).SumAsync(s => s.Expect);
                     expectNHQLastMonthM3 += await _context.DataForEvaluations.Where(s => s.PointOfEvaluation.Point == pointNHQM3 && s.PointOfEvaluation.Year == yearForRequest && s.Office.Code.Substring(0, 3) != "000" && s.Office.Code.Substring(5, 3) == "000" && s.Office.Code.Substring(2, 6) != "000000" && s.Month == m).Select(o => new { o.Expect }).SumAsync(s => s.Expect);
                     m += 1;
                 }
@@ -763,7 +706,6 @@ namespace EPES.Controllers
                 var m = DateTime.Now.AddMonths(-1).Month;
                 while (m >= 10)
                 {
-                    // resultNHQLastMonthM3 += await _context.DataForEvaluations.Where(s => s.PointOfEvaluation.Point == 6 && s.PointOfEvaluation.Year == yearForRequest && s.Office.Code.Substring(0, 3) != "000" && s.Office.Code.Substring(5, 3) == "000" && s.Month == m).Select(o => new { o.Result }).SumAsync(s => s.Result);
                     resultNHQLastMonthM3 += await _context.DataForEvaluations.Where(s => s.PointOfEvaluation.Point == pointNHQM3 && s.PointOfEvaluation.Year == yearForRequest && s.Office.Code.Substring(0, 3) != "000" && s.Office.Code.Substring(5, 3) == "000" && s.Office.Code.Substring(2, 6) != "000000" && s.Month == m).Select(o => new { o.Result }).SumAsync(s => s.Result);
                     m -= 1;
                 }
@@ -773,14 +715,12 @@ namespace EPES.Controllers
                 var m = 12;
                 while (m >= 10)
                 {
-                    //resultNHQLastMonthM3 += await _context.DataForEvaluations.Where(s => s.PointOfEvaluation.Point == 6 && s.PointOfEvaluation.Year == yearForRequest && s.Office.Code.Substring(0, 3) != "000" && s.Office.Code.Substring(5, 3) == "000" && s.Month == m).Select(o => new { o.Result }).SumAsync(s => s.Result);
                     resultNHQLastMonthM3 += await _context.DataForEvaluations.Where(s => s.PointOfEvaluation.Point == pointNHQM3 && s.PointOfEvaluation.Year == yearForRequest && s.Office.Code.Substring(0, 3) != "000" && s.Office.Code.Substring(5, 3) == "000" && s.Office.Code.Substring(2, 6) != "000000" && s.Month == m).Select(o => new { o.Result }).SumAsync(s => s.Result);
                     m -= 1;
                 }
                 m = 1;
                 while (m <= DateTime.Now.AddMonths(-1).Month)
                 {
-                    //resultNHQLastMonthM3 += await _context.DataForEvaluations.Where(s => s.PointOfEvaluation.Point == 6 && s.PointOfEvaluation.Year == yearForRequest && s.Office.Code.Substring(0, 3) != "000" && s.Office.Code.Substring(5, 3) == "000" && s.Month == m).Select(o => new { o.Result }).SumAsync(s => s.Result);
                     resultNHQLastMonthM3 += await _context.DataForEvaluations.Where(s => s.PointOfEvaluation.Point == pointNHQM3 && s.PointOfEvaluation.Year == yearForRequest && s.Office.Code.Substring(0, 3) != "000" && s.Office.Code.Substring(5, 3) == "000" && s.Office.Code.Substring(2, 6) != "000000" && s.Month == m).Select(o => new { o.Result }).SumAsync(s => s.Result);
                     m += 1;
                 }
@@ -803,7 +743,7 @@ namespace EPES.Controllers
 
 
             //---------------หมวด 4 ----------------------
-            decimal pointM4 = 9;
+            decimal pointM4 = 12;
             var expectHQM4 = await _context.DataForEvaluations.Where(s => s.PointOfEvaluation.Point == pointM4 && s.PointOfEvaluation.Year == yearForRequest && s.Office.Code.Substring(0, 3) != "000" && s.Office.Code.Substring(2, 6) == "000000").Select(o => new { o.Expect }).SumAsync(s => s.Expect);
 
             var expectNHQM4 = await _context.DataForEvaluations.Where(s => s.PointOfEvaluation.Point == pointM4 && s.PointOfEvaluation.Year == yearForRequest && s.Office.Code.Substring(0, 3) != "000" && s.Office.Code.Substring(2, 6) != "000000" && s.Office.Code.Substring(5, 3) == "000").Select(o => new { o.Expect }).SumAsync(s => s.Expect);
@@ -928,8 +868,8 @@ namespace EPES.Controllers
 
 
             //---------------หมวด 5----------------------
-            decimal pointHQM5 = 9;
-            decimal pointNHQM5 = 13;
+            decimal pointHQM5 = 10;
+            decimal pointNHQM5 = 16;
             List<string> pakHQM = new List<string>() { "01", "02", "03" };
             var expectHQM5 = await _context.DataForEvaluations.Where(s => s.PointOfEvaluation.Year == yearForRequest && ((s.PointOfEvaluation.Point == pointHQM5 && s.Office.Code == "00009000") || (s.PointOfEvaluation.Point == pointNHQM5 && pakHQM.Contains(s.Office.Code.Substring(0, 2)) && s.Office.Code.Substring(5, 3) == "000" && s.Office.Code.Substring(2, 6) != "000000"))).Select(o => new { o.Expect }).SumAsync(s => s.Expect);
 
@@ -967,7 +907,6 @@ namespace EPES.Controllers
                 var m = DateTime.Now.AddMonths(-1).Month;
                 while (m >= 10)
                 {
-                    // expectNHQLastMonthM5 += await _context.DataForEvaluations.Where(s => s.PointOfEvaluation.Point == 13 && s.PointOfEvaluation.Year == yearForRequest && s.Office.Code.Substring(0, 3) != "000" && s.Office.Code.Substring(5, 3) == "000" && s.Month == m).Select(o => new { o.Expect }).SumAsync(s => s.Expect);
                     expectNHQLastMonthM5 += await _context.DataForEvaluations.Where(s => s.PointOfEvaluation.Point == pointNHQM5 && s.PointOfEvaluation.Year == yearForRequest && s.Office.Code.Substring(0, 3) != "000" && !pakHQM.Contains(s.Office.Code.Substring(0, 2)) && s.Office.Code.Substring(5, 3) == "000" && s.Office.Code.Substring(2, 6) != "000000" && s.Month == m).Select(o => new { o.Expect }).SumAsync(s => s.Expect);
                     m -= 1;
                 }
@@ -977,14 +916,12 @@ namespace EPES.Controllers
                 var m = 12;
                 while (m >= 10)
                 {
-                    // expectNHQLastMonthM5 += await _context.DataForEvaluations.Where(s => s.PointOfEvaluation.Point == 13 && s.PointOfEvaluation.Year == yearForRequest && s.Office.Code.Substring(0, 3) != "000" && s.Office.Code.Substring(5, 3) == "000" && s.Month == m).Select(o => new { o.Expect }).SumAsync(s => s.Expect);
                     expectNHQLastMonthM5 += await _context.DataForEvaluations.Where(s => s.PointOfEvaluation.Point == pointNHQM5 && s.PointOfEvaluation.Year == yearForRequest && s.Office.Code.Substring(0, 3) != "000" && !pakHQM.Contains(s.Office.Code.Substring(0, 2)) && s.Office.Code.Substring(5, 3) == "000" & s.Office.Code.Substring(2, 6) != "000000" && s.Month == m).Select(o => new { o.Expect }).SumAsync(s => s.Expect);
                     m -= 1;
                 }
                 m = 1;
                 while (m <= DateTime.Now.AddMonths(-1).Month)
                 {
-                    // expectNHQLastMonthM5 += await _context.DataForEvaluations.Where(s => s.PointOfEvaluation.Point == 13 && s.PointOfEvaluation.Year == yearForRequest && s.Office.Code.Substring(0, 3) != "000" && s.Office.Code.Substring(5, 3) == "000" && s.Month == m).Select(o => new { o.Expect }).SumAsync(s => s.Expect);
                     expectNHQLastMonthM5 += await _context.DataForEvaluations.Where(s => s.PointOfEvaluation.Point == pointNHQM5 && s.PointOfEvaluation.Year == yearForRequest && s.Office.Code.Substring(0, 3) != "000" && !pakHQM.Contains(s.Office.Code.Substring(0, 2)) && s.Office.Code.Substring(5, 3) == "000" & s.Office.Code.Substring(2, 6) != "000000" && s.Month == m).Select(o => new { o.Expect }).SumAsync(s => s.Expect);
                     m += 1;
                 }
@@ -1023,7 +960,6 @@ namespace EPES.Controllers
                 var m = DateTime.Now.AddMonths(-1).Month;
                 while (m >= 10)
                 {
-                    // resultNHQLastMonthM5 += await _context.DataForEvaluations.Where(s => s.PointOfEvaluation.Point == 13 && s.PointOfEvaluation.Year == yearForRequest && s.Office.Code.Substring(0, 3) != "000" && s.Office.Code.Substring(5, 3) == "000" && s.Month == m).Select(o => new { o.Result }).SumAsync(s => s.Result);
                     resultNHQLastMonthM5 += await _context.DataForEvaluations.Where(s => s.PointOfEvaluation.Point == pointNHQM5 && s.PointOfEvaluation.Year == yearForRequest && s.Office.Code.Substring(0, 3) != "000" && !pakHQM.Contains(s.Office.Code.Substring(0, 2)) && s.Office.Code.Substring(5, 3) == "000" && s.Office.Code.Substring(2, 6) != "000000" && s.Month == m).Select(o => new { o.Result }).SumAsync(s => s.Result);
                     m -= 1;
                 }
@@ -1033,14 +969,12 @@ namespace EPES.Controllers
                 var m = 12;
                 while (m >= 10)
                 {
-                    // resultNHQLastMonthM5 += await _context.DataForEvaluations.Where(s => s.PointOfEvaluation.Point == 13 && s.PointOfEvaluation.Year == yearForRequest && s.Office.Code.Substring(0, 3) != "000" && s.Office.Code.Substring(5, 3) == "000" && s.Month == m).Select(o => new { o.Result }).SumAsync(s => s.Result);
                     resultNHQLastMonthM5 += await _context.DataForEvaluations.Where(s => s.PointOfEvaluation.Point == pointNHQM5 && s.PointOfEvaluation.Year == yearForRequest && s.Office.Code.Substring(0, 3) != "000" && !pakHQM.Contains(s.Office.Code.Substring(0, 2)) && s.Office.Code.Substring(5, 3) == "000" && s.Office.Code.Substring(2, 6) != "000000" && s.Month == m).Select(o => new { o.Result }).SumAsync(s => s.Result);
                     m -= 1;
                 }
                 m = 1;
                 while (m <= DateTime.Now.AddMonths(-1).Month)
                 {
-                    // resultNHQLastMonthM5 += await _context.DataForEvaluations.Where(s => s.PointOfEvaluation.Point == 13 && s.PointOfEvaluation.Year == yearForRequest && s.Office.Code.Substring(0, 3) != "000" && s.Office.Code.Substring(5, 3) == "000" && s.Month == m).Select(o => new { o.Result }).SumAsync(s => s.Result);
                     resultNHQLastMonthM5 += await _context.DataForEvaluations.Where(s => s.PointOfEvaluation.Point == pointNHQM5 && s.PointOfEvaluation.Year == yearForRequest && s.Office.Code.Substring(0, 3) != "000" && !pakHQM.Contains(s.Office.Code.Substring(0, 2)) && s.Office.Code.Substring(5, 3) == "000" && s.Office.Code.Substring(2, 6) != "000000" && s.Month == m).Select(o => new { o.Result }).SumAsync(s => s.Result);
                     m += 1;
                 }
@@ -1062,12 +996,10 @@ namespace EPES.Controllers
 
 
             //---------------หมวด 6----------------------
-            // var expectHQM6 = await _context.DataForEvaluations.Where(s => s.PointOfEvaluation.Point == 15 && s.PointOfEvaluation.Year == yearForRequest && s.Office.Code.Substring(0, 3) != "000" && s.Office.Code.Substring(2, 6) == "000000").Select(o => new { o.Expect }).SumAsync(s => s.Expect);
             // only pak 1- 3
-            decimal pointM6 = 16;
+            decimal pointM6 = 19;
             var expectHQM6 = await _context.DataForEvaluations.Where(s => s.PointOfEvaluation.Point == pointM6 && s.PointOfEvaluation.Year == yearForRequest && (s.Office.Code.Substring(0, 2) == "01" || s.Office.Code.Substring(0, 2) == "02" || s.Office.Code.Substring(0, 2) == "03") && s.Office.Code.Substring(2, 6) == "000000").Select(o => new { o.Expect }).SumAsync(s => s.Expect);
 
-            // var expectNHQM6 = await _context.DataForEvaluations.Where(s => s.PointOfEvaluation.Point == 15 && s.PointOfEvaluation.Year == yearForRequest && s.Office.Code.Substring(0, 3) != "000" && s.Office.Code.Substring(2, 6) != "000000" && s.Office.Code.Substring(5, 3) == "000").Select(o => new { o.Expect }).SumAsync(s => s.Expect);
             // pak 4 - 12 and region in pak
             var expectNHQM6 = await _context.DataForEvaluations.Where(s => s.PointOfEvaluation.Point == pointM6 && s.PointOfEvaluation.Year == yearForRequest && s.Office.Code.Substring(0, 2) != "01" && s.Office.Code.Substring(0, 2) != "02" && s.Office.Code.Substring(0, 2) != "03" && s.Office.Code.Substring(0, 2) != "00").Select(o => new { o.Expect }).SumAsync(s => s.Expect);
 
@@ -1078,7 +1010,6 @@ namespace EPES.Controllers
                 var m = DateTime.Now.AddMonths(-1).Month;
                 while (m >= 10)
                 {
-                    // expectHQLastMonthM6 += await _context.DataForEvaluations.Where(s => s.PointOfEvaluation.Point == 15 && s.PointOfEvaluation.Year == yearForRequest && s.Office.Code.Substring(0, 3) != "000" && s.Office.Code.Substring(2, 6) == "000000" && s.Month == m).Select(o => new { o.Expect }).SumAsync(s => s.Expect);
                     expectHQLastMonthM6 += await _context.DataForEvaluations.Where(s => s.PointOfEvaluation.Point == pointM6 && s.PointOfEvaluation.Year == yearForRequest && (s.Office.Code.Substring(0, 2) == "01" || s.Office.Code.Substring(0, 2) == "02" || s.Office.Code.Substring(0, 2) == "03") && s.Office.Code.Substring(2, 6) == "000000" && s.Month == m).Select(o => new { o.Expect }).SumAsync(s => s.Expect);
                     m -= 1;
                 }
@@ -1088,14 +1019,12 @@ namespace EPES.Controllers
                 var m = 12;
                 while (m >= 10)
                 {
-                    // expectHQLastMonthM6 += await _context.DataForEvaluations.Where(s => s.PointOfEvaluation.Point == 15 && s.PointOfEvaluation.Year == yearForRequest && s.Office.Code.Substring(0, 3) != "000" && s.Office.Code.Substring(2, 6) == "000000" && s.Month == m).Select(o => new { o.Expect }).SumAsync(s => s.Expect);
                     expectHQLastMonthM6 += await _context.DataForEvaluations.Where(s => s.PointOfEvaluation.Point == pointM6 && s.PointOfEvaluation.Year == yearForRequest && (s.Office.Code.Substring(0, 2) == "01" || s.Office.Code.Substring(0, 2) == "02" || s.Office.Code.Substring(0, 2) == "03") && s.Office.Code.Substring(2, 6) == "000000" && s.Month == m).Select(o => new { o.Expect }).SumAsync(s => s.Expect);
                     m -= 1;
                 }
                 m = 1;
                 while (m <= DateTime.Now.AddMonths(-1).Month)
                 {
-                    // expectHQLastMonthM6 += await _context.DataForEvaluations.Where(s => s.PointOfEvaluation.Point == 15 && s.PointOfEvaluation.Year == yearForRequest && s.Office.Code.Substring(0, 3) != "000" && s.Office.Code.Substring(2, 6) == "000000" && s.Month == m).Select(o => new { o.Expect }).SumAsync(s => s.Expect);
                     expectHQLastMonthM6 += await _context.DataForEvaluations.Where(s => s.PointOfEvaluation.Point == pointM6 && s.PointOfEvaluation.Year == yearForRequest && (s.Office.Code.Substring(0, 2) == "01" || s.Office.Code.Substring(0, 2) == "02" || s.Office.Code.Substring(0, 2) == "03") && s.Office.Code.Substring(2, 6) == "000000" && s.Month == m).Select(o => new { o.Expect }).SumAsync(s => s.Expect);
                     m += 1;
                 }
@@ -1107,7 +1036,6 @@ namespace EPES.Controllers
                 var m = DateTime.Now.AddMonths(-1).Month;
                 while (m >= 10)
                 {
-                    // expectNHQLastMonthM6 += await _context.DataForEvaluations.Where(s => s.PointOfEvaluation.Point == 15 && s.PointOfEvaluation.Year == yearForRequest && s.Office.Code.Substring(0, 3) != "000" && s.Office.Code.Substring(2, 6) != "000000" && s.Office.Code.Substring(5, 3) == "000" && s.Month == m).Select(o => new { o.Expect }).SumAsync(s => s.Expect);
                     expectNHQLastMonthM6 += await _context.DataForEvaluations.Where(s => s.PointOfEvaluation.Point == pointM6 && s.PointOfEvaluation.Year == yearForRequest && s.Office.Code.Substring(0, 2) != "01" && s.Office.Code.Substring(0, 2) != "02" && s.Office.Code.Substring(0, 2) != "03" && s.Office.Code.Substring(0, 2) != "00" && s.Month == m).Select(o => new { o.Expect }).SumAsync(s => s.Expect);
                     m -= 1;
                 }
@@ -1117,14 +1045,12 @@ namespace EPES.Controllers
                 var m = 12;
                 while (m >= 10)
                 {
-                    // expectNHQLastMonthM6 += await _context.DataForEvaluations.Where(s => s.PointOfEvaluation.Point == 15 && s.PointOfEvaluation.Year == yearForRequest && s.Office.Code.Substring(0, 3) != "000" && s.Office.Code.Substring(2, 6) != "000000" && s.Office.Code.Substring(5, 3) == "000" && s.Month == m).Select(o => new { o.Expect }).SumAsync(s => s.Expect);
                     expectNHQLastMonthM6 += await _context.DataForEvaluations.Where(s => s.PointOfEvaluation.Point == pointM6 && s.PointOfEvaluation.Year == yearForRequest && s.Office.Code.Substring(0, 2) != "01" && s.Office.Code.Substring(0, 2) != "02" && s.Office.Code.Substring(0, 2) != "03" && s.Office.Code.Substring(0, 2) != "00" && s.Month == m).Select(o => new { o.Expect }).SumAsync(s => s.Expect);
                     m -= 1;
                 }
                 m = 1;
                 while (m <= DateTime.Now.AddMonths(-1).Month)
                 {
-                    // expectNHQLastMonthM6 += await _context.DataForEvaluations.Where(s => s.PointOfEvaluation.Point == 15 && s.PointOfEvaluation.Year == yearForRequest && s.Office.Code.Substring(0, 3) != "000" && s.Office.Code.Substring(2, 6) != "000000" && s.Office.Code.Substring(5, 3) == "000" && s.Month == m).Select(o => new { o.Expect }).SumAsync(s => s.Expect);
                     expectNHQLastMonthM6 += await _context.DataForEvaluations.Where(s => s.PointOfEvaluation.Point == pointM6 && s.PointOfEvaluation.Year == yearForRequest && s.Office.Code.Substring(0, 2) != "01" && s.Office.Code.Substring(0, 2) != "02" && s.Office.Code.Substring(0, 2) != "03" && s.Office.Code.Substring(0, 2) != "00" && s.Month == m).Select(o => new { o.Expect }).SumAsync(s => s.Expect);
                     m += 1;
                 }
@@ -1137,7 +1063,6 @@ namespace EPES.Controllers
                 var m = DateTime.Now.AddMonths(-1).Month;
                 while (m >= 10)
                 {
-                    // resultHQLastMonthM6 += await _context.DataForEvaluations.Where(s => s.PointOfEvaluation.Point == 15 && s.PointOfEvaluation.Year == yearForRequest && s.Office.Code.Substring(0, 3) != "000" && s.Office.Code.Substring(2, 6) == "000000" && s.Month == m).Select(o => new { o.Result }).SumAsync(s => s.Result);
                     resultHQLastMonthM6 += await _context.DataForEvaluations.Where(s => s.PointOfEvaluation.Point == pointM6 && s.PointOfEvaluation.Year == yearForRequest && (s.Office.Code == "01000000" || s.Office.Code == "02000000" || s.Office.Code == "03000000") && s.Month == m).Select(o => new { o.Result }).SumAsync(s => s.Result);
                     m -= 1;
                 }
@@ -1147,14 +1072,12 @@ namespace EPES.Controllers
                 var m = 12;
                 while (m >= 10)
                 {
-                    // resultHQLastMonthM6 += await _context.DataForEvaluations.Where(s => s.PointOfEvaluation.Point == 15 && s.PointOfEvaluation.Year == yearForRequest && s.Office.Code.Substring(0, 3) != "000" && s.Office.Code.Substring(2, 6) == "000000" && s.Month == m).Select(o => new { o.Result }).SumAsync(s => s.Result);
                     resultHQLastMonthM6 += await _context.DataForEvaluations.Where(s => s.PointOfEvaluation.Point == pointM6 && s.PointOfEvaluation.Year == yearForRequest && (s.Office.Code == "01000000" || s.Office.Code == "02000000" || s.Office.Code == "03000000") && s.Month == m).Select(o => new { o.Result }).SumAsync(s => s.Result);
                     m -= 1;
                 }
                 m = 1;
                 while (m <= DateTime.Now.AddMonths(-1).Month)
                 {
-                    // resultHQLastMonthM6 += await _context.DataForEvaluations.Where(s => s.PointOfEvaluation.Point == 15 && s.PointOfEvaluation.Year == yearForRequest && s.Office.Code.Substring(0, 3) != "000" && s.Office.Code.Substring(2, 6) == "000000" && s.Month == m).Select(o => new { o.Result }).SumAsync(s => s.Result);
                     resultHQLastMonthM6 += await _context.DataForEvaluations.Where(s => s.PointOfEvaluation.Point == pointM6 && s.PointOfEvaluation.Year == yearForRequest && (s.Office.Code == "01000000" || s.Office.Code == "02000000" || s.Office.Code == "03000000") && s.Month == m).Select(o => new { o.Result }).SumAsync(s => s.Result);
                     m += 1;
                 }
@@ -1166,7 +1089,6 @@ namespace EPES.Controllers
                 var m = DateTime.Now.AddMonths(-1).Month;
                 while (m >= 10)
                 {
-                    // resultNHQLastMonthM6 += await _context.DataForEvaluations.Where(s => s.PointOfEvaluation.Point == 15 && s.PointOfEvaluation.Year == yearForRequest && s.Office.Code.Substring(0, 3) != "000" && s.Office.Code.Substring(2, 6) != "000000" && s.Office.Code.Substring(5, 3) == "000" && s.Month == m).Select(o => new { o.Result }).SumAsync(s => s.Result);
                     resultNHQLastMonthM6 += await _context.DataForEvaluations.Where(s => s.PointOfEvaluation.Point == pointM6 && s.PointOfEvaluation.Year == yearForRequest && s.Office.Code.Substring(0, 2) != "01" && s.Office.Code.Substring(0, 2) != "02" && s.Office.Code.Substring(0, 2) != "03" && s.Office.Code.Substring(0, 2) != "00" && s.Month == m).Select(o => new { o.Result }).SumAsync(s => s.Result);
                     m -= 1;
                 }
@@ -1176,14 +1098,12 @@ namespace EPES.Controllers
                 var m = 12;
                 while (m >= 10)
                 {
-                    // resultNHQLastMonthM6 += await _context.DataForEvaluations.Where(s => s.PointOfEvaluation.Point == 15 && s.PointOfEvaluation.Year == yearForRequest && s.Office.Code.Substring(0, 3) != "000" && s.Office.Code.Substring(2, 6) != "000000" && s.Office.Code.Substring(5, 3) == "000" && s.Month == m).Select(o => new { o.Result }).SumAsync(s => s.Result);
                     resultNHQLastMonthM6 += await _context.DataForEvaluations.Where(s => s.PointOfEvaluation.Point == pointM6 && s.PointOfEvaluation.Year == yearForRequest && s.Office.Code.Substring(0, 2) != "01" && s.Office.Code.Substring(0, 2) != "02" && s.Office.Code.Substring(0, 2) != "03" && s.Office.Code.Substring(0, 2) != "00" && s.Month == m).Select(o => new { o.Result }).SumAsync(s => s.Result);
                     m -= 1;
                 }
                 m = 1;
                 while (m <= DateTime.Now.AddMonths(-1).Month)
                 {
-                    // resultNHQLastMonthM6 += await _context.DataForEvaluations.Where(s => s.PointOfEvaluation.Point == 15 && s.PointOfEvaluation.Year == yearForRequest && s.Office.Code.Substring(0, 3) != "000" && s.Office.Code.Substring(2, 6) != "000000" && s.Office.Code.Substring(5, 3) == "000" && s.Month == m).Select(o => new { o.Result }).SumAsync(s => s.Result);
                     resultNHQLastMonthM6 += await _context.DataForEvaluations.Where(s => s.PointOfEvaluation.Point == pointM6 && s.PointOfEvaluation.Year == yearForRequest && s.Office.Code.Substring(0, 2) != "01" && s.Office.Code.Substring(0, 2) != "02" && s.Office.Code.Substring(0, 2) != "03" && s.Office.Code.Substring(0, 2) != "00" && s.Month == m).Select(o => new { o.Result }).SumAsync(s => s.Result);
                     m += 1;
                 }

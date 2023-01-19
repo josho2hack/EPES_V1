@@ -65,7 +65,9 @@ namespace EPES.Controllers
                 }
             }
 
-            var scoreDrafts = _context.ScoreDrafts.Include(p => p.PointOfEvaluation).Include(d => d.PointOfEvaluation.DataForEvaluations).Include(p => p.Office).Where(sd => sd.Office.Code == office && sd.PointOfEvaluation.SubPoint == 0 && sd.PointOfEvaluation.Year == yearForQuery && sd.ScoreValue > 0);
+            //var scoreDrafts = _context.ScoreDrafts.Include(p => p.PointOfEvaluation).Include(d => d.PointOfEvaluation.DataForEvaluations).Include(p => p.Office).Where(sd => sd.Office.Code == office && sd.PointOfEvaluation.SubPoint == 0 && sd.PointOfEvaluation.Year == yearForQuery && sd.ScoreValue > 0);
+
+            var scoreDrafts = _context.ScoreDrafts.Include(p => p.PointOfEvaluation).Include(d => d.PointOfEvaluation.DataForEvaluations).Include(p => p.Office).Where(sd => sd.Office.Code == office && sd.PointOfEvaluation.SubPoint == 0 && sd.PointOfEvaluation.Year == yearForQuery).OrderBy(pp => (int)pp.PointOfEvaluation.Plan).ThenBy(pp => pp.PointOfEvaluation.Point);
 
             //List<ScoreDraft> scoreTemp = new List<ScoreDraft>();
 
@@ -90,7 +92,7 @@ namespace EPES.Controllers
                 //scoreTemp.Add(item);
             }
 
-            var score = scoreDrafts.Select(i => new
+            var score = scoreDrafts.Where(sd => sd.weightOfMonth != 0).Select(i => new
             {
                 i.Id,
                 i.PointOfEvaluation.Plan,
@@ -105,7 +107,8 @@ namespace EPES.Controllers
                 calApprove = !i.PointOfEvaluation.WeightAll ?  (i.weightOfMonth * i.ScoreApprove / 100) : (i.PointOfEvaluation.Weight * i.ScoreValue / 100),
                 i.weightOfMonth,
                 officeName = i.Office.Name
-            });
+            }).OrderBy(pp => (int)pp.Plan).ThenBy(pp => pp.Point);
+
 
 
             return Json(await DataSourceLoader.LoadAsync(score, loadOptions));

@@ -7,21 +7,10 @@
     ViewData["Title"] = "Create";
     var user = await UserManager.GetUserAsync(User);
 
-    var yearStart = 0;
-    var yearMid = 0;
-    var yearStop = 0;
-    if (DateTime.Now.Month == 10 || DateTime.Now.Month == 11 || DateTime.Now.Month == 12)
-    {
-        yearStart = DateTime.Now.AddYears(ViewBag.yearPoint).Year;
-        yearMid = DateTime.Now.AddYears(ViewBag.yearPoint).Year + 1;
-        yearStop = DateTime.Now.AddYears(ViewBag.yearPoint).Year + 1;
-    }
-    else
-    {
-        yearStart = DateTime.Now.AddYears(ViewBag.yearPoint).Year - 1;
-        yearMid = DateTime.Now.AddYears(ViewBag.yearPoint).Year;
-        yearStop = DateTime.Now.AddYears(ViewBag.yearPoint).Year;
-    }
+    var yearPoint = ViewBag.yearPoint;
+    var yearStart = ViewBag.yearPoint - 1;
+    var yearMid = ViewBag.yearPoint;
+    var yearStop = ViewBag.yearPoint;
 }
 
 <div class="container-fluid">
@@ -63,16 +52,39 @@
                             </select>
                             <span asp-validation-for="point.SubPoint" class="text-danger"></span>
                         </div>
-                        <div class="form-group">
-                            <label asp-for="point.ExpectPlan" class="control-label"></label>
-                            <select asp-for="point.ExpectPlan" class="form-control" asp-items="Html.GetEnumSelectList<ExpectPlanRD>()"></select>
-                            <span asp-validation-for="point.ExpectPlan" class="text-danger"></span>
-                        </div>
-                        <div class="form-group">
-                            <label class="control-label">D<sup>2</sup>RIVE</label>
-                            <select asp-for="point.Ddrive" class="form-control" asp-items="Html.GetEnumSelectList<DdriveRD>()"></select>
-                            <span asp-validation-for="point.Ddrive" class="text-danger"></span>
-                        </div>
+                        @if (yearPoint >= 2023)
+                        {
+                            <div class="form-group">
+                                <label class="control-label" asp-for="point.ThemeId"></label>
+                                <select asp-for="point.ThemeId" class="form-control"></select>
+                                <span asp-validation-for="point.ThemeId" class="text-danger"></span>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="control-label" asp-for="point.EndId"></label>
+                                <select asp-for="point.EndId" class="form-control" disabled></select>
+                                <span asp-validation-for="point.EndId" class="text-danger"></span>
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label" asp-for="point.WayId"></label>
+                                <select asp-for="point.WayId" class="form-control" disabled></select>
+                                <span asp-validation-for="point.WayId" class="text-danger"></span>
+                            </div>
+                        }
+                        else
+                        {
+                            <div class="form-group">
+                                <label asp-for="point.ExpectPlan" class="control-label"></label>
+                                <select asp-for="point.ExpectPlan" class="form-control" asp-items="Html.GetEnumSelectList<ExpectPlanRD>()"></select>
+                                <span asp-validation-for="point.ExpectPlan" class="text-danger"></span>
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label">D<sup>2</sup>RIVE</label>
+                                <select asp-for="point.Ddrive" class="form-control" asp-items="Html.GetEnumSelectList<DdriveRD>()"></select>
+                                <span asp-validation-for="point.Ddrive" class="text-danger"></span>
+                            </div>
+
+                        }
                         <div class="form-group">
                             <label asp-for="point.DetailPlan" class="control-label"></label>
                             <input asp-for="point.DetailPlan" class="form-control" />
@@ -113,6 +125,7 @@
                             <select asp-for="point.AutoApp" class="form-control" asp-items="Html.GetEnumSelectList<AutoApps>()"></select>
                             <span asp-validation-for="point.AutoApp" class="text-danger"></span>
                         </div>
+
                         <fieldset>
                             <legend>เกณฑ์การประเมิน</legend>
                             <div class="row">
@@ -130,7 +143,7 @@
                                     <div class="card-header" id="RateHeading1">
                                         <h5 class="mb-0">
                                             <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#RateCollapse1" aria-expanded="true" aria-controls="RateCollapse1">
-                                                รอบที่ 1
+                                                รอบที่ 1 เดือนตุลาคม - กันยายน
                                             </button>
                                         </h5>
                                     </div>
@@ -213,7 +226,7 @@
                                     <div class="card-header" id="RateHeading2">
                                         <h5 class="mb-0">
                                             <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#RateCollapse2" aria-expanded="false" aria-controls="RateCollapse2">
-                                                รอบที่ 2
+                                                รอบที่ 2 เดือนเมษายน - กันยายน
                                             </button>
                                         </h5>
                                     </div>
@@ -297,7 +310,7 @@
                                     <div class="card-header" id="LevelHeading1">
                                         <h5 class="mb-0">
                                             <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#LevelCollapse1" aria-expanded="true" aria-controls="LevelCollapse1">
-                                                รอบที่ 1
+                                                รอบที่ 1 เดือนตุลาคม - กันยายน
                                             </button>
                                         </h5>
                                     </div>
@@ -400,7 +413,7 @@
                                     <div class="card-header" id="LevelHeading2">
                                         <h5 class="mb-0">
                                             <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#LevelCollapse2" aria-expanded="false" aria-controls="LevelCollapse2">
-                                                รอบที่ 2
+                                                รอบที่ 2 เดือนเมษายน - กันยายน
                                             </button>
                                         </h5>
                                     </div>
@@ -504,7 +517,7 @@
                                     <div class="card-header" id="LevelRateHeading1">
                                         <h5 class="mb-0">
                                             <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#LevelRateCollapse1" aria-expanded="true" aria-controls="LevelRateCollapse1">
-                                                รอบที่ 1
+                                                รอบที่ 1 เดือนตุลาคม - กันยายน
                                             </button>
                                         </h5>
                                     </div>
@@ -625,7 +638,7 @@
                                     <div class="card-header" id="LevelRateHeading2">
                                         <h5 class="mb-0">
                                             <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#LevelRateCollapse2" aria-expanded="false" aria-controls="LevelRateCollapse2">
-                                                รอบที่ 2
+                                                รอบที่ 2 เดือนเมษายน - กันยายน
                                             </button>
                                         </h5>
                                     </div>
@@ -743,6 +756,194 @@
                                     </div>
                                 </div>
                                 @*-----------------Level_Rate End------------------*@
+                                @*-----------------Score--------------------*@
+                                <div class="card" id="ScoreRound1" style="display: none">
+                                    <div class="card-header" id="ScoreHeading1">
+                                        <h5 class="mb-0">
+                                            <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#ScoreCollapse1" aria-expanded="true" aria-controls="ScoreCollapse1">
+                                                รอบที่ 1 เดือนตุลาคม - กันยายน
+                                            </button>
+                                        </h5>
+                                    </div>
+                                    <div id="ScoreCollapse1" class="collapse show" aria-labelledby="ScoreHeading1" data-parent="#round">
+                                        <div class="card-body">
+                                            <div class="row">
+                                                <div class="form-group col-md-6">
+                                                    <label asp-for="Score1Round1.Rate1" class="control-label"></label>
+                                                    <div class="input-group">
+                                                        <input asp-for="Score1Round1.Rate1" class="form-control" value="96" />
+                                                        <div class="input-group-append">
+                                                            <span class="input-group-text">% หรือ</span>
+                                                        </div>
+                                                        <input asp-for="Score2Round1.Rate1" class="form-control" value="2" />
+                                                    </div>
+                                                    <span asp-validation-for="Score1Round1.Rate1" class="text-danger"></span>
+                                                    <span asp-validation-for="Score2Round1.Rate1" class="text-danger"></span>
+                                                </div>
+                                                <div class="form-group col-md-6">
+                                                    <label asp-for="Score1Round1.R1MStart" class="control-label"></label>
+                                                    <input asp-for="Score1Round1.R1MStart" class="form-control" value="@yearStart-10-01" readonly />
+                                                    <span asp-validation-for="Score1Round1.R1MStart" class="text-danger"></span>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="form-group col-md-6">
+                                                    <label asp-for="Score1Round1.Rate2" class="control-label"></label>
+                                                    <div class="input-group">
+                                                        <input asp-for="Score1Round1.Rate2" class="form-control" value="97" />
+                                                        <div class="input-group-append">
+                                                            <span class="input-group-text">% หรือ</span>
+                                                        </div>
+                                                        <input asp-for="Score2Round1.Rate2" class="form-control" value="2" />
+                                                    </div>
+                                                    <span asp-validation-for="Score1Round1.Rate2" class="text-danger"></span>
+                                                    <span asp-validation-for="Score2Round1.Rate2" class="text-danger"></span>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="form-group col-md-6">
+                                                    <label asp-for="Score1Round1.Rate3" class="control-label"></label>
+                                                    <div class="input-group">
+                                                        <input asp-for="Score1Round1.Rate3" class="form-control" value="98" />
+                                                        <div class="input-group-append">
+                                                            <span class="input-group-text">% หรือ</span>
+                                                        </div>
+                                                        <input asp-for="Score2Round1.Rate3" class="form-control" value="3" />
+                                                    </div>
+                                                    <span asp-validation-for="Score1Round1.Rate3" class="text-danger"></span>
+                                                    <span asp-validation-for="Score2Round1.Rate3" class="text-danger"></span>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="form-group col-md-6">
+                                                    <label asp-for="Score1Round1.Rate4" class="control-label"></label>
+                                                    <div class="input-group">
+                                                        <input asp-for="Score1Round1.Rate4" class="form-control" value="99" />
+                                                        <div class="input-group-append">
+                                                            <span class="input-group-text">% หรือ</span>
+                                                        </div>
+                                                        <input asp-for="Score2Round1.Rate4" class="form-control" value="4" />
+                                                    </div>
+                                                    <span asp-validation-for="Score1Round1.Rate4" class="text-danger"></span>
+                                                    <span asp-validation-for="Score2Round1.Rate4" class="text-danger"></span>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="form-group col-md-6">
+                                                    <label asp-for="Score1Round1.Rate5" class="control-label"></label>
+                                                    <div class="input-group">
+                                                        <input asp-for="Score1Round1.Rate5" class="form-control" value="100" />
+                                                        <div class="input-group-append">
+                                                            <span class="input-group-text">% หรือ</span>
+                                                        </div>
+                                                        <input asp-for="Score2Round1.Rate5" class="form-control" value="5" />
+                                                    </div>
+                                                    <span asp-validation-for="Score1Round1.Rate5" class="text-danger"></span>
+                                                    <span asp-validation-for="Score2Round1.Rate5" class="text-danger"></span>
+                                                </div>
+                                                <div class="form-group col-md-6">
+                                                    <label asp-for="Score1Round1.R5MStop" class="control-label"></label>
+                                                    <input asp-for="Score1Round1.R5MStop" class="form-control" value="@yearStop-09-30" readonly />
+                                                    <span asp-validation-for="Score1Round1.R5MStop" class="text-danger"></span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="card" id="ScoreRound2" style="display: none;">
+                                    <div class="card-header" id="ScoreHeading2">
+                                        <h5 class="mb-0">
+                                            <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#ScoreCollapse2" aria-expanded="true" aria-controls="ScoreCollapse1">
+                                                รอบที่ 2 เดือนเมษายน - กันยายน
+                                            </button>
+                                        </h5>
+                                    </div>
+                                    <div id="ScoreCollapse2" class="collapse show" aria-labelledby="ScoreHeading2" data-parent="#round">
+                                        <div class="card-body">
+                                            <div class="row">
+                                                <div class="form-group col-md-6">
+                                                    <label asp-for="Score1Round2.Rate1" class="control-label"></label>
+                                                    <div class="input-group">
+                                                        <input asp-for="Score1Round2.Rate1" class="form-control" value="96" />
+                                                        <div class="input-group-append">
+                                                            <span class="input-group-text">% หรือ</span>
+                                                        </div>
+                                                        <input asp-for="Score2Round2.Rate1" class="form-control" value="2" />
+                                                    </div>
+                                                    <span asp-validation-for="Score1Round2.Rate1" class="text-danger"></span>
+                                                    <span asp-validation-for="Score2Round2.Rate1" class="text-danger"></span>
+                                                </div>
+                                                <div class="form-group col-md-6">
+                                                    <label asp-for="Score1Round2.R1MStart" class="control-label"></label>
+                                                    <input asp-for="Score1Round2.R1MStart" class="form-control" value="@yearStart-10-01" readonly />
+                                                    <span asp-validation-for="Score1Round2.R1MStart" class="text-danger"></span>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="form-group col-md-6">
+                                                    <label asp-for="Score1Round2.Rate2" class="control-label"></label>
+                                                    <div class="input-group">
+                                                        <input asp-for="Score1Round2.Rate2" class="form-control" value="97" />
+                                                        <div class="input-group-append">
+                                                            <span class="input-group-text">% หรือ</span>
+                                                        </div>
+                                                        <input asp-for="Score2Round2.Rate2" class="form-control" value="2" />
+                                                    </div>
+                                                    <span asp-validation-for="Score1Round2.Rate2" class="text-danger"></span>
+                                                    <span asp-validation-for="Score2Round2.Rate2" class="text-danger"></span>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="form-group col-md-6">
+                                                    <label asp-for="Score1Round2.Rate3" class="control-label"></label>
+                                                    <div class="input-group">
+                                                        <input asp-for="Score1Round2.Rate3" class="form-control" value="98" />
+                                                        <div class="input-group-append">
+                                                            <span class="input-group-text">% หรือ</span>
+                                                        </div>
+                                                        <input asp-for="Score2Round2.Rate3" class="form-control" value="3" />
+                                                    </div>
+                                                    <span asp-validation-for="Score1Round2.Rate3" class="text-danger"></span>
+                                                    <span asp-validation-for="Score2Round2.Rate3" class="text-danger"></span>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="form-group col-md-6">
+                                                    <label asp-for="Score1Round2.Rate4" class="control-label"></label>
+                                                    <div class="input-group">
+                                                        <input asp-for="Score1Round2.Rate4" class="form-control" value="99" />
+                                                        <div class="input-group-append">
+                                                            <span class="input-group-text">% หรือ</span>
+                                                        </div>
+                                                        <input asp-for="Score2Round2.Rate4" class="form-control" value="4" />
+                                                    </div>
+                                                    <span asp-validation-for="Score1Round2.Rate4" class="text-danger"></span>
+                                                    <span asp-validation-for="Score2Round2.Rate4" class="text-danger"></span>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="form-group col-md-6">
+                                                    <label asp-for="Score1Round2.Rate5" class="control-label"></label>
+                                                    <div class="input-group">
+                                                        <input asp-for="Score1Round2.Rate5" class="form-control" value="100" />
+                                                        <div class="input-group-append">
+                                                            <span class="input-group-text">% หรือ</span>
+                                                        </div>
+                                                        <input asp-for="Score2Round2.Rate5" class="form-control" value="5" />
+                                                    </div>
+                                                    <span asp-validation-for="Score1Round2.Rate5" class="text-danger"></span>
+                                                    <span asp-validation-for="Score2Round2.Rate5" class="text-danger"></span>
+                                                </div>
+                                                <div class="form-group col-md-6">
+                                                    <label asp-for="Score1Round2.R5MStop" class="control-label"></label>
+                                                    <input asp-for="Score1Round2.R5MStop" class="form-control" value="@yearStop-09-30" readonly />
+                                                    <span asp-validation-for="Score1Round2.R5MStop" class="text-danger"></span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                @*---------------- Score End -----------------------*@
                             </div>
                         </fieldset>
                         @*----------------------------ตารางประมาณการ-------------------------------*@
@@ -911,7 +1112,42 @@
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
-    <script>
+<script type="text/javascript">
+    var theme_arr = JSON.parse('@Html.Raw(Json.Serialize(@ViewBag.Theme))');
+    var end_arr = JSON.parse('@Html.Raw(Json.Serialize(ViewBag.End))');
+    var way_arr = JSON.parse('@Html.Raw(Json.Serialize(ViewBag.Way))');
+
+    $(document).ready(function() {
+        var ii;
+        var themeendway_option = "<option value=\"\">--- โปรดเลือก ---</option>";
+        var theme_option = themeendway_option;
+        for (ii = 0; ii < theme_arr.length; ii++)
+        {
+            theme_option += '<option value="' + theme_arr[ii]["id"] + '">' + theme_arr[ii]["themeName"] + "</option>";
+        }
+        $("#point_ThemeId").html(theme_option);
+        $("#point_EndId").html(themeendway_option);
+        $("#point_WayId").html(themeendway_option);
+
+        $("#point_ThemeId").change(function() {
+            var end_option = themeendway_option;
+            for (ii = 0; ii < end_arr[$(this).val()].length; ii++)
+            {
+                end_option += '<option value="' + end_arr[$(this).val()][ii][0] + '">' + end_arr[$(this).val()][ii][1] + "</option>";
+            }
+            $("#point_EndId").html(end_option).prop("disabled", false);
+            $("#point_WayId").html(themeendway_option).prop("disabled", true);
+        });
+
+        $("#point_EndId").change(function() {
+            var way_option = themeendway_option;
+            for (ii = 0; ii < way_arr[$(this).val()].length; ii++)
+            {
+                way_option += '<option value="' + way_arr[$(this).val()][ii][0] + '">' + way_arr[$(this).val()][ii][1] + "</option>";
+            }
+            $("#point_WayId").html(way_option).prop("disabled", false);
+        });
+    });
         $(function () {
             $("#point_WeightAll").prop("checked", true);
             $("#roundNumber").change(function () {
@@ -919,6 +1155,7 @@
                     if ($("#point_Unit").children("option:selected").val() == 0) {
                         $("#RateRound2").show();
                         $("#Round_R5MStop").val("@yearStop-03-31");
+                        $("#RateHeading1 h5 button").html("รอบที่ 1 เดือนตุลาคม - มีนาคม");
                     } else if ($("#point_Unit").children("option:selected").val() == 1){
                         $("#LevelRound2").show();
 
@@ -928,6 +1165,7 @@
                         $("#LRound_R4MStop").val("@yearStop-03-31");
                         $("#LRound_R5MStop").val("@yearStop-03-31");
 
+                        $("#LevelHeading1 h5 button").html("รอบที่ 1 เดือนตุลาคม - มีนาคม")
                     } else if ($("#point_Unit").children("option:selected").val() == 2) {
                         $("#LevelRateRound2").show();
 
@@ -935,11 +1173,21 @@
                         $("#LRRound_R2MStop").val("@yearStop-03-31");
                         $("#LRRound_R3MStop").val("@yearStop-03-31");
                         $("#LRRound_R4MStop").val("@yearStop-03-31");
+                        $("#LevelRateHeading1 h5 button").html("รอบที่ 1 เดือนตุลาคม - มีนาคม");
+                    } else if ($("#point_Unit").children("option:selected").val() == 3) {
+                        $("#ScoreRound2").show();
+                        $("#Score1Round1_R5MStop").val("@yearStop-03-31")
+                        $("#ScoreHeading1 h5 button").html("รอบที่ 1 เดือนตุลาคม - มีนาคม");
                     }
                 } else {
+                    $("#RateHeading1 h5 button").html("รอบที่ 1 เดือนตุลาคม - กันยายน");
+                    $("#LevelHeading1 h5 button").html("รอบที่ 1 เดือนตุลาคม - กันยายน");
+                    $("#LevelRateHeading1 h5 button").html("รอบที่ 1 เดือนตุลาคม - กันยายน");
+                    $("#ScoreHeading1 h5 button").html("รอบที่ 1 เดือนตุลาคม - กันยายน");
                     $("#RateRound2").hide();
                     $("#LevelRound2").hide();
                     $("#LevelRateRound2").hide();
+                    $("#ScoreRound2").hide();
 
                     $("#Round_R5MStop").val("@yearStop-09-30");
 
@@ -953,6 +1201,7 @@
                     $("#LRRound_R2MStop").val("@yearStop-09-30");
                     $("#LRRound_R3MStop").val("@yearStop-09-30");
                     $("#LRRound_R4MStop").val("@yearStop-09-30");
+                    $("#Score1Round1_R5MStop").val("@yearStop-09-30")
                 }
             });
 
@@ -979,6 +1228,9 @@
                     $("#LevelRound2").hide();
                     $("#LevelRateRound1").hide();
                     $("#LevelRateRound2").hide();
+                    $("#ScoreRound1").hide();
+                    $("#ScoreRound2").hide();
+                    $("#RateHeading1 h5 button").html("รอบที่ 1 เดือนตุลาคม - กันยายน");
                 } else if ($(this).children("option:selected").val() == 1) {
                     $("#DataForEvalutionTable").show();
                     $("#expect_Title").hide();
@@ -1001,6 +1253,9 @@
                     $("#LevelRound2").hide();
                     $("#LevelRateRound1").hide();
                     $("#LevelRateRound2").hide();
+                    $("#ScoreRound1").hide();
+                    $("#ScoreRound2").hide();
+                    $("#LevelHeading1 h5 button").html("รอบที่ 1 เดือนตุลาคม - กันยายน");
                 } else if ($(this).children("option:selected").val() == 2) {
                     $("#DataForEvalutionTable").show();
                     $("#expect_Title").show();
@@ -1023,6 +1278,34 @@
                     $("#LevelRound2").hide();
                     $("#LevelRateRound1").show();
                     $("#LevelRateRound2").hide();
+                    $("#ScoreRound1").hide();
+                    $("#ScoreRound2").hide();
+                    $("#LevelRateHeading1 h5 button").html("รอบที่ 1 เดือนตุลาคม - กันยายน");
+                } else if ($(this).children("option:selected").val() == 3) {
+                    $("#DataForEvalutionTable").show();
+                    $("#expect_Title").show();
+                    $("#expect10").show();
+                    $("#expect11").show();
+                    $("#expect12").show();
+                    $("#expect1").show();
+                    $("#expect2").show();
+                    $("#expect3").show();
+                    $("#expect4").show();
+                    $("#expect5").show();
+                    $("#expect6").show();
+                    $("#expect7").show();
+                    $("#expect8").show();
+                    $("#expect9").show();
+                    $("#roundNumber").val(1);
+                    $("#RateRound1").hide();
+                    $("#RateRound2").hide();
+                    $("#LevelRound1").hide();
+                    $("#LevelRound2").hide();
+                    $("#LevelRateRound1").hide();
+                    $("#LevelRateRound2").hide();
+                    $("#ScoreRound1").show();
+                    $("#ScoreRound2").hide();
+                    $("#ScoreHeading1 h5 button").html("รอบที่ 1 เดือนตุลาคม - กันยายน");
                 } else {
                     if ($("#OwnerOfficeId").val() == "") {
                         $("#DataForEvalutionTable").hide();
@@ -1130,7 +1413,7 @@
                         break;
                     default:
 
-                    // code block
+                        // code block
                 }
             });
 
@@ -1272,7 +1555,7 @@
             $("#point_WeightAll").change(function () {
                 //$(this).removeAttr("checked");
                 var w = $("#point_Weight").val();
-                if ($(this).is(":checked")) {                    
+                if ($(this).is(":checked")) {
                     $("#weight10").val(w);
                     $("#weight10").prop("disabled", true);
                     $("#weight11").val(w);
@@ -1325,5 +1608,5 @@
                 }
             });
         });
-    </script>
+</script>
 }

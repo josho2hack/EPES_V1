@@ -62,10 +62,10 @@ namespace EPES.Models
         [Display(Name = "รอบการประเมิน")]
         public List<Round> Rounds { get; set; }
 
-        [Display(Name = "ตัวชี้วัดสำหรับ")]
+        [Display(Name = "หน่วยปฏิบัติ")]
         public int OwnerOfficeId { get; set; }
         //[DisplayFormat(NullDisplayText = "สภ./สท.")]
-        [Display(Name = "ตัวชี้วัดสำหรับ")]
+        [Display(Name = "หน่วยปฏิบัติ")]
         public Office OwnerOffice { get; set; }
 
         [Display(Name = "หน่วยงานกำกับ")]
@@ -139,6 +139,21 @@ namespace EPES.Models
         [Display(Name = "เอกสารแนบคำอธิบายตัวชี้วัด")]
         public string AttachFile { get; set; }
 
+        [Display(Name = "ทิศทางการบริหารงาน (Theme)")]
+        public int? ThemeId { get; set; }
+        [Display(Name = "ทิศทางการบริหารงาน (Theme)")]
+        public Theme Theme { get; set; }
+        [Display(Name = "เป้าหมาย (END)")]
+        public int? EndId { get; set; }
+        [Display(Name = "เป้าหมาย (END)")]
+        public End End { get; set; }
+        [Display(Name = "กลยุทธ์ (Way)")]
+        public int? WayId { get; set; }
+        [Display(Name = "กลยุทธ์ (Way)")]
+        public Way Way { get; set; }
+
+        [NotMapped]
+        public bool isSelectedToCopy { get; set; }
     }
 
     public enum AutoApps
@@ -193,7 +208,11 @@ namespace EPES.Models
         A,
         B,
         C,
-        D
+        D,
+        Flagship,
+        Cascade,
+        [Display(Name = "Joint KPI")]
+        Joint_KPI
     }
 
     public enum UnitOfPoint
@@ -201,7 +220,9 @@ namespace EPES.Models
         ร้อยละ,
         ระดับ,
         [Display(Name = "ระดับ/ร้อยละ")]
-        ระดับ_ร้อยละ
+        ระดับ_ร้อยละ,
+        [Display(Name = "ค่าคะแนน")]
+        ค่าคะแนน
     }
 
     public enum ExpectPlanRD
@@ -245,4 +266,5 @@ namespace EPES.Models
         [Display(Name = "E – Efficiency")]
         E
     }
+    
 }

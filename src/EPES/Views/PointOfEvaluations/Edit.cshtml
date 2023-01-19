@@ -3,6 +3,10 @@
 
 @{
     ViewData["Title"] = "Edit";
+    var yearPoint = ViewBag.yearPoint;
+    var yearStart = ViewBag.yearPoint - 1;
+    var yearMid = ViewBag.yearPoint;
+    var yearStop = ViewBag.yearPoint;
 }
 
 <div class="container-fluid">
@@ -17,11 +21,16 @@
                 <div class="row">
                     <div class="col-md-8">
                         <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+                        <input asp-for="point.OwnerOfficeId" hidden />
+                        <!--
                         <div class="form-group">
                             <label asp-for="point.OwnerOfficeId" class="control-label"></label>
                             <select asp-for="point.OwnerOfficeId" class="form-control" asp-items="ViewBag.OfficeId"></select>
                             <span asp-validation-for="point.OwnerOfficeId" class="text-danger"></span>
                         </div>
+
+                        -->
                         <div class="form-group">
                             <label asp-for="point.AuditOfficeId" class="control-label"></label>
                             <select asp-for="point.AuditOfficeId" class="form-control" asp-items="ViewBag.AuditOfficeId"></select>
@@ -37,21 +46,47 @@
                             <select asp-for="point.SubPoint" class="form-control" asp-items="ViewBag.SubPoint"></select>
                             <span asp-validation-for="point.SubPoint" class="text-danger"></span>
                         </div>
-                        <div class="form-group">
-                            <label asp-for="point.ExpectPlan" class="control-label"></label>
-                            <select asp-for="point.ExpectPlan" class="form-control" asp-items="Html.GetEnumSelectList<ExpectPlanRD>()"></select>
-                            <span asp-validation-for="point.ExpectPlan" class="text-danger"></span>
-                        </div>
-                        <div class="form-group">
-                            <label class="control-label">D<sup>2</sup>RIVE</label>
-                            <select asp-for="point.Ddrive" class="form-control" asp-items="Html.GetEnumSelectList<DdriveRD>()"></select>
-                            <span asp-validation-for="point.Ddrive" class="text-danger"></span>
-                        </div>
+                        @if (ViewBag.yearPoint >= 2023)
+                        {
+                            <div class="form-group">
+                                <label class="control-label" asp-for="point.ThemeId"></label>
+                                <select asp-for="point.ThemeId" class="form-control"></select>
+                                <span asp-validation-for="point.ThemeId" class="text-danger"></span>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="control-label" asp-for="point.EndId"></label>
+                                <select asp-for="point.EndId" class="form-control"></select>
+                                <span asp-validation-for="point.EndId" class="text-danger"></span>
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label" asp-for="point.WayId"></label>
+                                <select asp-for="point.WayId" class="form-control"></select>
+                                <span asp-validation-for="point.WayId" class="text-danger"></span>
+                            </div>
+                        }
+                        else
+                        {
+                            <div class="form-group">
+                                <label asp-for="point.ExpectPlan" class="control-label"></label>
+                                <select asp-for="point.ExpectPlan" class="form-control" asp-items="Html.GetEnumSelectList<ExpectPlanRD>()"></select>
+                                <span asp-validation-for="point.ExpectPlan" class="text-danger"></span>
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label">D<sup>2</sup>RIVE</label>
+                                <select asp-for="point.Ddrive" class="form-control" asp-items="Html.GetEnumSelectList<DdriveRD>()"></select>
+                                <span asp-validation-for="point.Ddrive" class="text-danger"></span>
+                            </div>
+
+                        }
+                        <input asp-for="point.Plan" hidden />
+                        <!--
                         <div class="form-group">
                             <label asp-for="point.Plan" class="control-label"></label>
                             <select asp-for="point.Plan" class="form-control" asp-items="Html.GetEnumSelectList<TypeOfPlan>()"></select>
                             <span asp-validation-for="point.Plan" class="text-danger"></span>
                         </div>
+                        -->
                         <div class="form-group">
                             <label asp-for="point.DetailPlan" class="control-label"></label>
                             <input asp-for="point.DetailPlan" class="form-control" />
@@ -109,7 +144,7 @@
                                     <div class="card-header" id="RateHeading1">
                                         <h5 class="mb-0">
                                             <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#RateCollapse1" aria-expanded="true" aria-controls="RateCollapse1">
-                                                รอบที่ 1
+                                                รอบที่ 1 เดือนตุลาคม - กันยายน
                                             </button>
                                         </h5>
                                     </div>
@@ -128,7 +163,7 @@
                                                 </div>
                                                 <div class="form-group col-md-6">
                                                     <label asp-for="Round.R1MStart" class="control-label"></label>
-                                                    <input asp-for="Round.R1MStart" class="form-control" />
+                                                    <input asp-for="Round.R1MStart" class="form-control" readonly />
                                                     <span asp-validation-for="Round.R1MStart" class="text-danger"></span>
                                                 </div>
                                             </div>
@@ -181,7 +216,7 @@
                                                 </div>
                                                 <div class="form-group col-md-6">
                                                     <label asp-for="Round.R5MStop" class="control-label"></label>
-                                                    <input asp-for="Round.R5MStop" class="form-control" />
+                                                    <input asp-for="Round.R5MStop" class="form-control" readonly />
                                                     <span asp-validation-for="Round.R5MStop" class="text-danger"></span>
                                                 </div>
                                             </div>
@@ -192,7 +227,7 @@
                                     <div class="card-header" id="RateHeading2">
                                         <h5 class="mb-0">
                                             <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#RateCollapse2" aria-expanded="false" aria-controls="RateCollapse2">
-                                                รอบที่ 2
+                                                รอบที่ 2 เดือนเมษายน - กันยายน
                                             </button>
                                         </h5>
                                     </div>
@@ -211,7 +246,7 @@
                                                 </div>
                                                 <div class="form-group col-md-6">
                                                     <label asp-for="Round2.R1MStart" class="control-label"></label>
-                                                    <input asp-for="Round2.R1MStart" class="form-control" />
+                                                    <input asp-for="Round2.R1MStart" class="form-control" readonly />
                                                     <span asp-validation-for="Round2.R1MStart" class="text-danger"></span>
                                                 </div>
                                             </div>
@@ -264,7 +299,7 @@
                                                 </div>
                                                 <div class="form-group col-md-6">
                                                     <label asp-for="Round2.R5MStop" class="control-label"></label>
-                                                    <input asp-for="Round2.R5MStop" class="form-control" />
+                                                    <input asp-for="Round2.R5MStop" class="form-control" readonly />
                                                     <span asp-validation-for="Round2.R5MStop" class="text-danger"></span>
                                                 </div>
                                             </div>
@@ -276,7 +311,7 @@
                                     <div class="card-header" id="LevelHeading1">
                                         <h5 class="mb-0">
                                             <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#LevelCollapse1" aria-expanded="true" aria-controls="LevelCollapse1">
-                                                รอบที่ 1
+                                                รอบที่ 1 เดือนตุลาคม - กันยายน
                                             </button>
                                         </h5>
                                     </div>
@@ -379,7 +414,7 @@
                                     <div class="card-header" id="LevelHeading2">
                                         <h5 class="mb-0">
                                             <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#LevelCollapse2" aria-expanded="false" aria-controls="LevelCollapse2">
-                                                รอบที่ 2
+                                                รอบที่ 2 เดือนเมษายน - กันยายน
                                             </button>
                                         </h5>
                                     </div>
@@ -483,7 +518,7 @@
                                     <div class="card-header" id="LevelRateHeading1">
                                         <h5 class="mb-0">
                                             <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#LevelRateCollapse1" aria-expanded="true" aria-controls="LevelRateCollapse1">
-                                                รอบที่ 1
+                                                รอบที่ 1 เดือนตุลาคม - กันยายน
                                             </button>
                                         </h5>
                                     </div>
@@ -604,7 +639,7 @@
                                     <div class="card-header" id="LevelRateHeading2">
                                         <h5 class="mb-0">
                                             <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#LevelRateCollapse2" aria-expanded="false" aria-controls="LevelRateCollapse2">
-                                                รอบที่ 2
+                                                รอบที่ 2 เดือนเมษายน - กันยายน
                                             </button>
                                         </h5>
                                     </div>
@@ -722,6 +757,194 @@
                                     </div>
                                 </div>
                                 @*-----------------Level_Rate End------------------*@
+                                @*-----------------Score--------------------*@
+                                <div class="card" id="ScoreRound1" style="display: none">
+                                    <div class="card-header" id="ScoreHeading1">
+                                        <h5 class="mb-0">
+                                            <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#ScoreCollapse1" aria-expanded="true" aria-controls="ScoreCollapse1">
+                                                รอบที่ 1 เดือนตุลาคม - กันยายน
+                                            </button>
+                                        </h5>
+                                    </div>
+                                    <div id="ScoreCollapse1" class="collapse show" aria-labelledby="ScoreHeading1" data-parent="#round">
+                                        <div class="card-body">
+                                            <div class="row">
+                                                <div class="form-group col-md-6">
+                                                    <label asp-for="Score1Round1.Rate1" class="control-label"></label>
+                                                    <div class="input-group">
+                                                        <input asp-for="Score1Round1.Rate1" class="form-control" />
+                                                        <div class="input-group-append">
+                                                            <span class="input-group-text">% หรือ</span>
+                                                        </div>
+                                                        <input asp-for="Score2Round1.Rate1" class="form-control" />
+                                                    </div>
+                                                    <span asp-validation-for="Score1Round1.Rate1" class="text-danger"></span>
+                                                    <span asp-validation-for="Score2Round1.Rate1" class="text-danger"></span>
+                                                </div>
+                                                <div class="form-group col-md-6">
+                                                    <label asp-for="Score1Round1.R1MStart" class="control-label"></label>
+                                                    <input asp-for="Score1Round1.R1MStart" class="form-control" readonly />
+                                                    <span asp-validation-for="Score1Round1.R1MStart" class="text-danger"></span>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="form-group col-md-6">
+                                                    <label asp-for="Score1Round1.Rate2" class="control-label"></label>
+                                                    <div class="input-group">
+                                                        <input asp-for="Score1Round1.Rate2" class="form-control" />
+                                                        <div class="input-group-append">
+                                                            <span class="input-group-text">% หรือ</span>
+                                                        </div>
+                                                        <input asp-for="Score2Round1.Rate2" class="form-control" />
+                                                    </div>
+                                                    <span asp-validation-for="Score1Round1.Rate2" class="text-danger"></span>
+                                                    <span asp-validation-for="Score2Round1.Rate2" class="text-danger"></span>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="form-group col-md-6">
+                                                    <label asp-for="Score1Round1.Rate3" class="control-label"></label>
+                                                    <div class="input-group">
+                                                        <input asp-for="Score1Round1.Rate3" class="form-control" />
+                                                        <div class="input-group-append">
+                                                            <span class="input-group-text">% หรือ</span>
+                                                        </div>
+                                                        <input asp-for="Score2Round1.Rate3" class="form-control" />
+                                                    </div>
+                                                    <span asp-validation-for="Score1Round1.Rate3" class="text-danger"></span>
+                                                    <span asp-validation-for="Score2Round1.Rate3" class="text-danger"></span>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="form-group col-md-6">
+                                                    <label asp-for="Score1Round1.Rate4" class="control-label"></label>
+                                                    <div class="input-group">
+                                                        <input asp-for="Score1Round1.Rate4" class="form-control" />
+                                                        <div class="input-group-append">
+                                                            <span class="input-group-text">% หรือ</span>
+                                                        </div>
+                                                        <input asp-for="Score2Round1.Rate4" class="form-control" />
+                                                    </div>
+                                                    <span asp-validation-for="Score1Round1.Rate4" class="text-danger"></span>
+                                                    <span asp-validation-for="Score2Round1.Rate4" class="text-danger"></span>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="form-group col-md-6">
+                                                    <label asp-for="Score1Round1.Rate5" class="control-label"></label>
+                                                    <div class="input-group">
+                                                        <input asp-for="Score1Round1.Rate5" class="form-control" />
+                                                        <div class="input-group-append">
+                                                            <span class="input-group-text">% หรือ</span>
+                                                        </div>
+                                                        <input asp-for="Score2Round1.Rate5" class="form-control" />
+                                                    </div>
+                                                    <span asp-validation-for="Score1Round1.Rate5" class="text-danger"></span>
+                                                    <span asp-validation-for="Score2Round1.Rate5" class="text-danger"></span>
+                                                </div>
+                                                <div class="form-group col-md-6">
+                                                    <label asp-for="Score1Round1.R5MStop" class="control-label"></label>
+                                                    <input asp-for="Score1Round1.R5MStop" class="form-control" readonly />
+                                                    <span asp-validation-for="Score1Round1.R5MStop" class="text-danger"></span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="card" id="ScoreRound2" style="display: none;">
+                                    <div class="card-header" id="ScoreHeading2">
+                                        <h5 class="mb-0">
+                                            <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#ScoreCollapse2" aria-expanded="true" aria-controls="ScoreCollapse1">
+                                                รอบที่ 2 เดือนเมษายน - กันยายน
+                                            </button>
+                                        </h5>
+                                    </div>
+                                    <div id="ScoreCollapse2" class="collapse show" aria-labelledby="ScoreHeading2" data-parent="#round">
+                                        <div class="card-body">
+                                            <div class="row">
+                                                <div class="form-group col-md-6">
+                                                    <label asp-for="Score1Round2.Rate1" class="control-label"></label>
+                                                    <div class="input-group">
+                                                        <input asp-for="Score1Round2.Rate1" class="form-control" />
+                                                        <div class="input-group-append">
+                                                            <span class="input-group-text">% หรือ</span>
+                                                        </div>
+                                                        <input asp-for="Score2Round2.Rate1" class="form-control" />
+                                                    </div>
+                                                    <span asp-validation-for="Score1Round2.Rate1" class="text-danger"></span>
+                                                    <span asp-validation-for="Score2Round2.Rate1" class="text-danger"></span>
+                                                </div>
+                                                <div class="form-group col-md-6">
+                                                    <label asp-for="Score1Round2.R1MStart" class="control-label"></label>
+                                                    <input asp-for="Score1Round2.R1MStart" class="form-control" readonly />
+                                                    <span asp-validation-for="Score1Round2.R1MStart" class="text-danger"></span>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="form-group col-md-6">
+                                                    <label asp-for="Score1Round2.Rate2" class="control-label"></label>
+                                                    <div class="input-group">
+                                                        <input asp-for="Score1Round2.Rate2" class="form-control" />
+                                                        <div class="input-group-append">
+                                                            <span class="input-group-text">% หรือ</span>
+                                                        </div>
+                                                        <input asp-for="Score2Round2.Rate2" class="form-control" />
+                                                    </div>
+                                                    <span asp-validation-for="Score1Round2.Rate2" class="text-danger"></span>
+                                                    <span asp-validation-for="Score2Round2.Rate2" class="text-danger"></span>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="form-group col-md-6">
+                                                    <label asp-for="Score1Round2.Rate3" class="control-label"></label>
+                                                    <div class="input-group">
+                                                        <input asp-for="Score1Round2.Rate3" class="form-control" />
+                                                        <div class="input-group-append">
+                                                            <span class="input-group-text">% หรือ</span>
+                                                        </div>
+                                                        <input asp-for="Score2Round2.Rate3" class="form-control" />
+                                                    </div>
+                                                    <span asp-validation-for="Score1Round2.Rate3" class="text-danger"></span>
+                                                    <span asp-validation-for="Score2Round2.Rate3" class="text-danger"></span>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="form-group col-md-6">
+                                                    <label asp-for="Score1Round2.Rate4" class="control-label"></label>
+                                                    <div class="input-group">
+                                                        <input asp-for="Score1Round2.Rate4" class="form-control" />
+                                                        <div class="input-group-append">
+                                                            <span class="input-group-text">% หรือ</span>
+                                                        </div>
+                                                        <input asp-for="Score2Round2.Rate4" class="form-control" />
+                                                    </div>
+                                                    <span asp-validation-for="Score1Round2.Rate4" class="text-danger"></span>
+                                                    <span asp-validation-for="Score2Round2.Rate4" class="text-danger"></span>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="form-group col-md-6">
+                                                    <label asp-for="Score1Round2.Rate5" class="control-label"></label>
+                                                    <div class="input-group">
+                                                        <input asp-for="Score1Round2.Rate5" class="form-control" />
+                                                        <div class="input-group-append">
+                                                            <span class="input-group-text">% หรือ</span>
+                                                        </div>
+                                                        <input asp-for="Score2Round2.Rate5" class="form-control" />
+                                                    </div>
+                                                    <span asp-validation-for="Score1Round2.Rate5" class="text-danger"></span>
+                                                    <span asp-validation-for="Score2Round2.Rate5" class="text-danger"></span>
+                                                </div>
+                                                <div class="form-group col-md-6">
+                                                    <label asp-for="Score1Round2.R5MStop" class="control-label"></label>
+                                                    <input asp-for="Score1Round2.R5MStop" class="form-control" readonly />
+                                                    <span asp-validation-for="Score1Round2.R5MStop" class="text-danger"></span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                @*---------------- Score End -----------------------*@
                             </div>
                         </fieldset>
                         @*----------------------------ตารางประมาณการ-------------------------------*@
@@ -890,6 +1113,83 @@
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <script type="text/javascript">
+
+    var theme_arr = JSON.parse('@Html.Raw(Json.Serialize(@ViewBag.Theme))');
+    var end_arr = JSON.parse('@Html.Raw(Json.Serialize(ViewBag.End))');
+    var way_arr = JSON.parse('@Html.Raw(Json.Serialize(ViewBag.Way))');
+
+    $(document).ready(function() {
+        var ii;
+        var themeendway_option = "<option value=\"\">--- โปรดเลือก ---</option>";
+        var theme_option = themeendway_option;
+        for (ii = 0; ii < theme_arr.length; ii++)
+        {
+            theme_option += '<option value="' + theme_arr[ii]["id"] + '">' + theme_arr[ii]["themeName"] + "</option>";
+        }
+        $("#point_ThemeId").on('change', function () {
+            var end_option = themeendway_option;
+            for (ii = 0; ii < end_arr[$(this).val()].length; ii++) {
+                end_option += '<option value="' + end_arr[$(this).val()][ii][0] + '">' + end_arr[$(this).val()][ii][1] + "</option>";
+            }
+            $("#point_EndId").html(end_option);
+            $("#point_WayId").html(themeendway_option);
+        });
+
+        $("#point_EndId").on('change', function () {
+            var way_option = themeendway_option;
+            for (ii = 0; ii < way_arr[$(this).val()].length; ii++) {
+                way_option += '<option value="' + way_arr[$(this).val()][ii][0] + '">' + way_arr[$(this).val()][ii][1] + "</option>";
+            }
+            $("#point_WayId").html(way_option);
+        });
+
+        @if(Model.point.ThemeId == null)
+        {
+            <text>
+                $("#point_ThemeId").html(theme_option);
+                $("#point_EndId").html(theme_option);
+                $("#point_WayId").html(themeendway_option);
+            </text>
+        } else
+        {
+            <text>
+                $("#point_ThemeId").html(theme_option).val(@Model.point.ThemeId).trigger('change');
+            </text>
+                @if(Model.point.EndId != null)
+                {
+                    <text>
+                        $("#point_EndId").val(@Model.point.EndId).trigger('change');
+                    </text>
+                }
+
+                @if(Model.point.WayId != null) {
+                    <text>
+                        $("#point_WayId").val(@Model.point.WayId);
+                    </text>
+                }
+        }
+
+        @if (Model.point.WeightAll)
+        {
+            <text>
+                $("#weight10").prop("disabled", true);
+                $("#weight11").prop("disabled", true);
+                $("#weight12").prop("disabled", true);
+                $("#weight1").prop("disabled", true);
+                $("#weight2").prop("disabled", true);
+                $("#weight3").prop("disabled", true);
+                $("#weight4").prop("disabled", true);
+                $("#weight5").prop("disabled", true);
+                $("#weight6").prop("disabled", true);
+                $("#weight7").prop("disabled", true);
+                $("#weight8").prop("disabled", true);
+                $("#weight9").prop("disabled", true);
+            </text>
+        }
+
+    });
+    </script>
     <script>
         $(function () {
             if ($("#point_Unit").children("option:selected").val() == 0) {
@@ -910,13 +1210,17 @@
                 $("#RateRound").show();
                 if ($("#roundNumber").val() == 2) {
                     $("#RateRound2").show();
+                    $("#RateHeading1 h5 button").html("รอบที่ 1 เดือนตุลาคม - มีนาคม");
                 } else {
                     $("#RateRound2").hide();
+                    $("#RateHeading1 h5 button").html("รอบที่ 1 เดือนตุลาคม - กันยายน");
                 }
                 $("#LevelRound1").hide();
                 $("#LevelRound2").hide();
                 $("#LevelRateRound1").hide();
                 $("#LevelRateRound2").hide();
+                $("#ScoreRound1").hide();
+                $("#ScoreRound2").hide();
             } else if ($("#point_Unit").children("option:selected").val() == 1) {
                 $("#DataForEvalutionTable").show();
                 $("#expect_Title").hide();
@@ -937,11 +1241,15 @@
                 $("#LevelRound1").show();
                 if ($("#roundNumber").val() == 2) {
                     $("#LevelRound2").show();
+                    $("#LevelHeading1 h5 button").html("รอบที่ 1 เดือนตุลาคม - มีนาคม");
                 } else {
                     $("#LevelRound2").hide();
+                    $("#LevelHeading1 h5 button").html("รอบที่ 1 เดือนตุลาคม - กันยายน");
                 }
                 $("#LevelRateRound1").hide();
                 $("#LevelRateRound2").hide();
+                $("#ScoreRound1").hide();
+                $("#ScoreRound2").hide();
             } else if ($("#point_Unit").children("option:selected").val() == 2) {
                 $("#DataForEvalutionTable").show();
                 $("#expect_Title").show();
@@ -962,222 +1270,275 @@
                 $("#LevelRound1").hide();
                 $("#LevelRound2").hide();
                 $("#LevelRateRound1").show();
+                $("#ScoreRound1").hide();
+                $("#ScoreRound2").hide();
                 var valueOfLevelNumber = $(":input[name='LRRound.LevelNumber']").val();
-            switch (valueOfLevelNumber) {
-                case "1":
-                    $("label[id='LRRound.Label2']").hide();
-                    $("label[id='LRRound.LabelRate2']").show();
-                    $("div[id='LRRound.GRate2']").show();
-                    $(":input[name='LRRound.DetailRate2']").hide();
-                    $("div[id='LRRound.Start2']").hide();
-                    $("div[id='LRRound.Stop2']").hide();
+                switch (valueOfLevelNumber) {
+                    case "1":
+                        $("label[id='LRRound.Label2']").hide();
+                        $("label[id='LRRound.LabelRate2']").show();
+                        $("div[id='LRRound.GRate2']").show();
+                        $(":input[name='LRRound.DetailRate2']").hide();
+                        $("div[id='LRRound.Start2']").hide();
+                        $("div[id='LRRound.Stop2']").hide();
 
-                    $("label[id='LRRound.Label3']").hide();
-                    $("label[id='LRRound.LabelRate3']").show();
-                    $("div[id='LRRound.GRate3']").show();
-                    $(":input[name='LRRound.DetailRate3']").hide();
-                    $("div[id='LRRound.Start3']").hide();
-                    $("div[id='LRRound.Stop3']").hide();
+                        $("label[id='LRRound.Label3']").hide();
+                        $("label[id='LRRound.LabelRate3']").show();
+                        $("div[id='LRRound.GRate3']").show();
+                        $(":input[name='LRRound.DetailRate3']").hide();
+                        $("div[id='LRRound.Start3']").hide();
+                        $("div[id='LRRound.Stop3']").hide();
 
-                    $("label[id='LRRound.Label4']").hide();
-                    $("label[id='LRRound.LabelRate4']").show();
-                    $("div[id='LRRound.GRate4']").show();
-                    $(":input[name='LRRound.DetailRate4']").hide();
-                    $("div[id='LRRound.Start4']").hide();
-                    $("div[id='LRRound.Stop4']").hide();
-                    //alert($(this).val());
-                    break;
-                case "2":
-                    $("label[id='LRRound.Label2']").show();
-                    $("label[id='LRRound.LabelRate2']").hide();
-                    $("div[id='LRRound.GRate2']").hide();
-                    $(":input[name='LRRound.DetailRate2']").show();
-                    $("div[id='LRRound.Start2']").show();
-                    $("div[id='LRRound.Stop2']").show();
+                        $("label[id='LRRound.Label4']").hide();
+                        $("label[id='LRRound.LabelRate4']").show();
+                        $("div[id='LRRound.GRate4']").show();
+                        $(":input[name='LRRound.DetailRate4']").hide();
+                        $("div[id='LRRound.Start4']").hide();
+                        $("div[id='LRRound.Stop4']").hide();
+                        //alert($(this).val());
+                        break;
+                    case "2":
+                        $("label[id='LRRound.Label2']").show();
+                        $("label[id='LRRound.LabelRate2']").hide();
+                        $("div[id='LRRound.GRate2']").hide();
+                        $(":input[name='LRRound.DetailRate2']").show();
+                        $("div[id='LRRound.Start2']").show();
+                        $("div[id='LRRound.Stop2']").show();
 
-                    $("label[id='LRRound.Label3']").hide();
-                    $("label[id='LRRound.LabelRate3']").show();
-                    $("div[id='LRRound.GRate3']").show();
-                    $(":input[name='LRRound.DetailRate3']").hide();
-                    $("div[id='LRRound.Start3']").hide();
-                    $("div[id='LRRound.Stop3']").hide();
+                        $("label[id='LRRound.Label3']").hide();
+                        $("label[id='LRRound.LabelRate3']").show();
+                        $("div[id='LRRound.GRate3']").show();
+                        $(":input[name='LRRound.DetailRate3']").hide();
+                        $("div[id='LRRound.Start3']").hide();
+                        $("div[id='LRRound.Stop3']").hide();
 
-                    $("label[id='LRRound.Label4']").hide();
-                    $("label[id='LRRound.LabelRate4']").show();
-                    $("div[id='LRRound.GRate4']").show();
-                    $(":input[name='LRRound.DetailRate4']").hide();
-                    $("div[id='LRRound.Start4']").hide();
-                    $("div[id='LRRound.Stop4']").hide();
-                    //alert($(this).val());
-                    break;
-                case "3":
-                    $("label[id='LRRound.Label2']").show();
-                    $("label[id='LRRound.LabelRate2']").hide();
-                    $("div[id='LRRound.GRate2']").hide();
-                    $(":input[name='LRRound.DetailRate2']").show();
-                    $("div[id='LRRound.Start2']").show();
-                    $("div[id='LRRound.Stop2']").show();
+                        $("label[id='LRRound.Label4']").hide();
+                        $("label[id='LRRound.LabelRate4']").show();
+                        $("div[id='LRRound.GRate4']").show();
+                        $(":input[name='LRRound.DetailRate4']").hide();
+                        $("div[id='LRRound.Start4']").hide();
+                        $("div[id='LRRound.Stop4']").hide();
+                        //alert($(this).val());
+                        break;
+                    case "3":
+                        $("label[id='LRRound.Label2']").show();
+                        $("label[id='LRRound.LabelRate2']").hide();
+                        $("div[id='LRRound.GRate2']").hide();
+                        $(":input[name='LRRound.DetailRate2']").show();
+                        $("div[id='LRRound.Start2']").show();
+                        $("div[id='LRRound.Stop2']").show();
 
-                    $("label[id='LRRound.Label3']").show();
-                    $("label[id='LRRound.LabelRate3']").hide();
-                    $("div[id='LRRound.GRate3']").hide();
-                    $(":input[name='LRRound.DetailRate3']").show();
-                    $("div[id='LRRound.Start3']").show();
-                    $("div[id='LRRound.Stop3']").show();
+                        $("label[id='LRRound.Label3']").show();
+                        $("label[id='LRRound.LabelRate3']").hide();
+                        $("div[id='LRRound.GRate3']").hide();
+                        $(":input[name='LRRound.DetailRate3']").show();
+                        $("div[id='LRRound.Start3']").show();
+                        $("div[id='LRRound.Stop3']").show();
 
-                    $("label[id='LRRound.Label4']").hide();
-                    $("label[id='LRRound.LabelRate4']").show();
-                    $("div[id='LRRound.GRate4']").show();
-                    $(":input[name='LRRound.DetailRate4']").hide();
-                    $("div[id='LRRound.Start4']").hide();
-                    $("div[id='LRRound.Stop4']").hide();
-                    //alert($(this).val());
-                    break;
-                case "4":
-                    $("label[id='LRRound.Label2']").show();
-                    $("label[id='LRRound.LabelRate2']").hide();
-                    $("div[id='LRRound.GRate2']").hide();
-                    $(":input[name='LRRound.DetailRate2']").show();
-                    $("div[id='LRRound.Start2']").show();
-                    $("div[id='LRRound.Stop2']").show();
+                        $("label[id='LRRound.Label4']").hide();
+                        $("label[id='LRRound.LabelRate4']").show();
+                        $("div[id='LRRound.GRate4']").show();
+                        $(":input[name='LRRound.DetailRate4']").hide();
+                        $("div[id='LRRound.Start4']").hide();
+                        $("div[id='LRRound.Stop4']").hide();
+                        //alert($(this).val());
+                        break;
+                    case "4":
+                        $("label[id='LRRound.Label2']").show();
+                        $("label[id='LRRound.LabelRate2']").hide();
+                        $("div[id='LRRound.GRate2']").hide();
+                        $(":input[name='LRRound.DetailRate2']").show();
+                        $("div[id='LRRound.Start2']").show();
+                        $("div[id='LRRound.Stop2']").show();
 
-                    $("label[id='LRRound.Label3']").show();
-                    $("label[id='LRRound.LabelRate3']").hide();
-                    $("div[id='LRRound.GRate3']").hide();
-                    $(":input[name='LRRound.DetailRate3']").show();
-                    $("div[id='LRRound.Start3']").show();
-                    $("div[id='LRRound.Stop3']").show();
+                        $("label[id='LRRound.Label3']").show();
+                        $("label[id='LRRound.LabelRate3']").hide();
+                        $("div[id='LRRound.GRate3']").hide();
+                        $(":input[name='LRRound.DetailRate3']").show();
+                        $("div[id='LRRound.Start3']").show();
+                        $("div[id='LRRound.Stop3']").show();
 
-                    $("label[id='LRRound.Label4']").show();
-                    $("label[id='LRRound.LabelRate4']").hide();
-                    $("div[id='LRRound.GRate4']").hide();
-                    $(":input[name='LRRound.DetailRate4']").show();
-                    $("div[id='LRRound.Start4']").show();
-                    $("div[id='LRRound.Stop4']").show();
-                    //alert($(this).val());
-                    break;
-                default:
+                        $("label[id='LRRound.Label4']").show();
+                        $("label[id='LRRound.LabelRate4']").hide();
+                        $("div[id='LRRound.GRate4']").hide();
+                        $(":input[name='LRRound.DetailRate4']").show();
+                        $("div[id='LRRound.Start4']").show();
+                        $("div[id='LRRound.Stop4']").show();
+                        //alert($(this).val());
+                        break;
+                    default:
 
-                // code block
-            }
+                    // code block
+                }
+
                 if ($("#roundNumber").val() == 2) {
                     $("#LevelRateRound2").show();
-                     var valueOfLevelNumber = $(":input[name='LRRound2.LevelNumber']").val();
-            switch (valueOfLevelNumber) {
-                case "1":
-                    $("label[id='LRRound2.Label2']").hide();
-                    $("label[id='LRRound2.LabelRate2']").show();
-                    $("div[id='LRRound2.GRate2']").show();
-                    $(":input[name='LRRound2.DetailRate2']").hide();
-                    $("div[id='LRRound2.Start2']").hide();
-                    $("div[id='LRRound2.Stop2']").hide();
+                    $("#LevelRateHeading1 h5 button").html("รอบที่ 1 เดือนตุลาคม - มีนาคม");
+                    var valueOfLevelNumber = $(":input[name='LRRound2.LevelNumber']").val();
+                    switch (valueOfLevelNumber) {
+                        case "1":
+                            $("label[id='LRRound2.Label2']").hide();
+                            $("label[id='LRRound2.LabelRate2']").show();
+                            $("div[id='LRRound2.GRate2']").show();
+                            $(":input[name='LRRound2.DetailRate2']").hide();
+                            $("div[id='LRRound2.Start2']").hide();
+                            $("div[id='LRRound2.Stop2']").hide();
 
-                    $("label[id='LRRound2.Label3']").hide();
-                    $("label[id='LRRound2.LabelRate3']").show();
-                    $("div[id='LRRound2.GRate3']").show();
-                    $(":input[name='LRRound2.DetailRate3']").hide();
-                    $("div[id='LRRound2.Start3']").hide();
-                    $("div[id='LRRound2.Stop3']").hide();
+                            $("label[id='LRRound2.Label3']").hide();
+                            $("label[id='LRRound2.LabelRate3']").show();
+                            $("div[id='LRRound2.GRate3']").show();
+                            $(":input[name='LRRound2.DetailRate3']").hide();
+                            $("div[id='LRRound2.Start3']").hide();
+                            $("div[id='LRRound2.Stop3']").hide();
 
-                    $("label[id='LRRound2.Label4']").hide();
-                    $("label[id='LRRound2.LabelRate4']").show();
-                    $("div[id='LRRound2.GRate4']").show();
-                    $(":input[name='LRRound2.DetailRate4']").hide();
-                    $("div[id='LRRound2.Start4']").hide();
-                    $("div[id='LRRound2.Stop4']").hide();
-                    //alert($(this).val());
-                    break;
-                case "2":
-                    $("label[id='LRRound2.Label2']").show();
-                    $("label[id='LRRound2.LabelRate2']").hide();
-                    $("div[id='LRRound2.GRate2']").hide();
-                    $(":input[name='LRRound2.DetailRate2']").show();
-                    $("div[id='LRRound2.Start2']").show();
-                    $("div[id='LRRound2.Stop2']").show();
+                            $("label[id='LRRound2.Label4']").hide();
+                            $("label[id='LRRound2.LabelRate4']").show();
+                            $("div[id='LRRound2.GRate4']").show();
+                            $(":input[name='LRRound2.DetailRate4']").hide();
+                            $("div[id='LRRound2.Start4']").hide();
+                            $("div[id='LRRound2.Stop4']").hide();
+                            //alert($(this).val());
+                            break;
+                        case "2":
+                            $("label[id='LRRound2.Label2']").show();
+                            $("label[id='LRRound2.LabelRate2']").hide();
+                            $("div[id='LRRound2.GRate2']").hide();
+                            $(":input[name='LRRound2.DetailRate2']").show();
+                            $("div[id='LRRound2.Start2']").show();
+                            $("div[id='LRRound2.Stop2']").show();
 
-                    $("label[id='LRRound2.Label3']").hide();
-                    $("label[id='LRRound2.LabelRate3']").show();
-                    $("div[id='LRRound2.GRate3']").show();
-                    $(":input[name='LRRound2.DetailRate3']").hide();
-                    $("div[id='LRRound2.Start3']").hide();
-                    $("div[id='LRRound2.Stop3']").hide();
+                            $("label[id='LRRound2.Label3']").hide();
+                            $("label[id='LRRound2.LabelRate3']").show();
+                            $("div[id='LRRound2.GRate3']").show();
+                            $(":input[name='LRRound2.DetailRate3']").hide();
+                            $("div[id='LRRound2.Start3']").hide();
+                            $("div[id='LRRound2.Stop3']").hide();
 
-                    $("label[id='LRRound2.Label4']").hide();
-                    $("label[id='LRRound2.LabelRate4']").show();
-                    $("div[id='LRRound2.GRate4']").show();
-                    $(":input[name='LRRound2.DetailRate4']").hide();
-                    $("div[id='LRRound2.Start4']").hide();
-                    $("div[id='LRRound2.Stop4']").hide();
-                    //alert($(this).val());
-                    break;
-                case "3":
-                    $("label[id='LRRound2.Label2']").show();
-                    $("label[id='LRRound2.LabelRate2']").hide();
-                    $("div[id='LRRound2.GRate2']").hide();
-                    $(":input[name='LRRound2.DetailRate2']").show();
-                    $("div[id='LRRound2.Start2']").show();
-                    $("div[id='LRRound2.Stop2']").show();
+                            $("label[id='LRRound2.Label4']").hide();
+                            $("label[id='LRRound2.LabelRate4']").show();
+                            $("div[id='LRRound2.GRate4']").show();
+                            $(":input[name='LRRound2.DetailRate4']").hide();
+                            $("div[id='LRRound2.Start4']").hide();
+                            $("div[id='LRRound2.Stop4']").hide();
+                            //alert($(this).val());
+                            break;
+                        case "3":
+                            $("label[id='LRRound2.Label2']").show();
+                            $("label[id='LRRound2.LabelRate2']").hide();
+                            $("div[id='LRRound2.GRate2']").hide();
+                            $(":input[name='LRRound2.DetailRate2']").show();
+                            $("div[id='LRRound2.Start2']").show();
+                            $("div[id='LRRound2.Stop2']").show();
 
-                    $("label[id='LRRound2.Label3']").show();
-                    $("label[id='LRRound2.LabelRate3']").hide();
-                    $("div[id='LRRound2.GRate3']").hide();
-                    $(":input[name='LRRound2.DetailRate3']").show();
-                    $("div[id='LRRound2.Start3']").show();
-                    $("div[id='LRRound2.Stop3']").show();
+                            $("label[id='LRRound2.Label3']").show();
+                            $("label[id='LRRound2.LabelRate3']").hide();
+                            $("div[id='LRRound2.GRate3']").hide();
+                            $(":input[name='LRRound2.DetailRate3']").show();
+                            $("div[id='LRRound2.Start3']").show();
+                            $("div[id='LRRound2.Stop3']").show();
 
-                    $("label[id='LRRound2.Label4']").hide();
-                    $("label[id='LRRound2.LabelRate4']").show();
-                    $("div[id='LRRound2.GRate4']").show();
-                    $(":input[name='LRRound2.DetailRate4']").hide();
-                    $("div[id='LRRound2.Start4']").hide();
-                    $("div[id='LRRound2.Stop4']").hide();
-                    //alert($(this).val());
-                    break;
-                case "4":
-                    $("label[id='LRRound2.Label2']").show();
-                    $("label[id='LRRound2.LabelRate2']").hide();
-                    $("div[id='LRRound2.GRate2']").hide();
-                    $(":input[name='LRRound2.DetailRate2']").show();
-                    $("div[id='LRRound2.Start2']").show();
-                    $("div[id='LRRound2.Stop2']").show();
+                            $("label[id='LRRound2.Label4']").hide();
+                            $("label[id='LRRound2.LabelRate4']").show();
+                            $("div[id='LRRound2.GRate4']").show();
+                            $(":input[name='LRRound2.DetailRate4']").hide();
+                            $("div[id='LRRound2.Start4']").hide();
+                            $("div[id='LRRound2.Stop4']").hide();
+                            //alert($(this).val());
+                            break;
+                        case "4":
+                            $("label[id='LRRound2.Label2']").show();
+                            $("label[id='LRRound2.LabelRate2']").hide();
+                            $("div[id='LRRound2.GRate2']").hide();
+                            $(":input[name='LRRound2.DetailRate2']").show();
+                            $("div[id='LRRound2.Start2']").show();
+                            $("div[id='LRRound2.Stop2']").show();
 
-                    $("label[id='LRRound2.Label3']").show();
-                    $("label[id='LRRound2.LabelRate3']").hide();
-                    $("div[id='LRRound2.GRate3']").hide();
-                    $(":input[name='LRRound2.DetailRate3']").show();
-                    $("div[id='LRRound2.Start3']").show();
-                    $("div[id='LRRound2.Stop3']").show();
+                            $("label[id='LRRound2.Label3']").show();
+                            $("label[id='LRRound2.LabelRate3']").hide();
+                            $("div[id='LRRound2.GRate3']").hide();
+                            $(":input[name='LRRound2.DetailRate3']").show();
+                            $("div[id='LRRound2.Start3']").show();
+                            $("div[id='LRRound2.Stop3']").show();
 
-                    $("label[id='LRRound2.Label4']").show();
-                    $("label[id='LRRound2.LabelRate4']").hide();
-                    $("div[id='LRRound2.GRate4']").hide();
-                    $(":input[name='LRRound2.DetailRate4']").show();
-                    $("div[id='LRRound2.Start4']").show();
-                    $("div[id='LRRound2.Stop4']").show();
-                    //alert($(this).val());
-                    break;
-                default:
+                            $("label[id='LRRound2.Label4']").show();
+                            $("label[id='LRRound2.LabelRate4']").hide();
+                            $("div[id='LRRound2.GRate4']").hide();
+                            $(":input[name='LRRound2.DetailRate4']").show();
+                            $("div[id='LRRound2.Start4']").show();
+                            $("div[id='LRRound2.Stop4']").show();
+                            //alert($(this).val());
+                            break;
+                        default:
 
-                // code block
-            }
+                        // code block
+                    }
                 } else {
                     $("#LevelRateRound2").hide();
+                    $("#LevelRateHeading1 h5 button").html("รอบที่ 1 เดือนตุลาคม - กันยายน");
                 }
-            } 
+            } else if ($("#point_Unit").children("option:selected").val() == 3) {
+                $("#DataForEvalutionTable").show();
+                $("#expect_Title").show();
+                $("#expect10").show();
+                $("#expect11").show();
+                $("#expect12").show();
+                $("#expect1").show();
+                $("#expect2").show();
+                $("#expect3").show();
+                $("#expect4").show();
+                $("#expect5").show();
+                $("#expect6").show();
+                $("#expect7").show();
+                $("#expect8").show();
+                $("#expect9").show();
+                $("#RateRound1").hide();
+                $("#RateRound2").hide();
+                $("#LevelRound1").hide();
+                $("#LevelRound2").hide();
+                $("#LevelRateRound1").hide();
+                $("#LevelRateRound2").hide();
+                $("#ScoreRound1").show();
+                if ($("#roundNumber").val() == 2) {
+                    $("#ScoreRound2").show();
+                    $("#ScoreHeading1 h5 button").html("รอบที่ 1 เดือนตุลาคม - มีนาคม");
+                } else {
+                    $("#ScoreRound2").hide();
+                    $("#ScoreHeading1 h5 button").html("รอบที่ 1 เดือนตุลาคม - กันยายน");
+                }
+            }
 
             $("#roundNumber").change(function () {
                 if ($(this).val() == 2) {
                     if ($("#point_Unit").children("option:selected").val() == 0) {
                         $("#RateRound2").show();
+                        $("#Round_R5MStop").val("@yearStop-03-31");
+                        $("#Round2_R1MStart").val("@yearStop-04-01");
+                        $("#Round2_R5MStop").val("@yearStop-09-30");
+                        $("#RateHeading1 h5 button").html("รอบที่ 1 เดือนตุลาคม - มีนาคม");
                     } else if ($("#point_Unit").children("option:selected").val() == 1) {
                         $("#LevelRound2").show();
+                        $("#LevelHeading1 h5 button").html("รอบที่ 1 เดือนตุลาคม - มีนาคม")
                     } else if ($("#point_Unit").children("option:selected").val() == 2) {
                         $("#LevelRateRound2").show();
+                        $("#LevelRateHeading1 h5 button").html("รอบที่ 1 เดือนตุลาคม - มีนาคม");
+                    } else if ($("#point_Unit").children("option:selected").val() == 3) {
+                        $("#ScoreRound2").show();
+                        $("#Score1Round1_R1MStop").val("@yearStop-03-31");
+                        $("#Score1Round2_R1MStart").val("@yearStop-04-01");
+                        $("#Score1Round2_R5MStop").val("@yearStop-09-30");
+                        $("#ScoreHeading1 h5 button").html("รอบที่ 1 เดือนตุลาคม - มีนาคม");
                     }
                 } else {
+                    $("#RateHeading1 h5 button").html("รอบที่ 1 เดือนตุลาคม - กันยายน");
+                    $("#LevelHeading1 h5 button").html("รอบที่ 1 เดือนตุลาคม - กันยายน");
+                    $("#LevelRateHeading1 h5 button").html("รอบที่ 1 เดือนตุลาคม - กันยายน");
+                    $("#ScoreHeading1 h5 button").html("รอบที่ 1 เดือนตุลาคม - กันยายน");
+                    $("#Round_R5MStop").val("@yearStop-09-30");
+                    $("#Score1Round1_R5MStop").val("@yearStop-09-30");
                     $("#RateRound2").hide();
                     $("#LevelRound2").hide();
                     $("#LevelRateRound2").hide();
+                    $("#ScoreRound2").hide();
                 }
             });
 
@@ -1204,6 +1565,11 @@
                     $("#LevelRound2").hide();
                     $("#LevelRateRound1").hide();
                     $("#LevelRateRound2").hide();
+                    $("#ScoreRound1").hide();
+                    $("#ScoreRound2").hide();
+                    $("#Round_R1MStart").val("@yearStart-10-01");
+                    $("#Round_R5MStop").val("@yearStop-09-30");
+                    $("#RateHeading1 h5 button").html("รอบที่ 1 เดือนตุลาคม - กันยายน");
                 } else if ($(this).children("option:selected").val() == 1) {
                     $("#DataForEvalutionTable").show();
                     $("#expect_Title").hide();
@@ -1226,6 +1592,9 @@
                     $("#LevelRound2").hide();
                     $("#LevelRateRound1").hide();
                     $("#LevelRateRound2").hide();
+                    $("#ScoreRound1").hide();
+                    $("#ScoreRound2").hide();
+                    $("#LevelHeading1 h5 button").html("รอบที่ 1 เดือนตุลาคม - กันยายน");
                 } else if ($(this).children("option:selected").val() == 2) {
                     $("#DataForEvalutionTable").show();
                     $("#expect_Title").show();
@@ -1248,6 +1617,36 @@
                     $("#LevelRound2").hide();
                     $("#LevelRateRound1").show();
                     $("#LevelRateRound2").hide();
+                    $("#ScoreRound1").hide();
+                    $("#ScoreRound2").hide();
+                    $("#LevelRateHeading1 h5 button").html("รอบที่ 1 เดือนตุลาคม - กันยายน");
+                } else if ($(this).children("option:selected").val() == 3) {
+                    $("#DataForEvalutionTable").show();
+                    $("#expect_Title").show();
+                    $("#expect10").show();
+                    $("#expect11").show();
+                    $("#expect12").show();
+                    $("#expect1").show();
+                    $("#expect2").show();
+                    $("#expect3").show();
+                    $("#expect4").show();
+                    $("#expect5").show();
+                    $("#expect6").show();
+                    $("#expect7").show();
+                    $("#expect8").show();
+                    $("#expect9").show();
+                    $("#roundNumber").val(1);
+                    $("#RateRound1").hide();
+                    $("#RateRound2").hide();
+                    $("#LevelRound1").hide();
+                    $("#LevelRound2").hide();
+                    $("#LevelRateRound1").hide();
+                    $("#LevelRateRound2").hide();
+                    $("#ScoreRound1").show();
+                    $("#ScoreRound2").hide();
+                    $("#Score1Round1_R1MStart").val("@yearStart-10-01");
+                    $("#Score1Round1_R5MStop").val("@yearStop-09-30");
+                    $("#ScoreHeading1 h5 button").html("รอบที่ 1 เดือนตุลาคม - กันยายน");
                 } else {
                     if ($("#OwnerOfficeId").val() == "") {
                         $("#DataForEvalutionTable").hide();
@@ -1355,7 +1754,7 @@
                         break;
                     default:
 
-                    // code block
+                        // code block
                 }
             });
 
@@ -1462,7 +1861,6 @@
             });
 
             $("#point_Weight").change(function () {
-
                 var w = $(this).val();
                 if ($("#point_WeightAll").is(":checked")) {
                     $("#weight10").val(w);

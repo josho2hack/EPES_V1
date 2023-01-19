@@ -3,12 +3,11 @@
 @inject UserManager<ApplicationUser> UserManager
 
 @{
-    ViewData["Title"] = "Point Of Evaluation";
+    ViewData["Title"] = "แผนปฏิบัติราชการ";
     var user = await UserManager.GetUserAsync(User);
 
     List<string> userOffices = ViewBag.UserOffices;
 }
-
 
 <link href="~/css/devextreme/dx.common.css" rel="stylesheet" />
 <link href="~/css/devextreme/dx.light.css" rel="stylesheet" />
@@ -41,49 +40,10 @@
                 <select asp-for="selectoffice" class="form-control" asp-items="ViewBag.OfficeCode" onchange="this.form.submit()">
                     <option value="">เลือกหน่วยงาน</option>
                 </select>
-                @if (User.IsInRole("Admin") || User.IsInRole("Manager") || User.IsInRole("Special"))
-                {
-                }
             </div>
             <div class="form-group form-inline">
                 <label class="form-label text-md-right">ปีงบประมาณ: </label>
-                <select asp-for="yearPoint" class="form-control" onchange="this.form.submit()">
-                    <option value="-1">
-                        @{
-                            if (DateTime.Now.Month == 10 || DateTime.Now.Month == 11 || DateTime.Now.Month == 12)
-                            {
-                                @DateTime.Now.ToString("yyyy");
-                            }
-                            else
-                            {
-                                @DateTime.Now.AddYears(-1).ToString("yyyy");
-                            }
-                        }
-                    </option>
-                    <option value="0">
-                        @{
-                            if (DateTime.Now.Month == 10 || DateTime.Now.Month == 11 || DateTime.Now.Month == 12)
-                            {
-                                @DateTime.Now.AddYears(1).ToString("yyyy");
-                            }
-                            else
-                            {
-                                @DateTime.Now.ToString("yyyy");
-                            }
-                        }
-                    </option>
-                    <option value="1">
-                        @{
-                            if (DateTime.Now.Month == 10 || DateTime.Now.Month == 11 || DateTime.Now.Month == 12)
-                            {
-                                @DateTime.Now.AddYears(2).ToString("yyyy");
-                            }
-                            else
-                            {
-                                @DateTime.Now.AddYears(1).ToString("yyyy");
-                            }
-                        }
-                    </option>
+                <select asp-for="yearPoint" class="form-control" onchange="this.form.submit()" asp-items="ViewBag.selectyear">
                 </select>
             </div>
         </div>
@@ -272,86 +232,89 @@
             </div>
         </div>
     }
-    <!-- Plan B -->
-    <div class="card shadow mb-4">
-        <div class="card-header py-3">
-            <h6 class="m-0 font-weight-bold text-primary">แผนงานตามนโยบายที่ถ่ายทอดไปยังหน่วยปฏิบัติ (Top - Down: B)</h6>
-        </div>
-        <div class="card-body">
-            <div class="table-responsive">
-                <table class="table table-bordered" id="EPEStableB" style="width:100%;" cellspacing="0">
-                    <thead>
-                        <tr>
-                            <th>
-                                ลำดับที่
-                            </th>
-                            <th>
-                                แผนงาน/โครงการ
-                            </th>
-                            <th>
-                                ตัวชี้วัด
-                            </th>
-                            <th>
-                                หน่วยนับ
-                            </th>
-                            <th>
-                                น้ำหนัก
-                            </th>
-                            <th>
-                                ตัวชี้วัดสำหรับ
-                            </th>
-                            <th>
-                                หน่วยกำกับ
-                            </th>
-                            <th></th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach (var ptB in Model.pointB)
-                        {
-                            <tr>
-                                <td>
-                                    @if (ptB.SubPoint != 0)
-                                    {
-                                        @Html.DisplayFor(modelItem => ptB.Point)@:.@Html.DisplayFor(modelItem => ptB.SubPoint)
-                                    }
-                                    else
-                                    {
-                                        @Html.DisplayFor(modelItem => ptB.Point)
-                                    }
-                                </td>
-                                <td>
-                                    @Html.DisplayFor(modelItem => ptB.DetailPlan)
-                                </td>
-                                <td>
-                                    @Html.DisplayFor(modelItem => ptB.Name)
-                                </td>
-                                <td>
-                                    @Html.DisplayFor(modelItem => ptB.Unit)
-                                </td>
-                                <td>
-                                    @Html.DisplayFor(modelItem => ptB.Weight)
-                                </td>
-                                <td>
-                                    @Html.DisplayFor(modelItem => ptB.OwnerOffice.Name)
-                                </td>
-                                <td>
-                                    @Html.DisplayFor(modelItem => ptB.AuditOffice.Name)
-                                </td>
-                                <td>
-                                    @if (User.IsInRole("Admin") || (User.IsInRole("Manager") && (ptB.AuditOffice.Code == user.OfficeId || ptB.OwnerOffice.Code == user.OfficeId || userOffices.Any(uo => uo == ptB.OwnerOffice.Code || uo == ptB.AuditOffice.Code))) || (User.IsInRole("Manager") && (user.OfficeId.Substring(2, 6) == "000000" && ptB.OwnerOffice.Code.StartsWith(user.OfficeId.Substring(0, 2)) || userOffices.Any(uo => uo.Substring(2, 6) == "000000" && uo.Substring(0, 2) == ptB.OwnerOffice.Code.Substring(0, 2)))) || (User.IsInRole("User") && (ptB.OwnerOffice.Code == user.OfficeId || userOffices.Any(uo => uo == ptB.OwnerOffice.Code))))
-                                    {
-                                        <a title="แก้ไข" asp-action="Edit" asp-route-id="@ptB.Id" asp-route-yearPoint="@Model.yearPoint" asp-route-selectoffice="@ViewBag.selectoffice"><i class="fas fa-edit"></i></a>
-                                    }
-                                    <a title="รายละเอียด" asp-action="Details" asp-route-id="@ptB.Id" asp-route-yearPoint="@Model.yearPoint" asp-route-selectoffice="@ViewBag.selectoffice"><i class="fas fa-search-plus"></i></a>
-                                    @if (User.IsInRole("Admin") || (User.IsInRole("Manager") && (ptB.AuditOffice.Code == user.OfficeId || ptB.OwnerOffice.Code == user.OfficeId || userOffices.Any(uo => uo == ptB.OwnerOffice.Code || uo == ptB.AuditOffice.Code))) || (User.IsInRole("Manager") && (user.OfficeId.Substring(2, 6) == "000000" && ptB.OwnerOffice.Code.StartsWith(user.OfficeId.Substring(0, 2)) || userOffices.Any(uo => uo.Substring(2, 6) == "000000" && uo.Substring(0, 2) == ptB.OwnerOffice.Code.Substring(0, 2)))) || (User.IsInRole("User") && (ptB.OwnerOffice.Code == user.OfficeId || userOffices.Any(uo => uo == ptB.OwnerOffice.Code))))
-                                    {
-                                        <a title="ลบ" asp-action="Delete" asp-route-id="@ptB.Id" asp-route-yearPoint="@Model.yearPoint" asp-route-selectoffice="@ViewBag.selectoffice"><i class="fas fa-trash"></i></a>
 
-                                        @(Html.DevExtreme().Button()
-                                                //.ElementAttr("class", "button-info")
-                                                .Text("แนบ")
-                                                .OnClick(@<text>
+    @if (Model.pointB != null)
+    {
+        <!-- Plan B -->
+        <div class="card shadow mb-4">
+            <div class="card-header py-3">
+                <h6 class="m-0 font-weight-bold text-primary">แผนงานตามนโยบายที่ถ่ายทอดไปยังหน่วยปฏิบัติ (Top - Down: B)</h6>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-bordered" id="EPEStableB" style="width:100%;" cellspacing="0">
+                        <thead>
+                            <tr>
+                                <th>
+                                    ลำดับที่
+                                </th>
+                                <th>
+                                    แผนงาน/โครงการ
+                                </th>
+                                <th>
+                                    ตัวชี้วัด
+                                </th>
+                                <th>
+                                    หน่วยนับ
+                                </th>
+                                <th>
+                                    น้ำหนัก
+                                </th>
+                                <th>
+                                    ตัวชี้วัดสำหรับ
+                                </th>
+                                <th>
+                                    หน่วยกำกับ
+                                </th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var ptB in Model.pointB)
+                            {
+                                <tr>
+                                    <td>
+                                        @if (ptB.SubPoint != 0)
+                                        {
+                                            @Html.DisplayFor(modelItem => ptB.Point)@:.@Html.DisplayFor(modelItem => ptB.SubPoint)
+                                        }
+                                        else
+                                        {
+                                            @Html.DisplayFor(modelItem => ptB.Point)
+                                        }
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => ptB.DetailPlan)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => ptB.Name)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => ptB.Unit)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => ptB.Weight)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => ptB.OwnerOffice.Name)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => ptB.AuditOffice.Name)
+                                    </td>
+                                    <td>
+                                        @if (User.IsInRole("Admin") || (User.IsInRole("Manager") && (ptB.AuditOffice.Code == user.OfficeId || ptB.OwnerOffice.Code == user.OfficeId || userOffices.Any(uo => uo == ptB.OwnerOffice.Code || uo == ptB.AuditOffice.Code))) || (User.IsInRole("Manager") && (user.OfficeId.Substring(2, 6) == "000000" && ptB.OwnerOffice.Code.StartsWith(user.OfficeId.Substring(0, 2)) || userOffices.Any(uo => uo.Substring(2, 6) == "000000" && uo.Substring(0, 2) == ptB.OwnerOffice.Code.Substring(0, 2)))) || (User.IsInRole("User") && (ptB.OwnerOffice.Code == user.OfficeId || userOffices.Any(uo => uo == ptB.OwnerOffice.Code))))
+                                        {
+                                            <a title="แก้ไข" asp-action="Edit" asp-route-id="@ptB.Id" asp-route-yearPoint="@Model.yearPoint" asp-route-selectoffice="@ViewBag.selectoffice"><i class="fas fa-edit"></i></a>
+                                        }
+                                        <a title="รายละเอียด" asp-action="Details" asp-route-id="@ptB.Id" asp-route-yearPoint="@Model.yearPoint" asp-route-selectoffice="@ViewBag.selectoffice"><i class="fas fa-search-plus"></i></a>
+                                        @if (User.IsInRole("Admin") || (User.IsInRole("Manager") && (ptB.AuditOffice.Code == user.OfficeId || ptB.OwnerOffice.Code == user.OfficeId || userOffices.Any(uo => uo == ptB.OwnerOffice.Code || uo == ptB.AuditOffice.Code))) || (User.IsInRole("Manager") && (user.OfficeId.Substring(2, 6) == "000000" && ptB.OwnerOffice.Code.StartsWith(user.OfficeId.Substring(0, 2)) || userOffices.Any(uo => uo.Substring(2, 6) == "000000" && uo.Substring(0, 2) == ptB.OwnerOffice.Code.Substring(0, 2)))) || (User.IsInRole("User") && (ptB.OwnerOffice.Code == user.OfficeId || userOffices.Any(uo => uo == ptB.OwnerOffice.Code))))
+                                        {
+                                            <a title="ลบ" asp-action="Delete" asp-route-id="@ptB.Id" asp-route-yearPoint="@Model.yearPoint" asp-route-selectoffice="@ViewBag.selectoffice"><i class="fas fa-trash"></i></a>
+
+                                            @(Html.DevExtreme().Button()
+                        //.ElementAttr("class", "button-info")
+                        .Text("แนบ")
+                        .OnClick(@<text>
                                                     function showInfo(data) {
                                                         var popup = $("#attach-popup").dxPopup("instance");
                                                         popup.option("contentTemplate", $("@("#popup-attach-" + ptB.Id)"));
@@ -360,14 +323,14 @@
                                                 </text>)
                                             )
 
-                                        @if (ptB.AttachFile != null)
-                                        {
-                                            <a href="~/attach_files/@ptB.AttachFile" target="_blank"><i class="fas fa-file-pdf fa-2x"></i></a><br />
-                                            @(Html.DevExtreme().Button()
-                                                    .ElementAttr("class", "button-danger")
-                                                    .Text("ลบ")
-                                                    .Type(ButtonType.Danger)
-                                                    .OnClick(@<text>
+                                            @if (ptB.AttachFile != null)
+                                            {
+                                                <a href="~/attach_files/@ptB.AttachFile" target="_blank"><i class="fas fa-file-pdf fa-2x"></i></a><br />
+                                                @(Html.DevExtreme().Button()
+                            .ElementAttr("class", "button-danger")
+                            .Text("ลบ")
+                            .Type(ButtonType.Danger)
+                            .OnClick(@<text>
                                                         function showInfo(data) {
                                                             var popup = $("#attach-popup").dxPopup("instance");
                                                             popup.option("contentTemplate", $("@("#popup-del-" + ptB.Id)"));
@@ -375,154 +338,156 @@
                                                         }
                                                     </text>)
                                                 )
-                                        }
+                                            }
 
 
-                                        @using (Html.DevExtreme().NamedTemplate("popup-attach-" + ptB.Id))
-                                        {
-                                            <form id="form" method="post" enctype="multipart/form-data" action="PointOfEvaluations/FileSelection">
-                                                <h3>แนบไฟล์ประกอบแผนปฏิบัติราชการ</h3>
-                                                <div id="fileuploader-container">
-                                                    @(Html.DevExtreme().FileUploader()
-                                                        .Name("AttachFile")
-                                                        .SelectButtonText("เลือกไฟล์แนบ")
-                                                        .LabelText("ลากไฟล์แนบมาวางที่นี่")
-                                                        .Accept("application/pdf")
-                                                        .FocusStateEnabled(true)
-                                                        .IsValid(true)
-                                                        .Progress(0)
-                                                        .ReadyToUploadMessage("พร้อม Upload ไฟล์แนบได้")
-                                                        .UploadButtonText("Upload")
-                                                        .UploadedMessage("Upload ไฟล์แนบแล้ว")
-                                                        .UploadFailedMessage("ไม่สามารถ Upload ไฟล์แนบได้")
-                                                        .UploadMethod(UploadHttpMethod.POST)
-                                                        .UploadMode(FileUploadMode.Instantly)
+                                            @using (Html.DevExtreme().NamedTemplate("popup-attach-" + ptB.Id))
+                                            {
+                                                <form id="form" method="post" enctype="multipart/form-data" action="PointOfEvaluations/FileSelection">
+                                                    <h3>แนบไฟล์ประกอบแผนปฏิบัติราชการ</h3>
+                                                    <div id="fileuploader-container">
+                                                        @(Html.DevExtreme().FileUploader()
+                        .Name("AttachFile")
+                        .SelectButtonText("เลือกไฟล์แนบ")
+                        .LabelText("ลากไฟล์แนบมาวางที่นี่")
+                        .Accept("application/pdf")
+                        .FocusStateEnabled(true)
+                        .IsValid(true)
+                        .Progress(0)
+                        .ReadyToUploadMessage("พร้อม Upload ไฟล์แนบได้")
+                        .UploadButtonText("Upload")
+                        .UploadedMessage("Upload ไฟล์แนบแล้ว")
+                        .UploadFailedMessage("ไม่สามารถ Upload ไฟล์แนบได้")
+                        .UploadMethod(UploadHttpMethod.POST)
+                        .UploadMode(FileUploadMode.Instantly)
                                                     )
-                                                </div>
-                                                @(Html.DevExtreme().Button()
-                                                    .ID("button")
-                                                    .Text("ส่งไฟล์แนบ")
-                                                    .Type(ButtonType.Success)
-                                                    .UseSubmitBehavior(true)
+                                                    </div>
+                                                    @(Html.DevExtreme().Button()
+                        .ID("button")
+                        .Text("ส่งไฟล์แนบ")
+                        .Type(ButtonType.Success)
+                        .UseSubmitBehavior(true)
                                                 )
-                                                <input type="hidden" name="pid" value="@ptB.Id" />
-                                                <input type="hidden" name="selectoffice" value="@ViewBag.selectoffice" />
-                                                <input type="hidden" name="yearPoint" value="@Model.yearPoint" />
-                                            </form>
-                                        }
-                                        @using (Html.DevExtreme().NamedTemplate("popup-del-" + ptB.Id))
-                                        {
-                                            <form id="form" method="post" action="PointOfEvaluations/FileDelete">
-                                                <h3>ลบไฟล์ประกอบผลการปฏิบัติ</h3>
-                                                <h5>@ptB.AttachFile</h5>
-                                                @(Html.DevExtreme().Button()
-                                                    .ID("button")
-                                                    .Text("ลบไฟล์แนบ")
-                                                    .Type(ButtonType.Danger)
-                                                    .UseSubmitBehavior(true)
+                                                    <input type="hidden" name="pid" value="@ptB.Id" />
+                                                    <input type="hidden" name="selectoffice" value="@ViewBag.selectoffice" />
+                                                    <input type="hidden" name="yearPoint" value="@Model.yearPoint" />
+                                                </form>
+                                            }
+                                            @using (Html.DevExtreme().NamedTemplate("popup-del-" + ptB.Id))
+                                            {
+                                                <form id="form" method="post" action="PointOfEvaluations/FileDelete">
+                                                    <h3>ลบไฟล์ประกอบผลการปฏิบัติ</h3>
+                                                    <h5>@ptB.AttachFile</h5>
+                                                    @(Html.DevExtreme().Button()
+                        .ID("button")
+                        .Text("ลบไฟล์แนบ")
+                        .Type(ButtonType.Danger)
+                        .UseSubmitBehavior(true)
                                                 )
-                                                <input type="hidden" name="pid" value="@ptB.Id" />
-                                                <input type="hidden" name="selectoffice" value="@ViewBag.selectoffice" />
-                                                <input type="hidden" name="yearPoint" value="@Model.yearPoint" />
-                                            </form>
+                                                    <input type="hidden" name="pid" value="@ptB.Id" />
+                                                    <input type="hidden" name="selectoffice" value="@ViewBag.selectoffice" />
+                                                    <input type="hidden" name="yearPoint" value="@Model.yearPoint" />
+                                                </form>
+                                            }
                                         }
-                                    }
-                                </td>
-                            </tr>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                    <p class="text-right">
+                        @if (User.IsInRole("Admin") || User.IsInRole("Manager") || User.IsInRole("User"))
+                        {
+                            <a asp-action="Create" asp-route-plan="1" asp-route-yearPoint="@Model.yearPoint" asp-route-selectoffice="@ViewBag.selectoffice">เพิ่มแผน</a>
                         }
-                    </tbody>
-                </table>
-                <p class="text-right">
-                    @if (User.IsInRole("Admin") || User.IsInRole("Manager") || User.IsInRole("User"))
-                    {
-                        <a asp-action="Create" asp-route-plan="1" asp-route-yearPoint="@Model.yearPoint" asp-route-selectoffice="@ViewBag.selectoffice">เพิ่มแผน</a>
-                    }
-                </p>
+                    </p>
+                </div>
             </div>
         </div>
-    </div>
-
-    <!-- Plan C -->
-    <div class="card shadow mb-4">
-        <div class="card-header py-3">
-            <h6 class="m-0 font-weight-bold text-primary">แผนงานตามความต้องการของหน่วยงาน (Bottom - Up: C)</h6>
-        </div>
-        <div class="card-body">
-            <div class="table-responsive">
-                <table class="table table-bordered" id="EPEStableC" style="width:100%;" cellspacing="0">
-                    <thead>
-                        <tr>
-                            <th>
-                                ลำดับที่
-                            </th>
-                            <th>
-                                แผนงาน/โครงการ
-                            </th>
-                            <th>
-                                ตัวชี้วัด
-                            </th>
-                            <th>
-                                หน่วยนับ
-                            </th>
-                            <th>
-                                น้ำหนัก
-                            </th>
-                            <th>
-                                ตัวชี้วัดสำหรับ
-                            </th>
-                            <th>
-                                หน่วยกำกับ
-                            </th>
-                            <th></th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach (var ptC in Model.pointC)
-                        {
+    }
+    @if (Model.pointC != null)
+    {
+        <!-- Plan C -->
+        <div class="card shadow mb-4">
+            <div class="card-header py-3">
+                <h6 class="m-0 font-weight-bold text-primary">แผนงานตามความต้องการของหน่วยงาน (Bottom - Up: C)</h6>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-bordered" id="EPEStableC" style="width:100%;" cellspacing="0">
+                        <thead>
                             <tr>
-                                <td>
-                                    @if (ptC.SubPoint != 0)
-                                    {
-                                        @Html.DisplayFor(modelItem => ptC.Point)@:.@Html.DisplayFor(modelItem => ptC.SubPoint)
-                                    }
-                                    else
-                                    {
-                                        @Html.DisplayFor(modelItem => ptC.Point)
-                                    }
-                                </td>
-                                <td>
-                                    @Html.DisplayFor(modelItem => ptC.DetailPlan)
-                                </td>
-                                <td>
-                                    @Html.DisplayFor(modelItem => ptC.Name)
-                                </td>
-                                <td>
-                                    @Html.DisplayFor(modelItem => ptC.Unit)
-                                </td>
-                                <td>
-                                    @Html.DisplayFor(modelItem => ptC.Weight)
-                                </td>
-                                <td>
-                                    @Html.DisplayFor(modelItem => ptC.OwnerOffice.Name)
-                                </td>
-                                <td>
-                                    @Html.DisplayFor(modelItem => ptC.AuditOffice.Name)
-                                </td>
-                                <td>
-                                    @if (User.IsInRole("Admin") || (User.IsInRole("Manager") && (ptC.AuditOffice.Code == user.OfficeId || ptC.OwnerOffice.Code == user.OfficeId || userOffices.Any(uo => uo == ptC.AuditOffice.Code || uo == ptC.OwnerOffice.Code))) || (User.IsInRole("Manager") && (user.OfficeId.Substring(2, 6) == "000000" && ptC.OwnerOffice.Code.StartsWith(user.OfficeId.Substring(0, 2)) || (userOffices.Any(uo => uo.Substring(2, 6) == "000000" && uo.Substring(0, 2) == ptC.OwnerOffice.Code.Substring(0, 2))))) || (User.IsInRole("User") && (ptC.OwnerOffice.Code == user.OfficeId || userOffices.Any(uo => uo == ptC.OwnerOffice.Code))))
-                                    {
-                                        <a title="แก้ไข" asp-action="Edit" asp-route-id="@ptC.Id" asp-route-yearPoint="@Model.yearPoint" asp-route-selectoffice="@ViewBag.selectoffice"><i class="fas fa-edit"></i></a>
-                                    }
-                                    <a title="รายละเอียด" asp-action="Details" asp-route-id="@ptC.Id" asp-route-yearPoint="@Model.yearPoint" asp-route-selectoffice="@ViewBag.selectoffice"><i class="fas fa-search-plus"></i></a>
+                                <th>
+                                    ลำดับที่
+                                </th>
+                                <th>
+                                    แผนงาน/โครงการ
+                                </th>
+                                <th>
+                                    ตัวชี้วัด
+                                </th>
+                                <th>
+                                    หน่วยนับ
+                                </th>
+                                <th>
+                                    น้ำหนัก
+                                </th>
+                                <th>
+                                    ตัวชี้วัดสำหรับ
+                                </th>
+                                <th>
+                                    หน่วยกำกับ
+                                </th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var ptC in Model.pointC)
+                            {
+                                <tr>
+                                    <td>
+                                        @if (ptC.SubPoint != 0)
+                                        {
+                                            @Html.DisplayFor(modelItem => ptC.Point)@:.@Html.DisplayFor(modelItem => ptC.SubPoint)
+                                        }
+                                        else
+                                        {
+                                            @Html.DisplayFor(modelItem => ptC.Point)
+                                        }
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => ptC.DetailPlan)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => ptC.Name)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => ptC.Unit)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => ptC.Weight)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => ptC.OwnerOffice.Name)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => ptC.AuditOffice.Name)
+                                    </td>
+                                    <td>
+                                        @if (User.IsInRole("Admin") || (User.IsInRole("Manager") && (ptC.AuditOffice.Code == user.OfficeId || ptC.OwnerOffice.Code == user.OfficeId || userOffices.Any(uo => uo == ptC.AuditOffice.Code || uo == ptC.OwnerOffice.Code))) || (User.IsInRole("Manager") && (user.OfficeId.Substring(2, 6) == "000000" && ptC.OwnerOffice.Code.StartsWith(user.OfficeId.Substring(0, 2)) || (userOffices.Any(uo => uo.Substring(2, 6) == "000000" && uo.Substring(0, 2) == ptC.OwnerOffice.Code.Substring(0, 2))))) || (User.IsInRole("User") && (ptC.OwnerOffice.Code == user.OfficeId || userOffices.Any(uo => uo == ptC.OwnerOffice.Code))))
+                                        {
+                                            <a title="แก้ไข" asp-action="Edit" asp-route-id="@ptC.Id" asp-route-yearPoint="@Model.yearPoint" asp-route-selectoffice="@ViewBag.selectoffice"><i class="fas fa-edit"></i></a>
+                                        }
+                                        <a title="รายละเอียด" asp-action="Details" asp-route-id="@ptC.Id" asp-route-yearPoint="@Model.yearPoint" asp-route-selectoffice="@ViewBag.selectoffice"><i class="fas fa-search-plus"></i></a>
 
-                                    @if (User.IsInRole("Admin") || (User.IsInRole("Manager") && (ptC.AuditOffice.Code == user.OfficeId || ptC.OwnerOffice.Code == user.OfficeId || userOffices.Any(uo => uo == ptC.AuditOffice.Code || uo == ptC.OwnerOffice.Code))) || (User.IsInRole("Manager") && (user.OfficeId.Substring(2, 6) == "000000" && ptC.OwnerOffice.Code.StartsWith(user.OfficeId.Substring(0, 2)) || (userOffices.Any(uo => uo.Substring(2, 6) == "000000" && uo.Substring(0, 2) == ptC.OwnerOffice.Code.Substring(0, 2))))) || (User.IsInRole("User") && (ptC.OwnerOffice.Code == user.OfficeId || userOffices.Any(uo => uo == ptC.OwnerOffice.Code))))
-                                    {
-                                        <a title="ลบ" asp-action="Delete" asp-route-id="@ptC.Id" asp-route-yearPoint="@Model.yearPoint" asp-route-selectoffice="@ViewBag.selectoffice"><i class="fas fa-trash"></i></a>
+                                        @if (User.IsInRole("Admin") || (User.IsInRole("Manager") && (ptC.AuditOffice.Code == user.OfficeId || ptC.OwnerOffice.Code == user.OfficeId || userOffices.Any(uo => uo == ptC.AuditOffice.Code || uo == ptC.OwnerOffice.Code))) || (User.IsInRole("Manager") && (user.OfficeId.Substring(2, 6) == "000000" && ptC.OwnerOffice.Code.StartsWith(user.OfficeId.Substring(0, 2)) || (userOffices.Any(uo => uo.Substring(2, 6) == "000000" && uo.Substring(0, 2) == ptC.OwnerOffice.Code.Substring(0, 2))))) || (User.IsInRole("User") && (ptC.OwnerOffice.Code == user.OfficeId || userOffices.Any(uo => uo == ptC.OwnerOffice.Code))))
+                                        {
+                                            <a title="ลบ" asp-action="Delete" asp-route-id="@ptC.Id" asp-route-yearPoint="@Model.yearPoint" asp-route-selectoffice="@ViewBag.selectoffice"><i class="fas fa-trash"></i></a>
 
-                                        @(Html.DevExtreme().Button()
-                                                //.ElementAttr("class", "button-info")
-                                                .Text("แนบ")
-                                                .OnClick(@<text>
+                                            @(Html.DevExtreme().Button()
+                        //.ElementAttr("class", "button-info")
+                        .Text("แนบ")
+                        .OnClick(@<text>
                                                     function showInfo(data) {
                                                         var popup = $("#attach-popup").dxPopup("instance");
                                                         popup.option("contentTemplate", $("@("#popup-attach-" + ptC.Id)"));
@@ -531,14 +496,14 @@
                                                 </text>)
                                             )
 
-                                        @if (ptC.AttachFile != null)
-                                        {
-                                            <a href="~/attach_files/@ptC.AttachFile" target="_blank"><i class="fas fa-file-pdf fa-2x"></i></a><br />
-                                            @(Html.DevExtreme().Button()
-                                                    .ElementAttr("class", "button-danger")
-                                                    .Text("ลบ")
-                                                    .Type(ButtonType.Danger)
-                                                    .OnClick(@<text>
+                                            @if (ptC.AttachFile != null)
+                                            {
+                                                <a href="~/attach_files/@ptC.AttachFile" target="_blank"><i class="fas fa-file-pdf fa-2x"></i></a><br />
+                                                @(Html.DevExtreme().Button()
+                            .ElementAttr("class", "button-danger")
+                            .Text("ลบ")
+                            .Type(ButtonType.Danger)
+                            .OnClick(@<text>
                                                         function showInfo(data) {
                                                             var popup = $("#attach-popup").dxPopup("instance");
                                                             popup.option("contentTemplate", $("@("#popup-del-" + ptC.Id)"));
@@ -546,153 +511,155 @@
                                                         }
                                                     </text>)
                                                 )
-                                        }
+                                            }
 
 
-                                        @using (Html.DevExtreme().NamedTemplate("popup-attach-" + ptC.Id))
-                                        {
-                                            <form id="form" method="post" enctype="multipart/form-data" action="PointOfEvaluations/FileSelection">
-                                                <h3>แนบไฟล์ประกอบแผนปฏิบัติราชการ</h3>
-                                                <div id="fileuploader-container">
-                                                    @(Html.DevExtreme().FileUploader()
-                                                        .Name("AttachFile")
-                                                        .SelectButtonText("เลือกไฟล์แนบ")
-                                                        .LabelText("ลากไฟล์แนบมาวางที่นี่")
-                                                        .Accept("application/pdf")
-                                                        .FocusStateEnabled(true)
-                                                        .IsValid(true)
-                                                        .Progress(0)
-                                                        .ReadyToUploadMessage("พร้อม Upload ไฟล์แนบได้")
-                                                        .UploadButtonText("Upload")
-                                                        .UploadedMessage("Upload ไฟล์แนบแล้ว")
-                                                        .UploadFailedMessage("ไม่สามารถ Upload ไฟล์แนบได้")
-                                                        .UploadMethod(UploadHttpMethod.POST)
-                                                        .UploadMode(FileUploadMode.Instantly)
+                                            @using (Html.DevExtreme().NamedTemplate("popup-attach-" + ptC.Id))
+                                            {
+                                                <form id="form" method="post" enctype="multipart/form-data" action="PointOfEvaluations/FileSelection">
+                                                    <h3>แนบไฟล์ประกอบแผนปฏิบัติราชการ</h3>
+                                                    <div id="fileuploader-container">
+                                                        @(Html.DevExtreme().FileUploader()
+                        .Name("AttachFile")
+                        .SelectButtonText("เลือกไฟล์แนบ")
+                        .LabelText("ลากไฟล์แนบมาวางที่นี่")
+                        .Accept("application/pdf")
+                        .FocusStateEnabled(true)
+                        .IsValid(true)
+                        .Progress(0)
+                        .ReadyToUploadMessage("พร้อม Upload ไฟล์แนบได้")
+                        .UploadButtonText("Upload")
+                        .UploadedMessage("Upload ไฟล์แนบแล้ว")
+                        .UploadFailedMessage("ไม่สามารถ Upload ไฟล์แนบได้")
+                        .UploadMethod(UploadHttpMethod.POST)
+                        .UploadMode(FileUploadMode.Instantly)
                                                     )
-                                                </div>
-                                                @(Html.DevExtreme().Button()
-                                                    .ID("button")
-                                                    .Text("ส่งไฟล์แนบ")
-                                                    .Type(ButtonType.Success)
-                                                    .UseSubmitBehavior(true)
+                                                    </div>
+                                                    @(Html.DevExtreme().Button()
+                        .ID("button")
+                        .Text("ส่งไฟล์แนบ")
+                        .Type(ButtonType.Success)
+                        .UseSubmitBehavior(true)
                                                 )
-                                                <input type="hidden" name="pid" value="@ptC.Id" />
-                                                <input type="hidden" name="selectoffice" value="@ViewBag.selectoffice" />
-                                                <input type="hidden" name="yearPoint" value="@Model.yearPoint" />
-                                            </form>
-                                        }
-                                        @using (Html.DevExtreme().NamedTemplate("popup-del-" + ptC.Id))
-                                        {
-                                            <form id="form" method="post" action="PointOfEvaluations/FileDelete">
-                                                <h3>ลบไฟล์ประกอบผลการปฏิบัติ</h3>
-                                                <h5>@ptC.AttachFile</h5>
-                                                @(Html.DevExtreme().Button()
-                                                    .ID("button")
-                                                    .Text("ลบไฟล์แนบ")
-                                                    .Type(ButtonType.Danger)
-                                                    .UseSubmitBehavior(true)
+                                                    <input type="hidden" name="pid" value="@ptC.Id" />
+                                                    <input type="hidden" name="selectoffice" value="@ViewBag.selectoffice" />
+                                                    <input type="hidden" name="yearPoint" value="@Model.yearPoint" />
+                                                </form>
+                                            }
+                                            @using (Html.DevExtreme().NamedTemplate("popup-del-" + ptC.Id))
+                                            {
+                                                <form id="form" method="post" action="PointOfEvaluations/FileDelete">
+                                                    <h3>ลบไฟล์ประกอบผลการปฏิบัติ</h3>
+                                                    <h5>@ptC.AttachFile</h5>
+                                                    @(Html.DevExtreme().Button()
+                        .ID("button")
+                        .Text("ลบไฟล์แนบ")
+                        .Type(ButtonType.Danger)
+                        .UseSubmitBehavior(true)
                                                 )
-                                                <input type="hidden" name="pid" value="@ptC.Id" />
-                                                <input type="hidden" name="selectoffice" value="@ViewBag.selectoffice" />
-                                                <input type="hidden" name="yearPoint" value="@Model.yearPoint" />
-                                            </form>
+                                                    <input type="hidden" name="pid" value="@ptC.Id" />
+                                                    <input type="hidden" name="selectoffice" value="@ViewBag.selectoffice" />
+                                                    <input type="hidden" name="yearPoint" value="@Model.yearPoint" />
+                                                </form>
+                                            }
                                         }
-                                    }
-                                </td>
-                            </tr>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                    <p class="text-right">
+                        @if (User.IsInRole("Admin") || User.IsInRole("Manager") || User.IsInRole("User"))
+                        {
+                            <a asp-action="Create" asp-route-plan="2" asp-route-yearPoint="@Model.yearPoint" asp-route-selectoffice="@ViewBag.selectoffice">เพิ่มแผน</a>
                         }
-                    </tbody>
-                </table>
-                <p class="text-right">
-                    @if (User.IsInRole("Admin") || User.IsInRole("Manager") || User.IsInRole("User"))
-                    {
-                        <a asp-action="Create" asp-route-plan="2" asp-route-yearPoint="@Model.yearPoint" asp-route-selectoffice="@ViewBag.selectoffice">เพิ่มแผน</a>
-                    }
-                </p>
+                    </p>
+                </div>
             </div>
         </div>
-    </div>
-
-    <!-- Plan D -->
-    <div class="card shadow mb-4">
-        <div class="card-header py-3">
-            <h6 class="m-0 font-weight-bold text-primary">แผนงานร่วม (Joint KPI: D)</h6>
-        </div>
-        <div class="card-body">
-            <div class="table-responsive">
-                <table class="table table-bordered" id="EPEStableD" style="width:100%;" cellspacing="0">
-                    <thead>
-                        <tr>
-                            <th>
-                                ลำดับที่
-                            </th>
-                            <th>
-                                แผนงาน/โครงการ
-                            </th>
-                            <th>
-                                ตัวชี้วัด
-                            </th>
-                            <th>
-                                หน่วยนับ
-                            </th>
-                            <th>
-                                น้ำหนัก
-                            </th>
-                            <th>
-                                ตัวชี้วัดสำหรับ
-                            </th>
-                            <th>
-                                หน่วยกำกับ
-                            </th>
-                            <th></th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach (var ptD in Model.pointD)
-                        {
+    }
+    @if (Model.pointD != null)
+    {
+        <!-- Plan D -->
+        <div class="card shadow mb-4">
+            <div class="card-header py-3">
+                <h6 class="m-0 font-weight-bold text-primary">แผนงานร่วม (Joint KPI: D)</h6>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-bordered" id="EPEStableD" style="width:100%;" cellspacing="0">
+                        <thead>
                             <tr>
-                                <td>
-                                    @if (ptD.SubPoint != 0)
-                                    {
-                                        @Html.DisplayFor(modelItem => ptD.Point)@:.@Html.DisplayFor(modelItem => ptD.SubPoint)
-                                    }
-                                    else
-                                    {
-                                        @Html.DisplayFor(modelItem => ptD.Point)
-                                    }
-                                </td>
-                                <td>
-                                    @Html.DisplayFor(modelItem => ptD.DetailPlan)
-                                </td>
-                                <td>
-                                    @Html.DisplayFor(modelItem => ptD.Name)
-                                </td>
-                                <td>
-                                    @Html.DisplayFor(modelItem => ptD.Unit)
-                                </td>
-                                <td>
-                                    @Html.DisplayFor(modelItem => ptD.Weight)
-                                </td>
-                                <td>
-                                    @Html.DisplayFor(modelItem => ptD.OwnerOffice.Name)
-                                </td>
-                                <td>
-                                    @Html.DisplayFor(modelItem => ptD.AuditOffice.Name)
-                                </td>
-                                <td>
-                                    @if (User.IsInRole("Admin") || (User.IsInRole("Manager") && (ptD.AuditOffice.Code == user.OfficeId || ptD.OwnerOffice.Code == user.OfficeId || userOffices.Any(uo => uo == ptD.AuditOffice.Code || uo == ptD.OwnerOffice.Code))) || (User.IsInRole("Manager") && (user.OfficeId.Substring(2, 6) == "000000" && ptD.OwnerOffice.Code.StartsWith(user.OfficeId.Substring(0, 2)) || (userOffices.Any(uo => uo.Substring(2, 6) == "000000" && uo.Substring(0, 2) == ptD.OwnerOffice.Code.Substring(0, 2))))) || (User.IsInRole("User") && (ptD.OwnerOffice.Code == user.OfficeId || userOffices.Any(uo => uo == ptD.OwnerOffice.Code))))
-                                    {
-                                        <a title="แก้ไข" asp-action="Edit" asp-route-id="@ptD.Id" asp-route-yearPoint="@Model.yearPoint" asp-route-selectoffice="@ViewBag.selectoffice"><i class="fas fa-edit"></i></a>
-                                    }
-                                    <a title="รายละเอียด" asp-action="Details" asp-route-id="@ptD.Id" asp-route-yearPoint="@Model.yearPoint" asp-route-selectoffice="@ViewBag.selectoffice"><i class="fas fa-search-plus"></i></a>
-                                    @if (User.IsInRole("Admin") || (User.IsInRole("Manager") && (ptD.AuditOffice.Code == user.OfficeId || ptD.OwnerOffice.Code == user.OfficeId || userOffices.Any(uo => uo == ptD.AuditOffice.Code || uo == ptD.OwnerOffice.Code))) || (User.IsInRole("Manager") && (user.OfficeId.Substring(2, 6) == "000000" && ptD.OwnerOffice.Code.StartsWith(user.OfficeId.Substring(0, 2)) || (userOffices.Any(uo => uo.Substring(2, 6) == "000000" && uo.Substring(0, 2) == ptD.OwnerOffice.Code.Substring(0, 2))))) || (User.IsInRole("User") && (ptD.OwnerOffice.Code == user.OfficeId || userOffices.Any(uo => uo == ptD.OwnerOffice.Code))))
-                                    {
-                                        <a title="ลบ" asp-action="Delete" asp-route-id="@ptD.Id" asp-route-yearPoint="@Model.yearPoint" asp-route-selectoffice="@ViewBag.selectoffice"><i class="fas fa-trash"></i></a>
+                                <th>
+                                    ลำดับที่
+                                </th>
+                                <th>
+                                    แผนงาน/โครงการ
+                                </th>
+                                <th>
+                                    ตัวชี้วัด
+                                </th>
+                                <th>
+                                    หน่วยนับ
+                                </th>
+                                <th>
+                                    น้ำหนัก
+                                </th>
+                                <th>
+                                    ตัวชี้วัดสำหรับ
+                                </th>
+                                <th>
+                                    หน่วยกำกับ
+                                </th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var ptD in Model.pointD)
+                            {
+                                <tr>
+                                    <td>
+                                        @if (ptD.SubPoint != 0)
+                                        {
+                                            @Html.DisplayFor(modelItem => ptD.Point)@:.@Html.DisplayFor(modelItem => ptD.SubPoint)
+                                        }
+                                        else
+                                        {
+                                            @Html.DisplayFor(modelItem => ptD.Point)
+                                        }
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => ptD.DetailPlan)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => ptD.Name)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => ptD.Unit)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => ptD.Weight)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => ptD.OwnerOffice.Name)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => ptD.AuditOffice.Name)
+                                    </td>
+                                    <td>
+                                        @if (User.IsInRole("Admin") || (User.IsInRole("Manager") && (ptD.AuditOffice.Code == user.OfficeId || ptD.OwnerOffice.Code == user.OfficeId || userOffices.Any(uo => uo == ptD.AuditOffice.Code || uo == ptD.OwnerOffice.Code))) || (User.IsInRole("Manager") && (user.OfficeId.Substring(2, 6) == "000000" && ptD.OwnerOffice.Code.StartsWith(user.OfficeId.Substring(0, 2)) || (userOffices.Any(uo => uo.Substring(2, 6) == "000000" && uo.Substring(0, 2) == ptD.OwnerOffice.Code.Substring(0, 2))))) || (User.IsInRole("User") && (ptD.OwnerOffice.Code == user.OfficeId || userOffices.Any(uo => uo == ptD.OwnerOffice.Code))))
+                                        {
+                                            <a title="แก้ไข" asp-action="Edit" asp-route-id="@ptD.Id" asp-route-yearPoint="@Model.yearPoint" asp-route-selectoffice="@ViewBag.selectoffice"><i class="fas fa-edit"></i></a>
+                                        }
+                                        <a title="รายละเอียด" asp-action="Details" asp-route-id="@ptD.Id" asp-route-yearPoint="@Model.yearPoint" asp-route-selectoffice="@ViewBag.selectoffice"><i class="fas fa-search-plus"></i></a>
+                                        @if (User.IsInRole("Admin") || (User.IsInRole("Manager") && (ptD.AuditOffice.Code == user.OfficeId || ptD.OwnerOffice.Code == user.OfficeId || userOffices.Any(uo => uo == ptD.AuditOffice.Code || uo == ptD.OwnerOffice.Code))) || (User.IsInRole("Manager") && (user.OfficeId.Substring(2, 6) == "000000" && ptD.OwnerOffice.Code.StartsWith(user.OfficeId.Substring(0, 2)) || (userOffices.Any(uo => uo.Substring(2, 6) == "000000" && uo.Substring(0, 2) == ptD.OwnerOffice.Code.Substring(0, 2))))) || (User.IsInRole("User") && (ptD.OwnerOffice.Code == user.OfficeId || userOffices.Any(uo => uo == ptD.OwnerOffice.Code))))
+                                        {
+                                            <a title="ลบ" asp-action="Delete" asp-route-id="@ptD.Id" asp-route-yearPoint="@Model.yearPoint" asp-route-selectoffice="@ViewBag.selectoffice"><i class="fas fa-trash"></i></a>
 
-                                        @(Html.DevExtreme().Button()
-                                                //.ElementAttr("class", "button-info")
-                                                .Text("แนบ")
-                                                .OnClick(@<text>
+                                            @(Html.DevExtreme().Button()
+                        //.ElementAttr("class", "button-info")
+                        .Text("แนบ")
+                        .OnClick(@<text>
                                                     function showInfo(data) {
                                                         var popup = $("#attach-popup").dxPopup("instance");
                                                         popup.option("contentTemplate", $("@("#popup-attach-" + ptD.Id)"));
@@ -701,14 +668,14 @@
                                                 </text>)
                                             )
 
-                                        @if (ptD.AttachFile != null)
-                                        {
-                                            <a href="~/attach_files/@ptD.AttachFile" target="_blank"><i class="fas fa-file-pdf fa-2x"></i></a><br />
-                                            @(Html.DevExtreme().Button()
-                                                    .ElementAttr("class", "button-danger")
-                                                    .Text("ลบ")
-                                                    .Type(ButtonType.Danger)
-                                                    .OnClick(@<text>
+                                            @if (ptD.AttachFile != null)
+                                            {
+                                                <a href="~/attach_files/@ptD.AttachFile" target="_blank"><i class="fas fa-file-pdf fa-2x"></i></a><br />
+                                                @(Html.DevExtreme().Button()
+                            .ElementAttr("class", "button-danger")
+                            .Text("ลบ")
+                            .Type(ButtonType.Danger)
+                            .OnClick(@<text>
                                                         function showInfo(data) {
                                                             var popup = $("#attach-popup").dxPopup("instance");
                                                             popup.option("contentTemplate", $("@("#popup-del-" + ptD.Id)"));
@@ -716,77 +683,608 @@
                                                         }
                                                     </text>)
                                                 )
-                                        }
+                                            }
 
 
-                                        @using (Html.DevExtreme().NamedTemplate("popup-attach-" + ptD.Id))
-                                        {
-                                            <form id="form" method="post" enctype="multipart/form-data" action="PointOfEvaluations/FileSelection">
-                                                <h3>แนบไฟล์ประกอบแผนปฏิบัติราชการ</h3>
-                                                <div id="fileuploader-container">
-                                                    @(Html.DevExtreme().FileUploader()
-                                                        .Name("AttachFile")
-                                                        .SelectButtonText("เลือกไฟล์แนบ")
-                                                        .LabelText("ลากไฟล์แนบมาวางที่นี่")
-                                                        .Accept("application/pdf")
-                                                        .FocusStateEnabled(true)
-                                                        .IsValid(true)
-                                                        .Progress(0)
-                                                        .ReadyToUploadMessage("พร้อม Upload ไฟล์แนบได้")
-                                                        .UploadButtonText("Upload")
-                                                        .UploadedMessage("Upload ไฟล์แนบแล้ว")
-                                                        .UploadFailedMessage("ไม่สามารถ Upload ไฟล์แนบได้")
-                                                        .UploadMethod(UploadHttpMethod.POST)
-                                                        .UploadMode(FileUploadMode.Instantly)
+                                            @using (Html.DevExtreme().NamedTemplate("popup-attach-" + ptD.Id))
+                                            {
+                                                <form id="form" method="post" enctype="multipart/form-data" action="PointOfEvaluations/FileSelection">
+                                                    <h3>แนบไฟล์ประกอบแผนปฏิบัติราชการ</h3>
+                                                    <div id="fileuploader-container">
+                                                        @(Html.DevExtreme().FileUploader()
+                        .Name("AttachFile")
+                        .SelectButtonText("เลือกไฟล์แนบ")
+                        .LabelText("ลากไฟล์แนบมาวางที่นี่")
+                        .Accept("application/pdf")
+                        .FocusStateEnabled(true)
+                        .IsValid(true)
+                        .Progress(0)
+                        .ReadyToUploadMessage("พร้อม Upload ไฟล์แนบได้")
+                        .UploadButtonText("Upload")
+                        .UploadedMessage("Upload ไฟล์แนบแล้ว")
+                        .UploadFailedMessage("ไม่สามารถ Upload ไฟล์แนบได้")
+                        .UploadMethod(UploadHttpMethod.POST)
+                        .UploadMode(FileUploadMode.Instantly)
                                                     )
-                                                </div>
-                                                @(Html.DevExtreme().Button()
-                                                    .ID("button")
-                                                    .Text("ส่งไฟล์แนบ")
-                                                    .Type(ButtonType.Success)
-                                                    .UseSubmitBehavior(true)
+                                                    </div>
+                                                    @(Html.DevExtreme().Button()
+                        .ID("button")
+                        .Text("ส่งไฟล์แนบ")
+                        .Type(ButtonType.Success)
+                        .UseSubmitBehavior(true)
                                                 )
-                                                <input type="hidden" name="pid" value="@ptD.Id" />
-                                                <input type="hidden" name="selectoffice" value="@ViewBag.selectoffice" />
-                                                <input type="hidden" name="yearPoint" value="@Model.yearPoint" />
-                                            </form>
-                                        }
-                                        @using (Html.DevExtreme().NamedTemplate("popup-del-" + ptD.Id))
-                                        {
-                                            <form id="form" method="post" action="PointOfEvaluations/FileDelete">
-                                                <h3>ลบไฟล์ประกอบผลการปฏิบัติ</h3>
-                                                <h5>@ptD.AttachFile</h5>
-                                                @(Html.DevExtreme().Button()
-                                                    .ID("button")
-                                                    .Text("ลบไฟล์แนบ")
-                                                    .Type(ButtonType.Danger)
-                                                    .UseSubmitBehavior(true)
+                                                    <input type="hidden" name="pid" value="@ptD.Id" />
+                                                    <input type="hidden" name="selectoffice" value="@ViewBag.selectoffice" />
+                                                    <input type="hidden" name="yearPoint" value="@Model.yearPoint" />
+                                                </form>
+                                            }
+                                            @using (Html.DevExtreme().NamedTemplate("popup-del-" + ptD.Id))
+                                            {
+                                                <form id="form" method="post" action="PointOfEvaluations/FileDelete">
+                                                    <h3>ลบไฟล์ประกอบผลการปฏิบัติ</h3>
+                                                    <h5>@ptD.AttachFile</h5>
+                                                    @(Html.DevExtreme().Button()
+                        .ID("button")
+                        .Text("ลบไฟล์แนบ")
+                        .Type(ButtonType.Danger)
+                        .UseSubmitBehavior(true)
                                                 )
-                                                <input type="hidden" name="pid" value="@ptD.Id" />
-                                                <input type="hidden" name="selectoffice" value="@ViewBag.selectoffice" />
-                                                <input type="hidden" name="yearPoint" value="@Model.yearPoint" />
-                                            </form>
+                                                    <input type="hidden" name="pid" value="@ptD.Id" />
+                                                    <input type="hidden" name="selectoffice" value="@ViewBag.selectoffice" />
+                                                    <input type="hidden" name="yearPoint" value="@Model.yearPoint" />
+                                                </form>
+                                            }
                                         }
-                                    }
-                                </td>
-                            </tr>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                    <p class="text-right">
+                        @if (User.IsInRole("Admin") || User.IsInRole("Manager") || User.IsInRole("User"))
+                        {
+                            <a asp-action="Create" asp-route-plan="3" asp-route-yearPoint="@Model.yearPoint" asp-route-selectoffice="@ViewBag.selectoffice">เพิ่มแผน</a>
                         }
-                    </tbody>
-                </table>
-                <p class="text-right">
-                    @if (User.IsInRole("Admin") || User.IsInRole("Manager") || User.IsInRole("User"))
-                    {
-                        <a asp-action="Create" asp-route-plan="3" asp-route-yearPoint="@Model.yearPoint" asp-route-selectoffice="@ViewBag.selectoffice">เพิ่มแผน</a>
-                    }
-                </p>
+                    </p>
+                </div>
             </div>
         </div>
-    </div>
+    }
 
+    @if (Model.pointFlagship != null)
+    {
+        <!-- Plan Flagship -->
+        <div class="card shadow mb-4">
+            <div class="card-header py-3">
+                <h6 class="m-0 font-weight-bold text-primary">แผนงานระดับนโยบายสำคัญ (Flagship)</h6>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-bordered" id="EPEStableD" style="width:100%;" cellspacing="0">
+                        <thead>
+                            <tr>
+                                <th>
+                                    ลำดับที่
+                                </th>
+                                <th>
+                                    แผนงาน/โครงการ
+                                </th>
+                                <th>
+                                    ตัวชี้วัด
+                                </th>
+                                <th>
+                                    หน่วยนับ
+                                </th>
+                                <th>
+                                    น้ำหนัก
+                                </th>
+                                <th>
+                                    ตัวชี้วัดสำหรับ
+                                </th>
+                                <th>
+                                    หน่วยกำกับ
+                                </th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var pt in Model.pointFlagship)
+                            {
+                                <tr>
+                                    <td>
+                                        @if (pt.SubPoint != 0)
+                                        {
+                                            @Html.DisplayFor(modelItem => pt.Point)@:.@Html.DisplayFor(modelItem => pt.SubPoint)
+                                        }
+                                        else
+                                        {
+                                            @Html.DisplayFor(modelItem => pt.Point)
+                                        }
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => pt.DetailPlan)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => pt.Name)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => pt.Unit)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => pt.Weight)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => pt.OwnerOffice.Name)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => pt.AuditOffice.Name)
+                                    </td>
+                                    <td>
+                                        @if (User.IsInRole("Admin") || (User.IsInRole("Manager") && (pt.AuditOffice.Code == user.OfficeId || pt.OwnerOffice.Code == user.OfficeId || userOffices.Any(uo => uo == pt.AuditOffice.Code || uo == pt.OwnerOffice.Code))) || (User.IsInRole("Manager") && (user.OfficeId.Substring(2, 6) == "000000" && pt.OwnerOffice.Code.StartsWith(user.OfficeId.Substring(0, 2)) || (userOffices.Any(uo => uo.Substring(2, 6) == "000000" && uo.Substring(0, 2) == pt.OwnerOffice.Code.Substring(0, 2))))) || (User.IsInRole("User") && (pt.OwnerOffice.Code == user.OfficeId || userOffices.Any(uo => uo == pt.OwnerOffice.Code))))
+                                        {
+                                            <a title="แก้ไข" asp-action="Edit" asp-route-id="@pt.Id" asp-route-yearPoint="@Model.yearPoint" asp-route-selectoffice="@ViewBag.selectoffice"><i class="fas fa-edit"></i></a>
+                                        }
+                                        <a title="รายละเอียด" asp-action="Details" asp-route-id="@pt.Id" asp-route-yearPoint="@Model.yearPoint" asp-route-selectoffice="@ViewBag.selectoffice"><i class="fas fa-search-plus"></i></a>
+                                        @if (User.IsInRole("Admin") || (User.IsInRole("Manager") && (pt.AuditOffice.Code == user.OfficeId || pt.OwnerOffice.Code == user.OfficeId || userOffices.Any(uo => uo == pt.AuditOffice.Code || uo == pt.OwnerOffice.Code))) || (User.IsInRole("Manager") && (user.OfficeId.Substring(2, 6) == "000000" && pt.OwnerOffice.Code.StartsWith(user.OfficeId.Substring(0, 2)) || (userOffices.Any(uo => uo.Substring(2, 6) == "000000" && uo.Substring(0, 2) == pt.OwnerOffice.Code.Substring(0, 2))))) || (User.IsInRole("User") && (pt.OwnerOffice.Code == user.OfficeId || userOffices.Any(uo => uo == pt.OwnerOffice.Code))))
+                                        {
+                                            <a title="ลบ" asp-action="Delete" asp-route-id="@pt.Id" asp-route-yearPoint="@Model.yearPoint" asp-route-selectoffice="@ViewBag.selectoffice"><i class="fas fa-trash"></i></a>
+
+                                            @(Html.DevExtreme().Button()
+                        //.ElementAttr("class", "button-info")
+                        .Text("แนบ")
+                        .OnClick(@<text>
+                                                    function showInfo(data) {
+                                                        var popup = $("#attach-popup").dxPopup("instance");
+                                                        popup.option("contentTemplate", $("@("#popup-attach-" + pt.Id)"));
+                                                        popup.show();
+                                                    }
+                                                </text>)
+                                            )
+
+                                            @if (pt.AttachFile != null)
+                                            {
+                                                <a href="~/attach_files/@pt.AttachFile" target="_blank"><i class="fas fa-file-pdf fa-2x"></i></a><br />
+                                                @(Html.DevExtreme().Button()
+                            .ElementAttr("class", "button-danger")
+                            .Text("ลบ")
+                            .Type(ButtonType.Danger)
+                            .OnClick(@<text>
+                                                        function showInfo(data) {
+                                                            var popup = $("#attach-popup").dxPopup("instance");
+                                                            popup.option("contentTemplate", $("@("#popup-del-" + pt.Id)"));
+                                                            popup.show();
+                                                        }
+                                                    </text>)
+                                                )
+                                            }
+
+
+                                            @using (Html.DevExtreme().NamedTemplate("popup-attach-" + pt.Id))
+                                            {
+                                                <form id="form" method="post" enctype="multipart/form-data" action="PointOfEvaluations/FileSelection">
+                                                    <h3>แนบไฟล์ประกอบแผนปฏิบัติราชการ</h3>
+                                                    <div id="fileuploader-container">
+                                                        @(Html.DevExtreme().FileUploader()
+                        .Name("AttachFile")
+                        .SelectButtonText("เลือกไฟล์แนบ")
+                        .LabelText("ลากไฟล์แนบมาวางที่นี่")
+                        .Accept("application/pdf")
+                        .FocusStateEnabled(true)
+                        .IsValid(true)
+                        .Progress(0)
+                        .ReadyToUploadMessage("พร้อม Upload ไฟล์แนบได้")
+                        .UploadButtonText("Upload")
+                        .UploadedMessage("Upload ไฟล์แนบแล้ว")
+                        .UploadFailedMessage("ไม่สามารถ Upload ไฟล์แนบได้")
+                        .UploadMethod(UploadHttpMethod.POST)
+                        .UploadMode(FileUploadMode.Instantly)
+                                                    )
+                                                    </div>
+                                                    @(Html.DevExtreme().Button()
+                        .ID("button")
+                        .Text("ส่งไฟล์แนบ")
+                        .Type(ButtonType.Success)
+                        .UseSubmitBehavior(true)
+                                                )
+                                                    <input type="hidden" name="pid" value="@pt.Id" />
+                                                    <input type="hidden" name="selectoffice" value="@ViewBag.selectoffice" />
+                                                    <input type="hidden" name="yearPoint" value="@Model.yearPoint" />
+                                                </form>
+                                            }
+                                            @using (Html.DevExtreme().NamedTemplate("popup-del-" + pt.Id))
+                                            {
+                                                <form id="form" method="post" action="PointOfEvaluations/FileDelete">
+                                                    <h3>ลบไฟล์ประกอบผลการปฏิบัติ</h3>
+                                                    <h5>@pt.AttachFile</h5>
+                                                    @(Html.DevExtreme().Button()
+                        .ID("button")
+                        .Text("ลบไฟล์แนบ")
+                        .Type(ButtonType.Danger)
+                        .UseSubmitBehavior(true)
+                                                )
+                                                    <input type="hidden" name="pid" value="@pt.Id" />
+                                                    <input type="hidden" name="selectoffice" value="@ViewBag.selectoffice" />
+                                                    <input type="hidden" name="yearPoint" value="@Model.yearPoint" />
+                                                </form>
+                                            }
+                                        }
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                    <p class="text-right">
+                        @if (User.IsInRole("Admin") || User.IsInRole("Manager") || User.IsInRole("User"))
+                        {
+                            <a asp-action="Create" asp-route-plan="4" asp-route-yearPoint="@Model.yearPoint" asp-route-selectoffice="@ViewBag.selectoffice">เพิ่มแผน</a>
+                        }
+                    </p>
+                </div>
+            </div>
+        </div>
+    }
+    @if (Model.pointCascade != null)
+    {
+        <!-- Plan Cascade -->
+        <div class="card shadow mb-4">
+            <div class="card-header py-3">
+                <h6 class="m-0 font-weight-bold text-primary">
+                    @if(ViewBag.selectoffice.Substring(0, 2) != "00" || ViewBag.selectoffice == "00009000" || ViewBag.selectoffice == "00003000")
+                    {
+                    <span>แผนงานระดับนโยบายที่ถ่ายทอดไปยังหน่วยปฏิบัติ (Cascade)</span>
+                } else
+                    {
+                <span>แผนงานกำกับแผนงานระดับนโยบายที่ถ่ายทอดไปยังหน่วยปฏิบัติ (Cascade)</span>
+                }
+                </h6>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-bordered" id="EPEStableD" style="width:100%;" cellspacing="0">
+                        <thead>
+                            <tr>
+                                <th>
+                                    ลำดับที่
+                                </th>
+                                <th>
+                                    แผนงาน/โครงการ
+                                </th>
+                                <th>
+                                    ตัวชี้วัด
+                                </th>
+                                <th>
+                                    หน่วยนับ
+                                </th>
+                                <th>
+                                    น้ำหนัก
+                                </th>
+                                <th>
+                                    ตัวชี้วัดสำหรับ
+                                </th>
+                                <th>
+                                    หน่วยกำกับ
+                                </th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var pt in Model.pointCascade)
+                            {
+                                <tr>
+                                    <td>
+                                        @if (pt.SubPoint != 0)
+                                        {
+                                            @Html.DisplayFor(modelItem => pt.Point)@:.@Html.DisplayFor(modelItem => pt.SubPoint)
+                                        }
+                                        else
+                                        {
+                                            @Html.DisplayFor(modelItem => pt.Point)
+                                        }
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => pt.DetailPlan)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => pt.Name)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => pt.Unit)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => pt.Weight)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => pt.OwnerOffice.Name)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => pt.AuditOffice.Name)
+                                    </td>
+                                    <td>
+                                        @if (User.IsInRole("Admin") || (User.IsInRole("Manager") && (pt.AuditOffice.Code == user.OfficeId || pt.OwnerOffice.Code == user.OfficeId || userOffices.Any(uo => uo == pt.AuditOffice.Code || uo == pt.OwnerOffice.Code))) || (User.IsInRole("Manager") && (user.OfficeId.Substring(2, 6) == "000000" && pt.OwnerOffice.Code.StartsWith(user.OfficeId.Substring(0, 2)) || (userOffices.Any(uo => uo.Substring(2, 6) == "000000" && uo.Substring(0, 2) == pt.OwnerOffice.Code.Substring(0, 2))))) || (User.IsInRole("User") && (pt.OwnerOffice.Code == user.OfficeId || userOffices.Any(uo => uo == pt.OwnerOffice.Code))))
+                                        {
+                                            <a title="แก้ไข" asp-action="Edit" asp-route-id="@pt.Id" asp-route-yearPoint="@Model.yearPoint" asp-route-selectoffice="@ViewBag.selectoffice"><i class="fas fa-edit"></i></a>
+                                        }
+                                        <a title="รายละเอียด" asp-action="Details" asp-route-id="@pt.Id" asp-route-yearPoint="@Model.yearPoint" asp-route-selectoffice="@ViewBag.selectoffice"><i class="fas fa-search-plus"></i></a>
+                                        @if (User.IsInRole("Admin") || (User.IsInRole("Manager") && (pt.AuditOffice.Code == user.OfficeId || pt.OwnerOffice.Code == user.OfficeId || userOffices.Any(uo => uo == pt.AuditOffice.Code || uo == pt.OwnerOffice.Code))) || (User.IsInRole("Manager") && (user.OfficeId.Substring(2, 6) == "000000" && pt.OwnerOffice.Code.StartsWith(user.OfficeId.Substring(0, 2)) || (userOffices.Any(uo => uo.Substring(2, 6) == "000000" && uo.Substring(0, 2) == pt.OwnerOffice.Code.Substring(0, 2))))) || (User.IsInRole("User") && (pt.OwnerOffice.Code == user.OfficeId || userOffices.Any(uo => uo == pt.OwnerOffice.Code))))
+                                        {
+                                            <a title="ลบ" asp-action="Delete" asp-route-id="@pt.Id" asp-route-yearPoint="@Model.yearPoint" asp-route-selectoffice="@ViewBag.selectoffice"><i class="fas fa-trash"></i></a>
+
+                                            @(Html.DevExtreme().Button()
+                        //.ElementAttr("class", "button-info")
+                        .Text("แนบ")
+                        .OnClick(@<text>
+                                                    function showInfo(data) {
+                                                        var popup = $("#attach-popup").dxPopup("instance");
+                                                        popup.option("contentTemplate", $("@("#popup-attach-" + pt.Id)"));
+                                                        popup.show();
+                                                    }
+                                                </text>)
+                                            )
+
+                                            @if (pt.AttachFile != null)
+                                            {
+                                                <a href="~/attach_files/@pt.AttachFile" target="_blank"><i class="fas fa-file-pdf fa-2x"></i></a><br />
+                                                @(Html.DevExtreme().Button()
+                            .ElementAttr("class", "button-danger")
+                            .Text("ลบ")
+                            .Type(ButtonType.Danger)
+                            .OnClick(@<text>
+                                                        function showInfo(data) {
+                                                            var popup = $("#attach-popup").dxPopup("instance");
+                                                            popup.option("contentTemplate", $("@("#popup-del-" + pt.Id)"));
+                                                            popup.show();
+                                                        }
+                                                    </text>)
+                                                )
+                                            }
+
+
+                                            @using (Html.DevExtreme().NamedTemplate("popup-attach-" + pt.Id))
+                                            {
+                                                <form id="form" method="post" enctype="multipart/form-data" action="PointOfEvaluations/FileSelection">
+                                                    <h3>แนบไฟล์ประกอบแผนปฏิบัติราชการ</h3>
+                                                    <div id="fileuploader-container">
+                                                        @(Html.DevExtreme().FileUploader()
+                        .Name("AttachFile")
+                        .SelectButtonText("เลือกไฟล์แนบ")
+                        .LabelText("ลากไฟล์แนบมาวางที่นี่")
+                        .Accept("application/pdf")
+                        .FocusStateEnabled(true)
+                        .IsValid(true)
+                        .Progress(0)
+                        .ReadyToUploadMessage("พร้อม Upload ไฟล์แนบได้")
+                        .UploadButtonText("Upload")
+                        .UploadedMessage("Upload ไฟล์แนบแล้ว")
+                        .UploadFailedMessage("ไม่สามารถ Upload ไฟล์แนบได้")
+                        .UploadMethod(UploadHttpMethod.POST)
+                        .UploadMode(FileUploadMode.Instantly)
+                                                    )
+                                                    </div>
+                                                    @(Html.DevExtreme().Button()
+                        .ID("button")
+                        .Text("ส่งไฟล์แนบ")
+                        .Type(ButtonType.Success)
+                        .UseSubmitBehavior(true)
+                                                )
+                                                    <input type="hidden" name="pid" value="@pt.Id" />
+                                                    <input type="hidden" name="selectoffice" value="@ViewBag.selectoffice" />
+                                                    <input type="hidden" name="yearPoint" value="@Model.yearPoint" />
+                                                </form>
+                                            }
+                                            @using (Html.DevExtreme().NamedTemplate("popup-del-" + pt.Id))
+                                            {
+                                                <form id="form" method="post" action="PointOfEvaluations/FileDelete">
+                                                    <h3>ลบไฟล์ประกอบผลการปฏิบัติ</h3>
+                                                    <h5>@pt.AttachFile</h5>
+                                                    @(Html.DevExtreme().Button()
+                        .ID("button")
+                        .Text("ลบไฟล์แนบ")
+                        .Type(ButtonType.Danger)
+                        .UseSubmitBehavior(true)
+                                                )
+                                                    <input type="hidden" name="pid" value="@pt.Id" />
+                                                    <input type="hidden" name="selectoffice" value="@ViewBag.selectoffice" />
+                                                    <input type="hidden" name="yearPoint" value="@Model.yearPoint" />
+                                                </form>
+                                            }
+                                        }
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                    <p class="text-right">
+                        @if (User.IsInRole("Admin") || User.IsInRole("Manager") || User.IsInRole("User"))
+                        {
+                            <a asp-action="Create" asp-route-plan="5" asp-route-yearPoint="@Model.yearPoint" asp-route-selectoffice="@ViewBag.selectoffice">เพิ่มแผน</a>
+                        }
+                    </p>
+                </div>
+            </div>
+        </div>
+    }
+    @if (Model.PointJointKPI != null)
+    {
+        <!-- Plan Joint KPI -->
+        <div class="card shadow mb-4">
+            <div class="card-header py-3">
+                <h6 class="m-0 font-weight-bold text-primary">ตัวชี้วัดร่วม (Joint KPI)</h6>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-bordered" id="EPEStableD" style="width:100%;" cellspacing="0">
+                        <thead>
+                            <tr>
+                                <th>
+                                    ลำดับที่
+                                </th>
+                                <th>
+                                    แผนงาน/โครงการ
+                                </th>
+                                <th>
+                                    ตัวชี้วัด
+                                </th>
+                                <th>
+                                    หน่วยนับ
+                                </th>
+                                <th>
+                                    น้ำหนัก
+                                </th>
+                                <th>
+                                    ตัวชี้วัดสำหรับ
+                                </th>
+                                <th>
+                                    หน่วยกำกับ
+                                </th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var pt in Model.PointJointKPI)
+                            {
+                                <tr>
+                                    <td>
+                                        @if (pt.SubPoint != 0)
+                                        {
+                                            @Html.DisplayFor(modelItem => pt.Point)@:.@Html.DisplayFor(modelItem => pt.SubPoint)
+                                        }
+                                        else
+                                        {
+                                            @Html.DisplayFor(modelItem => pt.Point)
+                                        }
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => pt.DetailPlan)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => pt.Name)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => pt.Unit)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => pt.Weight)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => pt.OwnerOffice.Name)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => pt.AuditOffice.Name)
+                                    </td>
+                                    <td>
+                                        @if (User.IsInRole("Admin") || (User.IsInRole("Manager") && (pt.AuditOffice.Code == user.OfficeId || pt.OwnerOffice.Code == user.OfficeId || userOffices.Any(uo => uo == pt.AuditOffice.Code || uo == pt.OwnerOffice.Code))) || (User.IsInRole("Manager") && (user.OfficeId.Substring(2, 6) == "000000" && pt.OwnerOffice.Code.StartsWith(user.OfficeId.Substring(0, 2)) || (userOffices.Any(uo => uo.Substring(2, 6) == "000000" && uo.Substring(0, 2) == pt.OwnerOffice.Code.Substring(0, 2))))) || (User.IsInRole("User") && (pt.OwnerOffice.Code == user.OfficeId || userOffices.Any(uo => uo == pt.OwnerOffice.Code))))
+                                        {
+                                            <a title="แก้ไข" asp-action="Edit" asp-route-id="@pt.Id" asp-route-yearPoint="@Model.yearPoint" asp-route-selectoffice="@ViewBag.selectoffice"><i class="fas fa-edit"></i></a>
+                                        }
+                                        <a title="รายละเอียด" asp-action="Details" asp-route-id="@pt.Id" asp-route-yearPoint="@Model.yearPoint" asp-route-selectoffice="@ViewBag.selectoffice"><i class="fas fa-search-plus"></i></a>
+                                        @if (User.IsInRole("Admin") || (User.IsInRole("Manager") && (pt.AuditOffice.Code == user.OfficeId || pt.OwnerOffice.Code == user.OfficeId || userOffices.Any(uo => uo == pt.AuditOffice.Code || uo == pt.OwnerOffice.Code))) || (User.IsInRole("Manager") && (user.OfficeId.Substring(2, 6) == "000000" && pt.OwnerOffice.Code.StartsWith(user.OfficeId.Substring(0, 2)) || (userOffices.Any(uo => uo.Substring(2, 6) == "000000" && uo.Substring(0, 2) == pt.OwnerOffice.Code.Substring(0, 2))))) || (User.IsInRole("User") && (pt.OwnerOffice.Code == user.OfficeId || userOffices.Any(uo => uo == pt.OwnerOffice.Code))))
+                                        {
+                                            <a title="ลบ" asp-action="Delete" asp-route-id="@pt.Id" asp-route-yearPoint="@Model.yearPoint" asp-route-selectoffice="@ViewBag.selectoffice"><i class="fas fa-trash"></i></a>
+
+                                            @(Html.DevExtreme().Button()
+                        //.ElementAttr("class", "button-info")
+                        .Text("แนบ")
+                        .OnClick(@<text>
+                                                    function showInfo(data) {
+                                                        var popup = $("#attach-popup").dxPopup("instance");
+                                                        popup.option("contentTemplate", $("@("#popup-attach-" + pt.Id)"));
+                                                        popup.show();
+                                                    }
+                                                </text>)
+                                            )
+
+                                            @if (pt.AttachFile != null)
+                                            {
+                                                <a href="~/attach_files/@pt.AttachFile" target="_blank"><i class="fas fa-file-pdf fa-2x"></i></a><br />
+                                                @(Html.DevExtreme().Button()
+                            .ElementAttr("class", "button-danger")
+                            .Text("ลบ")
+                            .Type(ButtonType.Danger)
+                            .OnClick(@<text>
+                                                        function showInfo(data) {
+                                                            var popup = $("#attach-popup").dxPopup("instance");
+                                                            popup.option("contentTemplate", $("@("#popup-del-" + pt.Id)"));
+                                                            popup.show();
+                                                        }
+                                                    </text>)
+                                                )
+                                            }
+
+
+                                            @using (Html.DevExtreme().NamedTemplate("popup-attach-" + pt.Id))
+                                            {
+                                                <form id="form" method="post" enctype="multipart/form-data" action="PointOfEvaluations/FileSelection">
+                                                    <h3>แนบไฟล์ประกอบแผนปฏิบัติราชการ</h3>
+                                                    <div id="fileuploader-container">
+                                                        @(Html.DevExtreme().FileUploader()
+                        .Name("AttachFile")
+                        .SelectButtonText("เลือกไฟล์แนบ")
+                        .LabelText("ลากไฟล์แนบมาวางที่นี่")
+                        .Accept("application/pdf")
+                        .FocusStateEnabled(true)
+                        .IsValid(true)
+                        .Progress(0)
+                        .ReadyToUploadMessage("พร้อม Upload ไฟล์แนบได้")
+                        .UploadButtonText("Upload")
+                        .UploadedMessage("Upload ไฟล์แนบแล้ว")
+                        .UploadFailedMessage("ไม่สามารถ Upload ไฟล์แนบได้")
+                        .UploadMethod(UploadHttpMethod.POST)
+                        .UploadMode(FileUploadMode.Instantly)
+                                                    )
+                                                    </div>
+                                                    @(Html.DevExtreme().Button()
+                        .ID("button")
+                        .Text("ส่งไฟล์แนบ")
+                        .Type(ButtonType.Success)
+                        .UseSubmitBehavior(true)
+                                                )
+                                                    <input type="hidden" name="pid" value="@pt.Id" />
+                                                    <input type="hidden" name="selectoffice" value="@ViewBag.selectoffice" />
+                                                    <input type="hidden" name="yearPoint" value="@Model.yearPoint" />
+                                                </form>
+                                            }
+                                            @using (Html.DevExtreme().NamedTemplate("popup-del-" + pt.Id))
+                                            {
+                                                <form id="form" method="post" action="PointOfEvaluations/FileDelete">
+                                                    <h3>ลบไฟล์ประกอบผลการปฏิบัติ</h3>
+                                                    <h5>@pt.AttachFile</h5>
+                                                    @(Html.DevExtreme().Button()
+                        .ID("button")
+                        .Text("ลบไฟล์แนบ")
+                        .Type(ButtonType.Danger)
+                        .UseSubmitBehavior(true)
+                                                )
+                                                    <input type="hidden" name="pid" value="@pt.Id" />
+                                                    <input type="hidden" name="selectoffice" value="@ViewBag.selectoffice" />
+                                                    <input type="hidden" name="yearPoint" value="@Model.yearPoint" />
+                                                </form>
+                                            }
+                                        }
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                    <p class="text-right">
+                        @if (User.IsInRole("Admin") || User.IsInRole("Manager") || User.IsInRole("User"))
+                        {
+                            <a asp-action="Create" asp-route-plan="6" asp-route-yearPoint="@Model.yearPoint" asp-route-selectoffice="@ViewBag.selectoffice">เพิ่มแผน</a>
+                        }
+                    </p>
+                </div>
+            </div>
+        </div>
+    }
 </div>
-
 @section Scripts {
     <partial name="_dataTableScript" />
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
+
+@if (ViewBag.message != null)
+{
+<script type="text/javascript">
+        alert("@Html.Raw(ViewBag.message)")
+</script>
 }
 

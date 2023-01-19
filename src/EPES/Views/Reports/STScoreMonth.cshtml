@@ -125,7 +125,7 @@
 .FieldChooser(c => c.Enabled(false).Height(400))
 .RowHeaderLayout(PivotGridRowHeadersLayout.Tree)
 //.AllowExpandAll(true)
-.Texts(tt => tt.GrandTotal("รวม"))
+.Texts(tt => tt.GrandTotal("รวมเฉลี่ย"))
 .DataSource(d => d
     .Store(s => s.Mvc().Controller("ReportsApi").Key("Id").LoadAction("GetSTScore").LoadParams(new { yearPoint = Model.yearPoint, lastMonth = Model.Month }))
 
@@ -137,8 +137,13 @@
         .Expanded(false)
         //.SortBy(PivotGridSortBy.DisplayText)
         //.SortOrder(SortOrder.Asc)
-        .Width(200)
-        .Area(PivotGridArea.Row);
+        .Width(300)
+        .Area(PivotGridArea.Row)
+        .Selector(@<text>
+                    function(data) {
+            return "หน่วยงานในสังกัด" + data.nameGroup;
+            }
+        </text>);
 
     fields.Add()
         .Caption("หน่วยงาน")
@@ -176,6 +181,12 @@
                             return  "แผน C";
                         }else if(data.plan == 3){
                             return  "แผน D";
+                            } else if(data.plan == 4) {
+                                return "แผน Flagship";
+                            } else if(data.plan == 5) {
+                                return "แผน Cascade";
+                            } else if(data.plan == 6) {
+                                return "แผน Joint KPI";
                         }
                     }
                     </text>);
@@ -223,7 +234,7 @@
 .FieldChooser(c => c.Enabled(false).Height(400))
 .RowHeaderLayout(PivotGridRowHeadersLayout.Tree)
 //.AllowExpandAll(true)
-.Texts(tt => tt.GrandTotal("รวม"))
+.Texts(tt => tt.GrandTotal("รวมเฉลี่ย"))
 .DataSource(d => d
 .Store(s => s.Mvc().Controller("ReportsApi").Key("Id").LoadAction("GetSTScore").LoadParams(new { yearPoint = Model.yearPoint, lastMonth = Model.Month }))
 
@@ -235,7 +246,12 @@ fields.Add()
         //.SortBy(PivotGridSortBy.DisplayText)
         //.SortOrder(SortOrder.Asc)
         .Width(300)
-        .Area(PivotGridArea.Row);
+        .Area(PivotGridArea.Row)
+        .Selector(@<text>
+                    function(data) {
+            return "หน่วยงานในสังกัด" + data.nameGroup;
+            }
+        </text>);
 
 fields.Add()
         .Caption("หน่วยงาน")
@@ -273,6 +289,12 @@ fields.Add()
                             return  "แผน C";
                         }else if(data.plan == 3){
                             return  "แผน D";
+                            } else if(data.plan == 4) {
+                                return "แผน Flagship";
+                            } else if(data.plan == 5) {
+                                return "แผน Cascade";
+                            } else if(data.plan == 6) {
+                                return "แผน Joint KPI";
                         }
                     }
                     </text>);

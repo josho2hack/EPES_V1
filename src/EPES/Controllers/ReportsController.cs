@@ -872,15 +872,13 @@ namespace EPES.Controllers
 
         public IActionResult GetPakPlanB()
         {
-
             var model = new ReportViewModel();
             int m;
-            int yearPoint = 0;
-            List<Object> list = new List<object>();
+            int yearPoint = DateTime.Now.Year;
 
-            if (DateTime.Now.Month == 10)
+            if(DateTime.Now.Month == 11 || DateTime.Now.Month == 12)
             {
-                yearPoint = -1;
+                yearPoint += 1;
             }
 
             //บันทึกย้อนหลัง 1 เดือน
@@ -893,40 +891,23 @@ namespace EPES.Controllers
                 m = DateTime.Now.Month - 1;
             }
 
-            //ดึงข้อมูล เฉพาะในปีงบประมาณ ต.ค. (10) ปีก่อน - ก.ย. (09) ปีปัจจุบัน
-            if (yearPoint == 0)
+            List<object> years = new List<object>();
+            for(int ii = 2019; ii <= yearPoint; ii++)
             {
-                if (m < 10)
-                {
-                    for (int i = 10; i <= 12; i++)
-                    {
-                        list.Add(new { Value = i, Month = new DateTime(DateTime.Now.Year, i, 1).ToString("MMMM") + " " + new DateTime(DateTime.Now.AddYears(-1).Year, i, 1).ToString("yyyy") });
-                    }
-                    for (int i = 1; i <= m; i++)
-                    {
-                        list.Add(new { Value = i, Month = new DateTime(DateTime.Now.Year, i, 1).ToString("MMMM") + " " + new DateTime(DateTime.Now.Year, i, 1).ToString("yyyy") });
-                    }
-                }
-                else
-                {
-                    for (int i = 10; i <= m; i++)
-                    {
-                        list.Add(new { Value = i, Month = new DateTime(DateTime.Now.Year, i, 1).ToString("MMMM") + " " + new DateTime(DateTime.Now.Year, i, 1).ToString("yyyy") });
-                    }
-                }
+                years.Add(new { value = ii, year = new DateTime(ii, 1, 1).ToString("yyyy") });
             }
-            else
-            {
-                for (int i = 10; i <= 12; i++)
-                {
-                    list.Add(new { Value = i, Month = new DateTime(DateTime.Now.Year, i, 1).ToString("MMMM") + " " + new DateTime(DateTime.Now.AddYears(model.yearPoint).Year, i, 1).ToString("yyyy") });
-                }
-                for (int i = 1; i <= 9; i++)
-                {
-                    list.Add(new { Value = i, Month = new DateTime(DateTime.Now.Year, i, 1).ToString("MMMM") + " " + new DateTime(DateTime.Now.Year, i, 1).ToString("yyyy") });
-                }
-            }
+            ViewBag.selectyear = new SelectList(years, "value", "year", yearPoint);
 
+
+            List<Object> list = new List<object>();
+            for (int i = 10; i <= 12; i++)
+            {
+                list.Add(new { Value = i, Month = new DateTime(yearPoint, i, 1).AddYears(-1).ToString("MMMM yyyy") });
+            }
+            for (int i = 1; i <= 9; i++)
+            {
+                list.Add(new { Value = i, Month = new DateTime(yearPoint, i, 1).ToString("MMMM yyyy") });
+            }
             ViewBag.Month = new SelectList(list, "Value", "Month", m);
             model.Month = m;
             model.yearPoint = yearPoint;
@@ -940,12 +921,9 @@ namespace EPES.Controllers
         public IActionResult GetPakPlanBMonth(ReportViewModel model)
         {
             int m;
-            List<Object> list = new List<object>();
+            int yearPoint = DateTime.Now.Year;
+            int yearSelect = model.yearPoint;
 
-            if (DateTime.Now.Month == 10)
-            {
-                model.yearPoint = -1;
-            }
 
             //บันทึกย้อนหลัง 1 เดือน
             if (DateTime.Now.Month == 1)
@@ -957,55 +935,27 @@ namespace EPES.Controllers
                 m = DateTime.Now.Month - 1;
             }
 
-            //ดึงข้อมูล เฉพาะในปีงบประมาณ ต.ค. (10) ปีก่อน - ก.ย. (09) ปีปัจจุบัน
-            if (model.yearPoint == 0)
+            List<object> years = new List<object>();
+            for (int ii = 2019; ii <= yearPoint; ii++)
             {
-                if (m < 10)
-                {
-                    for (int i = 10; i <= 12; i++)
-                    {
-                        list.Add(new { Value = i, Month = new DateTime(DateTime.Now.Year, i, 1).ToString("MMMM") + " " + new DateTime(DateTime.Now.AddYears(-1).Year, i, 1).ToString("yyyy") });
-                    }
-                    for (int i = 1; i <= m; i++)
-                    {
-                        list.Add(new { Value = i, Month = new DateTime(DateTime.Now.Year, i, 1).ToString("MMMM") + " " + new DateTime(DateTime.Now.Year, i, 1).ToString("yyyy") });
-                    }
-                }
-                else
-                {
-                    for (int i = 10; i <= m; i++)
-                    {
-                        list.Add(new { Value = i, Month = new DateTime(DateTime.Now.Year, i, 1).ToString("MMMM") + " " + new DateTime(DateTime.Now.Year, i, 1).ToString("yyyy") });
-                    }
-                }
+                years.Add(new { value = ii, year = new DateTime(ii, 1, 1).ToString("yyyy") });
             }
-            else
-            {
-                if(DateTime.Now.Month < 10 )
-                {
-                    for (int i = 10; i <= 12; i++)
-                    {
-                        list.Add(new { Value = i, Month = new DateTime(DateTime.Now.Year, i, 1).ToString("MMMM") + " " + new DateTime(DateTime.Now.AddYears(-1 + model.yearPoint).Year, i, 1).ToString("yyyy") });
-                    }
-                    for (int i = 1; i <= 9; i++)
-                    {
-                        list.Add(new { Value = i, Month = new DateTime(DateTime.Now.Year, i, 1).ToString("MMMM") + " " + new DateTime(DateTime.Now.AddYears(model.yearPoint).Year, i, 1).ToString("yyyy") });
-                    }
-                }
-                else
-                {
-                    for (int i = 10; i <= 12; i++)
-                    {
-                        list.Add(new { Value = i, Month = new DateTime(DateTime.Now.Year, i, 1).ToString("MMMM") + " " + new DateTime(DateTime.Now.AddYears(model.yearPoint).Year, i, 1).ToString("yyyy") });
-                    }
-                    for (int i = 1; i <= 9; i++)
-                    {
-                        list.Add(new { Value = i, Month = new DateTime(DateTime.Now.Year, i, 1).ToString("MMMM") + " " + new DateTime(DateTime.Now.Year, i, 1).ToString("yyyy") });
-                    }
-                }
-            }
+            ViewBag.selectyear = new SelectList(years, "value", "year", yearSelect);
 
+
+            List<Object> list = new List<object>();
+            for (int i = 10; i <= 12; i++)
+            {
+                list.Add(new { Value = i, Month = new DateTime(yearSelect, i, 1).AddYears(-1).ToString("MMMM yyyy") });
+            }
+            for (int i = 1; i <= 9; i++)
+            {
+                list.Add(new { Value = i, Month = new DateTime(yearSelect, i, 1).ToString("MMMM yyyy") });
+            }
             ViewBag.Month = new SelectList(list, "Value", "Month", m);
+            model.Month = m;
+            model.yearPoint = yearSelect;
+
             return View(model);
         }
 
@@ -1014,41 +964,30 @@ namespace EPES.Controllers
             var user = await _userManager.GetUserAsync(User);
 
             DateTime yearForQuery;
-            List<object> listYear = new List<object>();
             if (yearPoint == 0)
             {
                 if (DateTime.Now.Month == 10 || DateTime.Now.Month == 11 || DateTime.Now.Month == 12)
                 {
                     yearForQuery = new DateTime(DateTime.Now.AddYears(1).Year, 1, 1);
 
-                    listYear.Add(new { Value = -1, Year = DateTime.Now.Year });
-                    listYear.Add(new { Value = 0, Year = DateTime.Now.AddYears(1).Year });
                 }
                 else
                 {
                     yearForQuery = new DateTime(DateTime.Now.Year, 1, 1);
-                    listYear.Add(new { Value = -1, Year = DateTime.Now.AddYears(-1).Year });
-                    listYear.Add(new { Value = 0, Year = DateTime.Now.Year });
                 }
             }
             else
             {
-                if (DateTime.Now.Month == 10 || DateTime.Now.Month == 11 || DateTime.Now.Month == 12)
-                {
-                    yearForQuery = new DateTime(DateTime.Now.AddYears(1 + yearPoint).Year, 1, 1);
-                    listYear.Add(new { Value = -1, Year = DateTime.Now.Year });
-                    listYear.Add(new { Value = 0, Year = DateTime.Now.AddYears(1).Year });
-                }
-                else
-                {
-                    yearForQuery = new DateTime(DateTime.Now.AddYears(yearPoint).Year, 1, 1);
-                    listYear.Add(new { Value = -1, Year = DateTime.Now.AddYears(-1).Year });
-                    listYear.Add(new { Value = 0, Year = DateTime.Now.Year });
-                }
+                yearForQuery = new DateTime(yearPoint, 1, 1);
             }
 
-            ViewBag.Year = new SelectList(listYear, "Value", "Year", yearPoint);
-            ViewBag.selectYear = yearPoint;
+            var years = await _context.PointOfEvaluations.Select(slt => new { value = slt.Year.Year, year = slt.Year.ToString("yyyy") }).Distinct().OrderBy(ob => ob.year).ToListAsync();
+            if (!years.Any(yy => yy.value == DateTime.Now.AddYears(1).Year))
+            {
+                years.Add(new { value = DateTime.Now.AddYears(1).Year, year = DateTime.Now.AddYears(1).ToString("yyyy") });
+            }
+            ViewBag.Year = new SelectList(years, "value", "year", yearForQuery.Year);
+            ViewBag.selectYear = yearForQuery.Year;
 
 
             List<object> listMonth = new List<object>();
@@ -1056,7 +995,6 @@ namespace EPES.Controllers
             listMonth.Add(new { Value = 9, Month = new DateTime(yearForQuery.Year, 9, 1).ToString("MMMM") + " " + new DateTime(yearForQuery.Year, 9, 1).ToString("yyyy") });
 
 
-            int[] monthRound;
             if (month == 0)
             {
                 if (DateTime.Now.Month >= 4 || DateTime.Now.Month <= 9)
@@ -1068,16 +1006,6 @@ namespace EPES.Controllers
                     month = 9;
                 }
             }
-
-            if (month == 3)
-            {
-                monthRound = new int[] { 10, 11, 12, 1, 2, 3 };
-            }
-            else
-            {
-                monthRound = new int[] { 4, 5, 6, 7, 8, 9 };
-            }
-
             ViewBag.Month = new SelectList(listMonth, "Value", "Month", month);
             ViewBag.selectMonth = month;
 

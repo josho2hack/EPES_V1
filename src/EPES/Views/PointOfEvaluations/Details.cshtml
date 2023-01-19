@@ -51,18 +51,42 @@
                         @Html.DisplayFor(model => model.SubPoint)
                     }
                 </dd>
-                <dt class="col-sm-4">
-                    @Html.DisplayNameFor(model => model.ExpectPlan)
-                </dt>
-                <dd class="col-sm-8">
-                    @Html.DisplayFor(model => model.ExpectPlan)
-                </dd>
-                <dt class="col-sm-4">
-                    <label class="control-label">D<sup>2</sup>RIVE</label>
-                </dt>
-                <dd class="col-sm-8">
-                    @Html.DisplayFor(model => model.Ddrive)
-                </dd>
+                @if (ViewBag.yearPoint >= 2023)
+                {
+                    <dt class="col-sm-4">
+                        @Html.DisplayNameFor(model => model.Theme)
+                    </dt>
+                    <dd class="col-sm-8">
+                        @Html.DisplayFor(model => model.Theme.ThemeName)
+                    </dd>
+                    <dt class="col-sm-4">
+                        @Html.DisplayNameFor(model => model.End)
+                    </dt>
+                    <dd class="col-sm-8">
+                        @Html.DisplayFor(model => model.End.EndName)
+                    </dd>
+                    <dt class="col-sm-4">
+                        @Html.DisplayNameFor(model => model.Way)
+                    </dt>
+                    <dd class="col-sm-8">
+                        @Html.DisplayFor(model => model.Way.WayName)
+                    </dd>
+                }
+                else
+                {
+                    <dt class="col-sm-4">
+                        @Html.DisplayNameFor(model => model.ExpectPlan)
+                    </dt>
+                    <dd class="col-sm-8">
+                        @Html.DisplayFor(model => model.ExpectPlan)
+                    </dd>
+                    <dt class="col-sm-4">
+                        <label class="control-label">D<sup>2</sup>RIVE</label>
+                    </dt>
+                    <dd class="col-sm-8">
+                        @Html.DisplayFor(model => model.Ddrive)
+                    </dd>
+                }
                 <dt class="col-sm-4">
                     @Html.DisplayNameFor(model => model.Plan)
                 </dt>
@@ -140,249 +164,23 @@
                     @Html.DisplayFor(model => model.Rounds.Count)
                 </dd>
             </dl>
-            <div class="card">
-                <div class="card-header">รอบที่ 1</div>
-                <div class="card-body">
-                    <dl class="row">
-                        @if (Model.Rounds.Count == 2)
-                        {
-                            if (Model.Rounds[0].RoundNumber == 1)
-                            {
-                                i = 0;
-                            }
-                            else
-                            {
-                                i = 1;
-                            }
-                        }
-                        @if (Model.Unit == UnitOfPoint.ร้อยละ)
-                        {
-                            <dt class="col-sm-3">
-                                @Html.DisplayNameFor(model => model.Rounds[i].Rate1)
-                            </dt>
-                            <dd class="col-sm-3">
-                                @Html.DisplayFor(model => model.Rounds[i].Rate1)<text>%</text>
-                            </dd>
-                            <dd class="col-sm-3">
-                                เริ่ม @Html.DisplayFor(model => model.Rounds[i].R1MStart)
-                            </dd>
-                            <dd class="col-sm-3">
-                                สิ้นสุด @Html.DisplayFor(model => model.Rounds[i].R5MStop)
-                            </dd>
-                            <dt class="col-sm-3">
-                                @Html.DisplayNameFor(model => model.Rounds[i].Rate2)
-                            </dt>
-                            <dd class="col-sm-3">
-                                @Html.DisplayFor(model => model.Rounds[i].Rate2) <text>%</text>
-                            </dd>
-                            <dd class="col-sm-3">
-                                เริ่ม @Html.DisplayFor(model => model.Rounds[i].R1MStart)
-                            </dd>
-                            <dd class="col-sm-3">
-                                สิ้นสุด @Html.DisplayFor(model => model.Rounds[i].R5MStop)
-                            </dd>
-                            <dt class="col-sm-3">
-                                @Html.DisplayNameFor(model => model.Rounds[i].Rate3)
-                            </dt>
-                            <dd class="col-sm-3">
-                                @Html.DisplayFor(model => model.Rounds[i].Rate3) <text>%</text>
-                            </dd>
-                            <dd class="col-sm-3">
-                                เริ่ม @Html.DisplayFor(model => model.Rounds[i].R1MStart)
-                            </dd>
-                            <dd class="col-sm-3">
-                                สิ้นสุด @Html.DisplayFor(model => model.Rounds[i].R5MStop)
-                            </dd>
-                            <dt class="col-sm-3">
-                                @Html.DisplayNameFor(model => model.Rounds[i].Rate4)
-                            </dt>
-                            <dd class="col-sm-3">
-                                @Html.DisplayFor(model => model.Rounds[i].Rate4)<text>%</text>
-                            </dd>
-                            <dd class="col-sm-3">
-                                เริ่ม @Html.DisplayFor(model => model.Rounds[i].R1MStart)
-                            </dd>
-                            <dd class="col-sm-3">
-                                สิ้นสุด @Html.DisplayFor(model => model.Rounds[i].R5MStop)
-                            </dd>
-                            <dt class="col-sm-3">
-                                @Html.DisplayNameFor(model => model.Rounds[i].Rate5)
-                            </dt>
-                            <dd class="col-sm-3">
-                                @Html.DisplayFor(model => model.Rounds[i].Rate5)<text>%</text>
-                            </dd>
-                            <dd class="col-sm-3">
-                                เริ่ม @Html.DisplayFor(model => model.Rounds[i].R1MStart)
-                            </dd>
-                            <dd class="col-sm-3">
-                                สิ้นสุด @Html.DisplayFor(model => model.Rounds[i].R5MStop)
-                            </dd>
-                        }
-                        else if (Model.Unit == UnitOfPoint.ระดับ)
-                        {
-                            <dt class="col-sm-6">
-                                1.@Html.DisplayFor(model => model.Rounds[i].DetailRate1)
-                            </dt>
-                            <dd class="col-sm-3">
-                                เริ่ม @Html.DisplayFor(model => model.Rounds[i].R1MStart)
-                            </dd>
-                            <dd class="col-sm-3">
-                                สิ้นสุด @Html.DisplayFor(model => model.Rounds[i].R1MStop)
-                            </dd>
-                            <dt class="col-sm-6">
-                                2.@Html.DisplayFor(model => model.Rounds[i].DetailRate2)
-                            </dt>
-                            <dd class="col-sm-3">
-                                เริ่ม @Html.DisplayFor(model => model.Rounds[i].R2MStart)
-                            </dd>
-                            <dd class="col-sm-3">
-                                สิ้นสุด @Html.DisplayFor(model => model.Rounds[i].R2MStop)
-                            </dd>
-                            <dt class="col-sm-6">
-                                3.@Html.DisplayFor(model => model.Rounds[i].DetailRate3)
-                            </dt>
-                            <dd class="col-sm-3">
-                                เริ่ม @Html.DisplayFor(model => model.Rounds[i].R3MStart)
-                            </dd>
-                            <dd class="col-sm-3">
-                                สิ้นสุด @Html.DisplayFor(model => model.Rounds[i].R3MStop)
-                            </dd>
-                            <dt class="col-sm-6">
-                                4.@Html.DisplayFor(model => model.Rounds[i].DetailRate4)
-                            </dt>
-                            <dd class="col-sm-3">
-                                เริ่ม @Html.DisplayFor(model => model.Rounds[i].R4MStart)
-                            </dd>
-                            <dd class="col-sm-3">
-                                สิ้นสุด @Html.DisplayFor(model => model.Rounds[i].R4MStop)
-                            </dd>
-                            <dt class="col-sm-6">
-                                5.@Html.DisplayFor(model => model.Rounds[i].DetailRate5)
-                            </dt>
-                            <dd class="col-sm-3">
-                                เริ่ม @Html.DisplayFor(model => model.Rounds[i].R5MStart)
-                            </dd>
-                            <dd class="col-sm-3">
-                                สิ้นสุด @Html.DisplayFor(model => model.Rounds[i].R5MStop)
-                            </dd>
-                        }
-                        else // Model.Unit == UnitOfPoint.ระดับ_ร้อยละ
-                        {
-                            <dt class="col-sm-6">
-                                1.@Html.DisplayFor(model => model.Rounds[i].DetailRate1)
-                            </dt>
-                            <dd class="col-sm-3">
-                                เริ่ม @Html.DisplayFor(model => model.Rounds[i].R1MStart)
-                            </dd>
-                            <dd class="col-sm-3">
-                                สิ้นสุด @Html.DisplayFor(model => model.Rounds[i].R1MStop)
-                            </dd>
-
-                            if (Model.Rounds[i].LevelNumber >= 2)
-                            {
-                                <dt class="col-sm-6">
-                                    2.@Html.DisplayFor(model => model.Rounds[i].DetailRate2)
-                                </dt>
-                                <dd class="col-sm-3">
-                                    เริ่ม @Html.DisplayFor(model => model.Rounds[i].R2MStart)
-                                </dd>
-                                <dd class="col-sm-3">
-                                    สิ้นสุด @Html.DisplayFor(model => model.Rounds[i].R2MStop)
-                                </dd>
-                            }
-                            else
-                            {
-                                <dt class="col-sm-3">
-                                    @Html.DisplayNameFor(model => model.Rounds[i].Rate2)
-                                </dt>
-                                <dd class="col-sm-3">
-                                    @Html.DisplayFor(model => model.Rounds[i].Rate2)<text>%</text>
-                                </dd>
-                                <dt class="col-sm-3">
-                                </dt>
-                                <dd class="col-sm-3">
-                                </dd>
-                            }
-
-                            if (Model.Rounds[i].LevelNumber >= 3)
-                            {
-                                <dt class="col-sm-6">
-                                    3.@Html.DisplayFor(model => model.Rounds[i].DetailRate3)
-                                </dt>
-                                <dd class="col-sm-3">
-                                    เริ่ม @Html.DisplayFor(model => model.Rounds[i].R3MStart)
-                                </dd>
-                                <dd class="col-sm-3">
-                                    สิ้นสุด @Html.DisplayFor(model => model.Rounds[i].R3MStop)
-                                </dd>
-                            }
-                            else
-                            {
-                                <dt class="col-sm-3">
-                                    @Html.DisplayNameFor(model => model.Rounds[i].Rate3)
-                                </dt>
-                                <dd class="col-sm-3">
-                                    @Html.DisplayFor(model => model.Rounds[i].Rate3)<text>%</text>
-                                </dd>
-                                <dt class="col-sm-3">
-                                </dt>
-                                <dd class="col-sm-3">
-                                </dd>
-                            }
-                            if (Model.Rounds[i].LevelNumber >= 4)
-                            {
-                                <dt class="col-sm-6">
-                                    4.@Html.DisplayFor(model => model.Rounds[i].DetailRate4)
-                                </dt>
-                                <dd class="col-sm-3">
-                                    เริ่ม @Html.DisplayFor(model => model.Rounds[i].R4MStart)
-                                </dd>
-                                <dd class="col-sm-3">
-                                    สิ้นสุด @Html.DisplayFor(model => model.Rounds[i].R4MStop)
-                                </dd>
-                            }
-                            else
-                            {
-                                <dt class="col-sm-3">
-                                    @Html.DisplayNameFor(model => model.Rounds[i].Rate4)
-                                </dt>
-                                <dd class="col-sm-3">
-                                    @Html.DisplayFor(model => model.Rounds[i].Rate4)<text>%</text>
-                                </dd>
-                                <dt class="col-sm-3">
-                                </dt>
-                                <dd class="col-sm-3">
-                                </dd>
-                            }
-                            <dt class="col-sm-3">
-                                @Html.DisplayNameFor(model => model.Rounds[i].Rate5)
-                            </dt>
-                            <dd class="col-sm-3">
-                                @Html.DisplayFor(model => model.Rounds[i].Rate5)<text>%</text>
-                            </dd>
-                            <dt class="col-sm-3">
-                            </dt>
-                            <dd class="col-sm-3">
-                            </dd>
-                        }
-                    </dl>
-                </div>
-            </div>
-            @if (Model.Rounds.Count == 2)
+            @if (Model.Unit == UnitOfPoint.ร้อยละ || Model.Unit == UnitOfPoint.ระดับ || Model.Unit == UnitOfPoint.ระดับ_ร้อยละ)
             {
-                <div class="card" id="round2">
-                    <div class="card-header">รอบที่ 2</div>
+                <div class="card">
+                    <div class="card-header">รอบที่ 1</div>
                     <div class="card-body">
                         <dl class="row">
-                            @if (Model.Rounds[0].RoundNumber == 2)
+                            @if (Model.Rounds.Count == 2)
                             {
-                                i = 0;
+                                if (Model.Rounds[0].RoundNumber == 1)
+                                {
+                                    i = 0;
+                                }
+                                else
+                                {
+                                    i = 1;
+                                }
                             }
-                            else
-                            {
-                                i = 1;
-                            }
-
                             @if (Model.Unit == UnitOfPoint.ร้อยละ)
                             {
                                 <dt class="col-sm-3">
@@ -494,7 +292,7 @@
                                     สิ้นสุด @Html.DisplayFor(model => model.Rounds[i].R5MStop)
                                 </dd>
                             }
-                            else // Model.Unit == UnitOfPoint.ระดับ_ร้อยละ
+                            else if (Model.Unit == UnitOfPoint.ระดับ_ร้อยละ)
                             {
                                 <dt class="col-sm-6">
                                     1.@Html.DisplayFor(model => model.Rounds[i].DetailRate1)
@@ -596,6 +394,413 @@
                         </dl>
                     </div>
                 </div>
+                @if (Model.Rounds.Count == 2)
+                {
+                    <div class="card" id="round2">
+                        <div class="card-header">รอบที่ 2</div>
+                        <div class="card-body">
+                            <dl class="row">
+                                @if (Model.Rounds[0].RoundNumber == 2)
+                                {
+                                    i = 0;
+                                }
+                                else
+                                {
+                                    i = 1;
+                                }
+
+                                @if (Model.Unit == UnitOfPoint.ร้อยละ)
+                                {
+                                    <dt class="col-sm-3">
+                                        @Html.DisplayNameFor(model => model.Rounds[i].Rate1)
+                                    </dt>
+                                    <dd class="col-sm-3">
+                                        @Html.DisplayFor(model => model.Rounds[i].Rate1)<text>%</text>
+                                    </dd>
+                                    <dd class="col-sm-3">
+                                        เริ่ม @Html.DisplayFor(model => model.Rounds[i].R1MStart)
+                                    </dd>
+                                    <dd class="col-sm-3">
+                                        สิ้นสุด @Html.DisplayFor(model => model.Rounds[i].R5MStop)
+                                    </dd>
+                                    <dt class="col-sm-3">
+                                        @Html.DisplayNameFor(model => model.Rounds[i].Rate2)
+                                    </dt>
+                                    <dd class="col-sm-3">
+                                        @Html.DisplayFor(model => model.Rounds[i].Rate2) <text>%</text>
+                                    </dd>
+                                    <dd class="col-sm-3">
+                                        เริ่ม @Html.DisplayFor(model => model.Rounds[i].R1MStart)
+                                    </dd>
+                                    <dd class="col-sm-3">
+                                        สิ้นสุด @Html.DisplayFor(model => model.Rounds[i].R5MStop)
+                                    </dd>
+                                    <dt class="col-sm-3">
+                                        @Html.DisplayNameFor(model => model.Rounds[i].Rate3)
+                                    </dt>
+                                    <dd class="col-sm-3">
+                                        @Html.DisplayFor(model => model.Rounds[i].Rate3) <text>%</text>
+                                    </dd>
+                                    <dd class="col-sm-3">
+                                        เริ่ม @Html.DisplayFor(model => model.Rounds[i].R1MStart)
+                                    </dd>
+                                    <dd class="col-sm-3">
+                                        สิ้นสุด @Html.DisplayFor(model => model.Rounds[i].R5MStop)
+                                    </dd>
+                                    <dt class="col-sm-3">
+                                        @Html.DisplayNameFor(model => model.Rounds[i].Rate4)
+                                    </dt>
+                                    <dd class="col-sm-3">
+                                        @Html.DisplayFor(model => model.Rounds[i].Rate4)<text>%</text>
+                                    </dd>
+                                    <dd class="col-sm-3">
+                                        เริ่ม @Html.DisplayFor(model => model.Rounds[i].R1MStart)
+                                    </dd>
+                                    <dd class="col-sm-3">
+                                        สิ้นสุด @Html.DisplayFor(model => model.Rounds[i].R5MStop)
+                                    </dd>
+                                    <dt class="col-sm-3">
+                                        @Html.DisplayNameFor(model => model.Rounds[i].Rate5)
+                                    </dt>
+                                    <dd class="col-sm-3">
+                                        @Html.DisplayFor(model => model.Rounds[i].Rate5)<text>%</text>
+                                    </dd>
+                                    <dd class="col-sm-3">
+                                        เริ่ม @Html.DisplayFor(model => model.Rounds[i].R1MStart)
+                                    </dd>
+                                    <dd class="col-sm-3">
+                                        สิ้นสุด @Html.DisplayFor(model => model.Rounds[i].R5MStop)
+                                    </dd>
+                                }
+                                else if (Model.Unit == UnitOfPoint.ระดับ)
+                                {
+                                    <dt class="col-sm-6">
+                                        1.@Html.DisplayFor(model => model.Rounds[i].DetailRate1)
+                                    </dt>
+                                    <dd class="col-sm-3">
+                                        เริ่ม @Html.DisplayFor(model => model.Rounds[i].R1MStart)
+                                    </dd>
+                                    <dd class="col-sm-3">
+                                        สิ้นสุด @Html.DisplayFor(model => model.Rounds[i].R1MStop)
+                                    </dd>
+                                    <dt class="col-sm-6">
+                                        2.@Html.DisplayFor(model => model.Rounds[i].DetailRate2)
+                                    </dt>
+                                    <dd class="col-sm-3">
+                                        เริ่ม @Html.DisplayFor(model => model.Rounds[i].R2MStart)
+                                    </dd>
+                                    <dd class="col-sm-3">
+                                        สิ้นสุด @Html.DisplayFor(model => model.Rounds[i].R2MStop)
+                                    </dd>
+                                    <dt class="col-sm-6">
+                                        3.@Html.DisplayFor(model => model.Rounds[i].DetailRate3)
+                                    </dt>
+                                    <dd class="col-sm-3">
+                                        เริ่ม @Html.DisplayFor(model => model.Rounds[i].R3MStart)
+                                    </dd>
+                                    <dd class="col-sm-3">
+                                        สิ้นสุด @Html.DisplayFor(model => model.Rounds[i].R3MStop)
+                                    </dd>
+                                    <dt class="col-sm-6">
+                                        4.@Html.DisplayFor(model => model.Rounds[i].DetailRate4)
+                                    </dt>
+                                    <dd class="col-sm-3">
+                                        เริ่ม @Html.DisplayFor(model => model.Rounds[i].R4MStart)
+                                    </dd>
+                                    <dd class="col-sm-3">
+                                        สิ้นสุด @Html.DisplayFor(model => model.Rounds[i].R4MStop)
+                                    </dd>
+                                    <dt class="col-sm-6">
+                                        5.@Html.DisplayFor(model => model.Rounds[i].DetailRate5)
+                                    </dt>
+                                    <dd class="col-sm-3">
+                                        เริ่ม @Html.DisplayFor(model => model.Rounds[i].R5MStart)
+                                    </dd>
+                                    <dd class="col-sm-3">
+                                        สิ้นสุด @Html.DisplayFor(model => model.Rounds[i].R5MStop)
+                                    </dd>
+                                }
+                                else // Model.Unit == UnitOfPoint.ระดับ_ร้อยละ
+                                {
+                                    <dt class="col-sm-6">
+                                        1.@Html.DisplayFor(model => model.Rounds[i].DetailRate1)
+                                    </dt>
+                                    <dd class="col-sm-3">
+                                        เริ่ม @Html.DisplayFor(model => model.Rounds[i].R1MStart)
+                                    </dd>
+                                    <dd class="col-sm-3">
+                                        สิ้นสุด @Html.DisplayFor(model => model.Rounds[i].R1MStop)
+                                    </dd>
+
+                                    if (Model.Rounds[i].LevelNumber >= 2)
+                                    {
+                                        <dt class="col-sm-6">
+                                            2.@Html.DisplayFor(model => model.Rounds[i].DetailRate2)
+                                        </dt>
+                                        <dd class="col-sm-3">
+                                            เริ่ม @Html.DisplayFor(model => model.Rounds[i].R2MStart)
+                                        </dd>
+                                        <dd class="col-sm-3">
+                                            สิ้นสุด @Html.DisplayFor(model => model.Rounds[i].R2MStop)
+                                        </dd>
+                                    }
+                                    else
+                                    {
+                                        <dt class="col-sm-3">
+                                            @Html.DisplayNameFor(model => model.Rounds[i].Rate2)
+                                        </dt>
+                                        <dd class="col-sm-3">
+                                            @Html.DisplayFor(model => model.Rounds[i].Rate2)<text>%</text>
+                                        </dd>
+                                        <dt class="col-sm-3">
+                                        </dt>
+                                        <dd class="col-sm-3">
+                                        </dd>
+                                    }
+
+                                    if (Model.Rounds[i].LevelNumber >= 3)
+                                    {
+                                        <dt class="col-sm-6">
+                                            3.@Html.DisplayFor(model => model.Rounds[i].DetailRate3)
+                                        </dt>
+                                        <dd class="col-sm-3">
+                                            เริ่ม @Html.DisplayFor(model => model.Rounds[i].R3MStart)
+                                        </dd>
+                                        <dd class="col-sm-3">
+                                            สิ้นสุด @Html.DisplayFor(model => model.Rounds[i].R3MStop)
+                                        </dd>
+                                    }
+                                    else
+                                    {
+                                        <dt class="col-sm-3">
+                                            @Html.DisplayNameFor(model => model.Rounds[i].Rate3)
+                                        </dt>
+                                        <dd class="col-sm-3">
+                                            @Html.DisplayFor(model => model.Rounds[i].Rate3)<text>%</text>
+                                        </dd>
+                                        <dt class="col-sm-3">
+                                        </dt>
+                                        <dd class="col-sm-3">
+                                        </dd>
+                                    }
+                                    if (Model.Rounds[i].LevelNumber >= 4)
+                                    {
+                                        <dt class="col-sm-6">
+                                            4.@Html.DisplayFor(model => model.Rounds[i].DetailRate4)
+                                        </dt>
+                                        <dd class="col-sm-3">
+                                            เริ่ม @Html.DisplayFor(model => model.Rounds[i].R4MStart)
+                                        </dd>
+                                        <dd class="col-sm-3">
+                                            สิ้นสุด @Html.DisplayFor(model => model.Rounds[i].R4MStop)
+                                        </dd>
+                                    }
+                                    else
+                                    {
+                                        <dt class="col-sm-3">
+                                            @Html.DisplayNameFor(model => model.Rounds[i].Rate4)
+                                        </dt>
+                                        <dd class="col-sm-3">
+                                            @Html.DisplayFor(model => model.Rounds[i].Rate4)<text>%</text>
+                                        </dd>
+                                        <dt class="col-sm-3">
+                                        </dt>
+                                        <dd class="col-sm-3">
+                                        </dd>
+                                    }
+                                    <dt class="col-sm-3">
+                                        @Html.DisplayNameFor(model => model.Rounds[i].Rate5)
+                                    </dt>
+                                    <dd class="col-sm-3">
+                                        @Html.DisplayFor(model => model.Rounds[i].Rate5)<text>%</text>
+                                    </dd>
+                                    <dt class="col-sm-3">
+                                    </dt>
+                                    <dd class="col-sm-3">
+                                    </dd>
+                                }
+                            </dl>
+                        </div>
+                    </div>
+                }
+
+            }
+            else //หนังสือร้องเรียน สน.
+            {
+                <div class="card">
+                    <div class="card-header">รอบที่ 1</div>
+                    <div class="card-body">
+                        <dl class="row">
+                            @{
+                                int j = 0;
+                            }
+                            @for (int round = 0; round < Model.Rounds.Count; round++)
+                            {
+                                if (Model.Rounds[round].RoundNumber == 1)
+                                {
+                                    if (Model.Rounds[round].LevelNumber == 1)
+                                    {
+                                        i = round;
+
+                                    }
+                                    if (Model.Rounds[round].LevelNumber == 2)
+                                    {
+                                        j = round;
+                                    }
+                                }
+                            }
+                            <dt class="col-sm-3">
+                                @Html.DisplayNameFor(model => model.Rounds[i].Rate1)
+                            </dt>
+                            <dd class="col-sm-3">
+                                @Html.DisplayFor(model => model.Rounds[i].Rate1)<text>% หรือ </text>@Html.DisplayFor(model => model.Rounds[j].Rate1)
+                            </dd>
+                            <dd class="col-sm-3">
+                                เริ่ม @Html.DisplayFor(model => model.Rounds[i].R1MStart)
+                            </dd>
+                            <dd class="col-sm-3">
+                                สิ้นสุด @Html.DisplayFor(model => model.Rounds[i].R5MStop)
+                            </dd>
+                            <dt class="col-sm-3">
+                                @Html.DisplayNameFor(model => model.Rounds[i].Rate2)
+                            </dt>
+                            <dd class="col-sm-3">
+                                @Html.DisplayFor(model => model.Rounds[i].Rate2)<text>% หรือ </text>@Html.DisplayFor(model => model.Rounds[j].Rate2)
+                            </dd>
+                            <dd class="col-sm-3">
+                                เริ่ม @Html.DisplayFor(model => model.Rounds[i].R1MStart)
+                            </dd>
+                            <dd class="col-sm-3">
+                                สิ้นสุด @Html.DisplayFor(model => model.Rounds[i].R5MStop)
+                            </dd>
+                            <dt class="col-sm-3">
+                                @Html.DisplayNameFor(model => model.Rounds[i].Rate3)
+                            </dt>
+                            <dd class="col-sm-3">
+                                @Html.DisplayFor(model => model.Rounds[i].Rate3)<text>% หรือ </text>@Html.DisplayFor(model => model.Rounds[j].Rate3)
+                            </dd>
+                            <dd class="col-sm-3">
+                                เริ่ม @Html.DisplayFor(model => model.Rounds[i].R1MStart)
+                            </dd>
+                            <dd class="col-sm-3">
+                                สิ้นสุด @Html.DisplayFor(model => model.Rounds[i].R5MStop)
+                            </dd>
+                            <dt class="col-sm-3">
+                                @Html.DisplayNameFor(model => model.Rounds[i].Rate4)
+                            </dt>
+                            <dd class="col-sm-3">
+                                @Html.DisplayFor(model => model.Rounds[i].Rate4)<text>% หรือ </text>@Html.DisplayFor(model => model.Rounds[j].Rate4)
+                            </dd>
+                            <dd class="col-sm-3">
+                                เริ่ม @Html.DisplayFor(model => model.Rounds[i].R1MStart)
+                            </dd>
+                            <dd class="col-sm-3">
+                                สิ้นสุด @Html.DisplayFor(model => model.Rounds[i].R5MStop)
+                            </dd>
+                            <dt class="col-sm-3">
+                                @Html.DisplayNameFor(model => model.Rounds[i].Rate5)
+                            </dt>
+                            <dd class="col-sm-3">
+                                @Html.DisplayFor(model => model.Rounds[i].Rate5)<text>% หรือ </text>@Html.DisplayFor(model => model.Rounds[j].Rate5)
+                            </dd>
+                            <dd class="col-sm-3">
+                                เริ่ม @Html.DisplayFor(model => model.Rounds[i].R1MStart)
+                            </dd>
+                            <dd class="col-sm-3">
+                                สิ้นสุด @Html.DisplayFor(model => model.Rounds[i].R5MStop)
+                            </dd>
+                        </dl>
+                    </div>
+                </div>
+                @if (Model.Rounds.Count > 2)
+                {
+                    <div class="card">
+                        <div class="card-header">รอบที่ 2</div>
+                        <div class="card-body">
+                            <dl class="row">
+                                @{
+                                    j = 0;
+                                    i = 0;
+                                }
+                                @for (int round = 0; round < Model.Rounds.Count; round++)
+                                {
+                                    if (Model.Rounds[round].RoundNumber == 2)
+                                    {
+                                        if (Model.Rounds[round].LevelNumber == 1)
+                                        {
+                                            i = round;
+
+                                        }
+                                        if (Model.Rounds[round].LevelNumber == 2)
+                                        {
+                                            j = round;
+                                        }
+                                    }
+                                }
+                                <dt class="col-sm-3">
+                                    @Html.DisplayNameFor(model => model.Rounds[i].Rate1)
+                                </dt>
+                                <dd class="col-sm-3">
+                                    @Html.DisplayFor(model => model.Rounds[i].Rate1)<text>% หรือ </text>@Html.DisplayFor(model => model.Rounds[j].Rate1)
+                                </dd>
+                                <dd class="col-sm-3">
+                                    เริ่ม @Html.DisplayFor(model => model.Rounds[i].R1MStart)
+                                </dd>
+                                <dd class="col-sm-3">
+                                    สิ้นสุด @Html.DisplayFor(model => model.Rounds[i].R5MStop)
+                                </dd>
+                                <dt class="col-sm-3">
+                                    @Html.DisplayNameFor(model => model.Rounds[i].Rate2)
+                                </dt>
+                                <dd class="col-sm-3">
+                                    @Html.DisplayFor(model => model.Rounds[i].Rate2)<text>% หรือ </text>@Html.DisplayFor(model => model.Rounds[j].Rate2)
+                                </dd>
+                                <dd class="col-sm-3">
+                                    เริ่ม @Html.DisplayFor(model => model.Rounds[i].R1MStart)
+                                </dd>
+                                <dd class="col-sm-3">
+                                    สิ้นสุด @Html.DisplayFor(model => model.Rounds[i].R5MStop)
+                                </dd>
+                                <dt class="col-sm-3">
+                                    @Html.DisplayNameFor(model => model.Rounds[i].Rate3)
+                                </dt>
+                                <dd class="col-sm-3">
+                                    @Html.DisplayFor(model => model.Rounds[i].Rate3)<text>% หรือ </text>@Html.DisplayFor(model => model.Rounds[j].Rate3)
+                                </dd>
+                                <dd class="col-sm-3">
+                                    เริ่ม @Html.DisplayFor(model => model.Rounds[i].R1MStart)
+                                </dd>
+                                <dd class="col-sm-3">
+                                    สิ้นสุด @Html.DisplayFor(model => model.Rounds[i].R5MStop)
+                                </dd>
+                                <dt class="col-sm-3">
+                                    @Html.DisplayNameFor(model => model.Rounds[i].Rate4)
+                                </dt>
+                                <dd class="col-sm-3">
+                                    @Html.DisplayFor(model => model.Rounds[i].Rate4)<text>% หรือ </text>@Html.DisplayFor(model => model.Rounds[j].Rate4)
+                                </dd>
+                                <dd class="col-sm-3">
+                                    เริ่ม @Html.DisplayFor(model => model.Rounds[i].R1MStart)
+                                </dd>
+                                <dd class="col-sm-3">
+                                    สิ้นสุด @Html.DisplayFor(model => model.Rounds[i].R5MStop)
+                                </dd>
+                                <dt class="col-sm-3">
+                                    @Html.DisplayNameFor(model => model.Rounds[i].Rate5)
+                                </dt>
+                                <dd class="col-sm-3">
+                                    @Html.DisplayFor(model => model.Rounds[i].Rate5)<text>% หรือ </text>@Html.DisplayFor(model => model.Rounds[j].Rate5)
+                                </dd>
+                                <dd class="col-sm-3">
+                                    เริ่ม @Html.DisplayFor(model => model.Rounds[i].R1MStart)
+                                </dd>
+                                <dd class="col-sm-3">
+                                    สิ้นสุด @Html.DisplayFor(model => model.Rounds[i].R5MStop)
+                                </dd>
+                            </dl>
+                        </div>
+                    </div>
+                }
             }
             <div>
                 <a asp-action="Index" asp-route-yearPoint="@ViewBag.yearPoint" asp-route-selectoffice="@ViewBag.selectoffice" class="btn btn-info">กลับหน้าแผน</a>

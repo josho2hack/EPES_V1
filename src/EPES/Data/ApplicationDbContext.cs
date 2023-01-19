@@ -90,5 +90,8 @@ namespace EPES.Data
         public DbSet<Round> Rounds { get; set; }
         public DbSet<IssueForEvaluations> IssueForEvaluations { get; set; }
         public DbSet<UserOffices> UserOffices { get; set; }
+        public DbSet<Theme> Theme { get; set; }
+        public DbSet<End> End { get; set; }
+        public DbSet<Way> Way { get; set; }
     }
 }
